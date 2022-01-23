@@ -444,7 +444,10 @@ Feature: OVN related networking scenarios
     Then the step should succeed
 
     # election timer is 1 second by default but the RAFT JSON-RPC probe might take 5 seconds to notice
-    And I wait up to 40 seconds for the steps to pass:
+    # election timer was 5 seconds, but now is 16 seconds and convergence also depends on master scaling
+    # BZ 1883662 - [sbdb][raft] Tune out of the box timer to be 16sec
+    # 40 seconds was not enough to converge with a 5 master cluster, increase wait.
+    And I wait up to 120 seconds for the steps to pass:
     # check the leader on the original leader to ensure it is still the leader and the split node doesn't become leader
     """
     When I store the ovnkube-master "south" leader pod in the :original_south_leader clipboard using node "<%= cb.south_leader.node_name %>"
@@ -456,8 +459,8 @@ Feature: OVN related networking scenarios
     When I run commands on the host:
       | iptables -t filter -D INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
     # wait for OVN to reconverge
-    # election timer is 1 second by default but the RAFT JSON-RPC probe might take 5 seconds to notice
-    And I wait up to 40 seconds for the steps to pass:
+    # wait 120 seconds for convergence due to election timer as described above.
+    And I wait up to 120 seconds for the steps to pass:
     # check the leader on the original leader to ensure it is still the leader and the split node doesn't become leader
     """
     When I store the ovnkube-master "south" leader pod in the :after_south_leader clipboard using node "<%= cb.south_leader.node_name %>"
