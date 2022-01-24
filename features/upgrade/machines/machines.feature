@@ -245,6 +245,12 @@ Feature: Machine-api components upgrade tests
     And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-clone-30783"
+    
+    # Create clusterautoscaler
+    Given I obtain test data file "cloud/cluster-autoscaler.yml"
+    When I run the :create admin command with:
+      | f | cluster-autoscaler.yml |
+    Then the step should succeed
 
     # Delete clusterautoscaler after scenario
     Given admin ensures "default" clusterautoscaler is deleted after scenario
