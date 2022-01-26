@@ -157,7 +157,6 @@ Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
     'FORWARD -i tun0 ! -o tun0 -m comment --comment "administrator overrides" -j OPENSHIFT-ADMIN-OUTPUT-RULES',
     'OPENSHIFT-FIREWALL-ALLOW -p udp -m udp --dport 4789 -m comment --comment "VXLAN incoming" -j ACCEPT',
     'OPENSHIFT-FIREWALL-ALLOW -i tun0 -m comment --comment "from SDN to localhost" -j ACCEPT',
-    'OPENSHIFT-FIREWALL-ALLOW -i docker0 -m comment --comment "from docker to localhost" -j ACCEPT',
     "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"attempted resend after connection close\" -m conntrack --ctstate INVALID -j DROP",
     "OPENSHIFT-FIREWALL-FORWARD -d #{subnet} -m comment --comment \"forward traffic from SDN\" -j ACCEPT",
     "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"forward traffic to SDN\" -j ACCEPT"
@@ -177,7 +176,8 @@ Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
     filter_matches.each { |match|
       unless @result[:success] && @result[:response] =~ /#{match}/
         @result[:success] = false
-        @result[:message] = "The filter table verification failed, missing [#{match}]"
+        # info only, we expect this to fail sometimes
+        logger.info "The filter table verification failed, missing [#{match}]"
         return
       end
     }
@@ -186,7 +186,8 @@ Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
     nat_matches.each { |match|
       unless @result[:success] && @result[:response] =~ /#{match}/
         @result[:success] = false
-        @result[:message] = "The nat table verification failed, missing [#{match}]"
+        # info only, we expect this to fail sometimes
+        logger.info "The nat table verification failed, missing [#{match}]"
         return
       end
     }
@@ -979,7 +980,7 @@ Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipbo
        step %Q/I run command on the node's ovnkube pod:/, table("| ip | -6 | route | show | default |")
     else
        step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
-    end  
+    end
   when "OpenShiftSDN"
     step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
@@ -990,7 +991,7 @@ Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipbo
   logger.info "The node's default interface is #{def_inf}"
   if v6
      @result = host.exec_admin("ip -6 -brief addr show #{def_inf}")
-     cb[cb_ipaddr]=@result[:response].match(/([a-f0-9:]+:+)+[a-f0-9]+/)[0]  
+     cb[cb_ipaddr]=@result[:response].match(/([a-f0-9:]+:+)+[a-f0-9]+/)[0]
   else
      @result = host.exec_admin("ip -4 -brief addr show #{def_inf}")
      cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
@@ -1443,7 +1444,7 @@ Given /^I switch the ovn gateway mode on this cluster$/ do
   step "I store the masters in the clipboard"
   ovnkube_master = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash| pod.node_name == node.name}.first
   @result = admin.cli_exec(:logs, resource_name: ovnkube_master.name, n: "openshift-ovn-kubernetes", c: "ovnkube-master")
-  
+
   if @result[:response].include? "Gateway:{Mode:local"
     logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
     @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": false}}}}}", type: "merge")
