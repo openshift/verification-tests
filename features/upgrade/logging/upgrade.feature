@@ -88,5 +88,5 @@ Feature: Logging upgrading related features
     Then I can display the pod logs of the "logging-upg-prep-share" project under the "*app" pattern in kibana
     Then I close the current browser
     Given I switch to the first user
-    Then The "<%= cb.proj1 %>" project is deleted
-    Then The "<%= cb.proj2 %>" project is deleted
+    Then the "<%= cb.proj1 %>" project is deleted
+    Then the "<%= cb.proj2 %>" project is deleted

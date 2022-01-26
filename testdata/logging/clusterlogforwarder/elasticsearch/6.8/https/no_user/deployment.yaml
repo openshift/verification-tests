@@ -26,7 +26,7 @@ objects:
           app: ${NAME}
       spec:
         containers:
-        - image: quay.io/openshifttest/elasticsearch@sha256:ac2fc3a8191fd9244b49c2c4e40fbdfaa7e08f6aa5c2be343563f3a89d014dfc
+        - image: quay.io/openshifttest/elasticsearch@sha256:388b33acaf9f7687b4f08eb3068a293c2125668ff5b8d6893d68d48d304b0d90
           imagePullPolicy: IfNotPresent
           name: ${NAME}
           ports:

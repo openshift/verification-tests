@@ -956,7 +956,7 @@ Given /^I get(?: (\d+))? logs from the #{QUOTED} kafka consumer job in the #{QUO
 end
 
 # deploy external elasticsearch server
-# version: 6.8 or 7.12
+# version: 6.8 or 7.16
 # project_name: where the external ES deployed
 # scheme: http or https
 # client_auth: true or false, if `true`, must provide client crendentials
@@ -964,7 +964,7 @@ end
 # secret_name: the name of the pipeline secret for the fluentd to use
 Given /^external elasticsearch server is deployed with:$/ do | table |
   opts = opts_array_to_hash(table.raw)
-  version = opts[:version] # 6.8 or 7.12
+  version = opts[:version] # 6.8 or 7.16
   project_name = opts[:project_name]
   scheme = opts[:scheme]
   client_auth = opts[:client_auth]
@@ -974,8 +974,8 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
   secret_name = opts[:secret_name]
   step %Q/I use the "#{project_name}" project/
 
-  unless ["6.8", "7.12"].include? version
-    raise "Unsupported ES version: #{version}, we only support ES 6.8 and 7.12!"
+  unless ["6.8", "7.16"].include? version
+    raise "Unsupported ES version: #{version}, we only support ES 6.8 and 7.16!"
   end
 
   if scheme == "https"
