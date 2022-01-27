@@ -156,7 +156,7 @@ Then /^(?:the )?expression should be true> (.+)$/ do |expr|
           if ['cred','key','passw','secret','token'].any? { |cred| expr_left.downcase.include?(cred) || expr_right.downcase.include?(cred) }
             logger.warn("Should not print credential info in logs")
           else
-            eval_details = "\nleft_operand: #{eval(expr_left)}, \nright_operand: #{eval(expt_right)}\n"
+            eval_details = "\nleft_operand: #{eval(expr_left)}, \nright_operand: #{eval(expr_right)}\n"
           end
         rescue
           logger.info("Unable to interpret the expression...")

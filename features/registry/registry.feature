@@ -4,9 +4,9 @@ Feature: Testing registry
   # @case_id OCP-12400
   @admin
   @destructive
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
@@ -61,8 +61,8 @@ Feature: Testing registry
   # @case_id OCP-18998
   @admin
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Mirror multiple locations to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -83,8 +83,8 @@ Feature: Testing registry
   # @case_id OCP-23030
   @admin
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Enable must-gather object refs in image-registry cluster
     When I run the :get admin command with:
       | resource      | co             |
@@ -156,8 +156,8 @@ Feature: Testing registry
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the related log from must-gather tool
     When I run the :delete admin command with:
       | object_type       | co             |
@@ -176,7 +176,7 @@ Feature: Testing registry
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Mirror image to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -194,21 +194,20 @@ Feature: Testing registry
   # @author xiuwang@redhat.com
   # @case_id OCP-29696
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Use node credentials in imagestream import
     Given I have a project
     When I run the :tag client command with:
-      | source           | registry.redhat.io/rhscl/mysql-80-rhel7:latest |
-      | dest             | mysql:8.0                                      |
-      | reference_policy | local                                          |
+      | source           | registry.redhat.io/rhel8/mysql-80:latest |
+      | dest             | mysql:8.0-el8                            |
+      | reference_policy | local                                    |
     Then the step should succeed
     When I run the :new_app client command with:
       | template | mysql-ephemeral               |
       | p        | NAMESPACE=<%= project.name %> |
-      | p        | MYSQL_VERSION=8.0             |
     Then the step should succeed
     When a pod becomes ready with labels:
       | deployment=mysql-1 |
@@ -228,22 +227,21 @@ Feature: Testing registry
   # @case_id OCP-29693
   @admin
   @disconnected
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: [Disconnect]Import image from a secure registry using node credentials
     Given I have a project
     And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard
     When I run the :tag client command with:
-      | source           | <%= cb.mirror_registry %>rhscl/mysql-80-rhel7:latest |
-      | dest             | mysql:8.0                                            |
-      | reference_policy | local                                                |
+      | source           | <%= cb.mirror_registry %>rhel8/mysql-80:latest |
+      | dest             | mysql:8.0-el8                                  |
+      | reference_policy | local                                          |
     Then the step should succeed
     When I run the :new_app client command with:
       | template | mysql-ephemeral               |
       | p        | NAMESPACE=<%= project.name %> |
-      | p        | MYSQL_VERSION=8.0             |
     Then the step should succeed
     When a pod becomes ready with labels:
       | deployment=mysql-1 |
@@ -262,8 +260,8 @@ Feature: Testing registry
   # @case_id OCP-29706
   @admin
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Node secret takes effect when common secret is removed
     Given I have a project
     When I run the :extract admin command with:
@@ -278,13 +276,12 @@ Feature: Testing registry
       | from_file   | /tmp/.dockerconfigjson |
     Then the step should succeed
     When I run the :tag client command with:
-      | source | registry.redhat.io/rhscl/mysql-80-rhel7:latest |
-      | dest   | mysql:8.0                                      |
+      | source | registry.redhat.io/rhel8/mysql-80:latest | 
+      | dest   | mysql:8.0-el8                            |
     Then the step should succeed
     When I run the :new_app client command with:
       | template | mysql-ephemeral               |
       | p        | NAMESPACE=<%= project.name %> |
-      | p        | MYSQL_VERSION=8.0             |
     Then the step should succeed
     When a pod becomes ready with labels:
       | deployment=mysql-1 |

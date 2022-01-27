@@ -304,7 +304,7 @@ Given /^I have a git client pod in the#{OPT_QUOTED} project$/ do |project_name|
   end
 
   #@result = user.cli_exec(:create, f: "https://raw.githubusercontent.com/openshift/origin/master/examples/gitserver/gitserver-ephemeral.yaml")
-  @result = user.cli_exec(:run, name: "git-client", image: "quay.io/openshifttest/origin-gitserver@sha256:8062457c330f0da521b340f2dceb13c4852d46ec58e45a9ef276a5ec639a328c", env: 'GIT_HOME=/var/lib/git')
+  @result = user.cli_exec(:run, name: "git-client", image: "quay.io/openshifttest/origin-gitserver@sha256:9b9e712a9b3d5d4ce1cdd2feaeeaf6d204883fe966790fd3b7d00664639cc7db", env: 'GIT_HOME=/var/lib/git')
   raise "could not create the git client pod" unless @result[:success]
 
   @result = BushSlicer::Pod.wait_for_labeled("run=git-client", count: 1,
@@ -335,7 +335,7 @@ Given /^I have a git client pod in the#{OPT_QUOTED} project$/ do |project_name|
   # currently we use user token instead of service account
   if cb.ssh_private_key.nil? then
     @result = pod.exec(
-        "bash", "-c",
+        "sh", "-c",
         "git config --global credential.http://#{cb.git_svc_ip}:8080.helper '!f() { echo \"username=#{user.name}\"; echo \"password=#{user.cached_tokens.first}\"; }; f'",
         as: user
     )

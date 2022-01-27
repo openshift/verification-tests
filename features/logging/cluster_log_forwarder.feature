@@ -412,10 +412,10 @@ Feature: cluster log forwarder features
     And I use the "openshift-logging" project
     And fluentd receiver is deployed as insecure in the "openshift-logging" project
     And external elasticsearch server is deployed with:
-      | version               | 6.8               |
-      | scheme                | http              |
-      | transport_ssl_enabled | false             |
-      | project_name          | openshift-logging |
+      | version      | 6.8               |
+      | scheme       | http              |
+      | client_auth  | false             |
+      | project_name | openshift-logging |
     # create clusterlogforwarder instace with multiple receiver
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     And I obtain test data file "logging/clusterlogforwarder/multiple_receiver/clf_fluent_es.yaml"
@@ -506,8 +506,8 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
     Given I switch to cluster admin pseudo user

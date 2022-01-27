@@ -2,9 +2,9 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11545
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Build with specified Dockerfile via new-build -D
     Given I have a project
@@ -56,21 +56,21 @@ Feature: buildlogic.feature
   # @author yantan@redhat.com
   # @case_id OCP-10799
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Create new build config use dockerfile with source repo
     Given I have a project
     When I run the :new_build client command with:
       | app_repo | https://github.com/openshift/ruby-hello-world   |
-      | D        | FROM quay.io/openshifttest/ruby-25-centos7:build\nRUN echo ok |
+      | D        | FROM quay.io/openshifttest/ruby-27:multiarch\nRUN echo ok |
     Then the step should succeed
     When I get project buildconfigs as YAML
     Then the step should succeed
     Then the output should match:
       | dockerfile   |
-      | FROM quay.io/openshifttest/ruby-25-centos7:build   |
+      | FROM quay.io/openshifttest/ruby-27:multiarch   |
       | RUN echo ok  |
       | uri: https://github.com/openshift/ruby-hello-world |
       | type: [Gg]it |
@@ -78,7 +78,7 @@ Feature: buildlogic.feature
     Then the "ruby-hello-world-1" build completed
 
   # @author haowang@redhat.com
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: ForcePull image for build
     Given I have a project
     Given I obtain test data file "build/forcePull/<template>"
@@ -96,7 +96,7 @@ Feature: buildlogic.feature
 
     @proxy
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
       | template                            |
       | buildconfig-docker-ImageStream.json | # @case_id OCP-10651
@@ -110,9 +110,9 @@ Feature: buildlogic.feature
 
   # @author yantan@redhat.com
   # @case_id OCP-10745
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
@@ -149,9 +149,9 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11720
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Build from private git repo with/without ssh key
     Given I have a project
@@ -196,9 +196,9 @@ Feature: buildlogic.feature
 
   # @author yantan@redhat.com
   # @case_id OCP-11896
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Create new-app from private git repo with ssh key
     Given I have a project
@@ -235,9 +235,9 @@ Feature: buildlogic.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13683
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Check s2i build substatus and times
     Given I have a project
@@ -259,9 +259,9 @@ Feature: buildlogic.feature
   # @case_id OCP-13684
   @flaky
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Check docker build substatus and times
     Given I have a project
@@ -452,8 +452,8 @@ Feature: buildlogic.feature
   # @case_id OCP-19133
   @proxy
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application
@@ -504,9 +504,9 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-40366
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's
     Given I have a project

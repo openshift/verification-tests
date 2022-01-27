@@ -3,7 +3,10 @@ Feature: IPsec upgrade scenarios
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
+  @network-ovnkubernetes
   @4.10 @4.9 @4.8
+  @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade - prepare
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -65,7 +68,10 @@ Feature: IPsec upgrade scenarios
   # @case_id OCP-44834
   @admin
   @upgrade-check
+  @network-ovnkubernetes
   @4.10 @4.9 @4.8
+  @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade
     Given evaluation of `50` is stored in the :protocol clipboard
     Given I switch to cluster admin pseudo user

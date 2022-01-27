@@ -178,7 +178,7 @@ check_resources_pod_dashboard:
 check_cluster_utilization_items:
   elements:
   - selector:
-      xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='Cluster utilization']
+      xpath: //div[contains(@class, "pf-c-card__title") and text()='Cluster utilization']
     timeout: 30
   - selector:
       xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='CPU']
@@ -193,32 +193,32 @@ check_cluster_utilization_items:
 click_cpu_data:
   element:
     selector:
-      xpath: //h4[text()='CPU']/..//button[contains(@class,'co-dashboard-card__button-link')]
+      xpath: //h4[text()='CPU']/..//button[contains(@class,'pf-c-button')]
     op: click
 click_memory_data:
   element:
     selector:
-      xpath: //h4[text()='Memory']/..//button[contains(@class,'co-dashboard-card__button-link')]
+      xpath: //h4[text()='Memory']/..//button[contains(@class,'pf-c-button')]
     op: click
 click_filesystem_data:
   element:
     selector:
-      xpath: //h4[text()='Filesystem']/..//button[contains(@class,'co-dashboard-card__button-link')]
+      xpath: //h4[text()='Filesystem']/..//button[contains(@class,'pf-c-button')]
     op: click
 click_pod_count_data:
   element:
     selector:
-      xpath: //h4[text()='Pod count']/..//button[contains(@class,'co-dashboard-card__button-link')]
+      xpath: //h4[text()='Pod count']/..//button[contains(@class,'pf-c-button')]
     op: click
 click_network_in_data:
   element:
     selector:
-      xpath: //h4[text()='Network transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][1]
+      xpath: //h4[text()='Network transfer']/..//button[contains(@class,'pf-c-button')][1]
     op: click
 click_network_out_data:
   element:
     selector:
-      xpath: //h4[text()='Network transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][2]
+      xpath: //h4[text()='Network transfer']/..//button[contains(@class,'pf-c-button')][2]
     op: click
     timeout: 60
 choose_consumer_measure:
@@ -540,7 +540,7 @@ check_metrics_query_filesystem_filter_by_node_type:
   scripts:
   - command:
       return /sum.*node_filesystem_size_bytes.*kube_node_role.*<node_type>/.test(decodeURI(document.querySelectorAll('div.co-utilization-card__item-chart>div>a')[2].href).replaceAll('\n',''))
-    expect_result: true   
+    expect_result: true
 check_metrics_query_network_filter_by_node_type:
   scripts:
   - command:
@@ -579,12 +579,14 @@ check_infra_info_when_filter_by_node_type:
   action: check_metrics_query_network_filter_by_node_type
   action: check_metrics_query_podcount_filter_by_node_type
 choose_node_type:
-  action: click_filter_dropdown
+  params:
+    button_text: Node type
+  action: click_button
   elements:
   - selector:
       xpath: //span[contains(@class,'pf-c-check__label') and contains(text(),'<node_type>')]
     op: click
-  action: click_filter_dropdown
+  action: click_button
 # status card
 click_operator_status:
   elements:
@@ -646,9 +648,9 @@ check_insights_popover_info_when_available:
 check_insights_popover_info_when_unavailable:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-status-popup__section') and contains(.,'Temporary unavailable')]
+      xpath: //div[contains(@class,'pf-c-popover__body') and contains(.,'Temporary unavailable')]
   - selector:
-      xpath: //a[contains(@class,'co-external-link') and contains(@href,'support/remote_health_monitoring/using-insights-to-identify-issues-with-your-cluster.html')]
+      xpath: //a[contains(@class,'co-external-link') and contains(@href,'using-insights-to-identify-issues-with-your-cluster')]
 check_insights_status_when_available:
   params:
     status: Warning
@@ -670,7 +672,7 @@ check_insights_status_when_unavailable:
 check_cluster_inventory_items:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-dashboard-card__header')]/*[text()='Cluster inventory']
+      xpath: //div[contains(@class,'pf-c-card__title') and contains(text(),'Cluster inventory')]
   - selector:
       xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Node')]
   - selector:
@@ -759,19 +761,19 @@ check_charts_on_pod_page:
   action: click_metrics_tab
   elements:
   - selector: &memory_usage_chart
-      xpath: //div/h2[text()='Memory usage']/following::div[1]//div[@class='pf-c-chart']
+      xpath: //div[contains(text(), 'Memory usage')]/following::div[1]//div[contains(@class,'pf-c-chart')]
     timeout: 40
   - selector:
-      xpath: //div/h2[text()='CPU usage']/following::div[1]//div[@class='pf-c-chart']
+      xpath: //div[contains(text(), 'CPU usage')]/following::div[1]//div[contains(@class,'pf-c-chart')]
     timeout: 40
   - selector:
-      xpath: //div/h2[text()='Filesystem']/following::div[1]//div[@class='pf-c-chart']
+      xpath: //div[contains(text(), 'Filesystem')]/following::div[1]//div[contains(@class,'pf-c-chart')]
     timeout: 40
   - selector:
-      xpath: //div/h2[text()='Network in']/following::div[1]//div[@class='pf-c-chart']
+      xpath: //div[contains(text(), 'Network in')]/following::div[1]//div[contains(@class,'pf-c-chart')]
     timeout: 40
   - selector:
-      xpath: //div/h2[text()='Network out']/following::div[1]//div[@class='pf-c-chart']
+      xpath: //div[contains(text(), 'Network out')]/following::div[1]//div[contains(@class,'pf-c-chart')]
     timeout: 40
 click_memory_usage_chart:
   element:
@@ -790,8 +792,9 @@ check_no_errors_in_charts:
   - selector:
       xpath: //div[contains(text(),'No datapoints found')]
     missing: true
+    timeout: 120
 check_monitoring_dashboard_card:
   element:
     selector:
-      xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='<card_name>']
+      xpath: //div[contains(@class,'pf-c-card__title') and text()='<card_name>']
     timeout: 60

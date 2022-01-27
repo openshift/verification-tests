@@ -1,6 +1,5 @@
 Feature: apiserver and auth related upgrade check
   # @author pmali@redhat.com
-  # @case_id OCP-22734
   @upgrade-prepare
   @inactive
   Scenario: Check Authentication operators and operands are upgraded correctly - prepare
@@ -130,17 +129,17 @@ Feature: apiserver and auth related upgrade check
   # @author kewang@redhat.com
   @upgrade-prepare
   @admin
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Default RBAC role, rolebinding, clusterrole and clusterrolebinding without any missing after upgraded - prepare
     When I run the :get admin command with:
-      | resource | clusterroles.rbac |
-      | o        | yaml              |
+      | resource | clusterroles.rbac                         |
+      | o        | jsonpath={.items[*].metadata.annotations} |
     Then the output should contain:
-      | autoupdate: "true" |
+      | autoupdate":"true" |
     And the output should not contain:
-      | autoupdate: "false" |
+      | autoupdate":"false" |
     # Make some changes on clusterrole resources before upgrade
     Given as admin I successfully patch resource "clusterrole.rbac/system:build-strategy-custom" with:
       | {"rules": [{"apiGroups": ["","build.openshift.io"],"resources": ["builds/custom"],"verbs": [ "get" ]}] } |
@@ -163,9 +162,9 @@ Feature: apiserver and auth related upgrade check
   # @case_id OCP-19470
   @upgrade-check
   @admin
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Default RBAC role, rolebinding, clusterrole and clusterrolebinding without any missing after upgraded
     # Checking original clusterrole resources recovered after upgraded
     When I run the :get admin command with:
@@ -186,9 +185,9 @@ Feature: apiserver and auth related upgrade check
   @upgrade-prepare
   @admin
   @destructive
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the default SCCs should not be stomped by CVO - prepare
     Given as admin I successfully merge patch resource "scc/anyuid" with:
       | {"users": ["system:serviceaccount:test-scc:test-scc"]} |
@@ -212,9 +211,9 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @admin
   @destructive
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the default SCCs should not be stomped by CVO
     Given the "kube-apiserver" operator version matches the current cluster version
     And the "openshift-apiserver" operator version matches the current cluster version
@@ -243,9 +242,9 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -275,9 +274,9 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-check
   @users=upuser1,upuser2
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
     Given the master version >= "4.8"
     Given I switch to the first user
@@ -303,7 +302,7 @@ Feature: apiserver and auth related upgrade check
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade - prepare
     # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
     # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -317,7 +316,7 @@ Feature: apiserver and auth related upgrade check
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade
     # This case needs keep running oc commands against servers during upgrade, but our framework does not support
     # So using a workaround: run them in a background script during upgrade CI job and check result here
@@ -328,4 +327,4 @@ Feature: apiserver and auth related upgrade check
       | n        | ocp-34223-proj |
     Then the step should succeed
     # This is to discover bugs like: 1845411 1804717 1912820
-    And the output should not contain "failed"
+    And the expression should be true> @result[:response].scan(/failed/).length <= 1

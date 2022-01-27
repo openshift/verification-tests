@@ -22,6 +22,7 @@ module BushSlicer
     CENSOR_KW = [
       'kind: secret',
       '"kind": "secret"',
+      '"password":',
       'source: data:',
       '"source": "data:',
     ]

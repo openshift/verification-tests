@@ -4,8 +4,8 @@ Feature: SDN externalIP compoment upgrade testing
   @admin
   @upgrade-prepare
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the externalIP works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
@@ -50,8 +50,8 @@ Feature: SDN externalIP compoment upgrade testing
   @admin
   @upgrade-check
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the externalIP works well after upgrade
     Given I switch to cluster admin pseudo user
     Given I store the schedulable nodes in the :nodes clipboard
@@ -75,6 +75,3 @@ Feature: SDN externalIP compoment upgrade testing
     """
     ### delete this project,make sure project is deleted
     Given the "externalip-upgrade" project is deleted
-
-
-

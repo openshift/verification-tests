@@ -1,8 +1,11 @@
  Feature: SDN multicast compoment upgrade testing
- 
+
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
+  @4.10 @4.9
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   Scenario: Check the multicast works well after upgrade - prepare
     # create some multicast testing pods
     Given I switch to cluster admin pseudo user
@@ -71,7 +74,7 @@
     Then the step should succeed
     And the output should match:
       | eth0\s+1\s+232.43.211.234 |
-    """   
+    """
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.pod3 %>" pod:
@@ -83,14 +86,15 @@
     And the output should not match:
       | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
       | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
-    """  
+    """
 
   # @author weliang@redhat.com
   # @case_id OCP-44636
   @admin
   @upgrade-check
   @4.10 @4.9
-  @azure-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   Scenario: Check the multicast works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "multicast-upgrade" project
@@ -147,7 +151,7 @@
     Then the step should succeed
     And the output should match:
       | eth0\s+1\s+232.43.211.234 |
-    """   
+    """
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.pod3 %>" pod:

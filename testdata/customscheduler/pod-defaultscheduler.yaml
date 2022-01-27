@@ -8,4 +8,4 @@ spec:
   schedulerName: default-scheduler
   containers:
   - name: pod-with-default-annotation-container
-    image: quay.io/openshifttest/pause@sha256:b31bfb4d0213f254d361e0079deaaebefa4f82ba7aa76ef82e90b4935ad5b105
+    image: quay.io/openshifttest/pause@sha256:e481caec2eb984ce023673a3ec280bf57dea8c0305009e246b019b3eef044f9e

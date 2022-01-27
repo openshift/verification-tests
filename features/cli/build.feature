@@ -69,9 +69,9 @@ Feature: build 'apps' with CLI
   # @author xiuwang@redhat.com
   # @case_id OCP-11133
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Create a build config based on the source code in the current git repository
     Given I have a project
@@ -134,15 +134,15 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11139
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
       | image_stream      | openshift/mysql                                      |
-      | image             | registry.access.redhat.com/rhscl/postgresql-96-rhel7 |
+      | image             | registry.redhat.io/rhel8/postgresql-12       |
       | env               | POSTGRESQL_USER=user                                 |
       | env               | POSTGRESQL_DATABASE=db                               |
       | env               | POSTGRESQL_PASSWORD=test                             |
@@ -160,7 +160,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     """
     And the output should contain "mysql"
-    Given I wait for the "postgresql-96-rhel7" service to become ready up to 300 seconds
+    Given I wait for the "postgresql-12" service to become ready up to 300 seconds
     And I get the service pods
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -174,9 +174,9 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   # @case_id OCP-11227
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Add multiple source inputs
     Given I have a project
@@ -203,9 +203,9 @@ Feature: build 'apps' with CLI
 
   # @case_id OCP-10771
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Add a image with multiple paths as source input
     Given I have a project
@@ -225,21 +225,21 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   # @case_id OCP-11943
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
       | source | quay.io/openshifttest/python:3.6 |
-      | dest   | python:latest |
+      | dest   | python:multiarch |
     Then the step should succeed
     And the "python" image stream becomes ready
     When I run the :new_build client command with:
       | app_repo | openshift/ruby:latest |
       | app_repo | https://github.com/openshift/ruby-hello-world |
-      | source_image | <%= project.name %>/python:latest |
+      | source_image | <%= project.name %>/python:multiarch |
       | source_image_path | /tmp:xiuwangtest/ |
       | name | final-app |
       | allow_missing_imagestream_tags| true |
@@ -247,7 +247,7 @@ Feature: build 'apps' with CLI
     When I get project build_config named "final-app" as YAML
     Then the output should match:
       | kind:\s+ImageStreamTag |
-      | name:\s+python:latest |
+      | name:\s+python:multiarch |
       | destinationDir:\s+xiuwangtest |
       | sourcePath:\s+/tmp |
     Given the "final-app-1" build completes
@@ -282,7 +282,7 @@ Feature: build 'apps' with CLI
       | image_name | python |
       | all | true |
       | confirm | true |
-      | from | quay.io/openshifttest/ruby-25-centos7 |
+      | from | quay.io/openshifttest/ruby-27 |
       | n | <%= project.name %> |
     Then the step should succeed
     Given I get project builds
@@ -290,9 +290,9 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11776
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Cannot create secret from local file and with same name via oc new-build
     Given I have a project
@@ -321,9 +321,9 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11552
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Using a docker image as source input for docker build
     Given I have a project
@@ -381,9 +381,9 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   # @case_id OCP-11582
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Change runpolicy to SerialLatestOnly build
     Given I have a project
@@ -462,7 +462,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Cancel multiple new/pending/running builds
     Given I have a project
     When I run the :new_build client command with:
@@ -600,7 +600,7 @@ Feature: build 'apps' with CLI
     """
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | num1 | num2 | num3 | num4 | num5 |
@@ -608,7 +608,7 @@ Feature: build 'apps' with CLI
 
   # @author haowang@redhat.com
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: The default runpolicy is Serial build -- new-build/new-app command
     Given I have a project
     When I run the :<cmd> client command with:
@@ -668,7 +668,7 @@ Feature: build 'apps' with CLI
     Then the "ruby-hello-world-7" build becomes :failed
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | cmd       |
@@ -705,9 +705,9 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11023
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Handle build naming collisions
     Given I have a project
@@ -733,29 +733,29 @@ Feature: build 'apps' with CLI
   # @author wzheng@redhat.com
   # @case_id OCP-17523
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
     Given I have a project
     When I run the :new_app client command with:
-      | app_repo | quay.io/openshifttest/ruby-22-centos7:2.2~https://github.com/openshift/ruby-hello-world#beta4 |
+      | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world#config |
     Then the step should succeed
     Given the "ruby-hello-world-1" build was created
     And the "ruby-hello-world-1" build completed
     When I run the :describe client command with:
       | resource | imagestreamtag |
     Then the output should contain:
-      | io.openshift.build.commit.ref=beta4 |
-      | OPENSHIFT_BUILD_REFERENCE=beta4     |
+      | io.openshift.build.commit.ref=config |
+      | OPENSHIFT_BUILD_REFERENCE=config    |
 
   # @author xiuwang@redhat.com
   # @case_id OCP-19631
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Insert configmap when create a buildconfig
     Given I have a project
@@ -888,9 +888,9 @@ Feature: build 'apps' with CLI
   # @author xiuwang@redhat.com
   # @case_id OCP-18962
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Allow using a configmap as an input to a docker build
     Given I have a project
@@ -914,7 +914,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     #Insert cm and secret to bc with empty destination - succeed
     When I run the :new_build client command with:
-      | app_repo         | quay.io/openshifttest/ruby-27-centos7:centos7~https://github.com/openshift/ruby-hello-world |
+      | app_repo         | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world |
       | build_config_map | cmtest1:.                                                                                   |
       | build_config_map | cmtest2:./newdir                                                                            |
       | strategy         | docker                                                                                      |
@@ -946,7 +946,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     #Add a configmaps with a multi-level dirs - succeed
     When I run the :new_build client command with:
-      | app_repo         | quay.io/openshifttest/ruby-27-centos7:centos7~https://github.com/openshift/ruby-hello-world |
+      | app_repo         | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world |
       | build_config_map | cmtest1:./newdir1/newdir2/newdir3                                                           |
       | strategy         | docker                                                                                      |
     Then the step should succeed

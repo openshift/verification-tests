@@ -4,6 +4,9 @@ Feature: Descheduler major upgrade should work fine
   @upgrade-prepare
   @users=upuser1,upuser2
   @destructive
+  @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: [upgrade] - upgrade descheduler from 4.x to 4.y - prepare
     Given I switch to cluster admin pseudo user
     Given I store master major version in the clipboard
@@ -37,6 +40,9 @@ Feature: Descheduler major upgrade should work fine
   @upgrade-check
   @users=upuser1,upuser2
   @destructive
+  @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: [upgrade] - upgrade descheduler from 4.x to 4.y
     Given I switch to cluster admin pseudo user
     And I use the "openshift-kube-descheduler-operator" project

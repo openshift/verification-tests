@@ -80,7 +80,7 @@ Feature: Service related networking scenarios
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: User cannot access the MCS by creating a LoadBalancer service that points to the MCS
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -108,8 +108,8 @@ Feature: Service related networking scenarios
   # @case_id OCP-21814
   @admin
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: The headless service can publish the pods even if they are not ready
     Given I have a project
     Given I obtain test data file "networking/headless_notreadypod.json"
@@ -136,7 +136,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-24668
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: externalIP defined in service but no spec.externalIP defined
     Given I have a project
     # Create a service with a externalIP
@@ -151,7 +151,7 @@ Feature: Service related networking scenarios
   @destructive
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: externalIP defined in service with set ExternalIP in allowedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -198,7 +198,7 @@ Feature: Service related networking scenarios
   @destructive
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: A rejectedCIDRs inside an allowedCIDRs
     # Create additional network through CNO
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
@@ -249,7 +249,7 @@ Feature: Service related networking scenarios
   @destructive
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: externalIP defined in service with set ExternalIP in rejectedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -283,7 +283,7 @@ Feature: Service related networking scenarios
   @destructive
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: An allowedCIDRs inside an rejectedCIDRs
     # Create additional network through CNO
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
@@ -321,7 +321,7 @@ Feature: Service related networking scenarios
   @destructive
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Defined Multiple allowedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -396,7 +396,7 @@ Feature: Service related networking scenarios
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Idling/Unidling services on sdn/OVN
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -470,8 +470,8 @@ Feature: Service related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Taint node with too small MTU value
     Given the default interface on nodes is stored in the :default_interface clipboard
     And the node's MTU value is stored in the :mtu_actual clipboard
@@ -526,9 +526,9 @@ Feature: Service related networking scenarios
   # @case_id OCP-33848
   @admin
   @destructive
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: User can expand the nodePort range by patch the serviceNodePortRange in network
     Given I store the workers in the :workers clipboard
@@ -579,7 +579,7 @@ Feature: Service related networking scenarios
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: The iptables rules for the service should be DNAT or REDIRECT to node after being idled
     Given I have a project
     And evaluation of `project.name` is stored in the :proj_name clipboard
@@ -633,3 +633,151 @@ Feature: Service related networking scenarios
       | KUBE-SEP-.+ -p tcp .* -m tcp -j DNAT --to-destination <%= cb.pod_ip %>:8080            |
       | KUBE-SERVICES -d <%= cb.service_ip %>/32 -p tcp .* -m tcp --dport 27017 -j KUBE-SVC-.+ |
       | KUBE-SVC-.+ .* -j KUBE-SEP-.+                                                          |
+
+
+  # @author jechen@redhat.com
+  # @case_id OCP-43493
+  @admin
+  @destructive
+  @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: Update externalIP from oc edit svc
+    Given I have a project
+    And evaluation of `project.name` is stored in the :proj_name clipboard
+    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
+    Given I store the schedulable nodes in the :nodes clipboard
+ 
+    # Add externalIP policy to CNO
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+	    | {"spec":{"externalIP":{"policy":{"allowedCIDRs":["1.1.1.0/24"]}}}} |
+
+    # Clean-up required to erase above externalIP policy after testing done
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs": null}}}} |
+    """
+ 
+    # Create a svc with externalIP
+    Given I switch to the first user
+    And I use the "<%= cb.proj_name %>" project
+    Given I obtain test data file "networking/externalip_service1.json"
+    And I wait up to 500 seconds for the steps to pass:
+    """
+    When I run oc create over "externalip_service1.json" replacing paths:
+      | ["spec"]["externalIPs"][0] | 1.1.1.1 |
+    Then the step should succeed
+    """
+ 
+    # Create a pod
+    Given I obtain test data file "networking/externalip_pod.yaml"
+    When I run the :create client command with:
+      | f | externalip_pod.yaml |
+    Then the step should succeed
+    And the pod named "externalip-pod" becomes ready
+ 
+    # Curl externalIP:portnumber should pass
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | curl --connect-timeout 5 1.1.1.1:27017 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift!"
+ 
+    # change externalIP for the svc
+    Given I switch to the first user
+    And I use the "<%= cb.proj_name %>" project
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :patch client command with:
+      | resource      | service                              |
+      | resource_name | service-unsecure                     |
+      | p             | {"spec":{"externalIPs":["1.1.1.2"]}} |
+    Then the step should succeed
+    """
+ 
+    # Curl new externalIP:portnumber should pass
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | curl --connect-timeout 5 1.1.1.2:27017 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift!"
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-47087
+  @4.10
+  @admin
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  Scenario: Other node cannot be accessed for nodePort when externalTrafficPolicy is Local
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
+    And evaluation of `rand(30000..32767)` is stored in the :port clipboard
+    Given I have a project
+    Given I obtain test data file "networking/nodeport_test_pod.yaml"
+    When I run the :create client command with:
+      | f | nodeport_test_pod.yaml |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=hello-pod |
+    And evaluation of `pod.node_ip` is stored in the :hostip clipboard
+    When I obtain test data file "networking/nodeport_test_service.yaml"
+    When I run oc create over "nodeport_test_service.yaml" replacing paths:
+      | ["spec"]["ports"][0]["nodePort"]  | <%= cb.port %> |
+      | ["spec"]["externalTrafficPolicy"] | Local          |
+    Then the step should succeed
+
+    Given I use the "<%= cb.masters[1].name %>" node
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.master0_ip %>:<%= cb.port %> |
+    Then the step should fail
+    And the output should not contain:
+      | Hello OpenShift! |
+    Given I ensure "hello-pod" service is deleted
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should fail
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-10770
+  @4.10 @4.9 @4.8 @4.7
+  @admin
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  Scenario: Be able to access the service via the nodeport
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
+    And evaluation of `rand(30000..32767)` is stored in the :port clipboard
+    Given I have a project
+    Given I obtain test data file "networking/nodeport_test_pod.yaml"
+    When I run the :create client command with:
+      | f | nodeport_test_pod.yaml |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=hello-pod |
+    And evaluation of `pod.node_ip` is stored in the :hostip clipboard
+    When I obtain test data file "networking/nodeport_test_service.yaml"
+    When I run oc create over "nodeport_test_service.yaml" replacing paths:
+      | ["spec"]["ports"][0]["nodePort"]  | <%= cb.port %> |
+    Then the step should succeed
+
+    Given I use the "<%= cb.masters[1].name %>" node
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.master0_ip %>:<%= cb.port %> |
+    Then the step should succeed 
+    And the output should contain:
+      | Hello OpenShift! |
+    Given I ensure "hello-pod" service is deleted
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should fail

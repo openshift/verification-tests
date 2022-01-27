@@ -7,16 +7,7 @@ metadata:
 spec:
   containers:
   - name: pod-request-limit-valid-1
-    image: quay.io/openshifttest/mysql-56-centos7@sha256:a9fb44bd6753a8053516567a0416db84844e10989140ea2b19ed1d2d8bafc75f
-    env:
-    - name: MYSQL_USER
-      value: userSUM
-      name: MYSQL_PASSWORD
-      value: P5J6s8wf
-      name: MYSQL_DATABASE
-      value: root
-      name: MYSQL_ROOT_PASSWORD
-      value: W5J6s8wf
+    image: quay.io/openshifttest/hello-openshift@sha256:1e70b596c05f46425c39add70bf749177d78c1e98b2893df4e5ae3883c2ffb5e
     resources:
       limits:
         cpu: "500m"

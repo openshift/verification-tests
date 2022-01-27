@@ -213,7 +213,7 @@
             "containers": [
               {
                 "name": "ruby-helloworld-database",
-                "image": "quay.io/openshifttest/mysql-56-centos7",
+                "image": "quay.io/openshifttest/mysql:multiarch",
                 "ports": [
                   {
                     "containerPort": 3306,
@@ -232,6 +232,10 @@
                   {
                     "name": "MYSQL_DATABASE",
                     "value": "${MYSQL_DATABASE}"
+                  },
+                  {
+                    "name": "MYSQL_RANDOM_ROOT_PASSWORD",
+                    "value": "yes"
                   }
                 ],
                 "resources": {

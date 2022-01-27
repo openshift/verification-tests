@@ -3,6 +3,9 @@ Feature: SDN sctp compoment upgrade testing
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
+  @4.10 @4.9
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   Scenario: Check the sctp works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -66,7 +69,8 @@ Feature: SDN sctp compoment upgrade testing
   @admin
   @upgrade-check
   @4.10 @4.9
-  @azure-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   Scenario: Check the sctp works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "sctp-upgrade" project

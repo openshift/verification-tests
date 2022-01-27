@@ -82,7 +82,7 @@ check_alert_style_for_dc_pause_rollouts:
 check_filter_toolbar_style:
   elements:
   - selector:
-      xpath: //div[@class='pf-c-toolbar']//span[text()='Filter']
+      xpath: //div[contains(@class,'pf-c-toolbar')]//span[contains(.,'Filter')]
 check_filter_dropdown_style:
   action: click_filter_dropdown
   elements:
@@ -93,7 +93,7 @@ check_filter_dropdown_style:
 check_input_toolbar_style:
   elements:
     - selector:
-        xpath: //div[@class='pf-c-toolbar']//input[contains(@class,'pf-c-form-control')]
+        xpath: //div[contains(@class,'pf-c-toolbar')]//input[contains(@class,'pf-c-form-control')]
 check_search_tool_bar_style:
   action: check_filter_toolbar_style
   action: check_filter_dropdown_style

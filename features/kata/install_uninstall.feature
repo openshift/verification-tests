@@ -13,9 +13,9 @@ Feature: kata related features
   @admin
   @destructive
   @flaky
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   @gcp-ipi @baremetal-ipi @azure-ipi
-  @gcp-upi @azure-upi
+  @gcp-upi @baremetal-upi @azure-upi
   @upgrade-sanity
   Scenario: test delete kata installation
     Given I remove kata operator from the namespace
@@ -35,7 +35,7 @@ Feature: kata related features
   @flaky
   @4.10 @4.9
   @gcp-ipi @baremetal-ipi @azure-ipi
-  @gcp-upi @azure-upi
+  @gcp-upi @baremetal-upi @azure-upi
   Scenario: Operator can be installed through web console
     Given the kata-operator is installed using OLM GUI
 

@@ -3,9 +3,9 @@ Feature: projects related features via cli
   # @author yapei@redhat.com
   # @case_id OCP-11887
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Could delete all resources when delete the project
     Given a 5 characters random string of type :dns is stored into the :prj_name clipboard
@@ -13,26 +13,26 @@ Feature: projects related features via cli
       | project_name | <%= cb.prj_name %> |
     Then the step should succeed
     When I create a new application with:
-      | docker image | quay.io/openshifttest/mysql-56-centos7        |
+      | docker image | quay.io/openshifttest/mysql:multiarch         |
       | code         | https://github.com/openshift/ruby-hello-world |
     ### get project resource
     When I run the :get client command with:
       | resource | dc,deployment |
     Then the step should succeed
     And the output should contain:
-      | mysql-56-centos7 |
+      | mysql            |
       | ruby-hello-world |
     When I run the :get client command with:
       | resource | services |
     Then the step should succeed
     And the output should contain:
-      | mysql-56-centos7 |
+      | mysql            |
       | ruby-hello-world |
     When I run the :get client command with:
       | resource | is |
     Then the step should succeed
     And the output should contain:
-      | mysql-56-centos7 |
+      | mysql            |
       | ruby-hello-world |
     ### delete this project,make sure project is deleted
     Given the "<%= cb.prj_name %>" project is deleted
@@ -42,21 +42,21 @@ Feature: projects related features via cli
       | n        | <%= cb.prj_name %>  |
     Then the step should fail
     And the output should not contain:
-      | mysql-56-centos7 |
+      | mysql            |
       | ruby-hello-world |
     When I run the :get client command with:
       | resource | services           |
       | n        | <%= cb.prj_name %> |
     Then the step should fail
     And the output should not contain:
-      | mysql-56-centos7 |
+      | mysql            |
       | ruby-hello-world |
     When I run the :get client command with:
       | resource | pods               |
       | n        | <%= cb.prj_name %> |
     Then the step should fail
     And the output should not contain:
-      | mysql-56-centos7 |
+      | mysql |
 
     ### create a project with same name, no context for this new one
     And I wait for the steps to pass:
@@ -74,7 +74,7 @@ Feature: projects related features via cli
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: User can get node selector from a project
     Given  an 8 character random string of type :dns is stored into the :oadmproj1 clipboard
     Given  an 8 character random string of type :dns is stored into the :oadmproj2 clipboard
@@ -101,9 +101,9 @@ Feature: projects related features via cli
 
   # @author cryan@redhat.com
   # @case_id OCP-12561
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Could remove user and group from the current project
     Given I have a project
@@ -140,9 +140,9 @@ Feature: projects related features via cli
   # @author yinzhou@redhat.com
   # @case_id OCP-11201
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy
     Given I have a project

@@ -1,6 +1,6 @@
 Feature: stibuild.feature
   # @author xiuwang@redhat.com
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     Given I obtain test data file "templates/<template>"
@@ -34,7 +34,7 @@ Feature: stibuild.feature
     And the output should not contain "sample-build-4"
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | template          |
@@ -45,18 +45,18 @@ Feature: stibuild.feature
   @proxy
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/ruby-22-centos7:2.2 |
-      | app_repo     | https://github.com/openshift-qe/ruby-ex   |
+      | docker_image | quay.io/openshifttest/ruby-27:multiarch   |
+      | app_repo     | https://github.com/sclorg/ruby-ex   |
     Then the step should succeed
     And the "ruby-ex-1" build completes
     When I run the :patch client command with:
       | resource      | buildconfig                                                                                                                                      |
       | resource_name | ruby-ex                                                                                                                                          |
-      | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "quay.io/openshifttest/ruby-25-centos7@sha256:575194aa8be12ea066fc3f4aa9103dcb4291d43f9ee32e4afe34e0063051610b"}}},"type": "Source"}} |
+      | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "quay.io/openshifttest/ruby-27@sha256:cdb6a13032184468b1e0607f36cfb8834c97dbeffeeff800e9e6834323bed8fc"}}},"type": "Source"}} |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-ex |
@@ -82,8 +82,8 @@ Feature: stibuild.feature
   # @case_id OCP-22596
   @proxy
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:
@@ -101,9 +101,9 @@ Feature: stibuild.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-28891
   @disconnected
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Test s2i build in disconnect cluster
     Given I have a project
@@ -131,9 +131,9 @@ Feature: stibuild.feature
   # @case_id OCP-42159
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
-  Scenario: Mount source secret and configmap to builder container- sourcestrategy 
+  Scenario: Mount source secret and configmap to builder container- sourcestrategy
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |
@@ -142,20 +142,20 @@ Feature: stibuild.feature
       | from_literal | password=redhat    |
     Then the step should succeed
     When I run the :create_configmap client command with:
-      | name         | myconfig  | 
+      | name         | myconfig  |
       | from_literal | key=foo   |
       | from_literal | value=bar |
     Then the step should succeed
     When I run the :new_app client command with:
       | image_stream | ruby                                             |
-      | app_repo     | http://github.com/openshift/ruby-hello-world.git | 
+      | app_repo     | http://github.com/openshift/ruby-hello-world.git |
     Then the step should succeed
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
     When I run the :patch client command with:
-      | resource      | buildconfig      | 
+      | resource      | buildconfig      |
       | resource_name | ruby-hello-world |
-      | p             | {"spec":{"strategy":{"sourceStrategy":{"volumes":[{"mounts":[{"destinationPath":"/var/run/secret/mysecret"}],"name":"mysecret","source":{"secret":{"secretName":"mysecret"},"type":"Secret"}},{"mounts":[{"destinationPath":"/var/run/secret/myconfig"}],"name":"myconfig","source":{"configMap":{"name":"myconfig"},"type":"ConfigMap"}}]}}}} | 
+      | p             | {"spec":{"strategy":{"sourceStrategy":{"volumes":[{"mounts":[{"destinationPath":"/var/run/secret/mysecret"}],"name":"mysecret","source":{"secret":{"secretName":"mysecret"},"type":"Secret"}},{"mounts":[{"destinationPath":"/var/run/secret/myconfig"}],"name":"myconfig","source":{"configMap":{"name":"myconfig"},"type":"ConfigMap"}}]}}}} |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
@@ -168,4 +168,4 @@ Feature: stibuild.feature
       | o             | yaml                     |
     Then the output should contain:
       | mysecret-user-build-volume |
-      | myconfig-user-build-volume | 
+      | myconfig-user-build-volume |

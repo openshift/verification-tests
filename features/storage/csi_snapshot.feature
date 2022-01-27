@@ -2,7 +2,7 @@ Feature: Volume snapshot test
 
   # @author wduan@redhat.com
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Volume snapshot create and restore test
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -68,13 +68,14 @@ Feature: Volume snapshot test
     @openstack-ipi
     @openstack-upi
     @upgrade-sanity
+    @qeci
     Examples:
       | csi-sc       | csi-vsc      |
       | standard-csi | standard-csi |# @case_id OCP-37568
 
   # @author wduan@redhat.com
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Volume snapshot create and restore test with block
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -137,6 +138,7 @@ Feature: Volume snapshot test
     @openstack-ipi
     @openstack-upi
     @upgrade-sanity
+    @qeci
     Examples:
       | csi-sc       | csi-vsc      |
       | standard-csi | standard-csi | # @case_id OCP-37569
