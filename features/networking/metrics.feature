@@ -84,13 +84,7 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `cb.ovn_master_metrics_ep_ip + ':' +cb.ovn_master_metrics_ep_port` is stored in the :ovn_master_metrics_ep clipboard
     
     And evaluation of `endpoints('ovn-kubernetes-node').subsets.first.addresses.first.ip.to_s` is stored in the :ovn_node_metrics_ep_ip clipboard
-    When I run the :get client command with:
-      | resource      | ep                                                      |
-      | n             | openshift-ovn-kubernetes                                |
-      | resource_name | ovn-kubernetes-node                                     |
-      | o             | jsonpath={.subsets[*].ports[?(@.name=="metrics")].port} |
-    Then the step should succeed
-    And evaluation of `@result[:response]` is stored in the :ovn_node_metrics_ep_port clipboard
+    And evaluation of `endpoints('ovn-kubernetes-node').subsets.flat_map{ |i| i.ports }.select{ |p| p.name == "metrics" }.first.port.to_s` is stored in the :ovn_node_metrics_ep_port clipboard
     And evaluation of `cb.ovn_node_metrics_ep_ip + ':' +cb.ovn_node_metrics_ep_port` is stored in the :ovn_node_metrics_ep clipboard
     
     Given I use the "openshift-monitoring" project
