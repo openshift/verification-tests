@@ -33,19 +33,18 @@ Given /^I save the (output|response) to file>(.+)$/ do |part, filepath|
 end
 
 Given /^I get time difference using "(.+)" and "(.+)" in (.+) file$/ do  |s1, s2, filename|
-   ##This isn't a generic step-definition yet & specific to logs of machineset-controller##	
-   split1 = File.open(filename){ |f| f.read }.split(s1)[0].split("Watching")[0]
-   split2 = File.open(filename){ |f| f.read }.split(s2)[0].split(s1)[2].strip
-   
-   #Calculating time difference in seconds
-   time_start = DateTime.parse split1
-   time_end = DateTime.parse split2
-   time_difference = ((time_end - time_start)* 24 * 60 * 60).to_i
-        if time_difference > 30
-		raise ("Upgrade can cause issues for new machinesets")
-	else 	
-   end	
- end
+  ##This isn't a generic step-definition yet & specific to logs of machineset-controller##
+  split1 = File.open(filename){ |f| f.read }.split(s1)[0].split("Watching")[0]
+  split2 = File.open(filename){ |f| f.read }.split(s2)[0].split(s1)[2].strip
+
+  #Calculating time difference in seconds
+  time_start = DateTime.parse split1
+  time_end = DateTime.parse split2
+  time_difference = ((time_end - time_start)* 24 * 60 * 60).to_i
+  if time_difference > 30
+    raise ("Upgrade can cause issues for new machinesets")
+  end
+end
 # This step is used to delete lines from file. If multiline match is needed,
 #   then write another step. If pattern starts with '/' or '%r{' treat as RE.
 #   Relative paths are considered inside workdir.
