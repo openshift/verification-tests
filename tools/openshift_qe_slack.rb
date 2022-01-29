@@ -77,8 +77,13 @@ module BushSlicer
       @users_map.dig(user_name)
     end
 
-    def post_msg(msg: nil, channel: self.channel)
-      self.client.chat_postMessage(channel: channel, text: msg, as_user: true)
+    def post_msg(msg: nil, channel: self.channel, as_blocks: false)
+      unless as_blocks
+        block_msg = [{"type": "section", "text": {"type": "mrkdwn", "text": "```#{msg}```"}}]
+        self.client.chat_postMessage(channel: channel, blocks: block_msg, as_user: true)
+      else
+        self.client.chat_postMessage(channel: channel, text: msg, as_user: true)
+      end
     end
   end
 end
@@ -103,5 +108,8 @@ if __FILE__ == $0
                  [nil, nil, 29.71, nil],
                  ["errata463", "7865", 29.98, "pruan"],
                  ]
-  slack.notify_longlived_clusters_to_users(clusters: clusters)
+  test_msg = "This is a test"
+  slack.post_msg(msg: test_msg, channel: "#pruan_slack_bot_sandbox", as_blocks: true)
+  slack.post_msg(msg: test_msg, channel: "#pruan_slack_bot_sandbox")
+#  slack.notify_longlived_clusters_to_users(clusters: clusters)
 end
