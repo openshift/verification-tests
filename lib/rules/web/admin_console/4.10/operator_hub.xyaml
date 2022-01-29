@@ -541,6 +541,7 @@ switch_to_yaml_view:
   element:
     selector:
       xpath: //div[contains(@class,'monaco-editor')]
+    timeout: 40
 select_installed_namespace:
   action: click_project_list_dropdown
   action: choose_project_from_dropdown_list

@@ -13,15 +13,15 @@ switch_to_container:
 wait_log_window_loaded:
   elements:
   - selector:
-      xpath: //div[contains(@class,'log-window')]/div[contains(@class,'log-window__header')]
+      xpath: //div[contains(@class,'log-window')]
     timeout: 30
   - selector:
-      xpath: //div[contains(@class,'log-window')]/div[contains(@class,'log-window__body')]
+      xpath: //div[contains(@class,'pf-c-log-viewer__main')]
     timeout: 30
 check_log_content_contains:
   element:
     selector:
-      xpath: //div[contains(@class,'log-window__lines') and contains(.,'<log_content>')]
+      xpath: //span[contains(@class,'text') and contains(.,'<log_content>')]
     timeout: 30
 check_some_context_missing_in_expanded_log_view:
   elements:
@@ -95,12 +95,11 @@ check_event_is_streaming:
 check_logs_not_wrapped:
   elements:
   - selector:
-      xpath: //div[contains(@class,'log-window__lines--wrap')]
-    missing: true
+      xpath: //div[contains(@style,'auto')]
 check_logs_wrapped:
   elements:
   - selector:
-      xpath: //div[contains(@class,'log-window__lines--wrap')]
+      xpath: //div[contains(@style,'hidden')]
 toggle_log_wraps:
   element:
     selector:
