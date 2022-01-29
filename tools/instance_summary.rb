@@ -10,7 +10,7 @@ module BushSlicer
   # tabulized format
 
   class InstanceSummary
-    attr_accessor :jenkins
+    attr_accessor :jenkins, :slack
 
     def initialize(jenkins)
       @jenkins = jenkins
@@ -291,17 +291,8 @@ module BushSlicer
     # slack channel URL is defined in private/config/config.yaml
     ## TODO: research doing it via ruby-slack-client instead
     def send_to_slack(summary_text: text, options: nil)
-      # for actual channel #forum-qe
-      url = options.config.dig('services', 'slack', 'webhooks', 'channels')[0]['url']
-      ## for debugging
-      #url = options.config.dig('services', 'slack', 'webhooks', 'channels')[2]['url']
-      opts = {:url => url, :method => "POST"}
-      if options.slack_no_block_format
-        opts[:payload] = %Q/{"blocks": [{"type": "section","text": {"type":"mrkdwn","text": "#{summary_text}"}}]}/
-      else
-        opts[:payload] = %Q/{"blocks": [{"type": "section","text": {"type":"mrkdwn","text": "```#{summary_text}```"}}]}/
-      end
-      res = Http.request(**opts)
+      @slack ||= BushSlicer::CoreosSlack.new
+      @slack.post_msg(msg: summary_text, as_blocks: options.slack_no_block_format)
     end
   end
 
