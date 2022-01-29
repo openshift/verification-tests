@@ -192,7 +192,7 @@ Feature: creating 'apps' with CLI
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"
     Then the step should succeed
-    Given an 8 character random string of type :dns952 is stored into the :appname clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname clipboard
     When I run the :new_app client command with:
       | app_repo     | ruby-hello-world         |
       | image_stream | openshift/ruby:latest    |
@@ -210,7 +210,7 @@ Feature: creating 'apps' with CLI
     And the output should contain "Hello"
     And I delete all resources from the project
     #Check https github url
-    Given an 8 character random string of type :dns952 is stored into the :appname1 clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname1 clipboard
     When I run the :new_app client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby                                |
@@ -228,7 +228,7 @@ Feature: creating 'apps' with CLI
     And the output should contain "Hello"
     And I delete all resources from the project
     #Check http github url
-    Given an 8 character random string of type :dns952 is stored into the :appname2 clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname2 clipboard
     When I run the :new_app client command with:
       | code         | http://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby:latest                        |
@@ -246,7 +246,7 @@ Feature: creating 'apps' with CLI
     And the output should contain "Hello"
     And I delete all resources from the project
     #Check master branch
-    Given an 8 character random string of type :dns952 is stored into the :appname4 clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname4 clipboard
     When I run the :new_app client command with:
       | code         | https://github.com/openshift/ruby-hello-world#master |
       | image_stream | openshift/ruby                                       |
@@ -258,7 +258,7 @@ Feature: creating 'apps' with CLI
     Then the output should match "Ref:\s+master"
     And I delete all resources from the project
     #Check invalid branch
-    Given an 8 character random string of type :dns952 is stored into the :appname5 clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname5 clipboard
     When I run the :new_app client command with:
       | code         | https://github.com/openshift/ruby-hello-world#invalid |
       | image_stream | openshift/ruby                                        |
@@ -267,7 +267,7 @@ Feature: creating 'apps' with CLI
     Then the output should contain "error"
     And I delete all resources from the project
     #Check non-master branch
-    Given an 8 character random string of type :dns952 is stored into the :appname6 clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname6 clipboard
     When I run the :new_app client command with:
       | code  	     | https://github.com/openshift/ruby-hello-world#beta4 |
       | image_stream | openshift/ruby 	                                   |
