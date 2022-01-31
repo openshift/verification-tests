@@ -90,3 +90,23 @@ Then(/^admin ensures machine number is restored after scenario$/) do
     end
   }
 end
+
+Given /^I run the steps #{NUMBER} times or exit when co machine-api is degraded:$/ do |num, steps_string|
+  eval_regex = /\#\{(.+?)\}/
+  eval_found = steps_string =~ eval_regex
+  step %Q{evaluation of `cluster_operator('machine-api').condition(type: 'Degraded')` is stored in the :co_degraded clipboard}
+  begin
+    logger.dedup_start
+    (1..Integer(num)).each { |i|
+      cb.i = i
+      if eval_found && cb.co_degraded["status"]=="False"
+        steps steps_string.gsub(eval_regex) { |s| "<%= #{$1} %>"}
+      else
+        steps steps_string
+      end
+    }
+  ensure
+    logger.dedup_flush
+  end
+end
+
