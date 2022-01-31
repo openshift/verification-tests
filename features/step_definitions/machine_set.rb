@@ -5,6 +5,13 @@ Given(/^I pick a random( windows)? machineset to scale$/) do | windows |
   cache_resources *machine_sets.shuffle
 end
 
+Given(/^I pick a earliest created machineset and store in#{OPT_SYM} clipboard$/) do | cb_name | 
+  ensure_admin_tagged
+  machine_sets = BushSlicer::MachineSet.list(user: admin, project: project("openshift-machine-api"))
+  cache_resources *machine_sets
+  cb[cb_name] = machine_sets.min_by(&:created_at).name
+end
+
 When(/^I scale the machineset to ([\+\-]?)#{NUMBER}$/) do | op, num |
   ensure_destructive_tagged
 

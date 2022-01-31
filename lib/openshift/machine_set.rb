@@ -51,5 +51,26 @@ module BushSlicer
       flavor = ms_provider_spec['instanceType'] || ms_provider_spec['vmSize'] || ms_provider_spec['machineType'] || ms_provider_spec['flavor']
       return flavor
     end
+
+    def aws_machineset_subnet(user: nil, cached: true, quiet: true)
+      raw_resource(user: user, cached: cached ,quiet: quiet).
+      dig('spec', 'template', 'spec', 'providerSpec', 'value', 'subnet','filters')
+    end
+
+    def aws_machineset_ami_id(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'template', 'spec', 'providerSpec', 'value', 'ami','id')
+    end
+
+    def aws_machineset_availability_zone(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'template', 'spec', 'providerSpec', 'value', 'placement','availabilityZone')
+    end
+
+    def aws_machineset_iamInstanceProfile(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'template', 'spec', 'providerSpec', 'value', 'iamInstanceProfile', 'id')
+    end
+
   end
 end

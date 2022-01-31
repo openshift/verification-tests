@@ -332,12 +332,12 @@ Feature: Machine features testing
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     Then admin ensures machine number is restored after scenario
-
-    Given I store the last provisioned machine in the :machine clipboard
-    When evaluation of `machine(cb.machine).aws_ami_id` is stored in the :default_ami_id clipboard
-    And evaluation of `machine(cb.machine).aws_availability_zone` is stored in the :default_availability_zone clipboard
-    And evaluation of `machine(cb.machine).aws_subnet` is stored in the :default_subnet clipboard
-    And evaluation of `machine(cb.machine).aws_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
+    
+    Given I pick a earliest created machineset and store in :machineset clipboard
+    When evaluation of `machine_set(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_subnet` is stored in the :default_subnet clipboard
     Then admin ensures "<name>" machineset is deleted after scenario
 
     Given I obtain test data file "cloud/ms-aws/<file_name>"
