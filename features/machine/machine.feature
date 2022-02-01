@@ -605,4 +605,54 @@ Feature: Machine features testing
   Scenario: Baremetal clusteroperator should be enabled in vsphere and osp 
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="False"
-   
+
+  # @author miyadav@redhat.com    
+  @admin
+  @destructive
+  @4.10 @4.9
+  Scenario Outline: Implement defaulting machineset values for AWS proxy clusters
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    Then admin ensures machine number is restored after scenario
+
+    Given I pick a earliest created machineset and store in :machineset clipboard
+    When evaluation of `machine_set(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_subnet_proxy` is stored in the :default_subnet clipboard
+    Then admin ensures "<name>" machineset is deleted after scenario
+
+    Given I obtain test data file "cloud/ms-aws/proxy-clusters/<file_name>"
+    When I run oc create over "<file_name>" replacing paths:
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["iamInstanceProfile"]["id"]         | <%= cb.default_iamInstanceProfile %>        |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["ami"]["id"]                        | <%= cb.default_ami_id %>                    |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["placement"]["availabilityZone"]    | <%= cb.default_availability_zone %>         |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["subnet"]["id"]                     | <%= cb.default_subnet %>                    |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
+      | ["metadata"]["name"]                                                                      | <name>                                      |
+    Then the step should succeed
+
+    Then I store the last provisioned machine in the :machine_latest clipboard
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
+    """
+
+    When I run the :describe admin command with:
+      | resource | machine                  |
+      | name     | <%= cb.machine_latest %> |
+    Then the step should succeed
+    And the output should contain:
+      | <Validation> |
+
+    @aws-ipi
+    Examples:
+      | name                    | file_name                 | Validation                    |
+      | default-valued-48463    | ms_default_values.yaml    | Placement                     | # @case_id OCP-48463
+      | tenancy-dedicated-48464 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-48464
+      | default-valued-48462    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-48462
+    

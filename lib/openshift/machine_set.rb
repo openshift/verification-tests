@@ -57,6 +57,12 @@ module BushSlicer
       dig('spec', 'template', 'spec', 'providerSpec', 'value', 'subnet','filters')
     end
 
+    def aws_machineset_subnet_proxy(user: nil, cached: true, quiet: true)
+      raw_resource(user: user, cached: cached ,quiet: quiet).
+      dig('spec', 'template', 'spec', 'providerSpec', 'value', 'subnet','id')
+    end
+
+
     def aws_machineset_ami_id(user: nil, cached: true, quiet: false)
        raw_resource(user: user, cached: cached ,quiet: quiet).
          dig('spec', 'template', 'spec', 'providerSpec', 'value', 'ami','id')
