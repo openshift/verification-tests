@@ -450,7 +450,9 @@ module BushSlicer
       unless @service_project
         # if the cluster set the default scheduler, set the project running debug pod node-selector=''
         # to overwrite the default scheduler, or the pod can not be run successfully
-        project_name = "prj-" + EXECUTOR_NAME.downcase
+        # project_suffix creates non identical names for namespace or project running debug pod in test cases.
+        project_suffix = [*"a".."z", *"1".."9"]
+        project_name = "prj-" + EXECUTOR_NAME.downcase + "-" + project_suffix.sample(4).join
         project = Project.new(name: project_name, env: self)
         unless project.active?
           # 60 seconds is no longer enough
