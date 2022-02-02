@@ -5,6 +5,9 @@ LABEL maintainer="OCP QE Team"
 
 USER root
 
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-* &&\
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*
+
 RUN set -x && \
     yum -y update && \
     INSTALL_PKGS="bsdtar git openssh-clients httpd-tools rsync" && \
