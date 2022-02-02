@@ -1699,3 +1699,51 @@ Feature: Multus-CNI related scenarios
     Then the output should contain:
       | 10.199.199.102 |
 
+  # @author weliang@redhat.com
+  # @case_id OCP-46116
+  @admin
+  @4.10
+  Scenario: [BZ 1897431] CIDR support for additional network attachment with the bridge CNI plug-in	
+    Given the multus is enabled on the cluster
+    And I store all worker nodes to the :nodes clipboard
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    #Patching rawCNIConfig config in network operator config CRD
+    Given I have a project
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:    
+      | {"spec": {"additionalNetworks": [{"name": "macvlan-bridge-ipam-dhcp","namespace": "<%= project.name %>","rawCNIConfig": "{ \"cniVersion\": \"0.3.1\", \"name\": \"test-network-1\", \"type\": \"bridge\", \"ipam\": { \"type\": \"static\", \"addresses\": [ { \"address\": \"191.168.1.23\" } ] } }","type":"Raw"}]}} |
+
+    # Cleanup for bringing CRD to original
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"additionalNetworks": null}} |
+    """
+
+    # Check NAD is configured under project namespace
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource | net-attach-def      |
+      | n        | <%= project.name %> |
+    Then the step should succeed
+    And the output should contain:
+      | macvlan-bridge-ipam-dhcp |
+    """
+
+    # Creating pod under openshift-multus project to absorb above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
+    When I run oc create over "1interface-macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-ipam-dhcp |
+      | ["metadata"]["namespace"]                                  | <%= project.name %>      |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %>  |
+      | ["metadata"]["name"]                                       | test-pod                 | 
+    Then the step should succeed
+    Given the pod named "test-pod" status becomes :pending
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | pod      |
+      | name     | test-pod |
+    Then the output should contain "the 'address' field is expected to be in CIDR notation"
+    """
+
