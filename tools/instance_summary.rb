@@ -333,6 +333,14 @@ module BushSlicer
         "r4.2xlarge" => 0.532,
         "r5a.xlarge" => 0.226,
         "t3a.xlarge" => 0.1504,
+        "m6i.xlarge" => 0.192,
+        "m6i.large" => 0.096,
+        "c5a.large" => 0.077,
+        "m5.12xlarge" => 2.304,
+        "m6g.xlarge" => 0.154,
+        "m6g.large" => 0.077,
+        "m5a.large" => 0.086,
+        "m6i.2xlarge" => 0.384,
       }
     end
 
@@ -458,8 +466,7 @@ module BushSlicer
         "n1-highcpu-4" => 0.176,
         "n1-highcpu-8" => 0.352,
         "n1-highcpu-16" => 0.704,
-
-
+        "e2-medium" => 0.0335,
       }
     end
 
@@ -667,6 +674,7 @@ module BushSlicer
       # https://metal.equinix.com/product/servers/ for pricing
       @packet_prices = {
         "t1.small.x86" => 0.07,
+        "c1.small.x86" => 0.40,
         "c2.medium.x86" => 1.10,
         "c3.small.x86" => 0.50,
         "c3.medium.x86" => 1.10,
@@ -674,6 +682,7 @@ module BushSlicer
         "m2.xlarge.x86" => 2.00,
         "s3.xlarge.x86" => 1.85,
         "n2.xlarge.x86" => 2.25,
+        "m1.xlarge.x86" => 1.70,
       }
     end
 
@@ -686,7 +695,13 @@ module BushSlicer
         inst_summary[:name]= inst['hostname']
         inst_summary[:uptime]= packet.instance_uptime inst["created_at"]
         inst_summary[:type] = inst['plan']['name']
-        inst_summary[:cost] = (inst_summary[:uptime] * @packet_prices[inst_summary[:type]]).round(2)
+        inst_hourly_price = @packet_prices[inst_summary[:type]]
+        cost = 0.0
+        if inst_hourly_price.nil?
+          inst_hourly_price = 0.0
+          puts "##### WARNING, setting hourly price for '#{inst_summary[:type]}' to 0.0 because it's not known"
+        end
+        inst_summary[:cost] = (cost = inst_summary[:uptime] * inst_hourly_price).round(2)
         inst_summary[:owned] = inst['created_by']['email']
         inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = jenkins.get_jenkins_flexy_job_id(inst['hostname'])
         summary << inst_summary
