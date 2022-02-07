@@ -379,11 +379,11 @@ check_items_on_downloads_route_page:
 check_refresh_notification:
   elements:
   - selector:
-      xpath: //h4[contains(.,'Web console update is available')]
+      xpath: //*[contains(.,'update is available')]
 refresh_console:
   elements:
   - selector:
-      xpath: //button[contains(.,'Refresh web console')]
+      xpath: //button[contains(.,'Refresh')]
     op: click
   - selector:
       id: page-sidebar
