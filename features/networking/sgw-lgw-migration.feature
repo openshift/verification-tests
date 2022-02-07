@@ -188,7 +188,7 @@ Feature: SGW<->LGW migration related scenarios
   @baremetal-upi
   Scenario: [SDN-2290] SGW <-> LGW migration scenarios for externalIP	
     Given the env is using "OVNKubernetes" networkType
-    ######## Prepare Data Pre Migration for multiple use cases############
+    ######## Prepare Data Pre Migration ############
     #OCP-24669 - externalIP defined in service with set ExternalIP in allowedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -242,7 +242,7 @@ Feature: SGW<->LGW migration related scenarios
     And the status of condition "Available" for network operator is :True
     """
     
-    ######## Check Data Post Migration for multiple use cases############   
+    ######## Check Data Post Migration ############   
     #OCP-24669 - externalIP defined in service with set ExternalIP in allowedCIDRs
     Given I use the "<%= cb.masters[0].name %>" node
     And I run commands on the host:
