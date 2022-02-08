@@ -43,6 +43,8 @@ module BushSlicer
           BushSlicer::IBMCloud.new(service_name: service_name)
         when "arm_bm"
           BushSlicer::ARMRdu2.new(service_name: service_name)
+        when "rdu_ipi_bm"
+          BushSlicer::Rdu_IPI_BM.new(service_name: service_name)
         else
           raise "unknown service type " \
             "#{conf[:services, service_name, :cloud_type]} for cloud " \
