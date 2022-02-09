@@ -36,12 +36,16 @@ module BushSlicer
   autoload :DockerImage, "openshift/flakes/docker_image"
 
   HOME = File.expand_path(__FILE__ + "/../..")
+  CUCUSHIFT_DIR = ENV['BUSHSLICER_CUCUSHIFT_DIR'] || File.expand_path(HOME + "/features/tierN")
   PRIVATE_DIR = ENV['BUSHSLICER_PRIVATE_DIR'] || File.expand_path(HOME + "/private")
   HOSTNAME = Socket.gethostname.freeze
   LOCAL_USER = Etc.getlogin.freeze
 
   GIT_HASH = `git rev-parse HEAD --git-dir="#{File.join(HOME,'.git')}"`.
                 lines[0].chomp rescue :unknown
+  GIT_CUCUSHIFT_HASH =
+    `git rev-parse HEAD --git-dir="#{File.join(CUCUSHIFT_DIR,'.git')}"`.
+      lines[0].chomp rescue :unknown
   GIT_PRIVATE_HASH =
     `git rev-parse HEAD --git-dir="#{File.join(PRIVATE_DIR,'.git')}"`.
       lines[0].chomp rescue :unknown
