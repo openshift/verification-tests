@@ -323,7 +323,7 @@ class CucuFormatter
   #       tierN repo to generate appropriate links
   def gen_repo_url(file_colon_line)
     file, none, line = file_colon_line.rpartition(":")
-    if file.contains('tierN')
+    if file.include? "tierN"
       url = conf[:git_cucushift_repo_url].dup
       url << "/blob/"
       url << GIT_CUCUSHIFT_HASH == :unknown ? conf(:git_cucushift_repo_default_branch) : GIT_CUCUSHIFT_HASH
