@@ -7,8 +7,10 @@ firefox
 gcc-c++
 git
 jq
+libcurl-devel
 libffi-devel
 libtool
+libxml2-devel
 libyaml-devel
 make
 openssl-devel
