@@ -528,14 +528,13 @@ check_default_view_is_form_view:
   element:
     selector:
       xpath: //input[@type='radio' and @value='form' and @checked]
-open_edit_form_view:
-  elements:
-  - selector:
-      xpath: //label[contains(.,'Form view')]//input
-    op: click
+open_edit_form_view: {}
 switch_to_yaml_view:
   params:
     radio_text: yaml
+  scripts:
+  - command: return document.querySelector("input[value=yaml]").scrollIntoView(false)
+    expect_result: ~
   action: click_radio_input
   action: wait_box_loaded
   element:
