@@ -353,8 +353,7 @@ Feature: cluster log forwarder features
   # @case_id OCP-32697
   @admin
   @destructive
-  @upgrade-sanity
-  @4.7
+  @4.10 @4.9 @4.8 @4.7
   Scenario: Forward logs to different kafka topics
     Given I switch to the first user
     And I create a project with non-leading digit name
