@@ -12,6 +12,3 @@ Xvfb
 
 ansible
 pyOpenSSL
-
-libcurl-devel
-libxml2-devel

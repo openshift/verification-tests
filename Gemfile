@@ -74,4 +74,3 @@ gem 'oga' # replacemen for nokogiri when we thought we can workaround it
 # gem 'terminal-table'
 gem 'parallel_tests'
 gem 'slack-ruby-client'
-gem 'ovirt-engine-sdk'
