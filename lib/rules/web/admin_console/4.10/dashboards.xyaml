@@ -610,6 +610,7 @@ check_status_card_health_item_text:
   element:
     selector:
       xpath: //span[contains(@class,'co-status-card__health-item-text')]/following::div[contains(.,'<status_text>')]
+    timeout: 40
 check_view_all_for_operators:
   params:
     text: View all
@@ -644,11 +645,11 @@ check_insights_popover_info_when_available:
   - selector:
       xpath: //div[contains(@class,'pf-c-chart')]
   - selector:
-      xpath: //a[contains(@class,'co-external-link') and contains(@href,'https://console.redhat.com/openshift/details/<cluster_id>#insights')]
+      xpath: //a[contains(@class,'co-external-link') and contains(@href,'https://console.redhat.com/openshift/insights/advisor/clusters/<cluster_id>')]
 check_insights_popover_info_when_unavailable:
   elements:
   - selector:
-      xpath: //div[contains(@class,'pf-c-popover__body') and contains(.,'Temporary unavailable')]
+      xpath: //div[contains(@class,'pf-c-popover__body') and contains(.,'unavailable')]
   - selector:
       xpath: //a[contains(@class,'co-external-link') and contains(@href,'using-insights-to-identify-issues-with-your-cluster')]
 check_insights_status_when_available:
