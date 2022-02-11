@@ -17,3 +17,6 @@ ansible
 pyOpenSSL
 # needed for local ansible repo/dnf operations
 redhat-rpm-config
+
+libcurl-devel
+libxml2-devel
