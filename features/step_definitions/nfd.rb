@@ -2,19 +2,20 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   ensure_admin_tagged
   nfd_ns ||= "openshift-nfd"
   if install_method == 'GUI'
-    nfd_ns = "openshift-operators"
+    nfd_ns = "openshift-nfd"
   end
-  cb.channel = cluster_version('version').version.split('-')[0].to_f
+  ver_raw, ver_major, ver_minor = env.get_version(user: user)
+  cb.channel = (ver_major.to_s + "." + ver_minor.to_s)
   install_method ||= 'CLI'
   step %Q/the first user is cluster-admin/
   step %Q/admin ensure "#{nfd_ns}" project is deleted after scenario/
   step %Q/admin ensure "nfd-master-server" node_feature_discovery is deleted from the "#{nfd_ns}" project after scenario/
   pod_label = "name=nfd-operator"
-  pod_label = "control-plane=controller-manager" if cb.channel > 4.7
+  pod_label = "control-plane=controller-manager" if env.version_gt("4.7", user: user)
   if install_method == 'GUI'
     # for 4.6, the GUI doesn't create the ns automatically if not present, so
     # do it manually
-    if cb.channel < 4.7
+    if env.version_lt("4.7", user: user)
       admin.cli_exec(:create_namespace, name: nfd_ns)
       step %Q/I wait for the "#{nfd_ns}" project to appear/
       step %Q/I use the "#{nfd_ns}" project/
@@ -28,8 +29,13 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
       | target_namespace | <%= cb.project.name %> |
     })
     step %Q/the step should succeed/
+    if env.version_gt("4.8", user: user)
+      channel_button = "stable"
+    else
+      channel_button = cb.channel
+    end
     step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
-      | update_channel    | <%= cb.channel %> |
+      | update_channel    | #{channel_button} |
       | install_mode      | OwnNamespace      |
       | approval_strategy | Automatic         |
     })
@@ -40,7 +46,7 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
     step %Q/a pod becomes ready with labels:/, table(%{
       | #{pod_label} |
     })
-    step %Q|I run oc create over ERB test file: nfd/<%= cb.channel %>/nfd_master.yaml|
+    step %Q|I run oc create over ERB test file: nfd/<%= cb.channel %>/040_customresources.yaml|
     step %Q/the step should succeed/
   else
     file_path = "nfd/#{cb.channel}/010_namespace.yaml"
