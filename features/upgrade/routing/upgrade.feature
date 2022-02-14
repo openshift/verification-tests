@@ -212,7 +212,7 @@ Feature: Routing and DNS related scenarios
 
   # @author mjoseph@redhat.com
   @upgrade-prepare
-  @users=upuser1,upuser2
+ 
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @baremetal-upi @azure-upi @aws-upi
@@ -235,10 +235,13 @@ Feature: Routing and DNS related scenarios
     Then the step should succeed
 
     Given I have a test-client-pod in the project
+    And I wait up to 30 seconds for the steps to pass:
+    """
     When I execute on the pod:
       | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-rc"
+    """
 
     When I run the :idle client command with:
       | svc_name | service-unsecure |
@@ -253,7 +256,7 @@ Feature: Routing and DNS related scenarios
   # @author mjoseph@redhat.com
   # @case_id OCP-45955
   @upgrade-check
-  @users=upuser1,upuser2
+
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @baremetal-upi @azure-upi @aws-upi
@@ -261,7 +264,7 @@ Feature: Routing and DNS related scenarios
     # Check the servcie service-unsecure to see the idle annotation is still intact
     Given I switch to first user
     Given I use the "ocp45955" project
-    And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
+    And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"caddy-rc\",\"replicas\":2}]"
 
     Given I have a test-client-pod in the project
     # To wake the idling service
