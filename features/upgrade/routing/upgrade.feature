@@ -235,10 +235,13 @@ Feature: Routing and DNS related scenarios
     Then the step should succeed
 
     Given I have a test-client-pod in the project
+    And I wait up to 30 seconds for the steps to pass:
+    """
     When I execute on the pod:
       | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-rc"
+    """
 
     When I run the :idle client command with:
       | svc_name | service-unsecure |
