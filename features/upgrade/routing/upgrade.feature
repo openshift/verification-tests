@@ -212,7 +212,7 @@ Feature: Routing and DNS related scenarios
 
   # @author mjoseph@redhat.com
   @upgrade-prepare
- 
+  @users=upuser1,upuser2
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @baremetal-upi @azure-upi @aws-upi
@@ -256,7 +256,7 @@ Feature: Routing and DNS related scenarios
   # @author mjoseph@redhat.com
   # @case_id OCP-45955
   @upgrade-check
-
+  @users=upuser1,upuser2
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @baremetal-upi @azure-upi @aws-upi
@@ -264,7 +264,7 @@ Feature: Routing and DNS related scenarios
     # Check the servcie service-unsecure to see the idle annotation is still intact
     Given I switch to first user
     Given I use the "ocp45955" project
-    And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"caddy-rc\",\"replicas\":2}]"
+    And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
 
     Given I have a test-client-pod in the project
     # To wake the idling service
