@@ -766,5 +766,110 @@ module BushSlicer
       print_grand_summary(grand_summary)
     end
   end
+
+  class AliCloudSummary < InstanceSummary
+    attr_accessor :ali, :ali_prices
+    def initialize(svc_name: :alicloud-v4, jenkins: nil)
+      @ali = Alicloud.new(service_name: svc_name, region: 'us-east-1')
+      @jenkins = jenkins
+      @table = Text::Table.new
+      # hard-coded pricing lookup table name: => price/hr
+      @ali_prices = {
+        "ecs.g6.large" => 0.128,
+        "ecs.g6.xlarge" => 0.256,
+      }
+    end
+
+    # @return <Hashed Array of Instances> with each hash key being keyed on the `owned` tag.
+    def regroup_instances(instances)
+      cluster_map = {}
+      instances.each do |r|
+        begin
+          owned = r.id['Tags']['Tag'].select {|t| t['TagValue'] == "owned" }
+        rescue
+          # for bastion hosts, there doesn't seem to be a tag associated with
+          # them, so just set it as empty
+          owned = []
+        end
+        if owned.count > 0
+          rindex = owned.first['TagKey'].split('kubernetes.io/cluster/')[-1]
+        else
+          rindex = "no_owner"
+        end
+        if cluster_map[rindex]
+          cluster_map[rindex] << r.id
+        else
+          cluster_map[rindex] = [r.id]
+        end
+      end
+      return cluster_map
+    end
+
+    # @instances <Array of unordered Instance obj>
+    def summarize_instances(region, instances)
+      summary = []
+      ali = @ali
+      jenkins = @jenkins
+      cm = regroup_instances(instances)
+      cm.each do | owned, inst_list |
+        inst_list.each do | inst |
+          inst_summary = {}
+          # inst_summary[:inst_obj] = inst
+          inst_summary[:region] = region
+          inst_summary[:name]= inst['InstanceName']
+          inst_summary[:type] = inst['InstanceType']
+          inst_summary[:uptime]= ali.instance_uptime inst
+          inst_hourly_price = @ali_prices[inst_summary[:type]]
+          cost = 0.0
+          if inst_hourly_price.nil?
+            inst_hourly_price = 0.0
+            puts "##### WARNING, setting hourly price for '#{inst_summary[:type]}' to 0.0 because it's not known"
+          end
+
+          cost = inst_summary[:uptime] * inst_hourly_price
+          inst_summary[:cost] = cost.round(2)
+          inst_summary[:owned] = owned
+          if inst_summary[:owned]
+            inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = jenkins.get_jenkins_flexy_job_id(inst_summary[:owned])
+          else
+            inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = nil, nil
+          end
+          summary << inst_summary
+        end
+      end
+      return summary
+    end
+
+    def get_summary(target_region: nil, options: nil, global_region: "alicloud-v4")
+      regions = ali.get_regions
+      ali_instances = {}
+      threads = []
+      regions.each do | region_name, url |
+        if target_region
+          # first check name is valid
+          raise "Unsupported region '#{target_region}'" unless regions.keys.include? target_region
+          region_name = target_region
+        end
+        end_point = regions.dig(region_name)
+        ali = Alicloud.new(service_name: global_region, region_id: region_name)
+        instances = ali.get_instances_by_status(status: 'Running', region_name: region_name, region_endpoint: end_point)
+        ali_instances[region_name] = instances
+        break if target_region
+      end
+      grand_summary = []
+      ali_instances.each do |region, inst_list|
+        total_cost = 0.0
+        summary = summarize_instances(region, inst_list)
+        print_summary(summary) if inst_list.count > 0
+        options.platform = "AliCloud #{region}"
+        print_longlived_clusters(summary, options) if inst_list.count > 0
+        summary.each { |s| total_cost += s[:cost]}
+        # print "REGION: #{region} TOTAL: #{total_cost}\n"
+        grand_summary << {platform: 'AliCloud', region: region, inst_count: inst_list.count, total_cost: total_cost}
+      end
+      print_grand_summary(grand_summary)
+    end
+
+  end
 end
 

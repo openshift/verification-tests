@@ -19,16 +19,18 @@ module BushSlicer
     include Common::Helper
     include CollectionsIncl
 
-    attr_reader :config
+    attr_reader :config, :regions_hash
 
     def initialize(**opts)
       service_name = opts.delete(:service_name)
+      service_name ||= "alicloud-v4"
       if service_name
         @config = conf[:services, service_name]
       else
         @config = {}
       end
-
+      region_id = opts.delete(:region_id)
+      @config = deep_merge(@config, {region_id: region_id}) if region_id
       config_opts = opts.delete(:config)
       if config_opts
         @config = deep_merge(@config, config_opts)
@@ -39,6 +41,9 @@ module BushSlicer
     # @see https://www.alibabacloud.com/help/doc-detail/25489.htm
     def request(api: "compute", action:, params: {}, noraise: false)
       api_url = config["#{api}_url".to_sym]
+      if params['RegionEndpoint']
+        api_url = params['RegionEndpoint']
+      end
       # api_url = "https://ecs.cn-zhangjiakou.aliyuncs.com/"
 
       # method = "POST"
@@ -376,6 +381,43 @@ module BushSlicer
       regions.map {|r| yield(r["RegionId"], r["RegionEndpoint"])}
     end
 
+    # @returns a Hash of region_id with its corresponding endpoint as value
+    def get_regions
+      r_hash = {}
+      regions.each {|r| r_hash[r["RegionId"]] =r["RegionEndpoint"]}
+      @regions_hash = r_hash
+    end
+
+    # @return [Array] of Instances
+    # the instance start time is vms_obj.spec['InstanceId']['StartTime']
+    def get_instances_by_status(status: "Running", page_size: 100, region_name: config[:region_id], region_endpoint: config['compute_url'])
+      next_token = nil
+      total_vms = []
+      loop do
+        query_params = {"RegionId"=> region_name, "Status" => status,
+          "PageSize" => page_size, "RegionEndpoint"=> region_endpoint}
+        query_params["NextToken"] = next_token if next_token
+        res = self.request(action: 'DescribeInstances', params: query_params)
+        # translate the results into Alicloud Instances
+        vms = res[:parsed]["Instances"]["Instance"].map do |id|
+          Instance.new({
+            "RegionId" => create_opts["RegionId"],
+            "InstanceId" => id}, self)
+        end
+        total_vms += vms
+        if res[:parsed]['NextToken'].size == 0
+          break
+        else
+          # save the NextToken to be used for the next loop iteration
+          next_token = res[:parsed]['NextToken']
+        end
+      end
+      return total_vms
+    end
+
+    def instance_uptime(instance)
+      ((Time.now.utc - Time.parse(instance['StartTime'])) / (60 * 60)).round(2)
+    end
     # can be used to retry a call by given HTTP request string, e.g.
     #   POST /?AccessKeyId=LTAIs2WYGap0r3FL&Action=DescribeRegions&Format=JSON&RegionId=cn-qingdao&Signature=R8z6MU3MVZa%252Bn4%252BsX%252B9%252FBTIWBq0%253D&SignatureMethod=HMAC-SHA1&SignatureNonce=ffe3fed8b16a4f51b84f1ccc05cc690d&SignatureType=&SignatureVersion=1.0&Timestamp=2018-07-16T20%3A22%3A04Z&Version=2014-05-26
     #def test_req(params, api: "compute")
@@ -560,17 +602,18 @@ end
 ## Standalone test
 if __FILE__ == $0
   extend BushSlicer::Common::Helper
-  ali = BushSlicer::Alicloud.new(service_name: "alicloud")
+  ali = BushSlicer::Alicloud.new(service_name: "alicloud-v4", region_id: 'us-east-1')
+  vms = ali.get_instances_by_status("Running")
 
-  # params = {
-  #   "RegionId" => "cn-zhangjiakou",
-  #   "KeyPairName" => "keyname",
-  #   "PublicKeyBody" => File.read(expand_private_path("path/key.pub"))
-  # }
-  # results = ali.for_each_region { |r|
-  #   params["RegionId"] = r
-  #   ali.request(action: "ImportKeyPair", params: params.dup, noraise: true)
-  # }
+  params = {
+    "RegionId" => "cn-zhangjiakou",
+    "KeyPairName" => "keyname",
+    "PublicKeyBody" => File.read(expand_private_path("path/key.pub"))
+  }
+  results = ali.for_each_region { |r|
+    params["RegionId"] = r
+    ali.request(action: "ImportKeyPair", params: params.dup, noraise: true)
+  }
 
   test_res = {}
   conf[:services].each do |name, service|
@@ -595,6 +638,4 @@ if __FILE__ == $0
   test_res.each do |name, res|
     puts "Alibaba instance #{name} failed: #{res}"
   end
-
-  require 'pry'; binding.pry
 end
