@@ -63,7 +63,7 @@ check_grafana_dashboard_body_loaded:
   element:
     selector:
       xpath: //div[contains(@class,'co-dashboard-body')]//*[contains(@class,'monitoring-dashboards')]
-    timeout: 30
+    timeout: 90
 click_dashboard_dropdown:
   element:
     selector:
@@ -131,7 +131,7 @@ check_chart_loaded:
   elements:
   - selector:
       xpath: //div[contains(@class,'pf-c-chart')]
-    timeout: 40
+    timeout: 90
 change_namespace:
   params:
     label_text: namespace

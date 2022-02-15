@@ -157,10 +157,10 @@ require_relative 'chrome_extension'
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
         if @selenium_url
-          @browser = Watir::Browser.new :chrome, options: options, url: @selenium_url
+          @browser = Watir::Browser.new :chrome, :http_client=>client, options: options, url: @selenium_url
         else
           options["goog:chromeOptions"][:switches] = chrome_switches
-          @browser = Watir::Browser.new :chrome, options: options
+          @browser = Watir::Browser.new :chrome, :http_client=>client, options: options
         end
         logger.info "#{browser.driver.capabilities[:browser_name]} version is #{browser.driver.capabilities[:browser_version]}"
         logger.info "Chromedriver version is #{browser.driver.capabilities['chrome']['chromedriverVersion']}"
