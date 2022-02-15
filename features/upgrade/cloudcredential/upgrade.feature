@@ -2,7 +2,7 @@ Feature: CloudCredentialOperator components upgrade tests
   # @author lwan@redhat.com
   @upgrade-prepare
   @admin
-  @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Cluster operator cloud-credential should be available after upgrade - prepare
