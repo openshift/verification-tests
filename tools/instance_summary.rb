@@ -784,7 +784,13 @@ module BushSlicer
     def regroup_instances(instances)
       cluster_map = {}
       instances.each do |r|
-        owned = r.id['Tags']['Tag'].select {|t| t['TagValue'] == "owned" }
+        begin
+          owned = r.id['Tags']['Tag'].select {|t| t['TagValue'] == "owned" }
+        rescue
+          # for bastion hosts, there doesn't seem to be a tag associated with
+          # them, so just set it as empty
+          owned = []
+        end
         if owned.count > 0
           rindex = owned.first['TagKey'].split('kubernetes.io/cluster/')[-1]
         else
