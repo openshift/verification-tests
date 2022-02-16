@@ -169,7 +169,7 @@ Feature: Sriov related scenarios
       | cr_name       | <cardname>-netdevice         |
       | resource_type | sriovnetworknodepolicies     |
     Then the step should succeed
-    And I wait up to 500 seconds for the steps to pass:
+    And I wait up to 1000 seconds for the steps to pass:
     """
     When I run the :get admin command with:
       | resource    | sriovnetworknodestates           |
@@ -227,7 +227,7 @@ Feature: Sriov related scenarios
     Then the step should succeed
 
     And admin checks that the "intel-netdevice-rhcos" network_attachment_definition exists in the "<%= cb.usr_project1 %>" project
-    And admin checks that the "intel-netdevice-rhcos" sriov_network is deleted from the "openshift-sriov-network-operator" project 
+    Given admin ensures "intel-netdevice-rhcos" sriov_network is deleted from the "openshift-sriov-network-operator" project 
     And admin checks that there are no network_attachment_definition in the "<%= cb.usr_project1 %>" project
 
   # @author zzhao@redhat.com
@@ -545,13 +545,13 @@ Feature: Sriov related scenarios
       | intel-netdevice       |
       | syncStatus: Succeeded |
       | vfID: 4               |
-    """
     When I run the :get admin command with:
       | resource      | node                                          |
       | l             | feature.node.kubernetes.io/sriov-capable=true |
       | o             | yaml                                          |
     Then the step should succeed
     And the output should contain "openshift.io/intelnetdevice: "5""
+    """
 
   # @author zzhao@redhat.com
   # @case_id OCP-30268
@@ -562,22 +562,20 @@ Feature: Sriov related scenarios
     Given sriov config daemon is ready
     Given I patch the sriov logs to "0"
     Then the step should succeed
-    Given 10 seconds have passed
     When I run the :logs admin command with:
       | resource_name | <%= pod.name %>             |
       | c             | sriov-network-config-daemon |
       | since         | 10s                         |
     Then the step should succeed
-    And the output should not contain "nodeUpdateHandler"
+    And the output should contain "Set log verbose level to: 0"
     Given I patch the sriov logs to "2"
     Then the step should succeed
-    Given 10 seconds have passed
     When I run the :logs admin command with:
       | resource_name | <%= pod.name %>             |
       | c             | sriov-network-config-daemon |
       | since         | 10s                         |
     Then the step should succeed
-    And the output should contain "nodeUpdateHandler"
+    And the output should contain "Set log verbose level to: 2"
 
   # @author zzhao@redhat.com
   # @case_id OCP-30277
@@ -698,7 +696,7 @@ Feature: Sriov related scenarios
       | cr_name       | intel-dpdk               |
       | resource_type | sriovnetworknodepolicies |
     Then the step should succeed
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 1000 seconds for the steps to pass:
     """
     When I run the :get admin command with:
       | resource    | sriovnetworknodestates           |
