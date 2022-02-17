@@ -121,7 +121,7 @@ Then /^the output should equal #{QUOTED}$/ do |value|
   end
 end
 
-Given /^([0-9]+?) seconds have passed$/ do |num|
+Given /#{NUMBER} seconds have passed$/ do |num|
   sleep(num.to_i)
 end
 

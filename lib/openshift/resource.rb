@@ -49,6 +49,11 @@ module BushSlicer
       elsif result[:response] =~ /Unable to connect to the server/
         logger.info(result[:response])
         return false
+      # Adding below because when in Single node cluster node restarted then SNO not have other nodes to communicate which cause connection timeout issue.
+      # And to prevent premature exit as describe in OCPQE-8043.
+      elsif result[:response] =~ /connection to the server \S+ was refused - did you specify the right host or port/ && env.nodes.length == 1
+        logger.info(result[:response])
+        return false
       else
         # e.g. when called by user without rights to list Resource
         raise "error getting #{self.class.name} '#{name}' existence: #{result[:response]}"
