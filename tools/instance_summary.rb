@@ -869,7 +869,126 @@ module BushSlicer
       end
       print_grand_summary(grand_summary)
     end
+  end
 
+  class IBMCloudSummary < InstanceSummary
+    attr_accessor :ibm, :ibm_prices
+    def initialize(svc_name: :ibmcloud, jenkins: nil)
+      @ibm = IBMCloud.new(service_name: svc_name, region: 'us-east')
+      @jenkins = jenkins
+      @table = Text::Table.new
+      # hard-coded pricing lookup table name: => price/hr
+      @ibm_prices = {
+        "bx2-2x8" => 0.096,
+        "bx2d-2x8" => 0.104,
+        "bx2-4x16" => 0.192,
+        "bx2d-4x16" => 0.208,
+        "bx2-8x32" => 0.384,
+        "bx2d-8x32" => 0.417,
+        "bx2-16x64" => 0.768,
+        "bx2d-16x64" => 0.834,
+        "bx2-32x128" => 1.536,
+        "bx2d-32x128" => 1.668,
+        "bx2-48x192" => 2.305,
+        "bx2d-48x192" => 2.502,
+        "bx2-64x256" => 3.073,
+        "bx2d-64x256" => 3.336,
+        "bx2-96x384" => 4.609,
+        "bx2d-96x384" => 5.004,
+        "bx2-128x512" => 6.146,
+        "bx2d-128x512" => 6.672,
+      }
+    end
+
+    # @return <Hashed Array of Instances> with each hash key being keyed on the `owned` tag.
+    def regroup_instances(instances)
+      cluster_map = {}
+      instances.each do |r|
+        begin
+          owned = r.dig("resource_group", "name")
+        rescue
+          # for bastion hosts, there doesn't seem to be a tag associated with
+          # them, so just set it as empty
+          owned = no_owner
+        end
+        if cluster_map[owned]
+          cluster_map[owned] << r
+        else
+          cluster_map[owned] = [r]
+        end
+      end
+      return cluster_map
+    end
+
+    # @instances <Array of unordered Instance obj>
+    def summarize_instances(region, instances)
+      summary = []
+      ibm = @ibm
+      jenkins = @jenkins
+      cm = regroup_instances(instances)
+      cm.each do | owned, inst_list |
+        inst_list.each do | inst |
+          inst_summary = {}
+          # inst_summary[:inst_obj] = inst
+          inst_summary[:region] = region
+          inst_summary[:name]= inst["name"]
+          inst_summary[:type] = inst['profile']['name']
+          inst_summary[:uptime]= ibm.instance_uptime inst
+          inst_hourly_price = @ibm_prices[inst_summary[:type]]
+          cost = 0.0
+          if inst_hourly_price.nil?
+            inst_hourly_price = 0.0
+            puts "##### WARNING, setting hourly price for '#{inst_summary[:type]}' to 0.0 because it's not known"
+          end
+
+          cost = inst_summary[:uptime] * inst_hourly_price
+          inst_summary[:cost] = cost.round(2)
+          inst_summary[:owned] = owned
+          if inst_summary[:owned]
+            inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = jenkins.get_jenkins_flexy_job_id(inst_summary[:owned])
+          else
+            inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = nil, nil
+          end
+          summary << inst_summary
+        end
+      end
+      return summary
+    end
+
+    def get_summary(target_region: nil, options: nil, global_region: "ibmcloud")
+      regions = ibm.regions
+      ibm_instances = {}
+      threads = []
+      # regions is an Array of ihash
+      # for example: {"name"=>"au-syd", "href"=>"https://us-south.iaas.cloud.ibm.com/v1/regions/au-syd", "endpoint"=>"https://au-syd.iaas.cloud.ibm.com", "status"=>"available"
+      regions.each do | region |
+        if target_region
+          # first check name is valid
+          raise "Unsupported region '#{target_region}'" unless regions.map {|r| r['name']}.include? target_region
+          region_name = target_region
+        else
+          region_name = region['name']
+        end
+        end_point = region.dig('endpoint')
+        puts ("Getting instances for region '#{region_name}'...\n")
+        ibm = IBMCloud.new(region_id: region_name)
+        ibm.set_region(region_name)
+        instances = ibm.get_instances_by_status(status: 'running') #, region_name: region['name'], region_endpoint: end_point)
+        ibm_instances[region_name] = instances
+        break if target_region
+      end
+      grand_summary = []
+      ibm_instances.each do |region, inst_list|
+        total_cost = 0.0
+        summary = summarize_instances(region, inst_list)
+        print_summary(summary) if inst_list.count > 0
+        options.platform = "IBMCloud #{region}"
+        print_longlived_clusters(summary, options) if inst_list.count > 0
+        summary.each { |s| total_cost += s[:cost]}
+        grand_summary << {platform: 'IBMCloud', region: region, inst_count: inst_list.count, total_cost: total_cost}
+      end
+      print_grand_summary(grand_summary)
+    end
   end
 end
 
