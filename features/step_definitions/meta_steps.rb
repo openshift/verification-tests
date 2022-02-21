@@ -38,12 +38,18 @@ Given /^I wait(?: up to #{NUMBER} seconds)? for the steps to pass:$/ do |seconds
     end
     logger.dedup_start
     seconds = Integer(seconds) rescue 60
-    # repetitions = 0
     error = nil
-    success = wait_for(seconds) {
-      # repetitions += 1
-      # this message needs to be disabled as it defeats deduping
-      # logger.info("Beginning step repetition: #{repetitions}")
+    intervals = 1
+    if seconds < 20
+      intervals = 1
+    elsif seconds < 60
+      intervals = 3
+    elsif seconds < 300
+      intervals = 10
+    else
+      intervals = 30
+    end
+    success = wait_for(seconds, interval: intervals) {
       begin
         steps steps_string
         true
