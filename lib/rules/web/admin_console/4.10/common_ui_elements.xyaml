@@ -127,6 +127,7 @@ check_button_enabled:
   element:
     selector:
       xpath: //button[contains(., '<button_text>') and not(@disabled)]
+    timeout: 40
 check_button_contains_text:
   element:
     selector:
