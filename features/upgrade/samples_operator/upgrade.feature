@@ -29,6 +29,7 @@ Feature: image-registry operator upgrade tests
   @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: samples/openshift-controller-manager/image-registry operators should be in correct status after upgrade
     Given I switch to cluster admin pseudo user
     # Check cluster operator openshift-samples should be in correct status

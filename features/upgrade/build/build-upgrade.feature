@@ -26,6 +26,7 @@ Feature: build related upgrade check
   @users=upuser1,upuser2
   @proxy
   @4.10 @4.9 @4.8
+  @singlenode
   Scenario: Check docker and sti build works well before and after upgrade
     Given I switch to the first user
     When I use the "build-upgrade" project

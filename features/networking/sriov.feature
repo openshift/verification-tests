@@ -5,6 +5,7 @@ Feature: Sriov related scenarios
   @admin
   @stage-only
   @4.10 @4.9
+  @singlenode
   Scenario: sriov operator can be setup and running well
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sriov-network-operator" project
@@ -688,6 +689,7 @@ Feature: Sriov related scenarios
   @4.10 @4.9
   @baremetal-ipi
   @baremetal-upi
+  @singlenode
   Scenario: dpdk for intel card works well
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-dpdk.yaml"

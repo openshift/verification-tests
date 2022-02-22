@@ -50,6 +50,7 @@ Feature: kubelet restart and node restart
     @vsphere-ipi
     @vsphere-upi
     @upgrade-sanity
+    @singlenode
     Examples:
       | platform       |
       | vsphere-volume | # @case_id OCP-13631

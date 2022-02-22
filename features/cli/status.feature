@@ -3,6 +3,7 @@ Feature: Check status via oc status, wait etc
   # @author yapei@redhat.com
   # @case_id OCP-11147
   @4.10 @4.9
+  @singlenode
   Scenario: Show RC info and indicate bad secrets reference in 'oc status'
     Given I have a project
 

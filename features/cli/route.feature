@@ -7,6 +7,7 @@ Feature: route related features via cli
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Expose routes from services
     Given I have a project
     When I run the :new_app client command with:
@@ -36,6 +37,7 @@ Feature: route related features via cli
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Be unable to add an existed alias name for service
     Given I have a project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"

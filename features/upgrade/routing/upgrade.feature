@@ -22,6 +22,7 @@ Feature: Routing and DNS related scenarios
   @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -57,6 +58,7 @@ Feature: Routing and DNS related scenarios
   @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -185,6 +187,7 @@ Feature: Routing and DNS related scenarios
   @4.10 @4.9 @4.8
   @azure-ipi
   @azure-upi
+  @singlenode
   Scenario: upgrade with route shards
     # Ensure cluster operator ingress is in normal status after upgrade
     Given I switch to cluster admin pseudo user
@@ -252,6 +255,7 @@ Feature: Routing and DNS related scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: Unidling a route work without user intervention
     # Check the servcie service-unsecure to see the idle annotation is still intact
     Given I switch to first user

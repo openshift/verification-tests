@@ -137,6 +137,7 @@ Feature: Service related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: externalIP defined in service but no spec.externalIP defined
     Given I have a project
     # Create a service with a externalIP
@@ -152,6 +153,7 @@ Feature: Service related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: externalIP defined in service with set ExternalIP in allowedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -199,6 +201,7 @@ Feature: Service related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: A rejectedCIDRs inside an allowedCIDRs
     # Create additional network through CNO
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
@@ -250,6 +253,7 @@ Feature: Service related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: externalIP defined in service with set ExternalIP in rejectedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -284,6 +288,7 @@ Feature: Service related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: An allowedCIDRs inside an rejectedCIDRs
     # Create additional network through CNO
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
@@ -397,6 +402,7 @@ Feature: Service related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: Idling/Unidling services on sdn/OVN
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -530,6 +536,7 @@ Feature: Service related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: User can expand the nodePort range by patch the serviceNodePortRange in network
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
@@ -642,6 +649,7 @@ Feature: Service related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: Update externalIP from oc edit svc
     Given I have a project
     And evaluation of `project.name` is stored in the :proj_name clipboard

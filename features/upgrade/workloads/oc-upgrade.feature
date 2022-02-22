@@ -15,6 +15,7 @@ Feature: basic verification for upgrade oc client testing
   @upgrade-check
   @admin
   @users=upuser1,upuser2
+  @singlenode
   Scenario: Check some container related oc commands still work after upgrade
     Given I switch to the first user
     When I use the "workloads-upgrade" project
@@ -70,6 +71,7 @@ Feature: basic verification for upgrade oc client testing
   @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: Check some container related oc commands still work for ocp45 after upgrade
     Given I switch to the first user
     When I use the "workloads-upgrade" project

@@ -69,6 +69,7 @@ Feature: Volume snapshot test
     @openstack-upi
     @upgrade-sanity
     @qeci
+    @singlenode
     Examples:
       | csi-sc       | csi-vsc      |
       | standard-csi | standard-csi |# @case_id OCP-37568
@@ -139,6 +140,7 @@ Feature: Volume snapshot test
     @openstack-upi
     @upgrade-sanity
     @qeci
+    @singlenode
     Examples:
       | csi-sc       | csi-vsc      |
       | standard-csi | standard-csi | # @case_id OCP-37569

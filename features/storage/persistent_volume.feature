@@ -38,6 +38,7 @@ Feature: Persistent Volume Claim binding policies
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
+    @singlenode
     Examples:
       | accessMode1   | accessMode2   | accessMode3   |
       | ReadOnlyMany  | ReadWriteMany | ReadWriteOnce | # @case_id OCP-9702
@@ -95,6 +96,7 @@ Feature: Persistent Volume Claim binding policies
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
+    @singlenode
     Examples:
       | access_mode   |
       | ReadOnlyMany  | # @case_id OCP-26880
@@ -132,6 +134,7 @@ Feature: Persistent Volume Claim binding policies
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
+    @singlenode
     Examples:
       | pv_access_mode | pvc_access_mode1 | pvc_access_mode2 |
       | ReadOnlyMany   | ReadWriteMany    | ReadWriteOnce    | # @case_id OCP-26882

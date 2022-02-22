@@ -4,6 +4,7 @@ Feature: rhel8images.feature
   # @case_id OCP-22950
   @admin
   @proxy
+  @singlenode
   Scenario: Using new-app cmd to create app with ruby rhel8 image
     Given I have a project
     When I run the :tag admin command with:
@@ -72,6 +73,7 @@ Feature: rhel8images.feature
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: mysql persistent template
     Given I have a project
     When I run the :tag admin command with:
@@ -127,6 +129,7 @@ Feature: rhel8images.feature
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project
     When I run the :new_app client command with:

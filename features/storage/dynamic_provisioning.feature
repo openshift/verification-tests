@@ -78,6 +78,7 @@ Feature: Dynamic provisioning
     @openstack-ipi
     @openstack-upi
     @upgrade-sanity
+    @singlenode
     Examples:
       | cloud_provider |
       | cinder         | # @case_id OCP-9656

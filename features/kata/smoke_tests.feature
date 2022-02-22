@@ -6,6 +6,7 @@ Feature: kata smoke tests
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @baremetal-upi @azure-upi
   @flaky
+  @singlenode
   Scenario: [sandboxed containers] Namespace installed by operator
     Given kata container has been installed successfully
     Then the expression should be true> project.name == 'openshift-sandboxed-containers-operator'
