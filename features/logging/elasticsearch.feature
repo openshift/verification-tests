@@ -9,6 +9,7 @@ Feature: Elasticsearch related tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Elasticsearch using dynamic volumes
     Given default storageclass is stored in the :default_sc clipboard
     Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"
@@ -44,6 +45,7 @@ Feature: Elasticsearch related tests
   @console
   @destructive
   @commonlogging
+  @singlenode
   Scenario: Elasticsearch6 new data modle indices
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -72,6 +74,7 @@ Feature: Elasticsearch related tests
   # @case_id OCP-28140
   @admin
   @destructive
+  @singlenode
   Scenario: Elasticsearch retention policy testing
     Given I switch to the first user
     And I create a project with non-leading digit name

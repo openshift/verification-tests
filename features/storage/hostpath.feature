@@ -50,6 +50,7 @@ Feature: Storage of Hostpath plugin testing
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
+    @singlenode
     Examples:
       | access_mode   | reclaim_policy | pv_status | step_status |
       | ReadWriteOnce | Retain         | released  | succeed     | # @case_id OCP-9639

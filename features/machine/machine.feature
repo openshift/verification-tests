@@ -7,6 +7,7 @@ Feature: Machine features testing
   @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
+  @singlenode
   Scenario: Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
@@ -38,6 +39,7 @@ Feature: Machine features testing
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
@@ -591,6 +593,7 @@ Feature: Machine features testing
   # @case_id OCP-47658
   @admin
   @4.10
+  @singlenode
   Scenario: Operator cloud-controller-manager should not show empty version
     Given I switch to cluster admin pseudo user
     Then evaluation of `cluster_operator('cloud-controller-manager').versions` is stored in the :versions clipboard
@@ -602,6 +605,7 @@ Feature: Machine features testing
   @4.10
   @vsphere-ipi @openstack-ipi @baremetal-ipi 
   @vsphere-upi @openstack-upi @baremetal-upi
+  @singlenode
   Scenario: Baremetal clusteroperator should be enabled in vsphere and osp 
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="False"

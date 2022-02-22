@@ -85,6 +85,7 @@ Feature: Cases to test forward logs to external elasticsearch
     And the expression should be true> JSON.parse(@result[:stdout])['count'] > 0
     """
 
+    @singlenode
     Examples:
       | scheme | client_auth | file                 |
       | https  | true        | clf-with-secret.yaml | # @case_id OCP-29845

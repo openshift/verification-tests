@@ -7,6 +7,7 @@ Feature: set deployment-hook/build-hook with CLI
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:
@@ -94,6 +95,7 @@ Feature: set deployment-hook/build-hook with CLI
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Set invalid pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:

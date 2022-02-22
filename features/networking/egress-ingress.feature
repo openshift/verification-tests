@@ -680,6 +680,7 @@ Feature: Egress-ingress related networking scenarios
   @admin
   @4.10 @4.9    
   @network-ovnkubernetes	
+  @singlenode
   Scenario: [bug2000057] No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted
     Given the env is using "OVNKubernetes" networkType
     And I have a project

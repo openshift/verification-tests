@@ -53,6 +53,7 @@ Feature: web console related upgrade check
   @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

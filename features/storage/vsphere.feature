@@ -58,6 +58,7 @@ Feature: vSphere test scenarios
     @vsphere-ipi
     @vsphere-upi
     @upgrade-sanity
+    @singlenode
     Examples:
       | disk_format      |
       | thin             | # @case_id OCP-13386
@@ -71,6 +72,7 @@ Feature: vSphere test scenarios
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Dynamically provision a vSphere volume with invalid disk format
     Given I have a project
     Given I obtain test data file "storage/vsphere/storageclass.yml"

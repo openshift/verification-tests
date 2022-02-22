@@ -7,6 +7,7 @@ Feature: Regression testing cases
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: RWO volumes are exclusively mounted on different nodes
     Given I have a project
     Given I store the schedulable workers in the :workers clipboard

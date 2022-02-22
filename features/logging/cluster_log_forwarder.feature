@@ -6,6 +6,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @commonlogging
+  @singlenode
   Scenario: ClusterLogForwarder `default` behavior testing
     Given the master version >= "4.6"
     # create project to generate logs
@@ -131,6 +132,7 @@ Feature: cluster log forwarder features
   # @case_id OCP-29843
   @admin
   @destructive
+  @singlenode
   Scenario: ClusterLogForwarder: Forward logs to fluentd as insecure
     Given I switch to the first user
     And I have a project
@@ -217,6 +219,7 @@ Feature: cluster log forwarder features
     """
     @upgrade-sanity
     @4.7
+    @singlenode
     Examples:
       | auth_type         |
       | mTLS_share        | # @case_id OCP-29844
@@ -276,6 +279,7 @@ Feature: cluster log forwarder features
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<audit_pipeline_name>')
     """
 
+    @singlenode
     Examples:
       | file                                 | app_pipeline_name     | infra_pipeline_name   | audit_pipeline_name   |
       | clf-forward-with-same-tag.yaml       | forward-to-default-es | forward-to-default-es | forward-to-default-es | # @case_id OCP-33750
@@ -285,6 +289,7 @@ Feature: cluster log forwarder features
   # @case_id OCP-33627
   @admin
   @destructive
+  @singlenode
   Scenario: Forward logs to remote-syslog - config error
     Given the master version >= "4.6"
     Given I switch to cluster admin pseudo user
@@ -343,6 +348,7 @@ Feature: cluster log forwarder features
 
     @upgrade-sanity
     @4.7
+    @singlenode
     Examples:
       | file                  | protocol |
       | rsys_clf_RFC3164.yaml | tls      | # @case_id OCP-32643
@@ -354,6 +360,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @4.10 @4.9 @4.8 @4.7
+  @singlenode
   Scenario: Forward logs to different kafka topics
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -397,6 +404,7 @@ Feature: cluster log forwarder features
   # @case_id OCP-32628
   @admin
   @destructive
+  @singlenode
   Scenario: Fluentd continues to ship logs even when one of multiple destination is down
     # create project to generate logs
     Given I switch to the first user
@@ -507,6 +515,7 @@ Feature: cluster log forwarder features
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
     Given I switch to cluster admin pseudo user

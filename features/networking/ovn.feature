@@ -197,6 +197,7 @@ Feature: OVN related networking scenarios
   @admin
   @4.10 @4.9
   @network-ovnkubernetes
+  @singlenode
   Scenario: ovnkube-masters should allocate pod IP and mac addresses
     Given the env is using "OVNKubernetes" networkType
     And I have a project
@@ -504,6 +505,7 @@ Feature: OVN related networking scenarios
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: OVN handles projects that start with a digit
     Given the env is using "OVNKubernetes" networkType
     Given I create a project with leading digit name

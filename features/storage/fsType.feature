@@ -47,6 +47,7 @@ Feature: testing for parameter fsType
       | xfs    | ebs    | # @case_id OCP-10049
 
     @upgrade-sanity
+    @singlenode
     Examples:
       | fsType | type   |
       | ext3   | cinder | # @case_id OCP-10097

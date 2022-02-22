@@ -38,6 +38,7 @@ Feature: eventrouter related test
       | "involvedObject" : |
     """
 
+    @singlenode
     Examples:
     | index_name  |
     | .operations | # @case_id OCP-25899

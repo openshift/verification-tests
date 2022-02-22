@@ -121,6 +121,7 @@ Feature: storage security check
 
     @openstack-ipi
     @openstack-upi
+    @singlenode
     Examples:
       | storage_type         | volume_name | type   |
       | cinder               | volumeID    | cinder | # @case_id OCP-9721
@@ -133,6 +134,7 @@ Feature: storage security check
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: secret volume security check
     Given I have a project
     Given I obtain test data file "storage/secret/secret.yaml"

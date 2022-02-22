@@ -53,6 +53,7 @@ Feature: CSI Resizing related feature
     @openstack-ipi
     @openstack-upi
     @upgrade-sanity
+    @singlenode
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37559
@@ -85,6 +86,7 @@ Feature: CSI Resizing related feature
     And the output should match:
       | Forbidden.*field can not be less than previous value |
 
+    @singlenode
     Examples:
       | sc_name |
       | gp2-csi | # @case_id OCP-25809

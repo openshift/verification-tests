@@ -12,6 +12,7 @@ Feature: negative testing
     And the output should contain:
       | <error> |
 
+    @singlenode
     Examples:
       | dir | file               | error                        |
       | gce | pv-retain-rwx.json | error querying GCE PD volume | # @case_id OCP-10310

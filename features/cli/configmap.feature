@@ -7,6 +7,7 @@ Feature: configMap
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Consume ConfigMap in environment variables
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -44,6 +45,7 @@ Feature: configMap
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Consume ConfigMap via volume plugin
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -89,6 +91,7 @@ Feature: configMap
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Perform CRUD operations against a ConfigMap resource
     Given I have a project
     Given I obtain test data file "configmap/configmap-example.yaml"

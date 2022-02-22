@@ -36,6 +36,7 @@ Feature: Marketplace related scenarios
   @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: upgrade Marketplace
     # Check Marketplace version after upgraded
     Given the "marketplace" operator version matches the current cluster version
