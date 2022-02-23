@@ -162,6 +162,7 @@ Feature: Egress compoment upgrade testing
 
   # @author huirwang@redhat.com
   @admin
+  @flaky
   @upgrade-prepare
   @4.10 @4.9
   @vsphere-ipi
@@ -228,6 +229,7 @@ Feature: Egress compoment upgrade testing
   # @author huirwang@redhat.com
   # @case_id OCP-45349
   @admin
+  @flaky
   @upgrade-check
   @4.10 @4.9
   @vsphere-ipi
