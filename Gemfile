@@ -35,8 +35,6 @@ gem 'azure_mgmt_compute', '~>0.18.0'
 gem 'azure_mgmt_resources', '~>0.17.0'
 gem 'azure_mgmt_network', '~>0.17.0'
 
-###### IBM cloud
-gem 'ibm_vpc'
 # gem 'timers'
 ## Logging
 gem 'term-ansicolor'
