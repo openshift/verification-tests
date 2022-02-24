@@ -676,7 +676,7 @@ Feature: deployment related features
       | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/hello-nonexist"}]}}}} |
     Then the step should succeed
     Given the pod named "hooks-2-deploy" becomes present
-    Given I wait up to 100 seconds for the steps to pass:
+    Given I wait up to 200 seconds for the steps to pass:
     """
     And the pod named "hooks-2-deploy" status becomes :failed
     When I get project pods with labels:
