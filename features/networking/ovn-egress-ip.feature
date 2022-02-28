@@ -454,7 +454,6 @@ Feature: OVN Egress IP related features
   @4.10 @4.9
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
-  @network-ovnkubernetes
   Scenario: Warning event will be triggered if apply EgressIP object but no EgressIP nodes
     #Get unused IP as egress ip
     Given I store a random unused IP address from the reserved range to the clipboard
