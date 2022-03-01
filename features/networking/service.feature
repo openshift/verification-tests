@@ -743,13 +743,13 @@ Feature: Service related networking scenarios
       | Hello OpenShift! |
     When I run commands on the host:
       | curl --connect-timeout 5 <%= cb.master0_ip %>:<%= cb.port %> |
-    Then the step should fail
-    And the output should not contain:
-      | Hello OpenShift! |
+    And the output should contain:
+      | Connection refused |
     Given I ensure "hello-pod" service is deleted
     When I run commands on the host:
       | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
-    Then the step should fail
+    And the output should contain:
+      | Connection refused |
 
   # @author zzhao@redhat.com
   # @case_id OCP-10770
