@@ -20,7 +20,8 @@ RUN set -x && \
     yum module reset ruby && \
     yum module -y enable ruby:2.7 && \
     yum module -y install ruby:2.7 && \
-    yum clean all -y && rm -rf /var/cache/yum /tmp/* /verification-tests/Gemfile.lock
+    yum clean all -y && \
+    rm -rf /var/cache/yum /var/tmp/* /tmp/*
 
 ADD . /verification-tests/
 
@@ -30,4 +31,5 @@ RUN set -x && \
     chmod -R g=u /verification-tests && \
     /verification-tests/tools/install_os_deps.sh && \
     /verification-tests/tools/hack_bundle.rb && \
-    yum clean all -y && rm -rf /var/cache/yum /tmp/* /verification-tests/Gemfile.lock
+    yum clean all -y && \
+    rm -rf /var/cache/yum /var/tmp/* /tmp/* /verification-tests/Gemfile.lock
