@@ -1,51 +1,52 @@
-# The standard name for this image is aosqe/openshift-vtests-public
-
-FROM quay.io/openshift/origin-jenkins-agent-base:4.6
+FROM quay.io/openshift/origin-jenkins-agent-base:4.10
 
 LABEL vendor="Red Hat inc."
 LABEL maintainer="OCP QE Team"
 
 RUN set -x && \
-    dnf repolist all && \
-    dnf config-manager --enable ansible-2.9-for-rhel-8-x86_64-rpms && \
-    INSTALL_PKGS="@ruby git bsdtar ansible subversion" && \
-    dnf install -y --allowerasing --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
-    dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
-    dnf install -y --setopt=tsflags=nodocs https://cbs.centos.org/kojifiles/packages/git-crypt/0.6.0/2.el8/x86_64/git-crypt-0.6.0-2.el8.x86_64.rpm && \
+    yum repolist enabled && \
+    OLD_REPOS=$(yum repolist enabled -q | sed 1d | cut -d'/' -f1 | awk '{print $1}') && \
+    ([ -n "$OLD_REPOS" ] && dnf config-manager --disable $OLD_REPOS || :) && \
+    NEW_REPOS="rhel-8-for-x86_64-appstream-rpms rhel-8-for-x86_64-baseos-rpms" && \
+    dnf config-manager --enable $NEW_REPOS && \
+    dnf config-manager --save --setopt=\*.skip_if_unavailable=1 $NEW_REPOS && \
+    yum repolist enabled && \
+    yum -y --allowerasing update && \
+    INSTALL_PKGS="bsdtar" && \
+    dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
+    dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    dnf config-manager --save --setopt=google-chrome.skip_if_unavailable=true && \
     CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
-    CHROMEDRIVER_VERSION=`curl -L "$CHROMEDRIVER_URL/LATEST_RELEASE"` && \
-    curl -L "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"  | bsdtar --no-same-owner --no-same-permissions -xvf - -C /usr/local/bin && \
+    CHROMEDRIVER_VERSION=`curl -sSL "$CHROMEDRIVER_URL/LATEST_RELEASE"` && \
+    curl -sSL "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"  | bsdtar --no-same-owner --no-same-permissions -xvf - -C /usr/local/bin && \
     GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
     curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s#$GECKODRIVER_RE#\1#p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
-    # curl -L https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
-    # dnf install -y /tmp/epel-release-latest-7.noarch.rpm && \
+    dnf -y install --setopt=tsflags=nodocs https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
+    dnf -y install --setopt=tsflags=nodocs https://cbs.centos.org/kojifiles/packages/git-crypt/0.6.0/2.el8/x86_64/git-crypt-0.6.0-2.el8.x86_64.rpm && \
+    yum module reset ruby && \
+    yum -y module enable ruby:2.7 && \
+    yum -y module install ruby:2.7 && \
+    yum -y clean all && \
+    rm -rf /var/cache/yum /tmp/* /var/tmp/* && \
     mkdir -p --mode=g+rw $HOME/bin
 
 # make sure context dir is at the repo root
 ADD . $HOME/verification-tests
 
-RUN "$HOME/verification-tests/tools/install_os_deps.sh"
 RUN set -x && \
-    cd "$HOME" && \
-    # in case Bundler updated in RHEL see:
-    # check https://github.com/rubygems/rubygems/pull/3933
-    setpriv --reuid 1001 bundle config path ~/.gem/ruby && \
+    chmod -R g=u "$HOME" && \
+    "$HOME/verification-tests/tools/install_os_deps.sh" && \
+    "$HOME/verification-tests/tools/hack_bundle.rb" && \
     git clone --depth 1 --single-branch https://github.com/openshift-qe/reportportal-agent-ruby.git && \
-    chown -R 1001 "$HOME" && \
     cd reportportal-agent-ruby && \
-    setpriv --reuid 1001 gem build reportportal && \
-    setpriv --reuid 1001 gem install reportportal-*.gem && \
+    gem build reportportal && \
+    gem install reportportal-*.gem && \
     cd .. && rm -rf reportportal-agent-ruby && \
-    setpriv --reuid 1001 "$HOME/verification-tests/tools/hack_bundle.rb"
-
-# -k is a bad option, better setup proper system certificates in a layered image
-# RUN sed -i -e 's/^\s\+curl\s/  curl -Sk /' /usr/local/bin/run-jnlp-client
-
-RUN rpm -qa && \
+    rpm -qa && \
     dnf clean all -y && \
-    rm -rf $HOME/verification-tests /var/cache/yum /tmp/*
+    rm -rf $HOME/verification-tests /var/cache/yum /tmp/* /var/tmp/*
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
 RUN chown -R 1001:0 $HOME && \
