@@ -50,4 +50,4 @@ check_name_validation_error:
   - selector:
       xpath: //h4[contains(.,'error occur')]
   - selector:
-      xpath: //div[contains(.,'subdomain must consist of lower case alphanumeric character')]
+      xpath: //div[contains(text(),'subdomain must consist of lower case alphanumeric character')]
