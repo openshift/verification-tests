@@ -1,19 +1,14 @@
+ansible
+firefox
+gcc-c++
 git
-
+make
+openssl
+pyOpenSSL
+redhat-rpm-config
 ruby
 ruby-devel
 rubygem-bundler
 rubygem-nokogiri
-
-gcc-c++
-make
-openssl
-
-firefox
 which
 Xvfb
-
-ansible
-pyOpenSSL
-# needed for local ansible repo/dnf operations
-redhat-rpm-config
