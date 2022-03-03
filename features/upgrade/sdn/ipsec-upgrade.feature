@@ -3,7 +3,7 @@ Feature: IPsec upgrade scenarios
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
-  @network-ovnkubernetes
+  @network-ovnkubernetes @ipsec
   @4.10 @4.9 @4.8
   @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -68,7 +68,7 @@ Feature: IPsec upgrade scenarios
   # @case_id OCP-44834
   @admin
   @upgrade-check
-  @network-ovnkubernetes
+  @network-ovnkubernetes @ipsec
   @4.10 @4.9 @4.8
   @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
