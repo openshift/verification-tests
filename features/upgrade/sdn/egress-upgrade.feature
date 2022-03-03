@@ -73,6 +73,7 @@ Feature: Egress compoment upgrade testing
   @4.10 @4.9 @4.8
   @vsphere-ipi
   @vsphere-upi
+  @qeci
   Scenario: Check ovn egressip is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I save ipecho url to the clipboard
@@ -128,6 +129,7 @@ Feature: Egress compoment upgrade testing
   @4.10 @4.9 @4.8
   @vsphere-ipi
   @vsphere-upi
+  @qeci
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
@@ -167,6 +169,7 @@ Feature: Egress compoment upgrade testing
   @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
+  @qeci
   Scenario: Check sdn egressip is functional post upgrade - prepare
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
@@ -234,6 +237,7 @@ Feature: Egress compoment upgrade testing
   @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
+  @qeci
   Scenario: Check sdn egressip is functional post upgrade
     Given I run the :get admin command with:
       | resource      | hostsubnet                                  |
