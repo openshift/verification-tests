@@ -684,6 +684,7 @@ Given /^I upgrade the operator with:$/ do | table |
   namespace = opts[:namespace]
   step %Q/I use the "#{namespace}" project/
 
+  pre_csv = subscription(subscription).current_csv
   # upgrade operator
   patch_json = {"spec": {"channel": "#{channel}", "source": "#{catsrc}"}}
   patch_opts = {resource: "subscription", resource_name: subscription, p: patch_json.to_json, n: namespace, type: "merge"}
@@ -691,7 +692,11 @@ Given /^I upgrade the operator with:$/ do | table |
   raise "Patch failed with #{@result[:response]}" unless @result[:success]
   # wait till new csv to be installed
   success = wait_for(180, interval: 10) {
-    (subscription(subscription).installplan_csv.include? channel) || (subscription(subscription).installplan_csv.include? (channel.split('-')[1]))
+    if channel != "stable"
+      (subscription(subscription).installplan_csv.include? channel) || (subscription(subscription).installplan_csv.include? (channel.split('-')[1]))
+    else
+      subscription(subscription).installplan_csv != pre_csv
+    end
   }
   raise "the new CSV can't be installed" unless success
   # wait till new csv is ready
