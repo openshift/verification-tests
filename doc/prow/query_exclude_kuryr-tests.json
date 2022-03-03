@@ -1,0 +1,3 @@
+{
+  "case_query": "products.KEY:ocp AND automation_script:cucushift AND caseimportance.KEY:(critical high medium) AND caseautomation.KEY:automated AND NOT upstream.KEY:yes AND NOT status:inactive AND NOT env_network_backend.KEY:kuryr"
+}
