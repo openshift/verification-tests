@@ -4,7 +4,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-38846
   @admin
   @4.10 @4.9
-  @network-ovnkubernetes
+  @network-ovnkubernetes @ipsec
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Should be able to send node to node ESP traffic on IPsec clusters
@@ -50,7 +50,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @network-ovnkubernetes
+  @network-ovnkubernetes @ipsec
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Segfault on pluto IKE daemon should result in restarting pluto daemon and corresponding ovn-ipsec pod
@@ -80,7 +80,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-37591
   @admin
   @4.10 @4.9
-  @network-ovnkubernetes
+  @network-ovnkubernetes @ipsec
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Make sure IPsec SA's are establishing in a transport mode
@@ -97,7 +97,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-39216
   @admin
   @4.10 @4.9
-  @network-ovnkubernetes
+  @network-ovnkubernetes @ipsec
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Pod created on IPsec cluster should have appropriate MTU size to accomdate IPsec Header
@@ -119,7 +119,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @network-ovnkubernetes
+  @network-ovnkubernetes @ipsec
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Delete all ovn-ipsec containers and check if they gets recreated
@@ -136,7 +136,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-37392
   @admin
   @4.10 @4.9
-  @network-ovnkubernetes
+  @network-ovnkubernetes @ipsec
   @vsphere-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: pod to pod traffic on different nodes should be ESP encrypted
@@ -187,7 +187,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @admin
   @destructive
   @inactive
-  @network-ovnkubernetes
+  @network-ovnkubernetes @ipsec
   Scenario: Allow enablement/disablement ipsec at runtime
     Given the env is using "OVNKubernetes" networkType
     Given I store all worker nodes to the :workers clipboard
