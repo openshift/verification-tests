@@ -2,6 +2,7 @@ FROM quay.io/openshift/origin-jenkins-agent-base:4.10
 
 LABEL vendor="Red Hat inc."
 LABEL maintainer="OCP QE Team"
+ENV USER_PATHS="$HOME /etc/machine-id /etc/passwd /etc/pki"
 
 RUN set -x && \
     yum repolist enabled && \
@@ -11,14 +12,14 @@ RUN set -x && \
     dnf config-manager --enable $NEW_REPOS && \
     dnf config-manager --save --setopt=\*.skip_if_unavailable=1 $NEW_REPOS && \
     yum repolist enabled && \
-    yum -y --allowerasing update && \
+    yum -y update && \
     INSTALL_PKGS="bsdtar" && \
     dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
     dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
     dnf config-manager --save --setopt=google-chrome.skip_if_unavailable=true && \
     CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
-    CHROMEDRIVER_VERSION=`curl -sSL "$CHROMEDRIVER_URL/LATEST_RELEASE"` && \
-    curl -sSL "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"  | bsdtar --no-same-owner --no-same-permissions -xvf - -C /usr/local/bin && \
+    CHROMEDRIVER_VERSION=$(curl -sSL "$CHROMEDRIVER_URL/LATEST_RELEASE") && \
+    curl -sSL "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" | bsdtar --no-same-owner --no-same-permissions -xvf - -C /usr/local/bin && \
     GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
     curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s#$GECKODRIVER_RE#\1#p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
@@ -29,7 +30,7 @@ RUN set -x && \
     yum -y module enable ruby:2.7 && \
     yum -y module install ruby:2.7 && \
     yum -y clean all && \
-    rm -rf /var/cache/yum /tmp/* /var/tmp/* && \
+    rm -rf /var/cache/yum /var/tmp/* /tmp/* && \
     mkdir -p --mode=g+rw $HOME/bin
 
 # make sure context dir is at the repo root
@@ -46,18 +47,13 @@ RUN set -x && \
     cd .. && rm -rf reportportal-agent-ruby && \
     rpm -qa && \
     dnf clean all -y && \
-    rm -rf $HOME/verification-tests /var/cache/yum /tmp/* /var/tmp/*
+    rm -rf $HOME/verification-tests /var/cache/yum /var/tmp/* /tmp/*
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
 RUN chown -R 1001:0 $HOME && \
-    chmod -R g+rw $HOME /etc/machine-id /etc/passwd /etc/pki
-# allow yum/dnf; but probably fakeroot would be needed and still some install
-# scripts may fail because of lack of real root
-#RUN dirs="/usr /etc /var /home /opt" && \
-#    chown -R 1001:0 $dirs && chmod -R g+rw $dirs
+    chmod -R g=u $USER_PATHS && \
+    chmod -R g+rw $USER_PATHS
 
-# running pod on OCP 3.x needs this
-RUN echo 'id -un 2>/dev/null || echo "default:x:`id -u`:`id -g`:Default Application User:${HOME}:/sbin/nologin" >> /etc/passwd' > /usr/local/bin/configure-agent
 # have sudo working just in case
 RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/bin/sudo && chmod 755 /usr/bin/sudo
 
