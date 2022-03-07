@@ -15,6 +15,7 @@ Feature: deployment related features
     Then the step should succeed
     # Wait and make the cancel succeed stably
     And I wait until the status of deployment "hooks" becomes :running
+    Given I wait for the "hooks-1-hook-pre" pod to appear in the project
     When  I run the :rollout_cancel client command with:
       | resource | deploymentConfig   |
       | name     | hooks              |
