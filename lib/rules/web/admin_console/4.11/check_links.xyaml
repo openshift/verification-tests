@@ -1,0 +1,390 @@
+check_doc_get_started_with_cli:
+  elements:
+  - selector:
+      xpath: //*[contains(@href, "/k8s/cluster/projects")]/button[contains(., "View My Projects")]
+check_brand:
+  elements:
+  - selector:
+      xpath: //img[contains(@src, '<logo_source>') and @alt='<product_name>']
+check_brand_in_modal:
+  elements:
+  - selector:
+      xpath: //div[contains(@role,'dialog')]//img[contains(@src, '<logo_source>') and @alt='<product_name>']
+check_logo_in_masthead:
+  params:
+    logo_source: static/assets/openshift-platform-logo.svg
+    product_name: Red Hat OpenShift Container Platform
+  action: check_brand
+check_logo_in_app_launcher:
+  params:
+    image_src: static/assets/redhat.svg
+  action: click_application_launcher_button
+  action: check_image_url
+check_logo_in_about_modal:
+  params:
+    logo_source: static/assets/openshift-platform-logo.svg
+    product_name: Red Hat OpenShift Container Platform
+  action: click_about_button
+  action: check_brand_in_modal
+click_about_button:
+  params:
+    button_text: About
+  action: click_help_button
+  action: click_button_text
+check_dedicated_logo:
+  params:
+    logo_source: static/assets/openshift-dedicated-logo.svg
+    product_name: Red Hat OpenShift Dedicated
+  action: check_brand
+check_online_logo:
+  params:
+    logo_source: static/assets/openshift-online-logo.svg
+    product_name: Red Hat OpenShift Online
+  action: check_brand
+check_azure_logo:
+  params:
+    logo_source: static/assets/openshift-logo.svg
+    product_name: Azure Red Hat OpenShift
+  action: check_brand
+check_monitoring_urls:
+  action: click_alert_manager_menu
+  action: check_alert_manager_url
+  action: click_metrics_prometheus_menu
+  action: check_metrics_prometheus_url
+  action: check_dashboards_grafana_menu_url
+click_alert_manager_menu:
+  params:
+    text: Alerting
+    link_url: /monitoring/alerts
+  action: click_link_with_text
+check_alert_manager_url: {}
+click_metrics_prometheus_menu:
+  params:
+    text: Metrics
+    link_url: /monitoring/query-browser?query0=
+  action: click_link_with_text
+check_metrics_prometheus_url: {}
+check_dashboards_grafana_menu_url: {}
+check_mega_menu:
+  params:
+    content: Red Hat applications
+    text: OpenShift Cluster Manager
+    link_url: https://console.redhat.com/openshift/details/
+  elements:
+  - selector:
+      xpath: //button[@aria-label='Application launcher']
+    op: click
+  action: check_page_contains
+  action: check_link_and_text
+click_perspective_switcher_button:
+  element:
+    selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
+navigate_to_dev_console:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
+  - selector:
+      xpath: //li//h2[contains(., 'Developer')]
+    op: click
+  action:
+    if_element:
+      selector:
+        xpath: //div[@id='guided-tour-modal']//button[text()='Skip tour']
+      timeout: 30
+    ref: skip_dev_perspective_tour
+navigate_to_admin_console:
+  action:
+    if_element:
+      selector:
+        xpath: //div[@id='guided-tour-modal']//button[text()='Skip tour']
+      timeout: 20
+    ref: skip_dev_perspective_tour
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
+  - selector:
+      xpath: //li//h2[contains(., 'Administrator')]
+    op: click
+check_active_perspective:
+  action:
+    if_param:
+      perspective: dev
+    ref: check_active_perspective_is_developer
+check_active_perspective_is_developer:
+  params:
+    active_perspective_text: Developer
+  action: check_current_perspective_text
+check_current_perspective_text:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'pf-c-dropdown__toggle-text') and contains(.,'<active_perspective_text>')]
+check_perspective_list_has_acm_option:
+  element:
+    selector:
+      xpath: //h2[@data-test-id='perspective-switcher-menu-option' and contains(.,'Advanced Cluster Management')]
+check_acm_in_perspective_switcher:
+  action: click_perspective_switcher_button
+  action: check_perspective_list_has_acm_option
+check_external_link:
+  elements:
+  - selector:
+      xpath: //div[contains(text(),'Launcher')] | //span[contains(text(),'Launcher')]
+    timeout: 20
+  - selector: &external_link
+      xpath: //a[contains(@class,'co-external-link') and contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), translate('<link_text>', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))]
+click_external_link:
+  elements:
+  - selector:
+      <<: *external_link
+    op: click
+check_external_log_link:
+  action: check_link_and_text
+# --- links on masthead ---
+browse_to_cli_tools_page:
+  action: click_help_button
+  params:
+    text: Command line tools
+    link_url: "command-line-tools"
+  action: click_link_with_text
+check_consolelink:
+  action:
+    if_param:
+      location: Help menu
+    ref: check_console_link_in_helpmenu
+  action:
+    if_param:
+      location: Application launcher
+    ref: check_console_link_in_applauncher
+  action:
+    if_param:
+      location: User menu
+    ref: check_console_link_in_usermenu
+check_console_link_in_helpmenu:
+  params:
+    link_url: "baidu.com"
+  action: click_help_button
+  action: check_link_and_text
+check_documentation_link_in_helpmenu:
+  params:
+    text: Documentation
+    link_url: https://access.redhat.com/documentation/en-us/openshift_container_platform/<version>
+  action: click_help_button
+  action: check_link_and_text
+check_customized_documentation_link_in_helpmenu:
+  params:
+    text: Documentation
+    link_url: <link_url>
+  action: click_help_button
+  action: check_link_and_text
+check_report_bug_or_open_case_link:
+  action:
+    if_element:
+      selector:
+        xpath: //a[contains(text(),'Report Bug to Red Hat')]
+    ref: check_report_bug_link
+  action:
+    if_element:
+      selector:
+        xpath: //a[contains(text(),'Open Support Case')]
+    ref: check_open_case_link
+check_report_bug_link:
+  scripts:
+    - command: |
+        var allas = document.querySelectorAll('a[data-test="application-launcher-item"]');
+        var expecteda;
+        for (var i of allas){
+          if(i.innerText.startsWith("Report Bug to Red Hat"))
+            expecteda = i
+        }
+        var bugzillaVersion = <bz_version>
+        var version = <detail_version>
+        var clusterID = <cluster_id>
+        var environment = encodeURIComponent(`Version: ${version}
+          Cluster ID: ${clusterID}
+          Browser: ${window.navigator.userAgent}
+        `)
+        var hh = `https://bugzilla.redhat.com/enter_bug.cgi?product=OpenShift%20Container%20Platform&version=${bugzillaVersion}&cf_environment=${environment}`
+        return decodeURIComponent(hh).replace(/\n/g, "").replace(/ +/g, "") === decodeURIComponent(expecteda.href).replace(/\n/g, "").replace(/ +/g, "")
+      expect_result: true
+check_open_case_link:
+  scripts:
+    - command: |
+        var allas = document.querySelectorAll('a[data-test="application-launcher-item"]');
+        var expecteda;
+        for (var i of allas){
+          if(i.innerText.startsWith("Open Support Case"))
+            expecteda = i
+        }
+        var ocp_version = <bz_version>
+        var clusterID = <cluster_id>
+        var hh = `https://access.redhat.com/support/cases/#/case/new?product=OpenShift%20Container%20Platform&version=${ocp_version}&clusterId=${cluster_id}`
+        return decodeURIComponent(hh).replace(/\n/g, "").replace(/ +/g, "") === decodeURIComponent(expecteda.href).replace(/\n/g, "").replace(/ +/g, "")
+      expect_result: true
+check_console_link_in_applauncher:
+  action: click_application_launcher_button
+  action: check_link_and_text
+  action: check_image_url
+check_acm_not_in_applauncher:
+  action: click_application_launcher_button
+  element:
+    selector:
+      xpath: //span[contains(@class,'pf-c-app-launcher__menu-item-text') and contains(.,'Advanced Cluster Management')]
+    missing: true
+check_console_link_in_usermenu:
+  params:
+    link_url: "www.youtube.com"
+  action: click_user_menu_button
+  action: check_link_and_text
+click_help_button:
+  params:
+    aria_label: Help menu
+  action: click_masthead_button
+click_application_launcher_button:
+  params:
+    aria_label: Application launcher
+  action: click_masthead_button
+click_user_menu_button:
+  params:
+    aria_label: User menu
+  action: click_masthead_button
+click_masthead_button:
+  element:
+    selector:
+      xpath: //button[contains(@aria-label, '<aria_label>')]
+    op: click
+check_image_url:
+  element:
+    selector:
+      xpath: //img[contains(@src,'<image_src>')]
+check_default_oc_download_links:
+  action: check_download_linux_oc_x86
+  action: check_download_linux_oc_arm64
+  action: check_download_linux_oc_ibm_power
+  action: check_download_linux_oc_ibm_z
+  action: check_download_mac_oc
+  action: check_download_windows_oc
+  action: check_oc_license
+check_download_linux_oc_x86:
+  params:
+    text: Download oc for Linux for x86_64
+    link_url: <downloads_route>/amd64/linux/oc.tar
+  action: check_link_and_text
+check_download_linux_oc_arm64:
+  params:
+    text: Download oc for Linux for ARM 64
+    link_url: <downloads_route>/arm64/linux/oc.tar
+  action: check_link_and_text
+check_download_linux_oc_ibm_power:
+  params:
+    text: Download oc for Linux for IBM Power, little endian
+    link_url: <downloads_route>/ppc64le/linux/oc.tar
+  action: check_link_and_text
+check_download_linux_oc_ibm_z:
+  params:
+    text: Download oc for Linux for IBM Z
+    link_url: <downloads_route>/s390x/linux/oc.tar
+  action: check_link_and_text
+check_download_mac_oc:
+  params:
+    text: Download oc for Mac
+    link_url: <downloads_route>/amd64/mac/oc.zip
+  action: check_link_and_text
+check_download_windows_oc:
+  params:
+    text: Download oc for Windows
+    link_url: <downloads_route>/amd64/windows/oc.zip
+  action: check_link_and_text
+check_oc_license:
+  params:
+    text: LICENSE
+    link_url: oc-license
+  action: check_link_and_text
+check_default_odo_download_links:
+  params:
+    text: odo
+    link_url: clients/odo/latest
+  action: check_link_and_text
+check_customized_oc_download_links:
+  params:
+    text: Download oc2
+    link_url: mirror.openshift.com/pub/openshift-v4/clients/oc
+  action: check_link_and_text
+  params:
+    text: Download oc3
+    link_url: mirror.openshift.com/pub/openshift-v4/clients/oc
+  action: check_link_and_text
+  params:
+    text: 下载oc命令行
+    link_url: mirror.openshift.com/pub/openshift-v4/clients/oc
+  action: check_link_and_text
+
+# --- links on navigator menu ---
+check_administration_menu_for_normal_user:
+  params:
+    primary_menu: Administration
+  action: navigate_to_admin_console
+  action: expand_primary_menu
+  action: check_crd_sub_menu_missing
+  action: check_namespaces_menu_missing
+  action: check_cluster_settings_menu_missing
+check_crd_sub_menu_missing:
+  params:
+    secondary_menu: Custom Resource Definitions
+  action: check_secondary_menu_missing
+check_namespaces_menu_missing:
+  params:
+    secondary_menu: Namespaces
+  action: check_secondary_menu_missing
+check_cluster_settings_menu_missing:
+  params:
+    secondary_menu: Cluster Settings
+  action: check_secondary_menu_missing
+check_administration_menu_for_admin_user:
+  params:
+    primary_menu: Administration
+  action: expand_primary_menu
+  action: check_crd_sub_menu
+  action: check_namespaces_menu
+  action: check_cluster_settings_menu
+check_crd_sub_menu:
+  params:
+    secondary_menu: CustomResourceDefinitions
+  action: check_secondary_menu
+check_namespaces_menu:
+  params:
+    secondary_menu: Namespaces
+  action: check_secondary_menu
+check_cluster_settings_menu:
+  params:
+    secondary_menu: Cluster Settings
+  action: check_secondary_menu
+
+# --- links on oc download route ---
+check_items_on_downloads_route_page:
+  elements:
+  - selector:
+      xpath: //li/a[@href="amd64/linux/oc" and contains(text(), "amd64 linux")]
+  - selector:
+      xpath: //li/a[@href="amd64/mac/oc" and contains(text(), "amd64 mac")]
+  - selector:
+      xpath: //li/a[@href="amd64/mac/oc.zip" and contains(text(), "zip")]
+  - selector:
+      xpath: //li/a[@href="amd64/windows/oc.exe" and contains(text(), "amd64 windows")]
+  - selector:
+      xpath: //li/a[@href="amd64/windows/oc.exe.tar" and contains(text(), "tar")]
+check_refresh_notification:
+  elements:
+  - selector:
+      xpath: //*[contains(.,'update is available')]
+refresh_console:
+  elements:
+  - selector:
+      xpath: //button[contains(.,'Refresh')]
+    op: click
+  - selector:
+      id: page-sidebar
+    timeout: 30
