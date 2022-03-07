@@ -595,23 +595,23 @@ Given /^an IP echo service is setup on the master node and the ip is stored in t
   }
 end
 
-
 Given /^the multus is enabled on the cluster$/ do
   ensure_admin_tagged
-
+  multus_status_timeout = 120
   desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
   available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
   #storing desired_multus_replicas value in desired_multus_replicas clipboard variable as well
   cb.desired_multus_replicas = desired_multus_replicas
-  unless (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0
-    daemon_set('multus', project('openshift-multus')).describe(admin, quiet:false)
-    BushSlicer::Pod.get_labeled("app=multus", user: admin, project: project("openshift-multus", switch: false)) do |pod|
-      pod.describe(admin, quiet: false)
+  wait_for(multus_status_timeout) {
+    unless (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0
+      daemon_set('multus', project('openshift-multus')).describe(admin, quiet:false)
+      BushSlicer::Pod.get_labeled("app=multus", user: admin, project: project("openshift-multus", switch: false)) do |pod|
+        pod.describe(admin, quiet: false)
+      end
+      env.nodes(user:admin, refresh: true, quiet: false)
+      raise "Multus is not running correctly!"
     end
-    env.nodes(user:admin, refresh: true, quiet: false)
-    raise "Multus is not running correctly!"
-  end
-
+  }
 end
 
 Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do | type, status |
