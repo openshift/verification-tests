@@ -81,17 +81,18 @@ Feature: Routing and DNS related scenarios
     # Get the number of worker nodes and scale up router pods
     Given I switch to cluster admin pseudo user
     And I store the number of worker nodes to the :num_workers clipboard
+    And evaluation of `cb.num_workers - 1` is stored in the :num_routers clipboard
     When I run the :scale admin command with:
       | resource | ingresscontroller          |
       | name     | default                    |
-      | replicas | <%= cb.num_workers %>      |
+      | replicas | <%= cb.num_routers %>      |
       | n        | openshift-ingress-operator |
     Then the step should succeed
     Given I use the "openshift-ingress" project
     And I wait up to 180 seconds for the steps to pass:
     """
-    Then the expression should be true> deployment("router-default").current_replicas(cached: false) == <%= cb.num_workers %>
-    And <%= cb.num_workers %> pods become ready with labels:
+    Then the expression should be true> deployment("router-default").current_replicas(cached: false) == <%= cb.num_routers %>
+    And <%= cb.num_routers %> pods become ready with labels:
       | ingresscontroller.operator.openshift.io/deployment-ingresscontroller=default |
     """
 
@@ -105,9 +106,10 @@ Feature: Routing and DNS related scenarios
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
     And I store the number of worker nodes to the :num_workers clipboard
+    And evaluation of `cb.num_workers - 1` is stored in the :num_routers clipboard
     Given I use the "openshift-ingress" project
-    Then the expression should be true> deployment("router-default").current_replicas(cached: false) == <%= cb.num_workers %>
-    And <%= cb.num_workers %> pods become ready with labels:
+    Then the expression should be true> deployment("router-default").current_replicas(cached: false) == <%= cb.num_routers %>
+    And <%= cb.num_routers %> pods become ready with labels:
       | ingresscontroller.operator.openshift.io/deployment-ingresscontroller=default |
 
 
