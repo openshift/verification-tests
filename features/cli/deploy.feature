@@ -721,6 +721,7 @@ Feature: deployment related features
     Then the step should succeed
     And I wait for the steps to pass:
     """
+    When I get project events
     When I get project pod named "hooks-1-deploy" as YAML
     Then the output should match:
       | \\s+limits:\n\\s+cpu: 30m\n\\s+memory: 150Mi\n   |
