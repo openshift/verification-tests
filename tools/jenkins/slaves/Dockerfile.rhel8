@@ -54,7 +54,8 @@ RUN chown -R 1001:0 $HOME && \
     chmod -R g=u $USER_PATHS && \
     chmod -R g+rw $USER_PATHS
 
-# have sudo working just in case
-RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/bin/sudo && chmod 755 /usr/bin/sudo
+# to workaround https://github.com/bitnami/bitnami-docker-jenkins/issues/60
+RUN echo "jenkins:x:1001:$(id -g):Jenkins:$JENKINS_HOME:/sbin/nologin" >> /etc/passwd && \
+    echo "jenkins:x:$(id -g):" >> /etc/groups
 
 USER 1001
