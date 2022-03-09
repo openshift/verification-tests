@@ -215,3 +215,89 @@ Feature: Kibana related features
       | password   | <%= user.password %>         |
       | idp        | <%= env.idp %>               |
     Then the step should succeed
+
+  # @author gkarager@redhat.com
+  # @case_id OCP-30343
+  @admin
+  @destructive
+  @console
+  @commonlogging
+  Scenario: Logs can be redirected from Webconsole to kibana
+    Given I switch to the first user
+    Given I create a project with non-leading digit name
+    Given evaluation of `project.name` is stored in the :proj_name clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | run=centos-logtest,test=centos-logtest |
+    And evaluation of `pod.name` is stored in the :pod_name clipboard 
+    Given the first user is cluster-admin
+    And I use the "openshift-logging" project
+    Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
+    Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
+    And I wait for the project "<%= cb.proj_name %>" logs to appear in the ES pod
+
+    When I run the :get client command with:
+      | resource | ConsoleExternalLogLink   |
+    Then the step should succeed
+
+    And I open admin console in a browser
+    When I perform the :goto_one_pod_log_page web action with:
+      | project_name | <%= cb.proj_name %> |
+      | pod_name     | <%= cb.pod_name %>  |
+    Then the step should succeed
+    
+    When I click the following "a" element:
+      | text  | Show in Kibana   |
+      | class | co-external-link |
+    Then the step should succeed
+    
+    # This step is to store the redirecting url of new window, does not check anything
+    And I wait up to 15 seconds for the steps to pass:
+    """
+    When I perform the :check_page_contains web action in ":url=>oauth" window with:
+      | content | |
+    Then the step should succeed
+    And evaluation of `@result[:url]` is stored in the :oauth_login clipboard
+    """
+    When I access the "<%= cb.oauth_login %>" url in the web browser
+
+    When I perform the :login_kibana web action with:
+      | username   | <%= user.name %>             |
+      | password   | <%= user.password %>         |
+      | idp        | <%= env.idp %>               |
+    Then the step should succeed
+
+    Given I have index pattern "*app"
+    Then the step should succeed
+    Given I have index pattern "*infra"
+    Then the step should succeed
+    Given I wait up to 180 seconds for the steps to pass:
+    """
+    And I run the :go_to_kibana_discover_page web action
+    Then the step should succeed
+    """
+
+    When I perform the :kibana_find_index_pattern web action with:
+      | index_pattern_name | *app |
+    Then the step should succeed
+    Given I wait up to 180 seconds for the steps to pass:
+    """
+    When I run the :check_log_count web action
+    Then the step should succeed
+    """
+    And I run the :kibana_expand_index_patterns web action
+    Then the step should succeed
+    When I perform the :kibana_click_index web action with:
+      | index_pattern_name | *infra |
+    Then the step should succeed
+    Given I wait up to 180 seconds for the steps to pass:
+    """
+    When I perform the :kibana_find_index_pattern web action with:
+      | index_pattern_name | *infra |
+    Then the step should succeed
+    When I run the :check_log_count web action
+    Then the step should succeed
+    """
