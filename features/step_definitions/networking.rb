@@ -597,21 +597,25 @@ end
 
 Given /^the multus is enabled on the cluster$/ do
   ensure_admin_tagged
-  multus_status_timeout = 120
   desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
   available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
   #storing desired_multus_replicas value in desired_multus_replicas clipboard variable as well
   cb.desired_multus_replicas = desired_multus_replicas
-  wait_for(multus_status_timeout) {
-    unless (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0
-      daemon_set('multus', project('openshift-multus')).describe(admin, quiet:false)
-      BushSlicer::Pod.get_labeled("app=multus", user: admin, project: project("openshift-multus", switch: false)) do |pod|
-        pod.describe(admin, quiet: false)
-      end
-      env.nodes(user:admin, refresh: true, quiet: false)
-      raise "Multus is not running correctly!"
+  success = wait_for(120, interval: 10)  {
+    desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
+    available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
+    #storing desired_multus_replicas value in desired_multus_replicas clipboard variable as well
+    cb.desired_multus_replicas = desired_multus_replicas
+    if (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0 
+      true
+    else
+      logger.info("Multus is not running correctly, continue checking")
+      false
     end
-  }
+  } 
+  unless success
+    raise "Multus is not running correctly! Exit Testing" 
+  end
 end
 
 Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do | type, status |
