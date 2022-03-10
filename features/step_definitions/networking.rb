@@ -597,15 +597,9 @@ end
 
 Given /^the multus is enabled on the cluster$/ do
   ensure_admin_tagged
-  desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
-  available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
-  #storing desired_multus_replicas value in desired_multus_replicas clipboard variable as well
-  cb.desired_multus_replicas = desired_multus_replicas
   success = wait_for(120, interval: 10)  {
     desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
     available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
-    #storing desired_multus_replicas value in desired_multus_replicas clipboard variable as well
-    cb.desired_multus_replicas = desired_multus_replicas
     if (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0 
       true
     else
