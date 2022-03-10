@@ -1,5 +1,3 @@
-# The standard name for this image is aosqe/openshift-vtests-public
-
 FROM openshift3/jenkins-slave-base-rhel7:v3.11
 
 LABEL vendor="Red Hat inc."
@@ -35,7 +33,6 @@ RUN set -x && \
 
 # make sure context dir is at the repo root
 ADD . $HOME/verification-tests
-# RUN scl enable rh-git218 "git clone --depth 1 --single-branch 'https://github.com/openshift/verification-tests.git' '$HOME/verification-tests'"
 
 RUN scl enable rh-ruby27 "$HOME/verification-tests/tools/install_os_deps.sh"
 RUN chown -R 1001 "$HOME"
@@ -55,24 +52,18 @@ RUN set -x && \
     cd reportportal-agent-ruby && \
     setpriv --reuid 1001 scl enable rh-ruby27 'gem build reportportal' && \
     setpriv --reuid 1001 scl enable rh-ruby27 'gem install reportportal-*.gem' && \
-    cd .. && rm -rf reportportal-agent-ruby
-
-RUN setpriv --reuid 1001 scl enable rh-ruby27 "$HOME/verification-tests/tools/hack_bundle.rb"
-
-# -k is a bad option, better setup proper system certificates in a layered image
-# RUN sed -i -e 's/^\s\+curl\s/  curl -Sk /' /usr/local/bin/run-jnlp-client
-
-RUN rpm -qa && \
+    cd .. && rm -rf reportportal-agent-ruby && \
+    setpriv --reuid 1001 scl enable rh-ruby27 "$HOME/verification-tests/tools/hack_bundle.rb" && \
+    rpm -qa && \
     yum clean all -y && \
     rm -rf $HOME/verification-tests /var/cache/yum /var/tmp/* /tmp/*
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
-RUN chmod -R g=u $USER_PATHS && chmod -R g+rw $USER_PATHS
+RUN chmod -R g=u $USER_PATHS && \
+    chmod -R g+rw $USER_PATHS
 
-# allow yum/dnf; but probably fakeroot would be needed and still some install
-# scripts may fail because of lack of real root
-#RUN dirs="/usr /etc /var /home /opt" && \
-#    chown -R 1001:0 $dirs && chmod -R g+rw $dirs
+# fix issue: No user exists for uid
+RUN echo 'id -un 2>/dev/null || echo "default:x:`id -u`:`id -g`:Default Application User:${HOME}:/sbin/nologin" >> /etc/passwd' > /usr/local/bin/configure-agent
 
 # have sudo working just in case
 RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/bin/sudo && chmod 755 /usr/bin/sudo
