@@ -1,34 +1,60 @@
-# Create configmap and secret first
 apiVersion: v1
-kind: DeploymentConfig
-metadata:
-  labels:
-    app: hello
-  name: hello
-spec:
-  replicas: 1
-  selector:
-    app: hello
-  template:
-    metadata:
-      labels:
-        app: hello
-    spec:
-      containers:
-      - args:
-        - --conf
-        - /etc/caddy/config/caddyfile.conf
-        image: quay.io/openshifttest/caddy-docker@sha256:a88247b9b2a35e0c0a9bc67506971a39fc5a0196b9a1d9ead49ae5fa4b48dfa5
-        name: hello
-        volumeMounts:
-        - mountPath: /etc/serving-cert
-          name: volume-secret
-        - mountPath: /etc/caddy/config
-          name: volume-cm
-      volumes:
-      - name: volume-secret
-        secret:
-          secretName: ssl-key
-      - configMap:
-          name: default-conf
-        name: volume-cm
+kind: List
+items:
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: nginx-config
+  data:
+    nginx.conf: |
+      events {
+          worker_connections 1024;
+      }
+
+      http {
+          server {
+              listen		8080;
+              location / {
+                  root /data/http;
+              }
+          }
+
+          server {
+              listen           	    8443 ssl http2 default;
+              listen           	    [::]:8443 ssl http2 default;
+              server_name      	    _;
+              ssl_certificate  	    certs/tls.crt;
+              ssl_certificate_key  	certs/tls.key;
+              location / {
+                  root /data/https-default;
+              }
+          }
+      }
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    labels:
+      name: web-server-rc
+    name: web-server-rc
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        labels:
+          name: web-server-rc
+      spec:
+        containers:
+        - name: nginx
+          image: quay.io/openshifttest/nginx-alpine@sha256:f266733786efb10c4353d4b44ada6f22434e983d22f0975d20803f1817d38f56
+          volumeMounts:
+          - name: ssl-key
+            mountPath: /etc/nginx/certs/
+          - name: nginx-config
+            mountPath: /etc/nginx/
+        volumes:
+        - name: ssl-key
+          secret:
+            secretName: ssl-key
+        - name: nginx-config
+          configMap:
+            name: nginx-config
