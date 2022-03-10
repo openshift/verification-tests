@@ -1055,7 +1055,7 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
 
   if version == "6.8"
     # get the arch of node
-    @result = admin.cli_exec(:get, resource: "nodes", output: "jsonpath={.items[0].status.nodeInfo.architecture}")
+    @result = admin.cli_exec(:get, resource: "nodes", l: "kubernetes.io/os=linux", output: "jsonpath={.items[0].status.nodeInfo.architecture}")
     # set xpack.ml.enable to false when testing ES 6.8 on arm64 cluster
     if @result[:response] == "arm64"
       cm_patch << ["p", "MACHINE_LEARNING=false"]
