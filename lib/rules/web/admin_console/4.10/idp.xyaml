@@ -40,7 +40,7 @@ check_idp_in_table_list:
   elements:
   - selector:
       xpath: //td[text()='<idp_name>']/following-sibling::td[text()='<idp_type>']
-    timeout: 20
+    timeout: 40
 
 # github idp
 add_github_idp:
