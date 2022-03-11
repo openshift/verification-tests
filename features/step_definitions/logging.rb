@@ -1053,6 +1053,15 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
     cm_patch << ["p", "USERNAME=#{username}"] << ["p", "PASSWORD=#{password}"]
   end
 
+  if version == "6.8"
+    # get the arch of node
+    @result = admin.cli_exec(:get, resource: "nodes", l: "kubernetes.io/os=linux", output: "jsonpath={.items[0].status.nodeInfo.architecture}")
+    # set xpack.ml.enable to false when testing ES 6.8 on arm64 cluster
+    if @result[:response] == "arm64"
+      cm_patch << ["p", "MACHINE_LEARNING=false"]
+    end
+  end
+
   @result = admin.cli_exec(:process, opts_array_process(cm_patch.uniq))
   File.write(File.expand_path("cm.yaml".strip), @result[:stdout])
   cm = "cm.yaml"

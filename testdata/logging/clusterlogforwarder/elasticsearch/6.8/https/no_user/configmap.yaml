@@ -29,6 +29,7 @@ objects:
       xpack.security.http.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/secret/admin-ca" ]
       xpack.security.http.ssl.verification_mode: full
       xpack.security.http.ssl.client_authentication: ${CLIENT_AUTH}
+      xpack.ml.enabled: ${MACHINE_LEARNING}
   kind: ConfigMap
   metadata:
     name: ${NAME}
@@ -40,3 +41,5 @@ parameters:
   value: openshift-logging
 - name: CLIENT_AUTH
   value: none
+- name: MACHINE_LEARNING
+  value: "true"
