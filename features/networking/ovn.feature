@@ -345,7 +345,8 @@ Feature: OVN related networking scenarios
     Then the expression should be true> @result[:parsed]['end']['sum']['lost_percent'].to_f < 10
     Then the expression should be true> @result[:parsed]['end']['sum']['bytes'].to_f > 1024
     Then the expression should be true> @result[:parsed]['end']['sum']['packets'].to_f > 0
-    Then the expression should be true> @result[:parsed]['end']['sum']['jitter_ms'].to_f < 1
+    # increase jitter threshold until it only fails when there is a real issue
+    Then the expression should be true> @result[:parsed]['end']['sum']['jitter_ms'].to_f < 5
     And I run the :logs client command with:
       | resource_name | iperf-server |
     Then the step should succeed
