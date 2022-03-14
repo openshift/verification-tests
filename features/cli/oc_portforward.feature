@@ -7,6 +7,7 @@ Feature: oc_portforward.feature
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @noproxy @connected
   Scenario: Forward multi local ports to a pod
     Given I have a project
     And evaluation of `rand(5000..7999)` is stored in the :porta clipboard

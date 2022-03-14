@@ -34,6 +34,7 @@ Feature: Machine-api components upgrade tests
 
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @disconnected @connected
   Examples:
     | cluster_operator           |
     | "machine-api"              | # @case_id OCP-22712
@@ -107,6 +108,7 @@ Feature: Machine-api components upgrade tests
   @destructive
   @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @disconnected @connected
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

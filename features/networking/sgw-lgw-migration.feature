@@ -7,6 +7,7 @@ Feature: SGW<->LGW migration related scenarios
   @destructive
   @network-ovnkubernetes
   @vsphere-ipi
+  @noproxy @connected
   Scenario: [SDN-2290] SGW <-> LGW migration scenario	for vsphere platform
     Given the env is using "OVNKubernetes" networkType
 
@@ -124,6 +125,7 @@ Feature: SGW<->LGW migration related scenarios
   @destructive
   @network-ovnkubernetes
   @baremetal-upi
+  @disconnected @connected
   Scenario: [SDN-2290] SGW <-> LGW migration scenario	for BM platform
     Given the env is using "OVNKubernetes" networkType
 

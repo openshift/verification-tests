@@ -114,6 +114,7 @@ Feature: Testing the isolation during build scenarios
     Then the output should not contain "Hello OpenShift"
     Then the output should contain "Connection timed out after"
     """
+    @noproxy @connected
     Examples:
       | type   | repo                                                           | strategy       |
       | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15731

@@ -7,6 +7,7 @@ Feature: resouces related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Return description of resources with cli describe
     Given I have a project
     And I create a new application with:

@@ -166,6 +166,7 @@ Feature: apiserver and auth related upgrade check
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: Default RBAC role, rolebinding, clusterrole and clusterrolebinding without any missing after upgraded
     # Checking original clusterrole resources recovered after upgraded
     When I run the :get admin command with:

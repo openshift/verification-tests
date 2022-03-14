@@ -87,6 +87,7 @@ Feature: buildconfig.feature
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @singlenode
+    @noproxy @connected
     Examples:
       | template                  |
       | test-buildconfig-s2i.json | # @case_id OCP-11474
@@ -99,6 +100,7 @@ Feature: buildconfig.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @noproxy @connected
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:

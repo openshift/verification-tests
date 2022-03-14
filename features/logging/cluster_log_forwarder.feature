@@ -7,6 +7,7 @@ Feature: cluster log forwarder features
   @destructive
   @commonlogging
   @singlenode
+  @disconnected @connected
   Scenario: ClusterLogForwarder `default` behavior testing
     Given the master version >= "4.6"
     # create project to generate logs
@@ -220,6 +221,7 @@ Feature: cluster log forwarder features
     @upgrade-sanity
     @4.7
     @singlenode
+    @connected
     Examples:
       | auth_type         |
       | mTLS_share        | # @case_id OCP-29844
@@ -280,6 +282,7 @@ Feature: cluster log forwarder features
     """
 
     @singlenode
+    @disconnected @connected
     Examples:
       | file                                 | app_pipeline_name     | infra_pipeline_name   | audit_pipeline_name   |
       | clf-forward-with-same-tag.yaml       | forward-to-default-es | forward-to-default-es | forward-to-default-es | # @case_id OCP-33750
@@ -290,6 +293,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @singlenode
+  @disconnected @connected
   Scenario: Forward logs to remote-syslog - config error
     Given the master version >= "4.6"
     Given I switch to cluster admin pseudo user
@@ -349,6 +353,7 @@ Feature: cluster log forwarder features
     @upgrade-sanity
     @4.7
     @singlenode
+    @disconnected @connected
     Examples:
       | file                  | protocol |
       | rsys_clf_RFC3164.yaml | tls      | # @case_id OCP-32643
@@ -361,6 +366,7 @@ Feature: cluster log forwarder features
   @destructive
   @4.10 @4.9 @4.8 @4.7
   @singlenode
+  @connected
   Scenario: Forward logs to different kafka topics
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -405,6 +411,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @singlenode
+  @connected
   Scenario: Fluentd continues to ship logs even when one of multiple destination is down
     # create project to generate logs
     Given I switch to the first user
@@ -516,6 +523,7 @@ Feature: cluster log forwarder features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @connected
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
     Given I switch to cluster admin pseudo user

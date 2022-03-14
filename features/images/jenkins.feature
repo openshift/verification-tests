@@ -96,6 +96,7 @@ Feature: jenkins.feature
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
+    @noproxy @connected
     Examples:
       | version |
       | 2       | # @case_id OCP-10980
@@ -107,6 +108,7 @@ Feature: jenkins.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: new-app/new-build support for pipeline buildconfigs
     Given I have a project
     When I run the :new_app client command with:
@@ -296,6 +298,7 @@ Feature: jenkins.feature
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
+    @connected
     Examples:
       | version |
       | 1       |
@@ -308,6 +311,7 @@ Feature: jenkins.feature
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @noproxy @connected
   Scenario: Jenkins pipeline build with OpenShift Client Plugin Example
     And I have a project
     When I run the :create client command with:
@@ -354,6 +358,7 @@ Feature: jenkins.feature
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @noproxy @connected
   Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project
     When I run the :new_app client command with:

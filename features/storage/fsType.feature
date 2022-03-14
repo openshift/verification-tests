@@ -48,6 +48,7 @@ Feature: testing for parameter fsType
 
     @upgrade-sanity
     @singlenode
+    @disconnected @connected
     Examples:
       | fsType | type   |
       | ext3   | cinder | # @case_id OCP-10097

@@ -171,6 +171,7 @@ Feature: Operator related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @disconnected @connected
   Scenario: Service should not get unidle when config flag is disabled under CNO
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"

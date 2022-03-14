@@ -127,6 +127,7 @@ Feature: Cluster Autoscaler Tests
   @destructive
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @disconnected @connected
   Scenario: Update machineAutoscaler to reference a different MachineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

@@ -5,6 +5,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @admin
   @4.10 @4.9
   @singlenode
+  @connected
   Scenario: Prebound pv is availabe due to requested pvc status is bound
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -30,6 +31,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @admin
   @4.10 @4.9
   @singlenode
+  @connected
   Scenario: Prebound pv is availabe due to mismatched accessmode with requested pvc
     Given I have a project
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
@@ -54,6 +56,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @admin
   @4.10 @4.9
   @singlenode
+  @connected
   Scenario: Prebound pvc is pending due to requested pv status is bound
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -78,6 +81,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @admin
   @4.10 @4.9
   @singlenode
+  @connected
   Scenario: Prebound PVC is pending due to mismatched accessmode with requested PV
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -101,6 +105,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @admin
   @4.10 @4.9
   @singlenode
+  @connected
   Scenario: Prebound PVC is pending due to mismatched volume size with requested PV
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -124,6 +129,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @admin
   @4.10 @4.9
   @singlenode
+  @connected
   Scenario: PV and PVC bound successfully when pvc created prebound to pv
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -150,6 +156,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @admin
   @4.10 @4.9
   @singlenode
+  @connected
   Scenario: PV and PVC bound successfully when pv created prebound to pvc
     Given I have a project
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
@@ -191,6 +198,7 @@ Feature: Testing for pv and pvc pre-bind feature
     And the "mypvc" PVC becomes :pending
     And the "pv-<%= project.name %>" PV status is :available
     @singlenode
+    @disconnected @connected
     Examples:
       | pre-bind-pvc | pre-bind-pv                |
       | nfsc         | nfspv1-<%= project.name %> | # @case_id OCP-10108
