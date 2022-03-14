@@ -23,10 +23,10 @@ Feature: cluster monitoring related upgrade check
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
-    And I wait up to 120 seconds for the steps to pass:
-    """
-    Given all pods in the project are ready
-    """
+
+    # Check cluster operators should be in correct status
+    Given the expression should be true> cluster_operator('monitoring').condition(type: 'Progressing')['status'] == "False"
+    And the expression should be true> cluster_operator('monitoring').condition(type: 'Available')['status'] == "True"
     And the expression should be true> cluster_operator('monitoring').condition(type: 'Degraded')['status'] == "False"
 
     #check retention time
