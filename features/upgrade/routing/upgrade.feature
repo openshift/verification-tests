@@ -23,6 +23,7 @@ Feature: Routing and DNS related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -59,6 +60,7 @@ Feature: Routing and DNS related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -103,6 +105,7 @@ Feature: Routing and DNS related scenarios
   @4.10 @4.9 @4.8
   @vsphere-ipi @baremetal-ipi
   @vsphere-upi @baremetal-upi
+  @disconnected @connected
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
     And I store the number of worker nodes to the :num_workers clipboard
@@ -190,6 +193,7 @@ Feature: Routing and DNS related scenarios
   @azure-ipi
   @azure-upi
   @singlenode
+  @disconnected @connected
   Scenario: upgrade with route shards
     # Ensure cluster operator ingress is in normal status after upgrade
     Given I switch to cluster admin pseudo user

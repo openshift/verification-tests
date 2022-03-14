@@ -61,6 +61,7 @@ Feature: SCTP related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @connected
   Scenario: Expose SCTP ClusterIP Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
@@ -123,6 +124,7 @@ Feature: SCTP related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @connected
   Scenario: Expose SCTP NodePort Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
@@ -187,6 +189,7 @@ Feature: SCTP related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @connected
   Scenario: Networkpolicy allow SCTP Client
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module

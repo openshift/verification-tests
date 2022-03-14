@@ -225,6 +225,7 @@ Feature: OVN related networking scenarios
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @disconnected @connected
   Scenario: Create/delete pods while forcing OVN leader election
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1781297
     Given the env is using "OVNKubernetes" networkType
@@ -506,6 +507,7 @@ Feature: OVN related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: OVN handles projects that start with a digit
     Given the env is using "OVNKubernetes" networkType
     Given I create a project with leading digit name
@@ -588,6 +590,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9 @4.8
   @network-ovnkubernetes
   @vsphere-ipi
+  @connected
   Scenario: Logical Router Policies and Annotations for a given node should be current
     Given the env is using "OVNKubernetes" networkType
     #Find apiVIP address of the cluster

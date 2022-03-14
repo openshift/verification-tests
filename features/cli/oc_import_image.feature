@@ -89,6 +89,7 @@ Feature: oc import-image related feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Tags should be added to ImageStream if image repository is from an external docker registry
     Given I have a project
     Given I obtain test data file "image-streams/external.json"
@@ -114,6 +115,7 @@ Feature: oc import-image related feature
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @connected
   Scenario: Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :tag client command with:
@@ -180,6 +182,7 @@ Feature: oc import-image related feature
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @connected
   Scenario: Allow imagestream request build config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :import_image client command with:

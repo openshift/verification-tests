@@ -9,6 +9,7 @@ Feature: Testing registry
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
     Given I enable image-registry default route
@@ -45,6 +46,7 @@ Feature: Testing registry
   @admin
   @4.10 @4.9
   @singlenode
+  @disconnected @connected
   Scenario: Copy image to another tag via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -66,6 +68,7 @@ Feature: Testing registry
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @connected
   Scenario: Mirror multiple locations to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -163,6 +166,7 @@ Feature: Testing registry
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @noproxy @connected
   Scenario: Check the related log from must-gather tool
     When I run the :delete admin command with:
       | object_type       | co             |
@@ -183,6 +187,7 @@ Feature: Testing registry
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @connected
   Scenario: Mirror image to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -205,6 +210,7 @@ Feature: Testing registry
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Use node credentials in imagestream import
     Given I have a project
     When I run the :tag client command with:
@@ -271,6 +277,7 @@ Feature: Testing registry
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @connected
   Scenario: Node secret takes effect when common secret is removed
     Given I have a project
     When I run the :extract admin command with:

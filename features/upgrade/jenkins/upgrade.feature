@@ -26,6 +26,7 @@ Feature: Jenkins feature upgrade test
   @vsphere-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @gcp-upi @azure-upi @aws-upi
   @singlenode
+  @noproxy @connected
   Scenario: Jenkins feature upgrade test
     Given I switch to the first user
     When I use the "jenkins-upgrade" project

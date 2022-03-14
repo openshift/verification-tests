@@ -5,6 +5,7 @@ Feature: Cinder Persistent Volume
   @admin
   @4.10 @4.9
   @singlenode
+  @disconnected @connected
   Scenario: Persistent Volume with cinder volume plugin
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard

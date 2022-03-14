@@ -66,6 +66,7 @@ Feature: oc_set_env.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Remove environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"

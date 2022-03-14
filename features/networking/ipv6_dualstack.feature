@@ -7,6 +7,7 @@ Feature: ipv6 dual stack cluster test scenarios
   @4.10 @4.9
   @baremetal-ipi
   @upgrade-sanity
+  @disconnected @connected
   Scenario: Project should be in isolation when using multitenant policy for ipv6 dual stack
     # create project and pods
     Given I have a project
@@ -87,6 +88,7 @@ Feature: ipv6 dual stack cluster test scenarios
   @4.10 @4.9
   @baremetal-ipi
   @singlenode
+  @disconnected @connected
   Scenario: ipv6 for nodeport service
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ipv4 clipboard    

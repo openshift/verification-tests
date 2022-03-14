@@ -149,6 +149,7 @@ Feature: cluster-logging-operator related test
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: OpenShift Logging dashboard
     Given I switch to the first user
     And the first user is cluster-admin
@@ -174,6 +175,7 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   @singlenode
+  @disconnected @connected
   Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments - Invalid Values
     Given I register clean-up steps:
     """
@@ -193,6 +195,7 @@ Feature: cluster-logging-operator related test
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer.yaml"
     And I create clusterlogging instance with:
@@ -219,6 +222,7 @@ Feature: cluster-logging-operator related test
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: Fluentd optimizing variable changes trigger new deployment
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_default.yaml"
     And I create clusterlogging instance with:

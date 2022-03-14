@@ -6,6 +6,7 @@ Feature: Scheduler related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: When no scheduler name is supplied, the pod is automatically scheduled using the default-scheduler
     Given I have a project
     Given I obtain test data file "scheduler/multiple-schedulers/pod-no-scheduler.yaml"

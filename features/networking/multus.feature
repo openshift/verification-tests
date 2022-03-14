@@ -8,6 +8,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @baremetal-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Create pods with multus-cni - macvlan bridge mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -73,6 +74,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @baremetal-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Create pods with multus-cni - macvlan private mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -136,6 +138,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @baremetal-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Create pods with multus-cni - macvlan vepa mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -200,6 +203,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-ipi @baremetal-ipi
   @vsphere-upi @baremetal-upi
   @upgrade-sanity
+  @connected
   Scenario: Create pods with multus-cni - host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -274,6 +278,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @baremetal-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + macvlan
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -323,6 +328,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -392,6 +398,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Create pods with muliple cni plugins via multus-cni - host-device + host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -468,6 +475,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @noproxy @connected
   Scenario: Create pod with Multus bridge CNI plugin without vlan
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -521,6 +529,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Create pod with Multus bridge CNI plugin and vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -566,6 +575,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @noproxy @connected
   Scenario: CNO manager mavlan configured manually with static
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
@@ -698,6 +708,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Pods can communicate each other with same vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -787,6 +798,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: Pods cannot communicate each other with different vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -892,6 +904,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: macvlan plugin without master parameter
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -922,6 +935,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Supported runtimeConfig/capability for MAC/IP
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -963,6 +977,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @noproxy
   Scenario: Multus CNI type bridge with DHCP
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
@@ -1100,6 +1115,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Assign static IP address using pod annotation
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1139,6 +1155,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Assign static MAC address using pod annotation
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1176,6 +1193,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Multus default route overwrite
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster

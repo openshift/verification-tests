@@ -70,6 +70,7 @@ Feature: Volume snapshot test
     @upgrade-sanity
     @qeci
     @singlenode
+    @disconnected @connected
     Examples:
       | csi-sc       | csi-vsc      |
       | standard-csi | standard-csi |# @case_id OCP-37568
@@ -141,6 +142,7 @@ Feature: Volume snapshot test
     @upgrade-sanity
     @qeci
     @singlenode
+    @disconnected @connected
     Examples:
       | csi-sc       | csi-vsc      |
       | standard-csi | standard-csi | # @case_id OCP-37569

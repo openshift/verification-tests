@@ -8,6 +8,7 @@ Feature: projects related features via cli
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Could delete all resources when delete the project
     Given a 5 characters random string of type :dns is stored into the :prj_name clipboard
     When I run the :new_project client command with:
@@ -148,6 +149,7 @@ Feature: projects related features via cli
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"

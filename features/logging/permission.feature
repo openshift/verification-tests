@@ -6,6 +6,7 @@ Feature: permission related test
   @admin
   @destructive
   @commonlogging
+  @disconnected @connected
   Scenario: [BZ1446217] View the project mapping index as different roles
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -55,6 +56,7 @@ Feature: permission related test
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: Normal User can only view project owned by himself
     Given I switch to the first user
     And evaluation of `user.cached_tokens.first` is stored in the :user_token clipboard
@@ -103,6 +105,7 @@ Feature: permission related test
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: cluster-admin view all projects
     Given I switch to the first user
     Given I create a project with non-leading digit name

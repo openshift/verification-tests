@@ -25,7 +25,7 @@ Feature: Pod related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-10031
   @smoke
-  @disconnected
+  @noproxy @disconnected
   @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -51,6 +51,7 @@ Feature: Pod related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: The openflow list will be cleaned after delete the pods
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -81,6 +82,7 @@ Feature: Pod related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: Check QoS after creating pod
     Given I have a project
     # setup iperf server to receive the traffic
@@ -236,6 +238,7 @@ Feature: Pod related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard

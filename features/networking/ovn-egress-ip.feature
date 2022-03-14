@@ -10,6 +10,7 @@ Feature: OVN Egress IP related features
   @upgrade-sanity
   @network-ovnkubernetes
   @qeci
+  @noproxy @connected
   Scenario: EgressIP works for all pods in the matched namespace when only configure namespaceSelector
     Given I save ipecho url to the clipboard
     Given I select a random node's host
@@ -79,6 +80,7 @@ Feature: OVN Egress IP related features
   @upgrade-sanity
   @network-ovnkubernetes
   @qeci
+  @noproxy @connected
   Scenario: Multiple EgressIP objects can have multiple Egress IPs
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -151,6 +153,7 @@ Feature: OVN Egress IP related features
   @upgrade-sanity
   @network-ovnkubernetes
   @qeci
+  @noproxy @connected
   Scenario: Multi-project can share same EgressIP
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -224,6 +227,7 @@ Feature: OVN Egress IP related features
   @vsphere-upi
   @network-ovnkubernetes
   @qeci
+  @noproxy @connected
   Scenario: Removed matched labels from project will not use EgressIP
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -279,6 +283,7 @@ Feature: OVN Egress IP related features
   @vsphere-upi
   @network-ovnkubernetes
   @qeci
+  @noproxy @connected
   Scenario: Removed matched labels from pods will not use EgressIP
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -342,6 +347,7 @@ Feature: OVN Egress IP related features
   @upgrade-sanity
   @network-ovnkubernetes
   @qeci
+  @noproxy @connected
   Scenario: EgressIP was removed after delete egressIP object
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -393,6 +399,7 @@ Feature: OVN Egress IP related features
   @vsphere-upi
   @network-ovnkubernetes
   @qeci
+  @noproxy @connected
   Scenario: After reboot node or reboot OVN services EgressIP still work
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -454,6 +461,7 @@ Feature: OVN Egress IP related features
   @4.10 @4.9
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
+  @noproxy @connected
   Scenario: Warning event will be triggered if apply EgressIP object but no EgressIP nodes
     #Get unused IP as egress ip
     Given I store a random unused IP address from the reserved range to the clipboard
@@ -488,6 +496,7 @@ Feature: OVN Egress IP related features
   @vsphere-upi
   @network-ovnkubernetes
   @qeci
+  @noproxy @connected
   Scenario: The pod located on different node than EgressIP nodes
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -540,6 +549,7 @@ Feature: OVN Egress IP related features
   @vsphere-upi
   @network-ovnkubernetes
   @qeci
+  @noproxy @connected
   Scenario: Deleting EgressIP object and recreating it will work
     Given I save ipecho url to the clipboard
 
@@ -603,6 +613,7 @@ Feature: OVN Egress IP related features
   @vsphere-ipi @baremetal-ipi
   @vsphere-upi @baremetal-upi
   @network-ovnkubernetes
+  @noproxy @connected
   Scenario: An EgressIP object can not have multiple egress IP assignments on the same node
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -635,6 +646,7 @@ Feature: OVN Egress IP related features
   @aws-ipi
   @aws-upi
   @network-ovnkubernetes
+  @noproxy @connected
   Scenario: Common user cannot tag the nodes by labelling them as egressIP nodes
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
@@ -656,6 +668,7 @@ Feature: OVN Egress IP related features
   @4.10 @4.9
   @aws-ipi
   @aws-upi
+  @noproxy @connected
   Scenario: Any egress IP can only be assigned to one node only
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node

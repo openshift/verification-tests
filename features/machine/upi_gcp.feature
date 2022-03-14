@@ -15,6 +15,7 @@ Feature: UPI GCP Tests
   @destructive
   @4.10 @4.9
   @gcp-upi
+  @disconnected @connected
   Scenario: [GCP] Scaling OCP Cluster on UPI
     Given I have an UPI deployment and machinesets are enabled
     And I switch to cluster admin pseudo user

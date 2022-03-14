@@ -37,6 +37,7 @@ Feature: stibuild.feature
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
+    @connected
     Examples:
       | template          |
       | ocp12041-s2i.json | # @case_id OCP-12041
@@ -48,6 +49,7 @@ Feature: stibuild.feature
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @connected
   Scenario: STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
@@ -87,6 +89,7 @@ Feature: stibuild.feature
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @noproxy @connected
   Scenario: Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:
@@ -103,7 +106,7 @@ Feature: stibuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-28891
-  @disconnected
+  @noproxy @disconnected
   @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -138,6 +141,7 @@ Feature: stibuild.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @connected
   Scenario: Mount source secret and configmap to builder container- sourcestrategy
     Given I have a project
     When I run the :create_secret client command with:

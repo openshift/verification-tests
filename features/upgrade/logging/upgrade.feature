@@ -48,6 +48,7 @@ Feature: Logging upgrading related features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @noproxy @connected
   Scenario: Cluster logging checking during cluster upgrade
     Given I switch to the first user
     Given I create a project with non-leading digit name

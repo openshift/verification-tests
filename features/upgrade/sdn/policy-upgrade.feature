@@ -79,6 +79,7 @@ Feature: SDN compoment upgrade testing
   @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @disconnected @connected
   Scenario: Check the networkpolicy works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade" project

@@ -21,6 +21,7 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: Seccomp part of SCC policy should be kept and working after upgrade
     Given I switch to cluster admin pseudo user
     Given admin checks that the "seccomp" scc exists

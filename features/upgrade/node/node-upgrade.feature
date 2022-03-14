@@ -52,6 +52,7 @@ Feature: Node components upgrade tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: Make sure nodeConfig is not changed after upgrade
     Given I switch to cluster admin pseudo user
     When I run the :get admin command with:

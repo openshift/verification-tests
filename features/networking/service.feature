@@ -81,6 +81,7 @@ Feature: Service related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @connected
   Scenario: User cannot access the MCS by creating a LoadBalancer service that points to the MCS
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -110,6 +111,7 @@ Feature: Service related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @noproxy @connected
   Scenario: The headless service can publish the pods even if they are not ready
     Given I have a project
     Given I obtain test data file "networking/headless_notreadypod.json"
@@ -537,6 +539,7 @@ Feature: Service related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @disconnected @connected
   Scenario: User can expand the nodePort range by patch the serviceNodePortRange in network
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
@@ -572,6 +575,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-33850
   @admin
   @destructive
+  @disconnected @connected
   Scenario: User cannot decrease the nodePort range in post action
     When I run the :patch admin command with:
       | resource      | networks.config.openshift.io                     |
@@ -717,6 +721,7 @@ Feature: Service related networking scenarios
   @admin
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @connected
   Scenario: Other node cannot be accessed for nodePort when externalTrafficPolicy is Local
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
@@ -757,6 +762,7 @@ Feature: Service related networking scenarios
   @admin
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @connected
   Scenario: Be able to access the service via the nodeport
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard

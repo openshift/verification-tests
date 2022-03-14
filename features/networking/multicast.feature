@@ -7,6 +7,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: pods should be able to subscribe send and receive multicast traffic
     # create some multicast testing pods
     Given I have a project
@@ -299,6 +300,7 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @connected
   Scenario: pods in default project should not be able to receive multicast traffic from other namespace
     # create multicast testing pod in one project
     Given I have a project
@@ -379,6 +381,7 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @connected
   Scenario: pods should be able to join multiple multicast groups at same time  
     # create some multicast testing pods in the project
     Given I have a project
@@ -477,6 +480,7 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @connected
   Scenario: pods should not be able to receive multicast traffic from other pods in different namespace
     # create some multicast testing pods in one project
     Given I have a project
@@ -556,6 +560,7 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @connected
   Scenario: pods in default project should be able to receive multicast traffic from other default project pods
     # enable multicast and create testing pods
     Given I switch to cluster admin pseudo user

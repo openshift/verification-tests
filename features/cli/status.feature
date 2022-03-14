@@ -4,6 +4,7 @@ Feature: Check status via oc status, wait etc
   # @case_id OCP-11147
   @4.10 @4.9
   @singlenode
+  @connected
   Scenario: Show RC info and indicate bad secrets reference in 'oc status'
     Given I have a project
 

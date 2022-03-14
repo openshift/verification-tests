@@ -7,6 +7,7 @@ Feature: Kibana related features
   @console
   @destructive
   @commonlogging
+  @disconnected @connected
   Scenario: Show logs on Kibana web console according to different user role
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -64,6 +65,7 @@ Feature: Kibana related features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: Normal User can only view logs out of the projects owned by himself --kibana
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -119,6 +121,7 @@ Feature: Kibana related features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @disconnected @connected
   Scenario: User with cluster-admin role can show logs out of all projects -- kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -222,6 +225,7 @@ Feature: Kibana related features
   @destructive
   @console
   @commonlogging
+  @disconnected @connected
   Scenario: Logs can be redirected from Webconsole to kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name

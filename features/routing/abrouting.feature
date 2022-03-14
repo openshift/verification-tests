@@ -179,6 +179,7 @@ Feature: Testing abrouting
   @upgrade-sanity
   @4.7
   @singlenode
+  @noproxy @connected
   Scenario: The edge route with multiple service will set load balance policy to RoundRobin by default
     #Create pod/service/route
     Given I have a project
@@ -273,6 +274,7 @@ Feature: Testing abrouting
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @noproxy @connected
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -358,6 +360,7 @@ Feature: Testing abrouting
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @noproxy @connected
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
     Given I switch to cluster admin pseudo user
     And I use the router project

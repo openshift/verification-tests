@@ -8,6 +8,7 @@ Feature: Machine features testing
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   @singlenode
+  @disconnected @connected
   Scenario: Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
@@ -151,6 +152,7 @@ Feature: Machine features testing
   @destructive
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @noproxy
   Scenario: Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -369,6 +371,7 @@ Feature: Machine features testing
       | <Validation> |
 
     @aws-ipi
+    @noproxy @connected
     Examples:
       | name                    | file_name                 | Validation                    |
       | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
@@ -654,6 +657,7 @@ Feature: Machine features testing
       | <Validation> |
 
     @aws-ipi
+    @proxy @disconnected
     Examples:
       | name                    | file_name                 | Validation                    |
       | default-valued-48463    | ms_default_values.yaml    | Placement                     | # @case_id OCP-48463

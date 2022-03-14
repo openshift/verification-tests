@@ -80,6 +80,7 @@ Feature: SDN related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
     Given the master version >= "3.6"
     Given I have a project
@@ -244,6 +245,7 @@ Feature: SDN related networking scenarios
   # @bug_id 1669311
   @admin
   @destructive
+  @noproxy @connected
   Scenario: Killing ovs process should not put sdn and ovs pods in bad shape
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
@@ -457,6 +459,7 @@ Feature: SDN related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @disconnected @connected
   Scenario: Netnamespace should be recreated after deleting it before the project is deleted
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -490,6 +493,7 @@ Feature: SDN related networking scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @disconnected @connected
   Scenario: Disable conntrack for vxlan traffic
     Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host
