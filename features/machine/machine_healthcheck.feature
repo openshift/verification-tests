@@ -4,7 +4,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25897
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Remediation should be applied when the unhealthyCondition 'Ready' is met
     Given I have an IPI deployment
@@ -41,7 +41,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-26311
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Create a machinehealthcheck when there is already an unhealthy machine
     Given I have an IPI deployment
@@ -70,7 +70,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25734
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Create multiple MHCs to monitor same machineset
     Given I have an IPI deployment
@@ -101,7 +101,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25691
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Use "maxUnhealthy" to prevent automated remediation
     Given I have an IPI deployment
@@ -190,7 +190,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25727
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Remediation should be applied when machine has nodeRef but node is deleted
     Given I have an IPI deployment
@@ -243,7 +243,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-28859
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: MHC MaxUnhealthy string value should be checked for '%' symbol
     Given I have an IPI deployment

@@ -61,7 +61,7 @@ Feature: Kibana related features
   @console
   @destructive
   @commonlogging
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -117,7 +117,7 @@ Feature: Kibana related features
   @console
   @destructive
   @commonlogging
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -226,6 +226,9 @@ Feature: Kibana related features
   @console
   @commonlogging
   @disconnected @connected
+  @4.11
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Logs can be redirected from Webconsole to kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name

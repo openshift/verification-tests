@@ -2,7 +2,7 @@ Feature: Testing haproxy router
   # @author hongli@redhat.com
   # @case_id OCP-11903
   @smoke
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -63,7 +63,7 @@ Feature: Testing haproxy router
 
   # @author bmeng@redhat.com
   # @case_id OCP-11130
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -129,7 +129,7 @@ Feature: Testing haproxy router
 
   # @author bmeng@redhat.com
   # @case_id OCP-11619
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -182,7 +182,7 @@ Feature: Testing haproxy router
   # @author hongli@redhat.com
   # @case_id OCP-15044
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -227,7 +227,7 @@ Feature: Testing haproxy router
   # @author hongli@redhat.com
   # @case_id OCP-15049
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -272,7 +272,7 @@ Feature: Testing haproxy router
 
   # @author bmeng@redhat.com
   # @case_id OCP-10043
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -324,7 +324,7 @@ Feature: Testing haproxy router
 
   # @author yadu@redhat.com
   # @case_id OCP-11679
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -371,7 +371,7 @@ Feature: Testing haproxy router
   # @author hongli@redhat.com
   # @case_id OCP-15872
   @smoke
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -420,7 +420,7 @@ Feature: Testing haproxy router
 
   # @author hongli@redhat.com
   # @case_id OCP-15873
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity

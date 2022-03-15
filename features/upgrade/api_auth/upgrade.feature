@@ -162,7 +162,7 @@ Feature: apiserver and auth related upgrade check
   # @case_id OCP-19470
   @upgrade-check
   @admin
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -213,7 +213,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @admin
   @destructive
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -277,7 +277,7 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-check
   @users=upuser1,upuser2
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -318,7 +318,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @qeci
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode

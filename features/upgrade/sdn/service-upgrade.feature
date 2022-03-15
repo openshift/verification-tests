@@ -32,7 +32,7 @@ Feature: service upgrade scenarios
   # @case_id OCP-44259
   @admin
   @upgrade-check
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
@@ -97,7 +97,7 @@ Feature: service upgrade scenarios
   # @case_id OCP-44302
   @admin
   @upgrade-check
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected

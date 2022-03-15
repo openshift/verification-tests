@@ -4,7 +4,7 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-11639
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -47,7 +47,7 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-13502
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -115,7 +115,7 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-13507
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -158,7 +158,7 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-13509
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -191,7 +191,7 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-15005
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -251,7 +251,7 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-15017
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -305,7 +305,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-13506
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @connected
@@ -343,7 +343,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-19615
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Iptables should be updated with correct endpoints when egress DNS policy was used
@@ -394,7 +394,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33530
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -433,7 +433,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33531
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -457,7 +457,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33539
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
@@ -494,7 +494,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33565
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
@@ -523,7 +523,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-35341
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
@@ -548,7 +548,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37491
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -582,7 +582,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37495
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -617,7 +617,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37496
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
@@ -652,7 +652,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-41179
   @admin
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity

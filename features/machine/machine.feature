@@ -4,7 +4,7 @@ Feature: Machine features testing
   # @case_id OCP-21196
   @smoke
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   @singlenode
@@ -17,7 +17,7 @@ Feature: Machine features testing
   # @case_id OCP-22115
   @smoke
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: machine-api clusteroperator should be in Available state
@@ -49,7 +49,7 @@ Feature: Machine features testing
   # @case_id OCP-25436
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   Scenario: Scale up and scale down a machineSet
@@ -71,7 +71,7 @@ Feature: Machine features testing
 
   # @author jhou@redhat.com
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   Scenario Outline: Metrics is exposed on https
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
@@ -98,7 +98,7 @@ Feature: Machine features testing
   # @case_id OCP-25608
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
@@ -150,7 +150,7 @@ Feature: Machine features testing
   # @case_id OCP-27609
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @noproxy
   Scenario: Scaling a machineset with providerSpec.publicIp set to true
@@ -169,7 +169,7 @@ Feature: Machine features testing
   # @case_id OCP-24363
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: [MAO] Reconciling machine taints with nodes
     Given I have an IPI deployment
@@ -202,7 +202,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   Scenario Outline: Required configuration should be added to the ProviderSpec to enable spot instances
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -301,7 +301,7 @@ Feature: Machine features testing
   # @case_id OCP-32620
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
@@ -330,7 +330,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   Scenario Outline: Implement defaulting machineset values for AWS
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -382,7 +382,7 @@ Feature: Machine features testing
   # @case_id OCP-33056
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @gcp-ipi
   Scenario: Implement defaulting machineset values for GCP
     Given I have an IPI deployment
@@ -418,7 +418,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   Scenario Outline: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -518,7 +518,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   Scenario Outline: Implement defaulting machineset values for vsphere
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -616,7 +616,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com    
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   Scenario Outline: Implement defaulting machineset values for AWS proxy clusters
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
