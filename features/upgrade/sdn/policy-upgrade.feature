@@ -16,7 +16,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-22707
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: network operator should be available after upgrade
@@ -76,7 +76,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-22735
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
@@ -184,7 +184,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-38751
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
@@ -407,7 +407,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-44901
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.6
   @azure-upi @aws-upi
   @azure-ipi @aws-ipi
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade

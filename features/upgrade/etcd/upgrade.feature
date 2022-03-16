@@ -33,7 +33,7 @@ Feature: basic verification for upgrade testing
   # @case_id OCP-22606
   @upgrade-check
   @admin
-  @4.11 @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
@@ -47,7 +47,7 @@ Feature: basic verification for upgrade testing
   # @case_id OCP-22665
   @upgrade-check
   @admin
-  @4.11 @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected

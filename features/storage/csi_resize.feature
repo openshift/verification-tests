@@ -1,7 +1,7 @@
 Feature: CSI Resizing related feature
   # @author chaoyang@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.6
   Scenario Outline: Resize online volume from 1Gi to 2Gi
     Given I have a project
 
@@ -60,7 +60,7 @@ Feature: CSI Resizing related feature
       | standard-csi | # @case_id OCP-37559
 
   # @author wduan@redhat.com
-  @4.10 @4.9
+  @4.10 @4.9 @4.6
   Scenario Outline: Resize negative test
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"

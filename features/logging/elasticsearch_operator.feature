@@ -6,7 +6,7 @@ Feature: elasticsearch-operator related tests
   @admin
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -31,7 +31,7 @@ Feature: elasticsearch-operator related tests
   # @author qitang@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   Scenario Outline: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
@@ -89,7 +89,7 @@ Feature: elasticsearch-operator related tests
   @console
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode

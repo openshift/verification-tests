@@ -2,7 +2,7 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11545
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -58,7 +58,7 @@ Feature: buildlogic.feature
   # @author yantan@redhat.com
   # @case_id OCP-10799
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -82,7 +82,7 @@ Feature: buildlogic.feature
     Then the "ruby-hello-world-1" build completed
 
   # @author haowang@redhat.com
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: ForcePull image for build
     Given I have a project
     Given I obtain test data file "build/forcePull/<template>"
@@ -116,7 +116,7 @@ Feature: buildlogic.feature
 
   # @author yantan@redhat.com
   # @case_id OCP-10745
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -157,7 +157,7 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11720
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -206,7 +206,7 @@ Feature: buildlogic.feature
 
   # @author yantan@redhat.com
   # @case_id OCP-11896
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -247,7 +247,7 @@ Feature: buildlogic.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13683
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -273,7 +273,7 @@ Feature: buildlogic.feature
   # @case_id OCP-13684
   @flaky
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -467,7 +467,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-19133
   @proxy
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -522,7 +522,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-40366
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity

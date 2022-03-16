@@ -153,6 +153,7 @@ Feature: collector related tests
   @commonlogging
   @singlenode
   @disconnected @connected
+  @4.6
   Scenario: The container logs metadata check
     Given the master version >= "4.2"
     Given I switch to the first user
@@ -188,7 +189,7 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -234,6 +235,7 @@ Feature: collector related tests
   @admin
   @destructive
   @singlenode
+  @4.6
   Scenario: Fluentd should write it's own logs to stdout and exclude them from collection
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     When I create clusterlogging instance with:

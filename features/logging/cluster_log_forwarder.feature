@@ -8,6 +8,7 @@ Feature: cluster log forwarder features
   @commonlogging
   @singlenode
   @disconnected @connected
+  @4.6
   Scenario: ClusterLogForwarder `default` behavior testing
     Given the master version >= "4.6"
     # create project to generate logs
@@ -134,6 +135,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @singlenode
+  @4.6
   Scenario: ClusterLogForwarder: Forward logs to fluentd as insecure
     Given I switch to the first user
     And I have a project
@@ -219,7 +221,7 @@ Feature: cluster log forwarder features
       | infra-container.log |
     """
     @upgrade-sanity
-    @4.7
+  @4.7 @4.6
     @singlenode
     @connected
     Examples:
@@ -283,6 +285,7 @@ Feature: cluster log forwarder features
 
     @singlenode
     @disconnected @connected
+    @4.6
     Examples:
       | file                                 | app_pipeline_name     | infra_pipeline_name   | audit_pipeline_name   |
       | clf-forward-with-same-tag.yaml       | forward-to-default-es | forward-to-default-es | forward-to-default-es | # @case_id OCP-33750
@@ -294,6 +297,7 @@ Feature: cluster log forwarder features
   @destructive
   @singlenode
   @disconnected @connected
+  @4.6
   Scenario: Forward logs to remote-syslog - config error
     Given the master version >= "4.6"
     Given I switch to cluster admin pseudo user
@@ -351,7 +355,7 @@ Feature: cluster log forwarder features
     """
 
     @upgrade-sanity
-    @4.7
+  @4.7 @4.6
     @singlenode
     @disconnected @connected
     Examples:
@@ -364,7 +368,7 @@ Feature: cluster log forwarder features
   # @case_id OCP-32697
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
   Scenario: Forward logs to different kafka topics
@@ -412,6 +416,7 @@ Feature: cluster log forwarder features
   @destructive
   @singlenode
   @connected
+  @4.6
   Scenario: Fluentd continues to ship logs even when one of multiple destination is down
     # create project to generate logs
     Given I switch to the first user

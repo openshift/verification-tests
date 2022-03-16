@@ -4,7 +4,7 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-28108
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
@@ -125,7 +125,7 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-22102
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @disconnected @connected
   Scenario: Update machineAutoscaler to reference a different MachineSet
@@ -199,7 +199,7 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-23745
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Machineautoscaler can be deleted when its referenced machineset does not exist
     Given I have an IPI deployment

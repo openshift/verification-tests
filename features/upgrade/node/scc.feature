@@ -17,7 +17,7 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   # @case_id OCP-13065
   @upgrade-check
   @admin
-  @4.11 @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode

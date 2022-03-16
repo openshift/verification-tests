@@ -4,7 +4,7 @@ Feature: PTP related scenarios
   # @case_id OCP-25940
   @admin
   @stage-only
-  @4.10 @4.9
+  @4.10 @4.9 @4.6
   Scenario: ptp operator can be deployed successfully
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ptp" project
