@@ -4,7 +4,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33618
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -74,7 +74,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33723
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -147,7 +147,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33641
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -222,7 +222,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33699
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
@@ -278,7 +278,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33700
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
@@ -341,7 +341,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33631
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -394,7 +394,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33704
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
@@ -458,7 +458,7 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @noproxy @connected
@@ -491,7 +491,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33706
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
@@ -544,7 +544,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33718
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
@@ -609,7 +609,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33710
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @baremetal-ipi
   @vsphere-upi @baremetal-upi
   @network-ovnkubernetes
@@ -642,7 +642,7 @@ Feature: OVN Egress IP related features
   # @author huirwang@redhat.com
   # @case_id OCP-33617
   @admin
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @aws-ipi
   @aws-upi
   @network-ovnkubernetes
@@ -665,7 +665,7 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @aws-ipi
   @aws-upi
   @noproxy @connected

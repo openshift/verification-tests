@@ -3,7 +3,7 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15465
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @upgrade-sanity
@@ -22,7 +22,7 @@ Feature: Egress IP related features
 
   # @author bmeng@redhat.com
   # @case_id OCP-15466
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @upgrade-sanity
@@ -41,7 +41,7 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15471
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -101,7 +101,7 @@ Feature: Egress IP related features
   # @author huirwang@redhat.com
   # @case_id OCP-15472
   @admin
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @connected
@@ -139,7 +139,7 @@ Feature: Egress IP related features
   # @bug_id  1609112
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   Scenario: Should remove the egressIP from the array if it was not being used
@@ -188,7 +188,7 @@ Feature: Egress IP related features
   # @case_id OCP-15992
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -234,7 +234,7 @@ Feature: Egress IP related features
   # @case_id OCP-15473
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   Scenario: The related iptables/openflow rules will be removed once the egressIP gets removed from netnamespace
@@ -282,7 +282,7 @@ Feature: Egress IP related features
   # @case_id OCP-19973
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -322,7 +322,7 @@ Feature: Egress IP related features
   # @author huirwang@redhat.com
   # @case_id OCP-15998
   @admin
-  @4.10 @4.9
+  @4.10 @4.9 @4.6
   Scenario: Invalid egressIP should not be acceptable
     Given I select a random node's host
     Given evaluation of `["fe80::5054:ff:fedd:3698", "a.b.c.d", "10.10.10.-1", "10.0.0.1/64", "10.1.1/24", "A008696"]` is stored in the :ips clipboard
@@ -341,7 +341,7 @@ Feature: Egress IP related features
   # @case_id OCP-25694
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -376,7 +376,7 @@ Feature: Egress IP related features
   # @case_id OCP-25640
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -432,7 +432,7 @@ Feature: Egress IP related features
   # @case_id OCP-18316
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -466,7 +466,7 @@ Feature: Egress IP related features
   # @case_id OCP-18315
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -506,7 +506,7 @@ Feature: Egress IP related features
   # @case_id OCP-19785
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -554,7 +554,7 @@ Feature: Egress IP related features
   # @case_id OCP-15989
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -621,7 +621,7 @@ Feature: Egress IP related features
   # @case_id OCP-18586
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci

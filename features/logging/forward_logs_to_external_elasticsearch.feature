@@ -86,6 +86,7 @@ Feature: Cases to test forward logs to external elasticsearch
     """
 
     @singlenode
+    @4.6
     Examples:
       | scheme | client_auth | file                 |
       | https  | true        | clf-with-secret.yaml | # @case_id OCP-29845

@@ -215,7 +215,7 @@ Feature: CSI clone testing related feature
   # @case_id OCP-27617
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @openstack-ipi
   @openstack-upi
   @qeci
@@ -272,7 +272,7 @@ Feature: CSI clone testing related feature
   # @author wduan@redhat.com
   # @case_id OCP-27686
   @admin
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @openstack-ipi
   @openstack-upi
   @qeci

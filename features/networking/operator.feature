@@ -3,7 +3,7 @@ Feature: Operator related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-22704
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -22,7 +22,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22706
   @admin
   @destructive
-  @4.10 @4.9
+  @4.10 @4.9 @4.6
   Scenario: The clusteroperator should be able to reflect the correct version field post bad network operator config
 
     Given the master version >= "4.1"
@@ -64,7 +64,7 @@ Feature: Operator related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-22201
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -168,7 +168,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-24918
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
@@ -252,7 +252,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-21574
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -286,7 +286,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-25856
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: CNO should delete non-relevant resources
@@ -368,7 +368,7 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Changing mtu in CNO should not be allowed

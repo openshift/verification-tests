@@ -5,7 +5,7 @@ Feature: Elasticsearch related tests
   # @case_id OCP-22050
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -48,6 +48,7 @@ Feature: Elasticsearch related tests
   @commonlogging
   @singlenode
   @disconnected @connected
+  @4.6
   Scenario: Elasticsearch6 new data modle indices
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -77,6 +78,7 @@ Feature: Elasticsearch related tests
   @admin
   @destructive
   @singlenode
+  @4.6
   Scenario: Elasticsearch retention policy testing
     Given I switch to the first user
     And I create a project with non-leading digit name
