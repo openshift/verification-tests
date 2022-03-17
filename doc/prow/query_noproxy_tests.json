@@ -1,3 +1,0 @@
-{
-  "case_query": "products.KEY:ocp AND automation_script:cucushift AND caseautomation.KEY:automated AND NOT upstream.KEY:yes AND NOT status:inactive AND env_behind_proxy.KEY:(_all_ no)"
-}

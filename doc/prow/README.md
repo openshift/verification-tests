@@ -7,8 +7,8 @@ Please follow this step by step guide to create a new Prow job to run cucushift 
 ## Create a Test Run Query
 
 1. Go to OSE project in Polarion, select `Workitems`, in the search box create your test run query matching your test profile. When constructing the test run query, select only `Critical`,`High` and `Medium` automated test cases.
-2. Upon completion of the query, click the `Convert Query to Text`. See the example of *query_aws_ipi_tests.json*.
-3. Copy your query and create a `$version/query_$profile_tests.json`, add a PR in this repo and ask qe-productivity for review.
+2. Upon completion of the query, click the `Convert Query to Text`. See the example of *query_aws-ipi.json*.
+3. Copy your query and create a `doc/prow/query_$tag.json`, add a PR in this repo and ask qe-productivity for review.
 
 The team should review the test query succesfully matches the profile and merge it.
 
@@ -20,10 +20,7 @@ The following commands will retrieve all test case ids and add the tag `@aws-ipi
 
 ```bash
 cd verficiation-tests
-# x.y are versions, e.g, 4.9
-QUERY_FILE="../path-to-folder/verification-tests/doc/prow/x.y/query_aws_ipi_tests.json"
-TAGS="@aws-ipi,@4.9"
-tools/case_id_splitter.rb add-tags --tags ${TAGS} --ids $(tools/polarshift.rb query-cases -f ${QUERY_FILE} | grep -o -E 'OCP-[0-9]+' | tr '\n' ',')
+bash tools/cucushift-add-tags.sh doc/prow/query_aws-ipi.json doc/prow/query_4.9.json
 ```
 
 Upon completion of the steps, create a pull request in `verfication-tests` and `cucushift` respectively. Add clear and consistent summary to your PR and ask qe-productivity for review.
