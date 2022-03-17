@@ -1,3 +1,0 @@
-{
-  "case_query": "type:testcase AND status:inactive AND caseautomation.KEY:automated AND automation_script:cucushift AND NOT upstream.KEY:yes"
-}
