@@ -47,7 +47,7 @@ end
 Given /^authentication successfully rolls out after config changes$/ do
   ensure_admin_tagged
   interval_time = 5
-  timeout = 300 # set 300 seconds here due to https://bugzilla.redhat.com/show_bug.cgi?id=1958198, after the bug fixed, the seconds should be reduced accordingly
+  timeout = 400 # set 400 seconds here due to https://bugzilla.redhat.com/show_bug.cgi?id=1958198, after the bug fixed, the seconds should be reduced accordingly
   stats = {}
   error = nil
   step %Q/operator "authentication" becomes progressing within #{timeout} seconds/
