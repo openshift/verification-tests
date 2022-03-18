@@ -1,0 +1,274 @@
+wait_overview_items_loaded:
+  elements:
+  - selector:
+      css: .odc-topology-list-view
+    timeout: 30
+wait_pane_body_loaded:
+  elements:
+  - selector:
+      xpath: //div[@class='co-m-page__body co-m-Project']
+    timeout: 10
+wait_side_bar_loaded:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'shown in')]
+    timeout: 10
+check_list_heading_shown:
+  element:
+    selector:
+      xpath: //div[contains(@class,'pf-c-data-list__cell') and contains(.,'<heading>')]
+    timeout: 30
+check_list_item:
+  elements:
+  - selector: &overview_item
+      xpath: //div[contains(.,'<resource_name>') and span[contains(., '<resource_kind>')]]
+    timeout: 30
+check_pod_number:
+  element:
+    selector:
+      css: .VictoryContainer
+  scripts:
+    - command: return document.getElementsByTagName("text")[0].getElementsByTagName("tspan")[0].innerHTML == "<pod_number>" || document.getElementsByTagName("text")[0].getElementsByTagName("tspan")[1].innerHTML == "scaling to <pod_number>"
+      expect_result: true
+check_pod_number_and_link:
+  element:
+    selector:
+      xpath: //a[@href='<link>']
+  scripts:
+    - command: |
+        var match = document.querySelector('a[href="<link>"]').innerText.indexOf('<text>') != -1 ? true : false
+        return match
+      expect_result: true
+check_pod_info_on_overview_sidebar:
+  action: check_page_contains
+click_list_item:
+  element:
+    selector:
+      <<: *overview_item
+    op: click
+sidebar_is_loaded:
+  element:
+    selector:
+      css: .overview__sidebar-pane
+click_topology_view_switcher:
+  element:
+    selector:
+      xpath: //button[@data-test-id='topology-switcher-view']
+    op: click
+click_sidebar_overview_tab:
+  element:
+    selector:
+      xpath: //div[contains(@class,'overview__sidebar')]//button[text()='Details']
+    op: click
+click_sidebar_resources_tab:
+  element:
+    selector:
+      xpath: //div[contains(@class,'overview__sidebar')]//button[text()='Resources']
+    op: click
+check_dc_available_action_menus:
+  elements:
+  - selector:
+      xpath: //li//button[.='Edit Application grouping']
+  - selector:
+      xpath: //li//button[.='Start rollout']
+  - selector: &pause_rollouts
+      xpath: //li//button[.='Pause rollouts']
+  - selector: &edit_counts
+      xpath: //li//button[.='Edit Pod count']
+  - selector: &add_storage
+      xpath: //li//button[.='Add storage']
+  - selector: &edit_labels
+      xpath: //li//button[.='Edit labels']
+  - selector: &edit_annotations
+      xpath: //li//button[.='Edit annotations']
+  - selector:
+      xpath: //li//button[.='Edit DeploymentConfig']
+  - selector:
+      xpath: //li//button[.='Delete DeploymentConfig']
+check_deployment_availble_action_menus:
+  action: click_resource_action_button_on_sidebar
+  elements:
+  - selector:
+      <<: *pause_rollouts
+  - selector:
+      <<: *edit_counts
+  - selector:
+      <<: *add_storage
+  - selector:
+      <<: *edit_labels
+  - selector:
+      <<: *edit_annotations
+  - selector:
+      xpath: //li//button[@data-test-action='Edit Deployment']
+  - selector:
+      xpath: //li//button[@data-test-action='Delete Deployment']
+check_error_icon_for_overview_item:
+  action: wait_overview_items_loaded
+  element:
+    selector:
+      css: .odc-topology-list-view__alert-cell
+    timeout: 20
+wait_resource_summary_loaded:
+  elements:
+  - selector:
+      xpath: //dl[contains(@class,'co-m-pane__details') and @data-test-id='resource-summary']
+    timeout: 20
+click_open_popover:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'details-item__popover-button') and contains(text(), '<popover_item>') and not(@disabled)]
+    op: click
+    timeout: 20
+check_popover_title:
+  elements:
+  - selector:
+      xpath: //*[contains(@id, 'popover')]/div[contains(text(),"<popover_item>")]
+check_run_policy_popover_info:
+  params:
+    content: RunPolicy describes how the new build created from this build configuration
+    popover_item: Run policy
+  action: wait_resource_summary_loaded
+  action: click_open_popover
+  action: check_popover_title
+  action: check_page_contains
+check_triggered_by_popover_info:
+  params:
+    content: triggeredBy describes which triggers started the most recent update to the build configuration
+    popover_item: Triggered by
+  action: wait_resource_summary_loaded
+  action: click_open_popover
+  action: check_popover_title
+  action: check_page_contains
+check_update_strategy_popover_info:
+  params:
+    content: the name of a deployment strategy
+    popover_item: Update strategy
+  action: wait_resource_summary_loaded
+  action: click_open_popover
+  action: check_popover_title
+  action: check_page_contains
+check_namespace_popover_info:
+  params:
+    text: docs/user-guide/namespaces
+    link_url: docs/user-guide/namespaces
+    popover_item: Namespace
+  action: wait_resource_summary_loaded
+  action: click_open_popover
+  action: check_popover_title
+  action: check_link_and_text
+click_groupby_dropdown_button:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'pf-c-dropdown__toggle-text') and contains(.,'Group by')]/parent::button[contains(@class,'pf-c-dropdown__toggle')]
+    op: click
+check_dropdown_menu_item:
+  element:
+    selector: &dropdown_item
+      xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and text()='<dropdown_menu_item>']
+click_dropdown_menu_item:
+  element:
+    selector:
+      <<: *dropdown_item
+    op: click
+check_groupby_application_dropdown:
+  params:
+    dropdown_menu_item: Application
+  action: check_dropdown_menu_item
+check_groupby_resource_dropdown:
+  params:
+    dropdown_menu_item: Resource
+  action: check_dropdown_menu_item
+check_groupby_dropdown_when_no_resources:
+  params:
+    content: No workloads found
+  action: check_page_contains
+check_groupby_label_header_missing:
+  element:
+    selector:
+      xpath: //div[@class='dropdown-menu__header' and text()='Label']
+    missing: true
+check_overview_group_heading:
+  element:
+    selector:
+      xpath: //h2[contains(@class,'project-overview__group-heading') and text()='<group_heading_name>']
+check_overview_group_items:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class,'project-overview__group-heading') and contains(.,'<group_heading_name>')]/parent::div[contains(@class,'project-overview__group')]//span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/following-sibling::button[contains(.,'<resource_name>')]
+group_by_application:
+  params:
+    dropdown_menu_item: Application
+  action: click_groupby_dropdown_button
+  action: click_dropdown_menu_item
+group_by_resource:
+  params:
+    dropdown_menu_item: Resource
+  action: click_groupby_dropdown_button
+  action: click_dropdown_menu_item
+group_by_label:
+  params:
+    dropdown_menu_item: <label>
+  action: click_groupby_dropdown_button
+  action: click_dropdown_menu_item
+send_key_to_workloads:
+  element:
+    selector:
+      xpath: //a[contains(text(),'Workloads')]
+    op: send_keys <key>
+check_workload_selected:
+  elements:
+  - selector:
+      xpath: //li[contains(@class,'pf-c-data-list__item') and contains(@class,'pf-m-selected')]
+check_workload_name:
+  elements:
+  - selector:
+      xpath: //div[@class='resource-overview__summary']//button[text()='Name']
+check_hint_missing_on_filter:
+  elements:
+  - selector:
+      xpath: //span[@class='form-control-feedback form-control-feedback--keyboard-hint']//kbd
+    missing: true
+check_workload_sidebar_missing:
+  elements:
+  - selector:
+      xpath: //div[@class='overview__sidebar overview__sidebar-enter-done']
+    missing: true
+check_shortcuts_on_workloads:
+  params:
+    workload: <workload>
+    workload_name: <workload_name>
+    keys: <key>
+  action: click_workloads_tab
+  action: wait_pane_body_loaded
+  action: send_key_to_workloads
+  action: check_workload_selected
+  action: click_workload_details
+  action: check_workload_name
+  action: send_key_to_workloads
+check_next_shortcut_on_workloads:
+  params:
+    workload: <workload>
+    workload_name: <workload_name>
+    keys: <key>
+  action: send_key_to_workloads
+  action: check_workload_selected
+  action: click_workload_details
+  action: check_workload_name
+  action: send_key_to_workloads
+check_escape_on_workloads:
+  params:
+    keys: <key>
+  action: click_workloads_tab
+  action: wait_pane_body_loaded
+  action: send_key_to_workloads
+  action: check_workload_sidebar_missing
+check_filter_on_workloads:
+  params:
+    workload: <workload>
+    workload_name: <workload_name>
+    workload_name: <missing_workload_name>
+    keys: <key>
+  action: click_workloads_tab
+  action: wait_pane_body_loaded
+  action: send_key_to_workloads
+  action: check_hint_missing_on_filter

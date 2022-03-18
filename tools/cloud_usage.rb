@@ -56,14 +56,31 @@ module BushSlicer
         c.option("-r", "--region region_name", "report on this region only")
         c.option("-u", "--uptime cluter uptime limit", "report for clusters having uptime over this limit")
         c.action do |args, options|
-          ps = AwsSummary.new(jenkins: @jenkins)
+          ps = AwsSummary.new(svc_name: :"AWS-CLOUD-USAGE", jenkins: @jenkins)
           options.config = conf
           say 'Getting summary...'
           ps.get_summary(target_region: options.region, options: options)
+          # add support for AWS-CHINA regions
+          global_region = :"AWS-CI-CHINA"
+          ps = AwsSummary.new(svc_name: global_region ,jenkins: @jenkins)
+          options.config = conf
+          say 'Getting summary...'
+          ps.get_summary(target_region: options.region, options: options, global_region: global_region)
 
         end
       end
-
+      command :"alicloud" do |c|
+        c.syntax = "#{File.basename __FILE__} -r <aliyun_region_name> [--all]"
+        c.description = 'display summary of running instances'
+        c.option("-r", "--region region_name", "report on this region only")
+        c.option("-u", "--uptime cluter uptime limit", "report for clusters having uptime over this limit")
+        c.action do |args, options|
+          ps = AliCloudSummary.new(svc_name: "alicloud-v4", jenkins: @jenkins)
+          options.config = conf
+          say 'Getting summary...'
+          ps.get_summary(target_region: options.region, options: options)
+        end
+      end
       command :"gce" do |c|
         c.syntax = "#{File.basename __FILE__} -r <gce_region_name> [--all]"
         c.description = 'display summary of running instances'

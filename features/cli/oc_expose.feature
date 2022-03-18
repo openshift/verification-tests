@@ -2,52 +2,36 @@ Feature: oc_expose.feature
 
   # @author pruan@redhat.com
   # @case_id OCP-10873
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Access app througth secure service and regenerate service serving certs if it about to expire
     Given the master version >= "3.3"
     Given I have a project
-    Given a "caddyfile.conf" file is created with the following lines:
-    """
-    :8443 {
-      tls /etc/serving-cert/tls.crt /etc/serving-cert/tls.key
-      root /srv/publics
-      browse /test
-    }
-    :8080 {
-      root /srv/public
-      browse /test
-    }
-    """
-    When I run the :create_service client command with:
-      | createservice_type  | clusterip |
-      | name                | hello     |
-      | tcp                 | 443:8443  |
-    Then the step should succeed
-    And I run the :annotate client command with:
-      | resource     | svc                                                         |
-      | resourcename | hello                                                       |
-      | keyval       | service.alpha.openshift.io/serving-cert-secret-name=ssl-key |
-    Then the step should succeed
-    And I wait for the "ssl-key" secret to appear
+    Given I obtain test data file "deployment/OCP-10873/svc.json"
+    When I run the :create client command with:
+      | f | svc.json |
+    And the step should succeed
+    And I wait for the "ssl-key" secret to appear up to 30 seconds
     And evaluation of `Time.now` is stored in the :t1 clipboard
-    And I run the :create_configmap client command with:
-      | name      | default-conf   |
-      | from_file | caddyfile.conf |
-    Then the step should succeed
     Given I obtain test data file "deployment/OCP-10873/dc.yaml"
     When I run the :create client command with:
       | f | dc.yaml |
     Then the step should succeed
-    And I wait until the status of deployment "hello" becomes :complete
+    And a pod becomes ready with labels:
+      | name=web-server-rc |
+    And evaluation of `pod.name` is stored in the :websrv_pod clipboard
+    When I get project configmaps
+    Then the output should match "nginx-config"
     Given I have a pod-for-ping in the project
     When I execute on the "hello-pod" pod:
       | curl | --cacert | /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt | https://hello.<%= project.name %>.svc:443 |
     Then the step should succeed
-    And the output should contain:
-      | Hello-OpenShift-1 https-8443 |
+    And the output should match:
+      | Hello-OpenShift web-server-rc.*https-8443 default |
 
     # Below checkpoint is in later version
     Given the master version >= "3.5"
@@ -84,6 +68,5 @@ Feature: oc_expose.feature
     When I execute on the "hello-pod" pod:
       | curl | --cacert | /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt | https://hello.<%= project.name %>.svc:443 |
     Then the step should succeed
-    And the output should contain:
-      | Hello-OpenShift-1 https-8443 |
-
+    And the output should match:
+      | Hello-OpenShift web-server-rc.*https-8443 default |

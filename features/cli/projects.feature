@@ -3,10 +3,12 @@ Feature: projects related features via cli
   # @author yapei@redhat.com
   # @case_id OCP-11887
   @proxy
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Could delete all resources when delete the project
     Given a 5 characters random string of type :dns is stored into the :prj_name clipboard
     When I run the :new_project client command with:
@@ -72,9 +74,10 @@ Feature: projects related features via cli
   # @author cryan@redhat.com
   # @case_id OCP-12193
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: User can get node selector from a project
     Given  an 8 character random string of type :dns is stored into the :oadmproj1 clipboard
     Given  an 8 character random string of type :dns is stored into the :oadmproj2 clipboard
@@ -101,10 +104,11 @@ Feature: projects related features via cli
 
   # @author cryan@redhat.com
   # @case_id OCP-12561
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Could remove user and group from the current project
     Given I have a project
     When I run the :oadm_policy_add_role_to_user client command with:
@@ -140,10 +144,12 @@ Feature: projects related features via cli
   # @author yinzhou@redhat.com
   # @case_id OCP-11201
   @proxy
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"

@@ -149,9 +149,11 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31241
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @connected
   Scenario: Set a probe to open a TCP socket test
     Given I have a project
     When I run the :new_app client command with:
@@ -208,10 +210,12 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31245
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Set a probe over HTTPS/HTTP test
     Given I have a project
     When I run the :new_app client command with:
@@ -257,10 +261,12 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31246
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Set an exec action probe test
     Given I have a project
     When I run the :new_app client command with:

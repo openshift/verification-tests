@@ -13,7 +13,7 @@ Feature: SDN sctp compoment upgrade testing
     Then the step should succeed
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
-    And I wait up to 800 seconds for the steps to pass:
+    And I wait up to 1600 seconds for the steps to pass:
     """
     When I run the :get admin command with:
       |resource|nodes|
@@ -68,7 +68,7 @@ Feature: SDN sctp compoment upgrade testing
   # @case_id OCP-44765
   @admin
   @upgrade-check
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   Scenario: Check the sctp works well after upgrade

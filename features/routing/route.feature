@@ -3,10 +3,12 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-12122
   @smoke
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Alias will be invalid after removing it
     Given I have a project
     Given I obtain test data file "routing/header-test/dc.json"
@@ -33,10 +35,12 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-10660
   @smoke
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Service endpoint can be work well if the mapping pod ip is updated
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -82,10 +86,12 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-12652
   @smoke
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: The later route should be HostAlreadyClaimed when there is a same host exist
     Given I have a project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"
@@ -108,10 +114,12 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-12562
   @smoke
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @disconnected @connected
   Scenario: The path specified in route can work well for edge terminated
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -187,10 +195,12 @@ Feature: Testing route
 
   # @author shudili@redhat.com
   # @case_id OCP-12564
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: The path specified in route can work well for reencrypt terminated
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -231,10 +241,12 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-9651
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Config insecureEdgeTerminationPolicy to Redirect for route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -279,10 +291,12 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-9650
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Config insecureEdgeTerminationPolicy to Allow for route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -346,10 +360,12 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-10024
   @smoke
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @disconnected @connected
   Scenario: Route could NOT be updated after created
     Given I have a project
     Given I obtain test data file "routing/route_withouthost1.json"
@@ -365,10 +381,12 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-11036
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @disconnected @connected
   Scenario: Set insecureEdgeTerminationPolicy to Redirect for passthrough route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -417,10 +435,12 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13839
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -480,10 +500,12 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13248
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: The hostname should be converted to available route when met special character
     Given I have a project
     Given I obtain test data file "routing/service_unsecure.yaml"
@@ -522,10 +544,12 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13753
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -606,16 +630,18 @@ Feature: Testing route
   # @author zzhao@redhat.com
   # @case_id OCP-14059
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Use the default destination CA of router if the route does not specify one for reencrypt route
     # since console route is using the reencrypt route without destination CA so we use it to check
     Given I switch to cluster admin pseudo user
     And I use the "openshift-console" project
     And I use the "console" service
-    And the expression should be true> service('console').annotation('service.alpha.openshift.io/serving-cert-secret-name') == "console-serving-cert"
+    And the expression should be true> service('console').annotation('service.alpha.openshift.io/serving-cert-secret-name') == "console-serving-cert" || service('console').annotation('service.beta.openshift.io/serving-cert-secret-name') == "console-serving-cert"
 
     Given I use the router project
     And all default router pods become ready
@@ -627,10 +653,12 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-14678
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Only the host in whitelist could access the route - unsecure route
     Given I have a project
     And I have a header test service in the project
@@ -665,10 +693,12 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-15976
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: The edge route should support HSTS
     Given the master version >= "3.7"
     And I have a project
@@ -725,10 +755,12 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-16368
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: The reencrypt route should support HSTS
     Given the master version >= "3.7"
     And I have a project

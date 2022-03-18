@@ -3,9 +3,11 @@ Feature: SDN/OVN metrics related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-28519
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @connected
   Scenario: Prometheus should be able to monitor kubeproxy metrics
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sdn" project
@@ -38,9 +40,10 @@ Feature: SDN/OVN metrics related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-16016
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @connected
   Scenario: Should be able to monitor the openshift-sdn related metrics by prometheus
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sdn" project
@@ -73,9 +76,10 @@ Feature: SDN/OVN metrics related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-37704
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: Should be able to monitor various ovnkube-master and ovnkube-node metrics via prometheus
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ovn-kubernetes" project
@@ -84,7 +88,7 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `cb.ovn_master_metrics_ep_ip + ':' +cb.ovn_master_metrics_ep_port` is stored in the :ovn_master_metrics_ep clipboard
     
     And evaluation of `endpoints('ovn-kubernetes-node').subsets.first.addresses.first.ip.to_s` is stored in the :ovn_node_metrics_ep_ip clipboard
-    And evaluation of `endpoints('ovn-kubernetes-node').subsets.first.ports.first.port.to_s` is stored in the :ovn_node_metrics_ep_port clipboard
+    And evaluation of `endpoints('ovn-kubernetes-node').subsets.flat_map{ |i| i.ports }.select{ |p| p.name == "metrics" }.first.port.to_s` is stored in the :ovn_node_metrics_ep_port clipboard
     And evaluation of `cb.ovn_node_metrics_ep_ip + ':' +cb.ovn_node_metrics_ep_port` is stored in the :ovn_node_metrics_ep clipboard
     
     Given I use the "openshift-monitoring" project

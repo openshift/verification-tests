@@ -4,9 +4,11 @@ Feature: Machine features testing
   # @case_id OCP-21196
   @smoke
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
+  @singlenode
+  @disconnected @connected
   Scenario: Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
@@ -15,7 +17,7 @@ Feature: Machine features testing
   # @case_id OCP-22115
   @smoke
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: machine-api clusteroperator should be in Available state
@@ -34,10 +36,11 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   # @case_id OCP-37706
   @admin
-  @4.10
-  @gcp-ipi @azure-ipi @aws-ipi
-  @gcp-upi @azure-upi @aws-upi
+  @4.9 @4.8 @4.7
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
@@ -46,7 +49,7 @@ Feature: Machine features testing
   # @case_id OCP-25436
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   Scenario: Scale up and scale down a machineSet
@@ -68,7 +71,7 @@ Feature: Machine features testing
 
   # @author jhou@redhat.com
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   Scenario Outline: Metrics is exposed on https
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
@@ -95,7 +98,7 @@ Feature: Machine features testing
   # @case_id OCP-25608
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
@@ -137,7 +140,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-27627
   @admin
-  @4.10 @4.9
+  @4.10 @4.9 @4.6
   Scenario: Verify all machine instance-state should be consistent with their providerStats.instanceState
     Given I have an IPI deployment
     And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
@@ -147,8 +150,9 @@ Feature: Machine features testing
   # @case_id OCP-27609
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @noproxy
   Scenario: Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -165,7 +169,7 @@ Feature: Machine features testing
   # @case_id OCP-24363
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: [MAO] Reconciling machine taints with nodes
     Given I have an IPI deployment
@@ -198,7 +202,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   Scenario Outline: Required configuration should be added to the ProviderSpec to enable spot instances
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -297,7 +301,7 @@ Feature: Machine features testing
   # @case_id OCP-32620
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
@@ -326,18 +330,18 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   Scenario Outline: Implement defaulting machineset values for AWS
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     Then admin ensures machine number is restored after scenario
-
-    Given I store the last provisioned machine in the :machine clipboard
-    When evaluation of `machine(cb.machine).aws_ami_id` is stored in the :default_ami_id clipboard
-    And evaluation of `machine(cb.machine).aws_availability_zone` is stored in the :default_availability_zone clipboard
-    And evaluation of `machine(cb.machine).aws_subnet` is stored in the :default_subnet clipboard
-    And evaluation of `machine(cb.machine).aws_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
+    
+    Given I pick a earliest created machineset and store in :machineset clipboard
+    When evaluation of `machine_set(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_subnet` is stored in the :default_subnet clipboard
     Then admin ensures "<name>" machineset is deleted after scenario
 
     Given I obtain test data file "cloud/ms-aws/<file_name>"
@@ -367,6 +371,7 @@ Feature: Machine features testing
       | <Validation> |
 
     @aws-ipi
+    @noproxy @connected
     Examples:
       | name                    | file_name                 | Validation                    |
       | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
@@ -377,7 +382,7 @@ Feature: Machine features testing
   # @case_id OCP-33056
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @gcp-ipi
   Scenario: Implement defaulting machineset values for GCP
     Given I have an IPI deployment
@@ -413,7 +418,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   Scenario Outline: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -457,7 +462,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-33455
   @admin
-  @4.10 @4.9
+  @4.10 @4.9 @4.6
   Scenario: Run machine api Controllers using leader election
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -483,7 +488,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   # @case_id OCP-34718
   @admin
-  @4.10 @4.9
+  @4.10 @4.9 @4.6
   Scenario: Node labels and Affinity definition in PV should match
     Given I have a project
 
@@ -513,7 +518,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   Scenario Outline: Implement defaulting machineset values for vsphere
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -570,7 +575,7 @@ Feature: Machine features testing
   # @case_id OCP-36489
   @admin
   @disconnected
-  @4.10 @4.9
+  @4.10 @4.9 @4.6
   Scenario: [Azure] Machineset should not be created when publicIP:true in disconnected Azure enviroment
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -587,3 +592,75 @@ Feature: Machine features testing
     And the output should contain:
       | Forbidden: publicIP is not allowed in Azure disconnected installation |
 
+  # @author miyadav@redhat.com
+  # @case_id OCP-47658
+  @admin
+  @4.10
+  @singlenode
+  Scenario: Operator cloud-controller-manager should not show empty version
+    Given I switch to cluster admin pseudo user
+    Then evaluation of `cluster_operator('cloud-controller-manager').versions` is stored in the :versions clipboard
+    And the expression should be true> cb.versions[0].include? "4"
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-47989
+  @admin
+  @4.10
+  @vsphere-ipi @openstack-ipi @baremetal-ipi 
+  @vsphere-upi @openstack-upi @baremetal-upi
+  @singlenode
+  Scenario: Baremetal clusteroperator should be enabled in vsphere and osp 
+    Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
+    Then the expression should be true> cb.co_disabled["status"]=="False"
+
+  # @author miyadav@redhat.com    
+  @admin
+  @destructive
+  @4.11 @4.10 @4.9 @4.6
+  Scenario Outline: Implement defaulting machineset values for AWS proxy clusters
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    Then admin ensures machine number is restored after scenario
+
+    Given I pick a earliest created machineset and store in :machineset clipboard
+    When evaluation of `machine_set(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
+    And evaluation of `machine_set(cb.machineset).aws_machineset_subnet_proxy` is stored in the :default_subnet clipboard
+    Then admin ensures "<name>" machineset is deleted after scenario
+
+    Given I obtain test data file "cloud/ms-aws/proxy-clusters/<file_name>"
+    When I run oc create over "<file_name>" replacing paths:
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["iamInstanceProfile"]["id"]         | <%= cb.default_iamInstanceProfile %>        |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["ami"]["id"]                        | <%= cb.default_ami_id %>                    |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["placement"]["availabilityZone"]    | <%= cb.default_availability_zone %>         |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["subnet"]["id"]                     | <%= cb.default_subnet %>                    |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
+      | ["metadata"]["name"]                                                                      | <name>                                      |
+    Then the step should succeed
+
+    Then I store the last provisioned machine in the :machine_latest clipboard
+    And I wait up to 540 seconds for the steps to pass:
+    """
+    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
+    """
+
+    When I run the :describe admin command with:
+      | resource | machine                  |
+      | name     | <%= cb.machine_latest %> |
+    Then the step should succeed
+    And the output should contain:
+      | <Validation> |
+
+    @aws-ipi
+    @proxy @disconnected
+    Examples:
+      | name                    | file_name                 | Validation                    |
+      | default-valued-48463    | ms_default_values.yaml    | Placement                     | # @case_id OCP-48463
+      | tenancy-dedicated-48464 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-48464
+      | default-valued-48462    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-48462
+    

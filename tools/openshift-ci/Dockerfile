@@ -2,7 +2,6 @@ FROM quay.io/centos/centos:8
 
 LABEL vendor="Red Hat inc."
 LABEL maintainer="OCP QE Team"
-
 USER root
 
 RUN set -x && \
@@ -17,17 +16,20 @@ RUN set -x && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
     curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s#$GECKODRIVER_RE#\1#p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
-    curl -sSL https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -o /tmp/epel-release-latest-8.noarch.rpm && \
-    yum install -y /tmp/epel-release-latest-8.noarch.rpm
-
-ADD . /verification-tests/
-RUN chmod 777 /verification-tests/
-RUN mv /tierN/ /verification-tests/features/tierN/
-RUN set -x && \
+    yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm  && \
     yum module reset ruby && \
     yum module -y enable ruby:2.7 && \
-    yum module -y install ruby:2.7
-RUN /verification-tests/tools/install_os_deps.sh
-RUN /verification-tests/tools/hack_bundle.rb
+    yum module -y install ruby:2.7 && \
+    yum clean all -y && \
+    rm -rf /var/cache/yum /var/tmp/* /tmp/*
 
-RUN yum clean all -y && rm -rf /var/cache/yum /tmp/* /verification-tests/Gemfile.lock
+ADD . /verification-tests/
+
+RUN set -x && \
+    mv /tierN/ /verification-tests/features/tierN/ && \
+    chgrp -R 0 /verification-tests && \
+    chmod -R g=u /verification-tests && \
+    /verification-tests/tools/install_os_deps.sh && \
+    /verification-tests/tools/hack_bundle.rb && \
+    yum clean all -y && \
+    rm -rf /var/cache/yum /var/tmp/* /tmp/* /verification-tests/Gemfile.lock

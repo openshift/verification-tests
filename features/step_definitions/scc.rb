@@ -18,21 +18,13 @@ Given /^the following scc policy is created: (.+)$/ do |policy|
 
   @result = admin.cli_exec(:create, f: path)
   if @result[:success]
-    _admin = admin
-    teardown_add {
-      @result = _admin.cli_exec(
-        :delete,
-        object_type: :scc,
-        object_name_or_id: policy_name
-      )
-      raise "cannot remove policy #{policy_name}" unless @result[:success]
-    }
+    step %Q/admin ensures "#{policy_name}" scc is deleted after scenario/
   else
     raise "unable to set scc policy #{path}, see log"
   end
 end
 
-# setup tier_down to restore scc after scenario end;
+# setup tear_down to restore scc after scenario ends
 Given /^scc policy #{QUOTED} is restored after scenario$/ do |policy|
   ensure_admin_tagged
   ensure_destructive_tagged
@@ -47,14 +39,7 @@ Given /^scc policy #{QUOTED} is restored after scenario$/ do |policy|
 
   _admin = admin
   teardown_add {
-    admin.cli_exec(
-      :delete,
-      object_type: :scc,
-      object_name_or_id: policy
-    )
-    # we don't check result here, we don't care if it existed or not
-    # we care if it will be created successfully below
-
+    step %Q/admin ensures "#{policy}" scc is deleted/
     @result = _admin.cli_exec(
       :create,
       f: "-",

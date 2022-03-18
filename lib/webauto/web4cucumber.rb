@@ -96,14 +96,17 @@ require_relative 'chrome_extension'
 
           proxy_proto, proxy_user, proxy_pass, proxy_host, proxy_port =
             proxy_raw.scan(%r{^(?:(.+?)://)?(.+?):(.+)@(.+?):([\d]+)$}).first
-          proxy_proto ||= "http"
-          proxy_chrome_ext_file = File.expand_path("chrome-proxy.crx")
-          ChromeExtension.pack_extension(
-            file: proxy_chrome_ext_file,
-            dir: File.dirname(__FILE__) + "/resource/chrome_proxy",
-            erb_binding: binding
-          )
+        else
+          proxy_proto, proxy_host, proxy_port =
+            proxy_raw.scan(%r{^(?:(.+?)://)(.+?):([\d]+)$}).first
         end
+        proxy_proto ||= "http"
+        proxy_chrome_ext_file = File.expand_path("chrome-proxy.crx")
+        ChromeExtension.pack_extension(
+          file: proxy_chrome_ext_file,
+          dir: File.dirname(__FILE__) + "/resource/chrome_proxy",
+          erb_binding: binding
+        )        
       end
       client = Watir::HttpClient.new
       client.open_timeout = 180
@@ -157,10 +160,10 @@ require_relative 'chrome_extension'
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
         if @selenium_url
-          @browser = Watir::Browser.new :chrome, options: options, url: @selenium_url
+          @browser = Watir::Browser.new :chrome, :http_client=>client, options: options, url: @selenium_url
         else
           options["goog:chromeOptions"][:switches] = chrome_switches
-          @browser = Watir::Browser.new :chrome, options: options
+          @browser = Watir::Browser.new :chrome, :http_client=>client, options: options
         end
         logger.info "#{browser.driver.capabilities[:browser_name]} version is #{browser.driver.capabilities[:browser_version]}"
         logger.info "Chromedriver version is #{browser.driver.capabilities['chrome']['chromedriverVersion']}"

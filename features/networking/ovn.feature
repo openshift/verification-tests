@@ -5,7 +5,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-29954
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -51,7 +51,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-30055
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -105,7 +105,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-30057
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -167,7 +167,7 @@ Feature: OVN related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-32205
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -195,8 +195,9 @@ Feature: OVN related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-32184
   @admin
-  @4.10 @4.9
+  @4.10 @4.9 @4.6
   @network-ovnkubernetes
+  @singlenode
   Scenario: ovnkube-masters should allocate pod IP and mac addresses
     Given the env is using "OVNKubernetes" networkType
     And I have a project
@@ -220,10 +221,11 @@ Feature: OVN related networking scenarios
   # @case_id OCP-28936
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @disconnected @connected
   Scenario: Create/delete pods while forcing OVN leader election
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1781297
     Given the env is using "OVNKubernetes" networkType
@@ -248,7 +250,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26092
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -292,7 +294,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26139
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -343,7 +345,8 @@ Feature: OVN related networking scenarios
     Then the expression should be true> @result[:parsed]['end']['sum']['lost_percent'].to_f < 10
     Then the expression should be true> @result[:parsed]['end']['sum']['bytes'].to_f > 1024
     Then the expression should be true> @result[:parsed]['end']['sum']['packets'].to_f > 0
-    Then the expression should be true> @result[:parsed]['end']['sum']['jitter_ms'].to_f < 1
+    # increase jitter threshold until it only fails when there is a real issue
+    Then the expression should be true> @result[:parsed]['end']['sum']['jitter_ms'].to_f < 5
     And I run the :logs client command with:
       | resource_name | iperf-server |
     Then the step should succeed
@@ -359,7 +362,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26089
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -383,7 +386,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26091
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -421,7 +424,8 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26138
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
+  @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Inducing Split Brain in the OVN HA cluster
@@ -443,7 +447,10 @@ Feature: OVN related networking scenarios
     Then the step should succeed
 
     # election timer is 1 second by default but the RAFT JSON-RPC probe might take 5 seconds to notice
-    And I wait up to 40 seconds for the steps to pass:
+    # election timer was 5 seconds, but now is 16 seconds and convergence also depends on master scaling
+    # BZ 1883662 - [sbdb][raft] Tune out of the box timer to be 16sec
+    # 40 seconds was not enough to converge with a 5 master cluster, increase wait.
+    And I wait up to 120 seconds for the steps to pass:
     # check the leader on the original leader to ensure it is still the leader and the split node doesn't become leader
     """
     When I store the ovnkube-master "south" leader pod in the :original_south_leader clipboard using node "<%= cb.south_leader.node_name %>"
@@ -455,8 +462,8 @@ Feature: OVN related networking scenarios
     When I run commands on the host:
       | iptables -t filter -D INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
     # wait for OVN to reconverge
-    # election timer is 1 second by default but the RAFT JSON-RPC probe might take 5 seconds to notice
-    And I wait up to 40 seconds for the steps to pass:
+    # wait 120 seconds for convergence due to election timer as described above.
+    And I wait up to 120 seconds for the steps to pass:
     # check the leader on the original leader to ensure it is still the leader and the split node doesn't become leader
     """
     When I store the ovnkube-master "south" leader pod in the :after_south_leader clipboard using node "<%= cb.south_leader.node_name %>"
@@ -471,7 +478,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26140
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -496,10 +503,12 @@ Feature: OVN related networking scenarios
   # @author rbrattai@redhat.com
   # @case_id OCP-37031
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @disconnected @connected
   Scenario: OVN handles projects that start with a digit
     Given the env is using "OVNKubernetes" networkType
     Given I create a project with leading digit name
@@ -574,14 +583,16 @@ Feature: OVN related networking scenarios
       | ping | -c | 30 | -i | 0.2 | <%= cb.pod2_ip%> |
     Then the step should succeed
     And the output should contain "0% packet loss"
-  
+
   # @author anusaxen@redhat.com
   # @case_id OCP-46285
   @admin
   @destructive
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @network-ovnkubernetes
-  @vsphere-ipi
+  @vsphere-ipi @baremetal-ipi
+  @connected
+  @vsphere-upi @baremetal-upi
   Scenario: Logical Router Policies and Annotations for a given node should be current
     Given the env is using "OVNKubernetes" networkType
     #Find apiVIP address of the cluster
@@ -607,16 +618,16 @@ Feature: OVN related networking scenarios
     And the output should contain:
       | k8s.ovn.org/host-addresses |
       | <%= cb.apiVIP %>           |
-  
+
     Given I use the "<%= cb.apiVIP_node %>" node
     And the host is rebooted and I wait it up to 600 seconds to become available
-    #Make sure after the reboot apiVIp switches to new node and only 1 entry correspond to apiVIP 
+    #Make sure after the reboot apiVIp switches to new node and only 1 entry correspond to apiVIP
     #exist in NB db (shouldn't be any stale or duplicates)
     Given I store the ovnkube-master "north" leader pod in the clipboard
     And admin executes on the pod "northd" container:
       | bash | -c | ovn-nbctl find logical_router_policy \| grep -B 5 -A 10 <%= cb.apiVIP %> |
     Then the step should succeed
-    #apiVIP switches to new node in case of node reboot and in very rare case couple of entries might stay there until apiVIP 
+    #apiVIP switches to new node in case of node reboot and in very rare case couple of entries might stay there until apiVIP
     #switching is done completely. Making sure 1 current entry should stay there eventually
     Given I wait up to 120 seconds for the steps to pass:
     """

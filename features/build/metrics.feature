@@ -4,9 +4,11 @@ Feature: Builds and samples related metrics test
   # @case_id OCP-33220
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @connected
   Scenario: Alerts on imagestream import retries
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
@@ -62,9 +64,11 @@ Feature: Builds and samples related metrics test
   # @author xiuwang@redhat.com
   # @case_id OCP-33722
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @connected
   Scenario: Check build metrics
     Given I have a project
     When I run the :new_app client command with:
@@ -148,6 +152,9 @@ Feature: Builds and samples related metrics test
   # @author xiuwang@redhat.com
   # @case_id OCP-33770
   @admin
+  @singlenode
+  @connected
+  @4.6
   Scenario: Adding metric for registry v1 protocol imports
     Given I have a project
     #Importing a image with regsitry v1 api
@@ -182,10 +189,12 @@ Feature: Builds and samples related metrics test
   # @case_id OCP-25598
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Monitoring, Alerting, and Degraded Status Reporting-Samples-operator
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |

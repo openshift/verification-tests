@@ -13,7 +13,7 @@ Feature: kata related features
   @admin
   @destructive
   @flaky
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @baremetal-upi @azure-upi
   @upgrade-sanity
@@ -33,7 +33,7 @@ Feature: kata related features
   @admin
   @destructive
   @flaky
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @baremetal-upi @azure-upi
   Scenario: Operator can be installed through web console

@@ -2,6 +2,8 @@
 global:
   git_repo_url: https://github.com/openshift/verification-tests
   git_repo_default_branch: master
+  git_cucushift_repo_url: https://github.com/openshift/cucushift
+  git_cucushift_repo_default_branch: master
 
   debug_in_after_hook: false
   debug_in_after_hook_always: false

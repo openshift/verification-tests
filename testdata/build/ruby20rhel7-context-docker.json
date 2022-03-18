@@ -116,7 +116,7 @@
         "source": {
           "type": "Git",
           "git": {
-            "uri": "https://github.com/openshift-qe/ruby-hello-world-context-dir",
+            "uri": "https://github.com/openshift-qe/ruby-hello-world-context-dir"
           },
           "contextDir": "test"
         },

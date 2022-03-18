@@ -90,9 +90,11 @@ Feature: Testing imagestream
   # @case_id OCP-19196
   @destructive
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @proxy @noproxy @connected
   Scenario: Prune images when DC reference to invalid image
     Given I have a project
     Given I enable image-registry default route
@@ -135,9 +137,11 @@ Feature: Testing imagestream
   # @case_id OCP-16495
   @destructive
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @proxy @noproxy @connected
   Scenario: Do not prune layer of a valid Image due to minimum aging
     Given I have a project
     Given I enable image-registry default route
@@ -145,8 +149,10 @@ Feature: Testing imagestream
     Given certification for default image registry is stored to the :reg_crt_name clipboard
 
     When I run the :new_app client command with:
-      | app_repo | ruby~https://github.com/sclorg/ruby-ex.git |
+      | app_repo | quay.io/openshifttest/ruby-27@sha256:cdb6a13032184468b1e0607f36cfb8834c97dbeffeeff800e9e6834323bed8fc~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
+    Given the "ruby-27" image stream was created 
+    Given the "ruby-27" image stream becomes ready 
     And the "ruby-ex-1" build was created
     And the "ruby-ex-1" build completes
     And the "ruby-ex:latest" image stream tag was created

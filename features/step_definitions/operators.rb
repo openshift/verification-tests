@@ -168,6 +168,7 @@ Given /^operator #{QUOTED} becomes #{NO_SPACE_STR}(?: within #{NUMBER} seconds)?
   interval_time = 5
   timeout = Integer(timeout) rescue 60
   interval_time = 20 if timeout > 100
+  interval_time = 5 if env.nodes.length == 1 # interval needs to be short because rotation is quick in SNO env
   actual_results = {}
   stats = {}
 

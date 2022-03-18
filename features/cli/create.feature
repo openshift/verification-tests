@@ -3,11 +3,14 @@ Feature: creating 'apps' with CLI
   # @author yinzhou@redhat.com
   # @case_id OCP-11761
   @admin
+  @destructive
   @proxy
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/pod_with_special_fsGroup.json"
@@ -30,6 +33,8 @@ Feature: creating 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-12399
+  @singlenode
+  @noproxy @connected
   Scenario: Create an application from source code
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"
@@ -90,10 +95,10 @@ Feature: creating 'apps' with CLI
     #Check git github url
     Given an 8 character random string of type :dns952 is stored into the :appname3 clipboard
     When I run the :new_app client command with:
-      | code         | git://github.com/openshift/ruby-hello-world |
-      | image_stream | openshift/ruby                              |
-      | name         | <%= cb.appname3 %>                          |
-      | env          | MYSQL_ROOT_PASSWORD=test                    |
+      | code         | https://github.com/openshift/ruby-hello-world |
+      | image_stream | openshift/ruby                                |
+      | name         | <%= cb.appname3 %>                            |
+      | env          | MYSQL_ROOT_PASSWORD=test                      |
     Given the "<%= cb.appname3 %>-1" build completes
     Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname3 %>-1 |
@@ -147,10 +152,12 @@ Feature: creating 'apps' with CLI
 
   # @author chuyu@redhat.com
   # @case_id OCP-22515
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: 4.x Could not create any context in non-existent project
     Given I create a new application with:
       | docker image | openshift/ruby-20-centos7~https://github.com/openshift/ruby-hello-world |
@@ -183,15 +190,17 @@ Feature: creating 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-31250
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Create an application from source code test
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"
     Then the step should succeed
-    Given an 8 character random string of type :dns952 is stored into the :appname clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname clipboard
     When I run the :new_app client command with:
       | app_repo     | ruby-hello-world         |
       | image_stream | openshift/ruby:latest    |
@@ -209,7 +218,7 @@ Feature: creating 'apps' with CLI
     And the output should contain "Hello"
     And I delete all resources from the project
     #Check https github url
-    Given an 8 character random string of type :dns952 is stored into the :appname1 clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname1 clipboard
     When I run the :new_app client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby                                |
@@ -227,7 +236,7 @@ Feature: creating 'apps' with CLI
     And the output should contain "Hello"
     And I delete all resources from the project
     #Check http github url
-    Given an 8 character random string of type :dns952 is stored into the :appname2 clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname2 clipboard
     When I run the :new_app client command with:
       | code         | http://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby:latest                        |
@@ -244,26 +253,8 @@ Feature: creating 'apps' with CLI
     """
     And the output should contain "Hello"
     And I delete all resources from the project
-    #Check git github url
-    Given an 8 character random string of type :dns952 is stored into the :appname3 clipboard
-    When I run the :new_app client command with:
-      | code         | git://github.com/openshift/ruby-hello-world |
-      | image_stream | openshift/ruby                              |
-      | name         | <%= cb.appname3 %>                          |
-      | env          | MYSQL_ROOT_PASSWORD=test                    |
-    Given the "<%= cb.appname3 %>-1" build completes
-    Given 1 pod becomes ready with labels:
-      | deployment=<%= cb.appname3 %> |
-    And I wait for the steps to pass:
-    """
-    When I execute on the pod:
-      | curl | localhost:8080 |
-    Then the step should succeed
-    """
-    And the output should contain "Hello"
-    And I delete all resources from the project
     #Check master branch
-    Given an 8 character random string of type :dns952 is stored into the :appname4 clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname4 clipboard
     When I run the :new_app client command with:
       | code         | https://github.com/openshift/ruby-hello-world#master |
       | image_stream | openshift/ruby                                       |
@@ -275,7 +266,7 @@ Feature: creating 'apps' with CLI
     Then the output should match "Ref:\s+master"
     And I delete all resources from the project
     #Check invalid branch
-    Given an 8 character random string of type :dns952 is stored into the :appname5 clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname5 clipboard
     When I run the :new_app client command with:
       | code         | https://github.com/openshift/ruby-hello-world#invalid |
       | image_stream | openshift/ruby                                        |
@@ -284,7 +275,7 @@ Feature: creating 'apps' with CLI
     Then the output should contain "error"
     And I delete all resources from the project
     #Check non-master branch
-    Given an 8 character random string of type :dns952 is stored into the :appname6 clipboard
+    Given an 8 character random string of type :lowercase_starting_num is stored into the :appname6 clipboard
     When I run the :new_app client command with:
       | code  	     | https://github.com/openshift/ruby-hello-world#beta4 |
       | image_stream | openshift/ruby 	                                   |

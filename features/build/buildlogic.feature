@@ -2,10 +2,12 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11545
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Build with specified Dockerfile via new-build -D
     Given I have a project
     When I run the :new_build client command with:
@@ -56,10 +58,12 @@ Feature: buildlogic.feature
   # @author yantan@redhat.com
   # @case_id OCP-10799
   @proxy
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Create new build config use dockerfile with source repo
     Given I have a project
     When I run the :new_build client command with:
@@ -78,7 +82,7 @@ Feature: buildlogic.feature
     Then the "ruby-hello-world-1" build completed
 
   # @author haowang@redhat.com
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: ForcePull image for build
     Given I have a project
     Given I obtain test data file "build/forcePull/<template>"
@@ -104,16 +108,20 @@ Feature: buildlogic.feature
       | buildconfig-docker-dockerimage.json | # @case_id OCP-10652
 
     @upgrade-sanity
+    @singlenode
+    @connected
     Examples:
       | template                            |
       | buildconfig-s2i-dockerimage.json    | # @case_id OCP-11149
 
   # @author yantan@redhat.com
   # @case_id OCP-10745
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
@@ -149,10 +157,12 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11720
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Build from private git repo with/without ssh key
     Given I have a project
     And I have an ssh-git service in the project
@@ -196,10 +206,12 @@ Feature: buildlogic.feature
 
   # @author yantan@redhat.com
   # @case_id OCP-11896
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Create new-app from private git repo with ssh key
     Given I have a project
     When I run the :new_app client command with:
@@ -235,10 +247,12 @@ Feature: buildlogic.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13683
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Check s2i build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
@@ -259,10 +273,12 @@ Feature: buildlogic.feature
   # @case_id OCP-13684
   @flaky
   @proxy
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Check docker build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-dockerbuild.json"
@@ -451,9 +467,11 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-19133
   @proxy
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @noproxy @connected
   Scenario: Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application
@@ -504,10 +522,12 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-40366
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's
     Given I have a project
     Given I save a htpasswd registry auth to the :combine_dockercfg clipboard

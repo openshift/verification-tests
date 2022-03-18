@@ -17,11 +17,20 @@ Given /^the #{QUOTED} oauth CR is restored after scenario$/ do |name|
   org_oauth_json = org_oauth.to_json
   _admin = admin
   teardown_add {
-    puts "Original CR to restore:", org_oauth_json
+    @result = admin.cli_exec(:get, resource: 'oauth', resource_name: name, o: 'yaml')
+    if @result[:success]
+      org_oauth_now = @result[:parsed]
+    else
+      raise "Could not get OAuth: #{name}"
+    end
+    print "Original CR to restore:\n", org_oauth_json
     # Use replace instead of patch, otherwise the patch with org_oauth_json can only add or modify fields, but will not remove fields that were added
     @result = _admin.cli_exec(:replace, f: "-", _stdin: org_oauth_json)
     raise "Cannot restore OAuth: #{name}" unless @result[:success]
-    sleep 60
+    # Check 'spec' first because pods only roll out when 'spec' had been changed
+    if org_oauth_now['spec'] != org_oauth['spec']
+      step %Q/authentication successfully rolls out after config changes/
+    end
   }
 end
 
@@ -38,7 +47,7 @@ end
 Given /^authentication successfully rolls out after config changes$/ do
   ensure_admin_tagged
   interval_time = 5
-  timeout = 300 # set 300 seconds here due to https://bugzilla.redhat.com/show_bug.cgi?id=1958198, after the bug fixed, the seconds should be reduced accordingly
+  timeout = 400 # set 400 seconds here due to https://bugzilla.redhat.com/show_bug.cgi?id=1958198, after the bug fixed, the seconds should be reduced accordingly
   stats = {}
   error = nil
   step %Q/operator "authentication" becomes progressing within #{timeout} seconds/

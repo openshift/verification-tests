@@ -386,18 +386,18 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
   if (logging_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
-    when '4.1'
-      cb[cb_name] = "preview"
-    when '4.2','4.3','4.4','4.5','4.6'
-      cb[cb_name] = version
-    when '4.7'
-      cb[cb_name] = "5.0"
-    when '4.8'
-      cb[cb_name] = "stable-5.1"
-    when '4.9'
-      cb[cb_name] = "stable-5.2"
     when '4.10'
       cb[cb_name] = "stable"
+    when '4.9'
+      cb[cb_name] = "stable-5.3"
+    when '4.8'
+      cb[cb_name] = "stable-5.2"
+    when '4.7'
+      cb[cb_name] = "stable-5.1"
+    when '4.2','4.3','4.4','4.5','4.6'
+      cb[cb_name] = version
+    when '4.1'
+      cb[cb_name] = "preview"
     else
       cb[cb_name] = "stable"
     end
@@ -684,6 +684,7 @@ Given /^I upgrade the operator with:$/ do | table |
   namespace = opts[:namespace]
   step %Q/I use the "#{namespace}" project/
 
+  pre_csv = subscription(subscription).current_csv
   # upgrade operator
   patch_json = {"spec": {"channel": "#{channel}", "source": "#{catsrc}"}}
   patch_opts = {resource: "subscription", resource_name: subscription, p: patch_json.to_json, n: namespace, type: "merge"}
@@ -691,7 +692,11 @@ Given /^I upgrade the operator with:$/ do | table |
   raise "Patch failed with #{@result[:response]}" unless @result[:success]
   # wait till new csv to be installed
   success = wait_for(180, interval: 10) {
-    (subscription(subscription).installplan_csv.include? channel) || (subscription(subscription).installplan_csv.include? (channel.split('-')[1]))
+    if channel != "stable"
+      (subscription(subscription).installplan_csv.include? channel) || (subscription(subscription).installplan_csv.include? (channel.split('-')[1]))
+    else
+      subscription(subscription).installplan_csv != pre_csv
+    end
   }
   raise "the new CSV can't be installed" unless success
   # wait till new csv is ready
@@ -956,7 +961,7 @@ Given /^I get(?: (\d+))? logs from the #{QUOTED} kafka consumer job in the #{QUO
 end
 
 # deploy external elasticsearch server
-# version: 6.8 or 7.12
+# version: 6.8 or 7.16
 # project_name: where the external ES deployed
 # scheme: http or https
 # client_auth: true or false, if `true`, must provide client crendentials
@@ -964,7 +969,7 @@ end
 # secret_name: the name of the pipeline secret for the fluentd to use
 Given /^external elasticsearch server is deployed with:$/ do | table |
   opts = opts_array_to_hash(table.raw)
-  version = opts[:version] # 6.8 or 7.12
+  version = opts[:version] # 6.8 or 7.16
   project_name = opts[:project_name]
   scheme = opts[:scheme]
   client_auth = opts[:client_auth]
@@ -974,8 +979,8 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
   secret_name = opts[:secret_name]
   step %Q/I use the "#{project_name}" project/
 
-  unless ["6.8", "7.12"].include? version
-    raise "Unsupported ES version: #{version}, we only support ES 6.8 and 7.12!"
+  unless ["6.8", "7.16"].include? version
+    raise "Unsupported ES version: #{version}, we only support ES 6.8 and 7.16!"
   end
 
   if scheme == "https"
@@ -1046,6 +1051,15 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
 
   if user_auth_enabled == "true"
     cm_patch << ["p", "USERNAME=#{username}"] << ["p", "PASSWORD=#{password}"]
+  end
+
+  if version == "6.8"
+    # get the arch of node
+    @result = admin.cli_exec(:get, resource: "nodes", l: "kubernetes.io/os=linux", output: "jsonpath={.items[0].status.nodeInfo.architecture}")
+    # set xpack.ml.enable to false when testing ES 6.8 on arm64 cluster
+    if @result[:response] == "arm64"
+      cm_patch << ["p", "MACHINE_LEARNING=false"]
+    end
   end
 
   @result = admin.cli_exec(:process, opts_array_process(cm_patch.uniq))

@@ -10,8 +10,8 @@ module BushSlicer
 
     attr_accessor :client, :usergroup_id, :token, :user_list, :users_map, :channel
 
-    def initialize(channel: '#forum-qe')
-      @token = conf.dig('services', 'slack', 'channels').dig(channel.to_sym, :token)
+    def initialize(app_name: :cloud_usage_summary, channel: '#team-qe')
+      @token = conf.dig('services', 'slack', 'apps').dig(app_name, :token)
       @usergroup_id = conf.dig('services', 'slack', 'usergroup_id')
       @channel = channel
 
@@ -77,14 +77,23 @@ module BushSlicer
       @users_map.dig(user_name)
     end
 
-    def post_msg(msg: nil, channel: self.channel)
-      self.client.chat_postMessage(channel: channel, text: msg, as_user: true)
+    def post_msg(msg: nil, channel: self.channel, as_blocks: false)
+      unless as_blocks
+        block_msg = [{"type": "section", "text": {"type": "mrkdwn", "text": "```#{msg}```"}}]
+        self.client.chat_postMessage(channel: channel, blocks: block_msg, as_user: true)
+      else
+        self.client.chat_postMessage(channel: channel, text: msg, as_user: true)
+      end
     end
   end
 end
 
 if __FILE__ == $0
-  slack = BushSlicer::CoreosSlack.new(channel: '#pruan_slack_bot_sandbox')
+  # default to team-qe channel.
+  slack = BushSlicer::CoreosSlack.new
+  # set the channel: parameter to direct to the channel where the message to be
+  # posted
+  #slack = BushSlicer::CoreosSlack.new(channel: '#pruan_slack_bot_sandbox')
   #slack = OpenshiftQE::CoreosSlack.new #(channel: '#ocp-qe-scale-ci-results')
   #slack.build_user_lookup_table
   #slack.build_user_lookup_table(pre_compiled_result: 'creds/slack_users_map.yaml')
@@ -99,5 +108,8 @@ if __FILE__ == $0
                  [nil, nil, 29.71, nil],
                  ["errata463", "7865", 29.98, "pruan"],
                  ]
-  slack.notify_longlived_clusters_to_users(clusters: clusters)
+  test_msg = "This is a test"
+  slack.post_msg(msg: test_msg, channel: "#pruan_slack_bot_sandbox", as_blocks: true)
+  slack.post_msg(msg: test_msg, channel: "#pruan_slack_bot_sandbox")
+#  slack.notify_longlived_clusters_to_users(clusters: clusters)
 end

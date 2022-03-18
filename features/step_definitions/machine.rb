@@ -84,7 +84,14 @@ Then(/^admin ensures machine number is restored after scenario$/) do
       raise "Machines deleted but never restored: #{machine_names_missing}."
     end
     
+    # Instead of delete a machine, wait for the deletion to complete, then loop another one.
+    # We trigger a delete cmd for all machines, then wait for the deletions to complete
     machines_waiting_delete.each do | machine |
+      # deleted object but does not wait for completion
+      machine.delete_graceful(by: user)
+    end
+    machines_waiting_delete.each do | machine |
+      # wait for the deletion to complete
       machine.ensure_deleted(user: user, wait: 1200)
       raise "Unable to delete machine #{machine.name}" if machine.exists?(user: user)
     end

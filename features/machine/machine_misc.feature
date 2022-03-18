@@ -4,7 +4,7 @@ Feature: Machine misc features testing
   # @case_id OCP-34940
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi
   Scenario: PVCs can still be provisioned after the password has been changed vSphere
     Given I have an IPI deployment
@@ -60,7 +60,7 @@ Feature: Machine misc features testing
   # @case_id OCP-35454
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   Scenario: Reconciliation of MutatingWebhookConfiguration values should happen
     Given I switch to cluster admin pseudo user
@@ -114,7 +114,7 @@ Feature: Machine misc features testing
   # @author miyadav@redhat.com
   # @case_id OCP-37744
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: kube-rbac-proxy should not expose tokens, have excessive verbosity
@@ -171,7 +171,8 @@ Feature: Machine misc features testing
   # @case_id OCP-40665
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
+  @vsphere-ipi
   Scenario: Deattach disk before destroying vm from vsphere
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project

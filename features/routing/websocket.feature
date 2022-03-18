@@ -2,10 +2,12 @@ Feature: Testing websocket features
 
   # @author hongli@redhat.com
   # @case_id OCP-17145
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: haproxy router support websocket via unsecure route
     Given I have a project
     Given I obtain test data file "routing/websocket/pod.json"

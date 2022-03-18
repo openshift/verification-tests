@@ -3,10 +3,12 @@ Feature: SCC policy related scenarios
   # @author pruan@redhat.com
   # @case_id OCP-11762
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: deployment hook volume inheritance with hostPath volume
     Given I have a project
     # Create hostdir pod again with new SCC
@@ -35,9 +37,11 @@ Feature: SCC policy related scenarios
   # @case_id OCP-11775
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @connected
   Scenario: Create or update scc with illegal capability name should fail with prompt message
     Given I have a project
     Given cluster role "cluster-admin" is added to the "first" user

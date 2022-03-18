@@ -2,10 +2,11 @@ Feature: pod related features
 
   # @author xiuli@redhat.com
   # @case_id OCP-15808
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
   Scenario: Endpoints should update in time and no delay
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -137,10 +138,12 @@ Feature: pod related features
   # @case_id OCP-11925
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Pods will still be created by DaemonSet when nodes are SchedulingDisabled
     Given I have a project
     Given I store the schedulable workers in the :nodes clipboard
@@ -170,10 +173,12 @@ Feature: pod related features
   # @author weinliu@redhat.com
   # @case_id OCP-12047
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
     Given I have a project
     Given I run the :patch admin command with:

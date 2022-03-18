@@ -3,7 +3,7 @@ Feature: Pod related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9747
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -25,8 +25,8 @@ Feature: Pod related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-10031
   @smoke
-  @disconnected
-  @4.10 @4.9 @4.8 @4.7
+  @noproxy @disconnected
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -47,10 +47,11 @@ Feature: Pod related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-14986
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: The openflow list will be cleaned after delete the pods
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -77,10 +78,11 @@ Feature: Pod related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-10817
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: Check QoS after creating pod
     Given I have a project
     # setup iperf server to receive the traffic
@@ -111,15 +113,14 @@ Feature: Pod related networking scenarios
       | ovs-vsctl | list | interface |
     Then the step should succeed
     And the output should contain "ingress_policing_rate: 1953"
-
     # test the bandwidth limit with qos for egress
     When I execute on the "<%= cb.iperf_client %>" pod:
-      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 1 -t 12s |
+      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 2 -t 24s |
     Then the step should succeed
     And the expression should be true> @result[:response].scan(/[12].[0-9][0-9] Mbits/).size >= 10
     # test the bandwidth limit with qos for ingress
     When I execute on the "<%= cb.iperf_client %>" pod:
-      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 1 -t 12s -R |
+      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 2 -t 24s -R |
     Then the step should succeed
     And the expression should be true> @result[:response].scan(/[45].[0-9][0-9] Mbits/).size >= 10
 
@@ -143,7 +144,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23890
   @admin
   @disconnected
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
@@ -179,7 +180,7 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23891
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
@@ -200,7 +201,7 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23893
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
@@ -233,10 +234,11 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23894
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -263,7 +265,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-21846
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -312,9 +314,10 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26822
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: [4.x] Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given I store the workers in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
@@ -462,7 +465,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-26014
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -473,6 +476,15 @@ Feature: Pod related networking scenarios
     And I use the "openshift-ovn-kubernetes" project
     And a pod is present with labels:
       | app=ovnkube-node |
+    # Making sure the cluster is in good state before exiting from this scenario
+    # Deleting ovnkube-pod will force CNO to rewrite the conf file and bring cluster back to normal
+    # Wait 60 seconds to make sure ovnkube-pods recover
+    And I register clean-up steps:
+    """
+    admin ensures "<%= pod.name %>" pod is deleted from the "openshift-ovn-kubernetes" project
+    I wait up to 60 seconds for the steps to pass:
+      | Given OVN is functional on the cluster |
+    """
     #Removing CNI config file from container to check readiness probe functionality
     When I run the :exec client command with:
       | pod              | <%= pod.name %>                       |
@@ -481,23 +493,17 @@ Feature: Pod related networking scenarios
       | exec_command     | rm                                    |
       | exec_command_arg | /etc/cni/net.d/10-ovn-kubernetes.conf |
     Then the step should succeed
-    #Deleting ovnkube-pod will force CNO to rewrite the conf file and bring cluster back to normal after scenario
-    And admin ensures "<%= pod.name %>" pod is deleted from the "openshift-ovn-kubernetes" project after scenario
-    #Now make sure readiness probe checking above file will cause one of the two ovnkube-node containers to go down and container ready status change to false
+    # Now make sure readiness probe checking above file will cause one of the two ovnkube-node containers to go down and container ready status change to false
     Given I wait up to 30 seconds for the steps to pass:
     """
     When I run the :get admin command with:
-      | resource      | pod                                                                     |
-      | resource_name | <%= pod.name %>                                                         |
-      | o             | jsonpath='{.status.containerStatuses[?(@.name=="ovnkube-node")].ready}' |
+      | resource      | pod                                                                   |
+      | resource_name | <%= pod.name %>                                                       |
+      | o             | jsonpath={.status.containerStatuses[?(@.name=="ovnkube-node")].ready} |
     Then the step should succeed
     And the output should contain "false"
     """
-    #Making sure the cluster is in good state before exiting from this scenario
-    And I wait up to 60 seconds for the steps to pass:
-    """
-    OVN is functional on the cluster
-    """
+
   # @author anusaxen@redhat.com
   # @case_id OCP-33413
   @admin
@@ -558,7 +564,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-22034
   @admin
   @destructive
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the unused ip are released after node reboot

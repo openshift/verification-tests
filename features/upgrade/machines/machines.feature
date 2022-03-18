@@ -13,13 +13,12 @@ Feature: Machine-api components upgrade tests
     | cluster_operator           |
     | "machine-api"              |
     | "cluster-autoscaler"       |
-    | "cloud-controller-manager" |
 
   # @author jhou@redhat.com
   # @author huliu@redhat.com
   @upgrade-check
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -35,11 +34,38 @@ Feature: Machine-api components upgrade tests
 
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @disconnected @connected
   Examples:
     | cluster_operator           |
     | "machine-api"              | # @case_id OCP-22712
     | "cluster-autoscaler"       | # @case_id OCP-27664
-    | "cloud-controller-manager" | # @case_id OCP-43331
+
+  @upgrade-prepare
+  @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario:  Cloud-controller-manager cluster operator should be available after upgrade - prepare
+    Given the expression should be true> "True" == "True"
+
+  # @author zhsun@redhat.com
+  # @case_id OCP-43331
+  @upgrade-check
+  @admin
+  @4.11 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: Cloud-controller-manager cluster operator should be available after upgrade
+    Given evaluation of `cluster_operator('cloud-controller-manager').condition(type: 'Available')` is stored in the :co_available clipboard
+    Then the expression should be true> cb.co_available["status"]=="True"
+
+    Given evaluation of `cluster_operator('cloud-controller-manager').condition(type: 'Degraded')` is stored in the :co_degraded clipboard
+    Then the expression should be true> cb.co_degraded["status"]=="False"
+
+    Given evaluation of `cluster_operator('cloud-controller-manager').condition(type: 'Upgradeable')` is stored in the :co_upgradable clipboard
+    Then the expression should be true> cb.co_upgradable["status"]=="True"
+
+    Given evaluation of `cluster_operator('cloud-controller-manager').condition(type: 'Progressing')` is stored in the :co_progressing clipboard
+    Then the expression should be true> cb.co_progressing["status"]=="False"
 
   @upgrade-prepare
   @admin
@@ -53,7 +79,7 @@ Feature: Machine-api components upgrade tests
   # @case_id OCP-22692
   @upgrade-check
   @admin
-  @4.10 @4.9
+  @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: There should be no pending or firing alerts for machine-api operators
@@ -80,8 +106,9 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @disconnected @connected
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -152,7 +179,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.6
   Scenario Outline: Spot/preemptible instances should not block upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -211,7 +238,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
@@ -268,7 +295,7 @@ Feature: Machine-api components upgrade tests
   # @case_id OCP-39845
   @upgrade-check
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Registering Components delays should not be more than liveliness probe 
     Given I have an IPI deployment

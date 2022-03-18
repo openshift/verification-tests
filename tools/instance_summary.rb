@@ -10,7 +10,7 @@ module BushSlicer
   # tabulized format
 
   class InstanceSummary
-    attr_accessor :jenkins
+    attr_accessor :jenkins, :slack
 
     def initialize(jenkins)
       @jenkins = jenkins
@@ -291,24 +291,15 @@ module BushSlicer
     # slack channel URL is defined in private/config/config.yaml
     ## TODO: research doing it via ruby-slack-client instead
     def send_to_slack(summary_text: text, options: nil)
-      # for actual channel #forum-qe
-      url = options.config.dig('services', 'slack', 'webhooks', 'channels')[0]['url']
-      ## for debugging
-      #url = options.config.dig('services', 'slack', 'webhooks', 'channels')[2]['url']
-      opts = {:url => url, :method => "POST"}
-      if options.slack_no_block_format
-        opts[:payload] = %Q/{"blocks": [{"type": "section","text": {"type":"mrkdwn","text": "#{summary_text}"}}]}/
-      else
-        opts[:payload] = %Q/{"blocks": [{"type": "section","text": {"type":"mrkdwn","text": "```#{summary_text}```"}}]}/
-      end
-      res = Http.request(**opts)
+      @slack ||= BushSlicer::CoreosSlack.new
+      @slack.post_msg(msg: summary_text, as_blocks: options.slack_no_block_format)
     end
   end
 
   class AwsSummary < InstanceSummary
     attr_accessor :amz, :amz_prices
-    def initialize(jenkins: nil)
-      @amz = Amz_EC2.new
+    def initialize(svc_name: :AWS, jenkins: nil)
+      @amz = Amz_EC2.new(service_name: svc_name)
       @jenkins = jenkins
       @table = Text::Table.new
       # hard-coded pricing lookup table name: => price/hr
@@ -342,6 +333,14 @@ module BushSlicer
         "r4.2xlarge" => 0.532,
         "r5a.xlarge" => 0.226,
         "t3a.xlarge" => 0.1504,
+        "m6i.xlarge" => 0.192,
+        "m6i.large" => 0.096,
+        "c5a.large" => 0.077,
+        "m5.12xlarge" => 2.304,
+        "m6g.xlarge" => 0.154,
+        "m6g.large" => 0.077,
+        "m5a.large" => 0.086,
+        "m6i.2xlarge" => 0.384,
       }
     end
 
@@ -399,7 +398,7 @@ module BushSlicer
       return summary
     end
 
-    def get_summary(target_region: nil, options: nil)
+    def get_summary(target_region: nil, options: nil, global_region: :"AWS-CLOUD-USAGE")
       regions = amz.get_regions
       region_names =  regions.map {|r| r.region_name }
       aws_instances = {}
@@ -410,7 +409,7 @@ module BushSlicer
           raise "Unsupported region '#{target_region}'" unless region_names.include? target_region
           region.region_name = target_region
         end
-        aws = Amz_EC2.new(region: region.region_name)
+        aws = Amz_EC2.new(service_name: global_region, region: region.region_name)
         instances = aws.get_instances_by_status('running')
         aws_instances[region.region_name] = instances
         ##  XXX commnet out thread implmentation for now as it's flaky when when in jenkins
@@ -467,8 +466,7 @@ module BushSlicer
         "n1-highcpu-4" => 0.176,
         "n1-highcpu-8" => 0.352,
         "n1-highcpu-16" => 0.704,
-
-
+        "e2-medium" => 0.0335,
       }
     end
 
@@ -676,6 +674,7 @@ module BushSlicer
       # https://metal.equinix.com/product/servers/ for pricing
       @packet_prices = {
         "t1.small.x86" => 0.07,
+        "c1.small.x86" => 0.40,
         "c2.medium.x86" => 1.10,
         "c3.small.x86" => 0.50,
         "c3.medium.x86" => 1.10,
@@ -683,6 +682,7 @@ module BushSlicer
         "m2.xlarge.x86" => 2.00,
         "s3.xlarge.x86" => 1.85,
         "n2.xlarge.x86" => 2.25,
+        "m1.xlarge.x86" => 1.70,
       }
     end
 
@@ -695,7 +695,13 @@ module BushSlicer
         inst_summary[:name]= inst['hostname']
         inst_summary[:uptime]= packet.instance_uptime inst["created_at"]
         inst_summary[:type] = inst['plan']['name']
-        inst_summary[:cost] = (inst_summary[:uptime] * @packet_prices[inst_summary[:type]]).round(2)
+        inst_hourly_price = @packet_prices[inst_summary[:type]]
+        cost = 0.0
+        if inst_hourly_price.nil?
+          inst_hourly_price = 0.0
+          puts "##### WARNING, setting hourly price for '#{inst_summary[:type]}' to 0.0 because it's not known"
+        end
+        inst_summary[:cost] = (cost = inst_summary[:uptime] * inst_hourly_price).round(2)
         inst_summary[:owned] = inst['created_by']['email']
         inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = jenkins.get_jenkins_flexy_job_id(inst['hostname'])
         summary << inst_summary
@@ -759,6 +765,111 @@ module BushSlicer
       grand_summary << {platform: 'vSphere', region: summary.first[:region], inst_count: summary.count}
       print_grand_summary(grand_summary)
     end
+  end
+
+  class AliCloudSummary < InstanceSummary
+    attr_accessor :ali, :ali_prices
+    def initialize(svc_name: :alicloud-v4, jenkins: nil)
+      @ali = Alicloud.new(service_name: svc_name, region: 'us-east-1')
+      @jenkins = jenkins
+      @table = Text::Table.new
+      # hard-coded pricing lookup table name: => price/hr
+      @ali_prices = {
+        "ecs.g6.large" => 0.128,
+        "ecs.g6.xlarge" => 0.256,
+      }
+    end
+
+    # @return <Hashed Array of Instances> with each hash key being keyed on the `owned` tag.
+    def regroup_instances(instances)
+      cluster_map = {}
+      instances.each do |r|
+        begin
+          owned = r.id['Tags']['Tag'].select {|t| t['TagValue'] == "owned" }
+        rescue
+          # for bastion hosts, there doesn't seem to be a tag associated with
+          # them, so just set it as empty
+          owned = []
+        end
+        if owned.count > 0
+          rindex = owned.first['TagKey'].split('kubernetes.io/cluster/')[-1]
+        else
+          rindex = "no_owner"
+        end
+        if cluster_map[rindex]
+          cluster_map[rindex] << r.id
+        else
+          cluster_map[rindex] = [r.id]
+        end
+      end
+      return cluster_map
+    end
+
+    # @instances <Array of unordered Instance obj>
+    def summarize_instances(region, instances)
+      summary = []
+      ali = @ali
+      jenkins = @jenkins
+      cm = regroup_instances(instances)
+      cm.each do | owned, inst_list |
+        inst_list.each do | inst |
+          inst_summary = {}
+          # inst_summary[:inst_obj] = inst
+          inst_summary[:region] = region
+          inst_summary[:name]= inst['InstanceName']
+          inst_summary[:type] = inst['InstanceType']
+          inst_summary[:uptime]= ali.instance_uptime inst
+          inst_hourly_price = @ali_prices[inst_summary[:type]]
+          cost = 0.0
+          if inst_hourly_price.nil?
+            inst_hourly_price = 0.0
+            puts "##### WARNING, setting hourly price for '#{inst_summary[:type]}' to 0.0 because it's not known"
+          end
+
+          cost = inst_summary[:uptime] * inst_hourly_price
+          inst_summary[:cost] = cost.round(2)
+          inst_summary[:owned] = owned
+          if inst_summary[:owned]
+            inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = jenkins.get_jenkins_flexy_job_id(inst_summary[:owned])
+          else
+            inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = nil, nil
+          end
+          summary << inst_summary
+        end
+      end
+      return summary
+    end
+
+    def get_summary(target_region: nil, options: nil, global_region: "alicloud-v4")
+      regions = ali.get_regions
+      ali_instances = {}
+      threads = []
+      regions.each do | region_name, url |
+        if target_region
+          # first check name is valid
+          raise "Unsupported region '#{target_region}'" unless regions.keys.include? target_region
+          region_name = target_region
+        end
+        end_point = regions.dig(region_name)
+        ali = Alicloud.new(service_name: global_region, region_id: region_name)
+        instances = ali.get_instances_by_status(status: 'Running', region_name: region_name, region_endpoint: end_point)
+        ali_instances[region_name] = instances
+        break if target_region
+      end
+      grand_summary = []
+      ali_instances.each do |region, inst_list|
+        total_cost = 0.0
+        summary = summarize_instances(region, inst_list)
+        print_summary(summary) if inst_list.count > 0
+        options.platform = "AliCloud #{region}"
+        print_longlived_clusters(summary, options) if inst_list.count > 0
+        summary.each { |s| total_cost += s[:cost]}
+        # print "REGION: #{region} TOTAL: #{total_cost}\n"
+        grand_summary << {platform: 'AliCloud', region: region, inst_count: inst_list.count, total_cost: total_cost}
+      end
+      print_grand_summary(grand_summary)
+    end
+
   end
 end
 

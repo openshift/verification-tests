@@ -6,6 +6,7 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
+  @disconnected @connected
   Scenario: All nodes logs are sent to Elasticsearch
     Given the master version == "4.1"
     Given evaluation of `cluster_logging('instance').fluentd_ready_pods.map(&:ip)` is stored in the :collector_pod_ips clipboard
@@ -103,6 +104,8 @@ Feature: collector related tests
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['name'] == cb.collection_type
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['inputname'] == (cb.collection_type == "fluentd" ? "fluent-plugin-systemd" : "imfile")
     """
+    @singlenode
+    @disconnected @connected
     Examples:
       | index_name  |
       | .operations | # @case_id OCP-25365
@@ -148,6 +151,9 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
+  @singlenode
+  @disconnected @connected
+  @4.6
   Scenario: The container logs metadata check
     Given the master version >= "4.2"
     Given I switch to the first user
@@ -183,10 +189,12 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @disconnected @connected
   Scenario: All nodes logs are collected
     Given the master version >= "4.5"
     Given logging collector name is stored in the :collector_name clipboard
@@ -226,6 +234,8 @@ Feature: collector related tests
   # @case_id OCP-32197
   @admin
   @destructive
+  @singlenode
+  @4.6
   Scenario: Fluentd should write it's own logs to stdout and exclude them from collection
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     When I create clusterlogging instance with:

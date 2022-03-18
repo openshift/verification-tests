@@ -44,9 +44,10 @@ Feature: Egress compoment upgrade testing
   # @case_id OCP-44315
   @admin
   @upgrade-check
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @noproxy @connected
   Scenario: Check egressfirewall is functional post upgrade
     Given I switch to cluster admin pseudo user
     And I save egress type to the clipboard
@@ -73,6 +74,7 @@ Feature: Egress compoment upgrade testing
   @4.10 @4.9 @4.8
   @vsphere-ipi
   @vsphere-upi
+  @qeci
   Scenario: Check ovn egressip is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I save ipecho url to the clipboard
@@ -125,9 +127,10 @@ Feature: Egress compoment upgrade testing
   @admin
   @upgrade-check
   @network-ovnkubernetes
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi
   @vsphere-upi
+  @qeci
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
@@ -162,10 +165,12 @@ Feature: Egress compoment upgrade testing
 
   # @author huirwang@redhat.com
   @admin
+  @flaky
   @upgrade-prepare
   @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
+  @qeci
   Scenario: Check sdn egressip is functional post upgrade - prepare
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
@@ -228,10 +233,12 @@ Feature: Egress compoment upgrade testing
   # @author huirwang@redhat.com
   # @case_id OCP-45349
   @admin
+  @flaky
   @upgrade-check
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
+  @qeci
   Scenario: Check sdn egressip is functional post upgrade
     Given I run the :get admin command with:
       | resource      | hostsubnet                                  |

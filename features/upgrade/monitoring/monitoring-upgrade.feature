@@ -17,13 +17,13 @@ Feature: cluster monitoring related upgrade check
   # @case_id OCP-29797
   @upgrade-check
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @disconnected @connected
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
-
     # Check cluster operators should be in correct status
     Given the expression should be true> cluster_operator('monitoring').condition(type: 'Progressing')['status'] == "False"
     And the expression should be true> cluster_operator('monitoring').condition(type: 'Available')['status'] == "True"

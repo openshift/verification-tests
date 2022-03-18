@@ -3,10 +3,12 @@ Feature: Testing haproxy rate limit related features
   # @author hongli@redhat.com
   # @case_id OCP-18482
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @noproxy @connected
   Scenario: limits backend pod max concurrent connections for unsecure, edge, reen route
     Given I switch to cluster admin pseudo user
     And I use the router project

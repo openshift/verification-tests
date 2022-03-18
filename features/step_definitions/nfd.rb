@@ -7,7 +7,8 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   cb.channel = cluster_version('version').version.split('-')[0].to_f
   install_method ||= 'CLI'
   step %Q/the first user is cluster-admin/
-  step %Q/I ensure "#{nfd_ns}" project is deleted after scenario/
+  step %Q/admin ensure "#{nfd_ns}" project is deleted after scenario/
+  step %Q/admin ensure "nfd-master-server" node_feature_discovery is deleted from the "#{nfd_ns}" project after scenario/
   pod_label = "name=nfd-operator"
   pod_label = "control-plane=controller-manager" if cb.channel > 4.7
   if install_method == 'GUI'
@@ -51,7 +52,7 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
     file_path = "nfd/#{cb.channel}/030_operator_sub.yaml"
     step %Q(I run oc create over ERB test file: #{file_path})
     step %Q(the step should succeed)
-
+    project(nfd_ns)
     # must make sure the nfd-operator pod is `Running`
     step %Q/a pod becomes ready with labels:/, table(%{
       | #{pod_label} |
@@ -79,4 +80,9 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   # go through all nodes and check if there are labels starts with 'feature'
   node_labels = cb.worker_nodes.select {|w| w.labels.select {|n| n.start_with? 'feature'}}
   raise "Node labled check failed" unless node_labels.count > 0
+  step %Q/I switch to cluster admin pseudo user/
+  step %Q/I use the "openshift-nfd" project/
+
+  logger.info("Check nfd resource exists...")
+  raise "NodeFeatureDiscovery resource does not exists" unless node_feature_discovery('nfd-master-server').exists?
 end

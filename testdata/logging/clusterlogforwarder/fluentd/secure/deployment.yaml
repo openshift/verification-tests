@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: "fluentdserver"
-        image: "quay.io/openshifttest/fluentd:multiarch@sha256:fd0c0e76fb693eb3b56f7d5b1936deaea27733882047260ad65169e16085c196"
+        image: "quay.io/openshifttest/fluentd@sha256:fd0c0e76fb693eb3b56f7d5b1936deaea27733882047260ad65169e16085c196"
         imagePullPolicy: "IfNotPresent"
         ports:
         - containerPort: 24224

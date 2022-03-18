@@ -3,10 +3,12 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-10805
   @smoke
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @disconnected @connected
   Scenario: Consume ConfigMap in environment variables
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -40,10 +42,12 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-11255
   @smoke
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @disconnected @connected
   Scenario: Consume ConfigMap via volume plugin
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -85,10 +89,12 @@ Feature: configMap
 
   # @author chezhang@redhat.com
   # @case_id OCP-11572
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @disconnected @connected
   Scenario: Perform CRUD operations against a ConfigMap resource
     Given I have a project
     Given I obtain test data file "configmap/configmap-example.yaml"

@@ -608,6 +608,7 @@ check_status_card_health_item_text:
   element:
     selector:
       xpath: //span[contains(@class,'co-status-card__health-item-text')]/following::div[contains(.,'<status_text>')]
+    timeout: 40
 check_view_all_for_operators:
   params:
     text: View all
@@ -646,7 +647,7 @@ check_insights_popover_info_when_available:
 check_insights_popover_info_when_unavailable:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-status-popup__section') and contains(.,'Temporary unavailable')]
+      xpath: //div[contains(@class,'co-status-popup__section') and contains(.,'isabled')]
   - selector:
       xpath: //a[contains(@class,'co-external-link') and contains(@href,'support/remote_health_monitoring/using-insights-to-identify-issues-with-your-cluster.html')]
 check_insights_status_when_available:
@@ -790,6 +791,7 @@ check_no_errors_in_charts:
   - selector:
       xpath: //div[contains(text(),'No datapoints found')]
     missing: true
+    timeout: 120
 check_monitoring_dashboard_card:
   element:
     selector:

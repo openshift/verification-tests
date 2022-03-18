@@ -76,7 +76,7 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   @console
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Make jenkins slave configurable when do jenkinspipeline strategy with maven slave
     Given I have a project
     And I have a jenkins v<version> application
@@ -95,16 +95,20 @@ Feature: jenkins.feature
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
+    @singlenode
+    @noproxy @connected
     Examples:
       | version |
       | 2       | # @case_id OCP-10980
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12773
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: new-app/new-build support for pipeline buildconfigs
     Given I have a project
     When I run the :new_app client command with:
@@ -227,7 +231,7 @@ Feature: jenkins.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-13259
   @console
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Add/update env vars to pipeline buildconfigs using jenkinsfile field
     Given I have a project
     And I have a jenkins v<version> application
@@ -294,6 +298,7 @@ Feature: jenkins.feature
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
+    @connected
     Examples:
       | version |
       | 1       |
@@ -302,10 +307,11 @@ Feature: jenkins.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-15384
   @console
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @noproxy @connected
   Scenario: Jenkins pipeline build with OpenShift Client Plugin Example
     And I have a project
     When I run the :create client command with:
@@ -348,9 +354,11 @@ Feature: jenkins.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-35068
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @noproxy @connected
   Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project
     When I run the :new_app client command with:

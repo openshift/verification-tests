@@ -85,6 +85,8 @@ Feature: Cases to test forward logs to external elasticsearch
     And the expression should be true> JSON.parse(@result[:stdout])['count'] > 0
     """
 
+    @singlenode
+    @4.6
     Examples:
       | scheme | client_auth | file                 |
       | https  | true        | clf-with-secret.yaml | # @case_id OCP-29845
@@ -194,6 +196,6 @@ Feature: Cases to test forward logs to external elasticsearch
 
     Examples:
       | version | scheme | client_auth | username | password | secret_name |
-      | 7.12    | https  | true        | test1    | redhat   | test1       | #@case_id OCP-41807
+      | 7.16    | https  | true        | test1    | redhat   | test1       | #@case_id OCP-41807
       | 6.8     | http   | false       | test2    | redhat   | test2       | #@case_id OCP-41805
       | 6.8     | https  | false       | test4    | redhat   | test4       | #@case_id OCP-41806

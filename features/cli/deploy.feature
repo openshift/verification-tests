@@ -2,10 +2,12 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-12543
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Restart a failed deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -14,6 +16,7 @@ Feature: deployment related features
     Then the step should succeed
     # Wait and make the cancel succeed stably
     And I wait until the status of deployment "hooks" becomes :running
+    Given I wait for the "hooks-1-hook-pre" pod to appear in the project
     When  I run the :rollout_cancel client command with:
       | resource | deploymentConfig   |
       | name     | hooks              |
@@ -36,10 +39,12 @@ Feature: deployment related features
   # @author xxing@redhat.com
   # @case_id OCP-10643
   @smoke
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Manually make deployment
     Given I have a project
     Given I obtain test data file "deployment/manual.json"
@@ -78,10 +83,12 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-11695
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: CLI rollback output to file
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -123,7 +130,7 @@ Feature: deployment related features
       | [tT]ype:\\s+ConfigChange |
 
   # @author xxing@redhat.com
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: CLI rollback two more components of deploymentconfig
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -170,6 +177,8 @@ Feature: deployment related features
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
+    @singlenode
+    @connected
     Examples:
       | change_scaling_settings | change_strategy | changed_val1  | changed_val2       |
       | :false                  | :false          |               |                    | # @case_id OCP-12116
@@ -178,10 +187,12 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-11877
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: CLI rollback with one component
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -225,10 +236,12 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12133
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Can't stop a deployment in Failed status
     Given I have a project
     Given I obtain test data file "deployment/test-stop-failed-deployment.json"
@@ -263,10 +276,12 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12246
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Stop a "Running" deployment
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -290,10 +305,12 @@ Feature: deployment related features
 
   # @author cryan@redhat.com
   # @case_id OCP-10648
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -375,6 +392,8 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-9563
+  @singlenode
+  @connected
   Scenario: A/B Deployment
     Given I have a project
     When I run the :new_app client command with:
@@ -432,10 +451,12 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-9566
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
@@ -540,10 +561,12 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-11939
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: start deployment when the latest deployment is completed
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -605,10 +628,12 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11769
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Start new deployment when deployment running
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -629,10 +654,12 @@ Feature: deployment related features
 
   # @author cryan@redhat.com
   # @case_id OCP-12151
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: When the latest deployment failed auto rollback to the active deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -663,7 +690,7 @@ Feature: deployment related features
       | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/hello-nonexist"}]}}}} |
     Then the step should succeed
     Given the pod named "hooks-2-deploy" becomes present
-    Given I wait up to 100 seconds for the steps to pass:
+    Given I wait up to 200 seconds for the steps to pass:
     """
     And the pod named "hooks-2-deploy" status becomes :failed
     When I get project pods with labels:
@@ -683,10 +710,12 @@ Feature: deployment related features
   # @author yinzhou@redhat.com
   # @case_id OCP-10617
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: DeploymentConfig should allow valid value of resource requirements
     Given I have a project
     Given I obtain test data file "quota/limits.yaml"
@@ -706,6 +735,7 @@ Feature: deployment related features
     Then the step should succeed
     And I wait for the steps to pass:
     """
+    When I get project events
     When I get project pod named "hooks-1-deploy" as YAML
     Then the output should match:
       | \\s+limits:\n\\s+cpu: 30m\n\\s+memory: 150Mi\n   |
@@ -722,10 +752,12 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11221
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -891,10 +923,12 @@ Feature: deployment related features
   # @author haowang@redhat.com
   # @case_id OCP-16443
   @proxy
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
@@ -911,10 +945,12 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-31200
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @singlenode
+  @connected
   Scenario: A/B Deployment for OCP 4.5 or greater
     Given the master version >= "4.5"
     Given I have a project

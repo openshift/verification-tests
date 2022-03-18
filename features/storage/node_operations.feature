@@ -3,7 +3,7 @@ Feature: Node operations test scenarios
   # @author jhou@redhat.com
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Drain a node that has cloud vendor volumes
     Given environment has at least 2 schedulable nodes
     And I have a project
@@ -60,6 +60,7 @@ Feature: Node operations test scenarios
       | cinder         | # @case_id OCP-15276
 
     @upgrade-sanity
+    @disconnected @connected
     Examples:
       | cloud_provider |
       | aws-ebs        | # @case_id OCP-15283

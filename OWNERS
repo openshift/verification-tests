@@ -1,5 +1,4 @@
 approvers:
-  - akostadinov
   - liangxia
   - pruan-rht
   - jhou1
@@ -7,6 +6,7 @@ approvers:
   - gpei
 
 reviewers:
+  - akostadinov
   - dis016
   - JianLi-RH
   - liangxia

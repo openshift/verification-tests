@@ -1,3 +1,0 @@
-{
-  "case_query": "products.KEY:ocp AND type:testcase AND NOT status:inactive AND caseautomation.KEY:automated AND automation_script:cucushift AND NOT upstream.KEY:yes AND env_install_method.KEY:(__all__ ipi) AND env_iaas_cloud_provider.KEY:(aws __all__) AND caseimportance.KEY:(critical high medium) AND NOT tags:(stage_only prod_only) AND version.KEY:4_10"
-}

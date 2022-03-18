@@ -19,9 +19,11 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29746
   @upgrade-check
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @disconnected @connected
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -54,9 +56,11 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29747
   @upgrade-check
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @disconnected @connected
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -79,17 +83,18 @@ Feature: Routing and DNS related scenarios
     # Get the number of worker nodes and scale up router pods
     Given I switch to cluster admin pseudo user
     And I store the number of worker nodes to the :num_workers clipboard
+    And evaluation of `cb.num_workers - 1` is stored in the :num_routers clipboard
     When I run the :scale admin command with:
       | resource | ingresscontroller          |
       | name     | default                    |
-      | replicas | <%= cb.num_workers %>      |
+      | replicas | <%= cb.num_routers %>      |
       | n        | openshift-ingress-operator |
     Then the step should succeed
     Given I use the "openshift-ingress" project
     And I wait up to 180 seconds for the steps to pass:
     """
-    Then the expression should be true> deployment("router-default").current_replicas(cached: false) == <%= cb.num_workers %>
-    And <%= cb.num_workers %> pods become ready with labels:
+    Then the expression should be true> deployment("router-default").current_replicas(cached: false) == <%= cb.num_routers %>
+    And <%= cb.num_routers %> pods become ready with labels:
       | ingresscontroller.operator.openshift.io/deployment-ingresscontroller=default |
     """
 
@@ -97,15 +102,17 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-30501
   @upgrade-check
   @admin
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.6
   @vsphere-ipi @baremetal-ipi
   @vsphere-upi @baremetal-upi
+  @disconnected @connected
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
     And I store the number of worker nodes to the :num_workers clipboard
+    And evaluation of `cb.num_workers - 1` is stored in the :num_routers clipboard
     Given I use the "openshift-ingress" project
-    Then the expression should be true> deployment("router-default").current_replicas(cached: false) == <%= cb.num_workers %>
-    And <%= cb.num_workers %> pods become ready with labels:
+    Then the expression should be true> deployment("router-default").current_replicas(cached: false) == <%= cb.num_routers %>
+    And <%= cb.num_routers %> pods become ready with labels:
       | ingresscontroller.operator.openshift.io/deployment-ingresscontroller=default |
 
 
@@ -113,8 +120,8 @@ Feature: Routing and DNS related scenarios
   @users=upuser1,upuser2
   @admin
   @4.10 @4.9 @4.8
-  @gcp-ipi @azure-ipi
-  @gcp-upi @azure-upi
+  @azure-ipi
+  @azure-upi
   Scenario: upgrade with route shards - prepare
     # Ensure cluster operator ingress is in normal status
     Given I switch to cluster admin pseudo user
@@ -182,9 +189,11 @@ Feature: Routing and DNS related scenarios
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.6
   @gcp-ipi @azure-ipi
   @gcp-upi @azure-upi
+  @singlenode
+  @disconnected @connected
   Scenario: upgrade with route shards
     # Ensure cluster operator ingress is in normal status after upgrade
     Given I switch to cluster admin pseudo user
@@ -214,8 +223,8 @@ Feature: Routing and DNS related scenarios
   @upgrade-prepare
   @users=upuser1,upuser2
   @4.10 @4.9
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Unidling a route work without user intervention - prepare
     Given I switch to first user
     And I run the :new_project client command with:
@@ -234,18 +243,13 @@ Feature: Routing and DNS related scenarios
     When I expose the "service-unsecure" service
     Then the step should succeed
 
-    Given I have a test-client-pod in the project
-    When I execute on the pod:
-      | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
-    Then the step should succeed
-    And the output should contain "Hello-OpenShift web-server-rc"
+    When I wait for a web server to become available via the "service-unsecure" route
+    And the output should contain "Hello-OpenShift"
 
     When I run the :idle client command with:
       | svc_name | service-unsecure |
     Then the step should succeed
     Given I wait for the resource "pod" named "<%= cb.pod_name %>" to disappear within 120 seconds
-    # will recreate test-client-pod in upgrade-check so delete the pod here
-    Given I ensure "hello-pod" pod is deleted
 
     # Check the servcie service-unsecure to see the idle annotation
     And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
@@ -254,20 +258,19 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-45955
   @upgrade-check
   @users=upuser1,upuser2
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: Unidling a route work without user intervention
     # Check the servcie service-unsecure to see the idle annotation is still intact
     Given I switch to first user
     Given I use the "ocp45955" project
     And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
-
-    Given I have a test-client-pod in the project
-    When I execute on the pod:
-      | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
-    Then the step should succeed
-    And the output should contain "Hello-OpenShift web-server-rc"
+    
+    Given I open web server via the "service-unsecure" route
+    And I wait for a web server to become available via the "service-unsecure" route
+    And the output should contain "Hello-OpenShift"
 
     # Check the servcie service-unsecure to see the idle annotation got removed
     And the expression should be true> !service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false)

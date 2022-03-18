@@ -2,7 +2,7 @@ Feature: CloudCredentialOperator components upgrade tests
   # @author lwan@redhat.com
   @upgrade-prepare
   @admin
-  @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Cluster operator cloud-credential should be available after upgrade - prepare
@@ -26,9 +26,10 @@ Feature: CloudCredentialOperator components upgrade tests
   # @case_id OCP-34260
   @upgrade-check
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: Cluster operator cloud-credential should be available after upgrade
     # Check cloud-credential operator version after upgraded
     Given the "cloud-credential" operator version matches the current cluster version

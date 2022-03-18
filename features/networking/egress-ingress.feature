@@ -4,10 +4,11 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-11639
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: EgressNetworkPolicy will not take effect after delete it
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -46,10 +47,11 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-13502
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: Apply different egress network policy in different projects
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -113,7 +115,7 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-13507
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -156,7 +158,7 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-13509
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -189,10 +191,11 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-15005
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @noproxy @connected
   Scenario: Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -248,10 +251,11 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-15017
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario: Add nodes local IP address to OVS rules for egressnetworkpolicy
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -301,9 +305,10 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-13506
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @connected
   Scenario: Update different dnsname in same egress network policy
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -338,7 +343,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-19615
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Iptables should be updated with correct endpoints when egress DNS policy was used
@@ -389,10 +394,11 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33530
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @noproxy @connected
   Scenario: [SDN-682] EgressFirewall allows traffic to destination ports
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -427,10 +433,11 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33531
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @connected
   Scenario:  [SDN-682] EgressFirewall rules take effect in order
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -450,9 +457,10 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33539
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @noproxy @connected
   Scenario:  [SDN-682] EgressFirewall policy should not take effect for traffic between pods and pods to service
     Given I have a project
     # Create EgressFirewall policy to deny all outbound traffic
@@ -486,9 +494,10 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33565
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @noproxy @connected
   Scenario: [SDN-682] EgressFirewall policy take effect for multiple port
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -514,9 +523,10 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-35341
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @noproxy @connected
   Scenario: EgressNetworkPolicy maxItems is 1000
     Given I have a project
     Given I obtain test data file "networking/egressnetworkpolicy/egressnetworkpolicy_1000.yaml"
@@ -538,10 +548,11 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37491
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @noproxy @connected
   Scenario: [SDN-1181] EgressFirewall allows traffic to destination dnsName
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -571,10 +582,11 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37495
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @noproxy @connected
   Scenario: [SDN-1181] EgressFirewall denys traffic to destination dnsName
     Given I have a project
 
@@ -605,9 +617,10 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37496
   @admin
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @noproxy @connected
   Scenario: [SDN-1181] Edit EgressFirewall should take effect
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -639,10 +652,11 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-41179
   @admin
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @noproxy @connected
   Scenario: [bug1947917] Egress Firewall should reliably apply firewall rules
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -680,6 +694,7 @@ Feature: Egress-ingress related networking scenarios
   @admin
   @4.10 @4.9    
   @network-ovnkubernetes	
+  @singlenode
   Scenario: [bug2000057] No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted
     Given the env is using "OVNKubernetes" networkType
     And I have a project

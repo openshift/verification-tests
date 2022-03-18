@@ -22,9 +22,11 @@ Feature: Jenkins feature upgrade test
   @upgrade-check
   @users=upuser1,upuser2
   @console
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.6
   @vsphere-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @gcp-upi @azure-upi @aws-upi
+  @singlenode
+  @noproxy @connected
   Scenario: Jenkins feature upgrade test
     Given I switch to the first user
     When I use the "jenkins-upgrade" project

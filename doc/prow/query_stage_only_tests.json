@@ -1,3 +1,0 @@
-{
-  "case_query": "products.KEY:ocp AND type:testcase AND tags:stage_only AND caseautomation.KEY:automated AND automation_script:cucushift"
-}
