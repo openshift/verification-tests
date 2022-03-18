@@ -3,7 +3,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-38846
   @admin
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @network-ovnkubernetes @ipsec
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -49,7 +49,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-38845
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @network-ovnkubernetes @ipsec
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -79,7 +79,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-37591
   @admin
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @network-ovnkubernetes @ipsec
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -96,7 +96,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-39216
   @admin
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @network-ovnkubernetes @ipsec
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -118,7 +118,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-37590
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @network-ovnkubernetes @ipsec
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -135,7 +135,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-37392
   @admin
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @network-ovnkubernetes @ipsec
   @vsphere-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi

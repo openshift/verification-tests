@@ -35,6 +35,8 @@ Feature: creating 'apps' with CLI
   # @case_id OCP-12399
   @singlenode
   @noproxy @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Create an application from source code
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"

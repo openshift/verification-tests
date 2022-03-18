@@ -166,7 +166,7 @@ Feature: change the policy of user/service account
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10447
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @aws-ipi
   @aws-upi
   @singlenode
@@ -215,7 +215,7 @@ Feature: change the policy of user/service account
   # @author chaoyang@redhat.com
   # @case_id OCP-10448
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @aws-ipi
   @aws-upi
   @singlenode
@@ -387,7 +387,7 @@ Feature: change the policy of user/service account
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10465
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -450,7 +450,7 @@ Feature: change the policy of user/service account
   # @author chuyu@redhat.com
   # @case_id OCP-9552
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode

@@ -4,7 +4,7 @@ Feature: ipv6 dual stack cluster test scenarios
   # @case_id OCP-40581
   @admin
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   @disconnected @connected

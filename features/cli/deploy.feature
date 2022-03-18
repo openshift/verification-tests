@@ -394,6 +394,8 @@ Feature: deployment related features
   # @case_id OCP-9563
   @singlenode
   @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: A/B Deployment
     Given I have a project
     When I run the :new_app client command with:

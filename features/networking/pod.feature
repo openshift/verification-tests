@@ -144,7 +144,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23890
   @admin
   @disconnected
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
@@ -180,7 +180,7 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23891
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
@@ -201,7 +201,7 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23893
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
@@ -265,7 +265,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-21846
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -314,7 +314,7 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26822
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -402,6 +402,8 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-25294
   @admin
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Pod should be accesible via node ip and host port
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
@@ -465,7 +467,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-26014
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -564,7 +566,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-22034
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the unused ip are released after node reboot

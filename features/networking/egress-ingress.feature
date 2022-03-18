@@ -305,7 +305,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-13506
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @connected
@@ -343,7 +343,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-19615
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Iptables should be updated with correct endpoints when egress DNS policy was used
@@ -457,7 +457,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33539
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
@@ -494,7 +494,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33565
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
@@ -523,7 +523,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-35341
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
@@ -617,7 +617,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37496
   @admin
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
@@ -692,7 +692,7 @@ Feature: Egress-ingress related networking scenarios
   # @author jechen@redhat.com
   # @case_id OCP-44940
   @admin
-  @4.10 @4.9    
+  @4.11 @4.10 @4.9    
   @network-ovnkubernetes	
   @singlenode
   Scenario: [bug2000057] No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted

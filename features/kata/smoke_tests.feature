@@ -2,7 +2,7 @@ Feature: kata smoke tests
   # @author pruan@redhat.com
   # @case_id OCP-41263
   @admin
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @baremetal-upi @azure-upi
   @flaky

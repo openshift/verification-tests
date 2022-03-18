@@ -53,7 +53,7 @@ Feature: Testing the isolation during build scenarios
   # @author zzhao@redhat.com
   # @bug_id 1487652
   @inactive
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Build-container is constrained to access other projects pod for networkpolicy plugin
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"

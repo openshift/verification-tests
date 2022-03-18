@@ -4,7 +4,7 @@ Feature: Node proxy configuration tests
   @admin
   @flaky
   @proxy
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Proxy config should be applied to kubelet and crio
     Given I use the "default" project
     Given I switch to cluster admin pseudo user

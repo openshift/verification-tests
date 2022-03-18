@@ -44,11 +44,12 @@ Feature: Logging upgrading related features
   @destructive
   @upgrade-check
   @users=upuser1,upuser2
-  @4.11 @4.10 @4.9 @4.8 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
+  @upgrade
   Scenario: Cluster logging checking during cluster upgrade
     Given I switch to the first user
     Given I create a project with non-leading digit name

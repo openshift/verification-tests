@@ -44,10 +44,11 @@ Feature: Egress compoment upgrade testing
   # @case_id OCP-44315
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
+  @upgrade
   Scenario: Check egressfirewall is functional post upgrade
     Given I switch to cluster admin pseudo user
     And I save egress type to the clipboard
@@ -127,10 +128,11 @@ Feature: Egress compoment upgrade testing
   @admin
   @upgrade-check
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
+  @upgrade
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
@@ -235,10 +237,11 @@ Feature: Egress compoment upgrade testing
   @admin
   @flaky
   @upgrade-check
-  @4.11 @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
+  @upgrade
   Scenario: Check sdn egressip is functional post upgrade
     Given I run the :get admin command with:
       | resource      | hostsubnet                                  |

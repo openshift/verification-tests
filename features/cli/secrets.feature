@@ -269,6 +269,8 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11311
   @smoke
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Secret volume should update when secret is updated
     Given I have a project
     Given I obtain test data file "secrets/secret1.json"

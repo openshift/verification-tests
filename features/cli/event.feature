@@ -4,6 +4,8 @@ Feature: Event related scenarios
   # @case_id OCP-10751
   @admin
   @disconnected @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: check event compressed in kube
     Given I have a project
     Given I obtain test data file "quota/quota_template.yaml"

@@ -8,6 +8,8 @@ Feature: Kibana related features
   @destructive
   @commonlogging
   @disconnected @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Show logs on Kibana web console according to different user role
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -61,7 +63,7 @@ Feature: Kibana related features
   @console
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -117,7 +119,7 @@ Feature: Kibana related features
   @console
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -180,6 +182,8 @@ Feature: Kibana related features
   @destructive
   @commonlogging
   @singlenode
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Kibana logout function should log off user
     Given the master version < "4.5"
     Given I switch to the first user
@@ -226,9 +230,10 @@ Feature: Kibana related features
   @console
   @commonlogging
   @disconnected @connected
-  @4.11 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
   Scenario: Logs can be redirected from Webconsole to kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name

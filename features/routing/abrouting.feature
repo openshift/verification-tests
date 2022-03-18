@@ -180,6 +180,8 @@ Feature: Testing abrouting
   @4.7 @4.6
   @singlenode
   @noproxy @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: The edge route with multiple service will set load balance policy to RoundRobin by default
     #Create pod/service/route
     Given I have a project
