@@ -7,6 +7,8 @@ Feature: collector related tests
   @destructive
   @commonlogging
   @disconnected @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: All nodes logs are sent to Elasticsearch
     Given the master version == "4.1"
     Given evaluation of `cluster_logging('instance').fluentd_ready_pods.map(&:ip)` is stored in the :collector_pod_ips clipboard
@@ -47,6 +49,8 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: All nodes logs had sent logs to Elasticsearch
     Given the master version >= "4.2"
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
@@ -106,6 +110,8 @@ Feature: collector related tests
     """
     @singlenode
     @disconnected @connected
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
       | index_name  |
       | .operations | # @case_id OCP-25365
@@ -115,6 +121,8 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: The Container logs metadata check
     Given the master version == "4.1"
     Given I switch to the first user
@@ -153,7 +161,9 @@ Feature: collector related tests
   @commonlogging
   @singlenode
   @disconnected @connected
-  @4.6
+  @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: The container logs metadata check
     Given the master version >= "4.2"
     Given I switch to the first user
@@ -235,7 +245,9 @@ Feature: collector related tests
   @admin
   @destructive
   @singlenode
-  @4.6
+  @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Fluentd should write it's own logs to stdout and exclude them from collection
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     When I create clusterlogging instance with:

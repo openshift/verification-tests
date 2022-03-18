@@ -70,6 +70,8 @@ Feature: jenkins.feature
       | <%= project.name %>/nodejs-010-rhel7     |
       | <%= project.name %>/origin-nodejs-sample |
       | prod                                     |
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
       | ver |
       | 2   | # @case_id OCP-11369
@@ -338,6 +340,7 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-25401
+  @inactive
   Scenario: Create jenkins application directly
     Given I have a project
     When I run the :new_app client command with:
@@ -354,7 +357,7 @@ Feature: jenkins.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-35068
   @admin
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode

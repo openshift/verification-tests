@@ -179,6 +179,8 @@ Feature: oc idle
   # @author minmli@redhat.com
   # @case_id OCP-10941
   @disconnected @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Idling service with dc
     Given I have a project
     Given I obtain test data file "rc/idling-echo-server.yaml"
@@ -246,6 +248,8 @@ Feature: oc idle
   # @author chezhang@redhat.com
   # @case_id OCP-11345
   @disconnected @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Idling service with rc
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"

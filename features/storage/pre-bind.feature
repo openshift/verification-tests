@@ -3,7 +3,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10107
   @admin
-  @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
   Scenario: Prebound pv is availabe due to requested pvc status is bound
@@ -29,7 +29,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-10109
   @admin
-  @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
   Scenario: Prebound pv is availabe due to mismatched accessmode with requested pvc
@@ -54,7 +54,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-10111
   @admin
-  @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
   Scenario: Prebound pvc is pending due to requested pv status is bound
@@ -79,7 +79,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-10113
   @admin
-  @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
   Scenario: Prebound PVC is pending due to mismatched accessmode with requested PV
@@ -103,7 +103,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-10114
   @admin
-  @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
   Scenario: Prebound PVC is pending due to mismatched volume size with requested PV
@@ -127,7 +127,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-9941
   @admin
-  @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
   Scenario: PV and PVC bound successfully when pvc created prebound to pv
@@ -154,7 +154,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-9940
   @admin
-  @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
   Scenario: PV and PVC bound successfully when pv created prebound to pvc
@@ -179,7 +179,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @author lxia@redhat.com
   @admin
-  @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Prebound pv/pvc is availabe/pending due to requested pvc/pv prebound to other pv/pvc
     Given I have a project
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"

@@ -699,6 +699,7 @@ Feature: build 'apps' with CLI
   # @case_id OCP-10944
   @proxy
   @4.10 @4.9
+  @inactive
   Scenario: Simple error message return when no value followed with oc build-logs
     Given I have a project
     When I run the :logs client command with:

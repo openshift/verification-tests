@@ -106,7 +106,7 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-11753
-  @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @disconnected @connected
   Scenario: Pod should be immediately deleted if it's not scheduled even if graceful termination period is set

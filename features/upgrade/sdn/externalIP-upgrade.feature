@@ -52,6 +52,7 @@ Feature: SDN externalIP compoment upgrade testing
   @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @upgrade
   Scenario: Check the externalIP works well after upgrade
     Given I switch to cluster admin pseudo user
     Given I store the schedulable nodes in the :nodes clipboard

@@ -4,6 +4,7 @@ Feature: Cases to test forward logs to external elasticsearch
   # @author qitang@redhat.com
   @admin
   @destructive
+  @4.7 @4.6
   Scenario Outline: ClusterLogForwarder: Forward logs to non-clusterlogging-managed elasticsearch
     Given I switch to the first user
     And I have a project
@@ -86,7 +87,8 @@ Feature: Cases to test forward logs to external elasticsearch
     """
 
     @singlenode
-    @4.6
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
       | scheme | client_auth | file                 |
       | https  | true        | clf-with-secret.yaml | # @case_id OCP-29845

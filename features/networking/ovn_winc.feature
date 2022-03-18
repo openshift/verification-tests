@@ -4,7 +4,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   # @case_id OCP-26360
   @admin
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @azure-ipi @aws-ipi
   Scenario: Ensure Pods and Service communication across window and linux nodes
     Given the env has hybridOverlayConfig enabled

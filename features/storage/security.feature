@@ -4,7 +4,7 @@ Feature: storage security check
   # @author piqin@redhat.com
   @admin
   @smoke
-  @4.11 @4.10 @4.9 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: [origin_infra_20] volume security testing
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
