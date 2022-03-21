@@ -3,9 +3,10 @@ Feature: Egress compoment upgrade testing
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @noproxy @connected
   Scenario: Check egressfirewall is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
@@ -72,7 +73,7 @@ Feature: Egress compoment upgrade testing
   @admin
   @upgrade-prepare
   @network-ovnkubernetes
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -169,7 +170,7 @@ Feature: Egress compoment upgrade testing
   @admin
   @flaky
   @upgrade-prepare
-  @4.10 @4.9
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci

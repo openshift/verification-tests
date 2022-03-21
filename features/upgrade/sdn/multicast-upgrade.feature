@@ -3,7 +3,7 @@
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   Scenario: Check the multicast works well after upgrade - prepare

@@ -3,9 +3,11 @@ Feature: Node components upgrade tests
   @upgrade-prepare
   @admin
   @long-duration
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @disconnected @connected
   Scenario: Make sure nodeConfig is not changed after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :label admin command with:
@@ -71,4 +73,3 @@ Feature: Node components upgrade tests
       | "imageMinimumGCAge": "5m0s"       |
       | "imageGCHighThresholdPercent": 80 |
       | "maxPods": 240                    |
-

@@ -4,7 +4,7 @@ Feature: IPsec upgrade scenarios
   @admin
   @upgrade-prepare
   @network-ovnkubernetes @ipsec
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade - prepare

@@ -1,6 +1,7 @@
 Feature: Machine-api components upgrade tests
   @upgrade-prepare
-  @4.10 @4.9 @4.8 @4.7
+  @disconnected @connected
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario Outline: Cluster operator should be available after upgrade - prepare
@@ -18,6 +19,7 @@ Feature: Machine-api components upgrade tests
   # @author huliu@redhat.com
   @upgrade-check
   @admin
+  @disconnected @connected
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
@@ -34,15 +36,13 @@ Feature: Machine-api components upgrade tests
 
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-    @disconnected @connected
-    @upgrade
   Examples:
     | cluster_operator           |
     | "machine-api"              | # @case_id OCP-22712
     | "cluster-autoscaler"       | # @case_id OCP-27664
 
   @upgrade-prepare
-  @4.10 @4.9
+  @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario:  Cloud-controller-manager cluster operator should be available after upgrade - prepare
@@ -71,7 +71,7 @@ Feature: Machine-api components upgrade tests
 
   @upgrade-prepare
   @admin
-  @4.10 @4.9
+  @4.10 @4.9 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: There should be no pending or firing alerts for machine-api operators - prepare
@@ -99,7 +99,8 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @admin
   @destructive
-  @4.10 @4.9 @4.8 @4.7
+  @disconnected @connected
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Scale up and scale down a machineSet after upgrade - prepare
     Given the expression should be true> "True" == "True"
@@ -132,7 +133,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @admin
   @destructive
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Spot/preemptible instances should not block upgrade - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -224,7 +225,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @destructive
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
@@ -292,7 +293,7 @@ Feature: Machine-api components upgrade tests
 
   @upgrade-prepare
   @admin
-  @4.10 @4.9 @4.8 @4.7
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Registering Components delays should not be more than liveliness probe - prepare 
     Given the expression should be true> "True" == "True"
@@ -319,4 +320,3 @@ Feature: Machine-api components upgrade tests
     And I save the output to file> logtime.txt 
     Given I get time difference using "Registering Components." and "Starting the Cmd." in logtime.txt file
     Then the step should succeed
-
