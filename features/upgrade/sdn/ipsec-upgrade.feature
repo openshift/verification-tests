@@ -119,6 +119,6 @@ Feature: IPsec upgrade scenarios
        | name=network-pod0 |
     #Following will confirm node-node encryption
     When admin executes on the "<%= cb.hostnw_pod_worker1 %>" pod:
-       | sh | -c | timeout  --preserve-status 60 tcpdump -c 2 -i br-ex "esp and less 40" |
+       | sh | -c | timeout  --preserve-status 60 tcpdump -c 2 -i br-ex "esp and less 1500" |
     Then the step should succeed
     And the output should not contain "0 packets captured"
