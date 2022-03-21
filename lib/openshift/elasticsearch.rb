@@ -96,8 +96,8 @@ module BushSlicer
     end
 
     def cluster_health(user: nil, cached: false, quiet: false)
-      return cluster_status(user: user, cached: true, quiet: quiet).dig('status') || 
-        status(user: user, cached: cached, quiet: quiet).dig('clusterHealth')   
+      return cluster_status(user: user, cached: true, quiet: quiet).dig('status') ||
+        status(user: user, cached: cached, quiet: quiet).dig('clusterHealth')
     end
 
     def active_primary_shards(user: nil, cached: false, quiet: false)
@@ -158,6 +158,38 @@ module BushSlicer
 
     def es_master_failed_pod_names(user: nil, cached: false, quiet: true)
       return es_master_pods(user: user, cached: cached, quiet: quiet)['failed']
+    end
+
+    def es_client_pods(user: nil, cached: false, quiet: true)
+      return es_pods(user: user, cached: cached, quiet: quiet)['client']
+    end
+
+    def es_client_ready_pod_names(user: nil, cached: false, quiet: true)
+      return es_client_pods(user: user, cached: cached, quiet: quiet)['ready']
+    end
+
+    def es_client_not_ready_pod_names(user: nil, cached: false, quiet: true)
+      return es_client_pods(user: user, cached: cached, quiet: quiet)['notReady']
+    end
+
+    def es_client_failed_pod_names(user: nil, cached: false, quiet: true)
+      return es_client_pods(user: user, cached: cached, quiet: quiet)['failed']
+    end
+
+    def es_data_pods(user: nil, cached: false, quiet: true)
+      return es_pods(user: user, cached: cached, quiet: quiet)['data']
+    end
+
+    def es_data_ready_pod_names(user: nil, cached: false, quiet: true)
+      return es_data_pods(user: user, cached: cached, quiet: quiet)['ready']
+    end
+
+    def es_data_not_ready_pod_names(user: nil, cached: false, quiet: true)
+      return es_data_pods(user: user, cached: cached, quiet: quiet)['notReady']
+    end
+
+    def es_data_failed_pod_names(user: nil, cached: false, quiet: true)
+      return es_data_pods(user: user, cached: cached, quiet: quiet)['failed']
     end
 
   end

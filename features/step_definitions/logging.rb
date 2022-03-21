@@ -719,9 +719,9 @@ Given /^I upgrade the operator with:$/ do | table |
       end
       # wait for the ES cluster to be ready
       success = wait_for(600, interval: 10) {
-        elasticsearch('elasticsearch').cluster_health == "green" &&
-        (elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"].empty? ||
-        elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"]["scheduledUpgrade"].nil?)
+        esPods = BushSlicer::Pod.get_labeled("component=elasticsearch", project: project, user: user, quiet: true).map(&:name)
+        readyPods = (elasticsearch('elasticsearch').es_master_ready_pod_names + elasticsearch('elasticsearch').es_client_ready_pod_names(cached: true) + elasticsearch('elasticsearch').es_data_ready_pod_names(cached:true)).uniq
+        elasticsearch('elasticsearch').cluster_health == "green" && (esPods - readyPods).blank? && (readyPods - esPods).blank?
       }
       raise "ES cluster isn't in a good status" unless success
       # check pvc count
