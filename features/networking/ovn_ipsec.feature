@@ -41,7 +41,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
     #Make sure you got some packets captured at the receiver node.The socat we used earlier will dump any ESP packets less that 40 in length (these are invalid in our clusters). Checking limited number
     #of packets say 1 or 2 should suffice as that would imply the successful communication of ESP traffic across the nodes
     When admin executes on the "<%= cb.hello_pod_worker1 %>" pod:
-       | bash | -c | timeout  --preserve-status 60 tcpdump -c 2 -i br-ex "esp and less 40" |
+       | bash | -c | timeout  --preserve-status 60 tcpdump -c 2 -i br-ex "esp and less 1500" |
     Then the step should succeed
     And the output should not contain "0 packets captured"
 

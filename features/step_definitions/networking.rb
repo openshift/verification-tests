@@ -1324,7 +1324,10 @@ Given /^the IPsec is enabled on the cluster$/ do
   _admin = admin
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
   default_network = network_operator.default_network(user: admin)
-  raise "env doesn't have IPSec enabled" unless default_network["ipsecConfig"]
+  unless default_network["ipsecConfig"]
+     logger.info "env doesn't have IPSec enabled"
+     skip_this_scenario
+  end 
 end
 
 Given /^the node's active nmcli connection is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
