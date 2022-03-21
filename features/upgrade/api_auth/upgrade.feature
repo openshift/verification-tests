@@ -265,6 +265,7 @@ Feature: apiserver and auth related upgrade check
       | f | headless-services.yaml |
     Then the step should succeed
     Given I use the "service-ca-upgrade" project
+    And I wait for the "test-serving-cert" secret to appear
     And I run the :extract client command with:
       | resource | secret/test-serving-cert |
       | confirm  | true                     |
@@ -291,9 +292,9 @@ Feature: apiserver and auth related upgrade check
   @upgrade
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
     Given the master version >= "4.8"
-    Given I switch to the first user
+    Given I switch to cluster admin pseudo user
     Given I use the "service-ca-upgrade" project
-    And I run the :extract client command with:
+    When I run the :extract client command with:
       | resource | secret/test-serving-cert |
       | confirm  | true                     |
     Then the step should succeed
