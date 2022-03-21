@@ -3,9 +3,11 @@ Feature: web console related upgrade check
   @console
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.10 @4.9 @4.8
+  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @singlenode
+  @disconnected @connected
   Scenario: check console accessibility - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
