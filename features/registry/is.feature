@@ -103,7 +103,7 @@ Feature: Testing imagestream
     Given default image registry route is stored in the :registry_hostname clipboard
     Given certification for default image registry is stored to the :reg_crt_name clipboard
     When I run the :new_app_as_dc client command with:
-      | app_repo | ruby~https://github.com/sclorg/ruby-ex.git |
+      | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     And the "ruby-ex-1" build was created
     And the "ruby-ex-1" build completes
@@ -164,7 +164,7 @@ Feature: Testing imagestream
 
     Given I create a new project
     When I run the :new_app client command with:
-      | app_repo | ruby~https://github.com/sclorg/ruby-ex.git |
+      | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     And the "ruby-ex-1" build was created
     And the "ruby-ex-1" build completes

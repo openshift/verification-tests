@@ -15,7 +15,7 @@ Feature: remote registry related scenarios
       | user name       | system:anonymous |
     Then the step should succeed
     When I run the :new_build client command with:
-      | app_repo | ruby~https://github.com/sclorg/ruby-ex.git |
+      | app_repo | registry.redhat.io/ubi8/ruby-30:latest~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     And the "ruby-ex-1" build was created
     And the "ruby-ex-1" build completes
@@ -45,7 +45,7 @@ Feature: remote registry related scenarios
     Given I create a new project
     And evaluation of `project.name` is stored in the :u1p2 clipboard
     When I run the :new_build client command with:
-      | app_repo | ruby~https://github.com/sclorg/ruby-ex.git |
+      | app_repo | registry.redhat.io/ubi8/ruby-30:latest~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     And the "ruby-ex-1" build was created
     Then the "ruby-ex-1" build completes
