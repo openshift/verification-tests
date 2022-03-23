@@ -205,6 +205,7 @@ Feature: Storage upgrade tests
   @aws-upi
   @singlenode
   @connected
+  @inactive
   Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot - prepare
     Given the master version >= "4.4"
 
@@ -323,6 +324,7 @@ Feature: Storage upgrade tests
   @singlenode
   @connected
   @upgrade
+  @inactive
   Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
     Given I switch to cluster admin pseudo user
 
