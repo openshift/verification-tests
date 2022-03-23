@@ -7,8 +7,8 @@ Feature: Logging upgrading related features
   @upgrade-prepare
   @users=upuser1,upuser2
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   Scenario: Cluster logging checking during cluster upgrade - prepare
@@ -47,8 +47,8 @@ Feature: Logging upgrading related features
   @upgrade-check
   @users=upuser1,upuser2
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   @upgrade
