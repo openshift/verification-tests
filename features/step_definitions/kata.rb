@@ -117,7 +117,8 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
   kata_ns ||= "openshift-sandboxed-containers-operator"
   kata_config_name = "example-kataconfig"
   step %Q/I store master major version in the :master_version clipboard/
-  raise "Kata operator OLM installation only supported for OCP >= 4.8" unless cb.master_version >= "4.8"
+  minor_version = cb.master_version.split('.').last 
+  raise "Kata operator OLM installation only supported for OCP >= 4.8" unless minor_version.to_i >= 8
   install_method ||= 'CLI'
   # first check pre-req
   step %Q/I switch to cluster admin pseudo user/
