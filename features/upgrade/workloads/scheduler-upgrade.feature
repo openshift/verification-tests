@@ -3,6 +3,7 @@ Feature: scheduler with custom policy upgrade check
   @upgrade-prepare
   @admin
   @destructive
+  @flaky
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -48,6 +49,7 @@ Feature: scheduler with custom policy upgrade check
   @upgrade-check
   @admin
   @destructive
+  @flaky
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
