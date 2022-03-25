@@ -117,13 +117,19 @@ Given /^I perform the HTTP request on the ES pod(?: with labels #{QUOTED})?:$/ d
 end
 
 Given /^I check the #{QUOTED} prometheus rule in the #{QUOTED} project on the prometheus server$/ do | prometheus_rule_name, project_name |
+  filename = "#{project_name}-#{prometheus_rule_name}.yaml"
+  if env.version_ge('4.10', user: user)
+    @result = admin.cli_exec(:get, resource: "prometheusrule", resource_name: prometheus_rule_name, n: project_name, output: "jsonpath={.metadata.uid}")
+    uid = @result[:stdout]
+    filename = "#{project_name}-#{prometheus_rule_name}-#{uid}.yaml"
+  end
   step %Q/I run the :exec client command with:/, table(%{
-    | n                | openshift-monitoring                                                                          |
-    | container        | prometheus                                                                                    |
-    | pod              | prometheus-k8s-0                                                                              |
-    | oc_opts_end      |                                                                                               |
-    | exec_command     | cat                                                                                           |
-    | exec_command_arg | /etc/prometheus/rules/prometheus-k8s-rulefiles-0/#{project_name}-#{prometheus_rule_name}.yaml |
+    | n                | openshift-monitoring                                         |
+    | container        | prometheus                                                   |
+    | pod              | prometheus-k8s-0                                             |
+    | oc_opts_end      |                                                              |
+    | exec_command     | cat                                                          |
+    | exec_command_arg | /etc/prometheus/rules/prometheus-k8s-rulefiles-0/#{filename} |
   })
   step %Q/the step should succeed/
 end
