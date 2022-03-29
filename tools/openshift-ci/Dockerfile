@@ -5,6 +5,7 @@ LABEL maintainer="OCP QE Team"
 USER root
 
 RUN set -x && \
+    sed -i 's/skip_if_unavailable=.*/skip_if_unavailable=True/' /etc/yum.conf && \
     yum -y update && \
     INSTALL_PKGS="bsdtar git openssh-clients httpd-tools rsync" && \
     yum install -y $INSTALL_PKGS && \
