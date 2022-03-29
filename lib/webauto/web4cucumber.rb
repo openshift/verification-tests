@@ -162,7 +162,7 @@ require_relative 'chrome_extension'
         if @selenium_url
           @browser = Watir::Browser.new :chrome, :http_client=>client, options: options, url: @selenium_url
         else
-          options["goog:chromeOptions"][:switches] = chrome_switches
+          options["goog:chromeOptions"][:args] = chrome_switches
           @browser = Watir::Browser.new :chrome, :http_client=>client, options: options
         end
         logger.info "#{browser.driver.capabilities[:browser_name]} version is #{browser.driver.capabilities[:browser_version]}"
