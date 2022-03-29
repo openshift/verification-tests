@@ -84,6 +84,20 @@ Feature: Testing registry
       | a            | <%= cb.dockercfg_file %>                                                                                |
       | insecure     | true                                                                                                    |
     And the step should succeed
+    Then I run the :image_info client command with:
+      | image | <%= cb.integrated_reg_ip %>/<%= project.name %>/myimage1:v1        |
+      | a            | <%= cb.dockercfg_file %>                                                                                |
+      | insecure     | true                                                                                                    |
+    And the step should succeed
+    Then I run the :image_mirror client command with:
+      | source_image | quay.io/openshifttest/base-alpine:multiarch=<%= cb.integrated_reg_ip %>/<%= project.name %>/myimage3:v1        |
+      | dest_image   | quay.io/openshifttest/alpine:multiarch=<%= cb.integrated_reg_ip %>/<%= project.name %>/myimage4:v1 |
+      | a            | <%= cb.dockercfg_file %>                                                                                |
+      | insecure     | true                                                                                                    |
+      | filter_by_os | .* |
+    And the step should succeed
+    Then I run the :image_info client command with:
+    And the output should match:
     And the output should match:
       | Mirroring completed in |
     Given the "myimage1" image stream was created
