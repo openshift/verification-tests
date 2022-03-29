@@ -103,30 +103,35 @@ require_relative 'chrome_extension'
           )
         end
       end
-      client = Selenium::WebDriver::Remote::Http::Default.new
+      client = Watir::HttpClient.new
       client.open_timeout = 180
       client.read_timeout = 600 # ff legacy vs `I have a jenkins v2 application`
       headless
       # Selenium::WebDriver.logger.level = :debug
+      # Watir.logger.level = :debug
       if @browser_type == :firefox
         logger.info "Launching Firefox Marionette/Geckodriver"
         raise "auth proxy not implemented for Firefox" if proxy_pass
-        caps = Selenium::WebDriver::Remote::Capabilities.firefox accept_insecure_certs: true
+        browser_opts = {
+          browser_name: 'firefox',
+          accept_insecure_certs: true,
+          "moz:webdriverClick": true
+        }
+        browser_opts["moz:firefoxOptions"] = {}
         if Integer === @scroll_strategy
-          caps[:element_scroll_behavior] = @scroll_strategy
+          browser_opts["moz:firefoxOptions"][:element_scroll_behavior] = @scroll_strategy
         end
-        options = Selenium::WebDriver::Firefox::Options.new profile: firefox_profile #, binary: "/home/user/local/firefox-52-esr/firefox"
-        # set any additional moz:firefoxOptions in the following way
-        # options.add_option :log, {"level"=> "trace"}
-
-        # https://bugzilla.mozilla.org/show_bug.cgi?id=1321516#c110
-        caps["moz:webdriverClick"] = true
 
         # This is actually a shortcut for trace logging
         # this also needs debug webdriver logging enabled above to work
         # options.log_level = 'trace'
-
-        @browser = Watir::Browser.new :firefox, :http_client=>client, desired_capabilities: caps, options: options
+        if @selenium_url
+          @browser = Watir::Browser.new :firefox, :http_client=>client, options: browser_opts, url: @selenium_url
+        else
+          @browser = Watir::Browser.new :firefox, :http_client=>client, options: browser_opts
+        end
+        logger.info "#{browser.driver.capabilities[:browser_name]} version is #{browser.driver.capabilities[:browser_version]}"
+        logger.info "Geckodriver version is #{browser.driver.capabilities['moz:geckodriverVersion']}"
         if @size
           browser.window.resize_to(*@size)
         end
@@ -141,9 +146,21 @@ require_relative 'chrome_extension'
         end
         # options = Selenium::WebDriver::Chrome::Options.new
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
-        options = {}
+        options = {
+          browser_name: 'chrome',
+          accept_insecure_certs: true
+        }
+        options["goog:chromeOptions"] = {}
+        options["goog:chromeOptions"][:element_scroll_behavior] = @scroll_strategy if Integer === @scroll_strategy
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
-        @browser = Watir::Browser.new :chrome, desired_capabilities: chrome_caps, switches: chrome_switches, options: options
+        if @selenium_url
+          @browser = Watir::Browser.new :chrome, options: options, url: @selenium_url
+        else
+          options["goog:chromeOptions"][:switches] = chrome_switches
+          @browser = Watir::Browser.new :chrome, options: options
+        end
+        logger.info "#{browser.driver.capabilities[:browser_name]} version is #{browser.driver.capabilities[:browser_version]}"
+        logger.info "Chromedriver version is #{browser.driver.capabilities['chrome']['chromedriverVersion']}"
       elsif @browser_type == :safari
         logger.info "Launching Safari"
         raise "auth proxy not implemented for Safari" if proxy_pass
