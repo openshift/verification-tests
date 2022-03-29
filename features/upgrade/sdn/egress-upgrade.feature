@@ -50,6 +50,7 @@ Feature: Egress compoment upgrade testing
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @upgrade
+  @network-ovnkubernetes
   Scenario: Check egressfirewall is functional post upgrade
     Given I switch to cluster admin pseudo user
     And I save egress type to the clipboard

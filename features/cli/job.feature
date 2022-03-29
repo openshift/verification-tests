@@ -7,6 +7,7 @@ Feature: job.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
+  @network-ovnkubernetes
   Scenario: Create job with multiple completions
     Given I have a project
     Given I obtain test data file "templates/ocp11206/job.yaml"
@@ -56,6 +57,7 @@ Feature: job.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Create job with pod parallelism
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -178,6 +180,7 @@ Feature: job.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Specifying your own pod selector for job
     Given I have a project
     Given I obtain test data file "job/job-manualselector.yaml"

@@ -626,6 +626,7 @@ Feature: Egress IP related features
   @vsphere-upi
   @qeci
   @noproxy @connected
+  @network-multitenant
   Scenario: The same egressIP will not be assigned to different netnamespace
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard

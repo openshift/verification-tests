@@ -10,6 +10,7 @@ Feature: Kibana related features
   @disconnected @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @network-ovnkubernetes
   Scenario: Show logs on Kibana web console according to different user role
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -68,6 +69,7 @@ Feature: Kibana related features
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @disconnected @connected
+  @network-ovnkubernetes
   Scenario: Normal User can only view logs out of the projects owned by himself --kibana
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -124,6 +126,7 @@ Feature: Kibana related features
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @disconnected @connected
+  @network-ovnkubernetes
   Scenario: User with cluster-admin role can show logs out of all projects -- kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -184,6 +187,7 @@ Feature: Kibana related features
   @singlenode
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @network-ovnkubernetes
   Scenario: Kibana logout function should log off user
     Given the master version < "4.5"
     Given I switch to the first user
@@ -234,6 +238,7 @@ Feature: Kibana related features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @network-ovnkubernetes
   Scenario: Logs can be redirected from Webconsole to kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name

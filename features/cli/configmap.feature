@@ -9,6 +9,7 @@ Feature: configMap
   @upgrade-sanity
   @singlenode
   @disconnected @connected
+  @network-ovnkubernetes
   Scenario: Consume ConfigMap in environment variables
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -48,6 +49,7 @@ Feature: configMap
   @upgrade-sanity
   @singlenode
   @disconnected @connected
+  @network-ovnkubernetes
   Scenario: Consume ConfigMap via volume plugin
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -95,6 +97,7 @@ Feature: configMap
   @upgrade-sanity
   @singlenode
   @disconnected @connected
+  @network-ovnkubernetes
   Scenario: Perform CRUD operations against a ConfigMap resource
     Given I have a project
     Given I obtain test data file "configmap/configmap-example.yaml"

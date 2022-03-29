@@ -88,6 +88,7 @@ Feature: buildconfig.feature
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @singlenode
     @noproxy @connected
+    @network-ovnkubernetes
     Examples:
       | template                  |
       | test-buildconfig-s2i.json | # @case_id OCP-11474
@@ -101,6 +102,7 @@ Feature: buildconfig.feature
   @upgrade-sanity
   @singlenode
   @noproxy @connected
+  @network-ovnkubernetes
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:
