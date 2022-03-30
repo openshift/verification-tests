@@ -16,6 +16,7 @@ Feature: Descheduler major upgrade should work fine
     When I run the :create admin command with:
       | f | kubedescheduler-<%= cb.master_version %>.yaml |
     Then the step should succeed
+    Given 60 seconds have passed
     And status becomes :running of exactly 1 pods labeled:
       | app=descheduler |
     Given evaluation of `pod.name` is stored in the :pod_name clipboard
