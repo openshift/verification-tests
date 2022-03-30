@@ -7,6 +7,7 @@ Feature: oc_set_env.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @network-ovnkubernetes
   Scenario: Set environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
@@ -67,6 +68,7 @@ Feature: oc_set_env.feature
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Remove environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"

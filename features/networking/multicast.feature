@@ -8,6 +8,8 @@ Feature: testing multicast scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @connected
+  @network-multitenant
+  @network-ovnkubernetes
   Scenario: pods should be able to subscribe send and receive multicast traffic
     # create some multicast testing pods
     Given I have a project
@@ -93,6 +95,8 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @network-multitenant
+  @network-ovnkubernetes
   Scenario: multicast is disabled by default if not annotate the namespace
     # create multicast testing pods in the project and without multicast enable
     Given I have a project
@@ -159,6 +163,8 @@ Feature: testing multicast scenarios
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @network-multitenant
+  @network-ovnkubernetes
   Scenario: Same multicast groups can be created in multiple namespace
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -301,6 +307,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @connected
+  @network-multitenant
   Scenario: pods in default project should not be able to receive multicast traffic from other namespace
     # create multicast testing pod in one project
     Given I have a project
@@ -382,6 +389,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @connected
+  @network-multitenant
   Scenario: pods should be able to join multiple multicast groups at same time  
     # create some multicast testing pods in the project
     Given I have a project
@@ -481,6 +489,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @connected
+  @network-multitenant
   Scenario: pods should not be able to receive multicast traffic from other pods in different namespace
     # create some multicast testing pods in one project
     Given I have a project
@@ -561,6 +570,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @connected
+  @network-multitenant
   Scenario: pods in default project should be able to receive multicast traffic from other default project pods
     # enable multicast and create testing pods
     Given I switch to cluster admin pseudo user

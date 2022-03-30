@@ -43,6 +43,7 @@ Feature: eventrouter related test
     @connected
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @network-ovnkubernetes
     Examples:
     | index_name  |
     | .operations | # @case_id OCP-25899

@@ -71,6 +71,7 @@ Feature: Volume snapshot test
     @qeci
     @singlenode
     @disconnected @connected
+    @network-ovnkubernetes
     Examples:
       | csi-sc       | csi-vsc      |
       | standard-csi | standard-csi |# @case_id OCP-37568

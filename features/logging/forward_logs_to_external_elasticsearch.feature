@@ -89,6 +89,7 @@ Feature: Cases to test forward logs to external elasticsearch
     @singlenode
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @network-ovnkubernetes
     Examples:
       | scheme | client_auth | file                 |
       | https  | true        | clf-with-secret.yaml | # @case_id OCP-29845

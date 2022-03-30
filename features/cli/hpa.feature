@@ -8,6 +8,7 @@ Feature: hpa scale
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: HPA shouldn't scale up target if the replicas of dc is 0
     Given I have a project
     Given I obtain test data file "hpa/dc-hello-openshift.yaml"
@@ -50,6 +51,7 @@ Feature: hpa scale
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: HPA shouldn't scale up target if the replicas of rc is 0
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"
@@ -90,6 +92,7 @@ Feature: hpa scale
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @disconnected @connected
+  @network-ovnkubernetes
   Scenario: Creates autoscaler for replication controller by oc autoscale
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"

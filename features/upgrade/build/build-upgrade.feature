@@ -31,6 +31,7 @@ Feature: build related upgrade check
   @singlenode
   @connected
   @upgrade
+  @network-ovnkubernetes
   Scenario: Check docker and sti build works well before and after upgrade
     Given I switch to the first user
     When I use the "build-upgrade" project

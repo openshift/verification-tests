@@ -9,6 +9,7 @@ Feature: oc_env.feature
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Set environment variables when creating application using non-DeploymentConfig template
     Given I have a project
     When I run the :new_app client command with:

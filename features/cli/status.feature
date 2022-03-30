@@ -5,6 +5,7 @@ Feature: Check status via oc status, wait etc
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Show RC info and indicate bad secrets reference in 'oc status'
     Given I have a project
 

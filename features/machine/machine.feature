@@ -9,6 +9,7 @@ Feature: Machine features testing
   @upgrade-sanity
   @singlenode
   @disconnected @connected
+  @network-ovnkubernetes
   Scenario: Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
@@ -20,6 +21,7 @@ Feature: Machine features testing
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @network-ovnkubernetes
   Scenario: machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -41,6 +43,7 @@ Feature: Machine features testing
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @network-ovnkubernetes
   Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
@@ -52,6 +55,7 @@ Feature: Machine features testing
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
+  @network-ovnkubernetes
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -88,6 +92,7 @@ Feature: Machine features testing
     Then the step should succeed
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @network-ovnkubernetes
     Examples:
       | url                                                                          |
       | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
@@ -100,6 +105,7 @@ Feature: Machine features testing
   @destructive
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @network-ovnkubernetes
   Scenario: Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
@@ -141,6 +147,7 @@ Feature: Machine features testing
   # @case_id OCP-27627
   @admin
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @network-ovnkubernetes
   Scenario: Verify all machine instance-state should be consistent with their providerStats.instanceState
     Given I have an IPI deployment
     And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
@@ -153,6 +160,7 @@ Feature: Machine features testing
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @noproxy
+  @network-ovnkubernetes
   Scenario: Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -171,6 +179,7 @@ Feature: Machine features testing
   @destructive
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @network-ovnkubernetes
   Scenario: [MAO] Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -293,6 +302,7 @@ Feature: Machine features testing
       | gcp       | machineset-clone-32126 | # @case_id OCP-32126
 
     @azure-ipi
+    @network-ovnkubernetes
     Examples:
       | iaas_type | machineset_name        |
       | azure     | machineset-clone-33040 | # @case_id OCP-33040
@@ -303,6 +313,7 @@ Feature: Machine features testing
   @destructive
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @network-ovnkubernetes
   Scenario: Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -372,6 +383,7 @@ Feature: Machine features testing
 
     @aws-ipi
     @noproxy @connected
+    @network-ovnkubernetes
     Examples:
       | name                    | file_name                 | Validation                    |
       | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
@@ -384,6 +396,7 @@ Feature: Machine features testing
   @destructive
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @gcp-ipi
+  @network-ovnkubernetes
   Scenario: Implement defaulting machineset values for GCP
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -454,6 +467,7 @@ Feature: Machine features testing
       | <Validation> |
 
     @azure-ipi
+    @network-ovnkubernetes
     Examples:
       | name                    | file_name               | Validation                |
       | default-valued-33058    | ms_default_values.yaml  | Public IP                 | # @case_id OCP-33058
@@ -463,6 +477,7 @@ Feature: Machine features testing
   # @case_id OCP-33455
   @admin
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @network-ovnkubernetes
   Scenario: Run machine api Controllers using leader election
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -489,6 +504,7 @@ Feature: Machine features testing
   # @case_id OCP-34718
   @admin
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @network-ovnkubernetes
   Scenario: Node labels and Affinity definition in PV should match
     Given I have a project
 
@@ -567,6 +583,7 @@ Feature: Machine features testing
     Examples:
       | name                         | template                           | diskGiB           |
       | default-valued-33380         | <%= cb.template %>                 | <%= cb.diskGiB %> | # @case_id OCP-33380
+    @network-ovnkubernetes
     Examples:
       | name                         | template                           | diskGiB           |
       | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
@@ -576,6 +593,7 @@ Feature: Machine features testing
   @admin
   @disconnected
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @network-ovnkubernetes
   Scenario: [Azure] Machineset should not be created when publicIP:true in disconnected Azure enviroment
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -597,6 +615,7 @@ Feature: Machine features testing
   @admin
   @4.11 @4.10
   @singlenode
+  @network-ovnkubernetes
   Scenario: Operator cloud-controller-manager should not show empty version
     Given I switch to cluster admin pseudo user
     Then evaluation of `cluster_operator('cloud-controller-manager').versions` is stored in the :versions clipboard
@@ -609,6 +628,7 @@ Feature: Machine features testing
   @vsphere-ipi @openstack-ipi @baremetal-ipi 
   @vsphere-upi @openstack-upi @baremetal-upi
   @singlenode
+  @network-ovnkubernetes
   Scenario: Baremetal clusteroperator should be enabled in vsphere and osp 
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="False"
@@ -658,6 +678,7 @@ Feature: Machine features testing
 
     @aws-ipi
     @proxy @disconnected
+    @network-ovnkubernetes
     Examples:
       | name                    | file_name                 | Validation                    |
       | default-valued-48463    | ms_default_values.yaml    | Placement                     | # @case_id OCP-48463

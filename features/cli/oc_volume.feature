@@ -10,6 +10,7 @@ Feature: oc_volume.feature
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Create a pod that consumes the secret in a volume
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/secret.yaml"

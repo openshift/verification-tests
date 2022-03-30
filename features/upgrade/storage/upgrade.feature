@@ -485,6 +485,7 @@ Feature: Storage upgrade tests
   @singlenode
   @connected
   @upgrade
+  @network-ovnkubernetes
   Scenario: [AWS-EBS-CSI] [Snapshot operator] should work well before and after upgrade of a cluster
     Given I switch to cluster admin pseudo user
     Given the master version >= "4.7"

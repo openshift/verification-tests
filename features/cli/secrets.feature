@@ -41,6 +41,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Pods do not have access to each other's secrets in the same namespace
     Given I have a project
     Given I obtain test data file "secrets/ocp12281/first-secret.json"
@@ -92,6 +93,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Pods do not have access to each other's secrets with the same secret name in different namespaces
     Given I have a project
     Given evaluation of `project.name` is stored in the :project0 clipboard
@@ -174,6 +176,7 @@ Feature: secrets related scenarios
     @upgrade-sanity
     @singlenode
     @noproxy @connected
+    @network-ovnkubernetes
     Examples:
       | type   | build_secret         | path      | command | expression               |
       | docker | testsecret1:mysecret1| mysecret1 | ls      | true                     | # @case_id OCP-11947
@@ -187,6 +190,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @disconnected @connected
+  @network-ovnkubernetes
   Scenario: Consume the same Secrets as environment variables in multiple pods
     Given I have a project
     Given I obtain test data file "secrets/secret.yaml"
@@ -243,6 +247,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @disconnected @connected
+  @network-ovnkubernetes
   Scenario: Using Secrets as Environment Variables
     Given I have a project
     Given I obtain test data file "secrets/secret.yaml"
@@ -271,6 +276,7 @@ Feature: secrets related scenarios
   @smoke
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @network-ovnkubernetes
   Scenario: Secret volume should update when secret is updated
     Given I have a project
     Given I obtain test data file "secrets/secret1.json"
@@ -312,6 +318,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Mapping specified secret volume should update when secret is updated
     Given I have a project
     Given I obtain test data file "secrets/secret1.json"
@@ -350,6 +357,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Allow specifying secret data using strings and images
     Given I have a project
     Given I obtain test data file "secrets/secret-datastring-image.json"
@@ -402,6 +410,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @noproxy @connected
+  @network-ovnkubernetes
   Scenario: oc new-app to gather git creds
     Given I have a project
     When I have an http-git service in the project

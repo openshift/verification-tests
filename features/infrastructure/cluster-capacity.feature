@@ -11,6 +11,7 @@ Feature: cluster-capacity related features
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Cluster capacity image support: Cluster capacity can work well with a simple pod
     Given environment has at least 2 schedulable nodes
     Given I have a project

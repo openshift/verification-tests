@@ -10,6 +10,7 @@ Feature: elasticsearch-operator related tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @network-ovnkubernetes
   Scenario: ServiceMonitor Object for Elasticsearch is deployed along with the Elasticsearch cluster
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
@@ -78,6 +79,7 @@ Feature: elasticsearch-operator related tests
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @singlenode
     @disconnected @connected
+    @network-ovnkubernetes
     Examples:
       | cluster_setting |
       | transient       | # @case_id OCP-21530
@@ -94,6 +96,7 @@ Feature: elasticsearch-operator related tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @disconnected @connected
+  @network-ovnkubernetes
   Scenario: Additional essential metrics ES dashboard
     Given I switch to the first user
     And the first user is cluster-admin

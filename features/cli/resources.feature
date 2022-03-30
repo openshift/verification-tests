@@ -8,6 +8,7 @@ Feature: resouces related scenarios
   @upgrade-sanity
   @singlenode
   @connected
+  @network-ovnkubernetes
   Scenario: Return description of resources with cli describe
     Given I have a project
     And I create a new application with:

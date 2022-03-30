@@ -25,6 +25,7 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   @singlenode
   @disconnected @connected
   @upgrade
+  @network-ovnkubernetes
   Scenario: Seccomp part of SCC policy should be kept and working after upgrade
     Given I switch to cluster admin pseudo user
     Given admin checks that the "seccomp" scc exists

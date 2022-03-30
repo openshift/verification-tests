@@ -49,6 +49,7 @@ Feature: Webhook REST Related Tests
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @singlenode
     @noproxy @connected
+    @network-ovnkubernetes
     Examples:
       | type    | negative1 | negative2   | negative3 | path              | file              | header1        | header2 |
       | generic | GitHub    | ImageChange | github    | generic/testdata/ | push-generic.json |                |         | # @case_id OCP-11693

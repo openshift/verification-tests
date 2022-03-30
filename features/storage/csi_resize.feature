@@ -55,6 +55,7 @@ Feature: CSI Resizing related feature
     @upgrade-sanity
     @singlenode
     @disconnected @connected
+    @network-ovnkubernetes
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37559
@@ -89,6 +90,7 @@ Feature: CSI Resizing related feature
 
     @singlenode
     @disconnected @connected
+    @network-ovnkubernetes
     Examples:
       | sc_name |
       | gp2-csi | # @case_id OCP-25809
