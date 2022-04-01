@@ -7,7 +7,7 @@ Feature: change the policy of user/service account
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: User can view ,add, remove and modify roleBinding via admin role user
     Given I have a project
     When I run the :get client command with:
@@ -84,7 +84,7 @@ Feature: change the policy of user/service account
   @upgrade-sanity
   @singlenode
   @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: [origin_platformexp_214] User can view, add , modify and delete specific role to/from new added project via admin role user
     Given I have a project
     Given I obtain test data file "authorization/policy/projectviewservice.json"
@@ -143,7 +143,7 @@ Feature: change the policy of user/service account
   @upgrade-sanity
   @singlenode
   @disconnected @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: DaemonSet only support Always restartPolicy
     Given I have a project
     Given cluster role "sudoer" is added to the "first" user

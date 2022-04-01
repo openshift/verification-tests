@@ -244,6 +244,7 @@ Feature: Egress compoment upgrade testing
   @vsphere-upi
   @qeci
   @upgrade
+  @network-openshiftsdn
   Scenario: Check sdn egressip is functional post upgrade
     Given I run the :get admin command with:
       | resource      | hostsubnet                                  |

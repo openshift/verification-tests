@@ -39,7 +39,7 @@ Feature: basic verification for upgrade testing
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-operators" project
@@ -55,7 +55,7 @@ Feature: basic verification for upgrade testing
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check etcd image have been udpated to target release value after upgrade
     # operands
     Given I switch to cluster admin pseudo user

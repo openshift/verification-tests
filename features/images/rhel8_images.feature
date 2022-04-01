@@ -6,7 +6,7 @@ Feature: rhel8images.feature
   @proxy
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Using new-app cmd to create app with ruby rhel8 image
     Given I have a project
     When I run the :tag admin command with:
@@ -77,7 +77,7 @@ Feature: rhel8images.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: mysql persistent template
     Given I have a project
     When I run the :tag admin command with:
@@ -135,7 +135,7 @@ Feature: rhel8images.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project
     When I run the :new_app client command with:

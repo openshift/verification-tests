@@ -52,7 +52,7 @@ Feature: Logging upgrading related features
   @singlenode
   @noproxy @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Cluster logging checking during cluster upgrade
     Given I switch to the first user
     Given I create a project with non-leading digit name

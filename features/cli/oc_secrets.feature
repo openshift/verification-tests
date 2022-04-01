@@ -108,7 +108,7 @@ Feature: oc_secrets.feature
   # @case_id OCP-11900
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check name requirements for oc secret
     Given I have a project
     And I run the :get client command with:

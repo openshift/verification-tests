@@ -20,7 +20,7 @@ Feature: SDN compoment upgrade testing
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-network-operator" project
@@ -84,7 +84,7 @@ Feature: SDN compoment upgrade testing
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   Scenario: Check the networkpolicy works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade" project
@@ -195,7 +195,7 @@ Feature: SDN compoment upgrade testing
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project
@@ -357,7 +357,7 @@ Feature: SDN compoment upgrade testing
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade3" project
@@ -422,7 +422,7 @@ Feature: SDN compoment upgrade testing
   @azure-upi @aws-upi
   @azure-ipi @aws-ipi
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "conntrack-upgrade" project
@@ -612,7 +612,7 @@ Feature: SDN compoment upgrade testing
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @destructive
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-networkpolicy
   @upgrade
   Scenario: Check network policy ACL logging works post upgrade 
     Given I switch to cluster admin pseudo user

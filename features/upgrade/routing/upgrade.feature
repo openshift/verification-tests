@@ -27,7 +27,7 @@ Feature: Routing and DNS related scenarios
   @singlenode
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -68,7 +68,7 @@ Feature: Routing and DNS related scenarios
   @singlenode
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -116,7 +116,7 @@ Feature: Routing and DNS related scenarios
   @vsphere-upi @baremetal-upi
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
     And I store the number of worker nodes to the :num_workers clipboard
@@ -208,7 +208,7 @@ Feature: Routing and DNS related scenarios
   @singlenode
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: upgrade with route shards
     # Ensure cluster operator ingress is in normal status after upgrade
     Given I switch to cluster admin pseudo user
@@ -279,7 +279,7 @@ Feature: Routing and DNS related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Unidling a route work without user intervention
     # Check the servcie service-unsecure to see the idle annotation is still intact
     Given I switch to first user

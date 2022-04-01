@@ -59,7 +59,7 @@ Feature: Multus-CNI ipv6 related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: IPv6 testing for OCP-31999: Whereabouts should exclude IPv6 ranges
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1913062
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1917984
@@ -131,7 +131,7 @@ Feature: Multus-CNI ipv6 related scenarios
   @admin
   @4.9
   @singlenode
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Whereabouts IPv6 should be calculated if first hextet of IPv6 has leading zeros	
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1919048
   # Make sure that the multus is enabled

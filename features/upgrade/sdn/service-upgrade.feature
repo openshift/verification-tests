@@ -38,7 +38,7 @@ Feature: service upgrade scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check the idle service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "idle-upgrade" project
@@ -106,7 +106,7 @@ Feature: service upgrade scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   Scenario: Check the nodeport service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "nodeport-upgrade" project

@@ -4,7 +4,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-10025
   @admin
   @destructive
-  @network-multitenant
+  @network-openshiftsdn @network-multitenant
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: kubelet proxy could change to userspace mode
@@ -44,6 +44,7 @@ Feature: SDN related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @network-openshiftsdn @network-networkpolicy
   Scenario: iptables rules will be repaired automatically once it gets destroyed
     # we do not detect incomplete rule removal since ~4.3, BZ-1810316
     # so only test on >= 4.3
@@ -83,6 +84,7 @@ Feature: SDN related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @connected
+  @network-openshiftsdn
   Scenario: an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
     Given the master version >= "3.6"
     Given I have a project
@@ -189,7 +191,7 @@ Feature: SDN related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: should not show "No such device" message when run "ovs-vsctl show" command
     Given I have a project
     And I have a pod-for-ping in the project
@@ -210,7 +212,7 @@ Feature: SDN related networking scenarios
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: The iptables binary and rules on sdn containers should be the same as host
     Given I select a random node's host
     When I run commands on the host:
@@ -241,6 +243,7 @@ Feature: SDN related networking scenarios
   @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @network-openshiftsdn
   Scenario: ovs-vswitchd process must be running on all ovs pods
     Given I switch to cluster admin pseudo user
     When I run cmds on all ovs pods:
@@ -256,6 +259,7 @@ Feature: SDN related networking scenarios
   @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @network-openshiftsdn
   Scenario: Killing ovs process should not put sdn and ovs pods in bad shape
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
@@ -302,7 +306,7 @@ Feature: SDN related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Networking should work on default namespace
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157
     Given I switch to cluster admin pseudo user
@@ -436,6 +440,7 @@ Feature: SDN related networking scenarios
   @4.7 @4.6
   @baremetal-ipi
   @baremetal-upi
+  @network-openshiftsdn
   Scenario: Without allow the migration operation, migration cannot be executed
     When I run the :annotate client command with:
        | resource     | network.operator.openshift.io                       |
@@ -474,7 +479,7 @@ Feature: SDN related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
-  @network-multitenant
+  @network-openshiftsdn @network-networkpolicy @network-multitenant
   Scenario: Netnamespace should be recreated after deleting it before the project is deleted
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -492,6 +497,7 @@ Feature: SDN related networking scenarios
   @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
+  @network-openshiftsdn
   Scenario: UDP offloads were disabled on vsphere platform
     Given I select a random node's host
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -509,6 +515,7 @@ Feature: SDN related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
+  @network-openshiftsdn
   Scenario: Disable conntrack for vxlan traffic
     Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host

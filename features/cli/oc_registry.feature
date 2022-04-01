@@ -7,7 +7,7 @@ Feature: oc registry command scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @disconnected @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check function of oc registry command
     Given I have a project
     When I run the :registry_info client command with:

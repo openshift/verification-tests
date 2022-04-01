@@ -7,7 +7,7 @@ Feature: remote registry related scenarios
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Support unauthenticated with registry-admin role
     Given I have a project
     Given I find a bearer token of the default service account

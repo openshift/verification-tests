@@ -18,7 +18,7 @@ Feature: kata related features
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @baremetal-upi @azure-upi
   @upgrade-sanity
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: test delete kata installation
     Given I remove kata operator from the namespace
 
@@ -38,7 +38,7 @@ Feature: kata related features
   @4.11 @4.10 @4.9 @4.8 @4.7
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @baremetal-upi @azure-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Operator can be installed through web console
     Given the kata-operator is installed using OLM GUI
 
@@ -59,7 +59,7 @@ Feature: kata related features
   @4.8
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @baremetal-upi @azure-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: install kata, verify pod has kata runtime followed by uninstall kata from cluster
     Given the kata-operator is installed using OLM CLI
     And I verify kata container runtime is installed into a worker node

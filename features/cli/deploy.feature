@@ -311,7 +311,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:

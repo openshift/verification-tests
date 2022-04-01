@@ -11,7 +11,7 @@ Feature: creating 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/pod_with_special_fsGroup.json"
@@ -38,7 +38,7 @@ Feature: creating 'apps' with CLI
   @noproxy @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Create an application from source code
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"
@@ -200,7 +200,7 @@ Feature: creating 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Create an application from source code test
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"

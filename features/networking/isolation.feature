@@ -304,7 +304,7 @@ Feature: networking isolation related scenarios
   # @case_id OCP-12659
   @admin
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @network-multitenant
+  @network-openshiftsdn @network-multitenant
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity

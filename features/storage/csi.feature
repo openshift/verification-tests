@@ -84,7 +84,7 @@ Feature: CSI testing related feature
     @qeci
     @singlenode
     @disconnected @connected
-    @network-ovnkubernetes
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37572
@@ -275,7 +275,7 @@ Feature: CSI testing related feature
     @upgrade-sanity
     @singlenode
     @disconnected @connected
-    @network-ovnkubernetes
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37511
@@ -327,7 +327,7 @@ Feature: CSI testing related feature
 
     @singlenode
     @disconnected @connected
-    @network-ovnkubernetes
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | sc_name      | type   | size  |
       | standard-csi | pd-ssd | 1Gi   | # @case_id OCP-37478
@@ -381,7 +381,7 @@ Feature: CSI testing related feature
     @upgrade-sanity
     @singlenode
     @disconnected @connected
-    @network-ovnkubernetes
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | pd.csi.storage.gke.io    | standard-csi | gcp-pd-csi-driver-operator           | gcp-pd-csi-driver-controller           | gcp-pd-csi-driver-node           | # @case_id OCP-37474

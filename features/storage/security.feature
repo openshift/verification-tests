@@ -123,7 +123,7 @@ Feature: storage security check
     @openstack-upi
     @singlenode
     @disconnected @connected
-    @network-ovnkubernetes
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | storage_type         | volume_name | type   |
       | cinder               | volumeID    | cinder | # @case_id OCP-9721

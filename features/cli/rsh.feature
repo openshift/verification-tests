@@ -8,7 +8,7 @@ Feature: rsh.feature
   @upgrade-sanity
   @singlenode
   @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check oc rsh for simpler access to a remote shell
     Given I have a project
     Then evaluation of `project.name` is stored in the :proj_name clipboard

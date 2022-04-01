@@ -24,7 +24,7 @@ Feature: basic verification for upgrade oc client testing
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check some container related oc commands still work after upgrade
     Given I switch to the first user
     When I use the "workloads-upgrade" project
@@ -85,7 +85,7 @@ Feature: basic verification for upgrade oc client testing
   @singlenode
   @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check some container related oc commands still work for ocp45 after upgrade
     Given I switch to the first user
     When I use the "workloads-upgrade" project
