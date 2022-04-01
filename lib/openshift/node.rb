@@ -109,6 +109,14 @@ module BushSlicer
       end
       return result
     end
+    def address(user: nil, type:, cached: true, quiet: false)
+      addresses = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'addresses')
+      c = addresses.find { |c|
+        c.dig('type') == type
+      } or raise "No address with type #{type} found."
+      return c.dig('address')
+    end
+
 
     # @return [Integer} capacity cpu in 'm'
     def capacity_cpu(user: nil, cached: true, quiet: false)

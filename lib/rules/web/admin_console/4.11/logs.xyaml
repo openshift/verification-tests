@@ -23,6 +23,10 @@ check_log_content_contains:
     selector:
       xpath: //span[contains(@class,'text') and contains(.,'<log_content>')]
     timeout: 30
+check_download_logfile_name:
+  element:
+    selector:
+      xpath: //a[@download='<pod_name>-<container_name>.log']
 check_some_context_missing_in_expanded_log_view:
   elements:
   - selector: &expand_button
