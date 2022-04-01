@@ -11,7 +11,7 @@ Feature: Logging smoke test case
   @upgrade-sanity
   @singlenode
   @disconnected @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console
     Given logging service is removed successfully

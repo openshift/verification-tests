@@ -58,7 +58,7 @@ Feature: web console related upgrade check
   @singlenode
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

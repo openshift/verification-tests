@@ -23,7 +23,7 @@ Feature: cluster monitoring related upgrade check
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project

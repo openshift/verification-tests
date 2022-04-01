@@ -11,7 +11,7 @@ Feature: Elasticsearch related tests
   @upgrade-sanity
   @singlenode
   @disconnected @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Elasticsearch using dynamic volumes
     Given default storageclass is stored in the :default_sc clipboard
     Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"
@@ -52,7 +52,7 @@ Feature: Elasticsearch related tests
   @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Elasticsearch6 new data modle indices
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -85,7 +85,7 @@ Feature: Elasticsearch related tests
   @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Elasticsearch retention policy testing
     Given I switch to the first user
     And I create a project with non-leading digit name

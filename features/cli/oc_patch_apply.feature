@@ -9,7 +9,7 @@ Feature: oc patch/apply related scenarios
   @upgrade-sanity
   @singlenode
   @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: oc patch can update one or more fields of rescource
     Given I have a project
     And I run the :create_deploymentconfig client command with:

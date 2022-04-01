@@ -42,7 +42,7 @@ Feature: SCC policy related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Create or update scc with illegal capability name should fail with prompt message
     Given I have a project
     Given cluster role "cluster-admin" is added to the "first" user

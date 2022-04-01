@@ -30,7 +30,7 @@ Feature: Jenkins feature upgrade test
   @singlenode
   @noproxy @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Jenkins feature upgrade test
     Given I switch to the first user
     When I use the "jenkins-upgrade" project

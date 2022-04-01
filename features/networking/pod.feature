@@ -7,6 +7,7 @@ Feature: Pod related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @network-openshiftsdn
   Scenario: Pod cannot claim UDP port 4789 on the node as part of a port mapping
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -30,6 +31,7 @@ Feature: Pod related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @network-openshiftsdn
   Scenario: Container could reach the dns server
     Given I have a project
     Given I obtain test data file "pods/ocp10031/pod.json"
@@ -52,6 +54,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @connected
+  @network-openshiftsdn
   Scenario: The openflow list will be cleaned after delete the pods
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -83,6 +86,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @connected
+  @network-openshiftsdn
   Scenario: Check QoS after creating pod
     Given I have a project
     # setup iperf server to receive the traffic
@@ -147,7 +151,7 @@ Feature: Pod related networking scenarios
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -184,7 +188,7 @@ Feature: Pod related networking scenarios
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
     Given I store the masters in the :masters clipboard
     And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard
@@ -206,6 +210,7 @@ Feature: Pod related networking scenarios
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @baremetal-upi @azure-upi @aws-upi
+  @network-openshiftsdn
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -241,7 +246,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -321,7 +326,7 @@ Feature: Pod related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: [4.x] Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given I store the workers in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
@@ -408,7 +413,7 @@ Feature: Pod related networking scenarios
   @admin
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Pod should be accesible via node ip and host port
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
@@ -574,6 +579,7 @@ Feature: Pod related networking scenarios
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @network-openshiftsdn
   Scenario: Check the unused ip are released after node reboot
     Given I store the workers in the :workers clipboard
     Given I use the "<%= cb.workers[0].name %>" node

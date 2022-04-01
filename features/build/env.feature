@@ -7,7 +7,7 @@ Feature: env.feature
   @noproxy @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file
     Given I have a project
     When I run the :new_app client command with:
@@ -82,7 +82,7 @@ Feature: env.feature
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file test
     Given I have a project
     When I run the :new_app client command with:

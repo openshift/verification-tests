@@ -34,7 +34,7 @@ Feature: image-registry operator upgrade tests
   @singlenode
   @disconnected @connected
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: samples/openshift-controller-manager/image-registry operators should be in correct status after upgrade
     Given I switch to cluster admin pseudo user
     # Check cluster operator openshift-samples should be in correct status

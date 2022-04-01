@@ -692,7 +692,7 @@ Feature: Sriov related scenarios
   @baremetal-upi
   @singlenode
   @disconnected @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: dpdk for intel card works well
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-dpdk.yaml"

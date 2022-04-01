@@ -9,7 +9,7 @@ Feature: Builds and samples related metrics test
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Alerts on imagestream import retries
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
@@ -70,7 +70,7 @@ Feature: Builds and samples related metrics test
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check build metrics
     Given I have a project
     When I run the :new_app client command with:
@@ -157,7 +157,7 @@ Feature: Builds and samples related metrics test
   @singlenode
   @connected
   @4.6
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Adding metric for registry v1 protocol imports
     Given I have a project
     #Importing a image with regsitry v1 api
@@ -198,7 +198,7 @@ Feature: Builds and samples related metrics test
   @upgrade-sanity
   @singlenode
   @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Monitoring, Alerting, and Degraded Status Reporting-Samples-operator
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |

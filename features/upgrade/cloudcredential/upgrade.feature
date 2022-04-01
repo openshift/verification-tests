@@ -32,7 +32,7 @@ Feature: CloudCredentialOperator components upgrade tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
-  @network-ovnkubernetes
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Cluster operator cloud-credential should be available after upgrade
     # Check cloud-credential operator version after upgraded
     Given the "cloud-credential" operator version matches the current cluster version
