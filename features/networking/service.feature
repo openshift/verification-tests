@@ -40,7 +40,6 @@ Feature: Service related networking scenarios
     # access service in project1
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 4 | <%= cb.service1_ip %>:27017 |
-    Then the step should fail
     Then the output should not contain:
       | Hello OpenShift |
 
@@ -588,7 +587,8 @@ Feature: Service related networking scenarios
     Given I ensure "hello-pod" service is deleted
     When I run commands on the host:
       | curl --connect-timeout 5 <%= cb.worker0_ip %>:<%= cb.port %> |
-    Then the step should fail
+    And the output should contain:
+      | Connection refused |      
 
   # @author zzhao@redhat.com
   # @case_id OCP-33850
@@ -823,4 +823,5 @@ Feature: Service related networking scenarios
     Given I ensure "hello-pod" service is deleted
     When I run commands on the host:
       | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
-    Then the step should fail
+    And the output should contain:
+      | Connection refused |      
