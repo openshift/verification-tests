@@ -81,7 +81,7 @@ Feature: env.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @noproxy @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file test
     Given I have a project

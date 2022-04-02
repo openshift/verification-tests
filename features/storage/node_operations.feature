@@ -60,7 +60,7 @@ Feature: Node operations test scenarios
       | cinder         | # @case_id OCP-15276
 
     @upgrade-sanity
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     Examples:
       | cloud_provider |
       | aws-ebs        | # @case_id OCP-15283

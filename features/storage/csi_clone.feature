@@ -13,7 +13,7 @@ Feature: CSI clone testing related feature
   @upgrade-sanity
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Clone a PVC and verify data consistency
     # Step 1
@@ -59,7 +59,7 @@ Feature: CSI clone testing related feature
   @openstack-upi
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: [Cinder CSI Clone] Clone a pvc with capacity greater than original pvc
     Given I have a project
@@ -113,7 +113,7 @@ Feature: CSI clone testing related feature
   @openstack-upi
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: [Cinder CSI Clone] Clone a pvc with capacity less than original pvc will fail
     Given I have a project
@@ -166,7 +166,7 @@ Feature: CSI clone testing related feature
   @upgrade-sanity
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: [Cinder CSI clone] Clone a pvc with block VolumeMode successfully
     Given I have a project
@@ -224,7 +224,7 @@ Feature: CSI clone testing related feature
   @openstack-upi
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: [Cinder CSI Clone] Clone a pvc with default storageclass
     Given default storage class is patched to non-default
@@ -282,7 +282,7 @@ Feature: CSI clone testing related feature
   @openstack-upi
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: [Cinder CSI Clone] Clone a pvc with different storage class is failed
     # Create mypvc-ori with sc1

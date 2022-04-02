@@ -3,7 +3,7 @@ Feature: Event related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10751
   @admin
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn

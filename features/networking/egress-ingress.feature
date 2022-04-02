@@ -122,6 +122,7 @@ Feature: Egress-ingress related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @network-openshiftsdn @network-networkpolicy @network-multitenant
+  @proxy @noproxy
   Scenario: The rules of egress network policy are added in openflow
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -355,6 +356,7 @@ Feature: Egress-ingress related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-openshiftsdn @network-networkpolicy @network-multitenant
+  @proxy @noproxy
   Scenario: Iptables should be updated with correct endpoints when egress DNS policy was used
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -713,6 +715,7 @@ Feature: Egress-ingress related networking scenarios
   @4.11 @4.10 @4.9    
   @network-ovnkubernetes @network-openshiftsdn	
   @singlenode
+  @proxy @noproxy @disconnected @connected
   Scenario: [bug2000057] No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted
     Given the env is using "OVNKubernetes" networkType
     And I have a project

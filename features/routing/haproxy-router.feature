@@ -383,7 +383,7 @@ Feature: Testing haproxy router
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: can set cookie name for unsecure routes by annotation
     #create route and service which has two endpoints

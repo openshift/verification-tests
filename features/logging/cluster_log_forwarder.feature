@@ -7,7 +7,7 @@ Feature: cluster log forwarder features
   @destructive
   @commonlogging
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -142,6 +142,7 @@ Feature: cluster log forwarder features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: ClusterLogForwarder: Forward logs to fluentd as insecure
     Given I switch to the first user
     And I have a project
@@ -229,7 +230,7 @@ Feature: cluster log forwarder features
     """
     @upgrade-sanity
     @singlenode
-    @connected
+    @proxy @noproxy @connected
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
@@ -294,7 +295,7 @@ Feature: cluster log forwarder features
     """
 
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
@@ -308,7 +309,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -372,7 +373,7 @@ Feature: cluster log forwarder features
 
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
@@ -388,7 +389,7 @@ Feature: cluster log forwarder features
   @destructive
   @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
@@ -436,7 +437,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -552,7 +553,7 @@ Feature: cluster log forwarder features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver

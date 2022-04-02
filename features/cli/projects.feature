@@ -80,6 +80,7 @@ Feature: projects related features via cli
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: User can get node selector from a project
     Given  an 8 character random string of type :dns is stored into the :oadmproj1 clipboard
     Given  an 8 character random string of type :dns is stored into the :oadmproj2 clipboard
@@ -112,6 +113,7 @@ Feature: projects related features via cli
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: Could remove user and group from the current project
     Given I have a project
     When I run the :oadm_policy_add_role_to_user client command with:

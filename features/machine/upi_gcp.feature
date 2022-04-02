@@ -7,6 +7,7 @@ Feature: UPI GCP Tests
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @gcp-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: MachineSets in GCP should create Machines in a Shared (XPN) VPC environment
     Given I have an UPI deployment and machinesets are enabled
 
@@ -16,7 +17,7 @@ Feature: UPI GCP Tests
   @destructive
   @4.11 @4.10 @4.9 @4.8 @4.7
   @gcp-upi
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: [GCP] Scaling OCP Cluster on UPI
     Given I have an UPI deployment and machinesets are enabled

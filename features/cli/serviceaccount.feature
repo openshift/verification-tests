@@ -7,7 +7,7 @@ Feature: ServiceAccount and Policy Managerment
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Could grant admin permission for the service account username to access to its own project
     Given I have a project
@@ -85,6 +85,7 @@ Feature: ServiceAccount and Policy Managerment
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: User can get the serviceaccount token via client
     Given I have a project
     When I run the :serviceaccounts_get_token client command with:

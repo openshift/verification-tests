@@ -7,7 +7,7 @@ Feature: dockerbuild.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Docker build with both SourceURI and context dir
     Given I have a project
@@ -34,7 +34,7 @@ Feature: dockerbuild.feature
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project
@@ -98,7 +98,7 @@ Feature: dockerbuild.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Add ARGs in docker build
     Given I have a project
@@ -161,7 +161,7 @@ Feature: dockerbuild.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Mount source secret to builder container- dockerstrategy
     Given I have a project
@@ -202,7 +202,7 @@ Feature: dockerbuild.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Mount source configmap to builder container- dockerstrategy
     Given I have a project
@@ -242,7 +242,7 @@ Feature: dockerbuild.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Mount multi paths to builder container
     Given I have a project
@@ -284,7 +284,7 @@ Feature: dockerbuild.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Can't add relative path for mount path
     Given I have a project
@@ -322,7 +322,7 @@ Feature: dockerbuild.feature
   @upgrade-sanity
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Mount source name must be unique
     Given I have a project

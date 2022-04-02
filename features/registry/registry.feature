@@ -9,7 +9,7 @@ Feature: Testing registry
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
@@ -47,7 +47,7 @@ Feature: Testing registry
   @admin
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Copy image to another tag via 'oc image mirror'
     Given I have a project
@@ -70,7 +70,7 @@ Feature: Testing registry
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Mirror multiple locations to another registry via 'oc image mirror'
     Given I have a project
@@ -96,6 +96,7 @@ Feature: Testing registry
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: Enable must-gather object refs in image-registry cluster
     When I run the :get admin command with:
       | resource      | co             |
@@ -170,7 +171,7 @@ Feature: Testing registry
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @noproxy @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check the related log from must-gather tool
     When I run the :delete admin command with:
@@ -192,7 +193,7 @@ Feature: Testing registry
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Mirror image to another registry via 'oc image mirror'
     Given I have a project
@@ -246,7 +247,7 @@ Feature: Testing registry
   # @author xiuwang@redhat.com
   # @case_id OCP-29693
   @admin
-  @disconnected
+  @proxy @noproxy @disconnected
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -285,7 +286,7 @@ Feature: Testing registry
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Node secret takes effect when common secret is removed
     Given I have a project

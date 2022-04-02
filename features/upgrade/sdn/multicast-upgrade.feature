@@ -97,6 +97,7 @@
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Check the multicast works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "multicast-upgrade" project

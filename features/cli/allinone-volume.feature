@@ -7,7 +7,7 @@ Feature: All in one volume
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Project secrets, configmap and downward API into the same volume with normal keys and path
     Given I have a project

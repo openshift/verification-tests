@@ -135,6 +135,7 @@ Feature: Egress compoment upgrade testing
   @vsphere-upi
   @qeci
   @upgrade
+  @proxy @noproxy @disconnected @connected
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
@@ -245,6 +246,7 @@ Feature: Egress compoment upgrade testing
   @qeci
   @upgrade
   @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Check sdn egressip is functional post upgrade
     Given I run the :get admin command with:
       | resource      | hostsubnet                                  |
