@@ -229,6 +229,7 @@ goto_catalog_page:
   action: wait_box_loaded
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
+  action: wait_box_loaded
 goto_create_app_from_template_page:
   params:
     template_namespace: openshift
