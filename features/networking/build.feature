@@ -45,6 +45,7 @@ Feature: Testing the isolation during build scenarios
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-openshiftsdn @network-multitenant
     @upgrade-sanity
+    @proxy @noproxy
     Examples:
       | type   | repo                                                           | strategy       |
       | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15741

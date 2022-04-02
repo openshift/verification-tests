@@ -6,7 +6,7 @@ Feature: permission related test
   @admin
   @destructive
   @commonlogging
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
@@ -59,7 +59,7 @@ Feature: permission related test
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Normal User can only view project owned by himself
     Given I switch to the first user
@@ -109,7 +109,7 @@ Feature: permission related test
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: cluster-admin view all projects
     Given I switch to the first user

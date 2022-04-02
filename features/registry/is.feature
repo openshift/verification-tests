@@ -7,6 +7,7 @@ Feature: Testing imagestream
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: Should prune the extenal image correctly
     Given default registry service ip is stored in the :registry_hostname clipboard
     Given I have a project

@@ -717,6 +717,7 @@ Feature: OVN Egress IP related features
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
+  @proxy @noproxy @disconnected @connected
   Scenario: lr-policy-list and snat should be updated correctly after remove pods
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -828,6 +829,7 @@ Feature: OVN Egress IP related features
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
+  @proxy @noproxy @disconnected @connected
   Scenario: lr-policy-list and snat should be updated correctly after remove egressip objects 
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -921,6 +923,7 @@ Feature: OVN Egress IP related features
   @vsphere-ipi
   @vsphere-upi
   @qeci
+  @proxy @noproxy @disconnected @connected
   Scenario: Traffic is load balanced between egress nodes in OVN cluster
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard

@@ -35,7 +35,7 @@ Feature: OLM related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: upgrade OLM

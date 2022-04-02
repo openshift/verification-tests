@@ -4,7 +4,7 @@ Feature: Check status via oc status, wait etc
   # @case_id OCP-11147
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Show RC info and indicate bad secrets reference in 'oc status'
     Given I have a project

@@ -47,7 +47,7 @@ Feature: storageClass related feature
     @azure-ipi
     @azure-upi
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     Examples:
       | storage-class-name |
       | managed-premium    | # @case_id OCP-13488
@@ -103,7 +103,7 @@ Feature: storageClass related feature
     @aws-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     Examples:
       | provisioner | type        | zone          | is-default | size  |
       | aws-ebs     | gp2         | us-east-1d    | false      | 1Gi   | # @case_id OCP-10160
@@ -177,7 +177,7 @@ Feature: storageClass related feature
     @vsphere-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     Examples:
       | provisioner    |
       | vsphere-volume | # @case_id OCP-24259
@@ -243,7 +243,7 @@ Feature: storageClass related feature
     @aws-ipi
     @aws-upi
     @singlenode
-    @connected
+    @proxy @noproxy @connected
     Examples:
       | size  |
       | 4Gi   | # @case_id OCP-10158
@@ -281,7 +281,7 @@ Feature: storageClass related feature
     @aws-ipi
     @aws-upi
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     Examples:
       | type | size | errorMessage                  |
       | sc1  | 5Gi  | at least 125 GiB              | # @case_id OCP-10164
@@ -294,7 +294,7 @@ Feature: storageClass related feature
   @aws-ipi
   @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   Scenario: PVC with storage class won't provisioned pv if no storage class or wrong storage class object
     Given I have a project
     # No sc exists
@@ -322,7 +322,7 @@ Feature: storageClass related feature
   @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   Scenario: AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
     Given I obtain test data file "storage/ebs/pvc-retain.json"

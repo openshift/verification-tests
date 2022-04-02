@@ -79,7 +79,7 @@ Feature: Storage upgrade tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
     Given I switch to cluster admin pseudo user
@@ -183,7 +183,7 @@ Feature: Storage upgrade tests
   @baremetal-ipi
   @baremetal-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   Scenario: Cluster operator storage should be in correct status after upgrade
     Given I switch to cluster admin pseudo user
@@ -483,7 +483,7 @@ Feature: Storage upgrade tests
   @aws-ipi
   @aws-upi
   @singlenode
-  @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: [AWS-EBS-CSI] [Snapshot operator] should work well before and after upgrade of a cluster

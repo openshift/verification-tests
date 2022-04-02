@@ -55,6 +55,7 @@
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Check the multus works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "multus-upgrade" project

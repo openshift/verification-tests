@@ -39,7 +39,7 @@ Feature: Persistent Volume Claim binding policies
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
-    @noproxy @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     Examples:
       | accessMode1   | accessMode2   | accessMode3   |
       | ReadOnlyMany  | ReadWriteMany | ReadWriteOnce | # @case_id OCP-9702
@@ -98,7 +98,7 @@ Feature: Persistent Volume Claim binding policies
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | access_mode   |
@@ -138,7 +138,7 @@ Feature: Persistent Volume Claim binding policies
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | pv_access_mode | pvc_access_mode1 | pvc_access_mode2 |

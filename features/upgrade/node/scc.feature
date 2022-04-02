@@ -23,7 +23,7 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Seccomp part of SCC policy should be kept and working after upgrade

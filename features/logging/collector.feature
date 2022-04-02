@@ -6,7 +6,7 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
@@ -53,6 +53,7 @@ Feature: collector related tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: All nodes logs had sent logs to Elasticsearch
     Given the master version >= "4.2"
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
@@ -111,7 +112,7 @@ Feature: collector related tests
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['inputname'] == (cb.collection_type == "fluentd" ? "fluent-plugin-systemd" : "imfile")
     """
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
@@ -127,6 +128,7 @@ Feature: collector related tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: The Container logs metadata check
     Given the master version == "4.1"
     Given I switch to the first user
@@ -164,7 +166,7 @@ Feature: collector related tests
   @destructive
   @commonlogging
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -209,7 +211,7 @@ Feature: collector related tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: All nodes logs are collected
     Given the master version >= "4.5"
@@ -255,6 +257,7 @@ Feature: collector related tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Fluentd should write it's own logs to stdout and exclude them from collection
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     When I create clusterlogging instance with:

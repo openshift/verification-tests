@@ -24,7 +24,7 @@ Feature: limit range related scenarios:
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | path     | expr1                                                | expr2                                                |
@@ -54,7 +54,7 @@ Feature: limit range related scenarios:
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 | expr11 |expr12 | expr13| expr14 | expr15 | expr16 | expr17 | expr18 | expr19| expr20 |
@@ -81,7 +81,7 @@ Feature: limit range related scenarios:
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 |
@@ -96,7 +96,7 @@ Feature: limit range related scenarios:
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Limit range does not allow min > defaultRequest
     Given I have a project
@@ -118,7 +118,7 @@ Feature: limit range related scenarios:
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Limit range does not allow defaultRequest > default
     Given I have a project
@@ -140,7 +140,7 @@ Feature: limit range related scenarios:
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Limit range does not allow defaultRequest > max
     Given I have a project
@@ -162,7 +162,7 @@ Feature: limit range related scenarios:
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
@@ -193,7 +193,7 @@ Feature: limit range related scenarios:
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Limit range with all values set with proper values
     Given I have a project

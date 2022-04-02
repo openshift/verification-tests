@@ -224,6 +224,7 @@ Feature: apiserver and auth related upgrade check
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Check the default SCCs should not be stomped by CVO
     Given the "kube-apiserver" operator version matches the current cluster version
     And the "openshift-apiserver" operator version matches the current cluster version
@@ -292,6 +293,7 @@ Feature: apiserver and auth related upgrade check
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
     Given the master version >= "4.8"
     Given I switch to cluster admin pseudo user
@@ -336,6 +338,7 @@ Feature: apiserver and auth related upgrade check
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade
     # This case needs keep running oc commands against servers during upgrade, but our framework does not support
     # So using a workaround: run them in a background script during upgrade CI job and check result here

@@ -7,7 +7,7 @@ Feature: hpa scale
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: HPA shouldn't scale up target if the replicas of dc is 0
     Given I have a project
@@ -50,7 +50,7 @@ Feature: hpa scale
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: HPA shouldn't scale up target if the replicas of rc is 0
     Given I have a project
@@ -91,7 +91,7 @@ Feature: hpa scale
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Creates autoscaler for replication controller by oc autoscale
     Given I have a project

@@ -10,7 +10,7 @@ Feature: cluster-capacity related features
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Cluster capacity image support: Cluster capacity can work well with a simple pod
     Given environment has at least 2 schedulable nodes

@@ -25,7 +25,7 @@ Feature: pods related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: kubectl describe pod should show qos tier info
     Given I have a project
@@ -109,7 +109,7 @@ Feature: pods related scenarios
   # @case_id OCP-11753
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Pod should be immediately deleted if it's not scheduled even if graceful termination period is set
     Given I have a project
@@ -167,7 +167,7 @@ Feature: pods related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project

@@ -33,6 +33,7 @@ Feature: CloudCredentialOperator components upgrade tests
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Cluster operator cloud-credential should be available after upgrade
     # Check cloud-credential operator version after upgraded
     Given the "cloud-credential" operator version matches the current cluster version

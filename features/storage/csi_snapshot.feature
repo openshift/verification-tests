@@ -70,7 +70,7 @@ Feature: Volume snapshot test
     @upgrade-sanity
     @qeci
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | csi-sc       | csi-vsc      |
@@ -143,7 +143,7 @@ Feature: Volume snapshot test
     @upgrade-sanity
     @qeci
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     Examples:
       | csi-sc       | csi-vsc      |
       | standard-csi | standard-csi | # @case_id OCP-37569

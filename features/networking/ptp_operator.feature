@@ -5,6 +5,7 @@ Feature: PTP related scenarios
   @admin
   @stage-only
   @4.10 @4.9 @4.6
+  @proxy @noproxy @disconnected @connected
   Scenario: ptp operator can be deployed successfully
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ptp" project

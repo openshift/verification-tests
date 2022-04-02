@@ -161,7 +161,7 @@ Feature: creating 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   Scenario: 4.x Could not create any context in non-existent project
     Given I create a new application with:
       | docker image | openshift/ruby-20-centos7~https://github.com/openshift/ruby-hello-world |

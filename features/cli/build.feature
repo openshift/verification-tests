@@ -74,7 +74,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Create a build config based on the source code in the current git repository
     Given I have a project
@@ -142,7 +142,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Create applications only with multiple db images
     Given I create a new project
@@ -185,7 +185,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Add multiple source inputs
     Given I have a project
@@ -217,7 +217,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Add a image with multiple paths as source input
     Given I have a project
@@ -242,7 +242,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Using a docker image as source input using new-build cmd
     Given I have a project
@@ -310,7 +310,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Cannot create secret from local file and with same name via oc new-build
     Given I have a project
@@ -407,7 +407,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Change runpolicy to SerialLatestOnly build
     Given I have a project
@@ -741,7 +741,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Handle build naming collisions
     Given I have a project
@@ -772,7 +772,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
     Given I have a project
@@ -795,7 +795,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Insert configmap when create a buildconfig
     Given I have a project
@@ -933,7 +933,7 @@ Feature: build 'apps' with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Allow using a configmap as an input to a docker build
     Given I have a project

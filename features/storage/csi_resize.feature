@@ -54,7 +54,7 @@ Feature: CSI Resizing related feature
     @openstack-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | sc_name      |
@@ -89,7 +89,7 @@ Feature: CSI Resizing related feature
       | Forbidden.*field can not be less than previous value |
 
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | sc_name |

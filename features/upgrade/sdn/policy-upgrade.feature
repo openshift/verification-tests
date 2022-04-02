@@ -21,6 +21,7 @@ Feature: SDN compoment upgrade testing
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-network-operator" project
@@ -82,7 +83,7 @@ Feature: SDN compoment upgrade testing
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   Scenario: Check the networkpolicy works well after upgrade
@@ -196,6 +197,7 @@ Feature: SDN compoment upgrade testing
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
+  @proxy @noproxy @disconnected @connected
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project
@@ -358,6 +360,7 @@ Feature: SDN compoment upgrade testing
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
+  @proxy @noproxy @disconnected @connected
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade3" project
@@ -423,6 +426,7 @@ Feature: SDN compoment upgrade testing
   @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "conntrack-upgrade" project
@@ -614,6 +618,7 @@ Feature: SDN compoment upgrade testing
   @destructive
   @network-ovnkubernetes @network-networkpolicy
   @upgrade
+  @proxy @noproxy @disconnected @connected
   Scenario: Check network policy ACL logging works post upgrade 
     Given I switch to cluster admin pseudo user
     Given the env is using "OVNKubernetes" networkType

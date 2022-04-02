@@ -19,7 +19,7 @@ Feature: Machine-api components upgrade tests
   # @author huliu@redhat.com
   @upgrade-check
   @admin
-  @disconnected @connected
+    @proxy @noproxy @disconnected @connected
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
@@ -58,6 +58,7 @@ Feature: Machine-api components upgrade tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Cloud-controller-manager cluster operator should be available after upgrade
     Given evaluation of `cluster_operator('cloud-controller-manager').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -88,6 +89,7 @@ Feature: Machine-api components upgrade tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: There should be no pending or firing alerts for machine-api operators
     Given I switch to cluster admin pseudo user
 
@@ -115,7 +117,7 @@ Feature: Machine-api components upgrade tests
   @destructive
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Scale up and scale down a machineSet after upgrade
@@ -223,6 +225,7 @@ Feature: Machine-api components upgrade tests
     @azure-ipi
     @upgrade
     @network-ovnkubernetes @network-openshiftsdn
+    @proxy @noproxy @disconnected @connected
     Examples:
       | iaas_type | machineset_name        | value                   |
       | azure     | machineset-clone-41804 | "spotVMOptions": {}     | # @case_id OCP-41804
@@ -253,6 +256,7 @@ Feature: Machine-api components upgrade tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -312,6 +316,7 @@ Feature: Machine-api components upgrade tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Registering Components delays should not be more than liveliness probe 
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

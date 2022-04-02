@@ -8,6 +8,7 @@ Feature: change the policy of user/service account
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: User can view ,add, remove and modify roleBinding via admin role user
     Given I have a project
     When I run the :get client command with:
@@ -61,7 +62,7 @@ Feature: change the policy of user/service account
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   Scenario: Could get projects for new role which has permission to get projects
     Given an 8 characters random string of type :dns is stored into the :random clipboard
     And admin ensures "clusterrole-12430-<%= cb.random %>" cluster_role is deleted after scenario
@@ -142,7 +143,7 @@ Feature: change the policy of user/service account
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: DaemonSet only support Always restartPolicy
     Given I have a project
@@ -173,7 +174,7 @@ Feature: change the policy of user/service account
   @aws-ipi
   @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   Scenario: Basic user could not get deeper storageclass object info
     Given I have a project
     When I run the :get client command with:
@@ -222,7 +223,7 @@ Feature: change the policy of user/service account
   @aws-ipi
   @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   Scenario: User with role storage-admin can check deeper storageclass object info
     Given I have a project
     And admin ensures "sc-<%= project.name %>" storageclasses is deleted after scenario
@@ -284,7 +285,7 @@ Feature: change the policy of user/service account
   @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   Scenario: User with role storage-admin can check deeper pv object info
     Given I have a project
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
@@ -347,7 +348,7 @@ Feature: change the policy of user/service account
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   Scenario: User with role storage-admin can get pvc object info
     Given I have a project
     And evaluation of `project.name` is stored in the :project clipboard
@@ -394,7 +395,7 @@ Feature: change the policy of user/service account
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   Scenario: Basic user could not get pv object info
     Given I have a project
     Then I run the :get client command with:
@@ -420,7 +421,7 @@ Feature: change the policy of user/service account
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   Scenario: User can know if he can create podspec against the current scc rules via CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview_privileged_false.json"
@@ -457,7 +458,7 @@ Feature: change the policy of user/service account
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   Scenario: User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
@@ -534,7 +535,7 @@ Feature: change the policy of user/service account
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   Scenario: User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"

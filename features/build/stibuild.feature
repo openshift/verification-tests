@@ -37,7 +37,7 @@ Feature: stibuild.feature
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
-    @connected
+    @proxy @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | template          |
@@ -50,7 +50,7 @@ Feature: stibuild.feature
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: STI build with dockerImage with specified tag
     Given I have a project
@@ -145,7 +145,7 @@ Feature: stibuild.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Mount source secret and configmap to builder container- sourcestrategy
     Given I have a project

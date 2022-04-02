@@ -20,7 +20,7 @@ Feature: basic verification for upgrade oc client testing
   @admin
   @users=upuser1,upuser2
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
@@ -83,7 +83,7 @@ Feature: basic verification for upgrade oc client testing
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check some container related oc commands still work for ocp45 after upgrade

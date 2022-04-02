@@ -25,7 +25,7 @@ Feature: Routing and DNS related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: ensure ingress works well before and after upgrade
@@ -66,7 +66,7 @@ Feature: Routing and DNS related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: ensure DNS works well before and after upgrade
@@ -114,7 +114,7 @@ Feature: Routing and DNS related scenarios
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @baremetal-ipi
   @vsphere-upi @baremetal-upi
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: upgrade with running router pods on all worker nodes
@@ -206,7 +206,7 @@ Feature: Routing and DNS related scenarios
   @gcp-ipi @azure-ipi
   @gcp-upi @azure-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: upgrade with route shards
@@ -280,6 +280,7 @@ Feature: Routing and DNS related scenarios
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Unidling a route work without user intervention
     # Check the servcie service-unsecure to see the idle annotation is still intact
     Given I switch to first user

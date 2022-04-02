@@ -4,7 +4,7 @@ Feature: CSI testing related feature
   # @case_id OCP-30787
   @admin
   @stage-only
-  @connected
+  @proxy @noproxy @connected
   Scenario: CSI images checking in stage and prod env
     Given the master version >= "4.4"
     Given I switch to cluster admin pseudo user
@@ -19,7 +19,7 @@ Feature: CSI testing related feature
   # @case_id OCP-31345
   @admin
   @stage-only
-  @connected
+  @proxy @noproxy @connected
   Scenario: CSI images checking in stage env in OCP4.3
     Given the master version == "4.3"
     Given I switch to cluster admin pseudo user
@@ -31,7 +31,7 @@ Feature: CSI testing related feature
   # @case_id OCP-31346
   @admin
   @stage-only
-  @connected
+  @proxy @noproxy @connected
   Scenario: CSI images checking in stage env in OCP4.2
     Given the master version == "4.2"
     Given I switch to cluster admin pseudo user
@@ -83,7 +83,7 @@ Feature: CSI testing related feature
     @upgrade-sanity
     @qeci
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | sc_name      |
@@ -168,7 +168,7 @@ Feature: CSI testing related feature
     @upgrade-sanity
     @qeci
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37562
@@ -223,7 +223,7 @@ Feature: CSI testing related feature
     @upgrade-sanity
     @qeci
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     Examples:
       | sc_name       | fstype |
       | standard-csi  | xfs    | # @case_id OCP-37560
@@ -274,7 +274,7 @@ Feature: CSI testing related feature
 
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | sc_name      |
@@ -326,7 +326,7 @@ Feature: CSI testing related feature
       | gp2-csi      | st1    | 125Gi | # @case_id OCP-24572
 
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | sc_name      | type   | size  |
@@ -380,7 +380,7 @@ Feature: CSI testing related feature
 
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |

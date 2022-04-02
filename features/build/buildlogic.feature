@@ -7,7 +7,7 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Build with specified Dockerfile via new-build -D
     Given I have a project
@@ -64,7 +64,7 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Create new build config use dockerfile with source repo
     Given I have a project
@@ -111,7 +111,7 @@ Feature: buildlogic.feature
 
     @upgrade-sanity
     @singlenode
-    @connected
+    @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | template                            |
@@ -124,7 +124,7 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
@@ -258,7 +258,7 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check s2i build substatus and times
     Given I have a project
@@ -285,7 +285,7 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check docker build substatus and times
     Given I have a project

@@ -7,7 +7,7 @@ Feature: ipv6 dual stack cluster test scenarios
   @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Project should be in isolation when using multitenant policy for ipv6 dual stack
     # create project and pods
@@ -89,7 +89,7 @@ Feature: ipv6 dual stack cluster test scenarios
   @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: ipv6 for nodeport service
     Given I store the workers in the :workers clipboard
