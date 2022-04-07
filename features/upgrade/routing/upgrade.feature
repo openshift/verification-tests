@@ -91,7 +91,7 @@ Feature: Routing and DNS related scenarios
   Scenario: upgrade with running router pods on all worker nodes - prepare
     # Get the number of worker nodes and scale up router pods
     Given I switch to cluster admin pseudo user
-    And I store the number of worker nodes to the :num_workers clipboard
+    And I store the number of linux worker nodes to the :num_workers clipboard
     And evaluation of `cb.num_workers - 1` is stored in the :num_routers clipboard
     When I run the :scale admin command with:
       | resource | ingresscontroller          |
@@ -119,7 +119,7 @@ Feature: Routing and DNS related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
-    And I store the number of worker nodes to the :num_workers clipboard
+    And I store the number of linux worker nodes to the :num_workers clipboard
     And evaluation of `cb.num_workers - 1` is stored in the :num_routers clipboard
     Given I use the "openshift-ingress" project
     Then the expression should be true> deployment("router-default").current_replicas(cached: false) == <%= cb.num_routers %>
