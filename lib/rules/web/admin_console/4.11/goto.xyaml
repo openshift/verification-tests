@@ -15,6 +15,9 @@ goto_project_resources_page:
       selector:
         xpath: //button[contains(translate(@aria-label, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'list view')]
     ref: click_topology_view_switcher
+goto_project_topology_page:
+  url: topology/ns/<project_name>?view=list
+  action: wait_box_loaded
 goto_project_details_page:
   url: k8s/cluster/projects/<project_name>/details
 # Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
