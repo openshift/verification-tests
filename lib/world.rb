@@ -50,6 +50,20 @@ module BushSlicer
       end
     end
 
+    def print_debugging_info(host)
+      # Intention of method is to execute additional debug statement to analyze unexpected trickier failures.
+      logger.handled_error = ''
+      res = admin.cli_exec(:get, resource: "nodes", _quiet: true)
+      nodes = host.exec_raw("echo '#{res[:response]}' | grep -E 'SchedulingDisabled|NotReady' | awk '(NR>1)'", quiet: true)
+      res = admin.cli_exec(:get, resource: "co", _quiet: true)
+      cos = host.exec_raw("echo '#{res[:response]}' | grep -v '.True.*False.*False' | awk '(NR>1)'", quiet: true)
+      res = admin.cli_exec(:get, all_namespaces: true, resource: "pods", _quiet: true)
+      pods = host.exec_raw("echo '#{res[:response]}' | grep -Ev 'Running|Completed' | awk '(NR>1)'", quiet: true)
+      logger.info("List of abnormal nodes :\n" + nodes[:response])
+      logger.info("List of abnormal co :\n" + cos[:response])
+      logger.info("List of abnormal pods :\n" + pods[:response])
+    end
+
     def scenario_tags
       scenario.source_tag_names
     end

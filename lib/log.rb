@@ -19,6 +19,8 @@ module BushSlicer
     # include Term::ANSIColor
 
     attr_reader :level
+    attr_accessor :handled_error
+
     CENSOR_KW = [
       'kind: secret',
       '"kind": "secret"',
@@ -82,6 +84,10 @@ module BushSlicer
       end
     end
 
+    def handled_error?
+      handled_error && !handled_error.empty?
+    end
+
     def dedup_start
       require 'strscan'
 
@@ -106,6 +112,8 @@ module BushSlicer
     end
 
     def log(msg, level=INFO, show_datetime='time')
+      filter_custom_logs(msg)
+
       return if level > self.level
 
       ## take care of special message types
@@ -163,6 +171,12 @@ module BushSlicer
       @@puts_method.call(msg)
     end
 
+    def filter_custom_logs(msg)
+      # This is to capture the message when the trickier failure like below seen in any test case execution.
+      if (msg =~/connection to the server\S+was refused|Unable to connect to the server|Error from server \(ServiceUnavailable\)/)
+        @handled_error = msg
+      end
+    end
     # supports embedding content similar with same semantics as Cucumber
     def embed(src, mime_type, label)
       if self.class.runtime.respond_to? :attach

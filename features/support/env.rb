@@ -73,6 +73,10 @@ After do |_scenario|
   debug_in_after_hook
 
   begin
+    # Calling additional debug statement and when the scenario is failed along with custom error message in execution.
+    if (self.scenario.failed?) && (logger.handled_error?)
+      print_debugging_info(localhost)
+    end
     ## raise inside block only if error can affect next scenarios execution ##
     # Manager will call clean-up including self.after_scenario
     manager.after_scenario
