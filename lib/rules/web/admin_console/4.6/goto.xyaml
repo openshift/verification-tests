@@ -31,6 +31,8 @@ goto_one_api_explore_page:
   url: api-resource/ns/<project_name>/<api_explore_name>
 
 # builds
+goto_buildconfigs_page:
+  url: k8s/ns/<project_name>/buildconfigs
 goto_one_buildconfig_page:
   url: k8s/ns/<project_name>/buildconfigs/<bc_name>
 goto_builds_page:
