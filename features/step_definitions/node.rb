@@ -26,7 +26,7 @@ end
 # select a random node from a cluster.
 Given /^I select a random( windows)? node's host$/ do | windows |
   ensure_admin_tagged
-  nodes = env.nodes.select { |n| n.schedulable? && (windows ? n.is_windows_worker? : ! n.is_windows_worker?) }
+  nodes = env.nodes.select { |n| n.schedulable? && (windows ? n.is_windows? : ! n.is_windows?) }
   cache_resources *nodes.shuffle
   @host = node.host
 end
@@ -56,7 +56,7 @@ Given /^I store the( schedulable| ready and schedulable)?( windows)? (node|maste
   end
 
   ###select windows worker or not
-  cb[cbname] = cb[cbname].select { |n| windows ? n.is_windows_worker? : ! n.is_windows_worker? }
+  cb[cbname] = cb[cbname].select { |n| windows ? n.is_windows? : ! n.is_windows? }
 
   cache_resources *cb[cbname].shuffle
 end
@@ -633,9 +633,14 @@ Given /^I store all worker nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
   cb[cb_name] = nodes.select { |n| n.is_worker? }
 end
 
-Given /^I store the number of worker nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
+Given /^I store the number of( linux| windows)? worker nodes to the#{OPT_SYM} clipboard$/ do |os_type, cb_name|
   nodes = BushSlicer::Node.list(user: admin)
   worker_nodes = nodes.select { |n| n.is_worker? }
+  if os_type =~ /linux/
+    worker_nodes = worker_nodes.select { |n| n.is_linux?}
+  elsif os_type =~ /windows/
+    worker_nodes = worker_nodes.select { |n| n.is_windows?}
+  end
   cb[cb_name] = worker_nodes.length
 end
 
