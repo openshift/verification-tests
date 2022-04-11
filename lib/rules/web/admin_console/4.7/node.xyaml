@@ -151,6 +151,4 @@ check_addresses:
   - selector:
       xpath: //li[contains(., '<hostname>') and span[contains(., 'Hostname')]]
   - selector:
-      xpath: //li[contains(., '<internal_dns>') and span[contains(., 'Internal DNS')]]
-  - selector:
       xpath: //li[contains(., '<internal_ip>') and span[contains(., 'Internal IP')]]
