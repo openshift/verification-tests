@@ -7,6 +7,9 @@
   @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Check the multus works well after upgrade - prepare
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard

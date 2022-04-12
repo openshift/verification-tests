@@ -9,6 +9,7 @@ Feature: Upgrade Logging with ClusterLogForwarder
   @singlenode
   @connected
   @4.6
+  @proxy @noproxy @connected
   Scenario: Upgrade clusterlogging with mulitple external log store enabled - prepare
     Given the master version >= "4.6"
     And logging operators are installed successfully

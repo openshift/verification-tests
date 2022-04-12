@@ -8,6 +8,7 @@ Feature: Egress compoment upgrade testing
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @upgrade
   Scenario: Check egressfirewall is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
@@ -79,6 +80,8 @@ Feature: Egress compoment upgrade testing
   @vsphere-ipi
   @vsphere-upi
   @qeci
+  @upgrade
+  @proxy @noproxy @disconnected @connected
   Scenario: Check ovn egressip is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I save ipecho url to the clipboard
@@ -177,6 +180,9 @@ Feature: Egress compoment upgrade testing
   @vsphere-ipi
   @vsphere-upi
   @qeci
+  @upgrade
+  @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Check sdn egressip is functional post upgrade - prepare
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user

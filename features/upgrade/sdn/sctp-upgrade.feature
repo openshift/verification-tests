@@ -6,6 +6,9 @@ Feature: SDN sctp compoment upgrade testing
   @4.11 @4.10 @4.9
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Check the sctp works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:

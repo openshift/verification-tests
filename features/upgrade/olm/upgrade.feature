@@ -10,6 +10,9 @@ Feature: OLM related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: upgrade OLM - prepare
     # Check OLM version
     Given the "operator-lifecycle-manager" operator version matches the current cluster version

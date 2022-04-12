@@ -1,4 +1,5 @@
 Feature: web console related upgrade check
+
   # @author yanpzhan@redhat.com
   @console
   @upgrade-prepare
@@ -8,6 +9,10 @@ Feature: web console related upgrade check
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @disconnected @connected
+  @admin
+  @proxy @noproxy @disconnected @connected
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: check console accessibility - prepare
     Given I switch to the first user
     When I run the :new_project client command with:

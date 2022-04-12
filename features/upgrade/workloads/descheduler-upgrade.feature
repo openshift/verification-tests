@@ -1,4 +1,5 @@
 Feature: Descheduler major upgrade should work fine
+
   # @author knarra@redhat.com
   @admin
   @upgrade-prepare

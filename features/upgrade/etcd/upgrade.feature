@@ -1,4 +1,5 @@
 Feature: basic verification for upgrade testing
+
   # @author geliu@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
