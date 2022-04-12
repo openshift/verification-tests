@@ -1,4 +1,5 @@
 Feature: image-registry operator upgrade tests
+
   # @author xiuwang@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2

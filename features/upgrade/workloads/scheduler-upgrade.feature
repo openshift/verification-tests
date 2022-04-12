@@ -1,4 +1,5 @@
 Feature: scheduler with custom policy upgrade check
+
   # @author knarra@redhat.com
   @upgrade-prepare
   @admin
@@ -8,6 +9,9 @@ Feature: scheduler with custom policy upgrade check
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Upgrading cluster when using a custom policy for kube-scheduler should work fine - prepare
     Given the "kube-scheduler" operator version matches the current cluster version
     Given the expression should be true> cluster_operator('kube-scheduler').condition(type: 'Progressing')['status'] == "False"

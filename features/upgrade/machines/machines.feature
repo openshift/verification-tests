@@ -1,4 +1,5 @@
 Feature: Machine-api components upgrade tests
+
   @upgrade-prepare
   @disconnected @connected
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -77,6 +78,10 @@ Feature: Machine-api components upgrade tests
   @4.10 @4.9 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: There should be no pending or firing alerts for machine-api operators - prepare
     Given the expression should be true> "True" == "True"
 
@@ -107,6 +112,9 @@ Feature: Machine-api components upgrade tests
   @disconnected @connected
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @proxy @noproxy @disconnected @connected
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Scale up and scale down a machineSet after upgrade - prepare
     Given the expression should be true> "True" == "True"
 
@@ -235,6 +243,9 @@ Feature: Machine-api components upgrade tests
   @admin
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -305,6 +316,9 @@ Feature: Machine-api components upgrade tests
   @admin
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Registering Components delays should not be more than liveliness probe - prepare 
     Given the expression should be true> "True" == "True"
 

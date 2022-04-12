@@ -7,6 +7,9 @@ Feature: service upgrade scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check the idle service works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -66,6 +69,9 @@ Feature: service upgrade scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   Scenario: Check the nodeport service works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:

@@ -1,4 +1,5 @@
 Feature: Node components upgrade tests
+
   # @author minmli@redhat.com
   @upgrade-prepare
   @admin
@@ -8,6 +9,9 @@ Feature: Node components upgrade tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Make sure nodeConfig is not changed after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :label admin command with:
