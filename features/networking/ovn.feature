@@ -136,10 +136,10 @@ Feature: OVN related networking scenarios
     Then the step should succeed
     """
     And I run the :scale admin command with:
-      | resource  | deployment                 |
-      | name      | network-operator           |
-      | replicas  | 0                          |
-      | n         | openshift-network-operator |
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 0                          |
+      | n        | openshift-network-operator |
     Then the step should succeed
     And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
     And admin executes existing pods die with labels:
@@ -209,7 +209,7 @@ Feature: OVN related networking scenarios
     Given I have a pod-for-ping in the project
     Then evaluation of `pod.ip` is stored in the :hello_pod_ip clipboard
     When I execute on the pod:
-       | bash | -c | ip a show eth0 |
+      | bash | -c | ip a show eth0 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :hello_pod_mac clipboard
 
@@ -399,12 +399,12 @@ Feature: OVN related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
-  Scenario: New corresponding raft leader should be elected if SB db or NB db on existing master is crashed
+  Scenario Outline: New corresponding raft leader should be elected if SB db or NB db on existing master is crashed
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
     When I store the ovnkube-master "south" leader pod in the clipboard
     Then the step should succeed
-    When the OVN "south" database is killed on the "<%= cb.south_leader.node_name %>" node
+    When the OVN "south" database is killed with signal "<signal>" on the "<%= cb.south_leader.node_name %>" node
     Then the step should succeed
 
     And I wait up to 30 seconds for the steps to pass:
@@ -417,7 +417,7 @@ Feature: OVN related networking scenarios
 
     When I store the ovnkube-master "north" leader pod in the clipboard
     Then the step should succeed
-    When the OVN "north" database is killed on the "<%= cb.north_leader.node_name %>" node
+    When the OVN "north" database is killed with signal "<signal>" on the "<%= cb.north_leader.node_name %>" node
     Then the step should succeed
 
     And I wait up to 30 seconds for the steps to pass:
@@ -428,6 +428,14 @@ Feature: OVN related networking scenarios
     """
     And admin waits for all pods in the project to become ready up to 120 seconds
 
+    Examples:
+      | signal |
+      | TERM   |
+      | QUIT   |
+      | INT    |
+      | HUP    |
+      | SEGV   |
+      | 9      |
 
   # @author rbrattai@redhat.com
   # @case_id OCP-26138
