@@ -75,6 +75,7 @@ Feature: IPsec upgrade scenarios
   @upgrade
   @proxy @noproxy @disconnected @connected
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade
+    Given the env is using "OVNKubernetes" networkType
     Given evaluation of `50` is stored in the :protocol clipboard
     Given I switch to cluster admin pseudo user
     And the default interface on nodes is stored in the :default_interface clipboard
