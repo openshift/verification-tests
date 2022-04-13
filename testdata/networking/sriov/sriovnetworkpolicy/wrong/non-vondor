@@ -8,8 +8,6 @@ spec:
   nicSelector:
     pfNames:
       - ens3f1
-    rootDevices:
-      - '0000:5e:00.1'
     vendor: '15b4'
   nodeSelector:
     feature.node.kubernetes.io/sriov-capable: 'true'

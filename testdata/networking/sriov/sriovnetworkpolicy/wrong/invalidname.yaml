@@ -7,10 +7,6 @@ spec:
   deviceType: netdevice
   mtu: 1500
   nicSelector:
-    pfNames:
-      - p1p1
-    rootDevices:
-      - '0000:3b:00.0'
     vendor: '8086'
   nodeSelector:
     feature.node.kubernetes.io/sriov-capable-rhel: 'true'
