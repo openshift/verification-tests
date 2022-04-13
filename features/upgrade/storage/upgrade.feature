@@ -90,10 +90,14 @@ Feature: Storage upgrade tests
     Given the "storage" operator version matches the current cluster version
 
     # Check cluster operator storage should be in correct status
+    # Added wait time for OCPQE-9247
+    Given I wait up to 180 seconds for the steps to pass:
+    """
     Given the expression should be true> cluster_operator('storage').condition(type: 'Progressing')['status'] == "False"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Available')['status'] == "True"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Degraded')['status'] == "False"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
+    """
 
     # There should be one and only one default storage class
     # Comment out the step of get default SC from co storage due to BUG 1868424, not deleting them as we will add them back after bug fixed
