@@ -9,8 +9,6 @@ spec:
     deviceID: '158b'
     pfNames:
       - ens1f0
-    rootDevices:
-      - '0000:3b:00.0'
     vendor: '8086'
   nodeSelector:
     feature.node.kubernetes.io/sriov-capable: 'true'
