@@ -157,7 +157,7 @@ check_cluster_role_reference:
     resource_link: /k8s/cluster/clusterroles/<role_name>
   action: check_resource_item
 check_no_create_button_on_list_page:
-  action: goto_project_pods_list_page
+  action: goto_dc_page
   action: check_yaml_create_button_missing
   action: goto_deployment_page
   action: check_yaml_create_button_missing
