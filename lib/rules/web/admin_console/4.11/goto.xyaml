@@ -202,7 +202,7 @@ goto_one_route_page:
   url: k8s/ns/<project_name>/routes/<route_name>
   action: wait_box_loaded
 goto_route_creation_page:
-  url: k8s/ns/<project_name>/routes/~new/form
+  url: k8s/ns/<project_name>/routes/~new
 
 #imagestream
 goto_all_imagestreams_list:
