@@ -13,17 +13,7 @@ module BushSlicer
     attr_reader :config
 
     def initialize(**opts)
-      service_name = opts.delete(:service_name)
-      if service_name
-        @config = conf[:services, service_name]
-      else
-        @config = {}
-      end
-
-      config_opts = opts.delete(:config)
-      if config_opts
-        deep_merge!(@config, config_opts)
-      end
+      @config = conf[:services, opts.delete(:service_name) || :nutanix]
     end
   end
 end
