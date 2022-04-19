@@ -6,6 +6,7 @@ metadata:
 spec:
   mtu: 1500
   nicSelector:
+    deviceID: '101'
     pfNames:
       - ens3f1
     vendor: '15b3'
