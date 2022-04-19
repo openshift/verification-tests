@@ -519,7 +519,7 @@ Feature: Sriov related scenarios
     Examples:
       | file              | Error message                |
       | invalidname.yaml  | invalid characters           |
-      | non-deviceid      | no supported NIC             |
+      | non-deviceid      | not supported                |
       | non-vondor        | vendor 15b4 is not supported |
       | vfnum0            | numVfs(0) in CR              |
 
@@ -552,7 +552,7 @@ Feature: Sriov related scenarios
       | l             | feature.node.kubernetes.io/sriov-capable=true |
       | o             | yaml                                          |
     Then the step should succeed
-    And the output should contain "openshift.io/intelnetdevice: "5""
+    And the output should match "openshift.io/intelnetdevice: "5|10""
     """
 
   # @author zzhao@redhat.com
