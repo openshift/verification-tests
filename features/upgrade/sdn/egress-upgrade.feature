@@ -26,7 +26,7 @@ Feature: Egress compoment upgrade testing
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -I | --connect-timeout | 5 | redhat.com |
     Then the step should succeed
-    And the output should contain "HTTP/1.0"
+    And the output should contain "redhat.com"
 
     Given I save egress data file directory to the clipboard
     Given I obtain test data file "networking/<%= cb.cb_egress_directory %>/limit_policy.json"
@@ -40,7 +40,7 @@ Feature: Egress compoment upgrade testing
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -I | --connect-timeout | 5 | redhat.com |
     Then the step should fail
-    And the output should not contain "HTTP/1.0"
+    And the output should contain "timed out"
     """
 
   # @author huirwang@redhat.com
@@ -70,7 +70,7 @@ Feature: Egress compoment upgrade testing
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -I | --connect-timeout | 5 | redhat.com |
     Then the step should fail
-    And the output should not contain "HTTP/1.0"
+    And the output should contain "timed out"
 
   # @author huirwang@redhat.com
   @admin
