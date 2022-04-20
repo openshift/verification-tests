@@ -867,7 +867,10 @@ Given /^the env is using windows nodes$/ do
   ensure_admin_tagged
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "nodes", show_label:true)
-  raise "env doesn't have any windows node" unless @result[:response].include? "kubernetes.io/os=windows"
+  unless @result[:response].include? "kubernetes.io/os=windows"
+    logger.info "env doesn't have any windows node"
+    skip_this_scenario
+  end
 end
 
 Given /^the env has hybridOverlayConfig enabled$/ do

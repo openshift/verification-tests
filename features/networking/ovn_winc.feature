@@ -8,8 +8,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   Scenario: Ensure Pods and Service communication across window and linux nodes
-    Given the env has hybridOverlayConfig enabled
-    And the env is using windows nodes
+    Given the env is using windows nodes
     Given I have a project
     And I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
@@ -64,8 +63,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
   Scenario: Create Loadbalancer service for a window container
-    Given the env has hybridOverlayConfig enabled
-    And the env is using windows nodes
+    Given the env is using windows nodes
     Given I have a project
     And I have a pod-for-ping in the project
     Given I obtain test data file "networking/windows_pod_and_service.yaml"
