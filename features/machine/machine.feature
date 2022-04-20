@@ -308,13 +308,6 @@ Feature: Machine features testing
       | iaas_type | machineset_name        |
       | gcp       | machineset-clone-32126 | # @case_id OCP-32126
 
-    @azure-ipi
-    @network-ovnkubernetes @network-openshiftsdn
-    @proxy @noproxy @disconnected @connected
-    Examples:
-      | iaas_type | machineset_name        |
-      | azure     | machineset-clone-33040 | # @case_id OCP-33040
-
   # @author zhsun@redhat.com
   # @case_id OCP-32620
   @admin
