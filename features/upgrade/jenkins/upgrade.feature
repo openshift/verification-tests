@@ -1,6 +1,7 @@
 Feature: Jenkins feature upgrade test
 
   # @author xiuwang@redhat.com
+  @flaky
   @upgrade-prepare
   @users=upuser1,upuser2
   @console
@@ -23,6 +24,7 @@ Feature: Jenkins feature upgrade test
 
   # @author xiuwang@redhat.com
   # @case_id OCP-16932
+  @flaky
   @upgrade-check
   @users=upuser1,upuser2
   @console
