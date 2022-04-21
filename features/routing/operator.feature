@@ -8,7 +8,8 @@ Feature: Testing Ingress Operator related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: set namespaceOwnership of routeAdmission to InterNamespaceAllowed
     Given the master version >= "4.4"
     And I have a project

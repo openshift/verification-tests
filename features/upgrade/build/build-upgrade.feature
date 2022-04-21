@@ -1,4 +1,5 @@
 Feature: build related upgrade check
+
   # @author wewang@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
@@ -6,6 +7,8 @@ Feature: build related upgrade check
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check docker and sti build works well before and after upgrade - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -31,6 +34,7 @@ Feature: build related upgrade check
   @singlenode
   @connected
   @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check docker and sti build works well before and after upgrade
     Given I switch to the first user
     When I use the "build-upgrade" project

@@ -13,7 +13,8 @@ Feature: CSI clone testing related feature
   @upgrade-sanity
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Clone a PVC and verify data consistency
     # Step 1
     Given the master version >= "4.7"
@@ -58,7 +59,8 @@ Feature: CSI clone testing related feature
   @openstack-upi
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: [Cinder CSI Clone] Clone a pvc with capacity greater than original pvc
     Given I have a project
     # Create mypvc-ori with 1Gi size
@@ -111,7 +113,8 @@ Feature: CSI clone testing related feature
   @openstack-upi
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: [Cinder CSI Clone] Clone a pvc with capacity less than original pvc will fail
     Given I have a project
     # Create mypvc-ori with 2Gi size
@@ -163,7 +166,8 @@ Feature: CSI clone testing related feature
   @upgrade-sanity
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: [Cinder CSI clone] Clone a pvc with block VolumeMode successfully
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -215,12 +219,13 @@ Feature: CSI clone testing related feature
   # @case_id OCP-27617
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi
   @openstack-upi
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: [Cinder CSI Clone] Clone a pvc with default storageclass
     Given default storage class is patched to non-default
     And admin clones storage class "my-csi-default" from "standard-csi" with:
@@ -277,7 +282,8 @@ Feature: CSI clone testing related feature
   @openstack-upi
   @qeci
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: [Cinder CSI Clone] Clone a pvc with different storage class is failed
     # Create mypvc-ori with sc1
     Given I have a project

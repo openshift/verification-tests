@@ -6,10 +6,9 @@ metadata:
 spec:
   mtu: 1500
   nicSelector:
+    deviceID: '101'
     pfNames:
       - ens3f1
-    rootDevices:
-      - '0000:5e:00.3'
     vendor: '15b3'
   nodeSelector:
     feature.node.kubernetes.io/sriov-capable: 'true'

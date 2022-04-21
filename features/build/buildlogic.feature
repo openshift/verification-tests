@@ -7,7 +7,8 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Build with specified Dockerfile via new-build -D
     Given I have a project
     When I run the :new_build client command with:
@@ -63,7 +64,8 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Create new build config use dockerfile with source repo
     Given I have a project
     When I run the :new_build client command with:
@@ -109,7 +111,8 @@ Feature: buildlogic.feature
 
     @upgrade-sanity
     @singlenode
-    @connected
+    @noproxy @connected
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | template                            |
       | buildconfig-s2i-dockerimage.json    | # @case_id OCP-11149
@@ -121,7 +124,8 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
@@ -163,6 +167,7 @@ Feature: buildlogic.feature
   @upgrade-sanity
   @singlenode
   @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Build from private git repo with/without ssh key
     Given I have a project
     And I have an ssh-git service in the project
@@ -212,6 +217,7 @@ Feature: buildlogic.feature
   @upgrade-sanity
   @singlenode
   @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Create new-app from private git repo with ssh key
     Given I have a project
     When I run the :new_app client command with:
@@ -252,7 +258,8 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check s2i build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
@@ -278,7 +285,8 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Check docker build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-dockerbuild.json"
@@ -472,6 +480,7 @@ Feature: buildlogic.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application
@@ -528,6 +537,7 @@ Feature: buildlogic.feature
   @upgrade-sanity
   @singlenode
   @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's
     Given I have a project
     Given I save a htpasswd registry auth to the :combine_dockercfg clipboard

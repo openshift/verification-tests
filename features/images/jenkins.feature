@@ -72,6 +72,8 @@ Feature: jenkins.feature
       | prod                                     |
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @network-ovnkubernetes @network-openshiftsdn
+    @proxy @noproxy
     Examples:
       | ver |
       | 2   | # @case_id OCP-11369
@@ -99,6 +101,7 @@ Feature: jenkins.feature
     @upgrade-sanity
     @singlenode
     @noproxy @connected
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | version |
       | 2       | # @case_id OCP-10980
@@ -110,7 +113,8 @@ Feature: jenkins.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: new-app/new-build support for pipeline buildconfigs
     Given I have a project
     When I run the :new_app client command with:
@@ -300,7 +304,8 @@ Feature: jenkins.feature
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
-    @connected
+    @proxy @noproxy @connected
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | version |
       | 1       |
@@ -314,6 +319,7 @@ Feature: jenkins.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Jenkins pipeline build with OpenShift Client Plugin Example
     And I have a project
     When I run the :create client command with:
@@ -362,6 +368,7 @@ Feature: jenkins.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project
     When I run the :new_app client command with:

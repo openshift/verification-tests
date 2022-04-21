@@ -1,4 +1,5 @@
 Feature: CloudCredentialOperator components upgrade tests
+
   # @author lwan@redhat.com
   @upgrade-prepare
   @admin
@@ -6,6 +7,9 @@ Feature: CloudCredentialOperator components upgrade tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Cluster operator cloud-credential should be available after upgrade - prepare
     Given I switch to cluster admin pseudo user
     #Check cloud-credential version
@@ -32,6 +36,8 @@ Feature: CloudCredentialOperator components upgrade tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: Cluster operator cloud-credential should be available after upgrade
     # Check cloud-credential operator version after upgraded
     Given the "cloud-credential" operator version matches the current cluster version

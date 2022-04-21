@@ -96,10 +96,15 @@ module BushSlicer
       return ! res.nil?
     end
   
-    def is_windows_worker?(user: nil, cached: true, quiet: false)
+    def is_windows?(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('metadata', 'labels', 'kubernetes.io/os') == "windows"
-    end    
+    end
+
+    def is_linux?(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('metadata', 'labels', 'kubernetes.io/os') == "linux"
+    end
 
     def ready?(user: nil, cached: false, quiet: false)
       status = get_cached_prop(prop: :status, user: user, cached: cached, quiet: quiet)
@@ -109,6 +114,14 @@ module BushSlicer
       end
       return result
     end
+    def address(user: nil, type:, cached: true, quiet: false)
+      addresses = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'addresses')
+      c = addresses.find { |c|
+        c.dig('type') == type
+      } or raise "No address with type #{type} found."
+      return c.dig('address')
+    end
+
 
     # @return [Integer} capacity cpu in 'm'
     def capacity_cpu(user: nil, cached: true, quiet: false)

@@ -8,7 +8,8 @@ Feature: set deployment-hook/build-hook with CLI
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:
@@ -98,6 +99,7 @@ Feature: set deployment-hook/build-hook with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Set invalid pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:

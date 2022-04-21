@@ -141,3 +141,14 @@ check_machineset_name_and_link:
     resource_type: MachineSet
     resource_link: /k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet/<resource_name>
   action: check_resource_item
+check_node_addresses:
+  params:
+    tab_name: Details
+  action: click_tab
+  action: check_addresses
+check_addresses:
+  elements:
+  - selector:
+      xpath: //li[contains(., '<hostname>') and span[contains(., 'Hostname')]]
+  - selector:
+      xpath: //li[contains(., '<internal_ip>') and span[contains(., 'Internal IP')]]

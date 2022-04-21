@@ -7,8 +7,6 @@ spec:
   deviceType: netdevice
   nicSelector:
     deviceID: '158b'
-    rootDevices:
-      - '0000:3b:00.0'
     vendor: '8086'
   nodeSelector:
     feature.node.kubernetes.io/sriov-capable: 'true'

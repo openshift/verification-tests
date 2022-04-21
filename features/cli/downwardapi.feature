@@ -7,7 +7,8 @@ Feature: Downward API
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Pods can get IPs via downward API under race condition
     Given I have a project
     Given I obtain test data file "downwardapi/ocp10707/pod-downwardapi-env.yaml"
@@ -27,7 +28,8 @@ Feature: Downward API
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: downward api pod name and pod namespace as env variables
     Given I have a project
     Given I obtain test data file "downwardapi/ocp10628/downward-example.yaml"
@@ -50,7 +52,8 @@ Feature: Downward API
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @connected
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Container consume infomation from the downward API using a volume plugin
     Given I have a project
     Given I obtain test data file "downwardapi/pod-dapi-volume.yaml"

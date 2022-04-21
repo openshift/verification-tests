@@ -14,7 +14,7 @@ Feature: negative testing
       | <error> |
 
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
     Examples:
       | dir | file               | error                        |
       | gce | pv-retain-rwx.json | error querying GCE PD volume | # @case_id OCP-10310

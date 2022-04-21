@@ -7,7 +7,8 @@ Feature: oc_delete.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Gracefully delete a pod with '--grace-period' option
     Given I have a project
     Given I obtain test data file "pods/graceful-delete/10.json"
@@ -124,7 +125,8 @@ Feature: oc_delete.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Verify pod is gracefully deleted when DeletionGracePeriodSeconds is specified.
     Given I have a project
     Given I obtain test data file "pods/graceful-delete/10.json"
@@ -155,7 +157,8 @@ Feature: oc_delete.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Pod should be immediately deleted if TerminationGracePeriodSeconds is 0
     Given I have a project
     Given I obtain test data file "pods/graceful-delete/0.json"

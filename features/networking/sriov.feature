@@ -6,7 +6,7 @@ Feature: Sriov related scenarios
   @stage-only
   @4.10 @4.9 @4.6
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   Scenario: sriov operator can be setup and running well
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sriov-network-operator" project
@@ -519,7 +519,7 @@ Feature: Sriov related scenarios
     Examples:
       | file              | Error message                |
       | invalidname.yaml  | invalid characters           |
-      | non-deviceid      | no supported NIC             |
+      | non-deviceid      | not supported                |
       | non-vondor        | vendor 15b4 is not supported |
       | vfnum0            | numVfs(0) in CR              |
 
@@ -552,7 +552,7 @@ Feature: Sriov related scenarios
       | l             | feature.node.kubernetes.io/sriov-capable=true |
       | o             | yaml                                          |
     Then the step should succeed
-    And the output should contain "openshift.io/intelnetdevice: "5""
+    And the output should match "openshift.io/intelnetdevice: "5|10""
     """
 
   # @author zzhao@redhat.com
@@ -691,7 +691,8 @@ Feature: Sriov related scenarios
   @baremetal-ipi
   @baremetal-upi
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: dpdk for intel card works well
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-dpdk.yaml"

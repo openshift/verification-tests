@@ -24,7 +24,8 @@ Feature: limit range related scenarios:
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | path     | expr1                                                | expr2                                                |
       | ocp10697 | Container\\s+cpu\\s+\-\\s+\-\\s+200m\\s+200m\\s+\-   | Container\\s+memory\\s+\-\\s+\-\\s+1Gi\\s+1Gi\\s+\-  | # @case_id OCP-10697
@@ -53,7 +54,8 @@ Feature: limit range related scenarios:
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 | expr11 |expr12 | expr13| expr14 | expr15 | expr16 | expr17 | expr18 | expr19| expr20 |
       | ocp11745 | 400m | default request | 400m | max | 200m | 200m | default | 400m | max | 200m | 2Gi | default request | 2Gi | max | 1Gi | 1Gi | default | 2Gi  | max   | 1Gi    | # @case_id OCP-11745
@@ -79,7 +81,8 @@ Feature: limit range related scenarios:
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     @singlenode
-    @disconnected @connected
+    @proxy @noproxy @disconnected @connected
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 |
       | ocp12286 | 2Gi | min | 2Gi | max | 1Gi | 400m | min | 400m | max | 200m |
@@ -93,7 +96,8 @@ Feature: limit range related scenarios:
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Limit range does not allow min > defaultRequest
     Given I have a project
     Given I obtain test data file "limits/ocp12250/limit.yaml"
@@ -114,7 +118,8 @@ Feature: limit range related scenarios:
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Limit range does not allow defaultRequest > default
     Given I have a project
     Given I obtain test data file "limits/ocp11918/limit.yaml"
@@ -135,7 +140,8 @@ Feature: limit range related scenarios:
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Limit range does not allow defaultRequest > max
     Given I have a project
     Given I obtain test data file "limits/ocp12043/limit.yaml"
@@ -156,7 +162,8 @@ Feature: limit range related scenarios:
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
     Given I obtain test data file "limits/ocp12139/limit.yaml"
@@ -186,7 +193,8 @@ Feature: limit range related scenarios:
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Limit range with all values set with proper values
     Given I have a project
     Given I obtain test data file "limits/ocp12315/limit.yaml"

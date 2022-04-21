@@ -40,9 +40,10 @@ Feature: eventrouter related test
     """
 
     @singlenode
-    @connected
+    @proxy @noproxy @connected
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
     | index_name  |
     | .operations | # @case_id OCP-25899

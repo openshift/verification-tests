@@ -687,6 +687,7 @@ click_filesystem_chart:
     selector:
       <<: *filesystem_chart
     op: click
+check_charts_on_deployment_page: {}
 check_charts_on_pod_page:
   action: click_metrics_tab
   elements:
@@ -728,3 +729,26 @@ check_monitoring_dashboard_card:
     selector:
       xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='<card_name>']
     timeout: 60
+check_metrics_under_deployment_observe_tab:
+  action: goto_project_topology_page
+  action: open_deployment_sidebar
+  action: check_metrics_on_observe_tab
+open_deployment_sidebar:
+  element:
+    selector:
+      xpath: //div[contains(text(), '<deployment_name>')]
+    op: click
+click_monitoring_button:
+  element:
+    selector:
+      xpath: //button[contains(text(), 'Monitoring')]
+    op: click
+check_metrics_on_observe_tab:
+  action: click_monitoring_button
+  elements:
+  - selector:
+      xpath: //*[contains(text(), 'CPU usage')]/parent::div/following::div[1]//div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //*[contains(text(), 'Memory usage')]/parent::div/following::div[1]//div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //*[contains(text(), 'Receive bandwidth')]/parent::div/following::div[1]//div[contains(@class,'pf-c-chart')]

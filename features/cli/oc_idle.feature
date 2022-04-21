@@ -7,7 +7,8 @@ Feature: oc idle
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: CLI - Idle all the service in the same project
     Given I have a project
     Given I obtain test data file "rc/idle-rc-1.yaml"
@@ -56,7 +57,8 @@ Feature: oc idle
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: CLI - Idle service by label
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -98,7 +100,8 @@ Feature: oc idle
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: CLI - Idle service from file
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -145,7 +148,8 @@ Feature: oc idle
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: CLI - Idle service with dry-run
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -178,9 +182,10 @@ Feature: oc idle
   # @author chezhang@redhat.com
   # @author minmli@redhat.com
   # @case_id OCP-10941
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Idling service with dc
     Given I have a project
     Given I obtain test data file "rc/idling-echo-server.yaml"
@@ -247,9 +252,10 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11345
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Idling service with rc
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"

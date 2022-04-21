@@ -9,8 +9,6 @@ spec:
     deviceID: '1017'
     pfNames:
       - ens3f0
-    rootDevices:
-      - '0000:5e:00.0'
     vendor: '15b3'
   nodeSelector:
     feature.node.kubernetes.io/sriov-capable: 'true'

@@ -867,7 +867,10 @@ Given /^the env is using windows nodes$/ do
   ensure_admin_tagged
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "nodes", show_label:true)
-  raise "env doesn't have any windows node" unless @result[:response].include? "kubernetes.io/os=windows"
+  unless @result[:response].include? "kubernetes.io/os=windows"
+    logger.info "env doesn't have any windows node"
+    skip_this_scenario
+  end
 end
 
 Given /^the env has hybridOverlayConfig enabled$/ do
@@ -1102,8 +1105,9 @@ Given /^admin deletes the ovnkube-master#{OPT_QUOTED} leader$/ do |ovndb|
   @result = resource(leader_pod_name, "pod", project_name: "openshift-ovn-kubernetes").ensure_deleted(user: admin, wait: 300)
 end
 
-Given /^the OVN "([^"]*)" database is killed on the "([^"]*)" node$/ do |ovndb, node_name|
+Given /^the OVN "([^"]*)" database is killed(?: with signal "([^"]*)")? on the "([^"]*)" node$/ do |ovndb, signal, node_name|
   ensure_admin_tagged
+  signal ||= "TERM"
   node = node(node_name)
   host = node.host
   case ovndb
@@ -1112,7 +1116,7 @@ Given /^the OVN "([^"]*)" database is killed on the "([^"]*)" node$/ do |ovndb, 
   else
     kill_match = "OVN_Southbound"
   end
-  @result = host.exec_admin("pkill -f #{kill_match}")
+  @result = host.exec_admin("pkill --signal #{signal} -f #{kill_match}")
   raise "Failed to kill the #{ovndb} database daemon" unless @result[:success]
 end
 
@@ -1437,7 +1441,7 @@ Given /^I save openflow egressip table number to the#{OPT_SYM} clipboard$/ do | 
   else
     cb[cb_name]="101"
   end
-  logger.info "The openfolw egressip related table number #{cb[cb_name]} is stored to the #{cb_name} clipboard."
+  logger.info "The openflow egressip related table number #{cb[cb_name]} is stored to the #{cb_name} clipboard."
 end
 
 Given /^I switch the ovn gateway mode on this cluster$/ do

@@ -1,4 +1,5 @@
 Feature: Descheduler major upgrade should work fine
+
   # @author knarra@redhat.com
   @admin
   @upgrade-prepare
@@ -16,6 +17,7 @@ Feature: Descheduler major upgrade should work fine
     When I run the :create admin command with:
       | f | kubedescheduler-<%= cb.master_version %>.yaml |
     Then the step should succeed
+    Given 60 seconds have passed
     And status becomes :running of exactly 1 pods labeled:
       | app=descheduler |
     Given evaluation of `pod.name` is stored in the :pod_name clipboard
@@ -44,6 +46,8 @@ Feature: Descheduler major upgrade should work fine
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
   Scenario: [upgrade] - upgrade descheduler from 4.x to 4.y
     Given I switch to cluster admin pseudo user
     And I use the "openshift-kube-descheduler-operator" project

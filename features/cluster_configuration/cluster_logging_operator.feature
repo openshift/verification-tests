@@ -8,6 +8,8 @@ Feature: cluster logging related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: Deploy Logging Via Community Operators
     Given logging service has been installed successfully
 

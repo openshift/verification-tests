@@ -8,7 +8,8 @@ Feature: project permissions
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
-  @disconnected @connected
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Pod creation should fail when pod's node selector conflicts with project node selector
     Given a 5 characters random string of type :dns is stored into the :proj_name clipboard
     When I run the :oadm_new_project admin command with:
@@ -31,7 +32,7 @@ Feature: project permissions
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
-  @connected
+  @proxy @noproxy @connected
   Scenario: The job and HPA should be deleted when project has been deleted
     Given I have a project
     Given I obtain test data file "hpa/hpa.yaml"
