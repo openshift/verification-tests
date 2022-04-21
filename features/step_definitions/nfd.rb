@@ -3,6 +3,11 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   nfd_ns ||= "openshift-nfd"
   if install_method == 'GUI'
     nfd_ns = "openshift-nfd"
+    if env.version_le("4.7", user: user)
+      nfd_ns = "openshift-operators"
+    else
+      nfd_ns = "openshift-nfd"
+    end
   end
   ver_raw, ver_major, ver_minor = env.get_version(user: user)
   cb.channel = (ver_major.to_s + "." + ver_minor.to_s)
@@ -15,7 +20,7 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   if install_method == 'GUI'
     # for 4.6, the GUI doesn't create the ns automatically if not present, so
     # do it manually
-    if env.version_lt("4.7", user: user)
+    if env.version_le("4.7", user: user)
       admin.cli_exec(:create_namespace, name: nfd_ns)
       step %Q/I wait for the "#{nfd_ns}" project to appear/
       step %Q/I use the "#{nfd_ns}" project/
@@ -46,7 +51,11 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
     step %Q/a pod becomes ready with labels:/, table(%{
       | #{pod_label} |
     })
-    step %Q|I run oc create over ERB test file: nfd/<%= cb.channel %>/040_customresources.yaml|
+    if env.version_le("4.7", user: user)
+      step %Q|I run oc create over ERB test file: nfd/<%= cb.channel %>/040_customresources_gui.yaml|
+    else
+      step %Q|I run oc create over ERB test file: nfd/<%= cb.channel %>/040_customresources.yaml|
+    end
     step %Q/the step should succeed/
   else
     file_path = "nfd/#{cb.channel}/010_namespace.yaml"
@@ -87,7 +96,7 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   node_labels = cb.worker_nodes.select {|w| w.labels.select {|n| n.start_with? 'feature'}}
   raise "Node labled check failed" unless node_labels.count > 0
   step %Q/I switch to cluster admin pseudo user/
-  step %Q/I use the "openshift-nfd" project/
+  step %Q/I use the "#{nfd_ns}" project/
 
   logger.info("Check nfd resource exists...")
   raise "NodeFeatureDiscovery resource does not exists" unless node_feature_discovery('nfd-master-server').exists?
