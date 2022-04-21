@@ -632,6 +632,7 @@ click_filesystem_chart:
     selector:
       <<: *filesystem_chart
     op: click
+check_charts_on_deployment_page: {}
 check_charts_on_pod_page:
   elements:
   - selector: &memory_usage_chart
@@ -670,3 +671,4 @@ check_monitoring_dashboard_card:
     selector:
       xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='<card_name>']
     timeout: 60
+check_metrics_under_deployment_observe_tab: {}
