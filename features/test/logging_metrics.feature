@@ -20,3 +20,7 @@ Feature: test logging and metrics related steps
     And elasticsearch-operator channel name is stored in the :eo_channel clipboard
     Given elasticsearch-operator catalog source name is stored in the :eo_catsrc clipboard
     Given cluster-logging catalog source name is stored in the :clo_catsrc clipboard
+
+  @admin
+  Scenario: check node capacity for logging
+    Given I check if the remaining_resources in woker nodes meet the requirements for logging stack

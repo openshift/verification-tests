@@ -14,6 +14,7 @@ Feature: Logging upgrading related features
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: Cluster logging checking during cluster upgrade - prepare
+    Given I check if the remaining_resources in woker nodes meet the requirements for logging stack
     Given I switch to the first user
     Given I have "json" log pod in project "logging-upg-prep-1"
     And I have "json" log pod in project "logging-upg-prep-share"
