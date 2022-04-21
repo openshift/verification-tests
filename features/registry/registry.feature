@@ -247,6 +247,7 @@ Feature: Testing registry
   # @author xiuwang@redhat.com
   # @case_id OCP-29693
   @admin
+  @qeci
   @proxy @noproxy @disconnected
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
