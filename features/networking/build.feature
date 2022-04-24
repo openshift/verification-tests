@@ -46,6 +46,7 @@ Feature: Testing the isolation during build scenarios
     @network-openshiftsdn @network-multitenant
     @upgrade-sanity
     @noproxy
+    @arm64 @amd64
     Examples:
       | type   | repo                                                           | strategy       |
       | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15741
@@ -119,6 +120,7 @@ Feature: Testing the isolation during build scenarios
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-openshiftsdn @network-networkpolicy
+    @arm64 @amd64
     Examples:
       | type   | repo                                                           | strategy       |
       | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15731

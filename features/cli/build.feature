@@ -76,6 +76,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Create a build config based on the source code in the current git repository
     Given I have a project
     And I git clone the repo "https://github.com/openshift/ruby-hello-world.git"
@@ -144,6 +145,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
@@ -187,6 +189,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Add multiple source inputs
     Given I have a project
     Given I obtain test data file "templates/ocp11227/ruby22rhel7-template-sti.json"
@@ -219,6 +222,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Add a image with multiple paths as source input
     Given I have a project
     Given I obtain test data file "templates/ocp10771/ruby22rhel7-template-sti.json"
@@ -244,6 +248,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
@@ -312,6 +317,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Cannot create secret from local file and with same name via oc new-build
     Given I have a project
     Given I obtain test data file "secrets/testsecret1.json"
@@ -346,6 +352,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Using a docker image as source input for docker build
     Given I have a project
     Given I obtain test data file "templates/ocp11552/ruby22rhel7-template-docker.json"
@@ -409,6 +416,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Change runpolicy to SerialLatestOnly build
     Given I have a project
     When I run the :new_build client command with:
@@ -629,6 +637,7 @@ Feature: build 'apps' with CLI
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @arm64 @amd64
     Examples:
       | num1 | num2 | num3 | num4 | num5 |
       | 5    | 5    | 5    | 5    | 5    | # @case_id OCP-15019
@@ -700,6 +709,7 @@ Feature: build 'apps' with CLI
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @arm64 @amd64
     Examples:
       | cmd       |
       | new_build | # @case_id OCP-12066
@@ -743,6 +753,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Handle build naming collisions
     Given I have a project
     When I run the :new_build client command with:
@@ -774,6 +785,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
     Given I have a project
     When I run the :new_app client command with:
@@ -797,6 +809,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Insert configmap when create a buildconfig
     Given I have a project
     Given a "configmap.test" file is created with the following lines:
@@ -935,6 +948,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Allow using a configmap as an input to a docker build
     Given I have a project
     Given a "configmap1.test" file is created with the following lines:

@@ -10,6 +10,7 @@ Feature: cluster logging related scenarios
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: Deploy Logging Via Community Operators
     Given logging service has been installed successfully
 

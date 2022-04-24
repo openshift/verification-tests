@@ -9,6 +9,7 @@ Feature: hpa scale
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: HPA shouldn't scale up target if the replicas of dc is 0
     Given I have a project
     Given I obtain test data file "hpa/dc-hello-openshift.yaml"
@@ -52,6 +53,7 @@ Feature: hpa scale
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: HPA shouldn't scale up target if the replicas of rc is 0
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"
@@ -93,6 +95,7 @@ Feature: hpa scale
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Creates autoscaler for replication controller by oc autoscale
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"

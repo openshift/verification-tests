@@ -9,6 +9,7 @@ Feature: oc_portforward.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Forward multi local ports to a pod
     Given I have a project
     And evaluation of `rand(5000..7999)` is stored in the :porta clipboard

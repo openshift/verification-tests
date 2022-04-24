@@ -8,6 +8,7 @@ Feature: remote registry related scenarios
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Support unauthenticated with registry-admin role
     Given I have a project
     Given I find a bearer token of the default service account

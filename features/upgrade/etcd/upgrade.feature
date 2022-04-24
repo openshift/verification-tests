@@ -10,6 +10,7 @@ Feature: basic verification for upgrade testing
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: etcd-operator and cluster works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I obtain test data file "admin/subscription.yaml"
@@ -43,6 +44,7 @@ Feature: basic verification for upgrade testing
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-operators" project
@@ -60,6 +62,7 @@ Feature: basic verification for upgrade testing
   @proxy @disconnected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Check etcd image have been udpated to target release value after upgrade
     Given I switch to cluster admin pseudo user
     And I use the "openshift-etcd" project

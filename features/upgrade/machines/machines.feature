@@ -38,6 +38,7 @@ Feature: Machine-api components upgrade tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
+    @arm64 @amd64
   Examples:
     | cluster_operator           |
     | "machine-api"              | # @case_id OCP-22712
@@ -60,6 +61,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Cloud-controller-manager cluster operator should be available after upgrade
     Given evaluation of `cluster_operator('cloud-controller-manager').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -82,6 +84,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: There should be no pending or firing alerts for machine-api operators - prepare
     Given the expression should be true> "True" == "True"
 
@@ -95,6 +98,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: There should be no pending or firing alerts for machine-api operators
     Given I switch to cluster admin pseudo user
 
@@ -115,6 +119,7 @@ Feature: Machine-api components upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Scale up and scale down a machineSet after upgrade - prepare
     Given the expression should be true> "True" == "True"
 
@@ -128,6 +133,7 @@ Feature: Machine-api components upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -234,6 +240,7 @@ Feature: Machine-api components upgrade tests
     @upgrade
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
+    @arm64 @amd64
     Examples:
       | iaas_type | machineset_name        | value                   |
       | azure     | machineset-clone-41804 | "spotVMOptions": {}     | # @case_id OCP-41804
@@ -246,6 +253,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -268,6 +276,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -319,6 +328,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Registering Components delays should not be more than liveliness probe - prepare 
     Given the expression should be true> "True" == "True"
 
@@ -331,6 +341,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Registering Components delays should not be more than liveliness probe 
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

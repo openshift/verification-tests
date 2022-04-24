@@ -20,6 +20,7 @@ Feature: kata related features
   @upgrade-sanity
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: test delete kata installation
     Given I remove kata operator from the namespace
 
@@ -41,6 +42,7 @@ Feature: kata related features
   @gcp-upi @baremetal-upi @azure-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Operator can be installed through web console
     Given the kata-operator is installed using OLM GUI
 

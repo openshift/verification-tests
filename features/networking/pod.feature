@@ -9,6 +9,7 @@ Feature: Pod related networking scenarios
   @upgrade-sanity
   @network-openshiftsdn
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: Pod cannot claim UDP port 4789 on the node as part of a port mapping
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -33,6 +34,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Container could reach the dns server
     Given I have a project
     Given I obtain test data file "pods/ocp10031/pod.json"
@@ -56,6 +58,7 @@ Feature: Pod related networking scenarios
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-openshiftsdn
+  @arm64 @amd64
   Scenario: The openflow list will be cleaned after delete the pods
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -88,6 +91,7 @@ Feature: Pod related networking scenarios
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Check QoS after creating pod
     Given I have a project
     # setup iperf server to receive the traffic
@@ -153,6 +157,7 @@ Feature: Pod related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -191,6 +196,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
     Given I store the masters in the :masters clipboard
     And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard
@@ -214,6 +220,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @baremetal-upi @azure-upi @aws-upi
   @network-openshiftsdn
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -250,6 +257,7 @@ Feature: Pod related networking scenarios
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -281,6 +289,7 @@ Feature: Pod related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
@@ -332,6 +341,7 @@ Feature: Pod related networking scenarios
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: [4.x] Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given I store the workers in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
@@ -488,6 +498,7 @@ Feature: Pod related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Pod readiness check for OVN
     Given the env is using "OVNKubernetes" networkType
     And OVN is functional on the cluster
@@ -588,6 +599,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-openshiftsdn
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: Check the unused ip are released after node reboot
     Given I store the workers in the :workers clipboard
     Given I use the "<%= cb.workers[0].name %>" node

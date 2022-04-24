@@ -62,6 +62,7 @@ Feature: oc_secrets.feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: [origin_platformexp_391] Project admin can process local directory or files and convert it to kubernetes secret
     Given I have a project
     When the "tmpfoo" file is created with the following lines:

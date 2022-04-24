@@ -9,6 +9,7 @@ Feature: ResourceQuata for storage
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Requested storage can not exceed the namespace's storage quota
     Given I have a project
     And I switch to cluster admin pseudo user
@@ -85,6 +86,7 @@ Feature: ResourceQuata for storage
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Setting quota for a StorageClass
     Given I have a project
     Given admin clones storage class "sc-<%= project.name %>" from ":default" with:
