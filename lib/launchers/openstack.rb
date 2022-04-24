@@ -732,6 +732,14 @@ module BushSlicer
       end
     end
 
+    def network_id_to_name(network_id)
+      network = floating_ip_networks.find { |n| n["id"] == network_id }
+      unless network
+        raise "could not find network for id #{network_id} in current tenant."
+      end
+      return network["name"]
+    end
+
     def allocate_floating_ip(network_name, reuse: true, designator: nil)
       network = floating_ip_networks.find { |n| n["name"] == network_name }
       unless network
