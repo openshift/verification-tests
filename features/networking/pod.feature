@@ -64,11 +64,14 @@ Feature: Pod related networking scenarios
     Given I have a pod-for-ping in the project
     Then evaluation of `pod.node_name` is stored in the :node_name clipboard
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
+    Given I wait up to 20 seconds for the steps to pass:
+    """
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
       | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
     Then the step should succeed
     And the output should contain:
       | <%=cb.pod_ip %> |
+    """
     When I run the :delete client command with:
       | object_type       | pod       |
       | object_name_or_id | hello-pod |
