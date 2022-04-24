@@ -9,6 +9,7 @@ Feature: Testing timeout route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Set timeout server for passthough route
     Given I have a project
     Given I obtain test data file "routing/routetimeout/httpbin-pod-2.json"

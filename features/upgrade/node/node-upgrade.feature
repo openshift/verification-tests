@@ -12,6 +12,7 @@ Feature: Node components upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Make sure nodeConfig is not changed after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :label admin command with:
@@ -61,6 +62,7 @@ Feature: Node components upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Make sure nodeConfig is not changed after upgrade
     Given I switch to cluster admin pseudo user
     When I run the :get admin command with:

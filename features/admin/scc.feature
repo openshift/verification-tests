@@ -9,6 +9,7 @@ Feature: SCC policy related scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
+  @arm64 @amd64
   Scenario: deployment hook volume inheritance with hostPath volume
     Given I have a project
     # Create hostdir pod again with new SCC
@@ -43,6 +44,7 @@ Feature: SCC policy related scenarios
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Create or update scc with illegal capability name should fail with prompt message
     Given I have a project
     Given cluster role "cluster-admin" is added to the "first" user

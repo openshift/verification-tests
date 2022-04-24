@@ -100,6 +100,7 @@ Feature: Testing imagestream
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Prune images when DC reference to invalid image
     Given I have a project
     Given I enable image-registry default route
@@ -148,6 +149,7 @@ Feature: Testing imagestream
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Do not prune layer of a valid Image due to minimum aging
     Given I have a project
     Given I enable image-registry default route

@@ -124,6 +124,7 @@ Feature: storage security check
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @arm64 @amd64
     Examples:
       | storage_type         | volume_name | type   |
       | cinder               | volumeID    | cinder | # @case_id OCP-9721
@@ -138,6 +139,7 @@ Feature: storage security check
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: secret volume security check
     Given I have a project
     Given I obtain test data file "storage/secret/secret.yaml"

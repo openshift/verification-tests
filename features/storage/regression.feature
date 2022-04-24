@@ -9,6 +9,7 @@ Feature: Regression testing cases
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: RWO volumes are exclusively mounted on different nodes
     Given I have a project
     Given I store the schedulable workers in the :workers clipboard

@@ -10,6 +10,7 @@ Feature: IPsec upgrade scenarios
   @network-ovnkubernetes @network-networkpolicy @ipsec
   @upgrade
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade - prepare
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -77,6 +78,7 @@ Feature: IPsec upgrade scenarios
   @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade
     Given the IPsec is enabled on the cluster
     Given evaluation of `50` is stored in the :protocol clipboard

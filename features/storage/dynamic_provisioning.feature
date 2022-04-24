@@ -80,6 +80,7 @@ Feature: Dynamic provisioning
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @disconnected @connected
+    @arm64 @amd64
     Examples:
       | cloud_provider |
       | cinder         | # @case_id OCP-9656

@@ -10,6 +10,7 @@ Feature: Builds and samples related metrics test
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Alerts on imagestream import retries
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
@@ -71,6 +72,7 @@ Feature: Builds and samples related metrics test
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Check build metrics
     Given I have a project
     When I run the :new_app client command with:
@@ -199,6 +201,7 @@ Feature: Builds and samples related metrics test
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Monitoring, Alerting, and Degraded Status Reporting-Samples-operator
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |

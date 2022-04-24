@@ -13,6 +13,7 @@ Feature: Logging upgrading related features
   @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @amd64
   Scenario: Cluster logging checking during cluster upgrade - prepare
     Given I switch to the first user
     Given I have "json" log pod in project "logging-upg-prep-1"
@@ -55,6 +56,7 @@ Feature: Logging upgrading related features
   @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @amd64
   Scenario: Cluster logging checking during cluster upgrade
     Given I switch to the first user
     Given I create a project with non-leading digit name

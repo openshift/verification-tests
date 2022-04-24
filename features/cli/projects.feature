@@ -10,6 +10,7 @@ Feature: projects related features via cli
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Could delete all resources when delete the project
     Given a 5 characters random string of type :dns is stored into the :prj_name clipboard
     When I run the :new_project client command with:
@@ -81,6 +82,7 @@ Feature: projects related features via cli
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: User can get node selector from a project
     Given  an 8 character random string of type :dns is stored into the :oadmproj1 clipboard
     Given  an 8 character random string of type :dns is stored into the :oadmproj2 clipboard
@@ -114,6 +116,7 @@ Feature: projects related features via cli
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @arm64 @amd64
   Scenario: Could remove user and group from the current project
     Given I have a project
     When I run the :oadm_policy_add_role_to_user client command with:
@@ -156,6 +159,7 @@ Feature: projects related features via cli
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"

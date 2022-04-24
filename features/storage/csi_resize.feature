@@ -56,6 +56,7 @@ Feature: CSI Resizing related feature
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @arm64 @amd64
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37559
@@ -91,6 +92,7 @@ Feature: CSI Resizing related feature
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @arm64 @amd64
     Examples:
       | sc_name |
       | gp2-csi | # @case_id OCP-25809

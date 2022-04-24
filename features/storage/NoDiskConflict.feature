@@ -6,6 +6,7 @@ Feature: NoDiskConflict
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: [storage_201] Only one pod with the same persistent volume can be scheduled when NoDiskConflicts policy is enabled
     Given a 5 characters random string of type :dns is stored into the :proj_name clipboard
     When I run the :oadm_new_project admin command with:
