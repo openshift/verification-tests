@@ -6,6 +6,7 @@ Feature: Check status via oc status, wait etc
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Show RC info and indicate bad secrets reference in 'oc status'
     Given I have a project
 

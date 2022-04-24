@@ -12,6 +12,7 @@ Feature: fips enabled verification for upgrade
   @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: FIPS mode checking command works for a cluster with fip mode on - prepare
     Given fips is enabled
 
@@ -60,6 +61,7 @@ Feature: fips enabled verification for upgrade
   @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: FIPS mode checking command works for a cluster with fip mode on
     Given fips is enabled
 

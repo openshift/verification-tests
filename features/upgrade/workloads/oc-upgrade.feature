@@ -74,6 +74,7 @@ Feature: basic verification for upgrade oc client testing
   @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Check some container related oc commands still work for ocp45 after upgrade - prepare
     Given the master version >= "4.5"
     Given I switch to the first user
@@ -95,6 +96,7 @@ Feature: basic verification for upgrade oc client testing
   @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Check some container related oc commands still work for ocp45 after upgrade
     Given I switch to the first user
     When I use the "workloads-upgrade" project

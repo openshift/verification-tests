@@ -11,6 +11,7 @@ Feature: basic verification for upgrade testing
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Upgrade - Make sure multiple resources work well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I ensure "node-upgrade" project is deleted
@@ -62,6 +63,7 @@ Feature: basic verification for upgrade testing
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Upgrade - Make sure multiple resources work well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "node-upgrade" project

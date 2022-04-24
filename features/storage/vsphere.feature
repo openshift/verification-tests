@@ -60,6 +60,7 @@ Feature: vSphere test scenarios
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @disconnected @connected
+    @arm64 @amd64
     Examples:
       | disk_format      |
       | thin             | # @case_id OCP-13386
@@ -75,6 +76,7 @@ Feature: vSphere test scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Dynamically provision a vSphere volume with invalid disk format
     Given I have a project
     Given I obtain test data file "storage/vsphere/storageclass.yml"

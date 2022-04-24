@@ -28,6 +28,7 @@ Feature: Secure Computing Test Scenarios
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Using Secure Computing Profiles with Pod Annotations
     # Create custom machine config that contains the seccomp
     Given I switch to cluster admin pseudo user

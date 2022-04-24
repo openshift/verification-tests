@@ -12,6 +12,7 @@ Feature: Jenkins feature upgrade test
   @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @amd64
   Scenario: Jenkins feature upgrade test - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -35,6 +36,7 @@ Feature: Jenkins feature upgrade test
   @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @amd64
   Scenario: Jenkins feature upgrade test
     Given I switch to the first user
     When I use the "jenkins-upgrade" project

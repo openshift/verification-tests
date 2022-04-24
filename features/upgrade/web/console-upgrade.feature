@@ -13,6 +13,7 @@ Feature: web console related upgrade check
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: check console accessibility - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -64,6 +65,7 @@ Feature: web console related upgrade check
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

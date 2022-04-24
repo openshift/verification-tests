@@ -9,6 +9,7 @@ Feature: resouces related scenarios
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Return description of resources with cli describe
     Given I have a project
     And I create a new application with:

@@ -10,6 +10,7 @@ Feature: oc_env.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @arm64 @amd64
   Scenario: Set environment variables when creating application using non-DeploymentConfig template
     Given I have a project
     When I run the :new_app client command with:

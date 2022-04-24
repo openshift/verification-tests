@@ -6,6 +6,7 @@ Feature: Cinder Persistent Volume
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @disconnected @connected
+  @arm64 @amd64
   Scenario: Persistent Volume with cinder volume plugin
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard
