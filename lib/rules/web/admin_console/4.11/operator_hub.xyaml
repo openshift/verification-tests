@@ -548,6 +548,11 @@ switch_to_yaml_view:
     selector:
       xpath: //div[contains(@class,'monaco-editor')]
     timeout: 40
+switch_to_form_view:
+  element:
+    selector:
+      id: form
+    op: click
 select_installed_namespace:
   action: click_project_list_dropdown
   action: choose_project_from_dropdown_list
@@ -716,6 +721,11 @@ click_create_mockk8sdropdownresouce:
     button_text: Create MockK8sDropdownResource
   action: click_button
 open_k8sresource_dropdown:
+  action:
+    if_element:
+      selector:
+        id: form
+    ref: switch_to_form_view
   element:
     selector:
       id: root_spec_k8sResourcePrefix
