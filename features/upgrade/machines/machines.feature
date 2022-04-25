@@ -195,11 +195,6 @@ Feature: Machine-api components upgrade tests
       | iaas_type | machineset_name        | value                   |
       | gcp       | machineset-clone-41803 | "preemptible": true     |
 
-    @azure-ipi
-    Examples:
-      | iaas_type | machineset_name        | value                   |
-      | azure     | machineset-clone-41804 | "spotVMOptions": {}     |
-
   # @author zhsun@redhat.com
   @upgrade-check
   @admin
@@ -235,15 +230,6 @@ Feature: Machine-api components upgrade tests
     Examples:
       | iaas_type | machineset_name        | value                   |
       | gcp       | machineset-clone-41803 | "preemptible": true     | # @case_id OCP-41803
-
-    @azure-ipi
-    @upgrade
-    @network-ovnkubernetes @network-openshiftsdn
-    @proxy @noproxy @disconnected @connected
-    @arm64 @amd64
-    Examples:
-      | iaas_type | machineset_name        | value                   |
-      | azure     | machineset-clone-41804 | "spotVMOptions": {}     | # @case_id OCP-41804
 
   @upgrade-prepare
   @destructive
