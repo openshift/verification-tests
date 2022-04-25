@@ -19,6 +19,7 @@ module BushSlicer
   autoload :IBMCloud, "launchers/ibmcloud"
   autoload :ARMRdu2, "launchers/a_r_m_rdu2"
   autoload :Rdu_IPI_BM, "launchers/rdu_ipi_bm"
+  autoload :Nutanix, "launchers/nutanix"
   autoload :OCMCluster, "launchers/o_c_m_cluster"
   autoload :EnvironmentLauncher, "launchers/environment_launcher"
   autoload :PolarShift, "polarshift/autoload"
