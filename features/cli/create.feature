@@ -21,11 +21,9 @@ Feature: creating 'apps' with CLI
     Then the step should fail
     Given I obtain test data file "authorization/scc/scc-runasany.yaml"
     Given the following scc policy is created: scc-runasany.yaml
-    Then the step should succeed
-    Given I obtain test data file "pods/pod_with_special_fsGroup.json"
     When I run the :create admin command with:
       | f | pod_with_special_fsGroup.json |
-      | n | <%= project.name %>                                                                                   |
+      | n | <%= project.name %>           |
     Then the step should succeed
     When the pod named "hello-openshift" becomes ready
     When I get project pod named "hello-openshift" as YAML
