@@ -61,6 +61,9 @@ module BushSlicer
         # config_str = res[:stdout].gsub(/^(\s*server:)\s.*$/) {
         #   $1 + " " + env.api_endpoint_url
         # }
+        # HACK: save kubeconfig for debug purpose
+        debug_kubeconfig_path = File.join(Host.localhost.workdir, "debug.kubeconfig")
+        File.write(debug_kubeconfig_path, res[:response])
         return accessor_from_kubeconfig(res[:response])
       else
         logger.error(res[:response])
@@ -81,6 +84,9 @@ module BushSlicer
         res = Http.get(url: url, raise_on_error: true)
         config = res[:response]
       end
+      # HACK: save kubeconfig for debug purpose
+      debug_kubeconfig_path = File.join(Host.localhost.workdir, "debug.kubeconfig")
+      File.write(debug_kubeconfig_path, res[:response])
       return accessor_from_kubeconfig(config)
     end
   end

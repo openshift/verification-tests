@@ -1,4 +1,5 @@
 require 'yaml'
+require 'host'
 
 require_relative 'resource'
 
@@ -166,6 +167,18 @@ module BushSlicer
         res[:items] = res[:parsed]["items"].map { |item_hash|
           self.from_api_object(user.env, item_hash)
         }
+      elsif res[:stderr] =~ /Error from server \(ServiceUnavailable\)\: the server is currently unable to handle the request \(get projects\.project\.openshift\.io/
+          # refer to https://github.com/openshift/verification-tests/pull/2823
+          logger.info(">>>>>> Debug Segment: checking openshift-apiserver availability <<<<<<")
+          logger.info(res[:stderr])
+          # get debug kubeconfig
+          user.env.admin # HACK: force reload kubeconfig
+          debug_kubeconfig_path = File.join(Host.localhost.workdir, "debug.kubeconfig")
+          # debug messages
+          debug_message = host.exec("oc get co --kubeconfig=#{debug_kubeconfig_path} | grep -v '.True.*False.*False'")
+          logger.info(debug_message)
+          debug_message = host.exec("oc describe co/openshift-apiserver --kubeconfig=#{debug_kubeconfig_path} | sed -n \"/Status:/,$ p\"")
+          logger.info(debug_message)
       else
         user.env.logger.error(res[:response])
         raise "error getting #{self::RESOURCE} by user: '#{user}'"

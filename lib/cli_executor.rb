@@ -1,6 +1,7 @@
 require "base64"
 require 'openssl'
 require 'yaml'
+require 'host'
 
 require 'rules_command_executor'
 
@@ -132,6 +133,19 @@ module BushSlicer
 
       unless res[:success]
         logger.debug res[:instruction]
+        if res[:stderr] =~ /Error from server \(ServiceUnavailable\)\: the server is currently unable to handle the request \(get projects\.project\.openshift\.io/
+          # refer to https://github.com/openshift/verification-tests/pull/2823
+          logger.info(">>>>>> Debug Segment: checking openshift-apiserver availability <<<<<<")
+          logger.info(res[:stderr])
+          # get debug kubeconfig
+          user.env.admin # HACK: force reload kubeconfig
+          debug_kubeconfig_path = File.join(Host.localhost.workdir, "debug.kubeconfig")
+          # debug messages
+          debug_message = host.exec("oc get co --kubeconfig=#{debug_kubeconfig_path} | grep -v '.True.*False.*False'")
+          logger.info(debug_message)
+          debug_message = host.exec("oc describe co/openshift-apiserver --kubeconfig=#{debug_kubeconfig_path} | sed -n \"/Status:/,$ p\"")
+          logger.info(debug_message)
+        end
         raise "cannot login with command"
       end
     end
@@ -225,7 +239,21 @@ module BushSlicer
     # see CliExecutor#exec
     def exec(user, key, opts={})
       cli_tool = tool_from_opts!(opts)
-      executor(user, cli_tool: cli_tool).run(key, opts)
+      res = executor(user, cli_tool: cli_tool).run(key, opts)
+      if res[:stderr] =~ /Error from server \(ServiceUnavailable\)\: the server is currently unable to handle the request \(get projects\.project\.openshift\.io/
+          # refer to https://github.com/openshift/verification-tests/pull/2823
+          logger.info(">>>>>> Debug Segment: checking openshift-apiserver availability <<<<<<")
+          logger.info(res[:stderr])
+          # get debug kubeconfig
+          user.env.admin # HACK: force reload kubeconfig
+          debug_kubeconfig_path = File.join(Host.localhost.workdir, "debug.kubeconfig")
+          # debug messages
+          debug_message = host.exec("oc get co --kubeconfig=#{debug_kubeconfig_path} | grep -v '.True.*False.*False'")
+          logger.info(debug_message)
+          debug_message = host.exec("oc describe co/openshift-apiserver --kubeconfig=#{debug_kubeconfig_path} | sed -n \"/Status:/,$ p\"")
+          logger.info(debug_message)
+      end
+      return res
     end
 
     def clean_up

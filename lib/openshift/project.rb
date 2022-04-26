@@ -1,4 +1,5 @@
 require 'yaml'
+require 'host'
 
 require_relative 'build'
 require_relative 'cluster_resource'
@@ -23,6 +24,18 @@ module BushSlicer
         case  result[:response]
         when /Error from server \(Forbidden\)/, /Error from server \(NotFound\)/
           return false
+        when /Error from server \(ServiceUnavailable\)\: the server is currently unable to handle the request \(get projects\.project\.openshift\.io/
+          # refer to https://github.com/openshift/verification-tests/pull/2823
+          logger.info(">>>>>> Debug Segment: checking openshift-apiserver availability <<<<<<")
+          logger.info(res[:stderr])
+          # get debug kubeconfig
+          user.env.admin # HACK: force reload kubeconfig
+          debug_kubeconfig_path = File.join(Host.localhost.workdir, "debug.kubeconfig")
+          # debug messages
+          debug_message = host.exec("oc get co --kubeconfig=#{debug_kubeconfig_path} | grep -v '.True.*False.*False'")
+          logger.info(debug_message)
+          debug_message = host.exec("oc describe co/openshift-apiserver --kubeconfig=#{debug_kubeconfig_path} | sed -n \"/Status:/,$ p\"")
+          logger.info(debug_message)
         else
           raise "error getting project '#{name}' existence: #{result[:response]}"
         end
