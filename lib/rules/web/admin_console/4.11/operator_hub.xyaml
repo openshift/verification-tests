@@ -617,7 +617,7 @@ check_manual_approve_info:
   elements:
   - selector:
       xpath: //h2[contains(., 'Manual approval required')]
-    timeout: 20
+    timeout: 50
 check_installation_failure_message:
   action: goto_csv_detail_page
   elements:
