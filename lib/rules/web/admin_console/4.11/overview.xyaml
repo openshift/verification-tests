@@ -68,7 +68,7 @@ click_sidebar_resources_tab:
 check_dc_available_action_menus:
   elements:
   - selector:
-      xpath: //li//button[.='Edit Application grouping']
+      xpath: //li//button[.='Edit application grouping']
   - selector:
       xpath: //li//button[.='Start rollout']
   - selector: &pause_rollouts
