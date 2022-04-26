@@ -62,7 +62,7 @@ module BushSlicer
 
       # multi_az is optional
       # default value is false
-      @multi_az = ENV['OCM_MULTI_AZ'] || @opts[:multi_az]
+      @multi_az = ENV['OCM_MULTI_AZ'] || @opts[:multi_az] || false
 
       # BYOC (Bring Your Own Cloud)
       # you can refer to already defined cloud in config.yaml
@@ -129,8 +129,8 @@ module BushSlicer
         }
       }
 
-      if @multi_az
-        json_data.merge!({"multi_az" => @multi_az})
+      if @multi_az && @multi_az.to_s == "true"
+        json_data.merge!({"multi_az" => true})
       end
 
       if @region
