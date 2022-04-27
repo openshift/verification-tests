@@ -495,6 +495,7 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   @proxy
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @flaky
   Scenario Outline: Cancel multiple new/pending/running builds
     Given I have a project
     When I run the :new_build client command with:
