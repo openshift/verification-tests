@@ -1528,3 +1528,51 @@ Given /^the cluster has workers for sctp$/ do
     skip_this_scenario
   end
 end
+ 
+Given /^I save cluster type to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "cluster_type" unless cb_name
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.serviceNetwork}")
+  if @result[:response].count(":") >= 2 && @result[:response].count(".") >= 2
+    cb[cb_name]="dualstack"
+  elsif @result[:response].count(":") >= 2
+    cb[cb_name]="ipv6single"
+  elsif @result[:response].count(".") >= 2
+    cb[cb_name]="ipv4single"
+  else
+    raise "unknown cluster_type"
+    skip_this_scenario
+  end
+  logger.info "The cluster type #{cb[cb_name]} is stored to the #{cb_name} clipboard."
+end
+
+Given /^the egressfirewall policy is applied to the "(.+?)" namespace$/ do | project_name |
+  ensure_admin_tagged
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
+  when "OVNKubernetes"
+    step "I save cluster type to the clipboard"
+    if cb.cluster_type == "dualstack"
+      @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/networking/ovn-egressfirewall/limit_policy_dualstack.json")
+      unless @result[:success]
+        raise "Failed to apply the egressfirewall policy to specified namespace."
+      end
+    elsif cb.cluster_type == "ipv4single"
+      @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/networking/ovn-egressfirewall/limit_policy.json")
+      unless @result[:success]
+        raise "Failed to apply the egressfirewall policy to specified namespace."
+      end
+    else
+      skip_this_scenario
+    end
+  when "OpenShiftSDN"
+    @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/networking/egressnetworkpolicy/limit_policy.json")
+    unless @result[:success]
+      raise "Failed to apply the egressnetworkpolicy to specified namespace."
+    end
+  else
+    raise "unknown network_type"
+  end
+  logger.info "The egressfirewall type is applied."
+end

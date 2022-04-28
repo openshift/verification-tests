@@ -29,11 +29,7 @@ Feature: Egress compoment upgrade testing
     Then the step should succeed
     And the output should contain "redhat.com"
 
-    Given I save egress data file directory to the clipboard
-    Given I obtain test data file "networking/<%= cb.cb_egress_directory %>/limit_policy.json"
-    When I run the :create admin command with:
-      | f | limit_policy.json   |
-      | n | <%= project.name %> |
+    Given the egressfirewall policy is applied to the "egressfw-upgrade1" namespace
     Then the step should succeed
 
     And I wait up to 10 seconds for the steps to pass:
@@ -41,7 +37,6 @@ Feature: Egress compoment upgrade testing
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -I | --connect-timeout | 5 | redhat.com |
     Then the step should fail
-    And the output should contain "timed out"
     """
 
   # @author huirwang@redhat.com
@@ -67,13 +62,13 @@ Feature: Egress compoment upgrade testing
     And the output should contain:
       | 0.0.0.0/0 |
     Given I use the "egressfw-upgrade1" project
+
     Given status becomes :running of 1 pod labeled:
       | name=test-pods |
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -I | --connect-timeout | 5 | redhat.com |
     Then the step should fail
-    And the output should contain "timed out"
 
   # @author huirwang@redhat.com
   @admin

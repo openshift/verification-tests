@@ -1,0 +1,23 @@
+{
+  "kind": "EgressFirewall",
+  "apiVersion": "k8s.ovn.org/v1",
+  "metadata": {
+    "name": "default"
+  },
+  "spec": {
+    "egress": [
+      {
+        "type": "Deny",
+        "to": {
+          "cidrSelector": "0.0.0.0/0"
+        }
+      },
+      {
+        "type": "Deny",
+        "to": {
+          "cidrSelector": "::/0"
+        }
+      }
+    ]
+  }
+}
