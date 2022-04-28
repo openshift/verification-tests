@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: build.openshift.io/v1
 kind: Build
 metadata:
   name: ruby-hello-world-2
