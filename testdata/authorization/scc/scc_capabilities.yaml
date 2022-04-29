@@ -7,7 +7,7 @@ runAsUser:
   type: RunAsAny
 seLinuxContext:
   type: RunAsAny
-apiVersion: v1
+apiVersion: security.openshift.io/v1
 groups:
 - system:serviceaccounts:default
 kind: SecurityContextConstraints

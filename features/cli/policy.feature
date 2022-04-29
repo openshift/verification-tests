@@ -96,47 +96,45 @@ Feature: change the policy of user/service account
       | f | projectviewservice.json |
     Then the step should succeed
     And the output should contain:
-      | created      |
+      | created |
     When I run the :describe client command with:
-      | namespace    | <%= project.name %> |
-      | resource     | role                |
-      | name         | viewservices        |
+      | namespace | <%= project.name %> |
+      | resource  | role                |
+      | name      | viewservices        |
     Then the step should succeed
     And the output should contain:
-      | get                                |
-      | list                               |
-      | watch                              |
-    Given I obtain test data file "authorization/policy/projectviewservice.json"
-    When I delete matching lines from "projectviewservice.json":
-      | "get",       |
-    Then the step should succeed
+      | get   |
+      | list  |
+      | watch |
+    Given I delete matching lines from "projectviewservice.json":
+      | "get", |
     When I run the :replace client command with:
-      | f            | projectviewservice.json      |
+      | f | projectviewservice.json |
     Then the step should succeed
     And the output should contain:
-      | replaced     |
+      | replaced |
     When I run the :describe client command with:
-      | namespace    | <%= project.name %> |
-      | resource     | role                |
-      | name         | viewservices        |
+      | namespace | <%= project.name %> |
+      | resource  | role                |
+      | name      | viewservices        |
     Then the step should succeed
     And the output should not contain:
-      | get          |
+      | get |
 
     When I run the :delete client command with:
-      | object_type       | role                    |
-      | object_name_or_id | viewservices            |
+      | object_type       | role         |
+      | object_name_or_id | viewservices |
     Then the step should succeed
     And the output should contain:
-      | deleted          |
+      | deleted |
     When I run the :describe client command with:
-      | namespace    | <%= project.name %>          |
-      | resource     | role                       |
-      | name         | viewservices                      |
+      | namespace | <%= project.name %> |
+      | resource  | role                |
+      | name      | viewservices        |
     Then the step should fail
     And the output should not contain:
-      | list          |
-      | watch         |
+      | list  |
+      | watch |
 
   # @author chezhang@redhat.com
   # @case_id OCP-10211
