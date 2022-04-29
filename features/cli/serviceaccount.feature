@@ -50,7 +50,7 @@ Feature: ServiceAccount and Policy Managerment
   Scenario: Could grant admin permission for the service account group to access to its own project
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/hello-openshift:multiarch |
+      | app_repo | quay.io/openshifttest/hello-openshift:multiarch |
     Then the step should succeed
     When I run the :policy_add_role_to_group client command with:
       | role       | admin                                     |
@@ -62,9 +62,10 @@ Feature: ServiceAccount and Policy Managerment
     When I get project services
     Then the output should contain:
       | hello-openshift |
-    ## this template is to create an application without any build
-    Given I obtain test data file "deployment/deployments_nobc_cpulimit.json"
-    When I process and create "deployments_nobc_cpulimit.json"
+    # Verify the permission of various operations
+    When I run the :new_app client command with:
+      | app_repo | quay.io/openshifttest/hello-openshift:multiarch |
+      | name     | app2                                            |
     Then the step should succeed
     When I run the :delete client command with:
       | object_type       | svc             |
