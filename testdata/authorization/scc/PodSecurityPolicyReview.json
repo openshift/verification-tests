@@ -1,6 +1,6 @@
 {
     "kind": "PodSecurityPolicyReview",
-    "apiVersion": "v1",
+    "apiVersion": "security.openshift.io/v1",
     "metadata": {
         "name": "pspsr"
     },

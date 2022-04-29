@@ -1,9 +1,9 @@
 {
-  "apiVersion": "v1",
+  "apiVersion": "image.openshift.io/v1",
   "kind": "ImageStreamList",
   "items": [
     {
-      "apiVersion": "v1",
+      "apiVersion": "image.openshift.io/v1",
       "kind": "ImageStream",
       "metadata": {
         "name": "hello-world"
