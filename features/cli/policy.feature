@@ -476,31 +476,16 @@ Feature: change the policy of user/service account
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
+    # Test explicit serviceaccount
     Given I run the :policy_scc_review client command with:
-      | f | PodSecurityPolicyReview.json |
-      | n | <%= project.name %>                                                                            |
-    Then the step should succeed
-    And the output should not match:
-      | .*default.*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
+      | serviceaccount | default                      |
       | f              | PodSecurityPolicyReview.json |
-    Then the step should succeed
-    And the output should not match:
-      | .*default.*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
-      | f              | PodSecurityPolicyReview.json |
-      | n              | <%= project.name %>                                                                            |
+      | n              | <%= project.name %>          |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
     Given SCC "restricted" is added to the "default" service account
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    And I wait for the steps to pass:
+    Then I wait for the steps to pass:
     """
     Given I run the :policy_scc_review client command with:
       | f | PodSecurityPolicyReview.json |
@@ -508,31 +493,12 @@ Feature: change the policy of user/service account
     And the output should match:
       | .*default.*restricted |
     """
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    And I wait for the steps to pass:
-    """
+
+    # Test explicit serviceaccount
     Given I run the :policy_scc_review client command with:
-      | f | PodSecurityPolicyReview.json |
-      | n | <%= project.name %>                                                                            |
-    Then the step should succeed
-    And the output should match:
-      | .*default.*restricted |
-    """
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    And I wait for the steps to pass:
-    """
-    Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
+      | serviceaccount | default                      |
       | f              | PodSecurityPolicyReview.json |
-    Then the step should succeed
-    And the output should match:
-      | .*default.*restricted |
-    """
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
-      | f              | PodSecurityPolicyReview.json |
-      | n              | <%= project.name %>                                                                            |
+      | n              | <%= project.name %>          |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
@@ -549,34 +515,19 @@ Feature: change the policy of user/service account
   Scenario: User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
+    # If user is specified but not groups, it is interpreted as "what if the user
+    # is not a member of any groups", see "oc policy scc-subject-review -h"
     Given I run the :policy_scc_subject_review client command with:
-      | user | <%= user.name %>                                                                                      |
+      | user | <%= user.name %>                    |
       | f    | PodSecurityPolicySubjectReview.json |
     Then the step should succeed
     And the output should not match:
       | .*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
-      | user | <%= user.name %>                                                                                      |
-      | f    | PodSecurityPolicySubjectReview.json |
-      | n    | <%= project.name %>                                                                                   |
-    Then the step should succeed
-    And the output should not match:
-      | .*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
-    Given I run the :policy_scc_subject_review client command with:
-      | user  | <%= user.name %>                                                                                      |
-      | group | system:authenticated                                                                                  |
+      | user  | <%= user.name %>                    |
+      | group | system:authenticated                |
       | f     | PodSecurityPolicySubjectReview.json |
-    Then the step should succeed
-    And the output should match:
-      | .*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
-    Given I run the :policy_scc_subject_review client command with:
-      | user  | <%= user.name %>                                                                                      |
-      | group | system:authenticated                                                                                  |
-      | f     | PodSecurityPolicySubjectReview.json |
-      | n     | <%= project.name %>                                                                                   |
+      | n     | <%= project.name %>                 |
     Then the step should succeed
     And the output should match:
       | .*restricted |
