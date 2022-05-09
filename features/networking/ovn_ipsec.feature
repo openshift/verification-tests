@@ -91,10 +91,10 @@ Feature: OVNKubernetes IPsec related networking scenarios
     And the IPsec is enabled on the cluster
     Given I select a random node's host
     And I run commands on the host:
-      | grep -i "IPsec SA established transport mode" /var/log/openvswitch/libreswan.log |
+      | ip x s \| grep -i "mode transport" |
     Then the step should succeed
     #We need to make sure some mode is chosen and supported only for now is transport
-    And the output should contain "IPsec SA established transport mode"
+    And the output should contain "mode transport"
 
   # @author anusaxen@redhat.com
   # @case_id OCP-39216
