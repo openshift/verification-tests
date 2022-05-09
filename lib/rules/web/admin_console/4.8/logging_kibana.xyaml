@@ -111,11 +111,17 @@ set_index_patter_name:
   elements:
   - selector:
       xpath: //input[@type="text" and @name="indexPattern"]
-    op: clear
+    op: click
     timeout: 30
-  - selector:
+  scripts:
+  - command: |
+      document.querySelector("input[name='indexPattern']").value = '<index_pattern_name>';
+      return document.querySelector("input[name='indexPattern']").value == '<index_pattern_name>';
+    expect_result: true
+  element:
+    selector:
       xpath: //input[@type="text" and @name="indexPattern"]
-    op: send_keys <index_pattern_name>
+    op: send_keys "*"
 
 click_create_index_pattern_go_to_step2_button:
   element:
