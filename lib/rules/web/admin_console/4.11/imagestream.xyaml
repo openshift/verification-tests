@@ -31,7 +31,7 @@ check_docker_pull:
 check_command:
   element:
     selector:
-      xpath: //pre[contains(., '<command>')]/following-sibling::button[contains(@class, 'copy-to-clipboard')]
+      xpath: //pre[contains(., '<command>') and contains(@data-test, 'copy-to-clipboard')]
 check_page_contains_warning_alert:
   params:
     content: warning alert
