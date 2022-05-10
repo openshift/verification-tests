@@ -119,7 +119,6 @@ Feature: SDN/OVN metrics related networking scenarios
       | ovnkube_master_ready_duration             |
       | ovnkube_master_resource_update_total      |
       | ovnkube_master_sb_e2e_timestamp           |
-      | ovnkube_master_skipped_nbctl_daemon_total |
     
     When I run the :exec admin command with:
       | n                | openshift-monitoring              |
