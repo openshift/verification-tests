@@ -96,6 +96,7 @@ Feature: jenkins.feature
       | jenkins=slave |
     Given the "openshift-jee-sample-1" build completes
 
+    @flaky
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
