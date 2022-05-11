@@ -260,7 +260,7 @@ click_query_cog_icon:
 check_query_input_text_area_no_value:
   element:
     selector:
-      xpath: //textarea[contains(@class, 'query-browser__query-input')][not(text())]
+      xpath: //div[@class="pf-c-form-control query-browser__query-input"][not(text())]
 
 perform_disable_query:
   element:
