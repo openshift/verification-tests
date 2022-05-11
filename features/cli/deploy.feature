@@ -974,7 +974,7 @@ Feature: deployment related features
     Given the master version >= "4.5"
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image         | quay.io/openshifttest/deployment-example:v1-multiarch |
+      | image                | quay.io/openshifttest/deployment-example:v1-multiarch |
       | name                 | ab-example-a                                          |
       | as_deployment_config | true                                                  |
       | l                    | ab-example=true                                       |
@@ -987,10 +987,13 @@ Feature: deployment related features
       | selector      | ab-example=true  |
     Then the step should succeed
     When I expose the "ab-example" service
+    Given I wait up to 80 seconds for the steps to pass:
+    """
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
+    """
     When I run the :new_app client command with:
-      | docker_image         | quay.io/openshifttest/deployment-example:v1-multiarch |
+      | image                | quay.io/openshifttest/deployment-example:v1-multiarch |
       | name                 | ab-example-b                                          |
       | as_deployment_config | true                                                  |
       | l                    | ab-example=true                                       |
@@ -1002,9 +1005,12 @@ Feature: deployment related features
       | replicas | 0                |
     Then the step should succeed
     Given I wait until number of replicas match "0" for replicationController "ab-example-a-1"
+    Given I wait up to 80 seconds for the steps to pass:
+    """
     When I use the "ab-example" service
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardB"
+    """
     Then I run the :scale client command with:
       | resource | deploymentconfig |
       | name     | ab-example-b     |
@@ -1017,7 +1023,9 @@ Feature: deployment related features
     Then the step should succeed
     Given I wait until number of replicas match "0" for replicationController "ab-example-b-1"
     Given I wait until number of replicas match "1" for replicationController "ab-example-a-1"
+    Given I wait up to 80 seconds for the steps to pass:
+    """
     When I use the "ab-example" service
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
-
+    """
