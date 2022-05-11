@@ -12,8 +12,8 @@ check_brand_in_modal:
       xpath: //div[contains(@role,'dialog')]//img[contains(@src, '<logo_source>') and @alt='<product_name>']
 check_logo_in_masthead:
   params:
-    logo_source: static/assets/openshift-platform-logo.svg
-    product_name: Red Hat OpenShift Container Platform
+    logo_source: static/assets/openshift-logo.svg
+    product_name: Red Hat OpenShift
   action: check_brand
 check_logo_in_app_launcher:
   params:
@@ -22,8 +22,8 @@ check_logo_in_app_launcher:
   action: check_image_url
 check_logo_in_about_modal:
   params:
-    logo_source: static/assets/openshift-platform-logo.svg
-    product_name: Red Hat OpenShift Container Platform
+    logo_source: static/assets/openshift-logo.svg
+    product_name: Red Hat OpenShift
   action: click_about_button
   action: check_brand_in_modal
 click_about_button:
