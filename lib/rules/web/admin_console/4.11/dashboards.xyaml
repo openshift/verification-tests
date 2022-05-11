@@ -273,7 +273,7 @@ check_on_monitoring_metrics_page:
 check_textarea:
   element:
     selector:
-      xpath: //textarea[contains(@class,'query-browser__query-input')]
+      xpath: //div[contains(@class,'query-browser__query-input')]
 check_metrics_query_cpu_by_project:
   scripts:
   - command:

@@ -1,8 +1,8 @@
 send_metrics_query:
   elements:
   - selector: &metrics_query_input
-      xpath: //textarea[contains(@class,'query-browser__query-input')]
-    op: clear
+      xpath: //div[contains(@contenteditable,'true') and contains(@class,'cm-content')]
+    op: send_keys :backspace
   - selector:
       <<: *metrics_query_input
     op: send_keys <metrics_name>
