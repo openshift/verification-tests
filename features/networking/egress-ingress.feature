@@ -420,7 +420,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @arm64 @amd64
-  Scenario: [SDN-682] EgressFirewall allows traffic to destination ports
+  Scenario: EgressFirewall allows traffic to destination ports
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -461,7 +461,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @arm64 @amd64
-  Scenario:  [SDN-682] EgressFirewall rules take effect in order
+  Scenario: EgressFirewall rules take effect in order
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -486,7 +486,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @arm64 @amd64
-  Scenario:  [SDN-682] EgressFirewall policy should not take effect for traffic between pods and pods to service
+  Scenario: EgressFirewall policy should not take effect for traffic between pods and pods to service
     Given I have a project
     # Create EgressFirewall policy to deny all outbound traffic
     When I obtain test data file "networking/ovn-egressfirewall/limit_policy.json"
@@ -525,7 +525,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @arm64 @amd64
-  Scenario: [SDN-682] EgressFirewall policy take effect for multiple port
+  Scenario: EgressFirewall policy take effect for multiple port
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -584,7 +584,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @arm64 @amd64
-  Scenario: [SDN-1181] EgressFirewall allows traffic to destination dnsName
+  Scenario: EgressFirewall allows traffic to destination dnsName
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -620,7 +620,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @arm64 @amd64
-  Scenario: [SDN-1181] EgressFirewall denys traffic to destination dnsName
+  Scenario: EgressFirewall denys traffic to destination dnsName
     Given I have a project
 
     When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy4.yaml"
@@ -656,7 +656,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @arm64 @amd64
-  Scenario: [SDN-1181] Edit EgressFirewall should take effect
+  Scenario: Edit EgressFirewall should take effect
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -694,7 +694,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @arm64 @amd64
-  Scenario: [bug1947917] Egress Firewall should reliably apply firewall rules
+  Scenario: bug1947917 Egress Firewall should reliably apply firewall rules
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -733,7 +733,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn	
   @singlenode
   @proxy @noproxy @disconnected @connected
-  Scenario: [bug2000057] No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted
+  Scenario: bug2000057 No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted
     Given the env is using "OVNKubernetes" networkType
     And I have a project
     Given I obtain test data file "networking/list_for_pods.json"

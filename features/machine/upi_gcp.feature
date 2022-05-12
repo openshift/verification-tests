@@ -21,7 +21,7 @@ Feature: UPI GCP Tests
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [GCP] Scaling OCP Cluster on UPI
+  Scenario: GCP Scaling OCP Cluster on UPI
     Given I have an UPI deployment and machinesets are enabled
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project

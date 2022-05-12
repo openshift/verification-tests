@@ -63,7 +63,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [Cinder CSI Clone] Clone a pvc with capacity greater than original pvc
+  Scenario: Cinder CSI Clone Clone a pvc with capacity greater than original pvc
     Given I have a project
     # Create mypvc-ori with 1Gi size
     Given I obtain test data file "storage/misc/pvc.json"
@@ -118,7 +118,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [Cinder CSI Clone] Clone a pvc with capacity less than original pvc will fail
+  Scenario: Cinder CSI Clone Clone a pvc with capacity less than original pvc will fail
     Given I have a project
     # Create mypvc-ori with 2Gi size
     Given I obtain test data file "storage/misc/pvc.json"
@@ -172,7 +172,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [Cinder CSI clone] Clone a pvc with block VolumeMode successfully
+  Scenario: Cinder CSI clone Clone a pvc with block VolumeMode successfully
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
@@ -231,7 +231,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [Cinder CSI Clone] Clone a pvc with default storageclass
+  Scenario: Cinder CSI Clone Clone a pvc with default storageclass
     Given default storage class is patched to non-default
     And admin clones storage class "my-csi-default" from "standard-csi" with:
       | ["metadata"]["name"] | my-csi-default |
@@ -290,7 +290,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [Cinder CSI Clone] Clone a pvc with different storage class is failed
+  Scenario: Cinder CSI Clone Clone a pvc with different storage class is failed
     # Create mypvc-ori with sc1
     Given I have a project
     When admin clones storage class "sc-<%= project.name %>-1" from "standard-csi" with:

@@ -10,7 +10,7 @@ Feature: permission related test
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: [BZ1446217] View the project mapping index as different roles
+  Scenario: BZ1446217 View the project mapping index as different roles
     Given I switch to the first user
     Given I create a project with non-leading digit name
     And evaluation of `project` is stored in the :project clipboard

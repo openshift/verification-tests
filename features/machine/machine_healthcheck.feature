@@ -168,7 +168,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @arm64 @amd64
-  Scenario: [MHC] - Machine Node startup timeout should be configurable
+  Scenario: Machine Node startup timeout should be configurable
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
@@ -236,7 +236,7 @@ Feature: MachineHealthCheck Test Scenarios
   @admin
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: [MHC] MaxUnhealthy should not allow malformed values
+  Scenario: MaxUnhealthy should not allow malformed values
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
@@ -329,7 +329,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @arm64 @amd64
-  Scenario: [mhc] timeout field without units(h,m,s) shoud not be allowed to be stored
+  Scenario: timeout field without units(h,m,s) shoud not be allowed to be stored
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project

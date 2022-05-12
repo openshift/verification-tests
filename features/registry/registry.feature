@@ -263,7 +263,7 @@ Feature: Testing registry
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [Disconnect]Import image from a secure registry using node credentials
+  Scenario: Disconnect Import image from a secure registry using node credentials
     Given I have a project
     And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard
     When I run the :tag client command with:

@@ -196,7 +196,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @arm64 @amd64
-  Scenario: [MAO] Reconciling machine taints with nodes
+  Scenario: Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -619,7 +619,7 @@ Feature: Machine features testing
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [Azure] Machineset should not be created when publicIP:true in disconnected Azure enviroment
+  Scenario: Machineset should not be created when publicIP:true in disconnected Azure enviroment
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project

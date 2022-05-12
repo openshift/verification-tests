@@ -99,7 +99,7 @@ Feature: CSI Resizing related feature
 
   # @author ropatil@redhat.com
   @admin
-  Scenario Outline: [CSI Resize] offline volume expansion from 1Gi to 2Gi
+  Scenario Outline: CSI Resize offline volume expansion from 1Gi to 2Gi
     Given I have a project
  
     # Create pvc with csi storage class 
