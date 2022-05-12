@@ -345,7 +345,7 @@ Feature: Pod related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @arm64 @amd64
-  Scenario: [4.x] Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
+  Scenario: 4.x Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given I store the workers in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
     Given I have a project

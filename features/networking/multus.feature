@@ -1763,7 +1763,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @arm64 @amd64
-  Scenario: [BZ1944678] Whereabouts IPAM CNI duplicate IP addresses assigned to pods
+  Scenario: BZ1944678 Whereabouts IPAM CNI duplicate IP addresses assigned to pods
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     # Create the net-attach-def via cluster admin
@@ -1822,7 +1822,7 @@ Feature: Multus-CNI related scenarios
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: [BZ 1897431] CIDR support for additional network attachment with the bridge CNI plug-in	
+  Scenario: BZ1897431 CIDR support for additional network attachment with the bridge CNI plug-in
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard

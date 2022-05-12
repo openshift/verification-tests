@@ -707,7 +707,7 @@ Feature: Egress IP related features
   @proxy @noproxy @connected
   @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [sdn-1282] Manually EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node it is on
+  Scenario: Manually EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node it is on
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
     Given I store a random unused IP address from the reserved range to the clipboard
@@ -757,7 +757,7 @@ Feature: Egress IP related features
   @proxy @noproxy @connected
   @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [sdn-1282] Manually EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
+  Scenario: Manually EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
     Given I save ipecho url to the clipboard
     Given I store the masters in the :masters clipboard
     Given I store the schedulable workers in the :workers clipboard
@@ -808,7 +808,7 @@ Feature: Egress IP related features
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @arm64 @amd64
-  Scenario: [SDN-1282] Auto EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
+  Scenario: Auto EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
     Given I save ipecho url to the clipboard
     Given I store the masters in the :masters clipboard
     Given I store the schedulable workers in the :workers clipboard
@@ -860,7 +860,7 @@ Feature: Egress IP related features
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @arm64 @amd64
-  Scenario: [SDN-1282] Auto EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node
+  Scenario: Auto EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :workers clipboard
     Given I store a random unused IP address from the reserved range to the clipboard
@@ -919,7 +919,7 @@ Feature: Egress IP related features
   @noproxy @disconnected @connected
   @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [Bug 1926662] NodePort works when configuring an EgressIP address
+  Scenario: Bug1926662 NodePort works when configuring an EgressIP address
     Given I store the schedulable workers in the :workers clipboard
     And I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
@@ -961,7 +961,7 @@ Feature: Egress IP related features
   @vsphere-ipi
   @vsphere-upi
   @qeci
-  Scenario: [Bug 2024880] EgressIP should work when configuring networkpolicy
+  Scenario: Bug2024880 EgressIP should work when configuring networkpolicy
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :workers clipboard
     And the valid egress IP is added to the "<%= cb.workers[0].name %>" node

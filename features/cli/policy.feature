@@ -89,7 +89,7 @@ Feature: change the policy of user/service account
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @arm64 @amd64
-  Scenario: [origin_platformexp_214] User can view, add , modify and delete specific role to/from new added project via admin role user
+  Scenario: User can view, add , modify and delete specific role to/from new added project via admin role user
     Given I have a project
     Given I obtain test data file "authorization/policy/projectviewservice.json"
     When I run the :create client command with:
