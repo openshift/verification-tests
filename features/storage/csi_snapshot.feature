@@ -72,7 +72,7 @@ Feature: Volume snapshot test
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | csi-sc       | csi-vsc      |
       | standard-csi | standard-csi |# @case_id OCP-37568
@@ -145,7 +145,7 @@ Feature: Volume snapshot test
     @qeci
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | csi-sc       | csi-vsc      |
       | standard-csi | standard-csi | # @case_id OCP-37569

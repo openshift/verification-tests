@@ -60,8 +60,8 @@ Feature: basic verification for upgrade testing
   @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
-    Scenario: etcd-operator and cluster works well after upgrade
+  @heterogeneous @arm64 @amd64
+  Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     Given I store the masters in the :masters clipboard
     When I use the "openshift-etcd" project
@@ -103,8 +103,8 @@ Feature: basic verification for upgrade testing
   @proxy @disconnected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
-  Scenario: Check etcd image have been updated to target release value after upgrade
+  @heterogeneous @arm64 @amd64
+  Scenario: Check etcd image have been udpated to target release value after upgrade
     Given I switch to cluster admin pseudo user
     And I use the "openshift-etcd" project
     And a pod becomes ready with labels:

@@ -48,7 +48,7 @@ Feature: storageClass related feature
     @azure-upi
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | storage-class-name |
       | managed-premium    | # @case_id OCP-13488
@@ -105,7 +105,7 @@ Feature: storageClass related feature
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | provisioner | type        | zone          | is-default | size  |
       | aws-ebs     | gp2         | us-east-1d    | false      | 1Gi   | # @case_id OCP-10160
@@ -180,7 +180,7 @@ Feature: storageClass related feature
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | provisioner    |
       | vsphere-volume | # @case_id OCP-24259
@@ -247,7 +247,7 @@ Feature: storageClass related feature
     @aws-upi
     @singlenode
     @proxy @noproxy @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | size  |
       | 4Gi   | # @case_id OCP-10158
@@ -286,7 +286,7 @@ Feature: storageClass related feature
     @aws-upi
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | type | size | errorMessage                  |
       | sc1  | 5Gi  | at least 125 GiB              | # @case_id OCP-10164
@@ -300,7 +300,7 @@ Feature: storageClass related feature
   @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: PVC with storage class won't provisioned pv if no storage class or wrong storage class object
     Given I have a project
     # No sc exists
@@ -329,7 +329,7 @@ Feature: storageClass related feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
     Given I obtain test data file "storage/ebs/pvc-retain.json"

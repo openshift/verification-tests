@@ -13,7 +13,7 @@ Feature: cluster-logging-operator related test
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
     Given logging collector name is stored in the :collector_name clipboard
     Given I wait for the "<%= cb.collector_name %>" service_monitor to appear
@@ -94,7 +94,7 @@ Feature: cluster-logging-operator related test
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Fluentd alert rule: FluentdNodeDown
     Given the master version >= "4.2"
     Given I obtain test data file "logging/clusterlogging/example.yaml"
@@ -162,7 +162,7 @@ Feature: cluster-logging-operator related test
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: OpenShift Logging dashboard
     Given I switch to the first user
     And the first user is cluster-admin
@@ -214,7 +214,7 @@ Feature: cluster-logging-operator related test
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer.yaml"
     And I create clusterlogging instance with:
@@ -243,7 +243,7 @@ Feature: cluster-logging-operator related test
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Fluentd optimizing variable changes trigger new deployment
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_default.yaml"
     And I create clusterlogging instance with:

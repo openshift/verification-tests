@@ -1192,9 +1192,9 @@ Given /^I have index pattern #{QUOTED}$/ do | pattern_name |
     unless @result[:success]
       step %Q/I run the :go_to_kibana_management_page web action/
       step %Q/I perform the :create_index_pattern_in_kibana web action with:/, table(%{
-        | index_pattern_name | "#{pattern_name}" |
-       })
-       raise "Failed to create index pattern #{pattern_name}" unless @result[:success]
+        | index_pattern_name | #{pattern_name} |
+      })
+      raise "Failed to create index pattern #{pattern_name}" unless @result[:success]
     end
 end
 

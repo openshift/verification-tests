@@ -56,7 +56,7 @@ Feature: CSI Resizing related feature
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37559
@@ -92,14 +92,14 @@ Feature: CSI Resizing related feature
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | sc_name |
       | gp2-csi | # @case_id OCP-25809
 
   # @author ropatil@redhat.com
   @admin
-  Scenario Outline: [CSI Resize] offline volume expansion from 1Gi to 2Gi
+  Scenario Outline: CSI Resize offline volume expansion from 1Gi to 2Gi
     Given I have a project
  
     # Create pvc with csi storage class 
@@ -177,4 +177,4 @@ Feature: CSI Resizing related feature
 
     Examples:
       | sc_name     |
-      | managed-csi | # @case_id OCP-41452 
+      | managed-csi | # @case_id OCP-41452

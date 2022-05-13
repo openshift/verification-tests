@@ -8,7 +8,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Restart a failed deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -46,7 +46,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Manually make deployment
     Given I have a project
     Given I obtain test data file "deployment/manual.json"
@@ -91,7 +91,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: CLI rollback output to file
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -182,7 +182,7 @@ Feature: deployment related features
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | change_scaling_settings | change_strategy | changed_val1  | changed_val2       |
       | :false                  | :false          |               |                    | # @case_id OCP-12116
@@ -197,7 +197,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: CLI rollback with one component
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -247,7 +247,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Can't stop a deployment in Failed status
     Given I have a project
     Given I obtain test data file "deployment/test-stop-failed-deployment.json"
@@ -288,7 +288,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Stop a "Running" deployment
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -319,7 +319,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -468,7 +468,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
@@ -579,7 +579,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: start deployment when the latest deployment is completed
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -647,7 +647,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Start new deployment when deployment running
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -674,7 +674,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: When the latest deployment failed auto rollback to the active deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -731,7 +731,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: DeploymentConfig should allow valid value of resource requirements
     Given I have a project
     Given I obtain test data file "quota/limits.yaml"
@@ -774,7 +774,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -946,7 +946,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
@@ -969,12 +969,12 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: A/B Deployment for OCP 4.5 or greater
     Given the master version >= "4.5"
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image         | quay.io/openshifttest/deployment-example:v1-multiarch |
+      | image                | quay.io/openshifttest/deployment-example:v1-multiarch |
       | name                 | ab-example-a                                          |
       | as_deployment_config | true                                                  |
       | l                    | ab-example=true                                       |
@@ -987,10 +987,13 @@ Feature: deployment related features
       | selector      | ab-example=true  |
     Then the step should succeed
     When I expose the "ab-example" service
+    Given I wait up to 80 seconds for the steps to pass:
+    """
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
+    """
     When I run the :new_app client command with:
-      | docker_image         | quay.io/openshifttest/deployment-example:v1-multiarch |
+      | image                | quay.io/openshifttest/deployment-example:v1-multiarch |
       | name                 | ab-example-b                                          |
       | as_deployment_config | true                                                  |
       | l                    | ab-example=true                                       |
@@ -1002,9 +1005,12 @@ Feature: deployment related features
       | replicas | 0                |
     Then the step should succeed
     Given I wait until number of replicas match "0" for replicationController "ab-example-a-1"
+    Given I wait up to 80 seconds for the steps to pass:
+    """
     When I use the "ab-example" service
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardB"
+    """
     Then I run the :scale client command with:
       | resource | deploymentconfig |
       | name     | ab-example-b     |
@@ -1017,7 +1023,9 @@ Feature: deployment related features
     Then the step should succeed
     Given I wait until number of replicas match "0" for replicationController "ab-example-b-1"
     Given I wait until number of replicas match "1" for replicationController "ab-example-a-1"
+    Given I wait up to 80 seconds for the steps to pass:
+    """
     When I use the "ab-example" service
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
-
+    """

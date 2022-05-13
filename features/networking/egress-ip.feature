@@ -9,7 +9,7 @@ Feature: Egress IP related features
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Only cluster admin can add/remove egressIPs on hostsubnet
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
@@ -30,7 +30,7 @@ Feature: Egress IP related features
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Only cluster admin can add/remove egressIPs on netnamespaces
     # Try to add the egress ip to the netnamespace with normal user
     Given I have a project
@@ -52,7 +52,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: All the pods egress connection will get out through the egress IP if the egress IP is set to netns and egress node can host the IP
     Given I save ipecho url to the clipboard
     Given I select a random node's host
@@ -112,7 +112,7 @@ Feature: Egress IP related features
   @vsphere-upi @aws-upi
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: The egressIPs will be added to the node's primary NIC when it gets set on hostsubnet and will be removed after gets unset
     # add the egress ip to the hostsubnet
     Given  the valid egress IP is added to the node
@@ -152,7 +152,7 @@ Feature: Egress IP related features
   @vsphere-upi
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Should remove the egressIP from the array if it was not being used
     Given I store a random unused IP address from the reserved range to the clipboard
     And evaluation of `IPAddr.new("<%= cb.subnet_range %>").to_s+"/"+IPAddr.new("<%= cb.subnet_range %>").prefix.to_s` is stored in the :valid_subnet clipboard
@@ -205,7 +205,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: The EgressNetworkPolicy should work well with egressIP
     Given I save ipecho url to the clipboard
     Given the valid egress IP is added to the node
@@ -252,7 +252,7 @@ Feature: Egress IP related features
   @vsphere-upi @aws-upi
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: The related iptables/openflow rules will be removed once the egressIP gets removed from netnamespace
     Given the valid egress IP is added to the node
     And I have a project
@@ -304,7 +304,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: The egressIP should still work fine after the node or network service restarted
     Given I save ipecho url to the clipboard
     Given the valid egress IP is added to the node
@@ -343,7 +343,7 @@ Feature: Egress IP related features
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Invalid egressIP should not be acceptable
     Given I select a random node's host
     Given evaluation of `["fe80::5054:ff:fedd:3698", "a.b.c.d", "10.10.10.-1", "10.0.0.1/64", "10.1.1/24", "A008696"]` is stored in the :ips clipboard
@@ -368,7 +368,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Random outages with egressIP
     Given I store the schedulable workers in the :nodes clipboard
     And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
@@ -405,7 +405,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Should be able to access to the service's externalIP with egressIP
     Given I have a project
     Given I store the schedulable nodes in the :nodes clipboard
@@ -463,7 +463,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: The egressIPs should work well when re-using the egressIP which is holding by a deleted project
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -499,7 +499,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Add the removed egressIP back to the netnamespace would work well
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -541,7 +541,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: The pod should be able to access outside with the node source IP after the egressIP removed
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -591,7 +591,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Pods will not be affected by the egressIP set on other netnamespace
     Given I save ipecho url to the clipboard
     # create project with pods
@@ -661,7 +661,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: The same egressIP will not be assigned to different netnamespace
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -706,8 +706,8 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn
-  @arm64 @amd64
-  Scenario: [sdn-1282] Manually EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node it is on
+  @heterogeneous @arm64 @amd64
+  Scenario: Manually EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node it is on
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
     Given I store a random unused IP address from the reserved range to the clipboard
@@ -756,8 +756,8 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn
-  @arm64 @amd64
-  Scenario: [sdn-1282] Manually EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
+  @heterogeneous @arm64 @amd64
+  Scenario: Manually EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
     Given I save ipecho url to the clipboard
     Given I store the masters in the :masters clipboard
     Given I store the schedulable workers in the :workers clipboard
@@ -807,8 +807,8 @@ Feature: Egress IP related features
   @qeci
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
-  Scenario: [SDN-1282] Auto EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
+  @heterogeneous @arm64 @amd64
+  Scenario: Auto EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
     Given I save ipecho url to the clipboard
     Given I store the masters in the :masters clipboard
     Given I store the schedulable workers in the :workers clipboard
@@ -859,8 +859,8 @@ Feature: Egress IP related features
   @qeci
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
-  Scenario: [SDN-1282] Auto EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node
+  @heterogeneous @arm64 @amd64
+  Scenario: Auto EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :workers clipboard
     Given I store a random unused IP address from the reserved range to the clipboard
@@ -918,8 +918,8 @@ Feature: Egress IP related features
   @qeci
   @noproxy @disconnected @connected
   @network-openshiftsdn
-  @arm64 @amd64
-  Scenario: [Bug 1926662] NodePort works when configuring an EgressIP address
+  @heterogeneous @arm64 @amd64
+  Scenario: Bug1926662 NodePort works when configuring an EgressIP address
     Given I store the schedulable workers in the :workers clipboard
     And I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
@@ -954,14 +954,14 @@ Feature: Egress IP related features
       | Hello OpenShift! |
 
   # @author huirwang@redhat.com
-  # @case_id OCP-46637 
+  # @case_id OCP-46637
   @admin
   @destructive
   @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
   @qeci
-  Scenario: [Bug 2024880] EgressIP should work when configuring networkpolicy
+  Scenario: Bug2024880 EgressIP should work when configuring networkpolicy
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :workers clipboard
     And the valid egress IP is added to the "<%= cb.workers[0].name %>" node

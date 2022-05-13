@@ -9,7 +9,7 @@ Feature: buildlogic.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Build with specified Dockerfile via new-build -D
     Given I have a project
     When I run the :new_build client command with:
@@ -67,7 +67,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Create new build config use dockerfile with source repo
     Given I have a project
     When I run the :new_build client command with:
@@ -115,7 +115,7 @@ Feature: buildlogic.feature
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | template                            |
       | buildconfig-s2i-dockerimage.json    | # @case_id OCP-11149
@@ -129,7 +129,7 @@ Feature: buildlogic.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
@@ -172,7 +172,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Build from private git repo with/without ssh key
     Given I have a project
     And I have an ssh-git service in the project
@@ -223,7 +223,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Create new-app from private git repo with ssh key
     Given I have a project
     When I run the :new_app client command with:
@@ -266,7 +266,7 @@ Feature: buildlogic.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Check s2i build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
@@ -294,7 +294,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Check docker build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-dockerbuild.json"
@@ -489,7 +489,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application
@@ -547,7 +547,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's
     Given I have a project
     Given I save a htpasswd registry auth to the :combine_dockercfg clipboard

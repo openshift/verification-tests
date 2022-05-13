@@ -52,7 +52,7 @@ Feature: Storage of Hostpath plugin testing
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | access_mode   | reclaim_policy | pv_status | step_status |
       | ReadWriteOnce | Retain         | released  | succeed     | # @case_id OCP-9639

@@ -2,12 +2,14 @@ Given(/^I have an IPI deployment$/) do
   # In an IPI deployment, machine number equals to node number
   machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
   if machines.length == 0
-    raise "Not an IPI deployment, there are no machines"
+    logger.info "Not an IPI deployment, there are no machines"
+    skip_this_scenario
   end
 
   machines.each do | machine |
     if machine.node_name.nil?
-      raise "machine #{machine.name} has no node ref, this is not a ready IPI deployment."
+      logger.info "machine #{machine.name} has no node ref, this is not a ready IPI deployment."
+      skip_this_scenario
     end
   end
 end
@@ -17,9 +19,9 @@ Given(/^I have an UPI deployment and machinesets are enabled$/) do
   machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
   if machines.length == 0
     raise "Machinesets are not enabled, there are no machines"
-  end 
+  end
 
-  machines.each do | machine | 
+  machines.each do | machine |
     if machine.node_name.nil?
       raise "machine #{machine.name} does not have nodeRef."
     end
@@ -83,7 +85,7 @@ Then(/^admin ensures machine number is restored after scenario$/) do
     unless machine_names_missing.empty?
       raise "Machines deleted but never restored: #{machine_names_missing}."
     end
-    
+
     # Instead of delete a machine, wait for the deletion to complete, then loop another one.
     # We trigger a delete cmd for all machines, then wait for the deletions to complete
     machines_waiting_delete.each do | machine |

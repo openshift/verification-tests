@@ -30,7 +30,7 @@ Feature: Node proxy configuration tests
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | file                                                      |
       | /etc/systemd/system/kubelet.service.d/10-default-env.conf | # @case_id OCP-24429

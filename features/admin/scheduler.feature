@@ -8,7 +8,7 @@ Feature: Scheduler related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: When no scheduler name is supplied, the pod is automatically scheduled using the default-scheduler
     Given I have a project
     Given I obtain test data file "scheduler/multiple-schedulers/pod-no-scheduler.yaml"

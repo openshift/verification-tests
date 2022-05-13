@@ -30,8 +30,8 @@ Feature: Logging upgrading related features
 
     Given I switch to the first user
     When I login to kibana logging web console
-    Given I have index pattern "*app"
-    Then I can display the pod logs of the "logging-upg-prep-1" project under the "*app" pattern in kibana
+    Given I have index pattern "app"
+    Then I can display the pod logs of the "logging-upg-prep-1" project under the "app*" pattern in kibana
     Then I close the current browser
     Given I run the :policy_add_role_to_group client command with:
       | group_name | project-group-share |
@@ -39,8 +39,8 @@ Feature: Logging upgrading related features
     Then the step should succeed
     Given I switch to the second user
     Given I login to kibana logging web console
-    Given I have index pattern "*app"
-    Then I can display the pod logs of the "logging-upg-prep-share" project under the "*app" pattern in kibana
+    Given I have index pattern "app"
+    Then I can display the pod logs of the "logging-upg-prep-share" project under the "app*" pattern in kibana
     Then I close the current browser
 
   # @case_id OCP-22911
@@ -71,11 +71,11 @@ Feature: Logging upgrading related features
     # check if kibana console is accessible
     Given I switch to the first user
     When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-1" project under the "*app" pattern in kibana
+    Then I can display the pod logs of the "logging-upg-prep-1" project under the "app*" pattern in kibana
     Then I close the current browser
     Given I switch to the second user
     When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-share" project under the "*app" pattern in kibana
+    Then I can display the pod logs of the "logging-upg-prep-share" project under the "app*" pattern in kibana
     Then I close the current browser
 
     # upgrade logging if needed
@@ -92,11 +92,11 @@ Feature: Logging upgrading related features
     # check if kibana console is accessible
     Given I switch to the first user
     When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-1" project under the "*app" pattern in kibana
+    Then I can display the pod logs of the "logging-upg-prep-1" project under the "app*" pattern in kibana
     Then I close the current browser
     Given I switch to the second user
     When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-share" project under the "*app" pattern in kibana
+    Then I can display the pod logs of the "logging-upg-prep-share" project under the "app*" pattern in kibana
     Then I close the current browser
     Given I switch to the first user
     Then the "<%= cb.proj1 %>" project is deleted

@@ -45,7 +45,7 @@ check_kibana_status:
       xpath: //div[@id="createStatusPageReact"]
     missing: true
     timeout: 30
-  
+
 create_index_pattern_in_kibana:
   action:
     if_element:
@@ -60,7 +60,7 @@ create_index_pattern:
       selector:
         xpath: //a[@data-test-subj="indexPatternLink"]
       timeout: 30
-    ref: click_create_index_pattern_button   
+    ref: click_create_index_pattern_button
   action: set_index_pattern_name
   action: click_create_index_pattern_go_to_step2_button
   action: create_index_pattern_time_field_select
@@ -98,7 +98,7 @@ click_kibana_index_patterns:
     selector:
       xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
     timeout: 30
-    op: click 
+    op: click
 
 click_create_index_pattern_button:
   element:
@@ -108,14 +108,20 @@ click_create_index_pattern_button:
     op: click
 
 set_index_patter_name:
-  elements: 
+  elements:
   - selector:
       xpath: //input[@type="text" and @name="indexPattern"]
-    op: clear
+    op: click
     timeout: 30
-  - selector:
+  scripts:
+  - command: |
+      document.querySelector("input[name='indexPattern']").value = '<index_pattern_name>';
+      return document.querySelector("input[name='indexPattern']").value == '<index_pattern_name>';
+    expect_result: true
+  element:
+    selector:
       xpath: //input[@type="text" and @name="indexPattern"]
-    op: send_keys <index_pattern_name>
+    op: send_keys "*"
 
 click_create_index_pattern_go_to_step2_button:
   element:

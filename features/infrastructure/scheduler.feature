@@ -4,7 +4,7 @@ Feature: Scheduler predicates and priority test suites
   # @case_id OCP-12467
   @admin
   @inactive
-  Scenario: [origin_runtime_646] Fixed predicates rules testing - MatchNodeSelector
+  Scenario: Fixed predicates rules testing - MatchNodeSelector
     Given I have a project
     Given I obtain test data file "scheduler/pod_with_nodeselector.json"
     Given I run the :create client command with:
