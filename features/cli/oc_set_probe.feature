@@ -155,7 +155,7 @@ Feature: oc_set_probe.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Set a probe to open a TCP socket test
     Given I have a project
     When I run the :new_app client command with:
@@ -219,7 +219,7 @@ Feature: oc_set_probe.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Set a probe over HTTPS/HTTP test
     Given I have a project
     When I run the :new_app client command with:
@@ -272,7 +272,7 @@ Feature: oc_set_probe.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Set an exec action probe test
     Given I have a project
     When I run the :new_app client command with:

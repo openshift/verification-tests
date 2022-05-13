@@ -61,7 +61,7 @@ Feature: Node operations test scenarios
 
     @upgrade-sanity
     @proxy @noproxy @disconnected @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | cloud_provider |
       | aws-ebs        | # @case_id OCP-15283

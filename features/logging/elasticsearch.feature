@@ -12,7 +12,7 @@ Feature: Elasticsearch related tests
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Elasticsearch using dynamic volumes
     Given default storageclass is stored in the :default_sc clipboard
     Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"

@@ -12,7 +12,7 @@ Feature: Logging smoke test case
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   @flaky
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console

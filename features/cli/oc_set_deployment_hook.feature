@@ -10,7 +10,7 @@ Feature: set deployment-hook/build-hook with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:
@@ -101,7 +101,7 @@ Feature: set deployment-hook/build-hook with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Set invalid pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:

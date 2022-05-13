@@ -42,7 +42,7 @@ Feature: OLM related scenarios
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: upgrade OLM
     # Check OLM version after upgraded
     Given the "operator-lifecycle-manager" operator version matches the current cluster version

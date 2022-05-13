@@ -52,7 +52,7 @@ Feature: Descheduler major upgrade should work fine
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: upgrade - upgrade descheduler from 4.x to 4.y
     Given I switch to cluster admin pseudo user
     And I use the "openshift-kube-descheduler-operator" project

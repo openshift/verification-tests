@@ -26,7 +26,7 @@ Feature: SDN compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-network-operator" project
@@ -95,7 +95,7 @@ Feature: SDN compoment upgrade testing
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Check the networkpolicy works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade" project
@@ -212,7 +212,7 @@ Feature: SDN compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project
@@ -380,7 +380,7 @@ Feature: SDN compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade3" project
@@ -451,7 +451,7 @@ Feature: SDN compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "conntrack-upgrade" project

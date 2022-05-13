@@ -55,7 +55,7 @@ Feature: Persistent Volume reclaim policy tests
     @openstack-upi
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | storage_type         | volume_name | path   | file                |
       | cinder               | volumeID    | cinder | pv-rwx-default.json | # @case_id OCP-9944
