@@ -10,7 +10,7 @@ Feature: oc_process.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Supply oc new-app parameter list+env vars via a file
     Given I have a project
     Given a "test1.env" file is created with the following lines:

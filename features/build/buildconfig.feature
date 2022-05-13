@@ -89,7 +89,7 @@ Feature: buildconfig.feature
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | template                  |
       | test-buildconfig-s2i.json | # @case_id OCP-11474
@@ -104,7 +104,7 @@ Feature: buildconfig.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:

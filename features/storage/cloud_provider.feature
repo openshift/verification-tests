@@ -52,7 +52,7 @@ Feature: kubelet restart and node restart
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | platform       |
       | vsphere-volume | # @case_id OCP-13631

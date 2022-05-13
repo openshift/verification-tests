@@ -10,7 +10,7 @@ Feature: NFS Persistent Volume
   @upgrade-sanity
   @singlenode
   @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Share NFS with multiple pods with ReadWriteMany mode
     Given I have a project
     And I have a NFS service in the project
@@ -63,7 +63,7 @@ Feature: NFS Persistent Volume
   @upgrade-sanity
   @singlenode
   @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Permission denied when nfs pv annotaion is not right
     Given I have a project
     And I have a NFS service in the project

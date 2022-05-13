@@ -117,7 +117,7 @@ Feature: jenkins.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: new-app/new-build support for pipeline buildconfigs
     Given I have a project
     When I run the :new_app client command with:
@@ -374,7 +374,7 @@ Feature: jenkins.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project
     When I run the :new_app client command with:

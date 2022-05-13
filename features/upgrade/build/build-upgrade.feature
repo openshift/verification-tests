@@ -36,7 +36,7 @@ Feature: build related upgrade check
   @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Check docker and sti build works well before and after upgrade
     Given I switch to the first user
     When I use the "build-upgrade" project

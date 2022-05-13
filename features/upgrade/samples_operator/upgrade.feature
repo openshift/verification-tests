@@ -39,7 +39,7 @@ Feature: image-registry operator upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: samples/openshift-controller-manager/image-registry operators should be in correct status after upgrade
     Given I switch to cluster admin pseudo user
     # Check cluster operator openshift-samples should be in correct status

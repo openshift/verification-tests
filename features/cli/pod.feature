@@ -27,7 +27,7 @@ Feature: pods related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: kubectl describe pod should show qos tier info
     Given I have a project
     Given I obtain test data file "quota/pod-notbesteffort.yaml"
@@ -112,7 +112,7 @@ Feature: pods related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Pod should be immediately deleted if it's not scheduled even if graceful termination period is set
     Given I have a project
     Given I obtain test data file "pods/graceful-delete/10.json"
@@ -171,7 +171,7 @@ Feature: pods related scenarios
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project
     Given I obtain test data file "pods/pod_with_two_containers.json"
@@ -230,7 +230,7 @@ Feature: pods related scenarios
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: 4.0 Oauth provider info should be consumed in a pod
     Given I have a project
     When I run the :new_app client command with:

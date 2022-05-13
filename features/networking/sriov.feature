@@ -693,7 +693,7 @@ Feature: Sriov related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: dpdk for intel card works well
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-dpdk.yaml"

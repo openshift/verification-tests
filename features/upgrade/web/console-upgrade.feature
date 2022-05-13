@@ -65,7 +65,7 @@ Feature: web console related upgrade check
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

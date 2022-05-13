@@ -12,7 +12,7 @@ Feature: creating 'apps' with CLI
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/pod_with_special_fsGroup.json"
@@ -201,7 +201,7 @@ Feature: creating 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Create an application from source code test
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"

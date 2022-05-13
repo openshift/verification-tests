@@ -8,7 +8,7 @@ Feature: oc registry command scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Check function of oc registry command
     Given I have a project
     When I run the :registry_info client command with:

@@ -8,7 +8,7 @@ Feature: Machine misc features testing
   @vsphere-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: PVCs can still be provisioned after the password has been changed vSphere
     Given I have an IPI deployment
     Then I switch to cluster admin pseudo user
@@ -67,7 +67,7 @@ Feature: Machine misc features testing
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Reconciliation of MutatingWebhookConfiguration values should happen
     Given I switch to cluster admin pseudo user
 
@@ -125,7 +125,7 @@ Feature: Machine misc features testing
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: kube-rbac-proxy should not expose tokens, have excessive verbosity
     Given I switch to cluster admin pseudo user
 
@@ -170,7 +170,7 @@ Feature: Machine misc features testing
   @4.11 @4.10 @4.9 @4.8 @4.7
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Report vCenter version to telemetry
     Given I switch to cluster admin pseudo user
     When I perform the GET prometheus rest client with:
@@ -187,7 +187,7 @@ Feature: Machine misc features testing
   @vsphere-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Deattach disk before destroying vm from vsphere
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project

@@ -50,7 +50,7 @@ Feature: Webhook REST Related Tests
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @arm64 @amd64
+    @heterogeneous @arm64 @amd64
     Examples:
       | type    | negative1 | negative2   | negative3 | path              | file              | header1        | header2 |
       | generic | GitHub    | ImageChange | github    | generic/testdata/ | push-generic.json |                |         | # @case_id OCP-11693

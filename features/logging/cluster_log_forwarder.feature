@@ -143,6 +143,7 @@ Feature: cluster log forwarder features
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous
   Scenario: ClusterLogForwarder: Forward logs to fluentd as insecure
     Given I switch to the first user
     And I have a project
@@ -234,6 +235,7 @@ Feature: cluster log forwarder features
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous
     Examples:
       | auth_type         |
       | mTLS_share        | # @case_id OCP-29844
@@ -555,7 +557,7 @@ Feature: cluster log forwarder features
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
     Given I switch to cluster admin pseudo user

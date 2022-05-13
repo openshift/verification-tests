@@ -9,7 +9,7 @@ Feature: kata smoke tests
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Namespace installed by operator
     Given kata container has been installed successfully
     Then the expression should be true> project.name == 'openshift-sandboxed-containers-operator'

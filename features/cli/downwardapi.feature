@@ -9,7 +9,7 @@ Feature: Downward API
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Pods can get IPs via downward API under race condition
     Given I have a project
     Given I obtain test data file "downwardapi/ocp10707/pod-downwardapi-env.yaml"
@@ -31,7 +31,7 @@ Feature: Downward API
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: downward api pod name and pod namespace as env variables
     Given I have a project
     Given I obtain test data file "downwardapi/ocp10628/downward-example.yaml"
@@ -56,7 +56,7 @@ Feature: Downward API
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Container consume infomation from the downward API using a volume plugin
     Given I have a project
     Given I obtain test data file "downwardapi/pod-dapi-volume.yaml"
