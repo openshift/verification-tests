@@ -13,7 +13,7 @@ click_run_queries_button:
 check_sample_query_area:
   element:
     selector:
-      xpath: //textarea[contains(text(),'sum_over_time')]
+      xpath: //span[contains(text(),'sum_over_time')]
 click_primary_menu_developer_mode:
   element:
     selector:
@@ -193,9 +193,8 @@ perform_metric_query_textarea:
 set_query_input_text_area_only:
   elements:
   - selector:
-      xpath: //textarea[contains(@class, 'query-browser__query-input')]
+      xpath: //div[@class="cm-line"]
     op: send_keys <metrics>
-    type: textarea
 click_clear_query_button:
   element:
     selector:
@@ -260,7 +259,7 @@ click_query_cog_icon:
 check_query_input_text_area_no_value:
   element:
     selector:
-      xpath: //textarea[contains(@class, 'query-browser__query-input')][not(text())]
+      xpath: //div[@class="cm-line"]
 
 perform_disable_query:
   element:
