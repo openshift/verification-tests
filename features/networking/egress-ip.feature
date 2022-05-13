@@ -954,7 +954,7 @@ Feature: Egress IP related features
       | Hello OpenShift! |
 
   # @author huirwang@redhat.com
-  # @case_id OCP-46637 
+  # @case_id OCP-46637
   @admin
   @destructive
   @4.10 @4.9

@@ -177,4 +177,4 @@ Feature: CSI Resizing related feature
 
     Examples:
       | sc_name     |
-      | managed-csi | # @case_id OCP-41452 
+      | managed-csi | # @case_id OCP-41452
