@@ -5,7 +5,7 @@ items:
 # The git server is deployed as a singleton pod and uses a very small amount
 # of resources. It can host or transiently serve Git repositories, as well
 # as automatically integrate with builds in a namespace.
-- apiVersion: "apps.openshift.io/v1"
+- apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
     name: git
@@ -197,7 +197,7 @@ items:
       app: git
 
 # Default route for git service
-- apiVersion: "route.openshift.io/v1"
+- apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
     labels:
