@@ -61,14 +61,8 @@ Feature: SDN externalIP compoment upgrade testing
   Scenario: Check the externalIP works well after upgrade
     Given I switch to cluster admin pseudo user
     # Get the external ip from  service
-    When I run the :get client command with:
-      | resource      | service                         |
-      | resource_name | service-unsecure                |
-      | n             | externalip-upgrade              |
-      | o             | jsonpath={.spec.externalIPs[0]} |
-    Then the step should succeed
-    And evaluation of `@result[:response]` is stored in the :hostip clipboard
     When I use the "externalip-upgrade" project
+    And evaluation of `service('service-unsecure').raw_resource(cached: true).dig('spec','externalIPs')[0]` is stored in the :hostip clipboard
     Given a pod becomes ready with labels:
       | name=externalip-pod    |
     And evaluation of `pod(0).name` is stored in the :pod1name clipboard
