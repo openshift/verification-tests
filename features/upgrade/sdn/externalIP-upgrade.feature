@@ -62,10 +62,10 @@ Feature: SDN externalIP compoment upgrade testing
     Given I switch to cluster admin pseudo user
     # Get the external ip from  service
     When I use the "externalip-upgrade" project
-    And evaluation of `service('service-unsecure').raw_resource(cached: true).dig('spec','externalIPs')[0]` is stored in the :hostip clipboard
+    And evaluation of `service('service-unsecure').raw_resource.dig('spec','externalIPs')[0]` is stored in the :hostip clipboard
     Given a pod becomes ready with labels:
       | name=externalip-pod    |
-    And evaluation of `pod(0).name` is stored in the :pod1name clipboard
+    And evaluation of `pod.name` is stored in the :pod1name clipboard
 
     # Curl externalIP:portnumber should pass
     When I execute on the "<%= cb.pod1name %>" pod:
