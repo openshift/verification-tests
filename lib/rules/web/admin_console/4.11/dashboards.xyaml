@@ -39,7 +39,7 @@ check_cluster_api_in_details_card:
   action: check_resource_details_key_and_value
 check_cluster_provider_in_details_card:
   params:
-    key: Provider
+    key: provider
     value: <provider>
   action: check_resource_details_key_and_value
 check_update_channel_in_details_card:
