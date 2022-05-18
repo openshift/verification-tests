@@ -433,11 +433,12 @@ Feature: Egress IP related features
     """
 
     # Create a pod
-    Given I obtain test data file "routing/web-server-1.yaml"
+    Given I obtain test data file "networking/externalip_pod.yaml"
     When I run the :create client command with:
-      | f | web-server-1.yaml |
+      | f | externalip_pod.yaml |
     Then the step should succeed
-    And the pod named "web-server-1" becomes ready
+    Given a pod becomes ready with labels:
+      | name=externalip-pod    |
     # Patch egressIP to the node
     Given the valid egress IP is added to the node
 
@@ -451,7 +452,7 @@ Feature: Egress IP related features
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift |
+      | Hello OpenShift |
 
   # @author huirwang@redhat.com
   # @case_id OCP-18316
