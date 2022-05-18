@@ -67,7 +67,7 @@ Feature: Pod related networking scenarios
     Given I wait up to 20 seconds for the steps to pass:
     """
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
+      | bash | -c | ovs-ofctl -O openflow13 dump-flows br0 \| grep <%=cb.pod_ip %> |
     Then the step should succeed
     And the output should contain:
       | <%=cb.pod_ip %> |
@@ -79,8 +79,7 @@ Feature: Pod related networking scenarios
     Given I wait up to 10 seconds for the steps to pass:
     """
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
-    Then the step should succeed
+     | bash | -c | ovs-ofctl -O openflow13 dump-flows br0 \| grep <%=cb.pod_ip %> |    
     And the output should not contain:
       | <%=cb.pod_ip %> |
     """
@@ -118,11 +117,11 @@ Feature: Pod related networking scenarios
 
     # check the ovs port and interface for the qos availibility
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-vsctl | list | qos |
+      | bash | -c | ovs-vsctl list qos \| grep max-rate |
     Then the step should succeed
     And the output should contain "max-rate="5000000""
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-vsctl | list | interface |
+      | bash | -c | ovs-vsctl list interface \| grep ingress_policing_rate |
     Then the step should succeed
     And the output should contain "ingress_policing_rate: 1953"
     # test the bandwidth limit with qos for egress
@@ -144,12 +143,10 @@ Feature: Pod related networking scenarios
     And I wait for the resource "pod" named "<%= cb.iperf_client %>" to disappear
 
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-vsctl | list | qos |
-    Then the step should succeed
+      | bash | -c | ovs-vsctl list qos \| grep max-rate |    
     And the output should not contain "max-rate="5000000""
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-vsctl | list | interface |
-    Then the step should succeed
+      | bash | -c | ovs-vsctl list interface \| grep ingress_policing_rate |    
     And the output should not contain "ingress_policing_rate: 1953"
 
   # @author anusaxen@redhat.com
