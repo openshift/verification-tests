@@ -974,7 +974,7 @@ Feature: deployment related features
     Given the master version >= "4.5"
     Given I have a project
     When I run the :new_app client command with:
-      | image                | quay.io/openshifttest/deployment-example:v1-multiarch |
+      | app_repo             | quay.io/openshifttest/deployment-example:v1-multiarch |
       | name                 | ab-example-a                                          |
       | as_deployment_config | true                                                  |
       | l                    | ab-example=true                                       |
@@ -993,7 +993,7 @@ Feature: deployment related features
     And the output should contain "shardA"
     """
     When I run the :new_app client command with:
-      | image                | quay.io/openshifttest/deployment-example:v1-multiarch |
+      | app_repo             | quay.io/openshifttest/deployment-example:v1-multiarch |
       | name                 | ab-example-b                                          |
       | as_deployment_config | true                                                  |
       | l                    | ab-example=true                                       |
