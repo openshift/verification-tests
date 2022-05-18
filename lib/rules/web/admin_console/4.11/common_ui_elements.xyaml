@@ -883,7 +883,7 @@ check_overlay_edit_modal:
 check_overlay_edit_modal_title:
   elements:
   - selector:
-      xpath: //h1[contains(@class, 'pf-c-title') and contains(@class, 'pf-m-2xl') and contains(@data-test-id, 'modal-title')]
+      xpath: //h1[contains(@data-test-id, 'modal-title')]
 check_side_overlay_dialog_modal:
   elements:
   - selector:
