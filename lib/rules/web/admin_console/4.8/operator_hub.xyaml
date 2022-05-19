@@ -261,9 +261,6 @@ check_quay_image_security_popup:
     op: click
   - selector:
       xpath: //div[contains(@class,'co-status-popup') and contains(.,'Impact') and contains(.,'Vulnerabilities')]
-  - selector:
-      xpath: //div[contains(@class,'co-status-popup') and contains(.,'<severity>')]
-    timeout: 40
   action: check_link_and_text
 check_affected_pods_tab:
   params:
