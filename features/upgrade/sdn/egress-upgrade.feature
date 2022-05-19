@@ -56,6 +56,7 @@ Feature: Egress compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   Scenario: Check egressfirewall is functional post upgrade
+    Given the cluster is not migration from sdn plugin
     Given I switch to cluster admin pseudo user
     And I save egress type to the clipboard
     When I run the :get admin command with:
@@ -189,6 +190,7 @@ Feature: Egress compoment upgrade testing
   @proxy @noproxy @disconnected @connected
   @arm64 @amd64
   Scenario: Check sdn egressip is functional post upgrade - prepare
+    Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
     Given I store the schedulable workers in the :workers clipboard
@@ -261,6 +263,8 @@ Feature: Egress compoment upgrade testing
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   Scenario: Check sdn egressip is functional post upgrade
+    Given the cluster is not migration from sdn plugin		
+    Given the env is using "OpenShiftSDN" networkType
     Given I run the :get admin command with:
       | resource      | hostsubnet                                  |
       | o             | jsonpath={.items[?(@.egressCIDRs)].host}    |
