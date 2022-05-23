@@ -99,11 +99,11 @@ check_event_is_streaming:
 check_logs_not_wrapped:
   elements:
   - selector:
-      xpath: //div[contains(@style,'auto')]
+      xpath: //div[contains(@class,'pf-c-log-viewer__scroll-container') and contains(@style,'auto')]
 check_logs_wrapped:
   elements:
   - selector:
-      xpath: //div[contains(@style,'hidden')]
+      xpath: //div[contains(@class,'pf-c-log-viewer__scroll-container') and contains(@style,'hidden')]
 toggle_log_wraps:
   element:
     selector:
