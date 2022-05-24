@@ -108,7 +108,8 @@ module BushSlicer
         if self.current_test_record.start_scenario_for! test_case
           return true
         else
-          raise "logic error: starting test case that is not part of current test record"
+          puts "logic error: starting test case that is not part of current test record\n"
+          #raise "logic error: starting test case that is not part of current test record"
         end
       end
 
@@ -122,7 +123,8 @@ module BushSlicer
       # @param test_case [Cucumber::Events::TestRunFinished]
       def test_case_execute_finish!(event, attach:)
         unless current_test_record
-          raise "Bug in test case management - current test record is not set but we finished scenario '#{event.test_case.name}'"
+          puts "Bug in test case management - current test record is not set but we finished scenario '#{event.test_case.name}'"
+          #raise "Bug in test case management - current test record is not set but we finished scenario '#{event.test_case.name}'"
         end
         test_case_expected?(event.test_case)
         current_test_record.finished!(event, attach: attach)
@@ -147,11 +149,13 @@ module BushSlicer
       # @param test_case [Cucumber::Core::Test::Case]
       def test_case_expected?(test_case)
         unless current_test_record
-         raise "logic error: expected to have current test record but we do not"
+          puts "logic error: expected to have current test record but we do not\n"
+          puts "Skipping testcase due to lacking testrecord for #{test_case}\n"
         end
 
         unless current_test_record.in_progress?(test_case)
-          raise "logic error: test case in progress status confusion"
+          puts "logic error: test case in progress status confusion\n"
+          puts "Skipping testcase due to logic error for #{test_case}\n"
         end
       end
 
