@@ -985,6 +985,8 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   logger.info "The tunnel interface address is stored in the #{cb_address} clipboard."
 end
 
+# Internal IP will support single stack clusters either IPv4 or IPv6. Internal IPv6 will extend support in case of Dual Stack.
+# This is more focussed on supporting single stack clusters and interoperability of such cases IPv4/IPv6 in verification-tests repo
 Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do | v6, node_name, cb_ipaddr|
   ensure_admin_tagged
   node = node(node_name)
@@ -994,28 +996,26 @@ Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipbo
   network_type = network_operator.network_type(user: admin)
   case network_type
   when "OVNKubernetes"
-    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
     if v6
        step %Q/I run command on the node's ovnkube pod:/, table("| ip | -6 | route | show | default |")
     else
-       step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
+       inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[0].address}")
     end
   when "OpenShiftSDN"
-    step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
+       inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[0].address}")
   else
     logger.info "unknown networkType"
     skip_this_scenario
   end
   # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
-  def_inf = @result[:response].split("\n").first.split[4]
-  logger.info "The node's default interface is #{def_inf}"
-  if v6
-     @result = host.exec_admin("ip -6 -brief addr show #{def_inf}")
-     cb[cb_ipaddr]=@result[:response].match(/([a-f0-9:]+:+)+[a-f0-9]+/)[0]
-  else
-     @result = host.exec_admin("ip -4 -brief addr show #{def_inf}")
-     cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
-  end
+    if v6
+       def_inf = @result[:response].split("\n").first.split[4]
+       logger.info "The node's default interface is #{def_inf}"
+       @result = host.exec_admin("ip -6 -brief addr show #{def_inf}")
+       cb[cb_ipaddr]=@result[:response].match(/([a-f0-9:]+:+)+[a-f0-9]+/)[0]
+    else
+       cb[cb_ipaddr]=inf_address[:response]
+    end
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
 
@@ -1480,6 +1480,9 @@ Given /^I switch the ovn gateway mode on this cluster$/ do
     @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": true}}}}}", type: "merge")
   end
   raise "Failed to patch network operator for gateway mode" unless @result[:success]
+  # Sometimes CNO starts rolling out changes after few seconds have passed (gap). During that gap, if we check rollout status it would always be a pass from previous rollout result.Its not a bug.
+  # Keeping a 30 seconds harcoded time before we make following instruction (oc rollout status) worthy
+  step "30 seconds have passed"
   @result = admin.cli_exec(:rollout_status, resource: "daemonset", name: "ovnkube-master", n: "openshift-ovn-kubernetes")
   raise "Failed to rollout masters" unless @result[:success]
 end
