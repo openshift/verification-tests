@@ -120,25 +120,25 @@ Feature: Machine features testing
   Scenario: Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
-    And evaluation of `machine(cb.machine).node_name` is stored in the :nodeRef_name clipboard
-    And evaluation of `machine(cb.machine).provider_id` is stored in the :providerID clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).node_name` is stored in the :nodeRef_name clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).provider_id` is stored in the :providerID clipboard
 
     When I run the :patch admin command with:
-      | resource      | machine                                |
+      | resource      | machines.machine.openshift.io          |
       | resource_name | <%= cb.machine %>                      |
       | p             | {"status":{"nodeRef":{"name":"test"}}} |
       | type          | merge                                  |
       | n             | openshift-machine-api                  |
     Then the step should succeed
     When I run the :describe admin command with:
-      | resource      | machine                                |
+      | resource      | machines.machine.openshift.io          |
       | name          | <%= cb.machine %>                      |
       | n             | openshift-machine-api                  |
     Then the step should succeed
     And the output should match "Name:\s+<%= cb.nodeRef_name %>"
 
     When I run the :patch admin command with:
-      | resource      | machine                                |
+      | resource      | machines.machine.openshift.io          |
       | resource_name | <%= cb.machine %>                      |
       | p             | {"spec":{"providerID":"invalid"}}      |
       | type          | merge                                  |
@@ -147,7 +147,7 @@ Feature: Machine features testing
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe admin command with:
-      | resource      | machine                                |
+      | resource      | machines.machine.openshift.io                                |
       | name          | <%= cb.machine %>                      |
       | n             | openshift-machine-api                  |
     Then the step should succeed
@@ -163,7 +163,7 @@ Feature: Machine features testing
   @heterogeneous @arm64 @amd64
   Scenario: Verify all machine instance-state should be consistent with their providerStats.instanceState
     Given I have an IPI deployment
-    And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
+    And evaluation of `BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
     Then the expression should be true> cb.machines.select{|m|m.instance_state == m.annotation_instance_state}.count == cb.machines.count
 
   # @author miyadav@redhat.com
@@ -182,7 +182,7 @@ Feature: Machine features testing
     And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-clone-27609"
-    Then as admin I successfully merge patch resource "machineset/machineset-clone-27609" with:
+    Then as admin I successfully merge patch resource "machinesets.machine.openshift.io/machineset-clone-27609" with:
       | {"spec":{"template": {"spec":{"providerSpec":{"value":{"publicIP": true}}}}}} |
     And I scale the machineset to +2
     Then the machineset should have expected number of running machines
@@ -203,8 +203,8 @@ Feature: Machine features testing
     And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-24363"
-    And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
-    And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
+    And evaluation of `machine_set_machine_openshift_io.machines.first.node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_set_machine_openshift_io.machines.first.name` is stored in the :machine_name clipboard
 
     Given I saved following keys to list in :taintsid clipboard:
       | {"spec":{"taints": [{"effect": "NoExecute","key": "role","value": "master"}]}}  | |
@@ -213,7 +213,7 @@ Feature: Machine features testing
     And I use the "openshift-machine-api" project
     Then I repeat the following steps for each :id in cb.taintsid:
     """
-    Given as admin I successfully merge patch resource "machine/<%= cb.machine_name %>" with:
+    Given as admin I successfully merge patch resource "machines.machine.openshift.io/<%= cb.machine_name %>" with:
       | #{cb.id} |
     Then the step should succeed
     """
@@ -236,13 +236,13 @@ Feature: Machine features testing
     #Create a spot machineset
     Given I use the "openshift-machine-api" project
     Given I create a spot instance machineset and name it "<machineset_name>" on <iaas_type>
-    And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
-    And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
+    And evaluation of `machine_set_machine_openshift_io.machines.first.node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_set_machine_openshift_io.machines.first.name` is stored in the :machine_name clipboard
 
     #Check machine and node were labelled as an `interruptible-instance`
     When I run the :describe admin command with:
-      | resource | machine                |
-      | name     | <%= cb.machine_name %> |
+      | resource | machines.machine.openshift.io |
+      | name     | <%= cb.machine_name %>        |
     Then the step should succeed
     And the output should match "machine.openshift.io/interruptible-instance"
     When I run the :describe admin command with:
@@ -283,7 +283,7 @@ Feature: Machine features testing
     # Verify machineset has scaled
     Given I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 3
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 3
     """
     Then the machineset should have expected number of running machines
 
@@ -292,13 +292,13 @@ Feature: Machine features testing
     # Check cluster auto scales down
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
 
     # Check autoscaler taints are deleted when min node is reached
     Given I store the last provisioned machine in the :machine clipboard
-    And evaluation of `machine(cb.machine).node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).node_name` is stored in the :noderef_name clipboard
     When I run the :describe admin command with:
       | resource | node                  |
       | name     | <%= cb.noderef_name%> |
@@ -334,7 +334,7 @@ Feature: Machine features testing
     And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-clone-32620"
-    Given as admin I successfully merge patch resource "machineset/machineset-clone-32620" with:
+    Given as admin I successfully merge patch resource "machinesets.machine.openshift.io/machineset-clone-32620" with:
       | {"spec":{"template":{"spec":{"metadata":{"labels":{"node-role.kubernetes.io/infra": ""}}}}}} |
     Then the step should succeed
 
@@ -344,7 +344,7 @@ Feature: Machine features testing
 
     #Check labels are propagate to nodes
     Given I store the last provisioned machine in the :machine clipboard
-    And evaluation of `machine(cb.machine).node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).node_name` is stored in the :noderef_name clipboard
     When I run the :describe admin command with:
       | resource | node                   |
       | name     | <%= cb.noderef_name %> |
@@ -362,11 +362,11 @@ Feature: Machine features testing
     Then admin ensures machine number is restored after scenario
     
     Given I pick a earliest created machineset and store in :machineset clipboard
-    When evaluation of `machine_set(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_subnet` is stored in the :default_subnet clipboard
-    Then admin ensures "<name>" machineset is deleted after scenario
+    When evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_subnet` is stored in the :default_subnet clipboard
+    Then admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-aws/<file_name>"
     When I run oc create over "<file_name>" replacing paths:
@@ -384,12 +384,12 @@ Feature: Machine features testing
     Then I store the last provisioned machine in the :machine_latest clipboard
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
+    Then the expression should be true> machine_machine_openshift_io(cb.machine_latest).phase(cached: false) == "Running"
     """
 
     When I run the :describe admin command with:
-      | resource | machine                  |
-      | name     | <%= cb.machine_latest %> |
+      | resource | machines.machine.openshift.io |
+      | name     | <%= cb.machine_latest %>      |
     Then the step should succeed
     And the output should contain:
       | <Validation> |
@@ -420,10 +420,10 @@ Feature: Machine features testing
     Then admin ensures machine number is restored after scenario
 
     Given I store the last provisioned machine in the :machine clipboard
-    When evaluation of `machine(cb.machine).gcp_region` is stored in the :default_region clipboard
-    And evaluation of `machine(cb.machine).gcp_zone` is stored in the :default_zone clipboard
-    And evaluation of `machine(cb.machine).gcp_service_account` is stored in the :default_service_account clipboard
-    Then admin ensures "default-valued-33056" machineset is deleted after scenario
+    When evaluation of `machine_machine_openshift_io(cb.machine).gcp_region` is stored in the :default_region clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).gcp_zone` is stored in the :default_zone clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).gcp_service_account` is stored in the :default_service_account clipboard
+    Then admin ensures "default-valued-33056" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-gcp/ms_default_values.yaml"
     When I run oc create over "ms_default_values.yaml" replacing paths:
@@ -440,7 +440,7 @@ Feature: Machine features testing
     # Verify machine could be created successful
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set("default-valued-33056").desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io("default-valued-33056").desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
 
@@ -455,8 +455,8 @@ Feature: Machine features testing
     Then admin ensures machine number is restored after scenario
 
     Given I store the last provisioned machine in the :machine clipboard
-    Then evaluation of `machine(cb.machine).azure_location` is stored in the :default_location clipboard
-    And admin ensures "<name>" machineset is deleted after scenario
+    Then evaluation of `machine_machine_openshift_io(cb.machine).azure_location` is stored in the :default_location clipboard
+    And admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-azure/<file_name>"
     When I run oc create over "<file_name>" replacing paths:
@@ -472,12 +472,12 @@ Feature: Machine features testing
     Then I store the last provisioned machine in the :machine_latest clipboard
     And I wait up to 400 seconds for the steps to pass:
     """
-    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
+    Then the expression should be true> machine_machine_openshift_io(cb.machine_latest).phase(cached: false) == "Running"
     """
 
     When I run the :describe admin command with:
-      | resource | machine                  |
-      | name     | <%= cb.machine_latest %> |
+      | resource | machines.machine.openshift.io |
+      | name     | <%= cb.machine_latest %>      |
     Then the step should succeed
     And the output should contain:
       | <Validation> |
@@ -564,15 +564,15 @@ Feature: Machine features testing
     Then admin ensures machine number is restored after scenario
 
     Given I store the last provisioned machine in the :machine clipboard
-    And evaluation of `machine(cb.machine).vsphere_datacenter` is stored in the :datacenter clipboard
-    And evaluation of `machine(cb.machine).vsphere_datastore` is stored in the :datastore clipboard
-    And evaluation of `machine(cb.machine).vsphere_folder` is stored in the :folder clipboard
-    And evaluation of `machine(cb.machine).vsphere_resourcePool` is stored in the :resourcePool clipboard
-    And evaluation of `machine(cb.machine).vsphere_server` is stored in the :server clipboard
-    And evaluation of `machine(cb.machine).vsphere_diskGiB` is stored in the :diskGiB clipboard
-    And evaluation of `machine(cb.machine).vsphere_memoryMiB` is stored in the :memoryMiB clipboard
-    And evaluation of `machine(cb.machine).vsphere_template` is stored in the :template clipboard
-    Then admin ensures "<name>" machineset is deleted after scenario
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_datacenter` is stored in the :datacenter clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_datastore` is stored in the :datastore clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_folder` is stored in the :folder clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_resourcePool` is stored in the :resourcePool clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_server` is stored in the :server clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_diskGiB` is stored in the :diskGiB clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_memoryMiB` is stored in the :memoryMiB clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_template` is stored in the :template clipboard
+    Then admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-vsphere/ms_default_values.yaml"
     When I run oc create over "ms_default_values.yaml" replacing paths:
@@ -595,7 +595,7 @@ Feature: Machine features testing
     And I wait up to 120 seconds for the steps to pass:
     """
     When I run the :get admin command with:
-      | resource | machine |
+      | resource | machines.machine.openshift.io |
     Then the step should succeed
     And the output should contain:
       | Provisioned  |
@@ -671,11 +671,11 @@ Feature: Machine features testing
     Then admin ensures machine number is restored after scenario
 
     Given I pick a earliest created machineset and store in :machineset clipboard
-    When evaluation of `machine_set(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_subnet_proxy` is stored in the :default_subnet clipboard
-    Then admin ensures "<name>" machineset is deleted after scenario
+    When evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_subnet_proxy` is stored in the :default_subnet clipboard
+    Then admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-aws/proxy-clusters/<file_name>"
     When I run oc create over "<file_name>" replacing paths:
@@ -693,12 +693,12 @@ Feature: Machine features testing
     Then I store the last provisioned machine in the :machine_latest clipboard
     And I wait up to 540 seconds for the steps to pass:
     """
-    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
+    Then the expression should be true> machine_machine_openshift_io(cb.machine_latest).phase(cached: false) == "Running"
     """
 
     When I run the :describe admin command with:
-      | resource | machine                  |
-      | name     | <%= cb.machine_latest %> |
+      | resource | machines.machine.openshift.io |
+      | name     | <%= cb.machine_latest %>      |
     Then the step should succeed
     And the output should contain:
       | <Validation> |

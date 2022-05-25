@@ -161,11 +161,11 @@ Feature: Machine-api components upgrade tests
     And I pick a random machineset to scale
 
     # Create a machineset
-    Given I get project machineset named "<%= machine_set.name %>" as YAML
+    Given I get project machine_set_machine_openshift_io named "<%= machine_set_machine_openshift_io.name %>" as YAML
     And I save the output to file> <machineset_name>.yaml
     And I replace content in "<machineset_name>.yaml":
-      | <%= machine_set.name %> | <machineset_name> |
-      | /replicas.*/            | replicas: 0       |
+      | <%= machine_set_machine_openshift_io.name %> | <machineset_name> |
+      | /replicas.*/                                 | replicas: 0       |
 
     When I run the :create admin command with:
       | f | <machineset_name>.yaml |
@@ -177,7 +177,7 @@ Feature: Machine-api components upgrade tests
     # Verify machine could be created successful
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set("<machineset_name>").desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io("<machineset_name>").desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
 
@@ -204,13 +204,13 @@ Feature: Machine-api components upgrade tests
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
-    And admin ensures "<machineset_name>" machineset is deleted after scenario
+    And admin ensures "<machineset_name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given "machine-api-termination-handler" daemonset becomes ready in the "openshift-machine-api" project
     And 1 pod becomes ready with labels:
       | k8s-app=termination-handler |
 
-    Given admin ensures "<machineset_name>" machineset is deleted
+    Given admin ensures "<machineset_name>" machine_set_machine_openshift_io is deleted
     And I wait up to 300 seconds for the steps to pass:
     """
     When I run the :get admin command with:
@@ -278,10 +278,10 @@ Feature: Machine-api components upgrade tests
     # Create machineautoscaler
     Given I obtain test data file "cloud/machine-autoscaler.yml"
     When I run oc create over "machine-autoscaler.yml" replacing paths:
-      | ["metadata"]["name"]               | maotest                 |
-      | ["spec"]["minReplicas"]            | 1                       |
-      | ["spec"]["maxReplicas"]            | 3                       |
-      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set.name %> |
+      | ["metadata"]["name"]               | maotest                                      |
+      | ["spec"]["minReplicas"]            | 1                                            |
+      | ["spec"]["maxReplicas"]            | 3                                            |
+      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set_machine_openshift_io.name %> |
     Then the step should succeed
     And admin ensures "maotest" machineautoscaler is deleted after scenario
 
@@ -295,7 +295,7 @@ Feature: Machine-api components upgrade tests
     # Verify machineset has scaled
     Given I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 3
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 3
     """
     Then the machineset should have expected number of running machines
 
@@ -304,7 +304,7 @@ Feature: Machine-api components upgrade tests
     # Check cluster auto scales down
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
 
