@@ -164,7 +164,7 @@ module BushSlicer
       logger.info("S3 upload file status: #{res}")
       unless res
         # XXX: don't raise exception to avoid premature exit of long test runs
-        puts "Failed to upload file '#{file}' to #{target}'"
+        logger.error("Failed to upload file '#{file}' to #{target}'")
       end
     end
 
