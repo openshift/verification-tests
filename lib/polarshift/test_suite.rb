@@ -108,7 +108,7 @@ module BushSlicer
         if self.current_test_record.start_scenario_for! test_case
           return true
         else
-          puts "logic error: starting test case '#{test_case} that is not part of current test record\n"
+          puts "logic error: starting test case '#{test_case}' that is not part of current test record\n"
           #raise "logic error: starting test case that is not part of current test record"
         end
       end
