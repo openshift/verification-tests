@@ -8,7 +8,7 @@ spec:
   containers:
     -
       name: "myfrontend"
-      image: "nginx"
+      image: "quay.io/openshifttest/nginx-alpine@sha256:f266733786efb10c4353d4b44ada6f22434e983d22f0975d20803f1817d38f56"
       ports:
         -
           containerPort: 80

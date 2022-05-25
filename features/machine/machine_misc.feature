@@ -47,7 +47,7 @@ Feature: Machine misc features testing
 
    Then I get project events
    And the output should match:
-     | Failed to provision volume with StorageClass "thin": ServerFaultCode: Cannot complete login |
+     | Failed to provision volume with StorageClass "thin": Credentials not found|
 
    Then I run the :replace admin command with:
       | _tool | oc                           |
