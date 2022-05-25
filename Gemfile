@@ -71,6 +71,6 @@ gem 'oga' # replacemen for nokogiri when we thought we can workaround it
 # gem 'mongoid'
 # gem 'text-table'
 # gem 'terminal-table'
-gem 'parallel_tests'
+gem 'parallel_tests', '~>3.8.1'
 gem 'slack-ruby-client'
 gem 'ovirt-engine-sdk'
