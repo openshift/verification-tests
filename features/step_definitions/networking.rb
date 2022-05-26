@@ -997,25 +997,25 @@ Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipbo
   case network_type
   when "OVNKubernetes"
     if v6
-       step %Q/I run command on the node's ovnkube pod:/, table("| ip | -6 | route | show | default |")
+      step %Q/I run command on the node's ovnkube pod:/, table("| ip | -6 | route | show | default |")
     else
-       inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[0].address}")
+      inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[0].address}")
     end
   when "OpenShiftSDN"
-       inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[0].address}")
+    inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[0].address}")
   else
     logger.info "unknown networkType"
     skip_this_scenario
   end
   # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
-    if v6
-       def_inf = @result[:response].split("\n").first.split[4]
-       logger.info "The node's default interface is #{def_inf}"
-       @result = host.exec_admin("ip -6 -brief addr show #{def_inf}")
-       cb[cb_ipaddr]=@result[:response].match(/([a-f0-9:]+:+)+[a-f0-9]+/)[0]
-    else
-       cb[cb_ipaddr]=inf_address[:response]
-    end
+  if v6
+    def_inf = @result[:response].split("\n").first.split[4]
+    logger.info "The node's default interface is #{def_inf}"
+    @result = host.exec_admin("ip -6 -brief addr show #{def_inf}")
+    cb[cb_ipaddr]=@result[:response].match(/([a-f0-9:]+:+)+[a-f0-9]+/)[0]
+  else
+    cb[cb_ipaddr]=inf_address[:response]
+  end
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
 
