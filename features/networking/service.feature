@@ -786,23 +786,23 @@ Feature: Service related networking scenarios
     Given I use the "<%= cb.masters[1].name %>" node
     #It should work because its external traffic from another node and destination node has a backend pod on it (ETP=local respected)
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.hostip %>]:<%= cb.port %>|
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift! |
     #It should NOT work because its external traffic from another node and destination node DOES NOT have a backend pod on it (ETP=local respected)
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.master0_ip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.master0_ip %>]:<%= cb.port %> |
     And the output should contain:
       | Connection refused |
     #It should work like ETP=cluster because its not external traffic, its within the node (ETP=local shouldn't be respected and its like ETP=cluster behaviour) 
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.master1_ip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.master1_ip %>]:<%= cb.port %> |
     And the output should contain:
       | Hello OpenShift! |
     Given I ensure "hello-pod" service is deleted
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.hostip %>]:<%= cb.port %> |
     And the output should contain:
       | Connection refused |
 
@@ -834,17 +834,17 @@ Feature: Service related networking scenarios
 
     Given I use the "<%= cb.masters[1].name %>" node
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.hostip %>]:<%= cb.port %> |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift! |
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.master0_ip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.master0_ip %>]:<%= cb.port %> |
     Then the step should succeed 
     And the output should contain:
       | Hello OpenShift! |
     Given I ensure "hello-pod" service is deleted
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.hostip %>]:<%= cb.port %> |
     And the output should contain:
       | Connection refused |      
