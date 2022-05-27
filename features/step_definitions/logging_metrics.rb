@@ -43,8 +43,11 @@ When /^I wait(?: (\d+) seconds)? for the #{QUOTED} index to appear in the ES pod
   seconds ||= 10 * 60
   count = 0
   success = wait_for(seconds) {
-    step %Q/I get the "#{index_name}" logging index information from a pod with labels "#{labels}"/
-    res = cb.index_data
+    step %Q/I perform the HTTP request on the ES pod with labels "#{labels}":/, table(%{
+      | relative_url | _cat/indices?format=JSON |
+      | op           | GET                      |
+    })
+    res = @result[:parsed].select {|e| e['index'].start_with? index_name}
       # exit only health is not 'red' and index is 'open' and the docs.count > 0
       # XXX note, to be more correct, we should check that the index is not red
       # for an extended persiod.  The tricky part is how to define extended period????
@@ -56,6 +59,7 @@ When /^I wait(?: (\d+) seconds)? for the #{QUOTED} index to appear in the ES pod
     end
     count > 0
   }
+  cb.docs_count = count
   raise "Index '#{index_name}' failed to appear in #{seconds} seconds" unless success
 end
 
@@ -75,7 +79,7 @@ When /^I get the #{QUOTED} logging index information(?: from a pod with labels #
     | relative_url | _cat/indices?format=JSON |
     | op           | GET                      |
   })
-  res = @result[:parsed].select {|e| e['index'].start_with? index_name}
+  res = @result[:parsed].find {|e| e['index'].start_with? index_name}
   cb.index_data = res
 end
 

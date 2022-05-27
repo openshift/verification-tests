@@ -100,7 +100,7 @@ Feature: Logging smoke test case
 
     # check the .security index is created after ES pods started
     Given I wait for the ".security" index to appear in the ES pod with labels "es-node-master=true"
-    And the expression should be true> cb.index_data['docs.count'] > "0"
+    And the expression should be true> cb.docs_count > 0
     Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
     Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
     And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
