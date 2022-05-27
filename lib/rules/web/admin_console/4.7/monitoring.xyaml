@@ -14,11 +14,11 @@ query_metrics:
 check_metrics_query_result:
   elements:
   - selector:
-      xpath: //td[@class='query-browser__table-cell' and text()='<metrics_name>']
+      xpath: //td[text()='<metrics_name>']
   - selector:
-      xpath: //td[@class='query-browser__table-cell' and text()='https://<data>']
+      xpath: //td[text()='https://<data>']
   - selector:
-      xpath: //td[@class='query-browser__table-cell' and text()='1']
+      xpath: //td[text()='1']
 check_alerts_tab:
   params:
     tab_name: Alerts
