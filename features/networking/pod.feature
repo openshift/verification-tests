@@ -445,13 +445,13 @@ Feature: Pod related networking scenarios
     #Pod should be accesible via node ip and host port from its home node
     Given I use the "<%= cb.workers[0].name %>" node
     And I run commands on the host:
-      | curl <%= cb.worker0_ip %>:9500 |
+      | curl --connect-timeout 5 [<%= cb.worker0_ip %>]:9500 |
     Then the output should contain:
       | Hello OpenShift |
     #Pod should be accesible via node ip and host port from another node as well. Remember worker0 is home node for that pod
     Given I use the "<%= cb.workers[1].name %>" node
     And I run commands on the host:
-      | curl <%= cb.worker0_ip %>:9500 |
+      | curl --connect-timeout 5 [<%= cb.worker0_ip %>]:9500 |
     Then the output should contain:
       | Hello OpenShift |
 
