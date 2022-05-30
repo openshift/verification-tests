@@ -20,6 +20,8 @@ module BushSlicer
           return {:type => "vsphere", :provider => nil}
         when "None"
           return {:type => "none", :provider => nil}
+        when "BareMetal"
+          return {:type => "none", :provider => nil}
         else
           raise "The IAAS provider #{provider_name} is currently not supported by test framework!"
         end
