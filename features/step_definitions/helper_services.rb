@@ -161,9 +161,10 @@ Given /^I have LDAP service in my project$/ do
     # So take the second one since this one can be implemented currently
     ###
     stats = {}
-    step %Q/I run the :run client command with:/, table(%{
-      | name  | ldapserver                                       |
-      | image | quay.io/openshifttest/ldap:multiarch |
+    step 'I obtain test data file "pods/ldapserver.yaml"'
+    step %Q/I run the :create admin command with:/, table(%{
+      | f | ldapserver.yaml      |
+      | n | <%= project.name %>  |
       })
     step %Q/the step should succeed/
     step %Q/a pod becomes ready with labels:/, table(%{
