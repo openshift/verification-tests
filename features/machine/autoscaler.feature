@@ -30,10 +30,10 @@ Feature: Cluster Autoscaler Tests
     # Create machineautoscaler
     Given I obtain test data file "cloud/machine-autoscaler.yml"
     When I run oc create over "machine-autoscaler.yml" replacing paths:
-      | ["metadata"]["name"]               | maotest                 |
-      | ["spec"]["minReplicas"]            | 1                       |
-      | ["spec"]["maxReplicas"]            | 3                       |
-      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set.name %> |
+      | ["metadata"]["name"]               | maotest                                      |
+      | ["spec"]["minReplicas"]            | 1                                            |
+      | ["spec"]["maxReplicas"]            | 3                                            |
+      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set_machine_openshift_io.name %> |
     Then the step should succeed
     And admin ensures "maotest" machineautoscaler is deleted after scenario
 
@@ -47,7 +47,7 @@ Feature: Cluster Autoscaler Tests
     # Verify machineset has scaled
     Given I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 3
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 3
     """
     Then the machineset should have expected number of running machines
 
@@ -56,13 +56,13 @@ Feature: Cluster Autoscaler Tests
     # Check cluster auto scales down
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
 
     # Check autoscaler taints are deleted when min node is reached
     Given I store the last provisioned machine in the :machine clipboard
-    And evaluation of `machine(cb.machine).node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).node_name` is stored in the :noderef_name clipboard
     When I run the :describe admin command with:
       | resource | node                  |
       | name     | <%= cb.noderef_name%> |
@@ -101,26 +101,26 @@ Feature: Cluster Autoscaler Tests
     Given I clone a machineset and name it "machineset-clone-21517"
     Given I obtain test data file "cloud/machine-autoscaler.yml"
     When I run oc create over "machine-autoscaler.yml" replacing paths:
-      | ["metadata"]["name"]               | maotest                 |
-      | ["spec"]["minReplicas"]            | 1                       |
-      | ["spec"]["maxReplicas"]            | 3                       |
-      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set.name %> |
+      | ["metadata"]["name"]               | maotest                                      |
+      | ["spec"]["minReplicas"]            | 1                                            |
+      | ["spec"]["maxReplicas"]            | 3                                            |
+      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set_machine_openshift_io.name %> |
     Then the step should succeed
     And admin ensures "maotest" machineautoscaler is deleted after scenario
     When I run the :get admin command with:
       | resource      | machineautoscaler |
       | resource_name | maotest           |
     Then the step succeeded
-    Then the expression should be true> machine_set.annotation("machine.openshift.io/cluster-api-autoscaler-node-group-min-size", cached: false) == "1"
-    Then the expression should be true> machine_set.annotation("machine.openshift.io/cluster-api-autoscaler-node-group-max-size", cached: false) == "3"
+    Then the expression should be true> machine_set_machine_openshift_io.annotation("machine.openshift.io/cluster-api-autoscaler-node-group-min-size", cached: false) == "1"
+    Then the expression should be true> machine_set_machine_openshift_io.annotation("machine.openshift.io/cluster-api-autoscaler-node-group-max-size", cached: false) == "3"
 
     When I run the :delete admin command with:
       | object_type       | machineautoscaler |
       | object_name_or_id | maotest           |
     Then the step succeeded
     When I run the :describe admin command with:
-      | resource | machineset              |
-      | name     | <%= machine_set.name %> |
+      | resource | machinesets.machine.openshift.io             |
+      | name     | <%= machine_set_machine_openshift_io.name %> |
     Then the step should succeed
     And the output should not match "autoscaling.openshift.io/machineautoscaler"
 
@@ -140,9 +140,9 @@ Feature: Cluster Autoscaler Tests
     And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-clone-22102"
-    And evaluation of `machine_set.name` is stored in the :machineset_clone_22102 clipboard
+    And evaluation of `machine_set_machine_openshift_io.name` is stored in the :machineset_clone_22102 clipboard
     Given I clone a machineset and name it "machineset-clone-22102-2"
-    And evaluation of `machine_set.name` is stored in the :machineset_clone_22102_2 clipboard
+    And evaluation of `machine_set_machine_openshift_io.name` is stored in the :machineset_clone_22102_2 clipboard
 
     Given I obtain test data file "cloud/machine-autoscaler.yml"
     When I run oc create over "machine-autoscaler.yml" replacing paths:
@@ -162,12 +162,12 @@ Feature: Cluster Autoscaler Tests
     Then the step should succeed
     And the output should match "Name:\s+<%= cb.machineset_clone_22102_2 %>"
     When I run the :describe admin command with:
-      | resource | machineset                       |
+      | resource | machinesets.machine.openshift.io |
       | name     | <%= cb.machineset_clone_22102 %> |
     Then the step should succeed
     And the output should not match "autoscaling.openshift.io/machineautoscaler"
     When I run the :describe admin command with:
-      | resource | machineset                         |
+      | resource | machinesets.machine.openshift.io   |
       | name     | <%= cb.machineset_clone_22102_2 %> |
     Then the step should succeed
     And the output should match "Annotations:\s+autoscaling.openshift.io/machineautoscaler: openshift-machine-api/maotest0"
@@ -190,12 +190,12 @@ Feature: Cluster Autoscaler Tests
     Then the step should succeed
     And the output should match "Name:\s+<%= cb.machineset_clone_22102 %>"
     When I run the :describe admin command with:
-      | resource | machineset                       |
+      | resource | machinesets.machine.openshift.io |
       | name     | <%= cb.machineset_clone_22102 %> |
     Then the step should succeed
     And the output should match "Annotations:\s+autoscaling.openshift.io/machineautoscaler: openshift-machine-api/maotest1"
     When I run the :describe admin command with:
-      | resource | machineset                         |
+      | resource | machinesets.machine.openshift.io   |
       | name     | <%= cb.machineset_clone_22102_2 %> |
     Then the step should succeed
     And the output should not match "autoscaling.openshift.io/machineautoscaler"

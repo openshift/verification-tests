@@ -194,7 +194,7 @@ Feature: Machine misc features testing
     And I clone a machineset and name it "machineset-clone-40665"
 
     Given I store the last provisioned machine in the :new_machine clipboard
-    And evaluation of `machine(cb.new_machine).node_name` is stored in the :nodeRef clipboard
+    And evaluation of `machine_machine_openshift_io(cb.new_machine).node_name` is stored in the :nodeRef clipboard
 
     When I run the :label admin command with:
       | resource | node                |
@@ -216,7 +216,7 @@ Feature: Machine misc features testing
 
     Given I obtain test data file "cloud/mhc/kubelet-killer-pod.yml"
     When I run oc create over "kubelet-killer-pod.yml" replacing paths:
-	    | ["spec"]["nodeName"]  | "<%= machine(cb.new_machine).node_name %>" |
+	    | ["spec"]["nodeName"]  | "<%= machine_machine_openshift_io(cb.new_machine).node_name %>" |
     Then the step should succeed
 
     When I run the :delete admin command with:

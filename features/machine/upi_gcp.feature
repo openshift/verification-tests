@@ -44,7 +44,7 @@ Feature: UPI GCP Tests
       | ["metadata"]["name"]               | maotest                 |
       | ["spec"]["minReplicas"]            | 1                       |
       | ["spec"]["maxReplicas"]            | 3                       |
-      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set.name %> |
+      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set_machine_openshift_io.name %> |
     Then the step should succeed
     And admin ensures "maotest" machineautoscaler is deleted after scenario
 
@@ -58,7 +58,7 @@ Feature: UPI GCP Tests
     # Verify machineset has scaled
     Given I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 3
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 3
     """
     Then the machineset should have expected number of running machines
 
@@ -67,6 +67,6 @@ Feature: UPI GCP Tests
     # Check cluster auto scales down
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines

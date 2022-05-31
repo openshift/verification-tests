@@ -1,9 +1,9 @@
-require 'openshift/cluster_resource'
+require 'openshift/project_resource'
 
 module BushSlicer
   # represents Machine
-  class Machine < ProjectResource
-    RESOURCE = 'machines'
+  class MachineMachineOpenshiftIo < ProjectResource
+    RESOURCE = 'machines.machine.openshift.io'
 
     def machine_set_name(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).
