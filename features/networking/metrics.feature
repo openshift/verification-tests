@@ -120,7 +120,6 @@ Feature: SDN/OVN metrics related networking scenarios
       | ovnkube_master_nb_e2e_timestamp           |
       | ovnkube_master_pod_creation_latency       |
       | ovnkube_master_ready_duration             |
-      | ovnkube_master_resource_update_total      |
       | ovnkube_master_sb_e2e_timestamp           |
     
     When I run the :exec admin command with:
