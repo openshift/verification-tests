@@ -3,7 +3,6 @@
 
 ### none configurable, just use default parameters
 Given /^logging service has been installed successfully$/ do
-  ensure_destructive_tagged
   ensure_admin_tagged
   if env.version_cmp('4.5', user: user) < 0
     example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml"
@@ -28,7 +27,6 @@ end
 # :sub_elasticsearch_yaml -- http url for elastic search yaml
 #
 Given /^logging operators are installed successfully$/ do
-  ensure_destructive_tagged
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
@@ -339,7 +337,6 @@ end
 
 Given /^I delete the clusterlogging instance$/ do
   ensure_admin_tagged
-  ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-logging" project/
 
@@ -389,8 +386,10 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
   if (logging_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
-    when '4.10'
+    when '4.11'
       cb[cb_name] = "stable"
+    when '4.10'
+      cb[cb_name] = "stable-5.4"
     when '4.9'
       cb[cb_name] = "stable-5.3"
     when '4.8'
@@ -1310,5 +1309,28 @@ Given /^I check if the remaining_resources in woker nodes meet the requirements 
   # for collector, memory: 736Mi*worker_nodes_count, cpu: 100m*worker_nodes_count
   if total_remaning_cpu < 800+100*worker_nodes.count || total_remaning_memory < 5066719232+771751936*worker_nodes.count
     raise "Cluster doesn't have sufficient cpu or memory for logging pods to deploy, skip the logging case"
+  end
+end
+
+Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\d+) seconds)?$/ do | action, namespace, seconds |
+  ensure_admin_tagged
+  pods = BushSlicer::Pod.list(user: admin, project: project(namespace))
+  pods.each do | pod |
+    # skip index management jobs
+    if pod.name.include? "elasticsearch-im-"
+      next
+    end
+    pod.containers.each do | container |
+      if seconds.nil?
+        @result = admin.cli_exec(:logs, n: namespace,resource_name: pod.name, c: container.name)
+      else
+        @result = admin.cli_exec(:logs, n: namespace,resource_name: pod.name, c: container.name, since: seconds+"s")
+      end
+      if action == "check"
+        unless !(@result[:response].include? ("error")) && !(@result[:response].include? ("Error")) && !(@result[:response].include? ("fail")) && !(@result[:response].include? ("Fail"))
+          raise "found error/failure in #{pod.name}/#{container.name} logs"
+        end
+      end
+    end
   end
 end
