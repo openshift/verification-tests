@@ -40,7 +40,7 @@ Feature: SDN externalIP compoment upgrade testing
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=externalip-pod    |
-    And evaluation of `pod(1).name` is stored in the :pod1name clipboard
+    And evaluation of `pod.name` is stored in the :pod1name clipboard
 
     # Curl externalIP:portnumber should pass
     When I execute on the "<%= cb.pod1name %>" pod:

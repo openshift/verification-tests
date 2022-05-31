@@ -999,10 +999,10 @@ Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipbo
     if v6
       step %Q/I run command on the node's ovnkube pod:/, table("| ip | -6 | route | show | default |")
     else
-      inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[0].address}")
+      inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[?(@.type==\"InternalIP\")].address}")
     end
   when "OpenShiftSDN"
-    inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[0].address}")
+    inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[?(@.type==\"InternalIP\")].address}")
   else
     logger.info "unknown networkType"
     skip_this_scenario
