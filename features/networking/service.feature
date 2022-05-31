@@ -591,13 +591,13 @@ Feature: Service related networking scenarios
       | name=hello-pod |
     Given I use the "<%= cb.workers[0].name %>" node
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.worker0_ip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.worker0_ip %>]:<%= cb.port %> |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift! |
     Given I ensure "hello-pod" service is deleted
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.worker0_ip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.worker0_ip %>]:<%= cb.port %> |
     And the output should contain:
       | Connection refused |      
 
