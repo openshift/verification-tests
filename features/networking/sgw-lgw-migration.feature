@@ -143,6 +143,7 @@ Feature: SGW<->LGW migration related scenarios
     #OCP-47087 - [bug_1903408]Other node cannot be accessed for nodePort when externalTrafficPolicy is Local	
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
+    And the Internal IP of node "<%= cb.masters[1].name %>" is stored in the :master1_ip clipboard
     And evaluation of `rand(30000..32767)` is stored in the :port clipboard
     Given I have a project
     Given I obtain test data file "networking/nodeport_test_pod.yaml"
@@ -183,6 +184,11 @@ Feature: SGW<->LGW migration related scenarios
       | curl --connect-timeout 5 [<%= cb.master0_ip %>]:<%= cb.port %> |
     Then the step should fail
     And the output should not contain:
+      | Hello OpenShift! |
+    When I run commands on the host:
+      | curl --connect-timeout 5 [<%= cb.master1_ip %>]:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
       | Hello OpenShift! |
     Given I ensure "hello-pod" service is deleted
     When I run commands on the host:
