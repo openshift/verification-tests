@@ -442,11 +442,11 @@ Feature: SDN related networking scenarios
   # And veths ovs interfaces also needs to be unmanaged
   And I run commands on the host:
     | nmcli device \| grep ethernet \| grep -c unmanaged |
-  And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_unmanaged_veths clipboard
+  And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_unmanaged_infs clipboard
   And I run commands on the host:
     | nmcli \| grep veth \| wc -l |
   And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_veths clipboard
-  Then the expression should be true> cb.no_of_unmanaged_veths >=cb.no_of_veths
+  Then the expression should be true> cb.no_of_unmanaged_infs >=cb.no_of_veths
 
   # @author huirwang@redhat.com
   # @case_id OCP-29299
