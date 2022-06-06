@@ -1100,7 +1100,7 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
   leader_node = splits.captures[1]
   leader_pod = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
                                            user: admin, quiet: true) { |pod, hash|
-    pod.node_name == leader_node || pod.ip == leader_node
+    pod.node_name == leader_node || pod.ip == leader_node || leader_node.split('.', 2).first == pod.name
   }.first
   # update the cache so we can execute on the pod without specify the name
   cache_resources leader_pod
