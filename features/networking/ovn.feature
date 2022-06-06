@@ -462,17 +462,20 @@ Feature: OVN related networking scenarios
     When I store the ovnkube-master "south" leader pod in the clipboard
     Then the step should succeed
 
+    # ipv6 uses ip6tables binary
+    Given evaluation of `(cb.south_leader.ip.include? ":") ? "ip6tables" : "iptables"` is stored in the :iptables_command clipboard
+
     Given I store the masters in the clipboard excluding "<%= cb.south_leader.node_name %>"
     And I use the "<%= cb.nodes[0].name %>" node
     # make sure to unblock after the test
     And I register clean-up steps:
     """
     When I run commands on the host:
-      | iptables -t filter -D INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
+      | <%= cb.iptables_command %> -t filter -D INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
     """
     # don't block all traffic that breaks etcd, just block the OVN ssl ports
     When I run commands on the host:
-      | iptables -t filter -A INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
+      | <%= cb.iptables_command %> -t filter -A INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
     Then the step should succeed
 
     # election timer is 1 second by default but the RAFT JSON-RPC probe might take 5 seconds to notice
@@ -489,7 +492,7 @@ Feature: OVN related networking scenarios
     """
     # try to get the isolated leader for debug, it might not work
     When I run commands on the host:
-      | iptables -t filter -D INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
+      | <%= cb.iptables_command %> -t filter -D INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
     # wait for OVN to reconverge
     # wait 120 seconds for convergence due to election timer as described above.
     And I wait up to 120 seconds for the steps to pass:
