@@ -20,7 +20,7 @@ Feature: Elasticsearch related tests
       | remove_logging_pods | true                                 |
       | crd_yaml            | clusterlogging-storage-template.yaml |
       | storage_class       | <%= cb.default_sc.name %>            |
-      | storage_size        | 10Gi                                 |
+      | storage_size        | 20Gi                                 |
     Then the step should succeed
     And the expression should be true> cluster_logging('instance').logstore_storage_class_name == cb.default_sc.name
     And the expression should be true> elasticsearch('elasticsearch').nodes[0]['storage']['storageClassName'] == cb.default_sc.name
