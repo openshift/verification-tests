@@ -1502,7 +1502,7 @@ Given /^the cluster has workers for sctp$/ do
   _admin = admin
   @result = _admin.cli_exec(:describe, resource: "node")
   if @result[:response].match(/desiredConfig: rendered-worker/).nil?
-    logger.info "No enought worker nodes to run sctp tests, skip!!!"
+    logger.info "No enough worker nodes to run sctp tests, skip!!!"
     skip_this_scenario
   end
 end
