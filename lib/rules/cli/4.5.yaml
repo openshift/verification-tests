@@ -317,6 +317,10 @@
     :tcp: --tcp=<value>
 :create_serviceaccount:
   :cmd: oc create serviceaccount <serviceaccount_name>
+:create_token:
+  :cmd: oc create token
+  :options:
+    :serviceaccount: <value>
 :create_user:
   :cmd: oc create user <username>
   :options:
