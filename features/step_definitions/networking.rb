@@ -1496,3 +1496,13 @@ Given /^the cluster is not migration from sdn plugin$/ do
     skip_this_scenario
   end
 end
+
+Given /^the cluster has workers for sctp$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:describe, resource: "node")
+  if @result[:response].match(/desiredConfig: rendered-worker/).nil?
+    logger.info "No enought worker nodes to run sctp tests, skip!!!"
+    skip_this_scenario
+  end
+end

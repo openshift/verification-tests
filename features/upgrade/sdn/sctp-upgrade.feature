@@ -11,6 +11,7 @@ Feature: SDN sctp compoment upgrade testing
   @proxy @noproxy @disconnected @connected
   Scenario: Check the sctp works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
+    And the cluster has workers for sctp
     When I run the :new_project client command with:
       | project_name | sctp-upgrade |
     Then the step should succeed
@@ -79,6 +80,7 @@ Feature: SDN sctp compoment upgrade testing
   @proxy @noproxy @disconnected @connected
   Scenario: Check the sctp works well after upgrade
     Given I switch to cluster admin pseudo user
+    And the cluster has workers for sctp
     When I use the "sctp-upgrade" project
     Given a pod becomes ready with labels:
       | name=sctpserver    |
