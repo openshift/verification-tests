@@ -258,14 +258,17 @@ Feature: cluster-logging-operator related test
     And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
     And the expression should be true> (cb.fluent_conf).include? "flush_mode interval"
     When I run the :patch client command with:
-      | resource      | clusterlogging                                                              |
-      | resource_name | instance                                                                    |
-      | p             | {"spec": {"forwarder": {"fluentd": {"buffer": {"flushMode":"lazy"}}}}}      |
-      | type          | merge                                                                       |
+      | resource      | clusterlogging                                                         |
+      | resource_name | instance                                                               |
+      | p             | {"spec": {"forwarder": {"fluentd": {"buffer": {"flushMode":"lazy"}}}}} |
+      | type          | merge                                                                  |
     Then the step should succeed
+    Given I wait up to 120 seconds for the steps to pass:
+    """
     When I run the :extract admin command with:
       | resource  | configmap/<%= cb.collector_name %> |
       | confirm   | true                               |
     Then the step should succeed
-    And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
-    Given the expression should be true> (cb.fluent_conf).include? "flush_mode lazy"
+    Given evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
+    Then the expression should be true> (cb.fluent_conf).include? "flush_mode lazy"
+    """
