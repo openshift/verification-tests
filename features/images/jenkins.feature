@@ -1,4 +1,5 @@
 Feature: jenkins.feature
+
   # @author cryan@redhat.com
   Scenario Outline: Trigger build of application from jenkins job with persistent volume
     Given I have a project
@@ -118,7 +119,7 @@ Feature: jenkins.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: new-app/new-build support for pipeline buildconfigs
+  Scenario: OCP-12773 new-app/new-build support for pipeline buildconfigs
     Given I have a project
     When I run the :new_app client command with:
       | app_repo    | https://github.com/sclorg/nodejs-ex |
@@ -325,7 +326,7 @@ Feature: jenkins.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @amd64
-  Scenario: Jenkins pipeline build with OpenShift Client Plugin Example
+  Scenario: OCP-15384 Jenkins pipeline build with OpenShift Client Plugin Example
     And I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/openshift-client-plugin-pipeline.yaml |
@@ -352,7 +353,7 @@ Feature: jenkins.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-25401
   @inactive
-  Scenario: Create jenkins application directly
+  Scenario: OCP-25401 Create jenkins application directly
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/jenkins:2 |
@@ -375,7 +376,7 @@ Feature: jenkins.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
+  Scenario: OCP-35068 Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project
     When I run the :new_app client command with:
       | template | jenkins-ephemeral |
