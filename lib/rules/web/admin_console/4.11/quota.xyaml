@@ -52,15 +52,15 @@ check_chart_color:
     ref: check_chart_with_red_color
 check_chart_with_green_color:
   params:
-    rgb_value: rgb(76, 177, 64)
+    rgb_value: 4cb140
   action: check_resource_chart_color
 check_chart_with_yellow_color:
   params:
-    rgb_value: rgb(240, 171, 0)
+    rgb_value: f0ab00 
   action: check_resource_chart_color
 check_chart_with_red_color:
   params:
-    rgb_value: rgb(201, 25, 11)
+    rgb_value: c9190b
   action: check_resource_chart_color
 check_resource_chart_color:
   elements:
