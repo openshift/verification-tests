@@ -36,12 +36,15 @@ Given /^scc policy #{QUOTED} is restored after scenario$/ do |policy|
   else
     raise "could not get scc: #{policy}"
   end
-
+  orig_policy = @result[:parsed]
+  orig_policy['metadata'].delete('resourceVersion')
+  orig_policy['metadata'].delete('uid')
+  orig_policy = orig_policy.to_json
   _admin = admin
   teardown_add {
-    step %Q/admin ensures "#{policy}" scc is deleted/
+    # `oc create -f` has race condition with the cluster's automatic recreation. so use `oc replace -f` here
     @result = _admin.cli_exec(
-      :create,
+      :replace,
       f: "-",
       _stdin: orig_policy
     )
