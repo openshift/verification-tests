@@ -10,7 +10,7 @@ Feature: oc_set_env.feature
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: Set environment variables for resources using oc set env
+  Scenario: OCP-11248 Set environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
     When I run the :new_app client command with:
@@ -72,7 +72,7 @@ Feature: oc_set_env.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Remove environment variables for resources using oc set env
+  Scenario: OCP-10798 Remove environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
     When I run the :new_app client command with:

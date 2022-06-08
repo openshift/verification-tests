@@ -10,7 +10,7 @@ Feature: Regression testing cases
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: RWO volumes are exclusively mounted on different nodes
+  Scenario: OCP-16485 RWO volumes are exclusively mounted on different nodes
     Given I have a project
     Given I store the schedulable workers in the :workers clipboard
 

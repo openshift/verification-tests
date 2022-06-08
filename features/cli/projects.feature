@@ -11,7 +11,7 @@ Feature: projects related features via cli
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Could delete all resources when delete the project
+  Scenario: OCP-11887 Could delete all resources when delete the project
     Given a 5 characters random string of type :dns is stored into the :prj_name clipboard
     When I run the :new_project client command with:
       | project_name | <%= cb.prj_name %> |
@@ -83,7 +83,7 @@ Feature: projects related features via cli
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: User can get node selector from a project
+  Scenario: OCP-12193 User can get node selector from a project
     Given  an 8 character random string of type :dns is stored into the :oadmproj1 clipboard
     Given  an 8 character random string of type :dns is stored into the :oadmproj2 clipboard
     When admin creates a project with:
@@ -117,7 +117,7 @@ Feature: projects related features via cli
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: Could remove user and group from the current project
+  Scenario: OCP-12561 Could remove user and group from the current project
     Given I have a project
     When I run the :oadm_policy_add_role_to_user client command with:
       | role_name        | admin                              |
@@ -160,7 +160,7 @@ Feature: projects related features via cli
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy
+  Scenario: OCP-11201 Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"
     When I run the :create client command with:

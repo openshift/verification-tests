@@ -68,7 +68,7 @@ Feature: Sriov IB related scenarios
   # @case_id OCP-33852
   @destructive
   @admin
-  Scenario: Set the infiniband-guid for pod
+  Scenario: OCP-33852 Set the infiniband-guid for pod
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/ib/cx6/cx6-ib.yaml"
     Given I create sriov resource with following:

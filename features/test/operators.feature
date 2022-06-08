@@ -1,4 +1,5 @@
 Feature: operators related
+
   @admin
   Scenario: test logging support apis
     Given I switch to cluster admin pseudo user

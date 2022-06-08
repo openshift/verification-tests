@@ -3,7 +3,7 @@ Feature: oc related features
   # @author chezhang@redhat.com
   # @case_id OCP-11565
   @inactive
-  Scenario: kubectl secret subcommand - help
+  Scenario: OCP-11565 kubectl secret subcommand - help
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type | |
@@ -87,7 +87,7 @@ Feature: oc related features
   # @author chezhang@redhat.com
   # @case_id OCP-10812
   @inactive
-  Scenario: Check `oc autoscale` help info
+  Scenario: OCP-10812 Check `oc autoscale` help info
     Given I have a project
     When I run the :autoscale client command with:
       | name  | :false |

@@ -3,7 +3,7 @@ Feature: rolling deployment related scenarios
   # @author pruan@redhat.com
   # @case_id OCP-12359
   @inactive
-  Scenario: Rolling-update pods with default value for maxSurge/maxUnavailable
+  Scenario: OCP-12359 Rolling-update pods with default value for maxSurge/maxUnavailable
     Given I have a project
     Given I obtain test data file "deployment/rolling.json"
     When I run the :create client command with:

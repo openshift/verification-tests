@@ -13,7 +13,7 @@ Feature: cluster-capacity related features
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Cluster capacity image support: Cluster capacity can work well with a simple pod
+  Scenario: OCP-14799 Cluster capacity image support: Cluster capacity can work well with a simple pod
     Given environment has at least 2 schedulable nodes
     Given I have a project
     Given I create the serviceaccount "cluster-capacity-sa"

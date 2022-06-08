@@ -11,7 +11,7 @@ Feature: Machine features testing
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Machines should be linked to nodes
+  Scenario: OCP-21196 Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
 
@@ -25,7 +25,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: machine-api clusteroperator should be in Available state
+  Scenario: OCP-22115 machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
 
@@ -49,7 +49,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
+  Scenario: OCP-37706 Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
 
@@ -63,7 +63,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Scale up and scale down a machineSet
+  Scenario: OCP-25436 Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -117,7 +117,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Machine should have immutable field providerID and nodeRef
+  Scenario: OCP-25608 Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
     And evaluation of `machine_machine_openshift_io(cb.machine).node_name` is stored in the :nodeRef_name clipboard
@@ -161,7 +161,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Verify all machine instance-state should be consistent with their providerStats.instanceState
+  Scenario: OCP-27627 Verify all machine instance-state should be consistent with their providerStats.instanceState
     Given I have an IPI deployment
     And evaluation of `BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
     Then the expression should be true> cb.machines.select{|m|m.instance_state == m.annotation_instance_state}.count == cb.machines.count
@@ -175,7 +175,7 @@ Feature: Machine features testing
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Scaling a machineset with providerSpec.publicIp set to true
+  Scenario: OCP-27609 Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -196,7 +196,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: Reconciling machine taints with nodes
+  Scenario: OCP-24363 Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -327,7 +327,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Labels specified in a machineset should propagate to nodes
+  Scenario: OCP-32620 Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -413,7 +413,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Implement defaulting machineset values for GCP
+  Scenario: OCP-33056 Implement defaulting machineset values for GCP
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -498,7 +498,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Run machine api Controllers using leader election
+  Scenario: OCP-33455 Run machine api Controllers using leader election
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -527,7 +527,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Node labels and Affinity definition in PV should match
+  Scenario: OCP-34718 Node labels and Affinity definition in PV should match
     Given I have a project
 
     # Create a pvc
@@ -619,7 +619,7 @@ Feature: Machine features testing
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Machineset should not be created when publicIP:true in disconnected Azure enviroment
+  Scenario: OCP-36489 Machineset should not be created when publicIP:true in disconnected Azure enviroment
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
@@ -642,7 +642,7 @@ Feature: Machine features testing
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Operator cloud-controller-manager should not show empty version
+  Scenario: OCP-47658 Operator cloud-controller-manager should not show empty version
     Given I switch to cluster admin pseudo user
     Then evaluation of `cluster_operator('cloud-controller-manager').versions` is stored in the :versions clipboard
     And the expression should be true> cb.versions[0].include? "4"
@@ -656,7 +656,7 @@ Feature: Machine features testing
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Baremetal clusteroperator should be enabled in vsphere and osp 
+  Scenario: OCP-47989 Baremetal clusteroperator should be enabled in vsphere and osp 
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="False"
 

@@ -1,4 +1,5 @@
 Feature: creds related steps testing
+
   @admin
   Scenario: test getting cloudcredentials from cluster
     Given I switch to cluster admin pseudo user

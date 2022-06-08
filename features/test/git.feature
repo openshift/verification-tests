@@ -1,4 +1,5 @@
 Feature: test git steps
+
   Scenario: git test
     And I git clone the repo "https://github.com/openshift/ruby-hello-world"
     And I git clone the repo "https://github.com/openshift/ruby-hello-world" to "dummy"

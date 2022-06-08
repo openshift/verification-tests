@@ -2,7 +2,7 @@ Feature: Online metrics related tests
 
   # @author pruan@redhat.com
   # @case_id OCP-15214
-  Scenario: Ordinary user could view CPU,memory, network metrics statistics on pod page of openshift web console
+  Scenario: OCP-15214 Ordinary user could view CPU,memory, network metrics statistics on pod page of openshift web console
     Given I have a project
     Given I login via web console
     When I run the :create client command with:

@@ -2,7 +2,7 @@ Feature: ONLY ONLINE Imagestreams related scripts in this file
 
   # @author bingli@redhat.com
   # @case_id OCP-10509
-  Scenario: Check Online Pro default images
+  Scenario: OCP-10509 Check Online Pro default images
     When I run the :get client command with:
       | resource      | imagestreamtag  |
       | n             | openshift       |
@@ -81,7 +81,7 @@ Feature: ONLY ONLINE Imagestreams related scripts in this file
 
   # @author bingli@redhat.com
   # @case_id OCP-17285
-  Scenario: Check Online Starter default images
+  Scenario: OCP-17285 Check Online Starter default images
     When I run the :get client command with:
       | resource      | imagestreamtag  |
       | n             | openshift       |

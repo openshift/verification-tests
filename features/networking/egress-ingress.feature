@@ -11,7 +11,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
-  Scenario: EgressNetworkPolicy will not take effect after delete it
+  Scenario: OCP-11639 EgressNetworkPolicy will not take effect after delete it
     Given I have a project
     Given I have a pod-for-ping in the project
     Given I save egress data file directory to the clipboard
@@ -56,7 +56,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
-  Scenario: Apply different egress network policy in different projects
+  Scenario: OCP-13502 Apply different egress network policy in different projects
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -126,7 +126,7 @@ Feature: Egress-ingress related networking scenarios
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: The rules of egress network policy are added in openflow
+  Scenario: OCP-13507 The rules of egress network policy are added in openflow
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -172,7 +172,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
-  Scenario: Egress network policy use dnsname with multiple ipv4 addresses
+  Scenario: OCP-13509 Egress network policy use dnsname with multiple ipv4 addresses
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -208,7 +208,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
-  Scenario: Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
+  Scenario: OCP-15005 Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -270,7 +270,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
-  Scenario: Add nodes local IP address to OVS rules for egressnetworkpolicy
+  Scenario: OCP-15017 Add nodes local IP address to OVS rules for egressnetworkpolicy
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -325,7 +325,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
-  Scenario: Update different dnsname in same egress network policy
+  Scenario: OCP-13506 Update different dnsname in same egress network policy
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -365,7 +365,7 @@ Feature: Egress-ingress related networking scenarios
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: Iptables should be updated with correct endpoints when egress DNS policy was used
+  Scenario: OCP-19615 Iptables should be updated with correct endpoints when egress DNS policy was used
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
     When I run oc create over "list_for_pods.json" replacing paths:
@@ -420,7 +420,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
-  Scenario: EgressFirewall allows traffic to destination ports
+  Scenario: OCP-33530 EgressFirewall allows traffic to destination ports
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -461,7 +461,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
-  Scenario: EgressFirewall rules take effect in order
+  Scenario: OCP-33531 EgressFirewall rules take effect in order
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -486,7 +486,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
-  Scenario: EgressFirewall policy should not take effect for traffic between pods and pods to service
+  Scenario: OCP-33539 EgressFirewall policy should not take effect for traffic between pods and pods to service
     Given I have a project
     # Create EgressFirewall policy to deny all outbound traffic
     When I obtain test data file "networking/ovn-egressfirewall/limit_policy.json"
@@ -525,7 +525,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
-  Scenario: EgressFirewall policy take effect for multiple port
+  Scenario: OCP-33565 EgressFirewall policy take effect for multiple port
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -556,7 +556,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
   @heterogeneous @arm64 @amd64
-  Scenario: EgressNetworkPolicy maxItems is 1000
+  Scenario: OCP-35341 EgressNetworkPolicy maxItems is 1000
     Given I have a project
     Given I obtain test data file "networking/egressnetworkpolicy/egressnetworkpolicy_1000.yaml"
     When I run the :create admin command with:
@@ -584,7 +584,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
-  Scenario: EgressFirewall allows traffic to destination dnsName
+  Scenario: OCP-37491 EgressFirewall allows traffic to destination dnsName
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -620,7 +620,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
-  Scenario: EgressFirewall denys traffic to destination dnsName
+  Scenario: OCP-37495 EgressFirewall denys traffic to destination dnsName
     Given I have a project
 
     When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy4.yaml"
@@ -656,7 +656,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
-  Scenario: Edit EgressFirewall should take effect
+  Scenario: OCP-37496 Edit EgressFirewall should take effect
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -694,7 +694,7 @@ Feature: Egress-ingress related networking scenarios
   @noproxy @connected
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
-  Scenario: bug1947917 Egress Firewall should reliably apply firewall rules
+  Scenario: OCP-41179 bug1947917 Egress Firewall should reliably apply firewall rules
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -733,7 +733,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn	
   @singlenode
   @proxy @noproxy @disconnected @connected
-  Scenario: bug2000057 No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted
+  Scenario: OCP-44940 bug2000057 No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted
     Given the env is using "OVNKubernetes" networkType
     And I have a project
     Given I obtain test data file "networking/list_for_pods.json"

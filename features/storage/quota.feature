@@ -10,7 +10,7 @@ Feature: ResourceQuata for storage
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Requested storage can not exceed the namespace's storage quota
+  Scenario: OCP-14173 Requested storage can not exceed the namespace's storage quota
     Given I have a project
     And I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
@@ -87,7 +87,7 @@ Feature: ResourceQuata for storage
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Setting quota for a StorageClass
+  Scenario: OCP-14382 Setting quota for a StorageClass
     Given I have a project
     Given admin clones storage class "sc-<%= project.name %>" from ":default" with:
       | ["volumeBindingMode"] | Immediate |

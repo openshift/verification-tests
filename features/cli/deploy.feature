@@ -9,7 +9,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Restart a failed deployment by oc deploy
+  Scenario: OCP-12543 Restart a failed deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
     When I run the :create client command with:
@@ -47,7 +47,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Manually make deployment
+  Scenario: OCP-10643 Manually make deployment
     Given I have a project
     Given I obtain test data file "deployment/manual.json"
     When I run the :create client command with:
@@ -92,7 +92,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: CLI rollback output to file
+  Scenario: OCP-11695 CLI rollback output to file
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
     When I run the :create client command with:
@@ -198,7 +198,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: CLI rollback with one component
+  Scenario: OCP-11877 CLI rollback with one component
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
     When I run the :create client command with:
@@ -248,7 +248,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Can't stop a deployment in Failed status
+  Scenario: OCP-12133 Can't stop a deployment in Failed status
     Given I have a project
     Given I obtain test data file "deployment/test-stop-failed-deployment.json"
     When I run the :create client command with:
@@ -289,7 +289,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Stop a "Running" deployment
+  Scenario: OCP-12246 Stop a "Running" deployment
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
     When I run the :create client command with:
@@ -320,7 +320,7 @@ Feature: deployment related features
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Rollback via CLI when previous version failed
+  Scenario: OCP-10648 Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:
       | image | quay.io/openshifttest/hello-openshift@sha256:eb47fdebd0f2cc0c130228ca972f15eb2858b425a3df15f10f7bb519f60f0c96 |
@@ -350,7 +350,7 @@ Feature: deployment related features
   # @author pruan@redhat.com
   # @case_id OCP-12528
   @inactive
-  Scenario: Make multiple deployment by oc deploy
+  Scenario: OCP-12528 Make multiple deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
     And I run the :create client command with:
@@ -373,7 +373,7 @@ Feature: deployment related features
   # @author xiaocwan@redhat.com
   # @case_id OCP-10717
   @inactive
-  Scenario: View the logs of the latest deployment
+  Scenario: OCP-10717 View the logs of the latest deployment
     # check deploy log when deploying
     Given I have a project
     When I run the :run client command with:
@@ -405,7 +405,7 @@ Feature: deployment related features
   @proxy @noproxy @connected
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  Scenario: A/B Deployment
+  Scenario: OCP-9563 A/B Deployment
     Given I have a project
     When I run the :new_app client command with:
       | docker_image | quay.io/openshifttest/deployment-example@sha256:9e0a0cd621fcb46b3439cb8979a0467dfaadb934215e8544193741aae2454668 |
@@ -469,7 +469,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Blue-Green Deployment
+  Scenario: OCP-9566 Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
       | docker_image | quay.io/openshifttest/deployment-example:v1-multiarch |
@@ -502,7 +502,7 @@ Feature: deployment related features
   # @author pruan@redhat.com
   # @case_id OCP-12532
   @inactive
-  Scenario: Manually start deployment by oc deploy
+  Scenario: OCP-12532 Manually start deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
     When I run the :create client command with:
@@ -517,7 +517,7 @@ Feature: deployment related features
   # @author yinzhou@redhat.com
   # @case_id OCP-12468
   @inactive
-  Scenario: Pre and post deployment hooks
+  Scenario: OCP-12468 Pre and post deployment hooks
     Given I have a project
     Given I obtain test data file "deployment/testhook.json"
     When I run the :create client command with:
@@ -539,7 +539,7 @@ Feature: deployment related features
   # @author yinzhou@redhat.com
   # @case_id OCP-10724
   @inactive
-  Scenario: deployment hook volume inheritance that volume name was null
+  Scenario: OCP-10724 deployment hook volume inheritance that volume name was null
     Given I have a project
     Given I obtain test data file "deployment/ocp10724/hooks-null-volume.json"
     When I run the :create client command with:
@@ -551,7 +551,7 @@ Feature: deployment related features
   # @case_id OCP-9567
   @smoke
   @inactive
-  Scenario: Recreate deployment strategy
+  Scenario: OCP-9567 Recreate deployment strategy
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/examples/deployment/recreate-example.yaml |
@@ -580,7 +580,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: start deployment when the latest deployment is completed
+  Scenario: OCP-11939 start deployment when the latest deployment is completed
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
     And I run the :create client command with:
@@ -597,7 +597,7 @@ Feature: deployment related features
   # @author pruan@redhat.com
   # @case_id OCP-12056
   @inactive
-  Scenario: Manual scale dc will update the deploymentconfig's replicas
+  Scenario: OCP-12056 Manual scale dc will update the deploymentconfig's replicas
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
     And I run the :create client command with:
@@ -623,7 +623,7 @@ Feature: deployment related features
   # @author pruan@redhat.com
   # @case_id OCP-10728
   @inactive
-  Scenario: Inline deployer hook logs
+  Scenario: OCP-10728 Inline deployer hook logs
     Given I have a project
     Given I obtain test data file "deployment/Inline-logs.json"
     And I run the :create client command with:
@@ -648,7 +648,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Start new deployment when deployment running
+  Scenario: OCP-11769 Start new deployment when deployment running
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
     When I run the :create client command with:
@@ -675,7 +675,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: When the latest deployment failed auto rollback to the active deployment
+  Scenario: OCP-12151 When the latest deployment failed auto rollback to the active deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
     When I run the :create client command with:
@@ -732,7 +732,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: DeploymentConfig should allow valid value of resource requirements
+  Scenario: OCP-10617 DeploymentConfig should allow valid value of resource requirements
     Given I have a project
     Given I obtain test data file "quota/limits.yaml"
     When I run the :create admin command with:
@@ -775,7 +775,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Scale up when deployment running
+  Scenario: OCP-11221 Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
       | image | quay.io/openshifttest/deployment-example@sha256:9e0a0cd621fcb46b3439cb8979a0467dfaadb934215e8544193741aae2454668 |
@@ -797,7 +797,7 @@ Feature: deployment related features
   # @author qwang@redhat.com
   # @case_id OCP-12356
   @inactive
-  Scenario: configchange triggers deploy automatically
+  Scenario: OCP-12356 configchange triggers deploy automatically
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
     When I run the :create client command with:
@@ -827,7 +827,7 @@ Feature: deployment related features
   # @author yinzhou@redhat.com
   # @case_id OCP-11326
   @smoke
-  Scenario: Support verbs of Deployment in OpenShift
+  Scenario: OCP-11326 Support verbs of Deployment in OpenShift
     Given I have a project
     Given I obtain test data file "deployment/extensions/deployment.yaml"
     When I run the :create client command with:
@@ -906,7 +906,7 @@ Feature: deployment related features
   # @case_id OCP-10902
   @smoke
   @inactive
-  Scenario: Auto cleanup old RCs
+  Scenario: OCP-10902 Auto cleanup old RCs
     Given I have a project
     Given I obtain test data file "deployment/ocp10902/history-limit-dc.yaml"
     When I run the :create client command with:
@@ -947,7 +947,7 @@ Feature: deployment related features
   @singlenode
   @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
+  Scenario: OCP-16443 Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
     When I process and create "https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-stibuild.json"
@@ -970,7 +970,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: A/B Deployment for OCP 4.5 or greater
+  Scenario: OCP-31200 A/B Deployment for OCP 4.5 or greater
     Given the master version >= "4.5"
     Given I have a project
     When I run the :new_app client command with:

@@ -3,7 +3,7 @@ Feature: oc_set_probe.feature
   # @author dyan@redhat.com
   # @case_id OCP-9870
   @inactive
-  Scenario: Set a probe to open a TCP socket
+  Scenario: OCP-9870 Set a probe to open a TCP socket
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:latest |
@@ -61,7 +61,7 @@ Feature: oc_set_probe.feature
   # @author dyan@redhat.com
   # @case_id OCP-9871
   @inactive
-  Scenario: Set a probe over HTTPS/HTTP
+  Scenario: OCP-9871 Set a probe over HTTPS/HTTP
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:latest |
@@ -107,7 +107,7 @@ Feature: oc_set_probe.feature
   # @author dyan@redhat.com
   # @case_id OCP-9872
   @inactive
-  Scenario: Set an exec action probe
+  Scenario: OCP-9872 Set an exec action probe
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:latest |
@@ -156,7 +156,7 @@ Feature: oc_set_probe.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Set a probe to open a TCP socket test
+  Scenario: OCP-31241 Set a probe to open a TCP socket test
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:latest |
@@ -220,7 +220,7 @@ Feature: oc_set_probe.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Set a probe over HTTPS/HTTP test
+  Scenario: OCP-31245 Set a probe over HTTPS/HTTP test
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:latest |
@@ -273,7 +273,7 @@ Feature: oc_set_probe.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Set an exec action probe test
+  Scenario: OCP-31246 Set an exec action probe test
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:latest |

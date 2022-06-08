@@ -11,7 +11,7 @@ Feature: Testing haproxy rate limit related features
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: limits backend pod max concurrent connections for unsecure, edge, reen route
+  Scenario: OCP-18482 limits backend pod max concurrent connections for unsecure, edge, reen route
     Given I switch to cluster admin pseudo user
     And I use the router project
     Given all default router pods become ready

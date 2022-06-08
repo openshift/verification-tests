@@ -5,7 +5,7 @@ Feature: CSI testing related feature
   @admin
   @stage-only
   @proxy @noproxy @connected
-  Scenario: CSI images checking in stage and prod env
+  Scenario: OCP-30787 CSI images checking in stage and prod env
     Given the master version >= "4.4"
     Given I switch to cluster admin pseudo user
     Given admin uses the "csihostpath" project
@@ -20,7 +20,7 @@ Feature: CSI testing related feature
   @admin
   @stage-only
   @proxy @noproxy @connected
-  Scenario: CSI images checking in stage env in OCP4.3
+  Scenario: OCP-31345 CSI images checking in stage env in OCP4.3
     Given the master version == "4.3"
     Given I switch to cluster admin pseudo user
     Given admin uses the "csihostpath" project
@@ -32,7 +32,7 @@ Feature: CSI testing related feature
   @admin
   @stage-only
   @proxy @noproxy @connected
-  Scenario: CSI images checking in stage env in OCP4.2
+  Scenario: OCP-31346 CSI images checking in stage env in OCP4.2
     Given the master version == "4.2"
     Given I switch to cluster admin pseudo user
     Given admin uses the "csihostpath" project

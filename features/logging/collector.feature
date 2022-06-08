@@ -10,7 +10,7 @@ Feature: collector related tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: All nodes logs are sent to Elasticsearch
+  Scenario: OCP-25767 All nodes logs are sent to Elasticsearch
     Given the master version == "4.1"
     Given evaluation of `cluster_logging('instance').fluentd_ready_pods.map(&:ip)` is stored in the :collector_pod_ips clipboard
     #A workaround to https://bugzilla.redhat.com/show_bug.cgi?id=1776594
@@ -54,7 +54,7 @@ Feature: collector related tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: All nodes logs had sent logs to Elasticsearch
+  Scenario: OCP-24837 All nodes logs had sent logs to Elasticsearch
     Given the master version >= "4.2"
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
     Given <%= daemon_set(cb.collection_type).replica_counters[:desired] %> pods become ready with labels:
@@ -129,7 +129,7 @@ Feature: collector related tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: The Container logs metadata check
+  Scenario: OCP-18147 The Container logs metadata check
     Given the master version == "4.1"
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -171,7 +171,7 @@ Feature: collector related tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: The container logs metadata check
+  Scenario: OCP-25768 The container logs metadata check
     Given the master version >= "4.2"
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -214,7 +214,7 @@ Feature: collector related tests
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: All nodes logs are collected
+  Scenario: OCP-30084 All nodes logs are collected
     Given the master version >= "4.5"
     Given logging collector name is stored in the :collector_name clipboard
     Given <%= daemon_set(cb.collector_name).replica_counters[:desired] %> pods become ready with labels:
@@ -259,7 +259,7 @@ Feature: collector related tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Fluentd should write it's own logs to stdout and exclude them from collection
+  Scenario: OCP-32197 Fluentd should write it's own logs to stdout and exclude them from collection
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true         |

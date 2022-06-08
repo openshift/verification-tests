@@ -2,7 +2,7 @@ Feature: ONLY ONLINE Projects related feature's scripts in this file
 
   # @author etrott@redhat.com
   # @case_id OCP-12547
-  Scenario: Should use and show the existing projects after the user login
+  Scenario: OCP-12547 Should use and show the existing projects after the user login
     Given I create a new project
     When I run the :login client command with:
       | server   | <%= env.api_endpoint_url %>         |
@@ -45,7 +45,7 @@ Feature: ONLY ONLINE Projects related feature's scripts in this file
 
   # @author yasun@redhat.com
   # @case_id OCP-14100
-  Scenario: Should use and show the existing projects after the user login - starter
+  Scenario: OCP-14100 Should use and show the existing projects after the user login - starter
     When I run the :login client command with:
       | server   | <%= env.api_endpoint_url %>         |
       | token    | <%= user.cached_tokens.first %>  |
@@ -65,7 +65,7 @@ Feature: ONLY ONLINE Projects related feature's scripts in this file
 
   # @author yasun@redhat.com
   # @case_id OCP-13073
-  Scenario: a new paid-user can not create muti-projects exceed the selected plan limitation
+  Scenario: OCP-13073 a new paid-user can not create muti-projects exceed the selected plan limitation
     Given I run the steps <%= user.plan.max_projects %> times:
     """
       Given I create a new project
