@@ -9,7 +9,7 @@ Feature: Scheduler related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: When no scheduler name is supplied, the pod is automatically scheduled using the default-scheduler
+  Scenario: OCP-14582 When no scheduler name is supplied, the pod is automatically scheduled using the default-scheduler
     Given I have a project
     Given I obtain test data file "scheduler/multiple-schedulers/pod-no-scheduler.yaml"
     When I run the :create client command with:

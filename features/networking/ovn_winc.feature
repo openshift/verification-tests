@@ -8,7 +8,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Ensure Pods and Service communication across window and linux nodes
+  Scenario: OCP-26360 Ensure Pods and Service communication across window and linux nodes
     Given the env is using windows nodes
     Given I have a project
     And I obtain test data file "networking/list_for_pods.json"
@@ -64,7 +64,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Create Loadbalancer service for a window container
+  Scenario: OCP-37519 Create Loadbalancer service for a window container
     Given the env is using windows nodes
     Given I have a project
     And I have a pod-for-ping in the project

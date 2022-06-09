@@ -1,4 +1,5 @@
 Feature: example kata container scenarios
+
   Scenario: test get channel
     Given I extract the channel information from subscription and save it to the :channel clipboard
 

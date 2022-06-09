@@ -1,4 +1,5 @@
 Feature: rc related test
+
   Scenario: test new rc ready method
     Given I have a project
     Given I store all replicationcontrollers in the project to the clipboard

@@ -1,4 +1,5 @@
 Feature: test logging and metrics related steps
+
   @admin
   @destructive
   Scenario: remove OLM installed logging and its related resources

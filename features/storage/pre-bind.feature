@@ -7,7 +7,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Prebound pv is availabe due to requested pvc status is bound
+  Scenario: OCP-10107 Prebound pv is availabe due to requested pvc status is bound
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
@@ -34,7 +34,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Prebound pv is availabe due to mismatched accessmode with requested pvc
+  Scenario: OCP-10109 Prebound pv is availabe due to mismatched accessmode with requested pvc
     Given I have a project
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:
@@ -60,7 +60,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Prebound pvc is pending due to requested pv status is bound
+  Scenario: OCP-10111 Prebound pvc is pending due to requested pv status is bound
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
@@ -86,7 +86,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Prebound PVC is pending due to mismatched accessmode with requested PV
+  Scenario: OCP-10113 Prebound PVC is pending due to mismatched accessmode with requested PV
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
@@ -111,7 +111,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Prebound PVC is pending due to mismatched volume size with requested PV
+  Scenario: OCP-10114 Prebound PVC is pending due to mismatched volume size with requested PV
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
@@ -136,7 +136,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: PV and PVC bound successfully when pvc created prebound to pv
+  Scenario: OCP-9941 PV and PVC bound successfully when pvc created prebound to pv
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
@@ -164,7 +164,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: PV and PVC bound successfully when pv created prebound to pvc
+  Scenario: OCP-9940 PV and PVC bound successfully when pv created prebound to pvc
     Given I have a project
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:

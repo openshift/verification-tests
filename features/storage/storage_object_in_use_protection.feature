@@ -2,7 +2,7 @@ Feature: Storage object in use protection
 
   # @author lxia@redhat.com
   # @case_id OCP-17253
-  Scenario: Delete pvc which is not in active use by pod should be deleted immediately
+  Scenario: OCP-17253 Delete pvc which is not in active use by pod should be deleted immediately
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
@@ -13,7 +13,7 @@ Feature: Storage object in use protection
 
   # @author lxia@redhat.com
   # @case_id OCP-17254
-  Scenario: Delete pvc which is in active use by pod should postpone deletion
+  Scenario: OCP-17254 Delete pvc which is in active use by pod should postpone deletion
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
@@ -51,7 +51,7 @@ Feature: Storage object in use protection
   # @author lxia@redhat.com
   # @case_id OCP-18796
   @admin
-  Scenario: Delete pv which is bind with pvc should postpone deletion
+  Scenario: OCP-18796 Delete pv which is bind with pvc should postpone deletion
     Given I have a project
     Given I obtain test data file "storage/nfs/auto/pv-template.json"
     When admin creates a PV from "pv-template.json" where:

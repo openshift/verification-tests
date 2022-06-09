@@ -77,7 +77,7 @@ Feature: vSphere test scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Dynamically provision a vSphere volume with invalid disk format
+  Scenario: OCP-13389 Dynamically provision a vSphere volume with invalid disk format
     Given I have a project
     Given I obtain test data file "storage/vsphere/storageclass.yml"
     When admin creates a StorageClass from "storageclass.yml" where:

@@ -1,4 +1,5 @@
 Feature: Testing CLI Scenarios
+
   Scenario: simple create project
     When I run the :new_project client command with:
       | project_name | demo |

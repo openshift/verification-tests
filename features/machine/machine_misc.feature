@@ -9,7 +9,7 @@ Feature: Machine misc features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: PVCs can still be provisioned after the password has been changed vSphere
+  Scenario: OCP-34940 PVCs can still be provisioned after the password has been changed vSphere
     Given I have an IPI deployment
     Then I switch to cluster admin pseudo user
 
@@ -68,7 +68,7 @@ Feature: Machine misc features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Reconciliation of MutatingWebhookConfiguration values should happen
+  Scenario: OCP-35454 Reconciliation of MutatingWebhookConfiguration values should happen
     Given I switch to cluster admin pseudo user
 
     Given I use the "openshift-cluster-version" project
@@ -126,7 +126,7 @@ Feature: Machine misc features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: kube-rbac-proxy should not expose tokens, have excessive verbosity
+  Scenario: OCP-37744 kube-rbac-proxy should not expose tokens, have excessive verbosity
     Given I switch to cluster admin pseudo user
 
     Given I use the "openshift-machine-api" project
@@ -171,7 +171,7 @@ Feature: Machine misc features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Report vCenter version to telemetry
+  Scenario: OCP-37180 Report vCenter version to telemetry
     Given I switch to cluster admin pseudo user
     When I perform the GET prometheus rest client with:
       | path  | /api/v1/query?                         |
@@ -188,7 +188,7 @@ Feature: Machine misc features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Deattach disk before destroying vm from vsphere
+  Scenario: OCP-40665 Deattach disk before destroying vm from vsphere
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
     And I clone a machineset and name it "machineset-clone-40665"

@@ -6,7 +6,7 @@ Feature: PTP related scenarios
   @stage-only
   @4.10 @4.9 @4.6
   @proxy @noproxy @disconnected @connected
-  Scenario: ptp operator can be deployed successfully
+  Scenario: OCP-25940 ptp operator can be deployed successfully
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ptp" project
     #check ptp related pods are ready in openshift-ptp projects
@@ -19,7 +19,7 @@ Feature: PTP related scenarios
   # @case_id OCP-25738
   @admin
   @destructive
-  Scenario: Linuxptp run as slave can sync to master
+  Scenario: OCP-25738 Linuxptp run as slave can sync to master
     Given the ptp operator is running well
     Given I switch to the first user
     Given I store the nodes in the clipboard
@@ -53,7 +53,7 @@ Feature: PTP related scenarios
   # @case_id OCP-25740
   @admin
   @destructive
-  Scenario: Linuxptp runs in transparent udp4 mode
+  Scenario: OCP-25740 Linuxptp runs in transparent udp4 mode
     Given the ptp operator is running well
     Given I switch to the first user
     And I store the nodes in the clipboard
@@ -93,7 +93,7 @@ Feature: PTP related scenarios
   @admin
   @destructive
   @4.10 @4.9
-  Scenario: PTP operator starts linuxptp daemon based on nodeSelector configured in default PtpOperatorConfig CRD
+  Scenario: OCP-26187 PTP operator starts linuxptp daemon based on nodeSelector configured in default PtpOperatorConfig CRD
     Given the ptp operator is running well
     And I use the "openshift-ptp" project
     Given as admin I successfully merge patch resource "ptpoperatorconfigs.ptp.openshift.io/default" with:

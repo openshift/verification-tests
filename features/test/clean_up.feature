@@ -1,4 +1,5 @@
 Feature: some clean up steps testing
+
   Scenario: define clean-up in different ways
     Given I register clean-up steps:
       |I log the message> Message 1  |

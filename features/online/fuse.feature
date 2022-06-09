@@ -3,7 +3,7 @@ Feature: ONLY Fuse Plan related scripts in this file
   # @author yuwan@redhat.com
   # @case_id OCP-20439
   # @note this scenario requires a user who have pro cluster(1) left to resigster
-  Scenario: an existed Red Hat account's contact details can be pre-populated to accountant profile during registration - Fuse
+  Scenario: OCP-20439 an existed Red Hat account's contact details can be pre-populated to accountant profile during registration - Fuse
     Given I open accountant console in a browser
     When I run the :go_to_register_fuse_profile_page web action
     Then the step should succeed

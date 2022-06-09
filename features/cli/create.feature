@@ -13,7 +13,7 @@ Feature: creating 'apps' with CLI
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
+  Scenario: OCP-11761 Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/pod_with_special_fsGroup.json"
     When I run the :create client command with:
@@ -38,7 +38,7 @@ Feature: creating 'apps' with CLI
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Create an application from source code
+  Scenario: OCP-12399 Create an application from source code
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"
     Then the step should succeed
@@ -162,7 +162,7 @@ Feature: creating 'apps' with CLI
   @singlenode
   @proxy @noproxy @connected
   @arm64 @amd64
-  Scenario: 4.x Could not create any context in non-existent project
+  Scenario: OCP-22515 4.x Could not create any context in non-existent project
     Given I create a new application with:
       | docker image | openshift/ruby-20-centos7~https://github.com/openshift/ruby-hello-world |
       | name         | myapp          |
@@ -202,7 +202,7 @@ Feature: creating 'apps' with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Create an application from source code test
+  Scenario: OCP-31250 Create an application from source code test
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"
     Then the step should succeed

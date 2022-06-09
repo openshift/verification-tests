@@ -7,7 +7,7 @@ Feature: Event related scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: check event compressed in kube
+  Scenario: OCP-10751 check event compressed in kube
     Given I have a project
     Given I obtain test data file "quota/quota_template.yaml"
     When I run the :new_app admin command with:
@@ -54,7 +54,7 @@ Feature: Event related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10750
   @inactive
-  Scenario: Check normal and warning information for kubernetes events
+  Scenario: OCP-10750 Check normal and warning information for kubernetes events
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"
     When I run the :create client command with:
@@ -98,7 +98,7 @@ Feature: Event related scenarios
   # @author dma@redhat.com
   # @case_id OCP-10208
   @inactive
-  Scenario: Event should show full failed reason when readiness probe failed
+  Scenario: OCP-10208 Event should show full failed reason when readiness probe failed
     Given I have a project
     Given I obtain test data file "pods/ocp10208/readiness-probe-exec.yaml"
     When I run the :create client command with:

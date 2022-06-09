@@ -1,4 +1,5 @@
 Feature: test daemonset methods
+
   @admin
   Scenario: Test daemonset support in the framework
     Given I have a project

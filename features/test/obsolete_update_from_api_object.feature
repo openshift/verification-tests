@@ -1,4 +1,5 @@
 Feature: test refactor of update_from_api_object to use raw_resource
+
   Scenario: test image_stream_tag
     Given I have a project
     And I run the :tag client command with:

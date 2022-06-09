@@ -13,7 +13,7 @@ Feature: Logging smoke test case
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: One logging acceptance case for all cluster
+  Scenario: OCP-37508 One logging acceptance case for all cluster
     Given logging operators are installed successfully
     # create a pod to generate some logs
     Given I switch to the second user

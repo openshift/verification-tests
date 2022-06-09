@@ -10,7 +10,7 @@ Feature: oc_portforward.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Forward multi local ports to a pod
+  Scenario: OCP-11195 Forward multi local ports to a pod
     Given I have a project
     And evaluation of `rand(5000..7999)` is stored in the :porta clipboard
     And evaluation of `rand(5000..7999)` is stored in the :portb clipboard

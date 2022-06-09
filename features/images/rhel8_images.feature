@@ -7,7 +7,7 @@ Feature: rhel8images.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Using new-app cmd to create app with ruby rhel8 image
+  Scenario: OCP-22950 Using new-app cmd to create app with ruby rhel8 image
     Given I have a project
     When I run the :tag admin command with:
       | source           | registry.redhat.io/rhel8/ruby-25:latest |
@@ -45,7 +45,7 @@ Feature: rhel8images.feature
   # @case_id OCP-22953
   @admin
   @inactive
-  Scenario: Enable hot deploy for ruby app with ruby rhel8 image
+  Scenario: OCP-22953 Enable hot deploy for ruby app with ruby rhel8 image
     Given I have a project
     When I run the :tag admin command with:
       | source           | registry.redhat.io/rhel8/ruby-25:latest |
@@ -79,7 +79,7 @@ Feature: rhel8images.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: mysql persistent template
+  Scenario: OCP-22595 mysql persistent template
     Given I have a project
     When I run the :tag admin command with:
       | source           | registry.redhat.io/rhel8/mysql-80:latest |
@@ -138,7 +138,7 @@ Feature: rhel8images.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: Create mysql service from imagestream via oc new-app mysql-rhel8 image
+  Scenario: OCP-22958 Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:latest |
@@ -180,7 +180,7 @@ Feature: rhel8images.feature
   # @case_id OCP-31249
   @admin
   @inactive
-  Scenario: Using new-app cmd to create app with ruby rhel8 image test
+  Scenario: OCP-31249 Using new-app cmd to create app with ruby rhel8 image test
     Given I have a project
     When I run the :tag admin command with:
       | source           | registry.redhat.io/rhel8/ruby-25:latest |

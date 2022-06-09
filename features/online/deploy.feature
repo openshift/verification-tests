@@ -2,7 +2,7 @@ Feature: ONLY ONLINE Deployment related scripts in this file
 
   # @author etrott@redhat.com
   # @case_id OCP-10075
-  Scenario: OSO Starter Specify resource constraints for standalone dc and rc in web console with project limits already set
+  Scenario: OCP-10075 OSO Starter Specify resource constraints for standalone dc and rc in web console with project limits already set
     Given I have a project
     Given I obtain test data file "deployment/dc-with-two-containers.yaml"
     When I run the :create client command with:
@@ -150,7 +150,7 @@ Feature: ONLY ONLINE Deployment related scripts in this file
 
   # @author bingli@redhat.com
   # @case_id OCP-14969
-  Scenario: OSO Pro Specify resource constraints for standalone dc and rc in web console with project limits already set
+  Scenario: OCP-14969 OSO Pro Specify resource constraints for standalone dc and rc in web console with project limits already set
     Given I have a project
     Given I obtain test data file "deployment/dc-with-two-containers.yaml"
     When I run the :create client command with:

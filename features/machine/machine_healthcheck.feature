@@ -9,7 +9,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Remediation should be applied when the unhealthyCondition 'Ready' is met
+  Scenario: OCP-25897 Remediation should be applied when the unhealthyCondition 'Ready' is met
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -49,7 +49,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Create a machinehealthcheck when there is already an unhealthy machine
+  Scenario: OCP-26311 Create a machinehealthcheck when there is already an unhealthy machine
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -81,7 +81,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Create multiple MHCs to monitor same machineset
+  Scenario: OCP-25734 Create multiple MHCs to monitor same machineset
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -115,7 +115,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Use "maxUnhealthy" to prevent automated remediation
+  Scenario: OCP-25691 Use "maxUnhealthy" to prevent automated remediation
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -168,7 +168,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Machine Node startup timeout should be configurable
+  Scenario: OCP-28718 Machine Node startup timeout should be configurable
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
@@ -210,7 +210,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Remediation should be applied when machine has nodeRef but node is deleted
+  Scenario: OCP-25727 Remediation should be applied when machine has nodeRef but node is deleted
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -236,7 +236,7 @@ Feature: MachineHealthCheck Test Scenarios
   @admin
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: MaxUnhealthy should not allow malformed values
+  Scenario: OCP-29857 MaxUnhealthy should not allow malformed values
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
@@ -268,7 +268,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: MHC MaxUnhealthy string value should be checked for '%' symbol
+  Scenario: OCP-28859 MHC MaxUnhealthy string value should be checked for '%' symbol
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -308,7 +308,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Leverage OpenAPI validation within MHC
+  Scenario: OCP-33714 Leverage OpenAPI validation within MHC
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
 
@@ -329,7 +329,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: timeout field without units(h,m,s) shoud not be allowed to be stored
+  Scenario: OCP-34095 timeout field without units(h,m,s) shoud not be allowed to be stored
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project

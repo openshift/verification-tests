@@ -10,7 +10,7 @@ Feature: Testing websocket features
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: haproxy router support websocket via unsecure route
+  Scenario: OCP-17145 haproxy router support websocket via unsecure route
     Given I have a project
     Given I obtain test data file "routing/websocket/pod.json"
     When I run the :create client command with:
