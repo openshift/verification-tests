@@ -94,9 +94,15 @@ module BushSlicer
     # @param user [APIAccessor]
     # @return
     private def config_setup(user:, executor:, opts: {})
+      if user.env.is_admin?(user)
+        api_endpoint_url = @opts[:admin_api_endpoint_url]
+      else
+        api_endpoint_url = user.env.api_endpoint_url
+      end
+
       if user.token
         ## login with existing token
-        res = executor.run(:login, token: user.token, server: user.env.api_endpoint_url, _timeout: LOGIN_TIMEOUT, **opts)
+        res = executor.run(:login, token: user.token, server: api_endpoint_url, _timeout: LOGIN_TIMEOUT, **opts)
       elsif user.client_cert
         cert = nil
         key = nil
@@ -118,9 +124,9 @@ module BushSlicer
         # see https://bugzilla.redhat.com/show_bug.cgi?id=1642149
         default_context_name = "generated"
         # oc --config=/tmp/tmp.config --server=https://ec2-54-86-33-62.compute-1.amazonaws.com:443 --client-certificate=/tmp/crt --client-key=/tmp/key --insecure-skip-tls-verify=true get user '~' --template='{{.metadata.name}}'
-        res = executor.run(:config_set_creds, name: user.id, cert: cert, key: key, embed: true, server: user.env.api_endpoint_url, **opts)
+        res = executor.run(:config_set_creds, name: user.id, cert: cert, key: key, embed: true, server: api_endpoint_url, **opts)
         raise "setting keys failed, see log" unless res[:success]
-        res = executor.run(:config_set_cluster, name: "#{default_context_name}-cluster", server: user.env.api_endpoint_url, **opts)
+        res = executor.run(:config_set_cluster, name: "#{default_context_name}-cluster", server: api_endpoint_url, **opts)
         raise "setting cluster failed, see log" unless res[:success]
         res = executor.run(:config_set_context, name: default_context_name, cluster: "#{default_context_name}-cluster", user: user.id, **opts)
         raise "setting context failed, see log" unless res[:success]
