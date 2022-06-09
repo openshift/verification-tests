@@ -8,7 +8,12 @@ When(/^I perform the (GET|POST) prometheus rest client with:$/) do | op_type, ta
   if opts.has_key? :token
     token = opts[:token]
   else
-    token = secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token
+    if env.version_lt('4.11', user: user)
+      token = secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token
+    else
+      @result = admin.cli_exec(:create_token, n: "openshift-monitoring", serviceaccount_name: "prometheus-k8s")
+      token = @result[:response]
+    end
   end
 
   https_opts = {}
