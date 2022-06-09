@@ -15,11 +15,10 @@ module BushSlicer
       'oc exec .*--d?creds',  # oc exec -- skopeo copy --dcreds username:****
                               # oc exec -- skopeo inspect --tls-verify=false --creds username:****
       'oc rsh .*bearer',      # oc rsh elasticsearch-* -- curl "Authorization: Bearer ***"
-      'oc login .*--token',   # oc login --token=***
-                              # oc login --token ***
       'oc login .*-p',        # oc login --passwordr= ***
                               # oc login --password ***
                               # oc login -p ***
+      '--token',              # any commands with --token
     ]
 
     attr_reader :pid
