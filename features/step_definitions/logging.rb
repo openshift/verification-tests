@@ -1314,6 +1314,28 @@ end
 
 Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\d+) seconds)?$/ do | action, namespace, seconds |
   ensure_admin_tagged
+  def check_log(logs, errors, exceptions)
+    error_logs = []
+    logs.split("\n").each do | log |
+      if !(exceptions.nil?)
+        exceptions.each do | exception |
+          if log.include? exception
+            next
+          end
+        end
+      else
+        errors.each do | error_string |
+          if log.include? error_string
+            error_logs.append(log)
+          end
+          #raise "found error/failure logs: #{log}" unless !(log.include? error_string)
+        end
+      end
+    end
+    return error_logs
+  end
+
+  error_strings = ["error", "Error"]
   pods = BushSlicer::Pod.list(user: admin, project: project(namespace))
   pods.each do | pod |
     # skip index management jobs
@@ -1327,9 +1349,16 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
         @result = admin.cli_exec(:logs, n: namespace,resource_name: pod.name, c: container.name, since: seconds+"s")
       end
       if action == "check"
-        unless !(@result[:response].include? ("error")) && !(@result[:response].include? ("Error")) && !(@result[:response].include? ("fail")) && !(@result[:response].include? ("Fail"))
-          raise "found error/failure in #{pod.name}/#{container.name} logs"
+        # read logs line by line
+        # ignore errors in https://issues.redhat.com/browse/LOG-2674 and https://issues.redhat.com/browse/LOG-2702
+        if container.name == "logfilesmetricexporter"
+          log = check_log(@result[:response], error_strings, ["can't remove non-existent inotify watch for"])
+        elsif container.name == "kibana"
+          log = check_log(@result[:response], error_strings, ["java.lang.UnsupportedOperationException"])
+        else
+          log = check_log(@result[:response], error_strings, nil)
         end
+        raise "find error/failure log in #{pod.name}/#{container.name}: #{log}" unless log.empty?
       end
     end
   end
