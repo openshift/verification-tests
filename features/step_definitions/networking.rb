@@ -1014,7 +1014,7 @@ Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipbo
     @result = host.exec_admin("ip -6 -brief addr show #{def_inf}")
     cb[cb_ipaddr]=@result[:response].match(/([a-f0-9:]+:+)+[a-f0-9]+/)[0]
   else
-    cb[cb_ipaddr]=inf_address[:response]
+    cb[cb_ipaddr]=inf_address[:response].split(" ").first
   end
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
