@@ -1318,10 +1318,15 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
     error_logs = []
     logs.split("\n").each do | log |
       if !(exceptions.nil?)
+        ignore = false
         exceptions.each do | exception |
           if log.include? exception
-            next
+            ignore = true
+            break
           end
+        end
+        if ignore
+          next
         end
       else
         errors.each do | error_string |
