@@ -99,7 +99,7 @@ Given /^I run( background)? commands on the host:$/ do |bg, table|
   ensure_admin_tagged
 
   raise "You must set a host prior to running this step" unless host
-  @result = host.exec(*table.raw.flatten, background: !!bg)
+  @result = host.exec_admin(*table.raw.flatten, background: !!bg)
 end
 
 Given /^I run commands on the host after scenario:$/ do |table|
