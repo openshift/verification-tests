@@ -67,17 +67,17 @@ Feature: OVN related networking scenarios
     """
     And I run the :scale admin command with:
       | resource | deployment                 |
-      | name     | network-operator           |
+      | name     | cluster-network-operator           |
       | replicas | 1                          |
-      | n        | openshift-network-operator |
+      | n        | <%= env.cno_namespace %> |
     Then the step should succeed
     """
     # Now scale down CNO pod to 0
     And I run the :scale admin command with:
       | resource | deployment                 |
-      | name     | network-operator           |
+      | name     | cluster-network-operator           |
       | replicas | 0                          |
-      | n        | openshift-network-operator |
+      | n        | <%= env.cno_namespace %> |
     Then the step should succeed
     And admin ensures "ovnkube-master" statefulsets is deleted from the "<%= env.ovn_namespace %>" project
     And admin executes existing pods die with labels:
@@ -90,9 +90,9 @@ Feature: OVN related networking scenarios
     # Now scale up CNO pod to 1 and check whether hello-pod is synced to NB db
     Given I run the :scale admin command with:
       | resource | deployment                 |
-      | name     | network-operator           |
+      | name     | cluster-network-operator           |
       | replicas | 1                          |
-      | n        | openshift-network-operator |
+      | n        | <%= env.cno_namespace %> |
     Then the step should succeed
     # A minimum wait for 30 seconds is tested to reflect CNO deployment to be effective which will then re-spawn ovn pods
     Given 30 seconds have passed
@@ -137,16 +137,16 @@ Feature: OVN related networking scenarios
     """
     And I run the :scale admin command with:
       | resource | deployment                 |
-      | name     | network-operator           |
+      | name     | cluster-network-operator           |
       | replicas | 1                          |
-      | n        | openshift-network-operator |
+      | n        | <%= env.cno_namespace %> |
     Then the step should succeed
     """
     And I run the :scale admin command with:
       | resource | deployment                 |
-      | name     | network-operator           |
+      | name     | cluster-network-operator           |
       | replicas | 0                          |
-      | n        | openshift-network-operator |
+      | n        | <%= env.cno_namespace %> |
     Then the step should succeed
     And admin ensures "ovnkube-master" statefulsets is deleted from the "<%= env.ovn_namespace %>" project
     And admin executes existing pods die with labels:
@@ -154,11 +154,10 @@ Feature: OVN related networking scenarios
     And I ensure "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
     # Now scale up CNO pod to 1 and check whether hello-pod status is synced to NB db means it should not present in the DB
     Given I run the :scale admin command with:
-      | namespace | openshift-network-operator |
       | resource  | deployment                 |
-      | name      | network-operator           |
+      | name      | cluster-network-operator           |
       | replicas  | 1                          |
-      | n         | openshift-network-operator |
+      | n         | <%= env.cno_amespace %> |
     Then the step should succeed
     # A recommended wait for 30 seconds is tested to reflect CNO deployment to be in effect which will then re-spawn ovn pods
     Given 30 seconds have passed

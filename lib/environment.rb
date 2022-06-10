@@ -150,6 +150,10 @@ module BushSlicer
       opts[:ovn_namespace] || "openshift-ovn-kubernetes"
     end
 
+    def cno_namespace
+      opts[:ovn_namespace] || "openshift-network-operator"
+    end
+
     def api_proto
       opts[:api_proto] || "https"
     end
