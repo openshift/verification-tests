@@ -475,7 +475,9 @@ Feature: OVN related networking scenarios
     # ipv6 uses ip6tables binary
     Given evaluation of `(cb.south_leader.ip.include? ":") ? "ip6tables" : "iptables"` is stored in the :iptables_command clipboard
 
-    Given I store the masters in the clipboard excluding "<%= cb.south_leader.node_name %>"
+    # hypershift ovnkube-masters are on the workers,
+    # TODO: find all the ovnkube-master nodes
+    Given I store the nodes in the clipboard excluding "<%= cb.south_leader.node_name %>"
     And I use the "<%= cb.nodes[0].name %>" node
     # make sure to unblock after the test
     And I register clean-up steps:
