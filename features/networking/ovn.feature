@@ -223,7 +223,7 @@ Feature: OVN related networking scenarios
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :hello_pod_mac clipboard
 
     Given I store the ovnkube-master "north" leader pod in the clipboard
-    And admin executes on the pod:
+    And admin executes on the pod "northd" container:
       | bash | -c | ovn-nbctl list logical_switch_port \| grep "hello-pod" -C 10 |
     Then the step should succeed
     # Make sure addresses don't say dynamic but display ip and mac assigned to the hello-pod and dynamic_addresses field should be empty
