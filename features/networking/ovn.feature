@@ -15,6 +15,7 @@ Feature: OVN related networking scenarios
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
     And I obtain test data file "networking/list_for_pods.json"
+    # create the test pod in the hosted cluster
     When I run the :create client command with:
       | f | list_for_pods.json |
     Then the step should succeed
@@ -37,7 +38,7 @@ Feature: OVN related networking scenarios
     Given I use the "<%= cb.ovn_nb_leader_node %>" node
     And I run commands on the host:
       | pkill -f OVN_Northbound |
-    And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 120 seconds
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds
     # Making sure the pod entries are synced again when NB db is re-created
     Given I store the ovnkube-master "north" leader pod in the clipboard
     # too much output, if we don't filter server-side this always fails
@@ -77,7 +78,7 @@ Feature: OVN related networking scenarios
       | replicas | 0                          |
       | n        | openshift-network-operator |
     Then the step should succeed
-    And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
+    And admin ensures "ovnkube-master" sts is deleted from the "<%= env.ovn_namespace %>" project
     And admin executes existing pods die with labels:
       | app=ovnkube-master |
     Given I have a project
@@ -95,7 +96,7 @@ Feature: OVN related networking scenarios
     # A minimum wait for 30 seconds is tested to reflect CNO deployment to be effective which will then re-spawn ovn pods
     Given 30 seconds have passed
     # This used to be 60 seconds but around the time of 4.6 60 seconds is no longer sufficient
-    And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 120 seconds
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds
     # Checking whether Kube API data is synced on OVN NB db which in this case is a test-pod created in earlier steps
     Given I store the ovnkube-master "north" leader pod in the clipboard
     # too much output, if we don't filter server-side this always fails
@@ -144,7 +145,7 @@ Feature: OVN related networking scenarios
       | replicas | 0                          |
       | n        | openshift-network-operator |
     Then the step should succeed
-    And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
+    And admin ensures "ovnkube-master" sts is deleted from the "<%= env.ovn_namespace %>" project
     And admin executes existing pods die with labels:
       | app=ovnkube-master |
     And I ensure "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
@@ -159,7 +160,7 @@ Feature: OVN related networking scenarios
     # A recommended wait for 30 seconds is tested to reflect CNO deployment to be in effect which will then re-spawn ovn pods
     Given 30 seconds have passed
     # This used to be 60 seconds but around the time of 4.6 60 seconds is no longer sufficient
-    And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 120 seconds
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds
     Given I store the ovnkube-master "north" leader pod in the clipboard
     # too much output, if we don't filter server-side this always fails
     # making sure here that hello-pod absense is properly synced
@@ -252,7 +253,7 @@ Feature: OVN related networking scenarios
     When I store the ovnkube-master "south" leader pod in the :new_south_leader clipboard
     Then the step should succeed
     And the expression should be true> cb.south_leader.name != cb.new_south_leader.name
-    And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 120 seconds
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds
     Given I ensure "hello-pod" pod is deleted from the "<%= cb.usr_project%>" project
     """
 
@@ -293,7 +294,7 @@ Feature: OVN related networking scenarios
     When I store the ovnkube-master "south" leader pod in the :new_south_leader clipboard
     Then the step should succeed
     And the expression should be true> cb.south_leader.name != cb.new_south_leader.name
-    And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 120 seconds
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds
 
     # Check pod works
     Given I use the "<%= cb.usr_project%>" project
@@ -350,7 +351,7 @@ Feature: OVN related networking scenarios
     Then the step should succeed
     And the expression should be true> cb.south_leader.name != cb.new_south_leader.name
     # one instance took 55 seconds for the first pod and then timed out, so wait a while
-    And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 120 seconds
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds
     Given I use the "<%= cb.iperf_project %>" project
     When the pod named "iperf-client" status becomes :succeeded within 120 seconds
     And I run the :logs client command with:
@@ -385,10 +386,10 @@ Feature: OVN related networking scenarios
   @heterogeneous @arm64 @amd64
   Scenario: OCP-26089 New raft leader should be elected if existing leader gets deleted or crashed in hybrid/non-hybrid clusters
     Given the env is using "OVNKubernetes" networkType
-    Given admin uses the "openshift-ovn-kubernetes" project
+    Given admin uses the "<%= env.ovn_namespace %>" project
     When I store the ovnkube-master "north" leader pod in the clipboard
     Then the step should succeed
-    Given admin ensures "<%= cb.north_leader.name %>" pod is deleted from the "openshift-ovn-kubernetes" project
+    Given admin ensures "<%= cb.north_leader.name %>" pod is deleted from the "<%= env.ovn_namespace %>" project
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
     """
@@ -410,7 +411,7 @@ Feature: OVN related networking scenarios
   @proxy @noproxy @disconnected @connected
   Scenario Outline: New corresponding raft leader should be elected if SB db or NB db on existing master is crashed
     Given the env is using "OVNKubernetes" networkType
-    Given admin uses the "openshift-ovn-kubernetes" project
+    Given admin uses the "<%= env.ovn_namespace %>" project
     When I store the ovnkube-master "south" leader pod in the clipboard
     Then the step should succeed
     When the OVN "south" database is killed with signal "<signal>" on the "<%= cb.south_leader.node_name %>" node
@@ -458,7 +459,7 @@ Feature: OVN related networking scenarios
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   Scenario: OCP-26138 Inducing Split Brain in the OVN HA cluster
-    Given admin uses the "openshift-ovn-kubernetes" project
+    Given admin uses the "<%= env.ovn_namespace %>" project
     When I store the ovnkube-master "south" leader pod in the clipboard
     Then the step should succeed
 
@@ -518,7 +519,7 @@ Feature: OVN related networking scenarios
   @heterogeneous @arm64 @amd64
   Scenario: OCP-26140 Delete all OVN master pods and makes sure leader/follower election converges smoothly
     Given the env is using "OVNKubernetes" networkType
-    Given admin uses the "openshift-ovn-kubernetes" project
+    Given admin uses the "<%= env.ovn_namespace %>" project
     When I store the ovnkube-master "north" leader pod in the clipboard
     Then the step should succeed
     When I run the :delete admin command with:
@@ -568,7 +569,7 @@ Feature: OVN related networking scenarios
   @inactive
   Scenario: OCP-38132 Should no intermittent packet drop from pod to pod after change hostname
     Given I store the schedulable workers in the :nodes clipboard
-    Given admin uses the "openshift-ovn-kubernetes" project
+    Given admin uses the "<%= env.ovn_namespace %>" project
     And I store the hostname from external ids in the :original_hostname clipboard on the "<%= cb.nodes[0].name %>" node
     Then the step should succeed
     And I store the "short" hostname in the :short_hostname clipboard for the "<%= cb.nodes[0].name %>" node

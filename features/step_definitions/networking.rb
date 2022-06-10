@@ -47,7 +47,7 @@ Given /^the env is using one of the listed network plugins:$/ do |table|
     plugin_name = @result[:stdout].to_s.split("-").last
     unless plugin_list.include? plugin_name
       logger.info "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
-      skip_this_scenario 
+      skip_this_scenario
     end
   else
     _host = node.host rescue nil
@@ -606,13 +606,13 @@ Given /^the multus is enabled on the cluster$/ do
   success = wait_for(120, interval: 10)  {
     desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
     available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
-    if (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0 
+    if (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0
       true
     else
       logger.info("Multus is not running correctly, continue checking")
       false
     end
-  } 
+  }
   unless success
     logger.info "Multus is not running correctly! Exit Testing"
     skip_this_scenario
@@ -1031,7 +1031,7 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
      project_name="openshift-sdn"
   else
      app="app=ovnkube-node"
-     project_name="openshift-ovn-kubernetes"
+     project_name=user.env.ovn_namespace
   end
   cb.network_project_name = project_name
   cb[cb_pod_name] = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
@@ -1052,7 +1052,7 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
 
   if node_name == nil
     # if we don't specify a node pick the oldest pod to check leader status
-    ovn_pods = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
+    ovn_pods = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project(user.env.ovn_namespace, switch: false),
                                            user: admin, quiet: true) { |pod, hash|
       # make sure we pick a Running master
       pod.ready?(user: admin, cached: false, quiet: true)
@@ -1061,7 +1061,7 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
     ovn_pods.sort!{ |a,b| a.props[:created] <=> b.props[:created]}
 
   else
-    ovn_pods = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
+    ovn_pods = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project(user.env.ovn_namespace, switch: false),
                                            user: admin, quiet: true) { |pod, hash|
       # always make sure it is ready
       pod.node_name == node_name && pod.ready?(user: admin, cached: false, quiet: true)
@@ -1098,7 +1098,7 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
   # match first string in the parens, the everything from the first colon to a colon digit close-paren sequence
   splits = leader_line.match(/\((\S+)[^:]+:\[?([^\]\[)]+)\]?:(\d+)\)/)
   leader_node = splits.captures[1]
-  leader_pod = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
+  leader_pod = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project(user.env.ovn_namespace, switch: false),
                                            user: admin, quiet: true) { |pod, hash|
     pod.node_name(user: admin) == leader_node || pod.ip(user: admin) == leader_node || leader_node.split('.', 2).first == pod.name
   }.first
@@ -1119,9 +1119,9 @@ Given /^admin deletes the ovnkube-master#{OPT_QUOTED} leader$/ do |ovndb|
   end
   leader_pod_name = cb[cb_leader_name].name
   # this doens't work for some reason, can't find the dynamic step
-  # step %Q/Given admin ensures "#{leader_pod_name}" pod is deleted from the "openshift-ovn-kubernetes" project/
+  # step %Q/Given admin ensures "#{leader_pod_name}" pod is deleted from the user.env.ovn_namespace project/
 
-  @result = resource(leader_pod_name, "pod", project_name: "openshift-ovn-kubernetes").ensure_deleted(user: admin, wait: 300)
+  @result = resource(leader_pod_name, "pod", project_name: user.env.ovn_namespace).ensure_deleted(user: admin, wait: 300)
 end
 
 Given /^the OVN "([^"]*)" database is killed(?: with signal "([^"]*)")? on the "([^"]*)" node$/ do |ovndb, signal, node_name|
@@ -1141,8 +1141,8 @@ end
 
 Given /^OVN is functional on the cluster$/ do
   ensure_admin_tagged
-  ovnkube_node_ds = daemon_set('ovnkube-node', project('openshift-ovn-kubernetes')).replica_counters(user: admin, cached: false)
-  ovnkube_master_ds = daemon_set('ovnkube-master', project('openshift-ovn-kubernetes')).replica_counters(user: admin, cached: false)
+  ovnkube_node_ds = daemon_set('ovnkube-node', project(user.env.ovn_namespace)).replica_counters(user: admin, cached: false)
+  ovnkube_master_ds = daemon_set('ovnkube-master', project(user.env.ovn_namespace)).replica_counters(user: admin, cached: false)
   desired_ovnkube_node_replicas, available_ovnkube_node_replicas = ovnkube_node_ds.values_at(:desired, :available)
   desired_ovnkube_master_replicas, available_ovnkube_master_replicas = ovnkube_master_ds.values_at(:desired, :available)
 
@@ -1353,7 +1353,7 @@ Given /^the IPsec is enabled on the cluster$/ do
   unless default_network["ipsecConfig"]
      logger.info "env doesn't have IPSec enabled"
      skip_this_scenario
-  end 
+  end
 end
 
 Given /^the node's active nmcli connection is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
@@ -1401,7 +1401,7 @@ Given /^I store the hostname from external ids in the#{OPT_SYM} clipboard on the
   cb_ovn_hostname ||= "ovn_hostname"
 
   ovsvsctl_cmd = %w(ovs-vsctl list open .)
-  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
+  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project(user.env.ovn_namespace, switch: false), user: admin, quiet: true) { |pod, hash|
     pod.node_name == node_name
   }.first
   @result = ovn_pod.exec(*ovsvsctl_cmd, as: admin, container: "ovnkube-node")
@@ -1424,7 +1424,7 @@ Given /^I store the#{OPT_QUOTED} hostname in the#{OPT_SYM} clipboard for the "([
     ovn_cmd = %w(hostname -f)
   end
 
-  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
+  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project(user.env.ovn_namespace, switch: false), user: admin, quiet: true) { |pod, hash|
     pod.node_name == node_name
   }.first
   @result = ovn_pod.exec(*ovn_cmd, as: admin, container: "ovnkube-node")
@@ -1444,7 +1444,7 @@ Given /^I set#{OPT_QUOTED} hostname to external ids on the "([^"]*)" node$/ do |
   ovsvsctl_cmd = %w(ovs-vsctl set open .)
   external_hostname = "external_ids:hostname=#{custom_hostname}"
   ovsvsctl_cmd << external_hostname
-  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
+  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project(user.env.ovn_namespace, switch: false), user: admin, quiet: true) { |pod, hash|
     pod.node_name == node_name
   }.first
   @result = ovn_pod.exec(*ovsvsctl_cmd, as: admin, container: "ovnkube-node")
@@ -1469,8 +1469,8 @@ end
 Given /^I switch the ovn gateway mode on this cluster$/ do
   ensure_admin_tagged
   step "I store the masters in the clipboard"
-  ovnkube_master = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash| pod.node_name == node.name}.first
-  @result = admin.cli_exec(:logs, resource_name: ovnkube_master.name, n: "openshift-ovn-kubernetes", c: "ovnkube-master")
+  ovnkube_master = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project(user.env.ovn_namespace, switch: false), user: admin, quiet: true) { |pod, hash| pod.node_name == node.name}.first
+  @result = admin.cli_exec(:logs, resource_name: ovnkube_master.name, n: user.env.ovn_namespace, c: "ovnkube-master")
 
   if @result[:response].include? "Gateway:{Mode:local"
     logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
@@ -1483,7 +1483,7 @@ Given /^I switch the ovn gateway mode on this cluster$/ do
   logger.info "Waiting upto 30 sec for network operator to change status to Progressing as a result of patch"
   @result = admin.cli_exec(:wait, resource: "co", resource_name: "network", for: "condition=PROGRESSING=True", timeout: "30s")
   raise "Patch was successful but CNO didn't change status to Progressing" unless @result[:success]
-  @result = admin.cli_exec(:rollout_status, resource: "daemonset", name: "ovnkube-master", n: "openshift-ovn-kubernetes")
+  @result = admin.cli_exec(:rollout_status, resource: "daemonset", name: "ovnkube-master", n: user.env.ovn_namespace)
   raise "Failed to rollout masters" unless @result[:success]
 end
 

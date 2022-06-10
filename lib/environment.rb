@@ -146,6 +146,10 @@ module BushSlicer
       Rest::RequestExecutor
     end
 
+    def ovn_namespace
+      opts[:ovn_namespace] || "openshift-ovn-kubernetes"
+    end
+
     def api_proto
       opts[:api_proto] || "https"
     end
