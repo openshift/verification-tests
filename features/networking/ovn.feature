@@ -38,7 +38,7 @@ Feature: OVN related networking scenarios
     Given I use the "<%= cb.ovn_nb_leader_node %>" node
     And I run commands on the host:
       | pkill -f OVN_Northbound |
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
     # Making sure the pod entries are synced again when NB db is re-created
     Given I store the ovnkube-master "north" leader pod in the clipboard
@@ -97,7 +97,8 @@ Feature: OVN related networking scenarios
     # A minimum wait for 30 seconds is tested to reflect CNO deployment to be effective which will then re-spawn ovn pods
     Given 30 seconds have passed
     # This used to be 60 seconds but around the time of 4.6 60 seconds is no longer sufficient
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    # 240 on hypershift
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
     # Checking whether Kube API data is synced on OVN NB db which in this case is a test-pod created in earlier steps
     Given I store the ovnkube-master "north" leader pod in the clipboard
@@ -162,7 +163,7 @@ Feature: OVN related networking scenarios
     # A recommended wait for 30 seconds is tested to reflect CNO deployment to be in effect which will then re-spawn ovn pods
     Given 30 seconds have passed
     # This used to be 60 seconds but around the time of 4.6 60 seconds is no longer sufficient
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
     Given I store the ovnkube-master "north" leader pod in the clipboard
     # too much output, if we don't filter server-side this always fails
@@ -256,7 +257,7 @@ Feature: OVN related networking scenarios
     When I store the ovnkube-master "south" leader pod in the :new_south_leader clipboard
     Then the step should succeed
     And the expression should be true> cb.south_leader.name != cb.new_south_leader.name
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
     Given I ensure "hello-pod" pod is deleted from the "<%= cb.usr_project%>" project
     """
@@ -298,7 +299,7 @@ Feature: OVN related networking scenarios
     When I store the ovnkube-master "south" leader pod in the :new_south_leader clipboard
     Then the step should succeed
     And the expression should be true> cb.south_leader.name != cb.new_south_leader.name
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
 
     # Check pod works
@@ -356,7 +357,7 @@ Feature: OVN related networking scenarios
     Then the step should succeed
     And the expression should be true> cb.south_leader.name != cb.new_south_leader.name
     # one instance took 55 seconds for the first pod and then timed out, so wait a while
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
     Given I use the "<%= cb.iperf_project %>" project
     When the pod named "iperf-client" status becomes :succeeded within 120 seconds
@@ -403,7 +404,7 @@ Feature: OVN related networking scenarios
     Then the step should succeed
     And the expression should be true> cb.north_leader.name != cb.new_north_leader.name
     """
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
 
 
@@ -430,7 +431,7 @@ Feature: OVN related networking scenarios
     Then the step should succeed
     And the expression should be true> cb.south_leader.name != cb.new_south_leader.name
     """
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
 
     When I store the ovnkube-master "north" leader pod in the clipboard
@@ -444,7 +445,7 @@ Feature: OVN related networking scenarios
     Then the step should succeed
     And the expression should be true> cb.north_leader.name != cb.new_north_leader.name
     """
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
 
     @heterogeneous @arm64 @amd64
@@ -513,7 +514,7 @@ Feature: OVN related networking scenarios
     When I store the ovnkube-master "south" leader pod in the :after_isolated_south_leader clipboard using node "<%= cb.nodes[0].name %>"
     Then the step should succeed
     """
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
 
 
@@ -542,7 +543,7 @@ Feature: OVN related networking scenarios
     Then the step should succeed
     And the expression should be true> cb.north_leader.name != cb.new_north_leader.name
     """
-    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 120 seconds with labels:
+    And admin waits for all pods in the "<%= env.ovn_namespace %>" project to become ready up to 240 seconds with labels:
       | app=ovnkube-master |
 
 
