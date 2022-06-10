@@ -86,7 +86,8 @@ Given /^(I|admin) checks? that there are no (\w+)(?: in the#{OPT_QUOTED} project
   end
 end
 
-Given /^(I|admin) waits? for all (\w+) in the#{OPT_QUOTED} project to become ready(?: up to (\d+) seconds)?$/ do |by, type, project_name, timeout|
+Given /^(I|admin) waits? for all (\w+) in the#{OPT_QUOTED} project to become ready(?: up to (\d+) seconds)? with labels:$/ do |by, type, project_name, timeout, table|
+  labels = table.raw.flatten
   timeout = timeout ? Integer(timeout) : 180
   _user = by == "admin" ? admin : user
   clazz = resource_class(type)
@@ -95,7 +96,7 @@ Given /^(I|admin) waits? for all (\w+) in the#{OPT_QUOTED} project to become rea
     raise "#{clazz} is not a ProjectResource"
   end
 
-  list = clazz.list(user: _user, project: project(project_name))
+  list = clazz.get_labeled(*labels, user: _user, project: project(project_name))
   cache_resources *list
   logger.info("#{clazz::RESOURCE}: #{list.map(&:name)}")
 
