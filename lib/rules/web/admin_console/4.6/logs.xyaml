@@ -23,6 +23,7 @@ check_log_content_contains:
     selector:
       xpath: //div[contains(@class,'log-window__lines') and contains(.,'<log_content>')]
     timeout: 30
+check_download_logfile_name: {}
 check_some_context_missing_in_expanded_log_view:
   elements:
   - selector: &expand_button
