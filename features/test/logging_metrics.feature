@@ -25,3 +25,5 @@ Feature: test logging and metrics related steps
   @admin
   Scenario: check node capacity for logging
     Given I check if the remaining_resources in woker nodes meet the requirements for logging stack
+    #Given I check all pods logs in the "openshift-operators-redhat" project in last 300 seconds
+    And I check all pods logs in the "openshift-logging" project in last 300 seconds
