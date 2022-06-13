@@ -8,7 +8,7 @@ RUN set -x && \
     yum repolist enabled && \
     OLD_REPOS=$(yum repolist enabled -q | sed 1d | cut -d'/' -f1 | awk '{print $1}') && \
     ([ -n "$OLD_REPOS" ] && dnf config-manager --disable $OLD_REPOS || :) && \
-    NEW_REPOS="rhel-8-for-x86_64-appstream-rpms rhel-8-for-x86_64-baseos-rpms" && \
+    NEW_REPOS="ansible-2.9-for-rhel-8-x86_64-rpms rhel-8-for-x86_64-appstream-rpms rhel-8-for-x86_64-baseos-rpms" && \
     dnf config-manager --enable $NEW_REPOS && \
     dnf config-manager --save --setopt=\*.skip_if_unavailable=1 $NEW_REPOS && \
     yum repolist enabled && \
