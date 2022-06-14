@@ -571,8 +571,8 @@ Feature: Egress-ingress related networking scenarios
       | f | egressnetworkpolicy_1001.yaml |
       | n | <%= project.name %>           |
     Then the step should fail
-    And the output should contain:
-      | spec.egress in body should have at most 1000 items |
+    And the output should match:
+      | spec.egress.*have at most 1000 items |
 
   # @author huirwang@redhat.com
   # @case_id OCP-37491
