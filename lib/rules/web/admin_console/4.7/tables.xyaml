@@ -235,6 +235,10 @@ change_all_projects_pods_list_columns_but_reset:
 check_changed_columns_in_all_projects_list_table:
   action: goto_projects_list_page
   action: check_changed_projects_list_columns
+reset_default_columns:
+  action: click_table_column_management_tooltip
+  action: click_reset_default_columns_button
+  action: submit_changes
 check_table_column_heading:
   element:
     selector:
