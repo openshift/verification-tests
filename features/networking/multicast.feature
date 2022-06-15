@@ -500,11 +500,13 @@ Feature: testing multicast scenarios
   @heterogeneous @arm64 @amd64
   Scenario: OCP-12929 pods should not be able to receive multicast traffic from other pods in different namespace
     # create some multicast testing pods in one project
+    Given I store the schedulable workers in the :nodes clipboard
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
     When I run oc create over "multicast-rc.json" replacing paths:
-      | ["spec"]["replicas"] | 1 |
+      | ["spec"]["replicas"] | 1                       |
+      | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given 1 pod becomes ready with labels:
       | name=mcast-pods |
@@ -519,7 +521,8 @@ Feature: testing multicast scenarios
     And evaluation of `project.name` is stored in the :proj2 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
     When I run oc create over "multicast-rc.json" replacing paths:
-      | ["spec"]["replicas"] | 1 |
+      | ["spec"]["replicas"] | 1                       |
+      | ["spec"]["nodeName"] | <%= cb.nodes[1].name %> |
     Then the step should succeed
     Given 1 pod becomes ready with labels:
       | name=mcast-pods |
