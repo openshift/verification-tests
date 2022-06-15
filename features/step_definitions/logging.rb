@@ -235,7 +235,6 @@ Given /^I wait until ES cluster is ready$/ do
   step %Q/#{cluster_logging('instance').logstore_node_count.to_i} pods become ready with labels:/, table(%{
     | cluster-name=elasticsearch,component=elasticsearch |
   })
-  cluster_logging('instance').wait_until_es_is_ready
 end
 
 Given /^I wait until kibana is ready$/ do
@@ -1307,24 +1306,26 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
   ensure_admin_tagged
   def check_log(logs, errors, exceptions)
     error_logs = []
-    logs.split("\n").each do | log |
-      if !(exceptions.nil?)
-        ignore = false
-        exceptions.each do | exception |
-          if log.include? exception
-            ignore = true
-            break
+    unless logs.empty? || logs.nil?
+      logs.split("\n").each do | log |
+        if !(exceptions.nil?)
+          ignore = false
+          exceptions.each do | exception |
+            if log.include? exception
+              ignore = true
+              break
+            end
           end
-        end
-        if ignore
-          next
-        end
-      else
-        errors.each do | error_string |
-          if log.include? error_string
-            error_logs.append(log)
+          if ignore
+            next
           end
-          #raise "found error/failure logs: #{log}" unless !(log.include? error_string)
+        else
+          errors.each do | error_string |
+            if log.include? error_string
+              error_logs.append(log)
+            end
+            #raise "found error/failure logs: #{log}" unless !(log.include? error_string)
+          end
         end
       end
     end
@@ -1334,8 +1335,8 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
   error_strings = ["error", "Error"]
   pods = BushSlicer::Pod.list(user: admin, project: project(namespace))
   pods.each do | pod |
-    # skip index management jobs
-    if pod.name.include? "elasticsearch-im-"
+    # skip index management jobs and not ready pods
+    if (pod.name.include? "elasticsearch-im-") || !(pod.ready?[:success])
       next
     end
     pod.containers.each do | container |
@@ -1352,9 +1353,6 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
           log = check_log(@result[:response], error_strings, ["can't remove non-existent inotify watch for"])
         when "kibana"
           log = check_log(@result[:response], error_strings, ["java.lang.UnsupportedOperationException"])
-        #ignore errors in https://issues.redhat.com/browse/LOG-2731
-        when "cluster-logging-operator"
-          log = check_log(@result[:response], error_strings, ["Reconcile Service"])
         else
           log = check_log(@result[:response], error_strings, nil)
         end
