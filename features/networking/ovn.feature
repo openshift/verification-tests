@@ -634,7 +634,7 @@ Feature: OVN related networking scenarios
     #Find apiVIP address of the cluster
     When I run the :get admin command with:
       | resource | infrastructure                                                         |
-      | o        | jsonpath={.items[*].status.platformStatus.vsphere.apiServerInternalIP} |
+      | o        | jsonpath={.items[*].status.platformStatus.*.apiServerInternalIP} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :apiVIP clipboard
     Given I store the ovnkube-master "north" leader pod in the clipboard
