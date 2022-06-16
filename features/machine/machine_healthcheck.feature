@@ -341,5 +341,5 @@ Feature: MachineHealthCheck Test Scenarios
     When I run oc create over "mhc_validations.yaml" replacing paths:
       | ["spec"]["unhealthyConditions"][0]["timeout"] | #{cb.timeout} |
     Then the output should match:
-      | timeout: Invalid value: ".*": spec.unhealthyConditions.timeout |
+      | timeout: Invalid value: ".*": spec.unhealthyConditions.*.timeout |
     """
