@@ -2,7 +2,7 @@ Feature: ONLY ONLINE Infra related scripts in this file
 
   # @author etrott@redhat.com
   # @case_id OCP-10142
-  Scenario: User cannot deploy a pod to an infra node
+  Scenario: OCP-10142 User cannot deploy a pod to an infra node
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tc532324/pod_nodeSelector_infra.yaml |
@@ -12,7 +12,7 @@ Feature: ONLY ONLINE Infra related scripts in this file
 
   # @author bingli@redhat.com
   # @case_id OCP-11230
-  Scenario: Specify runtime duration of run-once pods globally in master config
+  Scenario: OCP-11230 Specify runtime duration of run-once pods globally in master config
     Given I have a project
     When I run the :run client command with:
       | name    | run-once-pod     |

@@ -2,7 +2,7 @@ Feature: oc_secrets.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-12600
-  Scenario: Add secrets to serviceaccount via oc secrets add
+  Scenario: OCP-12600 Add secrets to serviceaccount via oc secrets add
     Given I have a project
     When I run the :secrets client command with:
       | action | new        |
@@ -54,7 +54,7 @@ Feature: oc_secrets.feature
   # @author qwang@redhat.com
   # @case_id OCP-12244
   @smoke
-  Scenario: CRUD operations on secrets
+  Scenario: OCP-12244 CRUD operations on secrets
     Given I have a project
     # 1.1 Create a secret with a non-existing namespace
     When I run the :create client command with:
@@ -165,7 +165,7 @@ Feature: oc_secrets.feature
 
   # @author xxia@redhat.com
   # @case_id OCP-11900
-  Scenario: Check name requirements for oc secret
+  Scenario: OCP-11900 Check name requirements for oc secret
     Given I have a project
     And I run the :get client command with:
       | resource      | project |
@@ -218,7 +218,7 @@ Feature: oc_secrets.feature
 
   # @author wjiang@redhat.com
   # @case_id OCP-11482
-  Scenario: Bundle secret will not load subdir and warning message will be displayed when -q is not present
+  Scenario: OCP-11482 Bundle secret will not load subdir and warning message will be displayed when -q is not present
     Given I have a project
     Given a "first/second/test" file is created with the following lines:
       |second test|

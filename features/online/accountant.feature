@@ -2,7 +2,7 @@ Feature: ONLY Accountant console related feature's scripts in this file
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-12754
-  Scenario: Cancel and resume service - UI
+  Scenario: OCP-12754 Cancel and resume service - UI
     Given I open accountant console in a browser
     When I run the :click_to_change_plan web action
     Then the step should succeed
@@ -23,7 +23,7 @@ Feature: ONLY Accountant console related feature's scripts in this file
   # @author yuwan@redhat.com
   # @case_id OCP-12758
   # @note this scenario requires a user who have pro cluster(1) left to resigster
-  Scenario: an existed Red Hat account's contact details can be pre-populated to accountant profile during registration
+  Scenario: OCP-12758 an existed Red Hat account's contact details can be pre-populated to accountant profile during registration
     Given I open accountant console in a browser
     When I run the :go_to_register_pro_cluster_page web action
     Then the step should succeed

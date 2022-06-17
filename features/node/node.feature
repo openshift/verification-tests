@@ -3,7 +3,7 @@ Feature: Node management
   # @author chaoyang@redhat.com
   # @case_id OCP-11084
   @admin
-  Scenario: admin can get nodes
+  Scenario: OCP-11084 admin can get nodes
     Given I have a project
     When I run the :get admin command with:
       |resource|nodes|
@@ -14,7 +14,7 @@ Feature: Node management
   # @case_id OCP-15111
   @admin
   @destructive
-  Scenario: Pod will be OOMKilled when memory request is more than node allocatable
+  Scenario: OCP-15111 Pod will be OOMKilled when memory request is more than node allocatable
     Given I have a project
     # Make sure when there are multi-node, you just modify one and schedule pods here
     Given I store the schedulable nodes in the :nodes clipboard

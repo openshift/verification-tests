@@ -3,7 +3,7 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9565
   @admin
-  Scenario: The pods in default namespace can communicate with all the other pods
+  Scenario: OCP-9565 The pods in default namespace can communicate with all the other pods
     Given the env is using multitenant network
     Given I have a project
     And evaluation of `project.name` is stored in the :u1p1 clipboard
@@ -85,7 +85,7 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9564
   @admin
-  Scenario: Only the pods nested in a same namespace can communicate with each other
+  Scenario: OCP-9564 Only the pods nested in a same namespace can communicate with each other
     Given the env is using multitenant network
     Given I have a project
     When I run the :create client command with:
@@ -125,7 +125,7 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9641
   @admin
-  Scenario: Make the network of given project be accessible to other projects
+  Scenario: OCP-9641 Make the network of given project be accessible to other projects
     # Create 3 projects and each contains 1 pod and 1 service
     Given the env is using multitenant network
     Given I have a project
@@ -275,7 +275,7 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-12659
   @admin
-  Scenario: Make the network of given projects be accessible globally
+  Scenario: OCP-12659 Make the network of given projects be accessible globally
     # Create 3 projects and each contains 1 pod and 1 service
     Given the env is using multitenant network
     Given I have a project
@@ -399,7 +399,7 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9646
   @admin
-  Scenario: Isolate the network for the project which already make network global
+  Scenario: OCP-9646 Isolate the network for the project which already make network global
     Given the env is using multitenant network
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard

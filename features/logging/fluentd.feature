@@ -4,7 +4,7 @@ Feature: fluentd related tests
   # @case_id OCP-10995
   @admin
   @destructive
-  Scenario: Check fluentd changes for common data model and index naming
+  Scenario: OCP-10995 Check fluentd changes for common data model and index naming
     Given I create a project with non-leading digit name
     And evaluation of `project` is stored in the :org_project clipboard
     When I run the :new_app client command with:

@@ -4,7 +4,7 @@ Feature: Testing ipfailover scenarios
   # @case_id OCP-9767
   @admin
   @destructive
-  Scenario: Configure a highly available network service
+  Scenario: OCP-9767 Configure a highly available network service
     Given the cluster is running on OpenStack
     And I switch to cluster admin pseudo user
     And I use the "default" project

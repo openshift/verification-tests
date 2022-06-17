@@ -4,7 +4,7 @@ Feature: taint toleration related scenarios
   # @case_id OCP-13542
   @admin
   @destructive
-  Scenario: Add default tolerations to pod when enable DefaultTolerationSecond
+  Scenario: OCP-13542 Add default tolerations to pod when enable DefaultTolerationSecond
     Given master config is merged with the following hash:
     """
     admissionConfig:

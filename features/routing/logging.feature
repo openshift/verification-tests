@@ -4,7 +4,7 @@ Feature: Testing HAProxy router logging related scenarios
   # @case_id OCP-19830
   @admin
   @destructive
-  Scenario: deploy haproxy router with an rsyslog sidecar container
+  Scenario: OCP-19830 deploy haproxy router with an rsyslog sidecar container
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
     And I use the router project

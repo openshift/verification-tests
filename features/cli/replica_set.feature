@@ -3,7 +3,7 @@ Feature: replicaSet related tests
   # @author pruan@redhat.com
   # @case_id OCP-10917
   @smoke
-  Scenario: Support endpoints of RS in OpenShift
+  Scenario: OCP-10917 Support endpoints of RS in OpenShift
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/replicaSet/tc533162/rs_endpoints.yaml |

@@ -2,7 +2,7 @@ Feature: memberships related features via web
 
   # @author etrott@redhat.com
   # @case_id OCP-11843
-  Scenario: Manage project membership about users
+  Scenario: OCP-11843 Manage project membership about users
     Given the master version >= "3.4"
     Given I have a project
     When I perform the :check_entry_content_on_membership web console action with:

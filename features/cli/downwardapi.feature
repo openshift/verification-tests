@@ -2,7 +2,7 @@ Feature: Downward API
 
   # @author qwang@redhat.com
   # @case_id OCP-10707
-  Scenario: Pods can get IPs via downward API under race condition
+  Scenario: OCP-10707 Pods can get IPs via downward API under race condition
     Given I have a project
     When I run the :create client command with:
       | filename  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/downwardapi/tc509097/pod-downwardapi-env.yaml |
@@ -15,7 +15,7 @@ Feature: Downward API
   # @author cryan@redhat.com
   # @case_id OCP-10628
   @smoke
-  Scenario: downward api pod name and pod namespace as env variables
+  Scenario: OCP-10628 downward api pod name and pod namespace as env variables
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/downwardapi/tc483203/downward-example.yaml |
@@ -31,7 +31,7 @@ Feature: Downward API
   # @author qwang@redhat.com
   # @case_id OCP-10708
   @smoke
-  Scenario: Container consume infomation from the downward API using a volume plugin
+  Scenario: OCP-10708 Container consume infomation from the downward API using a volume plugin
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/downwardapi/pod-dapi-volume.yaml |
@@ -96,7 +96,7 @@ Feature: Downward API
   # @author qwang@redhat.com
   # @case_id OCP-11977
   @admin
-  Scenario: Using resources downward API via volume plugin should be compatible with metadata downward API
+  Scenario: OCP-11977 Using resources downward API via volume plugin should be compatible with metadata downward API
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/downwardapi/dapi-resources-metadata-volume-pod.yaml |
@@ -178,7 +178,7 @@ Feature: Downward API
   # @author qwang@redhat.com
   # @case_id OCP-11618
   @admin
-  Scenario: Could expose resouces limits and requests via volume plugin from Downward APIs with magics keys
+  Scenario: OCP-11618 Could expose resouces limits and requests via volume plugin from Downward APIs with magics keys
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/downwardapi/dapi-resources-volume-magic-keys-pod.yaml |
@@ -228,7 +228,7 @@ Feature: Downward API
   # @author qwang@redhat.com
   # @case_id OCP-11816
   @admin
-  Scenario: Using resources downward API via ENV should be compatible with metadata downward API
+  Scenario: OCP-11816 Using resources downward API via ENV should be compatible with metadata downward API
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/downwardapi/dapi-resources-metadata-env-pod.yaml |

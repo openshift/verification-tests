@@ -4,7 +4,7 @@ Feature: Testing registry
   # @case_id OCP-12400
   @admin
   @destructive
-  Scenario: Prune images by command oadm_prune_images
+  Scenario: OCP-12400 Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
     And default docker-registry route is stored in the :registry_ip clipboard
     And I have a project
@@ -45,7 +45,7 @@ Feature: Testing registry
   # @author haowang@redhat.com
   # @case_id OCP-11310
   @admin
-  Scenario: Have size information for images pushed to internal registry
+  Scenario: OCP-11310 Have size information for images pushed to internal registry
     Given I have a project
     And I find a bearer token of the builder service account
     And default docker-registry route is stored in the :registry_ip clipboard

@@ -3,7 +3,7 @@ Feature: Testing route
   # @author zzhao@redhat.com
   # @case_id OCP-12122
   @smoke
-  Scenario: Alias will be invalid after removing it
+  Scenario: OCP-12122 Alias will be invalid after removing it
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/routing/header-test/dc.json |
@@ -27,7 +27,7 @@ Feature: Testing route
   # @author yadu@redhat.com
   # @case_id OCP-10660
   @smoke
-  Scenario: Service endpoint can be work well if the mapping pod ip is updated
+  Scenario: OCP-10660 Service endpoint can be work well if the mapping pod ip is updated
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
@@ -71,7 +71,7 @@ Feature: Testing route
   # @author zzhao@redhat.com
   # @case_id OCP-12652
   @smoke
-  Scenario: The later route should be HostAlreadyClaimed when there is a same host exist
+  Scenario: OCP-12652 The later route should be HostAlreadyClaimed when there is a same host exist
     Given I have a project
     When I run the :create client command with:
       | f |  https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/route_unsecure.json  |
@@ -88,7 +88,7 @@ Feature: Testing route
   # @author bmeng@redhat.com
   # @case_id OCP-12472
   @smoke
-  Scenario: Edge terminated route with custom cert
+  Scenario: OCP-12472 Edge terminated route with custom cert
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -135,7 +135,7 @@ Feature: Testing route
 
   # @author bmeng@redhat.com
   # @case_id OCP-12477
-  Scenario: Passthrough terminated route with custom cert
+  Scenario: OCP-12477 Passthrough terminated route with custom cert
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -168,7 +168,7 @@ Feature: Testing route
 
   # @author bmeng@redhat.com
   # @case_id OCP-12481
-  Scenario: Reencrypt terminated route with custom cert
+  Scenario: OCP-12481 Reencrypt terminated route with custom cert
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -217,7 +217,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-12562
-  Scenario: The path specified in route can work well for edge terminated
+  Scenario: OCP-12562 The path specified in route can work well for edge terminated
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
@@ -259,7 +259,7 @@ Feature: Testing route
   # @author zzhao@redhat.com
   # @case_id OCP-12564
   @smoke
-  Scenario: The path specified in route can work well for reencrypt terminated
+  Scenario: OCP-12564 The path specified in route can work well for reencrypt terminated
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -309,7 +309,7 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-9651
-  Scenario: Config insecureEdgeTerminationPolicy to Redirect for route
+  Scenario: OCP-9651 Config insecureEdgeTerminationPolicy to Redirect for route
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -352,7 +352,7 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-9650
-  Scenario: Config insecureEdgeTerminationPolicy to Allow for route
+  Scenario: OCP-9650 Config insecureEdgeTerminationPolicy to Allow for route
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -414,7 +414,7 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-12635
-  Scenario: Enabled Active/Active routers can do round-robin on multiple target IPs
+  Scenario: OCP-12635 Enabled Active/Active routers can do round-robin on multiple target IPs
     # The case need to run on multi-node env
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
@@ -452,7 +452,7 @@ Feature: Testing route
   # @author yadu@redhat.com
   # @case_id OCP-10024
   @smoke
-  Scenario: Route could NOT be updated after created
+  Scenario: OCP-10024 Route could NOT be updated after created
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/tc/tc470732/route_withouthost1.json |
@@ -466,7 +466,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-11036
-  Scenario: Set insecureEdgeTerminationPolicy to Redirect for passthrough route
+  Scenario: OCP-11036 Set insecureEdgeTerminationPolicy to Redirect for passthrough route
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -513,7 +513,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-11839
-  Scenario: Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
+  Scenario: OCP-11839 Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -570,7 +570,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13248
-  Scenario: The hostname should be converted to available route when met special character
+  Scenario: OCP-13248 The hostname should be converted to available route when met special character
     Given I have a project
     When I run the :create client command with:
       | f  |   https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
@@ -607,7 +607,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13753
-  Scenario: Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
+  Scenario: OCP-13753 Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -682,7 +682,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-14059
-  Scenario: Use the default destination CA of router if the route does not specify one for reencrypt route
+  Scenario: OCP-14059 Use the default destination CA of router if the route does not specify one for reencrypt route
     Given I have a project
     When I run the :create client command with:
       | f |  https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/reencrypt/reencrypt-without-all-cert.yaml |
@@ -695,7 +695,7 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-14678
-  Scenario: Only the host in whitelist could access the route - unsecure route
+  Scenario: OCP-14678 Only the host in whitelist could access the route - unsecure route
     Given I have a project
     And I have a header test service in the project
     And evaluation of `"haproxy.router.openshift.io/ip_whitelist=#{cb.req_headers["x-forwarded-for"]}"` is stored in the :my_whitelist clipboard
@@ -730,7 +730,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-15976
-  Scenario: The edge route should support HSTS
+  Scenario: OCP-15976 The edge route should support HSTS
     Given the master version >= "3.7"
     And I have a project
     When I run the :create client command with:
@@ -784,7 +784,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-16368
-  Scenario: The reencrypt route should support HSTS
+  Scenario: OCP-16368 The reencrypt route should support HSTS
     Given the master version >= "3.7"
     And I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/reencrypt/reencrypt-without-all-cert.yaml" replacing paths:

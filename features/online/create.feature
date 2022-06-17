@@ -38,7 +38,7 @@ Feature: ONLY ONLINE Create related feature's scripts in this file
 
   # @author etrott@redhat.com
   # @case_id OCP-10270
-  Scenario: Create Laravel application with a MySQL database using default template laravel-mysql-example
+  Scenario: OCP-10270 Create Laravel application with a MySQL database using default template laravel-mysql-example
     Given I have a project
     Then I run the :new_app client command with:
       | template | laravel-mysql-persistent |
@@ -52,7 +52,7 @@ Feature: ONLY ONLINE Create related feature's scripts in this file
 
   # @author yuwan@redhat.com
   # @case_id OCP-12687
-  Scenario: PyPi index can be used to providing dependencies for django-psql-example template	
+  Scenario: OCP-12687 PyPi index can be used to providing dependencies for django-psql-example template	
     Given I have a project
     When I run the :new_app client command with:
       | template | django-psql-persistent                                               |

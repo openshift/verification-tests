@@ -2,7 +2,7 @@ Feature: oc tag related scenarios
 
   # @author xxia@redhat.com
   # @case_id OCP-11496
-  Scenario: Tag an image into mutliple image streams
+  Scenario: OCP-11496 Tag an image into mutliple image streams
     Given I have a project
     When I run the :tag client command with:
       | source_type  | docker                     |
@@ -57,7 +57,7 @@ Feature: oc tag related scenarios
 
   # @author mcurlej@redhat.com
   # @case_id OCP-12154
-  Scenario: Tag should correctly add muptiple imagestreamtags to one imagestream
+  Scenario: OCP-12154 Tag should correctly add muptiple imagestreamtags to one imagestream
     Given I have a project
     When I run the :tag client command with:
       | source_type  | docker                  |

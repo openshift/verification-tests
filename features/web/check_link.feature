@@ -2,7 +2,7 @@ Feature: Check links in Openshift
 
   # @author yapei@redhat.com
   # @case_id OCP-9770
-  Scenario: check doc links in web
+  Scenario: OCP-9770 check doc links in web
     Given I store master major version in the clipboard
     # check documentation link in getting started instructions
     When I perform the :check_default_documentation_link_in_get_started web console action with:

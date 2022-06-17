@@ -2,7 +2,7 @@ Feature: bc/dc hooks related
 
   # @author xxing@redhat.com
   # @case_id OCP-11033
-  Scenario: Show hooks of recreate strategy DC
+  Scenario: OCP-11033 Show hooks of recreate strategy DC
     Given the master version > "3.4"
     Given I have a project
     When I run the :new_app client command with:

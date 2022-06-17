@@ -2,7 +2,7 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-11218
-  Scenario: kubectl describe pod should show qos tier info when pod without limits and request info
+  Scenario: OCP-11218 kubectl describe pod should show qos tier info when pod without limits and request info
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/hello-pod.json |
@@ -18,7 +18,7 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-11527
-  Scenario: kubectl describe pod should show qos tier info
+  Scenario: OCP-11527 kubectl describe pod should show qos tier info
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/quota/pod-notbesteffort.yaml |
@@ -50,7 +50,7 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-10729
-  Scenario: Implement supplemental groups for pod
+  Scenario: OCP-10729 Implement supplemental groups for pod
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tc510724/pod-supplementalGroups.yaml |
@@ -92,7 +92,7 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-11753
-  Scenario: Pod should be immediately deleted if it's not scheduled even if graceful termination period is set
+  Scenario: OCP-11753 Pod should be immediately deleted if it's not scheduled even if graceful termination period is set
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/graceful-delete/10.json |
@@ -108,7 +108,7 @@ Feature: pods related scenarios
   # @author cryan@redhat.com
   # @case_id OCP-10813
   # @bug_id 1324396
-  Scenario: Update ActiveDeadlineSeconds for pod
+  Scenario: OCP-10813 Update ActiveDeadlineSeconds for pod
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tc521546/hello-pod.json |
@@ -140,7 +140,7 @@ Feature: pods related scenarios
 
   # @author chuyu@redhat.com
   # @case_id OCP-10986
-  Scenario: Oauth provider info should be consumed in a pod
+  Scenario: OCP-10986 Oauth provider info should be consumed in a pod
     Given the master version >= "3.4"
     Given I have a project
     When I run the :new_app client command with:
@@ -158,7 +158,7 @@ Feature: pods related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-11055
-  Scenario: /dev/shm can be automatically shared among all of a pod's containers
+  Scenario: OCP-11055 /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project
     When I run oc create over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod_with_two_containers.json
     Then the step should succeed
@@ -206,7 +206,7 @@ Feature: pods related scenarios
 
   # @author chuyu@redhat.com
   # @case_id OCP-22283
-  Scenario: 4.0 Oauth provider info should be consumed in a pod
+  Scenario: OCP-22283 4.0 Oauth provider info should be consumed in a pod
     Given I have a project
     When I run the :new_app client command with:
       | docker_image     | aosqe/ruby-ex        |

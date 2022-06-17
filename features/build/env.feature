@@ -2,7 +2,7 @@ Feature: env.feature
 
   # @author shiywang@redhat.com
   # @case_id OCP-11543
-  Scenario: Can set env vars on buildconfig with new-app --env and --env-file
+  Scenario: OCP-11543 Can set env vars on buildconfig with new-app --env and --env-file
     Given I have a project
     When I run the :new_app client command with:
       | app_repo | ruby:2.2~https://github.com/openshift/ruby-hello-world |

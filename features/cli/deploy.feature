@@ -2,7 +2,7 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-12543
-  Scenario: Restart a failed deployment by oc deploy
+  Scenario: OCP-12543 Restart a failed deployment by oc deploy
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/dc-with-pre-mid-post.yaml |
@@ -31,7 +31,7 @@ Feature: deployment related features
   # @author xxing@redhat.com
   # @case_id OCP-10643
   @smoke
-  Scenario: Manually make deployment
+  Scenario: OCP-10643 Manually make deployment
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/manual.json |
@@ -68,7 +68,7 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-11695
-  Scenario: CLI rollback output to file
+  Scenario: OCP-11695 CLI rollback output to file
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
@@ -147,7 +147,7 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-11877
-  Scenario: CLI rollback with one component
+  Scenario: OCP-11877 CLI rollback with one component
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
@@ -185,7 +185,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12133
-  Scenario: Can't stop a deployment in Failed status
+  Scenario: OCP-12133 Can't stop a deployment in Failed status
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/test-stop-failed-deployment.json |
@@ -218,7 +218,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12246
-  Scenario: Stop a "Running" deployment
+  Scenario: OCP-12246 Stop a "Running" deployment
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/dc-with-pre-mid-post.yaml |
@@ -240,7 +240,7 @@ Feature: deployment related features
 
   # @author cryan@redhat.com
   # @case_id OCP-10648
-  Scenario: Rollback via CLI when previous version failed
+  Scenario: OCP-10648 Rollback via CLI when previous version failed
     Given I have a project
     When I run the :new_app client command with:
       | app_repo | aosqe/hello-openshift |
@@ -269,7 +269,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12528
-  Scenario: Make multiple deployment by oc deploy
+  Scenario: OCP-12528 Make multiple deployment by oc deploy
     Given I have a project
     And I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
@@ -290,7 +290,7 @@ Feature: deployment related features
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-10717
-  Scenario: View the logs of the latest deployment
+  Scenario: OCP-10717 View the logs of the latest deployment
     # check deploy log when deploying
     Given I have a project
     When I run the :run client command with:
@@ -318,7 +318,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-9563
-  Scenario: A/B Deployment
+  Scenario: OCP-9563 A/B Deployment
     Given I have a project
     When I run the :new_app client command with:
       | docker_image | <%= project_docker_repo %>openshift/deployment-example |
@@ -367,7 +367,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-9566
-  Scenario: Blue-Green Deployment
+  Scenario: OCP-9566 Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
       | docker_image | <%= project_docker_repo %>openshift/deployment-example:v1 |
@@ -399,7 +399,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12532
-  Scenario: Manually start deployment by oc deploy
+  Scenario: OCP-12532 Manually start deployment by oc deploy
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
@@ -412,7 +412,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-12468
-  Scenario: Pre and post deployment hooks
+  Scenario: OCP-12468 Pre and post deployment hooks
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/testhook.json |
@@ -432,7 +432,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10724
-  Scenario: deployment hook volume inheritance that volume name was null
+  Scenario: OCP-10724 deployment hook volume inheritance that volume name was null
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/tc510606/hooks-null-volume.json |
@@ -442,7 +442,7 @@ Feature: deployment related features
   # @author yadu@redhat.com
   # @case_id OCP-9567
   @smoke
-  Scenario: Recreate deployment strategy
+  Scenario: OCP-9567 Recreate deployment strategy
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/examples/deployment/recreate-example.yaml |
@@ -464,7 +464,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-11939
-  Scenario: start deployment when the latest deployment is completed
+  Scenario: OCP-11939 start deployment when the latest deployment is completed
     Given I have a project
     And I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
@@ -479,7 +479,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12056
-  Scenario: Manual scale dc will update the deploymentconfig's replicas
+  Scenario: OCP-12056 Manual scale dc will update the deploymentconfig's replicas
     Given I have a project
     And I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
@@ -503,7 +503,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-10728
-  Scenario: Inline deployer hook logs
+  Scenario: OCP-10728 Inline deployer hook logs
     Given I have a project
     And I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/Inline-logs.json |
@@ -520,7 +520,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11070
-  Scenario: Trigger info is retained for deployment caused by image changes
+  Scenario: OCP-11070 Trigger info is retained for deployment caused by image changes
     Given I have a project
     When I process and create "https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-stibuild.json"
     Then the step should succeed
@@ -536,7 +536,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11769
-  Scenario: Start new deployment when deployment running
+  Scenario: OCP-11769 Start new deployment when deployment running
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/testhook.json |
@@ -555,7 +555,7 @@ Feature: deployment related features
 
   # @author cryan@redhat.com
   # @case_id OCP-12151
-  Scenario: When the latest deployment failed auto rollback to the active deployment
+  Scenario: OCP-12151 When the latest deployment failed auto rollback to the active deployment
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
@@ -607,7 +607,7 @@ Feature: deployment related features
   # @author yinzhou@redhat.com
   # @case_id OCP-10617
   @admin
-  Scenario: DeploymentConfig should allow valid value of resource requirements
+  Scenario: OCP-10617 DeploymentConfig should allow valid value of resource requirements
     Given I have a project
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/quota/limits.yaml |
@@ -639,7 +639,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11221
-  Scenario: Scale up when deployment running
+  Scenario: OCP-11221 Scale up when deployment running
     Given I have a project
     When I run the :new_app client command with:
       | docker_image   | <%= project_docker_repo %>openshift/deployment-example |
@@ -659,7 +659,7 @@ Feature: deployment related features
 
   # @author qwang@redhat.com
   # @case_id OCP-12356
-  Scenario: configchange triggers deploy automatically
+  Scenario: OCP-12356 configchange triggers deploy automatically
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
@@ -683,7 +683,7 @@ Feature: deployment related features
   # @author yinzhou@redhat.com
   # @case_id OCP-11326
   @smoke
-  Scenario: Support verbs of Deployment in OpenShift
+  Scenario: OCP-11326 Support verbs of Deployment in OpenShift
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/extensions/deployment.yaml |
@@ -760,7 +760,7 @@ Feature: deployment related features
   # @author mcurlej@redhat.com
   # @case_id OCP-10902
   @smoke
-  Scenario: Auto cleanup old RCs
+  Scenario: OCP-10902 Auto cleanup old RCs
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/tc532411/history-limit-dc.yaml |
@@ -792,7 +792,7 @@ Feature: deployment related features
 
   # @author haowang@redhat.com
   # @case_id OCP-16443
-  Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
+  Scenario: OCP-16443 Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
     And I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/OCP-11384/application-template-stibuild.json"

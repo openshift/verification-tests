@@ -2,7 +2,7 @@ Feature: creating 'apps' with CLI
 
   # @author wsun@redhat.com
   # @case_id OCP-10593
-  Scenario: Could not create any context in non-existent project
+  Scenario: OCP-10593 Could not create any context in non-existent project
     Given I create a new application with:
       | docker image | openshift/ruby-20-centos7~https://github.com/openshift/ruby-hello-world |
       | name         | myapp          |
@@ -33,7 +33,7 @@ Feature: creating 'apps' with CLI
   # @author yinzhou@redhat.com
   # @case_id OCP-11761
   @admin
-  Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
+  Scenario: OCP-11761 Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod_with_special_fsGroup.json |
@@ -52,7 +52,7 @@ Feature: creating 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-12399
-  Scenario: Create an application from source code
+  Scenario: OCP-12399 Create an application from source code
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"
     Then the step should succeed

@@ -1,4 +1,5 @@
 Feature: some collection operations verification
+
   Scenario: substructs
     Given the expression should be true> cb.h1 = {metadata:{labels:{labelname: nil}}}
     And   the expression should be true> cb.h2 = {metadata:{labels:nil}}

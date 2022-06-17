@@ -2,7 +2,7 @@ Feature: scenarios related to catalog page
 
   # @author chali@redhat.com
   # @case_id OCP-10989
-  Scenario: Check the browse catalog tab on "Add to Project" page
+  Scenario: OCP-10989 Check the browse catalog tab on "Add to Project" page
     Given the master version <= "3.6"
     Given I create a new project
     When I perform the :goto_overview_page web console action with:

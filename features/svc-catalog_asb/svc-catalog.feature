@@ -4,7 +4,7 @@ Feature: Service-catalog related scenarios
   # @case_id OCP-15600
   @admin
   @destructive
-  Scenario: service-catalog walkthrough example
+  Scenario: OCP-15600 service-catalog walkthrough example
     Given I have a project
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
     And I create a new project
@@ -92,7 +92,7 @@ Feature: Service-catalog related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-14833
   @admin
-  Scenario: Confirm service-catalog image working well
+  Scenario: OCP-14833 Confirm service-catalog image working well
     When I switch to cluster admin pseudo user
     And I use the "kube-service-catalog" project
     Given 1 pods become ready with labels:
@@ -131,7 +131,7 @@ Feature: Service-catalog related scenarios
   # @case_id OCP-15604
   @admin
   @destructive
-  Scenario: Create/get/update/delete for ClusterServiceBroker resource	
+  Scenario: OCP-15604 Create/get/update/delete for ClusterServiceBroker resource	
     Given I have a project
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
 
@@ -211,7 +211,7 @@ Feature: Service-catalog related scenarios
   # @case_id OCP-15602
   @admin
   @destructive
-  Scenario: Create/get/update/delete for Clusterserviceclass/Clusterserviceplan resource
+  Scenario: OCP-15602 Create/get/update/delete for Clusterserviceclass/Clusterserviceplan resource
     Given I have a project
 
     # Deploy ups broker

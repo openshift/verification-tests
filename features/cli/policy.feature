@@ -2,7 +2,7 @@ Feature: change the policy of user/service account
 
   # @author xxing@redhat.com
   # @case_id OCP-11074
-  Scenario: User can view ,add, remove and modify roleBinding via admin role user
+  Scenario: OCP-11074 User can view ,add, remove and modify roleBinding via admin role user
     Given I have a project
     When I run the :get client command with:
       | resource      | rolebinding |
@@ -50,7 +50,7 @@ Feature: change the policy of user/service account
   # @author xxing@redhat.com
   # @case_id OCP-12430
   @admin
-  Scenario: Could get projects for new role which has permission to get projects
+  Scenario: OCP-12430 Could get projects for new role which has permission to get projects
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/policy/clustergetproject.json |
     Then the step should succeed
@@ -125,7 +125,7 @@ Feature: change the policy of user/service account
   # @author wsun@redhat.com
   # @case_id OCP-11273
   @admin
-  Scenario: UserA could impersonate UserB
+  Scenario: OCP-11273 UserA could impersonate UserB
     Given I have a project
     Given cluster role "sudoer" is added to the "first" user
     When I run the :create client command with:
@@ -143,7 +143,7 @@ Feature: change the policy of user/service account
   # @author chezhang@redhat.com
   # @case_id OCP-10211
   @admin
-  Scenario: DaemonSet only support Always restartPolicy
+  Scenario: OCP-10211 DaemonSet only support Always restartPolicy
     Given I have a project
     Given cluster role "sudoer" is added to the "first" user
     When I run the :create client command with:
@@ -165,7 +165,7 @@ Feature: change the policy of user/service account
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10447
-  Scenario: Basic user could not get deeper storageclass object info
+  Scenario: OCP-10447 Basic user could not get deeper storageclass object info
     Given I have a project
     When I run the :get client command with:
       | resource | storageclass |
@@ -208,7 +208,7 @@ Feature: change the policy of user/service account
   # @author chaoyang@redhat.com
   # @case_id OCP-10448
   @admin
-  Scenario: User with role storage-admin can check deeper storageclass object info
+  Scenario: OCP-10448 User with role storage-admin can check deeper storageclass object info
     Given I have a project
     And admin ensures "sc-<%= project.name %>" storageclasses is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
@@ -263,7 +263,7 @@ Feature: change the policy of user/service account
   # @author chaoyang@redhat.com
   # @case_id OCP-10466
   @admin
-  Scenario: User with role storage-admin can check deeper pv object info
+  Scenario: OCP-10466 User with role storage-admin can check deeper pv object info
     Given I have a project
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
@@ -321,7 +321,7 @@ Feature: change the policy of user/service account
   # @author chaoyang@redhat.com
   # @case_id OCP-10467
   @admin
-  Scenario: User with role storage-admin can get pvc object info
+  Scenario: OCP-10467 User with role storage-admin can get pvc object info
     Given I have a project
     And evaluation of `project.name` is stored in the :project clipboard
 
@@ -370,7 +370,7 @@ Feature: change the policy of user/service account
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10465
-  Scenario: Basic user could not get pv object info
+  Scenario: OCP-10465 Basic user could not get pv object info
     Given I have a project
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"] | pvc-<%= project.name %> |
@@ -399,7 +399,7 @@ Feature: change the policy of user/service account
 
   # @author chuyu@redhat.com
   # @case_id OCP-9551
-  Scenario: User can know if he can create podspec against the current scc rules via CLI
+  Scenario: OCP-9551 User can know if he can create podspec against the current scc rules via CLI
     Given I have a project
     When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json"
     Then the step should succeed
@@ -431,7 +431,7 @@ Feature: change the policy of user/service account
   # @author chuyu@redhat.com
   # @case_id OCP-9552
   @admin
-  Scenario: User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
+  Scenario: OCP-9552 User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
     Given I have a project
     When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Then the step should succeed
@@ -487,7 +487,7 @@ Feature: change the policy of user/service account
 
   # @author chuyu@redhat.com
   # @case_id OCP-9553
-  Scenario: User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
+  Scenario: OCP-9553 User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
     Given I have a project
     When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
     Then the step should succeed

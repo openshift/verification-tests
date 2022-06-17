@@ -2,7 +2,7 @@ Feature: services related feature on web console
 
   # @author wsun@redhat.com
   # @case_id OCP-10602
-  Scenario: Access service pages from web console
+  Scenario: OCP-10602 Access service pages from web console
     Given I have a project
     # oc process -f file | oc create -f -
     When I process and create "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/tc/tc477695/hello.json"
@@ -72,7 +72,7 @@ Feature: services related feature on web console
 
   # @author etrott@redhat.com
   # @case_id OCP-10359
-  Scenario: Group services on overview page
+  Scenario: OCP-10359 Group services on overview page
     # Given the master version >= "3.4"
     Given I create a new project
     When I run the :create client command with:

@@ -3,7 +3,7 @@ Feature: SCC policy related scenarios
   # @author pruan@redhat.com
   # @case_id OCP-11762
   @admin
-  Scenario: deployment hook volume inheritance with hostPath volume
+  Scenario: OCP-11762 deployment hook volume inheritance with hostPath volume
     Given I have a project
     # Create hostdir pod again with new SCC
     When I run the :create admin command with:
@@ -28,7 +28,7 @@ Feature: SCC policy related scenarios
   # @author yinzhou@redhat.com
   # @case_id OCP-11775
   @admin
-  Scenario: Create or update scc with illegal capability name should fail with prompt message
+  Scenario: OCP-11775 Create or update scc with illegal capability name should fail with prompt message
     Given I have a project
     Given admin ensures "scc-cap" scc is deleted after scenario
     Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/scc_capabilities.yaml"

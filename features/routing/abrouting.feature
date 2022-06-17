@@ -2,7 +2,7 @@ Feature: Testing abrouting
 
   # @author yadu@redhat.com
   # @case_id OCP-12076
-  Scenario: Set backends weight for unsecure route
+  Scenario: OCP-12076 Set backends weight for unsecure route
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/caddy-docker.json |
@@ -80,7 +80,7 @@ Feature: Testing abrouting
 
   # @author yadu@redhat.com
   # @case_id OCP-11970
-  Scenario: Set backends weight for reencrypt route
+  Scenario: OCP-11970 Set backends weight for reencrypt route
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -186,7 +186,7 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-13519
   @admin
-  Scenario: The edge route with multiple service will set load balance policy to RoundRobin by default
+  Scenario: OCP-13519 The edge route with multiple service will set load balance policy to RoundRobin by default
     #Create pod/service/route
     Given I have a project
     When I run the :create client command with:
@@ -272,7 +272,7 @@ Feature: Testing abrouting
 
   # @author yadu@redhat.com
   # @case_id OCP-15910
-  Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
+  Scenario: OCP-15910 Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
     # Create pods and services
     Given I have a project
     When I run the :create client command with:
@@ -341,7 +341,7 @@ Feature: Testing abrouting
 
   # @author yadu@redhat.com
   # @case_id OCP-15994
-  Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
+  Scenario: OCP-15994 Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
     # Create pods and services
     Given I have a project
     When I run the :create client command with:

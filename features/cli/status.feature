@@ -2,7 +2,7 @@ Feature: Check status via oc status, wait etc
 
   # @author yapei@redhat.com
   # @case_id OCP-11147
-  Scenario: Show RC info and indicate bad secrets reference in 'oc status'
+  Scenario: OCP-11147 Show RC info and indicate bad secrets reference in 'oc status'
     Given I have a project
 
     # Check standalone RC info is dispalyed in oc status output

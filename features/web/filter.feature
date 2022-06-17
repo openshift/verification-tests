@@ -2,7 +2,7 @@ Feature: filter on create page
 
   # @author yanpzhan@redhat.com
   # @case_id OCP-11077
-  Scenario: Filter resources by labels under Browse page
+  Scenario: OCP-11077 Filter resources by labels under Browse page
     Given I have a project
     When I perform the :create_app_from_image web console action with:
       | project_name | <%= project.name %>                        |
@@ -206,7 +206,7 @@ Feature: filter on create page
 
   # @author yanpzhan@redhat.com
   # @case_id OCP-11698
-  Scenario: Display existing labels in label suggestion list according to different resources
+  Scenario: OCP-11698 Display existing labels in label suggestion list according to different resources
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/python:latest                |

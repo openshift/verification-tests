@@ -3,7 +3,7 @@ Feature: ResourceQuata for storage
   # @author jhou@redhat.com
   # @case_id OCP-14173
   @admin
-  Scenario: Requested storage can not exceed the namespace's storage quota
+  Scenario: OCP-14173 Requested storage can not exceed the namespace's storage quota
     Given I have a project
     And I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
@@ -62,7 +62,7 @@ Feature: ResourceQuata for storage
   # @author jhou@redhat.com
   # @case_id OCP-14382
   @admin
-  Scenario: Setting quota for a StorageClass
+  Scenario: OCP-14382 Setting quota for a StorageClass
     Given I have a project
     And I have a nfs-provisioner service in the project
     And I switch to cluster admin pseudo user

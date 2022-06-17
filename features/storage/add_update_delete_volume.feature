@@ -3,7 +3,7 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
   # @author chaoyang@redhat.com
   # @case_id OCP-10284
   @smoke
-  Scenario: Check add or remove volume from dc works fine
+  Scenario: OCP-10284 Check add or remove volume from dc works fine
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mongodb:latest   |

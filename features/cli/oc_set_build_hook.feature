@@ -3,7 +3,7 @@ Feature: oc_set_build_hook
   # @author cryan@redhat.com
   # @case_id OCP-11602
   # @bug_id 1351797
-  Scenario: Set post-build-commit on buildconfig via oc set build-hook
+  Scenario: OCP-11602 Set post-build-commit on buildconfig via oc set build-hook
     Given I have a project
     When I run the :new_app client command with:
       | template | rails-postgresql-example |

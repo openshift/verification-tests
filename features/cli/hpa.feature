@@ -2,7 +2,7 @@ Feature: hpa scale
 
   # @author chezhang@redhat.com
   # @case_id OCP-10931
-  Scenario: HPA shouldn't scale up target if the replicas of dc is 0
+  Scenario: OCP-10931 HPA shouldn't scale up target if the replicas of dc is 0
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/hpa/dc-hello-openshift.yaml |
@@ -36,7 +36,7 @@ Feature: hpa scale
 
   # @author chezhang@redhat.com
   # @case_id OCP-11338
-  Scenario: HPA shouldn't scale up target if the replicas of rc is 0
+  Scenario: OCP-11338 HPA shouldn't scale up target if the replicas of rc is 0
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/hpa/rc-hello-openshift.yaml |
@@ -70,7 +70,7 @@ Feature: hpa scale
   # @author chezhang@redhat.com
   # @case_id OCP-11259
   @smoke
-  Scenario: Creates autoscaler for replication controller by oc autoscale
+  Scenario: OCP-11259 Creates autoscaler for replication controller by oc autoscale
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/hpa/rc-hello-openshift.yaml |
@@ -117,7 +117,7 @@ Feature: hpa scale
 
   # @author chezhang@redhat.com
   # @case_id OCP-11576
-  Scenario: Creates autoscaler for replication controller with invalid value
+  Scenario: OCP-11576 Creates autoscaler for replication controller with invalid value
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/hpa/rc-hello-openshift.yaml |

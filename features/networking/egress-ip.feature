@@ -2,7 +2,7 @@ Feature: Egress IP related features
 
   # @author bmeng@redhat.com
   # @case_id OCP-15465
-  Scenario: Only cluster admin can add/remove egressIPs on hostsubnet
+  Scenario: OCP-15465 Only cluster admin can add/remove egressIPs on hostsubnet
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
 
@@ -16,7 +16,7 @@ Feature: Egress IP related features
 
   # @author bmeng@redhat.com
   # @case_id OCP-15466
-  Scenario: Only cluster admin can add/remove egressIPs on netnamespaces
+  Scenario: OCP-15466 Only cluster admin can add/remove egressIPs on netnamespaces
     # Try to add the egress ip to the netnamespace with normal user
     Given I have a project
     And evaluation of `project.name` is stored in the :project clipboard
@@ -30,7 +30,7 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15471
   @admin
-  Scenario: All the pods egress connection will get out through the egress IP if the egress IP is set to netns and egress node can host the IP
+  Scenario: OCP-15471 All the pods egress connection will get out through the egress IP if the egress IP is set to netns and egress node can host the IP
     Given the cluster is running on OpenStack
     And the env is using multitenant or networkpolicy network
     Given I select a random node's host

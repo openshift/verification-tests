@@ -3,7 +3,7 @@ Feature: idle service related scenarios
   # @author hongli@redhat.com
   # @case_id OCP-10935
   @smoke
-  Scenario: Pod can be changed to un-idle when there is unsecure or edge or passthrough route coming
+  Scenario: OCP-10935 Pod can be changed to un-idle when there is unsecure or edge or passthrough route coming
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/list_for_caddy.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
@@ -92,7 +92,7 @@ Feature: idle service related scenarios
 
   # @author hongli@redhat.com
   # @case_id OCP-13837
-  Scenario: Pod can be changed to un-idle when there is reencrypt route coming
+  Scenario: OCP-13837 Pod can be changed to un-idle when there is reencrypt route coming
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/list_for_caddy.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |

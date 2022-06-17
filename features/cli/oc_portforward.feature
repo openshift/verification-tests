@@ -2,7 +2,7 @@ Feature: oc_portforward.feature
 
   # @author pruan@redhat.com
   # @case_id OCP-11195
-  Scenario: Forward multi local ports to a pod
+  Scenario: OCP-11195 Forward multi local ports to a pod
     Given I have a project
     And evaluation of `rand(5000..7999)` is stored in the :porta clipboard
     And evaluation of `rand(5000..7999)` is stored in the :portb clipboard

@@ -3,7 +3,7 @@ Feature: Testing haproxy router
   # @author zzhao@redhat.com
   # @case_id OCP-9736
   @admin
-  Scenario: HTTP response header should return for default haproxy 503
+  Scenario: OCP-9736 HTTP response header should return for default haproxy 503
     Given I switch to cluster admin pseudo user
     And I use the router project
     And all default router pods become ready
@@ -14,7 +14,7 @@ Feature: Testing haproxy router
   # @author bmeng@redhat.com
   # @case_id OCP-11903
   @smoke
-  Scenario: haproxy cookies based sticky session for unsecure routes
+  Scenario: OCP-11903 haproxy cookies based sticky session for unsecure routes
     #create route and service which has two endpoints
     Given I have a project
     When I run the :create client command with:
@@ -67,7 +67,7 @@ Feature: Testing haproxy router
 
   # @author bmeng@redhat.com
   # @case_id OCP-11130
-  Scenario: haproxy cookies based sticky session for edge termination routes
+  Scenario: OCP-11130 haproxy cookies based sticky session for edge termination routes
     #create route and service which has two endpoints
     Given I have a project
     When I run the :create client command with:
@@ -127,7 +127,7 @@ Feature: Testing haproxy router
   # @case_id OCP-11583
   @admin
   @destructive
-  Scenario: Router with specific ROUTE_LABELS will only work for specific routes
+  Scenario: OCP-11583 Router with specific ROUTE_LABELS will only work for specific routes
     Given admin ensures new router pod becomes ready after following env added:
       | ROUTE_LABELS=router=router1 |
 
@@ -201,7 +201,7 @@ Feature: Testing haproxy router
   # @case_id OCP-11549
   @admin
   @destructive
-  Scenario: Haproxy router health check will use 1936 port if user disable the stats port
+  Scenario: OCP-11549 Haproxy router health check will use 1936 port if user disable the stats port
     Given I switch to cluster admin pseudo user
     And I use the router project
     And default router image is stored into the :default_router_image clipboard
@@ -230,7 +230,7 @@ Feature: Testing haproxy router
   # @case_id OCP-12651
   @admin
   @destructive
-  Scenario: The route auto generated can be accessed using the default cert
+  Scenario: OCP-12651 The route auto generated can be accessed using the default cert
     Given I switch to cluster admin pseudo user
     And I use the router project
     And default router image is stored into the :default_router_image clipboard
@@ -291,7 +291,7 @@ Feature: Testing haproxy router
   # @case_id OCP-11236
   @admin
   @destructive
-  Scenario: Set reload time for haproxy router script - Create routes
+  Scenario: OCP-11236 Set reload time for haproxy router script - Create routes
     # prepare router
     Given default router is disabled and replaced by a duplicate
     And I switch to cluster admin pseudo user
@@ -388,7 +388,7 @@ Feature: Testing haproxy router
 
   # @author bmeng@redhat.com
   # @case_id OCP-11619
-  Scenario: Limit the number of TCP connection per IP in specified time period
+  Scenario: OCP-11619 Limit the number of TCP connection per IP in specified time period
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
@@ -433,7 +433,7 @@ Feature: Testing haproxy router
   # @author hongli@redhat.com
   # @case_id OCP-15044
   @admin
-  Scenario: The backend health check interval of unsecure route can be set by annotation
+  Scenario: OCP-15044 The backend health check interval of unsecure route can be set by annotation
     Given I switch to cluster admin pseudo user
     And I use the router project
     Given all default router pods become ready
@@ -471,7 +471,7 @@ Feature: Testing haproxy router
   # @author hongli@redhat.com
   # @case_id OCP-15049
   @admin
-  Scenario: The backend health check interval of edge route can be set by annotation
+  Scenario: OCP-15049 The backend health check interval of edge route can be set by annotation
     Given I switch to cluster admin pseudo user
     And I use the router project
     Given all default router pods become ready
@@ -509,7 +509,7 @@ Feature: Testing haproxy router
 
   # @author bmeng@redhat.com
   # @case_id OCP-10043
-  Scenario: Set balance leastconn for passthrough routes
+  Scenario: OCP-10043 Set balance leastconn for passthrough routes
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
@@ -557,7 +557,7 @@ Feature: Testing haproxy router
 
   # @author yadu@redhat.com
   # @case_id OCP-11679
-  Scenario: Disable haproxy hash based sticky session for unsecure routes
+  Scenario: OCP-11679 Disable haproxy hash based sticky session for unsecure routes
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
@@ -597,7 +597,7 @@ Feature: Testing haproxy router
   # @case_id OCP-11437
   @admin
   @destructive
-  Scenario: the routes should be loaded on initial sync
+  Scenario: OCP-11437 the routes should be loaded on initial sync
     Given I have a project
     And evaluation of `project.name` is stored in the :proj_name clipboard
     When I run the :create client command with:
@@ -634,7 +634,7 @@ Feature: Testing haproxy router
   # @case_id OCP-12923
   @admin
   @destructive
-  Scenario: same host with different path can be admitted
+  Scenario: OCP-12923 same host with different path can be admitted
     Given admin ensures new router pod becomes ready after following env added:
       | ROUTER_DISABLE_NAMESPACE_OWNERSHIP_CHECK=true  |
 
@@ -731,7 +731,7 @@ Feature: Testing haproxy router
 
   # @author hongli@redhat.com
   # @case_id OCP-15872
-  Scenario: can set cookie name for unsecure routes by annotation
+  Scenario: OCP-15872 can set cookie name for unsecure routes by annotation
     #create route and service which has two endpoints
     Given the master version >= "3.7"
     Given I have a project
@@ -773,7 +773,7 @@ Feature: Testing haproxy router
 
   # @author hongli@redhat.com
   # @case_id OCP-15873
-  Scenario: can set cookie name for edge routes by annotation
+  Scenario: OCP-15873 can set cookie name for edge routes by annotation
     #create route and service which has two endpoints
     Given the master version >= "3.7"
     Given I have a project
@@ -820,7 +820,7 @@ Feature: Testing haproxy router
   # @case_id OCP-15457
   @admin
   @destructive
-  Scenario: The router configuration should be loaded immediately after the namespace label added
+  Scenario: OCP-15457 The router configuration should be loaded immediately after the namespace label added
     Given the master version >= "3.7"
     Given admin ensures new router pod becomes ready after following env added:
       | NAMESPACE_LABELS=team=red |

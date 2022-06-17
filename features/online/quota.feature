@@ -3,7 +3,7 @@ Feature: ONLY ONLINE Quota related scripts in this file
   # @author bingli@redhat.com
   # @case_id OCP-13171
   # @case_id OCP-12700
-  Scenario: CRUD operation to the resource quota as project owner
+  Scenario: OCP-13171 CRUD operation to the resource quota as project owner
     Given I have a project
     When I run the :describe client command with:
       | resource | rolebinding   |
@@ -72,7 +72,7 @@ Feature: ONLY ONLINE Quota related scripts in this file
 
   # @author yuwei@redhat.com
   # @case_id OCP-10291
-  Scenario: Can not create resource exceed the hard quota in appliedclusterresourcequota  
+  Scenario: OCP-10291 Can not create resource exceed the hard quota in appliedclusterresourcequota  
     Given I have a project  
     And evaluation of `BushSlicer::AppliedClusterResourceQuota.list(user: user, project: project)` is stored in the :acrq clipboard
     And evaluation of `cb.acrq.find{|o|o.name.end_with?("-compute")}` is stored in the :memory_crq clipboard

@@ -3,7 +3,7 @@ Feature: login related scenario
   # @author wjiang@redhat.com
   # @case_id OCP-12239
   @smoke
-  Scenario: login and logout via web
+  Scenario: OCP-12239 login and logout via web
     Given I login via web console
     Given I run the :logout web console action
     Then the step should succeed
@@ -13,7 +13,7 @@ Feature: login related scenario
 
   # @author xxing@redhat.com
   # @case_id OCP-9771
-  Scenario: User could not access pages directly without login first
+  Scenario: OCP-9771 User could not access pages directly without login first
     Given I have a project
     # Disable default login
     When I perform the :new_project_navigate web console action with:
@@ -27,7 +27,7 @@ Feature: login related scenario
 
   # @author xxing@redhat.com
   # @case_id OCP-12189
-  Scenario: The page should redirect to login page when access session protected pages after session expired
+  Scenario: OCP-12189 The page should redirect to login page when access session protected pages after session expired
     When I create a new project via web
     Then the step should succeed
     #make token expired

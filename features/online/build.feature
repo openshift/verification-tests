@@ -2,7 +2,7 @@ Feature: ONLY ONLINE related feature's scripts in this file
 
   # @author bingli@redhat.com
   # @case_id OCP-9781
-  Scenario: cli disables Docker builds and custom builds and allow only sti builds
+  Scenario: OCP-9781 cli disables Docker builds and custom builds and allow only sti builds
     Given I have a project
     When I run the :new_build client command with:
       | app_repo | centos/ruby-22-centos7~https://github.com/openshift/ruby-hello-world.git |

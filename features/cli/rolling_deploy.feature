@@ -2,7 +2,7 @@ Feature: rolling deployment related scenarios
 
   # @author pruan@redhat.com
   # @case_id OCP-12359
-  Scenario: Rolling-update pods with default value for maxSurge/maxUnavailable
+  Scenario: OCP-12359 Rolling-update pods with default value for maxSurge/maxUnavailable
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/rolling.json |

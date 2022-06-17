@@ -3,7 +3,7 @@ Feature: custombuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-11443
   @admin
-  Scenario: Build with custom image - origin-custom-docker-builder
+  Scenario: OCP-11443 Build with custom image - origin-custom-docker-builder
     Given cluster role "system:build-strategy-custom" is added to the "first" user
     Then the step should succeed
     Given I have a project

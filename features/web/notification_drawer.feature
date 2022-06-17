@@ -2,7 +2,7 @@
 
   # @author yapei@redhat.com
   # @case_id OCP-15231
-  Scenario: Check notification goes into drawer in its own project
+  Scenario: OCP-15231 Check notification goes into drawer in its own project
     Given the master version >= "3.7"
     # Create 2 projects, add 'python' app to 1st project, add 'php' app to 2nd project
     Given I have a project

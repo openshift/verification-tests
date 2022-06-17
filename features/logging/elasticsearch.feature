@@ -4,7 +4,7 @@ Feature: elasticsearch related tests
   # @case_id OCP-16688
   @admin
   @destructive
-  Scenario: The journald log can be retrived from elasticsearch
+  Scenario: OCP-16688 The journald log can be retrived from elasticsearch
     Given I create a project with non-leading digit name
     And logging service is installed in the system
     And I run commands on the host:
@@ -35,7 +35,7 @@ Feature: elasticsearch related tests
   # @case_id OCP-11266
   @admin
   @destructive
-  Scenario: Use index names of project_name.project_uuid.xxx in Elasticsearch
+  Scenario: OCP-11266 Use index names of project_name.project_uuid.xxx in Elasticsearch
     Given the master version < "3.4"
     Given I create a project with non-leading digit name
     And logging service is installed in the system

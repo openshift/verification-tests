@@ -4,7 +4,7 @@ Feature: Testing ingress object
   # @case_id OCP-11069
   @admin
   @destructive
-  Scenario: haproxy support ingress object
+  Scenario: OCP-11069 haproxy support ingress object
     Given required cluster roles are added to router service account for ingress
     And admin ensures new router pod becomes ready after following env added:
       | ROUTER_ENABLE_INGRESS=true |

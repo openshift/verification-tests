@@ -2,7 +2,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11633
-  Scenario: CLI - Idle all the service in the same project
+  Scenario: OCP-11633 CLI - Idle all the service in the same project
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/rc/idle-rc-1.yaml |
@@ -43,7 +43,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11980
-  Scenario: CLI - Idle service by label
+  Scenario: OCP-11980 CLI - Idle service by label
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/rc/idle-rc-2.yaml |
@@ -78,7 +78,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-12085
-  Scenario: CLI - Idle service from file
+  Scenario: OCP-12085 CLI - Idle service from file
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/rc/idle-rc-2.yaml |
@@ -118,7 +118,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-12169
-  Scenario: CLI - Idle service with dry-run
+  Scenario: OCP-12169 CLI - Idle service with dry-run
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/rc/idle-rc-2.yaml |
@@ -148,7 +148,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-10941
-  Scenario: Idling service with dc
+  Scenario: OCP-10941 Idling service with dc
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/idling-echo-server.yaml |
@@ -212,7 +212,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11345
-  Scenario: Idling service with rc
+  Scenario: OCP-11345 Idling service with rc
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/rc/idle-rc-2.yaml |

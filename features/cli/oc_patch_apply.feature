@@ -3,7 +3,7 @@ Feature: oc patch/apply related scenarios
   # @author xxia@redhat.com
   # @case_id OCP-10696
   @smoke
-  Scenario: oc patch can update one or more fields of rescource
+  Scenario: OCP-10696 oc patch can update one or more fields of rescource
     Given I have a project
     And I run the :run client command with:
       | name      | hello             |

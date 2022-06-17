@@ -2,7 +2,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
 
   # @author bingli@redhat.com
   # @case_id OCP-9967
-  Scenario: Delete pod with mounting error
+  Scenario: OCP-9967 Delete pod with mounting error
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/online/tc526564/pod_volumetest.json |
@@ -35,7 +35,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
 
   # @author yasun@redhat.com
   # @case_id OCP-9809
-  Scenario: Pod should not create directories within /var/lib/docker/volumes/ on nodes
+  Scenario: OCP-9809 Pod should not create directories within /var/lib/docker/volumes/ on nodes
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/online/tc526564/pod_volumetest.json |
@@ -57,7 +57,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
 
   # @author yasun@redhat.com
   # @case_id OCP-13108
-  Scenario: Basic user could not get pv object info
+  Scenario: OCP-13108 Basic user could not get pv object info
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/claim.json" replacing paths:
       | ["metadata"]["name"]                           | ebsc-<%= project.name %> |
@@ -97,7 +97,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
 
   # @author yasun@redhat.com
   # @case_id OCP-9923
-  Scenario: Claim requesting to get the maximum capacity
+  Scenario: OCP-9923 Claim requesting to get the maximum capacity
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/online/dynamic_persistent_volumes/pvc-equal.yaml |
@@ -150,7 +150,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
 
   # @author yasun@redhat.com
   # @case_id OCP-9792
-  Scenario: Volume emptyDir is limited in the Pod in online openshift
+  Scenario: OCP-9792 Volume emptyDir is limited in the Pod in online openshift
     Given I have a project
     And evaluation of `project.mcs(user: user)` is stored in the :proj_selinux_options clipboard
     And evaluation of `project.supplemental_groups(user: user).begin` is stored in the :supplemental_groups clipboard

@@ -2,7 +2,7 @@ Feature: secrets related scenarios
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10725
-  Scenario: deployment hook volume inheritance --with secret volume
+  Scenario: OCP-10725 deployment hook volume inheritance --with secret volume
     Given I have a project
     When I run the :secrets client command with:
       | action | new        |
@@ -27,7 +27,7 @@ Feature: secrets related scenarios
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12290
-  Scenario: Create new secrets for ssh authentication
+  Scenario: OCP-12290 Create new secrets for ssh authentication
     Given I have a project
     When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cases/508971/id_rsa"
     When I run the :oc_secrets_new_sshauth client command with:
@@ -59,7 +59,7 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12281
   @smoke
-  Scenario: Pods do not have access to each other's secrets in the same namespace
+  Scenario: OCP-12281 Pods do not have access to each other's secrets in the same namespace
     Given I have a project
     When I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483168/first-secret.json |
@@ -100,7 +100,7 @@ Feature: secrets related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-12310
-  Scenario: Pods do not have access to each other's secrets with the same secret name in different namespaces
+  Scenario: OCP-12310 Pods do not have access to each other's secrets with the same secret name in different namespaces
     Given I have a project
     Given evaluation of `project.name` is stored in the :project0 clipboard
     When I run the :create client command with:
@@ -135,7 +135,7 @@ Feature: secrets related scenarios
 
   # @author cryan@redhat.com
   # @case_id OCP-10690
-  Scenario: Add an arbitrary list of secrets to custom builds
+  Scenario: OCP-10690 Add an arbitrary list of secrets to custom builds
     Given I have a project
     Given an 8 characters random string of type :dns is stored into the :pass1 clipboard
     Given an 8 characters random string of type :dns is stored into the :pass2 clipboard
@@ -240,7 +240,7 @@ Feature: secrets related scenarios
 
   # @author xiuwang@redhat.com
   # @case_id OCP-10851
-  Scenario: Build from private repo with/without secret of token --persistent gitserver
+  Scenario: OCP-10851 Build from private repo with/without secret of token --persistent gitserver
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/gitserver/gitserver-persistent.yaml |
@@ -362,7 +362,7 @@ Feature: secrets related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10814
   @smoke
-  Scenario: Consume the same Secrets as environment variables in multiple pods
+  Scenario: OCP-10814 Consume the same Secrets as environment variables in multiple pods
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/secret.yaml |
@@ -410,7 +410,7 @@ Feature: secrets related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11260
   @smoke
-  Scenario: Using Secrets as Environment Variables
+  Scenario: OCP-11260 Using Secrets as Environment Variables
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/secret.yaml |
@@ -433,7 +433,7 @@ Feature: secrets related scenarios
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12204
-  Scenario: Build from private repos with secret of multiple auth methods
+  Scenario: OCP-12204 Build from private repos with secret of multiple auth methods
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/gitserver/gitserver-persistent.yaml |
@@ -588,7 +588,7 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11311
   @smoke
-  Scenario: Secret volume should update when secret is updated
+  Scenario: OCP-11311 Secret volume should update when secret is updated
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483169/secret1.json |
@@ -621,7 +621,7 @@ Feature: secrets related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-10899
-  Scenario: Mapping specified secret volume should update when secret is updated
+  Scenario: OCP-10899 Mapping specified secret volume should update when secret is updated
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483169/secret1.json |
@@ -651,7 +651,7 @@ Feature: secrets related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-10569
-  Scenario: Allow specifying secret data using strings and images
+  Scenario: OCP-10569 Allow specifying secret data using strings and images
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/secret-datastring-image.json |
@@ -695,7 +695,7 @@ Feature: secrets related scenarios
 
   # @author xiuwang@redhat.com
   # @case_id OCP-10982
-  Scenario: oc new-app to gather git creds
+  Scenario: OCP-10982 oc new-app to gather git creds
     Given I have a project
     When I have an http-git service in the project
     And I run the :set_env client command with:
@@ -772,7 +772,7 @@ Feature: secrets related scenarios
 
   # @author shiywang@redhat.com xiuwang@redhat.com
   # @case_id OCP-12838
-  Scenario: Use build source secret based on annotation on Secret --http
+  Scenario: OCP-12838 Use build source secret based on annotation on Secret --http
     Given I have a project
     When I have an http-git service in the project
     And I run the :set_env client command with:

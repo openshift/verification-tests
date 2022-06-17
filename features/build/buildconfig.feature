@@ -2,7 +2,7 @@ Feature: buildconfig.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-12121
-  Scenario: Start build from buildConfig/build
+  Scenario: OCP-12121 Start build from buildConfig/build
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/ruby:2.2 |
@@ -23,7 +23,7 @@ Feature: buildconfig.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-10667
-  Scenario: Rebuild image when the underlying image changed for Docker build
+  Scenario: OCP-10667 Rebuild image when the underlying image changed for Docker build
     Given I have a project
     When I run the :new_build client command with:
       | app_repo | openshift/ruby-22-centos7~https://github.com/openshift/ruby-hello-world.git |
@@ -39,7 +39,7 @@ Feature: buildconfig.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-12020
-  Scenario: Trigger chain builds from a image update
+  Scenario: OCP-12020 Trigger chain builds from a image update
     Given I have a project
     When I run the :new_build client command with:
       | app_repo | openshift/ruby-22-centos7~https://github.com/openshift/ruby-hello-world.git |
@@ -82,7 +82,7 @@ Feature: buildconfig.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12057
-  Scenario: Using secret to pull a docker image which be used as source input
+  Scenario: OCP-12057 Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :new_secret client command with:
      | secret_name     | pull                                                                 |

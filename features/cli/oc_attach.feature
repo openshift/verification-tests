@@ -2,7 +2,7 @@ Feature: oc attach related scenarios
 
   # @author yapei@redhat.com
   # @case_id OCP-11162
-  Scenario: check oc attach functionality
+  Scenario: OCP-11162 check oc attach functionality
     Given I have a project
     And evaluation of `"doublecontainers"` is stored in the :pod_name clipboard
     When I run the :create client command with:

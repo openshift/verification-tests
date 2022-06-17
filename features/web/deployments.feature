@@ -3,7 +3,7 @@ Feature: Check deployments function
   # @author yapei@redhat.com
   # @case_id OCP-10679
   @smoke
-  Scenario: make deployment from web console
+  Scenario: OCP-10679 make deployment from web console
     Given I have a project
     # create dc
     When I run the :create client command with:
@@ -39,7 +39,7 @@ Feature: Check deployments function
 
   # @author yapei@redhat.com
   # @case_id OCP-12417
-  Scenario: Check deployment info on web console
+  Scenario: OCP-12417 Check deployment info on web console
     Given I create a new project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
@@ -97,7 +97,7 @@ Feature: Check deployments function
 
   # @author yanpzhan@redhat.com
   # @case_id OCP-11198
-  Scenario: View deployments streaming logs
+  Scenario: OCP-11198 View deployments streaming logs
     Given I have a project
     When I run the :new_app client command with:
       | name  | mytest                |
@@ -139,7 +139,7 @@ Feature: Check deployments function
 
   # @author yapei@redhat.com
   # @case_id OCP-10937
-  Scenario: Idled DC handling on web console
+  Scenario: OCP-10937 Idled DC handling on web console
     Given I create a new project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment-with-service.yaml |
@@ -197,7 +197,7 @@ Feature: Check deployments function
 
   # @author yapei@redhat.com
   # @case_id OCP-11593
-  Scenario: Create,Edit and Delete HPA from the deployment config page
+  Scenario: OCP-11593 Create,Edit and Delete HPA from the deployment config page
     Given the master version >= "3.3"
     Given I have a project
     When I run the :run client command with:
@@ -302,7 +302,7 @@ Feature: Check deployments function
 
   # @author etrott@redhat.com
   # @case_id OCP-12375
-  Scenario: Check ReplicaSet on Overview and ReplicaSet page
+  Scenario: OCP-12375 Check ReplicaSet on Overview and ReplicaSet page
     Given the master version >= "3.4"
     Given I have a project
     When I run the :create client command with:

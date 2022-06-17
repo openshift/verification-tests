@@ -2,7 +2,7 @@ Feature: oc_delete.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-11184
-  Scenario: Gracefully delete a pod with '--grace-period' option
+  Scenario: OCP-11184 Gracefully delete a pod with '--grace-period' option
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/graceful-delete/10.json |
@@ -49,7 +49,7 @@ Feature: oc_delete.feature
   # @case_id OCP-12048
   # @bug_id 1277101
   @admin
-  Scenario: The namespace will not be deleted until all pods gracefully terminate
+  Scenario: OCP-12048 The namespace will not be deleted until all pods gracefully terminate
     Given I have a project
     And evaluation of `project.name` is stored in the :prj1 clipboard
     When I run the :create client command with:
@@ -81,7 +81,7 @@ Feature: oc_delete.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-10705
-  Scenario: Default termination grace period is 30s if it's not set
+  Scenario: OCP-10705 Default termination grace period is 30s if it's not set
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/graceful-delete/default.json |
@@ -107,7 +107,7 @@ Feature: oc_delete.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-12144
-  Scenario: Verify pod is gracefully deleted when DeletionGracePeriodSeconds is specified.
+  Scenario: OCP-12144 Verify pod is gracefully deleted when DeletionGracePeriodSeconds is specified.
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/graceful-delete/10.json |
@@ -132,7 +132,7 @@ Feature: oc_delete.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-11526
-  Scenario: Pod should be immediately deleted if TerminationGracePeriodSeconds is 0
+  Scenario: OCP-11526 Pod should be immediately deleted if TerminationGracePeriodSeconds is 0
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/graceful-delete/0.json |

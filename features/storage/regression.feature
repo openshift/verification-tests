@@ -3,7 +3,7 @@ Feature: Regression testing cases
   # @author jhou@redhat.com
   # @case_id OCP-16485
   @admin
-  Scenario: RWO volumes are exclusively mounted on different nodes
+  Scenario: OCP-16485 RWO volumes are exclusively mounted on different nodes
     Given I have a project
 
     Given I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:

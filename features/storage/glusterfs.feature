@@ -4,7 +4,7 @@ Feature: Storage of GlusterFS plugin testing
   # @case_id OCP-9707
   @admin
   @destructive
-  Scenario: Glusterfs volume security testing
+  Scenario: OCP-9707 Glusterfs volume security testing
     Given I have a project
     And I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
@@ -65,7 +65,7 @@ Feature: Storage of GlusterFS plugin testing
   # @author jhou@redhat.com
   # @case_id OCP-10267
   @admin
-  Scenario: Dynamically provision a GlusterFS volume
+  Scenario: OCP-10267 Dynamically provision a GlusterFS volume
     Given I have a StorageClass named "glusterprovisioner"
     And I have a project
 
@@ -105,7 +105,7 @@ Feature: Storage of GlusterFS plugin testing
   # @author jhou@redhat.com
   # @case_id OCP-10266
   @admin
-  Scenario: Reclaim a provisioned GlusterFS volume
+  Scenario: OCP-10266 Reclaim a provisioned GlusterFS volume
     Given I have a StorageClass named "glusterprovisioner"
     And I have a project
 
@@ -127,7 +127,7 @@ Feature: Storage of GlusterFS plugin testing
   # @author jhou@redhat.com
   # @case_id OCP-10356
   @admin
-  Scenario: Dynamically provision a GlusterFS volume using heketi secret
+  Scenario: OCP-10356 Dynamically provision a GlusterFS volume using heketi secret
     # A StorageClass preconfigured on the test env
     Given I have a StorageClass named "glusterprovisioner1"
     And admin checks that the "heketi-secret" secret exists in the "default" project
@@ -151,7 +151,7 @@ Feature: Storage of GlusterFS plugin testing
   # @author jhou@redhat.com
   # @case_id OCP-10554
   @admin
-  Scenario: Pods should be assigned a valid GID using GlusterFS dynamic provisioner
+  Scenario: OCP-10554 Pods should be assigned a valid GID using GlusterFS dynamic provisioner
     Given I have a StorageClass named "glusterprovisioner"
     And I have a project
 
@@ -215,7 +215,7 @@ Feature: Storage of GlusterFS plugin testing
   # @author jhou@redhat.com
   # @case_id OCP-10354
   @admin
-  Scenario: Provisioned GlusterFS volume should be replicated with 3 replicas
+  Scenario: OCP-10354 Provisioned GlusterFS volume should be replicated with 3 replicas
     Given I have a StorageClass named "glusterprovisioner"
     And I have a project
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:

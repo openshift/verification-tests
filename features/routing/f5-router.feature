@@ -4,7 +4,7 @@ Feature: F5 router related scenarios
   # @case_id OCP-24080
   @admin
   @destructive
-  Scenario: the f5 router image should contains openssh-clients package
+  Scenario: OCP-24080 the f5 router image should contains openssh-clients package
     Given I switch to cluster admin pseudo user
     And I use the router project
     And default router image is stored into the :router_image clipboard

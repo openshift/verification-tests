@@ -3,7 +3,7 @@ Feature: ONLY ONLINE Images related scripts in this file
   # @author etrott@redhat.com
   # @case_id OCP-11614
   @smoke
-  Scenario: Create mongo resources with persistent template for mongodb-32-rhel7 images
+  Scenario: OCP-11614 Create mongo resources with persistent template for mongodb-32-rhel7 images
     Given I have a project
     Then I run the :new_app client command with:
       | template | mongodb-persistent           |
@@ -25,7 +25,7 @@ Feature: ONLY ONLINE Images related scripts in this file
   # @author etrott@redhat.com
   # @case_id OCP-10144
   @smoke
-  Scenario: Add env variables to postgresql-95-rhel7 image
+  Scenario: OCP-10144 Add env variables to postgresql-95-rhel7 image
     Given I have a project
     When I run the :new_app client command with:
       | name  | psql                           |
@@ -68,7 +68,7 @@ Feature: ONLY ONLINE Images related scripts in this file
   # @author etrott@redhat.com
   # @case_id OCP-10147
   @smoke
-  Scenario: Verify Mariadb can be connected after admin and user password are changed and re-deployment for persistent storage - marialdb-101-rhel7
+  Scenario: OCP-10147 Verify Mariadb can be connected after admin and user password are changed and re-deployment for persistent storage - marialdb-101-rhel7
     Given I have a project
     And I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc532739/mariadb-persistent.json |
@@ -115,7 +115,7 @@ Feature: ONLY ONLINE Images related scripts in this file
 
     # @author etrott@redhat.com
     # @case_id OCP-12681
-    Scenario: mem based auto-tuning mariadb
+    Scenario: OCP-12681 mem based auto-tuning mariadb
       Given I have a project
       When I run the :new_app client command with:
         | name  | mariadb                  |

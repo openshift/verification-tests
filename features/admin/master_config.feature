@@ -4,7 +4,7 @@ Feature: test master config related steps
   # @case_id OCP-10619
   @admin
   @destructive
-  Scenario: defaultNodeSelector options on master will make pod landing on nodes with label "infra=false"
+  Scenario: OCP-10619 defaultNodeSelector options on master will make pod landing on nodes with label "infra=false"
     Given master config is merged with the following hash:
     """
     projectConfig:
@@ -51,7 +51,7 @@ Feature: test master config related steps
   # @case_id OCP-13557
   @admin
   @destructive
-  Scenario: NodeController will sets NodeTaints when node become notReady/unreachable
+  Scenario: OCP-13557 NodeController will sets NodeTaints when node become notReady/unreachable
     Given environment has at least 2 schedulable nodes
     Given master config is merged with the following hash:
     """

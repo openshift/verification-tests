@@ -2,7 +2,7 @@ Feature: scaling related scenarios
 
   # @author pruan@redhat.com
   # @case_id OCP-10626
-  Scenario: Scale replicas via replicationcontrollers and deploymentconfig
+  Scenario: OCP-10626 Scale replicas via replicationcontrollers and deploymentconfig
     Given I have a project
     And I create a new application with:
       | image_stream | openshift/perl:5.20                   |
@@ -49,7 +49,7 @@ Feature: scaling related scenarios
 
   # @author pruan@redhat.com
   # @case_id OCP-11764
-  Scenario: Scale up/down jobs
+  Scenario: OCP-11764 Scale up/down jobs
     Given I have a project
     And I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc511599/job.yaml |
