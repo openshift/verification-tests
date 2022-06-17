@@ -2,7 +2,7 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11545
-  Scenario: Build with specified Dockerfile via new-build -D
+  Scenario: OCP-11545 Build with specified Dockerfile via new-build -D
     Given I have a project
     When I run the :new_build client command with:
       | D    | FROM centos:7\nRUN echo "hello" |
@@ -14,7 +14,7 @@ Feature: buildlogic.feature
 
   # @author xiazhao@redhat.com
   # @case_id OCP-11170
-  Scenario: Result image will be tried to push after multi-build
+  Scenario: OCP-11170 Result image will be tried to push after multi-build
     Given I have a project
     When I run the :new_app client command with:
       | file |  https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/language-image-templates/php-55-rhel7-stibuild.json |
@@ -38,7 +38,7 @@ Feature: buildlogic.feature
 
   # @author gpei@redhat.com
   # @case_id OCP-11767
-  Scenario: Create build without output
+  Scenario: OCP-11767 Create build without output
     Given I have a project
     When I run the :new_build client command with:
       | app_repo  | centos/ruby-23-centos7~https://github.com/openshift/ruby-hello-world.git |
@@ -50,7 +50,7 @@ Feature: buildlogic.feature
 
   # @author yantan@redhat.com
   # @case_id OCP-10799
-  Scenario: Create new build config use dockerfile with source repo
+  Scenario: OCP-10799 Create new build config use dockerfile with source repo
     Given I have a project
     When I run the :new_build client command with:
       | app_repo | https://github.com/openshift/ruby-hello-world   |
@@ -69,7 +69,7 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11740
-  Scenario: Prevent STI builder images from running as root - using onbuild image
+  Scenario: OCP-11740 Prevent STI builder images from running as root - using onbuild image
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc499516/test-buildconfig-onbuild-user0.json |
@@ -114,7 +114,7 @@ Feature: buildlogic.feature
 
   # @author yantan@redhat.com
   # @case_id OCP-10745
-  Scenario: Build with specified Dockerfile to image with same image name via new-build
+  Scenario: OCP-10745 Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
       | D | FROM centos:7\nRUN yum install -y httpd |
@@ -148,7 +148,7 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11720
-  Scenario: Build from private git repo with/without ssh key
+  Scenario: OCP-11720 Build from private git repo with/without ssh key
     Given I have a project
     And I have an ssh-git service in the project
     And the "secret" file is created with the following lines:
@@ -190,7 +190,7 @@ Feature: buildlogic.feature
 
   # @author yantan@redhat.com
   # @case_id OCP-11896
-  Scenario: Create new-app from private git repo with ssh key
+  Scenario: OCP-11896 Create new-app from private git repo with ssh key
     Given I have a project
     When I run the :new_app client command with:
       | image_stream   | openshift/perl:5.20       |
@@ -223,7 +223,7 @@ Feature: buildlogic.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13683
-  Scenario: Check s2i build substatus and times
+  Scenario: OCP-13683 Check s2i build substatus and times
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc470422/application-template-stibuild.json|
@@ -243,7 +243,7 @@ Feature: buildlogic.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13684
-  Scenario: Check docker build substatus and times
+  Scenario: OCP-13684 Check docker build substatus and times
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-dockerbuild.json |
@@ -262,7 +262,7 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-13914
-  Scenario: Prune old builds automaticly
+  Scenario: OCP-13914 Prune old builds automaticly
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | ruby                                          |

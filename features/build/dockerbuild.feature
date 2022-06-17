@@ -2,7 +2,7 @@ Feature: dockerbuild.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-11078
-  Scenario: Docker build with blank source repo
+  Scenario: OCP-11078 Docker build with blank source repo
     Given I have a project
     When I run the :process client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby22rhel7-template-docker-blankrepo.json |
@@ -16,7 +16,7 @@ Feature: dockerbuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-12115
   @smoke
-  Scenario: Docker build with both SourceURI and context dir
+  Scenario: OCP-12115 Docker build with both SourceURI and context dir
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby20rhel7-context-docker.json |
@@ -66,7 +66,7 @@ Feature: dockerbuild.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-9869
-  Scenario: Setting the nocache option in docker build strategy
+  Scenario: OCP-9869 Setting the nocache option in docker build strategy
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby22rhel7-template-docker.json |
@@ -109,7 +109,7 @@ Feature: dockerbuild.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13083
-  Scenario: Docker build using Dockerfile with 'FROM scratch'
+  Scenario: OCP-13083 Docker build using Dockerfile with 'FROM scratch'
     Given I have a project
     When I run the :new_build client command with:
       | D  | FROM scratch\nENV NUM 1 |
@@ -126,7 +126,7 @@ Feature: dockerbuild.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-12762
-  Scenario: Docker build with invalid context dir
+  Scenario: OCP-12762 Docker build with invalid context dir
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby20rhel7-invalidcontext-docker.json |
@@ -142,7 +142,7 @@ Feature: dockerbuild.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-12855
-  Scenario: Add ARGs in docker build
+  Scenario: OCP-12855 Add ARGs in docker build
     Given I have a project
     When I run the :new_build client command with:
       | code      | https://github.com/openshift/ruby-hello-world |
@@ -181,7 +181,7 @@ Feature: dockerbuild.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-15461
-  Scenario: Allow nocache to be specified on docker build request
+  Scenario: OCP-15461 Allow nocache to be specified on docker build request
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-dockerbuild.json |
@@ -214,7 +214,7 @@ Feature: dockerbuild.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-15462
-  Scenario: Override nocache setting using --no-cache flag when docker build request
+  Scenario: OCP-15462 Override nocache setting using --no-cache flag when docker build request
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-dockerbuild.json |
@@ -243,7 +243,7 @@ Feature: dockerbuild.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-18501
-  Scenario: Support additional EXPOSE values in new-app
+  Scenario: OCP-18501 Support additional EXPOSE values in new-app
     Given I have a project
     When I run the :new_app client command with:
       | code | https://github.com/openshift-qe/oc_newapp_expose |

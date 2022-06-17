@@ -3,7 +3,7 @@ Feature: Pod related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9747
   @admin
-  Scenario: Pod cannot claim UDP port 4789 on the node as part of a port mapping
+  Scenario: OCP-9747 Pod cannot claim UDP port 4789 on the node as part of a port mapping
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     When I run the :create client command with:
@@ -20,7 +20,7 @@ Feature: Pod related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9802
   @admin
-  Scenario: The user created docker container in openshift cluster should have outside network access
+  Scenario: OCP-9802 The user created docker container in openshift cluster should have outside network access
     Given I select a random node's host
     And I run commands on the host:
       | docker run -td --name=test-container bmeng/hello-openshift |
@@ -39,7 +39,7 @@ Feature: Pod related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-10031
   @smoke
-  Scenario: Container could reach the dns server
+  Scenario: OCP-10031 Container could reach the dns server
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tc528410/tc_528410_pod.json |
@@ -55,7 +55,7 @@ Feature: Pod related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-14986
   @admin
-  Scenario: The openflow list will be cleaned after delete the pods
+  Scenario: OCP-14986 The openflow list will be cleaned after delete the pods
     Given I have a project
     Given I have a pod-for-ping in the project
     Then I use the "<%= pod.node_name(user: user) %>" node
@@ -78,7 +78,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-16729
   @admin
   @destructive
-  Scenario: KUBE-HOSTPORTS chain rules won't be flushing when there is no pod with hostPort
+  Scenario: OCP-16729 KUBE-HOSTPORTS chain rules won't be flushing when there is no pod with hostPort
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     Given I store the schedulable nodes in the :nodes clipboard
@@ -133,7 +133,7 @@ Feature: Pod related networking scenarios
   # @auther bmeng@redhat.com
   # @case_id OCP-10817
   @admin
-  Scenario: Check QoS after creating pod
+  Scenario: OCP-10817 Check QoS after creating pod
     Given I have a project
     # setup iperf server to receive the traffic
     When I run the :create client command with:
@@ -193,7 +193,7 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-19810
   @admin
-  Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
+  Scenario: OCP-19810 Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given the master version <= "3.11"
     Given I store the schedulable nodes in the :nodes clipboard
     Given I use the "<%= cb.nodes[0].name %>" node

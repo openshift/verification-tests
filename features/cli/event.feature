@@ -3,7 +3,7 @@ Feature: Event related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10751
   @admin
-  Scenario: check event compressed in kube
+  Scenario: OCP-10751 check event compressed in kube
     Given I have a project
     When I run the :new_app admin command with:
       | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/quota/quota_template.yaml |
@@ -48,7 +48,7 @@ Feature: Event related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-10750
-  Scenario: Check normal and warning information for kubernetes events
+  Scenario: OCP-10750 Check normal and warning information for kubernetes events
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/hello-pod.json |
@@ -89,7 +89,7 @@ Feature: Event related scenarios
 
   # @author dma@redhat.com
   # @case_id OCP-10208
-  Scenario: Event should show full failed reason when readiness probe failed
+  Scenario: OCP-10208 Event should show full failed reason when readiness probe failed
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tc533910/readiness-probe-exec.yaml |

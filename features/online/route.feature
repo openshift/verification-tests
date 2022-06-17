@@ -2,7 +2,7 @@ Feature: Route test in online environments
 
   # @author zhaliu@redhat.com
   # @case_id OCP-16320
-  Scenario: Custom hostname is prohibited for passthrough terminated route
+  Scenario: OCP-16320 Custom hostname is prohibited for passthrough terminated route
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/passthrough/service_secure.json |
@@ -21,7 +21,7 @@ Feature: Route test in online environments
 
   # @author zhaliu@redhat.com
   # @case_id OCP-16318
-  Scenario: Custom hostname is prohibited for unsecure route
+  Scenario: OCP-16318 Custom hostname is prohibited for unsecure route
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
@@ -42,7 +42,7 @@ Feature: Route test in online environments
 
   # @author zhaliu@redhat.com
   # @case_id OCP-16319
-  Scenario: Custom hostname and cert are prohibited for edge terminated route
+  Scenario: OCP-16319 Custom hostname and cert are prohibited for edge terminated route
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/edge/service_unsecure.json |
@@ -83,7 +83,7 @@ Feature: Route test in online environments
 
   # @author zhaliu@redhat.com
   # @case_id OCP-16321
-  Scenario: Custom hostname and cert are prohibited for reencrypt terminated route
+  Scenario: OCP-16321 Custom hostname and cert are prohibited for reencrypt terminated route
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/reencrypt/reencrypt-without-all-cert.yaml |

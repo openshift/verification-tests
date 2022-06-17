@@ -2,7 +2,7 @@ Feature: projects related features via web
 
   # @author wsun@redhat.com
   # @case_id OCP-12440
-  Scenario: Could list all projects based on the user's authorization on web console
+  Scenario: OCP-12440 Could list all projects based on the user's authorization on web console
     Given an 8 characters random string of type :dns is stored into the :project1 clipboard
     Given an 8 characters random string of type :dns is stored into the :project2 clipboard
     Given an 8 characters random string of type :dns is stored into the :project3 clipboard
@@ -53,7 +53,7 @@ Feature: projects related features via web
 
   # @author yapei@redhat.com
   # @case_id OCP-10014
-  Scenario: Delete project from web console
+  Scenario: OCP-10014 Delete project from web console
     # delete project with project name on projects page
     When I create a project via web with:
       | display_name | testing project one |

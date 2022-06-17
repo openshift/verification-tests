@@ -2,7 +2,7 @@ Feature: Scheduler related scenarios
 
   # @author wmeng@redhat.com
   # @case_id OCP-14582
-  Scenario: When no scheduler name is supplied, the pod is automatically scheduled using the default-scheduler
+  Scenario: OCP-14582 When no scheduler name is supplied, the pod is automatically scheduled using the default-scheduler
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/scheduler/multiple-schedulers/pod-no-scheduler.yaml |

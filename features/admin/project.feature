@@ -3,7 +3,7 @@ Feature: project permissions
   # @author pruan@redhat.com
   # @case_id OCP-11717
   @admin
-  Scenario: Pod creation should fail when pod's node selector conflicts with project node selector
+  Scenario: OCP-11717 Pod creation should fail when pod's node selector conflicts with project node selector
     Given a 5 characters random string of type :dns is stored into the :proj_name clipboard
     When I run the :oadm_new_project admin command with:
       | project_name  | <%= cb.proj_name %> |
@@ -20,7 +20,7 @@ Feature: project permissions
   # @author yinzhou@redhat.com
   # @case_id OCP-10736
   @admin
-  Scenario: The job and HPA should be deleted when project has been deleted
+  Scenario: OCP-10736 The job and HPA should be deleted when project has been deleted
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/hpa/hpa.yaml |

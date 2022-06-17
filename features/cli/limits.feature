@@ -62,7 +62,7 @@ Feature: limit range related scenarios:
   # @author pruan@redhat.com, dma@redhat.com, azagayno@redhat.com
   # @case_id OCP-12250
   @admin
-  Scenario: Limit range does not allow min > defaultRequest
+  Scenario: OCP-12250 Limit range does not allow min > defaultRequest
     Given I have a project
     Given admin uses the "<%= project.name %>" project
     When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508046/limit.yaml
@@ -74,7 +74,7 @@ Feature: limit range related scenarios:
   # @author gpei@redhat.com, dma@redhat.com, azagayno@redhat.com
   # @case_id OCP-11918
   @admin
-  Scenario: Limit range does not allow defaultRequest > default
+  Scenario: OCP-11918 Limit range does not allow defaultRequest > default
     Given I have a project
     Given admin uses the "<%= project.name %>" project
     When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508042/limit.yaml
@@ -86,7 +86,7 @@ Feature: limit range related scenarios:
   # @author gpei@redhat.com, dma@redhat.com, azagayno@redhat.com
   # @case_id OCP-12043
   @admin
-  Scenario: Limit range does not allow defaultRequest > max
+  Scenario: OCP-12043 Limit range does not allow defaultRequest > max
     Given I have a project
     Given admin uses the "<%= project.name %>" project
     When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508043/limit.yaml
@@ -98,7 +98,7 @@ Feature: limit range related scenarios:
   # @author gpei@redhat.com, dma@redhat.com, azagayno@redhat.com
   # @case_id OCP-12139
   @admin
-  Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
+  Scenario: OCP-12139 Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
     Given admin uses the "<%= project.name %>" project
     When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508044/limit.yaml
@@ -118,7 +118,7 @@ Feature: limit range related scenarios:
   # @author gpei@redhat.com, azagayno@redhat.com
   # @case_id OCP-12315
   @admin
-  Scenario: Limit range with all values set with proper values
+  Scenario: OCP-12315 Limit range with all values set with proper values
     Given I have a project
     Given admin uses the "<%= project.name %>" project
     When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508048/limit.yaml

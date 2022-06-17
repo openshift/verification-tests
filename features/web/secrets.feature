@@ -2,7 +2,7 @@ Feature: web secrets related
 
   # @author xxing@redhat.com
   # @case_id OCP-11386
-  Scenario: Add secret on Create From Image page
+  Scenario: OCP-11386 Add secret on Create From Image page
     Given I have a project
     When I run the :oc_secrets_new_basicauth client command with:
       | secret_name | gitsecret |
@@ -28,7 +28,7 @@ Feature: web secrets related
 
   # @author yanpzhan@redhat.com
   # @case_id OCP-15549
-  Scenario: Add secret to application from the secret page
+  Scenario: OCP-15549 Add secret to application from the secret page
     Given I have a project
     When I run the :secrets client command with:
       | action | new        |

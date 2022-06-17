@@ -4,7 +4,7 @@ Feature: install and uninstall related scenarios
   # @case_id OCP-11061
   @admin
   @destructive
-  Scenario: Deploy logging via Ansible: clean install when OPS cluster is enabled
+  Scenario: OCP-11061 Deploy logging via Ansible: clean install when OPS cluster is enabled
     Given I create a project with non-leading digit name
     Given the master version >= "3.5"
     And logging service is installed with ansible using:
@@ -18,7 +18,7 @@ Feature: install and uninstall related scenarios
   # @case_id OCP-12377
   @admin
   @destructive
-  Scenario: Uninstall logging via Ansible
+  Scenario: OCP-12377 Uninstall logging via Ansible
     Given the master version >= "3.5"
     Given I create a project with non-leading digit name
     # the clean up steps registered with the install step will be using uninstall
@@ -29,7 +29,7 @@ Feature: install and uninstall related scenarios
   # @case_id OCP-11431
   @admin
   @destructive
-  Scenario: Deploy logging via Ansible - clean install when OPS cluster is not enabled
+  Scenario: OCP-11431 Deploy logging via Ansible - clean install when OPS cluster is not enabled
     Given the master version >= "3.5"
     Given I create a project with non-leading digit name
     Given logging service is installed with ansible using:

@@ -3,7 +3,7 @@ Feature: Egress router related features
   # @author bmeng@redhat.com
   # @case_id OCP-14106
   @admin
-  Scenario: User can use egress router as both initContainer mode and legacy mode
+  Scenario: OCP-14106 User can use egress router as both initContainer mode and legacy mode
     Given the cluster is running on OpenStack
     And the node's default gateway is stored in the clipboard
     And default router image is stored into the :router_image clipboard
@@ -37,7 +37,7 @@ Feature: Egress router related features
   # @author bmeng@redhat.com
   # @case_id OCP-14686
   @admin
-  Scenario: Multiple destination values for http proxy
+  Scenario: OCP-14686 Multiple destination values for http proxy
     Given the cluster is running on OpenStack
     And the node's default gateway is stored in the clipboard
     And default router image is stored into the :router_image clipboard
@@ -79,7 +79,7 @@ Feature: Egress router related features
   # @author bmeng@redhat.com
   # @case_id OCP-15056
   @admin
-  Scenario: Egress router works with multiple DNS names destination
+  Scenario: OCP-15056 Egress router works with multiple DNS names destination
     Given the cluster is running on OpenStack
     And the node's default gateway is stored in the clipboard
     And default router image is stored into the :router_image clipboard
@@ -133,7 +133,7 @@ Feature: Egress router related features
   # @author bmeng@redhat.com
   # @case_id OCP-15057
   @admin
-  Scenario: Egress router works with DNS names destination configured in ConfigMap
+  Scenario: OCP-15057 Egress router works with DNS names destination configured in ConfigMap
     Given the cluster is running on OpenStack
     And the node's default gateway is stored in the clipboard
     And default router image is stored into the :router_image clipboard

@@ -4,7 +4,7 @@ Feature: system metric related tests
   # @case_id OCP-15527
   @admin
   @destructive
-  Scenario: Deploy Prometheus via ansible with default values
+  Scenario: OCP-15527 Deploy Prometheus via ansible with default values
     Given the master version >= "3.7"
     Given I create a project with non-leading digit name
     And metrics service is installed with ansible using:
@@ -14,7 +14,7 @@ Feature: system metric related tests
   # @case_id OCP-10927
   @admin
   @destructive
-  Scenario: Access the external Hawkular Metrics API interface as cluster-admin
+  Scenario: OCP-10927 Access the external Hawkular Metrics API interface as cluster-admin
     Given I have a project
     Given metrics service is installed in the system using:
       | inventory       | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-11821/inventory              |
@@ -51,7 +51,7 @@ Feature: system metric related tests
   @admin
   @destructive
   @smoke
-  Scenario: Access heapster interface,Check jboss wildfly version from hawkular-metrics pod logs
+  Scenario: OCP-14162 Access heapster interface,Check jboss wildfly version from hawkular-metrics pod logs
     Given I create a project with non-leading digit name
     Given metrics service is installed in the system using:
       | inventory       | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-11821/inventory              |
@@ -87,7 +87,7 @@ Feature: system metric related tests
   # @case_id OCP-14519
   @admin
   @destructive
-  Scenario: Show CPU,memory, network metrics statistics on pod page of openshift web console
+  Scenario: OCP-14519 Show CPU,memory, network metrics statistics on pod page of openshift web console
     Given I create a project with non-leading digit name
     And metrics service is installed in the system
     And I switch to the first user

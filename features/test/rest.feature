@@ -1,4 +1,5 @@
 Feature: Testing REST Scenarios
+
   Scenario: simple rest scenario
     When I perform the :create_project_request rest request with:
       | project name | demo |

@@ -3,7 +3,7 @@ Feature: testing multicast scenarios
   # @author hongli@redhat.com
   # @case_id OCP-12926
   @admin
-  Scenario: pods should be able to subscribe send and receive multicast traffic
+  Scenario: OCP-12926 pods should be able to subscribe send and receive multicast traffic
     Given the env is using multitenant or networkpolicy network
 
     # create some multicast testing pods
@@ -85,7 +85,7 @@ Feature: testing multicast scenarios
   # @author hongli@redhat.com
   # @case_id OCP-12977
   @admin
-  Scenario: multicast is disabled by default if not annotate the netnamespace
+  Scenario: OCP-12977 multicast is disabled by default if not annotate the netnamespace
     Given the env is using multitenant or networkpolicy network
 
     # create multicast testing pods in the project and without multicast enable

@@ -2,7 +2,7 @@ Feature: oc_set_probe.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-9870
-  Scenario: Set a probe to open a TCP socket
+  Scenario: OCP-9870 Set a probe to open a TCP socket
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:5.6 |
@@ -59,7 +59,7 @@ Feature: oc_set_probe.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-9871
-  Scenario: Set a probe over HTTPS/HTTP
+  Scenario: OCP-9871 Set a probe over HTTPS/HTTP
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:5.6 |
@@ -104,7 +104,7 @@ Feature: oc_set_probe.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-9872
-  Scenario: Set an exec action probe
+  Scenario: OCP-9872 Set an exec action probe
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:5.6 |

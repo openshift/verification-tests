@@ -36,7 +36,7 @@ Feature: oc import-image related feature
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10585
-  Scenario: Do not create tags for ImageStream if image repository does not have tags
+  Scenario: OCP-10585 Do not create tags for ImageStream if image repository does not have tags
     When I have a project
     And I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/is_without_tags.json |
@@ -52,7 +52,7 @@ Feature: oc import-image related feature
 
   # @author wjiang@redhat.com
   # @case_id OCP-10721
-  Scenario: Could not import the tag when reference is true
+  Scenario: OCP-10721 Could not import the tag when reference is true
     Given I have a project
     When I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510523.json |
@@ -68,7 +68,7 @@ Feature: oc import-image related feature
 
   # @author wsun@redhat.com
   # @case_id OCP-11200
-  Scenario: Import image when pointing to non-existing docker image
+  Scenario: OCP-11200 Import image when pointing to non-existing docker image
     Given I have a project
     When I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510524.json |
@@ -83,7 +83,7 @@ Feature: oc import-image related feature
 
   # @author wjiang@redhat.com
   # @case_id OCP-11536
-  Scenario: Import image when spec.DockerImageRepository defined without any tags
+  Scenario: OCP-11536 Import image when spec.DockerImageRepository defined without any tags
     Given I have a project
     When I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510525.json |
@@ -99,7 +99,7 @@ Feature: oc import-image related feature
 
   # @author wjiang@redhat.com
   # @case_id OCP-11760
-  Scenario: Import Image when spec.DockerImageRepository not defined
+  Scenario: OCP-11760 Import Image when spec.DockerImageRepository not defined
     Given I have a project
     When I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510526.json |
@@ -117,7 +117,7 @@ Feature: oc import-image related feature
 
   # @author wjiang@redhat.com
   # @case_id OCP-11931
-  Scenario: Import image when spec.DockerImageRepository with some tags defined when Kind!=DockerImage
+  Scenario: OCP-11931 Import image when spec.DockerImageRepository with some tags defined when Kind!=DockerImage
     Given I have a project
     When I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510525.json |
@@ -147,7 +147,7 @@ Feature: oc import-image related feature
   # @author wjiang@redhat.com
   # @case_id OCP-12052
   @smoke
-  Scenario: Import image when spec.DockerImageRepository with some tags defined when Kind==DockerImage
+  Scenario: OCP-12052 Import image when spec.DockerImageRepository with some tags defined when Kind==DockerImage
     Given I have a project
     When I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510528.json |
@@ -163,7 +163,7 @@ Feature: oc import-image related feature
 
   # @author wsun@redhat.com
   # @case_id OCP-12147
-  Scenario: Import Image without tags and spec.DockerImageRepository set
+  Scenario: OCP-12147 Import Image without tags and spec.DockerImageRepository set
     Given I have a project
     When I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510529.json |
@@ -176,7 +176,7 @@ Feature: oc import-image related feature
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-11089
-  Scenario: Tags should be added to ImageStream if image repository is from an external docker registry
+  Scenario: OCP-11089 Tags should be added to ImageStream if image repository is from an external docker registry
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/external.json |
@@ -196,7 +196,7 @@ Feature: oc import-image related feature
 
   # @author geliu@redhat.com
   # @case_id OCP-12765
-  Scenario: Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
+  Scenario: OCP-12765 Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :tag client command with:
       | source_type | docker                                          |
@@ -254,7 +254,7 @@ Feature: oc import-image related feature
 
   # @author geliu@redhat.com
   # @case_id OCP-12766
-  Scenario: Allow imagestream request build config triggers by different mode('TagreferencePolicy':source/local)
+  Scenario: OCP-12766 Allow imagestream request build config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :import_image client command with:
       | from       | quay.io/openshifttest/ruby-25-centos7 |

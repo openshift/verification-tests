@@ -2,7 +2,7 @@ Feature: Seccomp
 
   # @author wmeng@redhat.com
   # @case_id OCP-10483
-  Scenario: seccomp=unconfined used by default
+  Scenario: OCP-10483 seccomp=unconfined used by default
     Given I have a project
     When I run the :create client command with:
       | filename  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/hello-pod.json |

@@ -3,7 +3,7 @@ Feature: remote registry related scenarios
   # @author pruan@redhat.com
   # @case_id OCP-11235
   @admin
-  Scenario: Pull image by digest value in the OpenShift registry
+  Scenario: OCP-11235 Pull image by digest value in the OpenShift registry
     Given I have a project
     And I find a bearer token of the deployer service account
     When I run the :tag client command with:
@@ -30,7 +30,7 @@ Feature: remote registry related scenarios
   # @author yinzhou@redhat.com
   # @case_id OCP-10636
   @admin
-  Scenario: User should be denied pushing when it does not have 'admin' role
+  Scenario: OCP-10636 User should be denied pushing when it does not have 'admin' role
     Given I have a project
     And default docker-registry route is stored in the :integrated_reg_ip clipboard
     And I give project view role to the second user
@@ -71,7 +71,7 @@ Feature: remote registry related scenarios
   # @author yinzhou@redhat.com
   # @case_id OCP-11113
   @admin
-  Scenario: Tracking tags with imageStream spec.tag
+  Scenario: OCP-11113 Tracking tags with imageStream spec.tag
     Given I have a project
     Given default docker-registry route is stored in the :integrated_reg_ip clipboard
     When I run the :create client command with:
@@ -103,7 +103,7 @@ Feature: remote registry related scenarios
   # @author yinzhou@redhat.com
   # @case_id OCP-10904
   @admin
-  Scenario: Support unauthenticated with registry-admin role
+  Scenario: OCP-10904 Support unauthenticated with registry-admin role
     Given I have a project
     When I run the :policy_add_role_to_user client command with:
       | role            | registry-admin   |

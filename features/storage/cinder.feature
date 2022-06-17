@@ -3,7 +3,7 @@ Feature: Cinder Persistent Volume
   # @author wehe@redhat.com
   # @case_id OCP-9643
   @admin
-  Scenario: Persistent Volume with cinder volume plugin
+  Scenario: OCP-9643 Persistent Volume with cinder volume plugin
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard
 

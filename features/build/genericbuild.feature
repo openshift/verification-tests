@@ -2,7 +2,7 @@ Feature: genericbuild.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-14373
-  Scenario: Support valueFrom with filedRef syntax for pod field
+  Scenario: OCP-14373 Support valueFrom with filedRef syntax for pod field
     Given I have a project
     Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc14373/test-valuefrom.json"
     And I run the :create client command with:
@@ -24,7 +24,7 @@ Feature: genericbuild.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-14381
-  Scenario: Support valueFrom with configMapKeyRef syntax for pod field
+  Scenario: OCP-14381 Support valueFrom with configMapKeyRef syntax for pod field
     Given I have a project
     When I run the :create_configmap client command with:
       | name         | special-config     |
@@ -61,7 +61,7 @@ Feature: genericbuild.feature
   # @case_id OCP-10965
   @admin
   @destructive
-  Scenario: Configure the noproxy BuildDefaults when build
+  Scenario: OCP-10965 Configure the noproxy BuildDefaults when build
     Given I have a project
     Given master config is merged with the following hash:
     """

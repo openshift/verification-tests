@@ -3,7 +3,7 @@ Feature: AWS specific scenarios
   # @author chaoyang@redhat.com
   # @case_id OCP-14335
   @admin
-  Scenario: Check two pods using one efs pv is working correctly
+  Scenario: OCP-14335 Check two pods using one efs pv is working correctly
     Given I have a project
     And I have a efs-provisioner in the project
     When admin creates a StorageClass from "https://raw.githubusercontent.com/kubernetes-incubator/external-storage/master/aws/efs/deploy/class.yaml" where:

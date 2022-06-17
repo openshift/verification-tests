@@ -3,7 +3,7 @@ Feature: cluster-capacity related features
   # @author wjiang@redhat.com
   # @case_id OCP-14799
   @admin
-  Scenario: Cluster capacity image support: Cluster capacity can work well with a simple pod
+  Scenario: OCP-14799 Cluster capacity image support: Cluster capacity can work well with a simple pod
     Given environment has at least 2 schedulable nodes
     Given I have a project
     Given I have a cluster-capacity pod in my project

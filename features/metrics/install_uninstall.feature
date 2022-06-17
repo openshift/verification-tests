@@ -4,7 +4,7 @@ Feature: metrics logging and uninstall tests
   # @case_id OCP-12234
   @admin
   @destructive
-  Scenario: Metrics Admin Command - fresh deploy with default values
+  Scenario: OCP-12234 Metrics Admin Command - fresh deploy with default values
     Given I create a project with non-leading digit name
     Given the master version >= "3.5"
     And metrics service is installed with ansible using:
@@ -14,7 +14,7 @@ Feature: metrics logging and uninstall tests
   # @case_id OCP-12305
   @admin
   @destructive
-  Scenario: Metrics Admin Command - clean and install
+  Scenario: OCP-12305 Metrics Admin Command - clean and install
     Given the master version >= "3.5"
     Given I create a project with non-leading digit name
     And metrics service is installed with ansible using:
@@ -30,7 +30,7 @@ Feature: metrics logging and uninstall tests
   # @case_id OCP-10214
   @admin
   @destructive
-  Scenario: deploy metrics with dynamic volume
+  Scenario: OCP-10214 deploy metrics with dynamic volume
     Given the master version >= "3.5"
     Given I create a project with non-leading digit name
     And metrics service is installed with ansible using:
@@ -44,7 +44,7 @@ Feature: metrics logging and uninstall tests
   # @case_id OCP-17163
   @admin
   @destructive
-  Scenario: deploy metrics with dynamic volume along with OCP
+  Scenario: OCP-17163 deploy metrics with dynamic volume along with OCP
     Given the master version >= "3.7"
     Given I create a project with non-leading digit name
     And metrics service is installed in the system using:

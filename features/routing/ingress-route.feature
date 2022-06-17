@@ -2,7 +2,7 @@ Feature: Testing ingress to route object
 
   # @author zzhao@redhat.com
   # @case_id OCP-18789
-  Scenario: Ingress generic support 
+  Scenario: OCP-18789 Ingress generic support 
     Given the master version >= "3.10"
     Given I have a project
     And I store default router IPs in the :router_ip clipboard

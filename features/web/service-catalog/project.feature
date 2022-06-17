@@ -2,7 +2,7 @@ Feature: projects related features via homepage
 
   # @author hasha@redhat.com
   # @case_id OCP-13717
-  Scenario: Manage project in popup panel on home page
+  Scenario: OCP-13717 Manage project in popup panel on home page
     Given the master version >= "3.6"
     Given I have a project
     Given a 5 characters random string of type :dns is stored into the :proj_name clipboard

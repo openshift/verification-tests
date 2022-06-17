@@ -59,7 +59,7 @@ Feature: vSphere test scenarios
   # @author jhou@redhat.com
   # @case_id OCP-13389
   @admin
-  Scenario: Dynamically provision a vSphere volume with invalid disk format
+  Scenario: OCP-13389 Dynamically provision a vSphere volume with invalid disk format
     Given I have a project
     When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/vsphere/storageclass.yml" where:
       | ["metadata"]["name"]         | storageclass-<%= project.name %> |

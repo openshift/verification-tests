@@ -2,7 +2,7 @@ Feature: stibuild.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11099
-  Scenario: STI build with invalid context dir
+  Scenario: OCP-11099 STI build with invalid context dir
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/language-image-templates/python-27-rhel7-errordir-stibuild.json |

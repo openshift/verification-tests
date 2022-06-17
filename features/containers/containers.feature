@@ -4,7 +4,7 @@ Feature: Container test feature
   # @case_id OCP-9863
   # @bug_id 1292666
   @smoke
-  Scenario: Setuid binaries shouldn't work inside of a running container
+  Scenario: OCP-9863 Setuid binaries shouldn't work inside of a running container
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod-setuid.yaml |

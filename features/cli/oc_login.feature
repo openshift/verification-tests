@@ -3,7 +3,7 @@ Feature: oc_login.feature
   # @author xiaocwan@redhat.com
   # @case_id OCP-11888
   @smoke
-  Scenario: User can login with the new generated token via web page for oc
+  Scenario: OCP-11888 User can login with the new generated token via web page for oc
     Given I log the message> this scenario can pass only when user accounts have a known password
     When I perform the :request_token_with_password web console action with:
       | url    | <%= env.api_endpoint_url %>/oauth/token/request |

@@ -3,7 +3,7 @@ Feature: create app on web console related
   # @author xxing@redhat.com
   # @case_id OCP-11171
   @smoke
-  Scenario: Create application from image on web console
+  Scenario: OCP-11171 Create application from image on web console
     Given I have a project
     Given I wait for the :create_app_from_image web console action to succeed with:
       | project_name | <%= project.name %>                        |
@@ -18,7 +18,7 @@ Feature: create app on web console related
 
   # @author xxing@redhat.com
   # @case_id OCP-11445
-  Scenario: Create application from template with invalid parameters on web console
+  Scenario: OCP-11445 Create application from template with invalid parameters on web console
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/ui/application-template-stibuild-without-customize-route.json |
@@ -35,7 +35,7 @@ Feature: create app on web console related
 
   # @author wsun@redhat.com
   # @case_id OCP-12596
-  Scenario: Create the app with invalid name
+  Scenario: OCP-12596 Create the app with invalid name
     Given I have a project
     When I perform the :create_app_from_image web console action with:
       | project_name | <%= project.name %>                        |
@@ -107,7 +107,7 @@ Feature: create app on web console related
 
   # @author etrott@redhat.com
   # @case_id OCP-10920
-  Scenario: Environment variables and label management in create app from image on web console
+  Scenario: OCP-10920 Environment variables and label management in create app from image on web console
     Given I have a project
     When I perform the :create_app_from_image_check_label web console action with:
       | project_name | <%= project.name %>                         |
@@ -253,7 +253,7 @@ Feature: create app on web console related
 
   # @author yapei@redhat.com
   # @case_id OCP-15062
-  Scenario: Check Deploy Image and Import YAML from new landing page
+  Scenario: OCP-15062 Check Deploy Image and Import YAML from new landing page
     Given the master version >= "3.7"
     Given I have a project
     # deploy from image stream tag with customized env and labels

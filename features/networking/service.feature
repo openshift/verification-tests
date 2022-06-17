@@ -3,7 +3,7 @@ Feature: Service related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-9604
   @admin
-  Scenario: tenants can access their own services
+  Scenario: OCP-9604 tenants can access their own services
     # create pod and service in project1
     Given the env is using multitenant network
     Given I have a project
@@ -45,7 +45,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-9977
   @admin
   @destructive
-  Scenario: Create service with external IP
+  Scenario: OCP-9977 Create service with external IP
     Given master config is merged with the following hash:
     """
     networkConfig:
@@ -80,7 +80,7 @@ Feature: Service related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-15032
   @admin
-  Scenario: The openflow list will be cleaned after delete the services
+  Scenario: OCP-15032 The openflow list will be cleaned after delete the services
     Given the env is using one of the listed network plugins:
       | subnet      |
       | multitenant |

@@ -2,7 +2,7 @@ Feature: create app on web console related
 
   # @author hasha@redhat.com
   # @case_id OCP-13718
-  Scenario: Create and view advanced options while creating/selecting project from homepage
+  Scenario: OCP-13718 Create and view advanced options while creating/selecting project from homepage
     # since it's 3.6 tech preview, no scripts for 3.6
     Given the master version >= "3.6"
     When I run the :goto_home_page web console action

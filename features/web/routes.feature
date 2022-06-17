@@ -2,7 +2,7 @@ Feature: Routes related features on web console
 
   # @author yapei@redhat.com
   # @case_id OCP-12294
-  Scenario: Create route with invalid name and hostname on web console
+  Scenario: OCP-12294 Create route with invalid name and hostname on web console
     Given I create a new project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/pod_requests_nothing.json |
@@ -34,7 +34,7 @@ Feature: Routes related features on web console
 
   # @author yapei@redhat.com
   # @case_id OCP-11210
-  Scenario: Add path when creating edge terminated route on web console
+  Scenario: OCP-11210 Add path when creating edge terminated route on web console
     Given I create a new project
 
     # create pod, service and pod used for curl command

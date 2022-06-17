@@ -4,7 +4,7 @@ Feature: Testing HAProxy dynamic configuration manager related scenarios
   # @case_id OCP-19863
   @admin
   @destructive
-  Scenario: unsecured route support haproxy dynamic changes
+  Scenario: OCP-19863 unsecured route support haproxy dynamic changes
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -37,7 +37,7 @@ Feature: Testing HAProxy dynamic configuration manager related scenarios
   # @case_id OCP-19864
   @admin
   @destructive
-  Scenario: edge route support haproxy dynamic changes
+  Scenario: OCP-19864 edge route support haproxy dynamic changes
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -72,7 +72,7 @@ Feature: Testing HAProxy dynamic configuration manager related scenarios
   # @case_id OCP-19865
   @admin
   @destructive
-  Scenario: passthrough route support haproxy dynamic changes
+  Scenario: OCP-19865 passthrough route support haproxy dynamic changes
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
     And I use the router project

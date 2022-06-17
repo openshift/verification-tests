@@ -4,7 +4,7 @@ Feature: Testing HTTP/2 related scenarios
   # @case_id OCP-19705
   @admin
   @destructive
-  Scenario: edge route support http2 protocol
+  Scenario: OCP-19705 edge route support http2 protocol
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -45,7 +45,7 @@ Feature: Testing HTTP/2 related scenarios
   # @case_id OCP-19706
   @admin
   @destructive
-  Scenario: reencrypt route support http2 protocol
+  Scenario: OCP-19706 reencrypt route support http2 protocol
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
     And I use the router project

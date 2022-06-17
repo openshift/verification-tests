@@ -59,7 +59,7 @@ Feature: Dynamic provisioning
   # @author lxia@redhat.com
   # @case_id OCP-10790
   @admin
-  Scenario: Check only one pv created for one pvc for dynamic provisioner
+  Scenario: OCP-10790 Check only one pv created for one pvc for dynamic provisioner
     Given I have a project
     And I run the steps 30 times:
     """

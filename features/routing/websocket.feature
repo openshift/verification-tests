@@ -2,7 +2,7 @@ Feature: Testing websocket features
 
   # @author hongli@redhat.com
   # @case_id OCP-17145
-  Scenario: haproxy router support websocket via unsecure route
+  Scenario: OCP-17145 haproxy router support websocket via unsecure route
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/websocket/pod.json |

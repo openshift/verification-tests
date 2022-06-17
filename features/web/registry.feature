@@ -3,7 +3,7 @@ Feature: Testing registry
   # @author etrott@redhat.com
   # @case_id OCP-10224
   @admin
-  Scenario: Login and logout of standalone registry console
+  Scenario: OCP-10224 Login and logout of standalone registry console
     Given I have a project
     And I open registry console in a browser
 

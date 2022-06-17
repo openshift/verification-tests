@@ -2,7 +2,7 @@ Feature: Features about k8s deployments
 
 # @author etrott@redhat.com
   # @case_id OCP-12329
-  Scenario: Check k8s deployments on Deployments page
+  Scenario: OCP-12329 Check k8s deployments on Deployments page
     Given the master version >= "3.4"
     Given I create a new project
     When I perform the :goto_deployments_page web console action with:

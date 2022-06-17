@@ -3,7 +3,7 @@ Feature: check settings page on web console
   # @author yapei@redhat.com
   # @case_id OCP-12631
   @admin
-  Scenario: create project limit and quota, check settings on web console
+  Scenario: OCP-12631 create project limit and quota, check settings on web console
     Given I have a project
     # create limit and quota via CLI
     Given I use the "<%= project.name %>" project
@@ -142,7 +142,7 @@ Feature: check settings page on web console
 
   # @author xxing@redhat.com
   # @case_id OCP-10351
-  Scenario: Check Openshift Master and Kubernetes Master version on About page
+  Scenario: OCP-10351 Check Openshift Master and Kubernetes Master version on About page
     Given the master version >= "3.3"
     When I run the :version client command
     Then the step should succeed
@@ -161,7 +161,7 @@ Feature: check settings page on web console
 
   # @author hasha@redhat.com
   # @case_id OCP-16826
-  Scenario: User could set console home page
+  Scenario: OCP-16826 User could set console home page
     Given the master version >= "3.9"
 
     # not able to set homepage as project overview when user has no project

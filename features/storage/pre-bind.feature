@@ -4,7 +4,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @case_id OCP-10107
   @admin
   @destructive
-  Scenario: Prebound pv is availabe due to requested pvc status is bound
+  Scenario: OCP-10107 Prebound pv is availabe due to requested pvc status is bound
     Given I have a project
     Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/nfs.json" where:
       | ["metadata"]["name"]            | nfspv1-<%= project.name %> |
@@ -22,7 +22,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10109
   @admin
-  Scenario: Prebound pv is availabe due to mismatched accessmode with requested pvc
+  Scenario: OCP-10109 Prebound pv is availabe due to mismatched accessmode with requested pvc
     Given I have a project
     Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | nfspv-<%= project.name %> |
@@ -40,7 +40,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @case_id OCP-10111
   @admin
   @destructive
-  Scenario: Prebound pvc is pending due to requested pv status is bound
+  Scenario: OCP-10111 Prebound pvc is pending due to requested pv status is bound
     Given I have a project
     Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/nfs.json" where:
       | ["metadata"]["name"]            | nfspv1-<%= project.name %> |
@@ -58,7 +58,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @case_id OCP-10113
   @admin
   @destructive
-  Scenario: Prebound PVC is pending due to mismatched accessmode with requested PV
+  Scenario: OCP-10113 Prebound PVC is pending due to mismatched accessmode with requested PV
     Given I have a project
     Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/nfs.json" where:
       | ["metadata"]["name"]            | nfspv-<%= project.name %> |
@@ -76,7 +76,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @case_id OCP-10114
   @admin
   @destructive
-  Scenario: Prebound PVC is pending due to mismatched volume size with requested PV
+  Scenario: OCP-10114 Prebound PVC is pending due to mismatched volume size with requested PV
     Given I have a project
     Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/nfs.json" where:
       | ["metadata"]["name"]            | nfspv-<%= project.name %> |
@@ -94,7 +94,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @case_id OCP-9941
   @admin
   @destructive
-  Scenario: PV and PVC bound successfully when pvc created prebound to pv
+  Scenario: OCP-9941 PV and PVC bound successfully when pvc created prebound to pv
     Given I have a project
     Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/nfs.json" where:
       | ["metadata"]["name"]            | nfspv1-<%= project.name %> |
@@ -117,7 +117,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @case_id OCP-9940
   @admin
   @destructive
-  Scenario: PV and PVC bound successfully when pv created prebound to pvc
+  Scenario: OCP-9940 PV and PVC bound successfully when pv created prebound to pvc
     Given I have a project
     Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | nfspv-<%= project.name %> |
@@ -136,7 +136,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @case_id OCP-9939
   @admin
   @destructive
-  Scenario: PVC is bond to PV successfully when pvc is created first
+  Scenario: OCP-9939 PVC is bond to PV successfully when pvc is created first
     Given I have a project
     Then I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
       | ["metadata"]["name"]                         | nfsc-<%= project.name %> |

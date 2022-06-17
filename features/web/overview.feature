@@ -2,7 +2,7 @@ Feature: Check overview page
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-10101
-  Scenario: Check overview page
+  Scenario: OCP-10101 Check overview page
     Given the master version <= "3.5"
     Given I have a project
     When I perform the :check_project_overview_without_resource web console action with:
@@ -178,7 +178,7 @@ Feature: Check overview page
 
   # @author hasha@redhat.com
   # @case_id OCP-13641
-  Scenario: Check app resources on overview page
+  Scenario: OCP-13641 Check app resources on overview page
     Given the master version >= "3.6"
     Given I have a project
     When I run the :new_app client command with:

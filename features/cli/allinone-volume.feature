@@ -2,7 +2,7 @@ Feature: All in one volume
 
   # @author chezhang@redhat.com
   # @case_id OCP-11683
-  Scenario: Project secrets, configmap and downward API into the same volume with normal keys and path
+  Scenario: OCP-11683 Project secrets, configmap and downward API into the same volume with normal keys and path
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/allinone-volume/configmap.yaml |

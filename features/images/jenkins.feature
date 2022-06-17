@@ -258,7 +258,7 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12773
-  Scenario: new-app/new-build support for pipeline buildconfigs
+  Scenario: OCP-12773 new-app/new-build support for pipeline buildconfigs
     Given I have a project
     When I run the :new_app client command with:
       | app_repo    | https://github.com/sclorg/nodejs-ex |
@@ -448,7 +448,7 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-15384
-  Scenario: Jenkins pipeline build with OpenShift Client Plugin Example
+  Scenario: OCP-15384 Jenkins pipeline build with OpenShift Client Plugin Example
     And I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/openshift-client-plugin-pipeline.yaml |
@@ -474,7 +474,7 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-17357
-  Scenario: Explicitly set jdk version via env var in jenkins-2-rhel7
+  Scenario: OCP-17357 Explicitly set jdk version via env var in jenkins-2-rhel7
     Given I have a project
     When I run the :new_app client command with:
       | template | jenkins-ephemeral |

@@ -3,7 +3,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-10805
   @smoke
-  Scenario: Consume ConfigMap in environment variables
+  Scenario: OCP-10805 Consume ConfigMap in environment variables
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/configmap/configmap.yaml |
@@ -34,7 +34,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-11255
   @smoke
-  Scenario: Consume ConfigMap via volume plugin
+  Scenario: OCP-11255 Consume ConfigMap via volume plugin
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/configmap/configmap.yaml |
@@ -72,7 +72,7 @@ Feature: configMap
 
   # @author chezhang@redhat.com
   # @case_id OCP-11572
-  Scenario: Perform CRUD operations against a ConfigMap resource
+  Scenario: OCP-11572 Perform CRUD operations against a ConfigMap resource
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/configmap/configmap-example.yaml |
@@ -112,7 +112,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-9882
   @smoke
-  Scenario: Set command-line arguments with ConfigMap
+  Scenario: OCP-9882 Set command-line arguments with ConfigMap
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/configmap/configmap.yaml |
@@ -141,7 +141,7 @@ Feature: configMap
 
   # @author chezhang@redhat.com
   # @case_id OCP-9884
-  Scenario: Configuring redis using ConfigMap
+  Scenario: OCP-9884 Configuring redis using ConfigMap
     Given I have a project
     Given a "redis-config" file is created with the following lines:
     """
@@ -176,7 +176,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-9880
   @smoke
-  Scenario: Create ConfigMap from file
+  Scenario: OCP-9880 Create ConfigMap from file
     Given I have a project
     Given I create the "configmap-test" directory
     Given a "configmap-test/game.properties" file is created with the following lines:
@@ -269,7 +269,7 @@ Feature: configMap
 
   # @author chezhang@redhat.com
   # @case_id OCP-9881
-  Scenario: Create ConfigMap from literal values
+  Scenario: OCP-9881 Create ConfigMap from literal values
     Given I have a project
     When I run the :create_configmap client command with:
       | name         | special-config     |
@@ -292,7 +292,7 @@ Feature: configMap
 
   # @author chezhang@redhat.com
   # @case_id OCP-9879
-  Scenario: Create ConfigMap from directories
+  Scenario: OCP-9879 Create ConfigMap from directories
     Given I have a project
     Given I create the "configmap-test" directory
     Given a "configmap-test/game.properties" file is created with the following lines:
@@ -342,7 +342,7 @@ Feature: configMap
 
  # @author xiuli@redhat.com
  # @case_id OCP-16721
-  Scenario: Changes to ConfigMap should be auto-updated into container	
+  Scenario: OCP-16721 Changes to ConfigMap should be auto-updated into container	
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/configmap/configmap.json |

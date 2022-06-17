@@ -2,7 +2,7 @@ Feature: Pod related features on web console
 
   # @author yanpzhan@redhat.com
   # @case_id OCP-11534
-  Scenario: View streaming logs for a running pod
+  Scenario: OCP-11534 View streaming logs for a running pod
     Given I have a project
     #Create a pod
     And I run the :run client command with:

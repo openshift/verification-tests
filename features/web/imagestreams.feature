@@ -3,7 +3,7 @@ Feature: check image streams page
   # @author yapei@redhat.com
   # @case_id OCP-10738
   @smoke
-  Scenario: check image stream page
+  Scenario: OCP-10738 check image stream page
     Given I have a project
     When I perform the :check_empty_image_streams_page web console action with:
       | project_name | <%= project.name %> |

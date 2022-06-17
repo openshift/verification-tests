@@ -1,4 +1,5 @@
 Feature: rc related test
+
   Scenario: test new rc ready method
     Given I have a project
     When I run the :create client command with:

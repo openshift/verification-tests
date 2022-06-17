@@ -1,4 +1,5 @@
 Feature: test endpoint methods
+
   @admin
   Scenario: Test endpoint support in the framework
     Given I switch to cluster admin pseudo user

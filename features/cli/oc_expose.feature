@@ -2,7 +2,7 @@ Feature: oc_expose.feature
 
   # @author pruan@redhat.com
   # @case_id OCP-10873
-  Scenario: Access app througth secure service and regenerate service serving certs if it about to expire
+  Scenario: OCP-10873 Access app througth secure service and regenerate service serving certs if it about to expire
     Given the master version >= "3.3"
     Given I have a project
     Given a "caddyfile.conf" file is created with the following lines:

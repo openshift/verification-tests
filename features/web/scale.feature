@@ -2,7 +2,7 @@ Feature: scale related features
 
   # @author yanpzhan@redhat.com
   # @case_id OCP-11196
-  Scenario: Could scale up and down on overview page
+  Scenario: OCP-11196 Could scale up and down on overview page
     Given I have a project
     #Create pod with dc
     When I run the :run client command with:

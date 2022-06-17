@@ -2,7 +2,7 @@ Feature: Storage object in use protection
 
   # @author lxia@redhat.com
   # @case_id OCP-17253
-  Scenario: Delete pvc which is not in active use by pod should be deleted immediately
+  Scenario: OCP-17253 Delete pvc which is not in active use by pod should be deleted immediately
     Given I have a project
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"] | pvc-<%= project.name %> |
@@ -13,7 +13,7 @@ Feature: Storage object in use protection
 
   # @author lxia@redhat.com
   # @case_id OCP-17254
-  Scenario: Delete pvc which is in active use by pod should postpone deletion
+  Scenario: OCP-17254 Delete pvc which is in active use by pod should postpone deletion
     Given I have a project
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"] | pvc-<%= project.name %> |
@@ -48,7 +48,7 @@ Feature: Storage object in use protection
   # @author lxia@redhat.com
   # @case_id OCP-18796
   @admin
-  Scenario: Delete pv which is bind with pvc should postpone deletion
+  Scenario: OCP-18796 Delete pv which is bind with pvc should postpone deletion
     Given I have a project
     When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-template.json" where:
       | ["metadata"]["name"] | pv-<%= project.name %> |

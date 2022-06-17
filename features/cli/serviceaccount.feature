@@ -2,7 +2,7 @@ Feature: ServiceAccount and Policy Managerment
 
   # @author anli@redhat.com
   # @case_id OCP-10642
-  Scenario: Could grant admin permission for the service account username to access to its own project
+  Scenario: OCP-10642 Could grant admin permission for the service account username to access to its own project
     Given I have a project
     When I create a new application with:
       | image_stream | ruby         |
@@ -27,7 +27,7 @@ Feature: ServiceAccount and Policy Managerment
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-11494
-  Scenario: Could grant admin permission for the service account group to access to its own project
+  Scenario: OCP-11494 Could grant admin permission for the service account group to access to its own project
     Given I have a project
     When I run the :new_app client command with:
       | docker_image | openshift/hello-openshift |
@@ -60,7 +60,7 @@ Feature: ServiceAccount and Policy Managerment
 
   # @author wjiang@redhat.com
   # @case_id OCP-11249
-  Scenario: User can get the serviceaccount token via client
+  Scenario: OCP-11249 User can get the serviceaccount token via client
     Given I have a project
     When I run the :serviceaccounts_get_token client command with:
       |serviceaccount_name| default|

@@ -2,7 +2,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11132
-  Scenario: Create a build config based on the provided image and source code
+  Scenario: OCP-11132 Create a build config based on the provided image and source code
     Given I have a project
     When I run the :new_build client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
@@ -68,7 +68,7 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11133
-  Scenario: Create a build config based on the source code in the current git repository
+  Scenario: OCP-11133 Create a build config based on the source code in the current git repository
     Given I have a project
     And I git clone the repo "https://github.com/openshift/ruby-hello-world.git"
     When I run the :new_build client command with:
@@ -129,7 +129,7 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11139
-  Scenario: Create applications only with multiple db images
+  Scenario: OCP-11139 Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
       | image_stream      | openshift/mongodb:2.6                               |
@@ -181,7 +181,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11227
-  Scenario: Add multiple source inputs
+  Scenario: OCP-11227 Add multiple source inputs
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc517667/ruby22rhel7-template-sti.json |
@@ -204,7 +204,7 @@ Feature: build 'apps' with CLI
       | xiuwangs2i-2 |
 
   # @case_id OCP-10771
-  Scenario: Add a image with multiple paths as source input
+  Scenario: OCP-10771 Add a image with multiple paths as source input
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc517666/ruby22rhel7-template-sti.json |
@@ -220,7 +220,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11943
-  Scenario: Using a docker image as source input using new-build cmd
+  Scenario: OCP-11943 Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
       | source | openshift/python:latest |
@@ -281,7 +281,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11776
-  Scenario: Cannot create secret from local file and with same name via oc new-build
+  Scenario: OCP-11776 Cannot create secret from local file and with same name via oc new-build
     Given I have a project
     #Reusing similar secrets to TC #519256
     When I run the :create client command with:
@@ -307,7 +307,7 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11552
-  Scenario: Using a docker image as source input for docker build
+  Scenario: OCP-11552 Using a docker image as source input for docker build
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc517668/ruby22rhel7-template-docker.json |
@@ -358,7 +358,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11582
-  Scenario: Change runpolicy to SerialLatestOnly build
+  Scenario: OCP-11582 Change runpolicy to SerialLatestOnly build
     Given I have a project
     And I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby22rhel7-template-sti.json"
     And I replace lines in "ruby22rhel7-template-sti.json":
@@ -635,7 +635,7 @@ Feature: build 'apps' with CLI
 
   # @author pruan@redhat.com
   # @case_id OCP-10944
-  Scenario: Simple error message return when no value followed with oc build-logs
+  Scenario: OCP-10944 Simple error message return when no value followed with oc build-logs
     Given I have a project
     When I run the :build_logs client command with:
       | build_name | |
@@ -660,7 +660,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11023
-  Scenario: Handle build naming collisions
+  Scenario: OCP-11023 Handle build naming collisions
     Given I have a project
     When I run the :new_build client command with:
       | app_repo     | https://github.com/openshift/ruby-hello-world.git |
@@ -682,7 +682,7 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-10942
-  Scenario: Build env vars are set correctly for Extended build
+  Scenario: OCP-10942 Build env vars are set correctly for Extended build
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/test-for-s2i-extendbuild/master/extended-bc-scripts-in-repo.json |
@@ -705,7 +705,7 @@ Feature: build 'apps' with CLI
 
   # @author wzheng@redhat.com
   # @case_id OCP-17523
-  Scenario: io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
+  Scenario: OCP-17523 io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
     Given I have a project
     When I run the :new_app client command with:
       | app_repo | https://github.com/openshift/ruby-hello-world#beta4 |
@@ -720,7 +720,7 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-19631
-  Scenario: Insert configmap when create a buildconfig
+  Scenario: OCP-19631 Insert configmap when create a buildconfig
     Given I have a project
     Given a "configmap.test" file is created with the following lines:
     """
@@ -856,7 +856,7 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-18962
-  Scenario: Allow using a configmap as an input to a docker build
+  Scenario: OCP-18962 Allow using a configmap as an input to a docker build
     Given I have a project
     Given a "configmap1.test" file is created with the following lines:
     """

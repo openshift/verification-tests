@@ -2,7 +2,7 @@ Feature: Check links in Openshift
 
   # @author yasun@redhat.com
   # @case_id OCP-9873
-  Scenario: Check the CLI download links on web page
+  Scenario: OCP-9873 Check the CLI download links on web page
     When I run the :version client command
     Then the step should succeed
     And evaluation of `@result[:props][:openshift_server_version]` is stored in the :server_version clipboard

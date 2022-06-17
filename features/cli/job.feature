@@ -2,7 +2,7 @@ Feature: job.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-11206
-  Scenario: Create job with multiple completions
+  Scenario: OCP-11206 Create job with multiple completions
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc511597/job.yaml |
@@ -42,7 +42,7 @@ Feature: job.feature
 
   # @author chezhang@redhat.com
   # @case_id OCP-11935
-  Scenario: Go through the job example
+  Scenario: OCP-11935 Go through the job example
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job.yaml |
@@ -81,7 +81,7 @@ Feature: job.feature
 
   # @author qwang@redhat.com
   # @case_id OCP-11539
-  Scenario: Create job with pod parallelism
+  Scenario: OCP-11539 Create job with pod parallelism
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
       | ["spec"]["parallelism"]           | 1    |
@@ -169,7 +169,7 @@ Feature: job.feature
 
   # @author qwang@redhat.com
   # @case_id OCP-9948
-  Scenario: Create job with activeDeadlineSeconds
+  Scenario: OCP-9948 Create job with activeDeadlineSeconds
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job_with_lessthan_runtime_activeDeadlineSeconds.yaml |
@@ -189,7 +189,7 @@ Feature: job.feature
 
   # @author qwang@redhat.com
   # @case_id OCP-9952
-  Scenario: Specifying your own pod selector for job
+  Scenario: OCP-9952 Specifying your own pod selector for job
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job-manualselector.yaml |
@@ -206,7 +206,7 @@ Feature: job.feature
 
   # @author qwang@redhat.com
   # @case_id OCP-10734
-  Scenario: Create job with different pod restartPolicy
+  Scenario: OCP-10734 Create job with different pod restartPolicy
     Given I have a project
     Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job-restartpolicy.yaml"
     # Create job without restartPolicy
@@ -313,7 +313,7 @@ Feature: job.feature
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10781
-  Scenario: Create job with specific deadline
+  Scenario: OCP-10781 Create job with specific deadline
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job_with_0_activeDeadlineSeconds.yaml |
@@ -360,7 +360,7 @@ Feature: job.feature
 
   # @author chuyu@redhat.com
   # @case_id OCP-11644
-  Scenario: User can schedule a job execution with cron format time
+  Scenario: OCP-11644 User can schedule a job execution with cron format time
     Given I have a project
     When I run the :run client command with:
        | name    | sj3          	|
@@ -540,7 +540,7 @@ Feature: job.feature
 
   # @author geliu@redhat.com
   # @case_id OCP-17515
-  Scenario: User can schedule a Cronjob execution with cron format time
+  Scenario: OCP-17515 User can schedule a Cronjob execution with cron format time
     Given I have a project
     When I run the :run client command with:
        | name     | sj3       |

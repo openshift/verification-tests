@@ -4,7 +4,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-10025
   @admin
   @destructive
-  Scenario: kubelet proxy could change to userspace mode
+  Scenario: OCP-10025 kubelet proxy could change to userspace mode
     Given the env is using one of the listed network plugins:
       | subnet      |
       | multitenant |
@@ -37,7 +37,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-11286
   @admin
   @destructive
-  Scenario: iptables rules will be repaired automatically once it gets destroyed
+  Scenario: OCP-11286 iptables rules will be repaired automatically once it gets destroyed
     Given I select a random node's host
     And the node iptables config is verified
     And the node service is restarted on the host after scenario
@@ -49,7 +49,7 @@ Feature: SDN related networking scenarios
   # @author hongli@redhat.com
   # @case_id OCP-13847
   @admin
-  Scenario: an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
+  Scenario: OCP-13847 an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
     Given the master version >= "3.6"
     Given I select a random node's host
     And the node service is verified
@@ -65,7 +65,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-16217
   @admin
   @destructive
-  Scenario: SDN will detect the version and plugin type mismatch in openflow and restart node automatically
+  Scenario: OCP-16217 SDN will detect the version and plugin type mismatch in openflow and restart node automatically
     Given the master version >= "3.10"
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :node_name clipboard
@@ -128,7 +128,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-15251
   @admin
   @destructive
-  Scenario: net.ipv4.ip_forward should be always enabled on node service startup
+  Scenario: OCP-15251 net.ipv4.ip_forward should be always enabled on node service startup
     Given I select a random node's host
     And the node service is verified
     And the node network is verified
@@ -161,7 +161,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-14985
   @admin
   @destructive
-  Scenario: The openflow list will be cleaned after deleted the node
+  Scenario: OCP-14985 The openflow list will be cleaned after deleted the node
     Given environment has at least 2 nodes
     And I store the nodes in the :nodes clipboard
     Given I switch to cluster admin pseudo user
@@ -207,7 +207,7 @@ Feature: SDN related networking scenarios
   # @author hongli@redhat.com
   # @case_id OCP-18535
   @admin
-  Scenario: should not show "No such device" message when run "ovs-vsctl show" command
+  Scenario: OCP-18535 should not show "No such device" message when run "ovs-vsctl show" command
     Given I have a project
     And I have a pod-for-ping in the project
     Then I use the "<%= pod.node_name(user: user) %>" node

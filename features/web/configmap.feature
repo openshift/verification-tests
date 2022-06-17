@@ -2,7 +2,7 @@ Feature: ConfigMap related features
 
   # @author xxing@redhat.com
   # @case_id OCP-12006
-  Scenario: Edit ConfigMap on web console
+  Scenario: OCP-12006 Edit ConfigMap on web console
     Given the master version >= "3.5"
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/configmap/configmap.yaml" replacing paths:
@@ -60,7 +60,7 @@ Feature: ConfigMap related features
 
   # @author etrott@redhat.com
   # @case_id OCP-11052
-  Scenario: Add/Edit env vars from config maps
+  Scenario: OCP-11052 Add/Edit env vars from config maps
     Given the master version >= "3.6"
     Given I have a project
     When I run the :new_app client command with:

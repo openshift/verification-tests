@@ -3,7 +3,7 @@ Feature: functions about resource limits on pod
   # @author yapei@redhat.com
   # @case_id OCP-10773
   @admin
-  Scenario: Specify resource constraints for standalone rc and dc in web console with project limits already set
+  Scenario: OCP-10773 Specify resource constraints for standalone rc and dc in web console with project limits already set
     Given I create a new project
     # create limits and DC
     When I run the :create admin command with:

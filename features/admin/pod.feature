@@ -2,7 +2,7 @@ Feature: pod related features
 
   # @author xiuli@redhat.com
   # @case_id OCP-15808
-  Scenario: Endpoints should update in time and no delay
+  Scenario: OCP-15808 Endpoints should update in time and no delay
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
@@ -14,7 +14,7 @@ Feature: pod related features
   # @author pruan@redhat.com
   # @case_id OCP-12432
   @admin
-  Scenario: Expose shared memory of the pod--Clustered
+  Scenario: OCP-12432 Expose shared memory of the pod--Clustered
     Given I have a project
     When I run the :new_app client command with:
       | app_repo | openshift/deployment-example |
@@ -55,7 +55,7 @@ Feature: pod related features
   # @case_id OCP-10598
   @admin
   @destructive
-  Scenario: Existing pods will not be affected when node is unschedulable
+  Scenario: OCP-10598 Existing pods will not be affected when node is unschedulable
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/examples/hello-openshift/hello-pod.json |
@@ -90,7 +90,7 @@ Feature: pod related features
   # @case_id OCP-10345
   @admin
   @destructive
-  Scenario: pod node label selector must be consistent with its project node label selector
+  Scenario: OCP-10345 pod node label selector must be consistent with its project node label selector
     Given I have a project
     Given a 5 characters random string of type :dns is stored into the :proj_name clipboard
     When I run the :oadm_new_project admin command with:
@@ -108,7 +108,7 @@ Feature: pod related features
   # @case_id OCP-11116
   @admin
   @destructive
-  Scenario: New pods creation will be disabled on unschedulable nodes
+  Scenario: OCP-11116 New pods creation will be disabled on unschedulable nodes
     Given I have a project
     Given I store the schedulable nodes in the :nodes clipboard
     Given I register clean-up steps:
@@ -142,7 +142,7 @@ Feature: pod related features
   # @case_id OCP-11466
   @admin
   @destructive
-  Scenario: Recovering an unschedulable node
+  Scenario: OCP-11466 Recovering an unschedulable node
     Given I have a project
     Given I run the :patch admin command with:
       | resource | namespace |
@@ -175,7 +175,7 @@ Feature: pod related features
   # @author chezhang@redhat.com
   # @case_id OCP-11752
   @admin
-  Scenario: Pod will not be copied to nodes which does not match it's node selector
+  Scenario: OCP-11752 Pod will not be copied to nodes which does not match it's node selector
     Given I have a project
     Given I run the :patch admin command with:
       | resource | namespace |
@@ -205,7 +205,7 @@ Feature: pod related features
   # @case_id OCP-11925
   @admin
   @destructive
-  Scenario: Pods will still be created by DaemonSet when nodes are SchedulingDisabled
+  Scenario: OCP-11925 Pods will still be created by DaemonSet when nodes are SchedulingDisabled
     Given I have a project
     Given I store the schedulable nodes in the :nodes clipboard
     Given I register clean-up steps:
@@ -239,7 +239,7 @@ Feature: pod related features
   # @author chezhang@redhat.com
   # @case_id OCP-12047
   @admin
-  Scenario: When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
+  Scenario: OCP-12047 When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
     Given I have a project
     Given I run the :patch admin command with:
       | resource | namespace |
@@ -291,7 +291,7 @@ Feature: pod related features
   # @case_id OCP-12338
   @admin
   @destructive
-  Scenario: Secret is valid after node reboot
+  Scenario: OCP-12338 Secret is valid after node reboot
     Given I have a project
     Given I run the :patch admin command with:
       | resource | namespace |
@@ -363,7 +363,7 @@ Feature: pod related features
   # @case_id OCP-11595
   @admin
   @destructive
-  Scenario: Should show image digests in node status
+  Scenario: OCP-11595 Should show image digests in node status
     Given I store the schedulable nodes in the :nodes clipboard
     Given I use the "<%= cb.nodes[0].name %>" node
     Given I run commands on the host:
@@ -403,7 +403,7 @@ Feature: pod related features
   # @author chezhang@redhat.com
   # @case_id OCP-13374
   @admin
-  Scenario: Pod and container level selinuxoptions should both work
+  Scenario: OCP-13374 Pod and container level selinuxoptions should both work
     Given I have a project
     Given SCC "privileged" is added to the "default" user
     When I run the :create client command with:

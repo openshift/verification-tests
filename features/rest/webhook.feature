@@ -49,7 +49,7 @@ Feature: Webhook REST Related Tests
 
   # @author cryan@redhat.com
   # @case_id OCP-11270
-  Scenario: New parameter can be passed via generic webhook
+  Scenario: OCP-11270 New parameter can be passed via generic webhook
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby22rhel7-template-sti.json |

@@ -71,7 +71,7 @@ Feature: rolebindingrestriction.feature
 
   # @author zhaliu@redhat.com
   # @case_id OCP-13798
-  Scenario: After the project is deleted the rolebindingrestriction will be deleted too
+  Scenario: OCP-13798 After the project is deleted the rolebindingrestriction will be deleted too
     Given I have a project
     And evaluation of `project.name` is stored in the :project_name clipboard
     When I run the :get client command with:

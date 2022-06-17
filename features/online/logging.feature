@@ -2,7 +2,7 @@ Feature: online logging tests
 
   # @author pruan@redhat.com
   # @case_id OCP-10767
-  Scenario: Logout kibana web console
+  Scenario: OCP-10767 Logout kibana web console
     Given I create a project with non-leading digit name
     Given I login to kibana logging web console
     When I perform the :logout_kibana web action with:

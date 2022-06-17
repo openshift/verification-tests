@@ -4,7 +4,7 @@ Feature: Add pvc to pod from web related
   # @case_id OCP-10752
   @admin
   @destructive
-  Scenario: Attach pvc to pod with multiple containers from web console
+  Scenario: OCP-10752 Attach pvc to pod with multiple containers from web console
     Given I have a project
     And I have a NFS service in the project
     And default storage class is deleted
@@ -86,7 +86,7 @@ Feature: Add pvc to pod from web related
 
   # @author yanpzhan@redhat.com
   # @case_id OCP-10126
-  Scenario: Create persist volume claim from web console
+  Scenario: OCP-10126 Create persist volume claim from web console
     Given I have a project
 
     # Create ROX type pvc

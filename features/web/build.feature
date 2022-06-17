@@ -2,7 +2,7 @@ Feature: build related feature on web console
 
   # @author yapei@redhat.com
   # @case_id OCP-11773
-  Scenario: Modify buildconfig settings for Dockerfile source
+  Scenario: OCP-11773 Modify buildconfig settings for Dockerfile source
     Given I have a project
     When I run the :new_build client command with:
       | D     | FROM centos:7\nRUN yum install -y httpd |
@@ -42,7 +42,7 @@ Feature: build related feature on web console
 
   # @author xxia@redhat.com
   # @case_id OCP-12494
-  Scenario: Check build trigger info when the trigger is ImageChange on web
+  Scenario: OCP-12494 Check build trigger info when the trigger is ImageChange on web
     Given I have a project
     When I run the :create client command with:
       | f    | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc528954/bc_imagechange.yaml |

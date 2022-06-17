@@ -15,7 +15,7 @@ Feature: Template service broker related features
   # @author zitang@redhat.com
   # @case_id OCP-14477
   @admin
-  Scenario: Provision a templateinstance 
+  Scenario: OCP-14477 Provision a templateinstance 
     Given I have a project
     # Provision jenkins instance
     When I process and create:

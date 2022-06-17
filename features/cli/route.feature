@@ -2,7 +2,7 @@ Feature: route related features via cli
 
   # @author cryan@redhat.com
   # @case_id OCP-10629
-  Scenario: Expose routes from services
+  Scenario: OCP-10629 Expose routes from services
     Given I have a project
     When I run the :new_app client command with:
       | code | https://github.com/sclorg/s2i-perl-container |
@@ -27,7 +27,7 @@ Feature: route related features via cli
 
   # @author cryan@redhat.com
   # @case_id OCP-12022
-  Scenario: Be unable to add an existed alias name for service
+  Scenario: OCP-12022 Be unable to add an existed alias name for service
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/route_unsecure.json |

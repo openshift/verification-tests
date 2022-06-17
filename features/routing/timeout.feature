@@ -2,7 +2,7 @@ Feature: Testing timeout route
 
   # @author yadu@redhat.com
   # @case_id OCP-11635
-  Scenario: Set timeout server for passthough route
+  Scenario: OCP-11635 Set timeout server for passthough route
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:

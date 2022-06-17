@@ -2,7 +2,7 @@ Feature: resouces related scenarios
 
   # @author xxia@redhat.com
   # @case_id OCP-11882
-  Scenario: Return description of resources with cli describe
+  Scenario: OCP-11882 Return description of resources with cli describe
     Given I have a project
     And I create a new application with:
       | file     | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-stibuild.json |

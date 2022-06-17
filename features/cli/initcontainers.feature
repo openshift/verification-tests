@@ -2,7 +2,7 @@ Feature: InitContainers
 
   # @author dma@redhat.com
   # @case_id OCP-11318
-  Scenario: App container run depends on initContainer results in pod
+  Scenario: OCP-11318 App container run depends on initContainer results in pod
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-success.yaml |
@@ -30,7 +30,7 @@ Feature: InitContainers
 
   # @author dma@redhat.com
   # @case_id OCP-11814
-  Scenario: Check volume and readiness probe field in initContainer
+  Scenario: OCP-11814 Check volume and readiness probe field in initContainer
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/volume-init-containers.yaml |
@@ -51,7 +51,7 @@ Feature: InitContainers
 
   # @author dma@redhat.com
   # @case_id OCP-12166
-  Scenario: InitContainer should failed after exceed activeDeadlineSeconds
+  Scenario: OCP-12166 InitContainer should failed after exceed activeDeadlineSeconds
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-deadline.yaml |
@@ -67,7 +67,7 @@ Feature: InitContainers
 
   # @author chezhang@redhat.com
   # @case_id OCP-10908
-  Scenario: Access init container by oc command
+  Scenario: OCP-10908 Access init container by oc command
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-sleep.yaml |
@@ -120,7 +120,7 @@ Feature: InitContainers
   # @author chezhang@redhat.com
   # @case_id OCP-11975
   @admin
-  Scenario: Init containers properly apply to quota and limits
+  Scenario: OCP-11975 Init containers properly apply to quota and limits
     Given I have a project
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/quota.yaml |
@@ -169,7 +169,7 @@ Feature: InitContainers
   # @author chezhang@redhat.com
   # @case_id OCP-12222
   @admin
-  Scenario: SCC rules should apply to init containers
+  Scenario: OCP-12222 SCC rules should apply to init containers
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-privilege.yaml |

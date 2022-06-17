@@ -3,7 +3,7 @@ Feature: oc_volume.feature
   # @author xxia@redhat.com
   # @case_id OCP-12194
   @smoke
-  Scenario: Create a pod that consumes the secret in a volume
+  Scenario: OCP-12194 Create a pod that consumes the secret in a volume
     Given I have a project
     When I run the :secrets client command with:
       | action         | new-basicauth     |
@@ -48,7 +48,7 @@ Feature: oc_volume.feature
   # @author xxia@redhat.com
   # @case_id OCP-11906
   @smoke
-  Scenario: Add secret volume to dc and rc
+  Scenario: OCP-11906 Add secret volume to dc and rc
     Given I have a project
     When I run the :run client command with:
       | name   | mydc                 |
@@ -101,7 +101,7 @@ Feature: oc_volume.feature
   # @author xxia@redhat.com
   # @case_id OCP-11141
   @smoke
-  Scenario: Add gitRepo volume to pod, dc and rc
+  Scenario: OCP-11141 Add gitRepo volume to pod, dc and rc
     Given I have a project
     And I run the :run client command with:
       | name      | mydc              |

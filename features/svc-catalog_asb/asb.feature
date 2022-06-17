@@ -145,7 +145,7 @@ Feature: Ansible-service-broker related scenarios
   # @author zitang@redhat.com
   # @case_id OCP-15354
   @admin
-  Scenario: Check multiple broker support for service catalog
+  Scenario: OCP-15354 Check multiple broker support for service catalog
     Given admin checks that the "ansible-service-broker" cluster_service_broker exists
     And admin checks that the "template-service-broker" cluster_service_broker exists
 
