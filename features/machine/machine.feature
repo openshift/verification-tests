@@ -84,9 +84,9 @@ Feature: Machine features testing
   @admin
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Metrics is exposed on https
-    Given I switch to cluster admin pseudo user
+    Given the first user is cluster-admin 
     And I use the "openshift-monitoring" project
-    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :token clipboard
+    And evaluation of `service_account('prometheus-k8s').cached_tokens.first` is stored in the :token clipboard
 
     When I run the :exec admin command with:
       | n                | openshift-monitoring                                           |
