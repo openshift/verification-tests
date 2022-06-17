@@ -2,6 +2,8 @@ ansible
 firefox
 gcc-c++
 git
+libcurl-devel
+libxml2-devel
 make
 openssl
 pyOpenSSL
