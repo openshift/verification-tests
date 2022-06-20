@@ -160,9 +160,10 @@ module BushSlicer
     # 2021/09/04/12:11:12 and 2021/09/04/23:11:12 as differnt directories
     def s3_upload_file(bucket:, file:, target: nil, content_type: 'text/html')
       target ||= File.basename file
-      res = s3.bucket(bucket).object(target).upload_file(file, content_type: content_type)
-      logger.info("S3 upload file status: #{res}")
-      unless res
+      begin 
+        res = s3.bucket(bucket).object(target).upload_file(file, content_type: content_type)
+        logger.info("S3 upload file status: #{res}")
+      rescue
         # XXX: don't raise exception to avoid premature exit of long test runs
         logger.error("Failed to upload file '#{file}' to '#{target}'")
       end
