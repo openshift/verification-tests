@@ -47,8 +47,6 @@ module BushSlicer
           BushSlicer::Rdu_IPI_BM.new(service_name: service_name)
         when "nutanix"
           BushSlicer::Nutanix.new(service_name: service_name)
-        when "ovirt"
-          BushSlicer::Ovirt.new(service_name: service_name)
         else
           raise "unknown service type " \
             "#{conf[:services, service_name, :cloud_type]} for cloud " \
