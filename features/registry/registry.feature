@@ -247,6 +247,8 @@ Feature: Testing registry
       | dest             | mysql:8.0-el8                            |
       | reference_policy | local                                    |
     Then the step should succeed
+    Given the "mysql" image stream was created 
+    Given the "mysql" image stream becomes ready 
     When I run the :new_app client command with:
       | template | mysql-ephemeral               |
       | p        | NAMESPACE=<%= project.name %> |
