@@ -42,7 +42,8 @@ Feature: cluster monitoring related upgrade check
     Given the expression should be true> prometheus('k8s').retention == "3h"
 
     # get sa/prometheus-k8s token
-    When evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
+    Given I find a bearer token of the prometheus-k8s service account
+    When evaluation of `service_account('prometheus-k8s').cached_tokens.first` is stored in the :sa_token clipboard
 
     # curl -k -H "Authorization: Bearer $token" 'https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=cluster_installer'
     When I run the :exec admin command with:
