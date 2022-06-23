@@ -27,6 +27,7 @@ Given /^I find a bearer token of the(?: (.+?))? service account$/ do |acc|
   if service_account(acc).cached_tokens == []
     # Starting with kube 1.24, i.e. OCP 4.11, serviceaccount's YAML does not have an automatically-generated secret-based token
     # So we explicitly create token here
+    acc = service_account(acc).name if acc.include? ":" # when the arg uses format "system:serviceaccount:projectname:default"
     @result = user.cli_exec(:create_token, [[:serviceaccount, acc]])
     raise "Could not create token for the serviceaccount #{acc}" unless @result[:success]
     service_account(acc).add_str_token(@result[:response], protect: true)
