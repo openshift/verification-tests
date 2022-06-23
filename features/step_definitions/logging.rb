@@ -481,11 +481,7 @@ Given /^logging eventrouter is installed in the cluster$/ do
   step %Q/admin ensures "eventrouter" config_map is deleted from the "openshift-logging" project after scenario/
   step %Q/admin ensures "eventrouter" deployment is deleted from the "openshift-logging" project after scenario/
   clo_csv_version = subscription("cluster-logging").current_csv(cached: false)
-  if clo_csv_version.include? "cluster-logging"
-    image_version = clo_csv_version.match(/cluster-logging\.(.*)/)[1].split('-')[0]
-  else
-    image_version = clo_csv_version.match(/clusterlogging\.(.*)/)[1].split('-')[0]
-  end
+  image_version = clo_csv_version.split(".", 2).last.split(/[A-Za-z]/).last
   if image_version.start_with?("5")
     # from logging 5.0, the image name is changed to eventrouter-rhel8
     image_name = "eventrouter-rhel8"
@@ -816,9 +812,9 @@ end
 Given /^I check the cronjob status$/ do
   # check logging version
   step %Q/I use the "openshift-operators-redhat" project/
-  eo_version = subscription("elasticsearch-operator").current_csv(cached: false)[23..-1].split('-')[0]
+  eo_version = subscription("elasticsearch-operator").current_csv(cached: false).split(".", 2).last.split(/[A-Za-z]/).last
   step %Q/I use the "openshift-logging" project/
-  clo_version = subscription("cluster-logging").current_csv(cached: false)[16..-1].split('-')[0]
+  clo_version = subscription("cluster-logging").current_csv(cached: false).split(".", 2).last.split(/[A-Za-z]/).last
   #csv version >= 4.5, check rollover/delete cronjobs, csv < 4.5, only check curator cronjob
   if ["4.0", "4.1", "4.2", "4.3", "4.4"].include? clo_version.split('.').take(2).join('.')
     if cron_job('curator').exists?
@@ -1279,14 +1275,9 @@ Given /^logging collector name is stored in the#{OPT_SYM} clipboard$/ do | colle
   collector_name ||= "collector_name"
   fluentd_component_label ||= "collector"
 
-  clo_csv_version = subscription("cluster-logging").current_csv(cached: false)
-  if clo_csv_version.include? "cluster-logging"
-    clo_release_version = clo_csv_version.match(/cluster-logging\.(.*)/)[1].split('-')[0]
-  else
-    clo_release_version = clo_csv_version.match(/clusterlogging\.(.*)/)[1].split('-')[0]
-  end
+  clo_csv_version = subscription("cluster-logging").current_csv(cached: false).split(".", 2).last.split(/[A-Za-z]/).last
 
-  if Integer(clo_release_version.split('.')[0]) < 5 || (Integer(clo_release_version.split('.')[0]) ==5 &&  Integer(clo_release_version.split('.')[1]) < 3 )
+  if Integer(clo_csv_version.split('.')[0]) < 5 || (Integer(clo_csv_version.split('.')[0]) ==5 &&  Integer(clo_csv_version.split('.')[1]) < 3 )
      fluentd_component_label="fluentd"
   end
   cb[collector_name] = fluentd_component_label
@@ -1356,10 +1347,14 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
       if action == "check"
         # read logs line by line
         # ignore errors in https://issues.redhat.com/browse/LOG-2674 and https://issues.redhat.com/browse/LOG-2702
-        if container.name == "logfilesmetricexporter"
+        case container.name
+        when "logfilesmetricexporter"
           log = check_log(@result[:response], error_strings, ["can't remove non-existent inotify watch for"])
-        elsif container.name == "kibana"
+        when "kibana"
           log = check_log(@result[:response], error_strings, ["java.lang.UnsupportedOperationException"])
+        #ignore errors in https://issues.redhat.com/browse/LOG-2731
+        when "cluster-logging-operator"
+          log = check_log(@result[:response], error_strings, ["Reconcile Service"])
         else
           log = check_log(@result[:response], error_strings, nil)
         end
