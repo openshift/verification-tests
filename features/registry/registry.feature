@@ -267,7 +267,7 @@ Feature: Testing registry
   @heterogeneous @arm64 @amd64
   Scenario: OCP-29693 Disconnect Import image from a secure registry using node credentials
     Given I have a project
-    And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard
+    And evaluation of `image_content_source_policy('image-policy-0').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard
     When I run the :tag client command with:
       | source           | <%= cb.mirror_registry %>rhel8/mysql-80:latest |
       | dest             | mysql:8.0-el8                                  |
@@ -277,6 +277,8 @@ Feature: Testing registry
       | template | mysql-ephemeral               |
       | p        | NAMESPACE=<%= project.name %> |
     Then the step should succeed
+    Given the "mysql" image stream was created 
+    Given the "mysql" image stream becomes ready 
     When a pod becomes ready with labels:
       | deployment=mysql-1 |
     When I run the :describe client command with:
