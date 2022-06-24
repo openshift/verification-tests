@@ -48,7 +48,7 @@ set_operand_name:
 remove_operand_label:
   elements:
   - selector:
-      xpath: //tags-input//a[contains(@class,'remove-button')]
+      xpath: //tags-input//button[contains(@aria-label,'Close')]
     op: click
 set_selector_value:
   params:
@@ -526,14 +526,16 @@ check_default_view_is_form_view:
     selector:
       xpath: //input[@type='radio' and @value='form' and @checked]
 open_edit_form_view:
-  params:
-    radio_text: form
-  action:
-    if_element:
-      selector:
-        xpath: //input[@data-checked-state='false' and @value='form']
-    ref: click_radio_input
+  element:
+    selector:
+      id: form
+    type: input
+    op: click
 switch_to_yaml_view:
+  element:
+    selector:
+      id: yaml
+    type: input
   params:
     radio_text: yaml
   scripts:
