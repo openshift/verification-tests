@@ -118,6 +118,7 @@ Given /^kubedescheduler operator has been installed successfully$/ do
     end
   end
   # check csv existense
+  csv = nil
   success = wait_for(300, interval: 10) {
     csv = subscription('cluster-kube-descheduler-operator').current_csv
     !(csv.nil?) && cluster_service_version(csv).exists?
