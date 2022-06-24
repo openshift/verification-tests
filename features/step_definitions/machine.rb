@@ -2,13 +2,15 @@ Given(/^I have an IPI deployment$/) do
   # In an IPI deployment, machine number equals to node number
   machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   if machines.length == 0
-    logger.info "Not an IPI deployment, there are no machines"
+    logger.warn "Not an IPI deployment, there are no machines"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 
   machines.each do | machine |
     if machine.node_name.nil?
-      logger.info "machine #{machine.name} has no node ref, this is not a ready IPI deployment."
+      logger.warn "machine #{machine.name} has no node ref, this is not a ready IPI deployment."
+      logger.warn "We will skip this scenario"
       skip_this_scenario
     end
   end

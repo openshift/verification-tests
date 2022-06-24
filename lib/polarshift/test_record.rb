@@ -174,7 +174,7 @@ module BushSlicer
         scenario = self.test_case.scenarios.find { |s| s.match! test_case}
         unless scenario
           logger.warn "logic error: trying to start Cucumber scenario not part of this test record"
-          logger.warn "Skipping testcase #{test_case}"
+          logger.warn "Skipping testcase #{test_case}: #{test_case.name}"
         else
           scenario.start!
         end

@@ -46,8 +46,9 @@ Given /^the env is using one of the listed network plugins:$/ do |table|
     # only check stdout because stderr can contain "-" and cause the split to fail
     plugin_name = @result[:stdout].to_s.split("-").last
     unless plugin_list.include? plugin_name
-      logger.info "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
-      skip_this_scenario 
+      logger.warn "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
     end
   else
     _host = node.host rescue nil
@@ -77,7 +78,8 @@ Given /^the env is using one of the listed network plugins:$/ do |table|
     logger.info("environment network plugin name: #{plugin_name}")
 
     unless plugin_list.include? plugin_name
-      logger.info "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
+      logger.warn "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
+      logger.warn "We will skip this scenario"
       skip_this_scenario
     end
   end
@@ -147,7 +149,8 @@ Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
   end
 
   unless plugin_type.include?("openshift-ovs-networkpolicy")
-    logger.info "#{plugin_type} != openshift-ovs-networkpolicy.  This is unsupported?"
+    logger.warn "#{plugin_type} != openshift-ovs-networkpolicy.  This is unsupported?"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 
@@ -461,7 +464,8 @@ Given /^I restart the openvswitch service on the node$/ do
         pod.node_name == node.name
       }.first
     else
-      logger.info "unknown network_type"
+      logger.warn "unknown network_type"
+      logger.warn "We will skip this scenario"
       skip_this_scenario
     end
     @result = ovs_pod.ensure_deleted(user: _admin)
@@ -490,7 +494,8 @@ Given /^I restart the network components on the node( after scenario)?$/ do |aft
           pod.node_name == _node.name
         }.first
       else
-        logger.info "unknown network_type"
+        logger.warn "unknown network_type"
+        logger.warn "We will skip this scenario"
         skip_this_scenario
       end
       @result = net_pod.ensure_deleted(user: _admin)
@@ -522,7 +527,8 @@ Given /^I get the networking components logs of the node since "(.+)" ago$/ do |
     }.first
     @result = admin.cli_exec(:logs, resource_name: ovnkube_pod.name, n: "openshift-ovn-kubernetes", since: duration)
   else
-    logger.info "unknown network_type"
+    logger.warn "unknown network_type"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 end
@@ -614,7 +620,8 @@ Given /^the multus is enabled on the cluster$/ do
     end
   } 
   unless success
-    logger.info "Multus is not running correctly! Exit Testing"
+    logger.warn "Multus is not running correctly!"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 end
@@ -660,7 +667,8 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
     cache_resources ovnkube_pod
     @result = ovnkube_pod.exec(network_cmd, container: "ovn-controller", as: admin)
   else
-    logger.info "unknown network_type"
+    logger.warn "unknown network_type"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
   # Don't check success here, let the testcase do thad
@@ -695,7 +703,8 @@ Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
         pod.node_name == node_name
       }.first
     else
-      logger.info "unknown network_type"
+      logger.warn "unknown network_type"
+      logger.warn "We will skip this scenario"
       skip_this_scenario
     end
     @result = ovs_pod.ensure_deleted(user: _admin)
@@ -720,7 +729,8 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   when "OpenShiftSDN"
     step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
-    logger.info "unknown network_type"
+    logger.warn "unknown network_type"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
   # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
@@ -803,7 +813,8 @@ Given /^I run cmds on all ovs pods:$/ do | table |
     when "OVNKubernetes"
       ovs_pods = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true)
     else
-      logger.info "unknown network_type"
+      logger.warn "unknown network_type"
+      logger.warn "We will skip this scenario"
       skip_this_scenario
     end
     ovs_pods.each do |pod|
@@ -839,7 +850,8 @@ Given /^I run command on the#{OPT_QUOTED} node's ovs pod:$/ do |node_name, table
         pod.node_name == node_name
       }.first
     else
-      logger.info "unknown network_type"
+      logger.warn "unknown network_type"
+      logger.warn "We will skip this scenario"
       skip_this_scenario
     end
     cache_resources ovs_pod
@@ -866,7 +878,8 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   _admin = admin
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
   unless network_operator.network_type(user: _admin) == network_type
-    logger.info  "the networkType is not #{network_type}"
+    logger.warn  "the networkType is not #{network_type}"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 end
@@ -883,7 +896,8 @@ Given /^the env is using windows nodes$/ do
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "nodes", show_label:true)
   unless @result[:response].include? "kubernetes.io/os=windows"
-    logger.info "env doesn't have any windows node"
+    logger.warn "env doesn't have any windows node"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 end
@@ -893,7 +907,8 @@ Given /^the env has hybridOverlayConfig enabled$/ do
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig}")
   unless @result[:response].include? "hybridOverlayConfig"
-    logger.info "env doesn't have hybridOverlayConfig enabled"
+    logger.warn "env doesn't have hybridOverlayConfig enabled"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 end
@@ -1004,7 +1019,8 @@ Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipbo
   when "OpenShiftSDN"
     inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[?(@.type==\"InternalIP\")].address}")
   else
-    logger.info "unknown networkType"
+    logger.warn "unknown networkType"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
   # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
@@ -1247,7 +1263,8 @@ Given /^I install machineconfigs load-sctp-module$/ do
       raise "Failed to install load-sctp-module" unless @result[:success]
     end
   else
-    logger.info "At least two schedulable workers are needed"
+    logger.warn "At least two schedulable workers are needed"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 end
@@ -1312,7 +1329,8 @@ Given /^I save egress data file directory to the#{OPT_SYM} clipboard$/ do | cb_n
   when "OpenShiftSDN"
     cb[cb_name]="egressnetworkpolicy"
   else
-    logger.info "unknown network_type"
+    logger.warn "unknown network_type"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
   logger.info "The egressfirewall file directory path is stored to the #{cb_name} clipboard."
@@ -1329,7 +1347,8 @@ Given /^I save egress type to the#{OPT_SYM} clipboard$/ do | cb_name |
   when "OpenShiftSDN"
     cb[cb_name] = "egressnetworkpolicy"
   else
-    logger.info "unknown network_type"
+    logger.warn "unknown network_type"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
   logger.info "The egressfirewall type is stored to the #{cb_name} clipboard."
@@ -1351,8 +1370,9 @@ Given /^the IPsec is enabled on the cluster$/ do
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
   default_network = network_operator.default_network(user: admin)
   unless default_network["ipsecConfig"]
-     logger.info "env doesn't have IPSec enabled"
-     skip_this_scenario
+    logger.warn "env doesn't have IPSec enabled"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end 
 end
 
@@ -1492,7 +1512,8 @@ Given /^the cluster is not migration from sdn plugin$/ do
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration}")
   if @result[:stdout]["networkType"]
-    logger.info "the cluster is migration from sdn plugin"
+    logger.warn "the cluster is migration from sdn plugin"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 end
@@ -1502,7 +1523,8 @@ Given /^the cluster has workers for sctp$/ do
   _admin = admin
   @result = _admin.cli_exec(:describe, resource: "node")
   if @result[:response].match(/desiredConfig: rendered-worker/).nil?
-    logger.info "No proper worker nodes to run sctp tests, skip!!!"
+    logger.warn "No proper worker nodes to run sctp tests, skip!!!"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 end
