@@ -40,7 +40,9 @@ module BushSlicer
       end
 
       config.on_event :test_case_finished do |event|
-        tc_manager.signal(:end_case, event)
+        unless event.result.skipped?
+          tc_manager.signal(:end_case, event)
+        end
       end
 
       config.on_event :test_run_finished do |event|
