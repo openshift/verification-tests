@@ -1550,29 +1550,25 @@ Given /^the egressfirewall policy is applied to the "(.+?)" namespace$/ do | pro
   ensure_admin_tagged
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
   network_type = network_operator.network_type(user: admin)
+  policy_file = ''
   case network_type
   when "OVNKubernetes"
     step "I save cluster type to the clipboard"
     if cb.cluster_type == "dualstack"
-      @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/networking/ovn-egressfirewall/limit_policy_dualstack.json")
-      unless @result[:success]
-        raise "Failed to apply the egressfirewall policy to specified namespace."
-      end
+      policy_file = "networking/ovn-egressfirewall/limit_policy_dualstack.json"
     elsif cb.cluster_type == "ipv4single"
-      @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/networking/ovn-egressfirewall/limit_policy.json")
-      unless @result[:success]
-        raise "Failed to apply the egressfirewall policy to specified namespace."
-      end
+      policy_file = "networking/ovn-egressfirewall/limit_policy.json"
     else
       skip_this_scenario
     end
   when "OpenShiftSDN"
-    @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/networking/egressnetworkpolicy/limit_policy.json")
-    unless @result[:success]
-      raise "Failed to apply the egressnetworkpolicy to specified namespace."
-    end
+    policy_file = "networking/egressnetworkpolicy/limit_policy.json"
   else
     raise "unknown network_type"
+  end
+  @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/#{policy_file}")
+  unless @result[:success]
+    raise "Failed to apply the egressnetworkpolicy to specified namespace."
   end
   logger.info "The egressfirewall type is applied."
 end
