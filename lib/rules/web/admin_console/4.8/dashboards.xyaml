@@ -520,8 +520,9 @@ check_network_out_breakdown_info_when_filter_by_node:
 click_operator_status:
   elements:
   - selector:
-      xpath: //div[@class='co-status-card__health-item']/div[@class='co-dashboard-icon']/following-sibling::div[contains(., 'Operators')]//button[@aria-disabled='false']
+      xpath: //div[@class='co-status-card__health-item']//button[contains(.,'Operators')]    
     op: click
+    timeout: 60
 check_operator_status:
   elements:
   - selector:
@@ -544,20 +545,12 @@ check_view_all_for_operators:
   params:
     text: View all
     link_url: k8s/all-namespaces/operators.coreos.com~v1alpha1~ClusterServiceVersion
-    content: Installed Operators
-  action: goto_cluster_dashboards_page
-  action: click_operator_status
-  action: click_link_with_text
-  action: check_page_contains
+  action: check_link_and_text
 check_view_all_for_cluster_operators:
   params:
     text: View all
     link_url: settings/cluster/clusteroperators
-    content: Cluster Settings
-  action: goto_cluster_dashboards_page
-  action: click_operator_status
-  action: click_link_with_text
-  action: check_page_contains
+  action: check_link_and_text
 check_cluster_operator_status_on_status_card:
   params:
     operator_type: Cluster operators
