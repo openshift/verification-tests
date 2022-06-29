@@ -70,7 +70,7 @@ module BushSlicer
             Kernel.puts("#{job.human_id} - already reserved")
           end
           test_suite.incomplete.each do |job|
-            Kernel.puts("#{job.human_id} - could not find all scenarios")
+            Kernel.puts("#{job.human_id} - could not find scenario, or scenario not suitable for current TEST_MODE")
           end
           test_suite.non_runnable.each do |job|
             Kernel.puts("#{job.human_id} - not runnable")

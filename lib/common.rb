@@ -175,7 +175,7 @@ module BushSlicer
 
     module Setup
       def self.handle_signals
-        # Cucumber traps SIGINT anf SIGTERM to allow graceful shutdown
+        # Cucumber traps SIGINT and SIGTERM to allow graceful shutdown
         # see https://github.com/cucumber/cucumber/issues/27
         Signal.trap('SIGINT') { exit(false) }
         #Signal.trap('SIGTERM') { exit(false) } # it works like that already
