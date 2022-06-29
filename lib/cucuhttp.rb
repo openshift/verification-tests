@@ -143,6 +143,24 @@ module BushSlicer
       logger.trace("HTTP response:\n#{result[:response]}")
       return result
     end
+
+    def self.request_with_retry(**request_opts, &block)
+      begin
+        attempts ||= 1
+        http_request(**request_opts, &block)
+      rescue
+        puts "Timeout: #{e} (attempt ##{ attempts })"
+        if (attempts += 1) <= 6 # retry if condition ok
+          puts "<retrying..>"
+          sleep 30
+          retry
+        else
+          puts "--------------------------"
+          puts "Retry attempts exceeded. Moving on."
+        end
+      end
+    end
+
     class << self
       alias request http_request
     end
