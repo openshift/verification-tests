@@ -394,7 +394,7 @@ Feature: Pod related networking scenarios
     Given I wait up to 20 seconds for the steps to pass:
     """
     And I execute on the pod:
-      | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
+      | bash | -c | conntrack -L \| grep "<%= cb.host_pod1.ip %>" |
     Then the step should succeed
     And the output should contain:
       |<%= cb.host_pod1.ip %>|
@@ -418,7 +418,7 @@ Feature: Pod related networking scenarios
     Given I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.network_pod %>" pod:
-      | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
+      | bash | -c | conntrack -L \| grep "<%= cb.host_pod2.ip %>" |
     Then the output should contain "<%= cb.host_pod2.ip %>"
     And the output should not contain "<%= cb.host_pod1.ip %>"
     """
