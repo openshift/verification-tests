@@ -13,18 +13,28 @@ Feature: testing multicast scenarios
   @heterogeneous @arm64 @amd64
   Scenario: OCP-12926 pods should be able to subscribe send and receive multicast traffic
     # create some multicast testing pods
+    Given I store the schedulable workers in the :nodes clipboard
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
-    When I run the :create client command with:
-      | f | multicast-rc.json |
+    When I run oc create over "multicast-rc.json" replacing paths:
+      | ["spec"]["replicas"] | 2                       |
+      | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
-    Given 3 pods become ready with labels:
+    Given 2 pods become ready with labels:
       | name=mcast-pods |
     And evaluation of `pod(0).ip` is stored in the :pod1ip clipboard
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
     And evaluation of `pod(1).ip` is stored in the :pod2ip clipboard
     And evaluation of `pod(1).name` is stored in the :pod2 clipboard
+    When I run oc create over "multicast-rc.json" replacing paths:
+      | ["metadata"]["name"]                               | "mcast-rc2"             |
+      | ["spec"]["replicas"]                               | 1                       |
+      | ["spec"]["nodeName"]                               | <%= cb.nodes[1].name %> |
+      | ["spec"]["template"]["metadata"]["labels"]["name"] | "mcast2-pods"           |
+    Then the step should succeed
+    Given 1 pod becomes ready with labels:
+      | name=mcast2-pods |
     And evaluation of `pod(2).ip` is stored in the :pod3ip clipboard
     And evaluation of `pod(2).name` is stored in the :pod3 clipboard
 
@@ -500,13 +510,11 @@ Feature: testing multicast scenarios
   @heterogeneous @arm64 @amd64
   Scenario: OCP-12929 pods should not be able to receive multicast traffic from other pods in different namespace
     # create some multicast testing pods in one project
-    Given I store the schedulable workers in the :nodes clipboard
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
     When I run oc create over "multicast-rc.json" replacing paths:
       | ["spec"]["replicas"] | 1                       |
-      | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given 1 pod becomes ready with labels:
       | name=mcast-pods |
@@ -522,7 +530,6 @@ Feature: testing multicast scenarios
     Given I obtain test data file "networking/multicast-rc.json"
     When I run oc create over "multicast-rc.json" replacing paths:
       | ["spec"]["replicas"] | 1                       |
-      | ["spec"]["nodeName"] | <%= cb.nodes[1].name %> |
     Then the step should succeed
     Given 1 pod becomes ready with labels:
       | name=mcast-pods |
