@@ -24,6 +24,7 @@ Feature: buildconfig.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-10667
+  @inactive
   Scenario: OCP-10667 Rebuild image when the underlying image changed for Docker build
     Given I have a project
     When I run the :new_build client command with:
@@ -42,6 +43,7 @@ Feature: buildconfig.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-12020
+  @inactive
   Scenario: OCP-12020 Trigger chain builds from a image update
     Given I have a project
     When I run the :new_build client command with:
@@ -90,6 +92,7 @@ Feature: buildconfig.feature
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
       | template                  |
       | test-buildconfig-s2i.json | # @case_id OCP-11474
@@ -105,6 +108,7 @@ Feature: buildconfig.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-12057 Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:

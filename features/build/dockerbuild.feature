@@ -11,6 +11,7 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-12115 Docker build with both SourceURI and context dir
     Given I have a project
     Given I obtain test data file "build/ruby20rhel7-context-docker.json"
@@ -39,6 +40,7 @@ Feature: dockerbuild.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-30854 Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
@@ -79,6 +81,7 @@ Feature: dockerbuild.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13083
+  @inactive
   Scenario: OCP-13083 Docker build using Dockerfile with 'FROM scratch'
     Given I have a project
     When I run the :new_build client command with:
@@ -104,6 +107,7 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-12855 Add ARGs in docker build
     Given I have a project
     When I run the :new_build client command with:
@@ -168,6 +172,7 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-42157 Mount source secret to builder container- dockerstrategy
     Given I have a project
     When I run the :create_secret client command with:
@@ -210,6 +215,7 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-42158 Mount source configmap to builder container- dockerstrategy
     Given I have a project
     When I run the :create_configmap client command with:
@@ -251,6 +257,7 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-42184 Mount multi paths to builder container
     Given I have a project
     When I run the :create_secret client command with:
@@ -294,6 +301,7 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-42185 Can't add relative path for mount path
     Given I have a project
     When I run the :create_secret client command with:
@@ -333,6 +341,7 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-42529 Mount source name must be unique
     Given I have a project
     When I run the :create_secret client command with:

@@ -61,6 +61,7 @@ Feature: build 'apps' with CLI
     Then the output should not contain:
       | ruby-sample-build |
 
+    @inactive
     Examples:
       | number   | build_status |
       | ocp11224 | :complete    | # @case_id OCP-11224
@@ -77,6 +78,7 @@ Feature: build 'apps' with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-11133 Create a build config based on the source code in the current git repository
     Given I have a project
     And I git clone the repo "https://github.com/openshift/ruby-hello-world.git"
@@ -146,6 +148,7 @@ Feature: build 'apps' with CLI
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-11139 Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
@@ -190,6 +193,7 @@ Feature: build 'apps' with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-11227 Add multiple source inputs
     Given I have a project
     Given I obtain test data file "templates/ocp11227/ruby22rhel7-template-sti.json"
@@ -223,6 +227,7 @@ Feature: build 'apps' with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-10771 Add a image with multiple paths as source input
     Given I have a project
     Given I obtain test data file "templates/ocp10771/ruby22rhel7-template-sti.json"
@@ -249,6 +254,7 @@ Feature: build 'apps' with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-11943 Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
@@ -318,6 +324,7 @@ Feature: build 'apps' with CLI
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-11776 Cannot create secret from local file and with same name via oc new-build
     Given I have a project
     Given I obtain test data file "secrets/testsecret1.json"
@@ -353,6 +360,7 @@ Feature: build 'apps' with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-11552 Using a docker image as source input for docker build
     Given I have a project
     Given I obtain test data file "templates/ocp11552/ruby22rhel7-template-docker.json"
@@ -402,6 +410,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     Given the "<build_name>" build becomes :complete
 
+    @inactive
     Examples:
       | bc_name              | build_name             | file_name        |
       | ruby-sample-build-ns | ruby-sample-build-ns-1 | Nonesrc-sti.json | # @case_id OCP-11580
@@ -417,6 +426,7 @@ Feature: build 'apps' with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-11582 Change runpolicy to SerialLatestOnly build
     Given I have a project
     When I run the :new_build client command with:
@@ -639,6 +649,7 @@ Feature: build 'apps' with CLI
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
       | num1 | num2 | num3 | num4 | num5 |
       | 5    | 5    | 5    | 5    | 5    | # @case_id OCP-15019
@@ -711,6 +722,7 @@ Feature: build 'apps' with CLI
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
       | cmd       |
       | new_build | # @case_id OCP-12066
@@ -755,6 +767,7 @@ Feature: build 'apps' with CLI
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-11023 Handle build naming collisions
     Given I have a project
     When I run the :new_build client command with:
@@ -787,6 +800,7 @@ Feature: build 'apps' with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-17523 io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
     Given I have a project
     When I run the :new_app client command with:
@@ -811,6 +825,7 @@ Feature: build 'apps' with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-19631 Insert configmap when create a buildconfig
     Given I have a project
     Given a "configmap.test" file is created with the following lines:
@@ -950,6 +965,7 @@ Feature: build 'apps' with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-18962 Allow using a configmap as an input to a docker build
     Given I have a project
     Given a "configmap1.test" file is created with the following lines:

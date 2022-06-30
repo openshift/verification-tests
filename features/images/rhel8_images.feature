@@ -7,6 +7,7 @@ Feature: rhel8images.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
+  @inactive
   Scenario: OCP-22950 Using new-app cmd to create app with ruby rhel8 image
     Given I have a project
     When I run the :tag admin command with:
@@ -138,6 +139,7 @@ Feature: rhel8images.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-22958 Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project
     When I run the :new_app client command with:

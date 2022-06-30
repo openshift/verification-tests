@@ -41,6 +41,7 @@ Feature: stibuild.feature
     @proxy @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
       | template          |
       | ocp12041-s2i.json | # @case_id OCP-12041
@@ -55,6 +56,7 @@ Feature: stibuild.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-30858 STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
@@ -121,6 +123,7 @@ Feature: stibuild.feature
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-28891 Test s2i build in disconnect cluster
     Given I have a project
     When I have an http-git service in the project
@@ -154,6 +157,7 @@ Feature: stibuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-42159 Mount source secret and configmap to builder container- sourcestrategy
     Given I have a project
     When I run the :create_secret client command with:
