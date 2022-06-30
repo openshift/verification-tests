@@ -464,6 +464,13 @@ module BushSlicer
           admin.cli_exec(:annotate, resource: "namespace", resourcename: project_name, keyval: 'openshift.io/node-selector=', overwrite: true)
           # we must update the cache, since we just waited for the previously active project to disappear
           project.reload
+          success = wait_for(60, interval: 5) {
+            uid_range = admin.cli_exec(:get, resource: "namespace", resource_name: project_name, template: '{{ index .metadata.annotations "openshift.io/sa.scc.uid-range" }}')
+            !uid_range.nil? && !uid_range.empty? && uid_range !~ /no value/
+          }
+          unless success
+            raise "timeout waiting for project #{project_name} to get annotation openshift.io/sa.scc.uid-range"
+          end
         end
         @service_project = project
       end
