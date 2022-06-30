@@ -56,3 +56,8 @@ click_item_in_breadcrumb:
       xpath: //li[contains(@class,'pf-c-breadcrumb__item')]//button[contains(.,'<breadcrumb_item>')]
     op: click
 
+click_yaml_view_label:
+  element:
+    selector:
+      xpath: //*[@id="content-scrollable"]/section/div/div[2]/div/form/div[1]/div[2]/div/div[2]/div[2]/label
+    op: click
