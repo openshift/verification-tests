@@ -1256,6 +1256,12 @@ end
 Given /^I install machineconfigs load-sctp-module$/ do
   ensure_admin_tagged
   _admin = admin
+  @result = _admin.cli_exec(:get, resource: "nodes")
+    if @result[:response].include?("SchedulingDisabled") || @result[:response].include?("NotReady")
+      logger.warn "There are some nodes already in not normal status."
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
+    end
   if cb.workers.count > 1
     @result = _admin.cli_exec(:get, resource: "machineconfigs", output: 'jsonpath={.items[?(@.metadata.name=="load-sctp-module")].metadata.name}')
     if @result[:response] != "load-sctp-module"

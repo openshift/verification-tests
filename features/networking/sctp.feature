@@ -131,8 +131,8 @@ Feature: SCTP related scenarios
   @heterogeneous @arm64 @amd64
   Scenario: OCP-28759 Expose SCTP NodePort Services
     Given I store the ready and schedulable workers in the :workers clipboard
-    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     Given I install machineconfigs load-sctp-module
+    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
