@@ -1528,3 +1528,47 @@ Given /^the cluster has workers for sctp$/ do
     skip_this_scenario
   end
 end
+ 
+Given /^I save cluster type to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "cluster_type" unless cb_name
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.serviceNetwork}")
+  if @result[:response].count(":") >= 2 && @result[:response].count(".") >= 2
+    cb[cb_name]="dualstack"
+  elsif @result[:response].count(":") >= 2
+    cb[cb_name]="ipv6single"
+  elsif @result[:response].count(".") >= 2
+    cb[cb_name]="ipv4single"
+  else
+    raise "unknown cluster_type"
+    skip_this_scenario
+  end
+  logger.info "The cluster type #{cb[cb_name]} is stored to the #{cb_name} clipboard."
+end
+
+Given /^the egressfirewall policy is applied to the "(.+?)" namespace$/ do | project_name |
+  ensure_admin_tagged
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  policy_file = ''
+  case network_type
+  when "OVNKubernetes"
+    step "I save cluster type to the clipboard"
+    if cb.cluster_type == "dualstack"
+      policy_file = "networking/ovn-egressfirewall/limit_policy_dualstack.json"
+    elsif cb.cluster_type == "ipv4single"
+      policy_file = "networking/ovn-egressfirewall/limit_policy.json"
+    else
+      skip_this_scenario
+    end
+  when "OpenShiftSDN"
+    policy_file = "networking/egressnetworkpolicy/limit_policy.json"
+  else
+    raise "unknown network_type"
+  end
+  @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/#{policy_file}")
+  unless @result[:success]
+    raise "Failed to apply the egressnetworkpolicy to specified namespace."
+  end
+  logger.info "The egressfirewall type is applied."
+end
