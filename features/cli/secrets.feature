@@ -181,6 +181,7 @@ Feature: secrets related scenarios
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
       | type   | build_secret         | path      | command | expression               |
       | docker | testsecret1:mysecret1| mysecret1 | ls      | true                     | # @case_id OCP-11947
@@ -421,6 +422,7 @@ Feature: secrets related scenarios
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-10982 oc new-app to gather git creds
     Given I have a project
     When I have an http-git service in the project
@@ -501,6 +503,7 @@ Feature: secrets related scenarios
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12838
+  @inactive
   Scenario: OCP-12838 Use build source secret based on annotation on Secret --http
     Given I have a project
     When I have an http-git service in the project

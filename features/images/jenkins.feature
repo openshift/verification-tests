@@ -105,6 +105,7 @@ Feature: jenkins.feature
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     @amd64
+    @inactive
     Examples:
       | version |
       | 2       | # @case_id OCP-10980
@@ -119,6 +120,7 @@ Feature: jenkins.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-12773 new-app/new-build support for pipeline buildconfigs
     Given I have a project
     When I run the :new_app client command with:
@@ -376,6 +378,7 @@ Feature: jenkins.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-35068 Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project
     When I run the :new_app client command with:
