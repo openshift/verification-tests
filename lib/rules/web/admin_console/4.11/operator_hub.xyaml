@@ -48,7 +48,7 @@ set_operand_name:
 remove_operand_label:
   elements:
   - selector:
-      xpath: //tags-input//a[contains(@class,'remove-button')]
+      xpath: //tags-input//button[contains(@aria-label,'Close')]
     op: click
 set_selector_value:
   params:
@@ -507,11 +507,11 @@ check_fips_mode_infras_value_in_operator_modal:
   action: click_checkbox_fips_from_infrastructure_features
 filter_by_keyword_on_catalog_page:
   elements:
-  - selector:
-      xpath: //input[contains(@class, 'pf-c-search-input__text-input')]
+  - selector: &search_input
+      xpath: //div[@data-test='search-operatorhub']//input
     op: send_keys :backspace
   - selector:
-      xpath: //input[contains(@class, 'pf-c-search-input__text-input')]
+      <<: *search_input
     op: send_keys <keyword>
 open_operator_modal:
   params:
