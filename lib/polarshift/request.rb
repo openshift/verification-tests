@@ -276,7 +276,7 @@ module BushSlicer
         return list
       end
 
-      # refresh PolarShift cashe of test cases
+      # refresh PolarShift cache of test cases
       def refresh_cases(project_id, case_ids)
         Http.request_with_retry(
           method: :put,
