@@ -66,7 +66,7 @@ module BushSlicer
         self.location == test_case.location.to_s
       end
 
-      # @param test_case [Cucumber::Core::Test::Case, Cucumber::Events::TestRunFinished]
+      # @param test_case [Cucumber::Core::Test::Case, Cucumber::Events::TestCaseFinished]
       def match!(test_case)
         if Cucumber::Events::TestCaseFinished === test_case
           result = test_case.result

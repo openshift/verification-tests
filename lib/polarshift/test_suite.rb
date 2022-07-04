@@ -109,12 +109,12 @@ module BushSlicer
           return true
         else
           puts "logic error: starting test case '#{test_case}' that is not part of current test record\n"
-          #raise "logic error: starting test case that is not part of current test record"
+          return false
         end
       end
 
       # @param test_case [Cucumber::Core::Test::Case]
-      # @note this method is redundant when using #reserve! instad of
+      # @note this method is redundant when using #reserve! instead of
       #   #test_case_execute_start!
       def test_case_execute_start!(test_case)
         test_case_expected?(test_case)
@@ -150,12 +150,12 @@ module BushSlicer
       def test_case_expected?(test_case)
         unless current_test_record
           puts "logic error: expected to have current test record but we do not\n"
-          puts "Skipping testcase due to lacking testrecord for #{test_case}\n"
+          puts "Skipping testcase due to lacking testrecord for #{test_case}: #{test_case.name}\n"
         end
 
         unless current_test_record.in_progress?(test_case)
           puts "logic error: test case in progress status confusion\n"
-          puts "Skipping testcase due to logic error for #{test_case}\n"
+          puts "Skipping testcase due to logic error for #{test_case}: #{test_case.name}\n"
         end
       end
 
