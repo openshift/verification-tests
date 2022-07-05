@@ -4,14 +4,14 @@ Given(/^I have an IPI deployment$/) do
   if machines.length == 0
     logger.warn "Not an IPI deployment, there are no machines"
     logger.warn "We will skip this scenario"
-    skip_this_scenario
+    # skip_this_scenario
   end
 
   machines.each do | machine |
     if machine.node_name.nil?
       logger.warn "machine #{machine.name} has no node ref, this is not a ready IPI deployment."
       logger.warn "We will skip this scenario"
-      skip_this_scenario
+      # skip_this_scenario
     end
   end
 end
