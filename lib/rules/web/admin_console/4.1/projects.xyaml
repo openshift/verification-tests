@@ -39,8 +39,3 @@ create_project_from_get_started_instru:
   action: click_button
   action: create_project
 nagivate_to_project_resources_page: {}
-
-check_timestamp:
-  element:
-    selector:
-      xpath: //span[contains(@data-test, 'timestamp')]
