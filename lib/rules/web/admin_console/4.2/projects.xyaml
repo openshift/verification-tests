@@ -56,7 +56,7 @@ switch_to_project:
       xpath: //a[text()='<project_name>']
     op: click
 
-check_time_stamp:
+check_timestamp:
   element:
     selector:
       xpath: //span[contains(@data-test, 'timestamp')]
