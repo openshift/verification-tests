@@ -271,7 +271,7 @@ Feature: apiserver and auth related upgrade check
       | f | headless-services.yaml |
     Then the step should succeed
     Given I use the "service-ca-upgrade" project
-    And I wait for the "test-serving-cert" secret to appear
+    And I wait for the "test-serving-cert" secret to appear up to 120 seconds
     And I run the :extract client command with:
       | resource | secret/test-serving-cert |
       | confirm  | true                     |
