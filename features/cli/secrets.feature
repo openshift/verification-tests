@@ -163,11 +163,11 @@ Feature: secrets related scenarios
     Given the pod named "build-secret-1-hook-pre" becomes present
     Given the pod named "build-secret-1-hook-pre" status becomes :running
     When I run the :exec client command with:
-      | pod | build-secret-1-hook-pre |
-      | exec_command | <command> |
-      | exec_command_arg | <path>/secret1 |
-      | exec_command_arg | <path>/secret2 |
-      | exec_command_arg | <path>/secret3 |
+      | pod              | build-secret-1-hook-pre   |
+      | exec_command     | <command>                 |
+      | exec_command_arg | <path>/secret1            |
+      | exec_command_arg | <path>/secret2            |
+      | exec_command_arg | <path>/secret3            |
       | exec_command_arg | /opt/app-root/src/secret1 |
       | exec_command_arg | /opt/app-root/src/secret2 |
       | exec_command_arg | /opt/app-root/src/secret3 |
@@ -183,8 +183,8 @@ Feature: secrets related scenarios
     @heterogeneous @arm64 @amd64
     @inactive
     Examples:
-      | type   | build_secret         | path      | command | expression               |
-      | docker | testsecret1:mysecret1| mysecret1 | ls      | true                     | # @case_id OCP-11947
+      | case_id   | type   | build_secret          | path      | command | expression |
+      | OCP-11947 | docker | testsecret1:mysecret1 | mysecret1 | ls      | true       | # @case_id OCP-11947
 
   # @author chezhang@redhat.com
   # @case_id OCP-10814

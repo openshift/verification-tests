@@ -57,23 +57,23 @@ Feature: ONLY ONLINE related feature's scripts in this file
 
     # @case_id OCP-9993
     Examples: xPaas STI builds
-      | image_name                          | image_tag | source_url                                                            | context_dir           |
-      | jboss-webserver30-tomcat7-openshift | 1.1       | https://github.com/jboss-openshift/openshift-quickstarts.git          | tomcat-websocket-chat |
-      | jboss-webserver30-tomcat7-openshift | 1.2       | https://github.com/jboss-openshift/openshift-quickstarts.git          | tomcat-websocket-chat |
-      | jboss-webserver30-tomcat7-openshift | 1.3       | https://github.com/jboss-openshift/openshift-quickstarts.git          | tomcat-websocket-chat |
-      | jboss-webserver30-tomcat8-openshift | 1.1       | https://github.com/jboss-openshift/openshift-quickstarts.git          | tomcat-websocket-chat |
-      | jboss-webserver30-tomcat8-openshift | 1.2       | https://github.com/jboss-openshift/openshift-quickstarts.git          | tomcat-websocket-chat |
-      | jboss-webserver30-tomcat8-openshift | 1.3       | https://github.com/jboss-openshift/openshift-quickstarts.git          | tomcat-websocket-chat |
-      | jboss-webserver31-tomcat7-openshift | 1.0       | https://github.com/jboss-openshift/openshift-quickstarts.git          | tomcat-websocket-chat |
-      | jboss-webserver31-tomcat8-openshift | 1.0       | https://github.com/jboss-openshift/openshift-quickstarts.git          | tomcat-websocket-chat |
+      | case_id  | image_name                          | image_tag | source_url                                                   | context_dir           |
+      | OCP-9993 | jboss-webserver30-tomcat7-openshift | 1.1       | https://github.com/jboss-openshift/openshift-quickstarts.git | tomcat-websocket-chat |
+      | OCP-9993 | jboss-webserver30-tomcat7-openshift | 1.2       | https://github.com/jboss-openshift/openshift-quickstarts.git | tomcat-websocket-chat |
+      | OCP-9993 | jboss-webserver30-tomcat7-openshift | 1.3       | https://github.com/jboss-openshift/openshift-quickstarts.git | tomcat-websocket-chat |
+      | OCP-9993 | jboss-webserver30-tomcat8-openshift | 1.1       | https://github.com/jboss-openshift/openshift-quickstarts.git | tomcat-websocket-chat |
+      | OCP-9993 | jboss-webserver30-tomcat8-openshift | 1.2       | https://github.com/jboss-openshift/openshift-quickstarts.git | tomcat-websocket-chat |
+      | OCP-9993 | jboss-webserver30-tomcat8-openshift | 1.3       | https://github.com/jboss-openshift/openshift-quickstarts.git | tomcat-websocket-chat |
+      | OCP-9993 | jboss-webserver31-tomcat7-openshift | 1.0       | https://github.com/jboss-openshift/openshift-quickstarts.git | tomcat-websocket-chat |
+      | OCP-9993 | jboss-webserver31-tomcat8-openshift | 1.0       | https://github.com/jboss-openshift/openshift-quickstarts.git | tomcat-websocket-chat |
 
     # @case_id OCP-9997
     Examples: wildfly STI builds
-      | image_name | image_tag | source_url                                            | context_dir |
-      | wildfly    | 8.1       | https://github.com/openshift/openshift-jee-sample.git | /           |
-      | wildfly    | 9.0       | https://github.com/openshift/openshift-jee-sample.git | /           |
-      | wildfly    | 10.0      | https://github.com/openshift/openshift-jee-sample.git | /           |
-      | wildfly    | 10.1      | https://github.com/openshift/openshift-jee-sample.git | /           |
+      | case_id  | image_name | image_tag | source_url                                            | context_dir |
+      | OCP-9997 | wildfly    | 8.1       | https://github.com/openshift/openshift-jee-sample.git | /           |
+      | OCP-9997 | wildfly    | 9.0       | https://github.com/openshift/openshift-jee-sample.git | /           |
+      | OCP-9997 | wildfly    | 10.0      | https://github.com/openshift/openshift-jee-sample.git | /           |
+      | OCP-9997 | wildfly    | 10.1      | https://github.com/openshift/openshift-jee-sample.git | /           |
 
   # @author yuwan@redhat.com
   Scenario Outline: Maven repository can be used to provide dependency caching for jboss-eap70-openshift image stream
@@ -106,10 +106,10 @@ Feature: ONLY ONLINE related feature's scripts in this file
 
     # @case_id OCP-20742
     Examples: xPaas STI builds
-      | image_name            | image_tag | source_url                                                            | context_dir |
-      | jboss-eap70-openshift | 1.3       | https://github.com/jboss-developer/jboss-eap-quickstarts.git#7.0.0.GA | kitchensink |
-      | jboss-eap70-openshift | 1.4       | https://github.com/jboss-developer/jboss-eap-quickstarts.git#7.0.0.GA | kitchensink |
-      | jboss-eap70-openshift | 1.5       | https://github.com/jboss-developer/jboss-eap-quickstarts.git#7.0.0.GA | kitchensink |
-      | jboss-eap70-openshift | 1.6       | https://github.com/jboss-developer/jboss-eap-quickstarts.git#7.0.0.GA | kitchensink |
-      | jboss-eap70-openshift | 1.7       | https://github.com/jboss-developer/jboss-eap-quickstarts.git#7.0.0.GA | kitchensink |
+      | case_id   | image_name            | image_tag | source_url                                                            | context_dir |
+      | OCP-20742 | jboss-eap70-openshift | 1.3       | https://github.com/jboss-developer/jboss-eap-quickstarts.git#7.0.0.GA | kitchensink |
+      | OCP-20742 | jboss-eap70-openshift | 1.4       | https://github.com/jboss-developer/jboss-eap-quickstarts.git#7.0.0.GA | kitchensink |
+      | OCP-20742 | jboss-eap70-openshift | 1.5       | https://github.com/jboss-developer/jboss-eap-quickstarts.git#7.0.0.GA | kitchensink |
+      | OCP-20742 | jboss-eap70-openshift | 1.6       | https://github.com/jboss-developer/jboss-eap-quickstarts.git#7.0.0.GA | kitchensink |
+      | OCP-20742 | jboss-eap70-openshift | 1.7       | https://github.com/jboss-developer/jboss-eap-quickstarts.git#7.0.0.GA | kitchensink |
 

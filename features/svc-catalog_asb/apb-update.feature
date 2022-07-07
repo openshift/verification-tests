@@ -55,7 +55,7 @@ Feature: Update sql apb related feature
       | deploymentconfig=<%= cb.dc_2.first.name %> |
 
      Examples:
-      |db_name                         |db_plan_1 |db_plan_2 |secret_name                                |db_version |
-      |<%= cb.prefix %>-postgresql-apb |prod      |dev       |<%= cb.prefix %>-postgresql-apb-parameters |9.5        | # @case_id OCP-16151
-      |<%= cb.prefix %>-postgresql-apb |dev       |prod      |<%= cb.prefix %>-postgresql-apb-parameters |9.5        | # @case_id OCP-18249
+      | case_id   | db_name                         | db_plan_1 | db_plan_2 | secret_name                                | db_version |
+      | OCP-16151 | <%= cb.prefix %>-postgresql-apb | prod      | dev       | <%= cb.prefix %>-postgresql-apb-parameters | 9.5        | # @case_id OCP-16151
+      | OCP-18249 | <%= cb.prefix %>-postgresql-apb | dev       | prod      | <%= cb.prefix %>-postgresql-apb-parameters | 9.5        | # @case_id OCP-18249
 

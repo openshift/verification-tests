@@ -51,7 +51,7 @@ Feature: testing for parameter fsType
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | fsType | type   |
-      | ext3   | cinder | # @case_id OCP-10097
-      | ext4   | cinder | # @case_id OCP-10098
-      | xfs    | cinder | # @case_id OCP-10099
+      | case_id   | fsType | type   |
+      | OCP-10097 | ext3   | cinder | # @case_id OCP-10097
+      | OCP-10098 | ext4   | cinder | # @case_id OCP-10098
+      | OCP-10099 | xfs    | cinder | # @case_id OCP-10099

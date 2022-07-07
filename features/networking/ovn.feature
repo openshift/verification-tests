@@ -439,13 +439,13 @@ Feature: OVN related networking scenarios
 
     @heterogeneous @arm64 @amd64
     Examples:
-      | signal |
-      | TERM   |
-      | QUIT   |
-      | INT    |
-      | HUP    |
-      | SEGV   |
-      | 9      |
+      | case_id   | signal |
+      | OCP-26091 | TERM   |
+      | OCP-26091 | QUIT   |
+      | OCP-26091 | INT    |
+      | OCP-26091 | HUP    |
+      | OCP-26091 | SEGV   |
+      | OCP-26091 | 9      |
 
   # @author rbrattai@redhat.com
   # @case_id OCP-26138

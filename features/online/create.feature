@@ -17,24 +17,24 @@ Feature: ONLY ONLINE Create related feature's scripts in this file
       | https://repo1.maven.org/non-existing/ |
     # @case_id OCP-10106
     Examples: MAVEN
-      | template                                | parameter_name   | env_name         |
-      | eap71-amq-persistent-s2i                | APPLICATION_NAME | MAVEN_MIRROR_URL |
-      | eap71-basic-s2i                         | APPLICATION_NAME | MAVEN_MIRROR_URL |
-      | eap71-https-s2i                         | APPLICATION_NAME | MAVEN_MIRROR_URL |
-      | eap71-postgresql-persistent-s2i         | APPLICATION_NAME | MAVEN_MIRROR_URL |
-      | jws31-tomcat7-https-s2i                 | APPLICATION_NAME | MAVEN_MIRROR_URL |
-      | jws31-tomcat8-https-s2i                 | APPLICATION_NAME | MAVEN_MIRROR_URL |
-      | jws31-tomcat8-mongodb-persistent-s2i    | APPLICATION_NAME | MAVEN_MIRROR_URL |
-      | jws31-tomcat8-mysql-persistent-s2i      | APPLICATION_NAME | MAVEN_MIRROR_URL |
-      | jws31-tomcat8-postgresql-persistent-s2i | APPLICATION_NAME | MAVEN_MIRROR_URL |
+      | case_id   | template                                | parameter_name   | env_name         |
+      | OCP-10106 | eap71-amq-persistent-s2i                | APPLICATION_NAME | MAVEN_MIRROR_URL |
+      | OCP-10106 | eap71-basic-s2i                         | APPLICATION_NAME | MAVEN_MIRROR_URL |
+      | OCP-10106 | eap71-https-s2i                         | APPLICATION_NAME | MAVEN_MIRROR_URL |
+      | OCP-10106 | eap71-postgresql-persistent-s2i         | APPLICATION_NAME | MAVEN_MIRROR_URL |
+      | OCP-10106 | jws31-tomcat7-https-s2i                 | APPLICATION_NAME | MAVEN_MIRROR_URL |
+      | OCP-10106 | jws31-tomcat8-https-s2i                 | APPLICATION_NAME | MAVEN_MIRROR_URL |
+      | OCP-10106 | jws31-tomcat8-mongodb-persistent-s2i    | APPLICATION_NAME | MAVEN_MIRROR_URL |
+      | OCP-10106 | jws31-tomcat8-mysql-persistent-s2i      | APPLICATION_NAME | MAVEN_MIRROR_URL |
+      | OCP-10106 | jws31-tomcat8-postgresql-persistent-s2i | APPLICATION_NAME | MAVEN_MIRROR_URL |
     # @case_id OCP-12688
     Examples: CPAN
-      | template                | parameter_name | env_name    |
-      | dancer-mysql-persistent | NAME           | CPAN_MIRROR |
+      | case_id   | template                | parameter_name | env_name    |
+      | OCP-12688 | dancer-mysql-persistent | NAME           | CPAN_MIRROR |
     # @case_id OCP-12689
     Examples: RUBYGEM
-      | template               | parameter_name | env_name       |
-      | rails-pgsql-persistent | NAME           | RUBYGEM_MIRROR |
+      | case_id   | template               | parameter_name | env_name       |
+      | OCP-12689 | rails-pgsql-persistent | NAME           | RUBYGEM_MIRROR |
 
   # @author etrott@redhat.com
   # @case_id OCP-10270

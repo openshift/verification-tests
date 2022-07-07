@@ -63,9 +63,9 @@ Feature: build 'apps' with CLI
 
     @inactive
     Examples:
-      | number   | build_status |
-      | ocp11224 | :complete    | # @case_id OCP-11224
-      | ocp11550 | :failed      | # @case_id OCP-11550
+      | case_id   | number   | build_status |
+      | OCP-11224 | ocp11224 | :complete    | # @case_id OCP-11224
+      | OCP-11550 | ocp11550 | :failed      | # @case_id OCP-11550
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11133
@@ -412,8 +412,8 @@ Feature: build 'apps' with CLI
 
     @inactive
     Examples:
-      | bc_name              | build_name             | file_name        |
-      | ruby-sample-build-ns | ruby-sample-build-ns-1 | Nonesrc-sti.json | # @case_id OCP-11580
+      | case_id   | bc_name              | build_name             | file_name        |
+      | OCP-11580 | ruby-sample-build-ns | ruby-sample-build-ns-1 | Nonesrc-sti.json | # @case_id OCP-11580
 
   # @author cryan@redhat.com
   # @case_id OCP-11582
@@ -651,8 +651,8 @@ Feature: build 'apps' with CLI
     @heterogeneous @arm64 @amd64
     @inactive
     Examples:
-      | num1 | num2 | num3 | num4 | num5 |
-      | 5    | 5    | 5    | 5    | 5    | # @case_id OCP-15019
+      | case_id   | num1 | num2 | num3 | num4 | num5 |
+      | OCP-15019 | 5    | 5    | 5    | 5    | 5    | # @case_id OCP-15019
 
   # @author haowang@redhat.com
   @proxy
@@ -700,8 +700,8 @@ Feature: build 'apps' with CLI
     And the "ruby-hello-world-5" build was cancelled
     And the "ruby-hello-world-3" build is :running
     Given I run the :patch client command with:
-      | resource      | bc                                                                                |
-      | resource_name | ruby-hello-world                                                                  |
+      | resource      | bc                                                                             |
+      | resource_name | ruby-hello-world                                                               |
       | p             | {"spec":{"source":{"git":{"uri":"https://xxxgithub.com/sclorg/ruby-ex.git"}}}} |
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
@@ -724,9 +724,9 @@ Feature: build 'apps' with CLI
     @heterogeneous @arm64 @amd64
     @inactive
     Examples:
-      | cmd       |
-      | new_build | # @case_id OCP-12066
-      | new_app   | # @case_id OCP-11954
+      | case_id   | cmd       |
+      | OCP-12066 | new_build | # @case_id OCP-12066
+      | OCP-11954 | new_app   | # @case_id OCP-11954
 
   # @author pruan@redhat.com
   # @case_id OCP-10944
@@ -924,7 +924,7 @@ Feature: build 'apps' with CLI
       | resource | bc               |
       | name     | ruby-hello-world |
     Then the output should match:
-      | Build ConfigMaps:\s+cmtest->.    |
+      | Build ConfigMaps:\s+cmtest->. |
     Then I run the :delete client command with:
       | object_type | all |
       | all         |     |
@@ -939,7 +939,7 @@ Feature: build 'apps' with CLI
       | resource | bc               |
       | name     | ruby-hello-world |
     Then the output should match:
-      | Build ConfigMaps:	cmtest->/aoscm        |
+      | Build ConfigMaps:	cmtest->/aoscm |
     Given the "ruby-hello-world-1" build completed
     Then evaluation of `image_stream("ruby-hello-world").docker_image_repository` is stored in the :user_image clipboard
     When I run the :run client command with:
@@ -989,9 +989,9 @@ Feature: build 'apps' with CLI
     #Insert cm and secret to bc with empty destination - succeed
     When I run the :new_build client command with:
       | app_repo         | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world |
-      | build_config_map | cmtest1:.                                                                                   |
-      | build_config_map | cmtest2:./newdir                                                                            |
-      | strategy         | docker                                                                                      |
+      | build_config_map | cmtest1:.                                                                             |
+      | build_config_map | cmtest2:./newdir                                                                      |
+      | strategy         | docker                                                                                |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc               |
@@ -1021,8 +1021,8 @@ Feature: build 'apps' with CLI
     #Add a configmaps with a multi-level dirs - succeed
     When I run the :new_build client command with:
       | app_repo         | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world |
-      | build_config_map | cmtest1:./newdir1/newdir2/newdir3                                                           |
-      | strategy         | docker                                                                                      |
+      | build_config_map | cmtest1:./newdir1/newdir2/newdir3                                                     |
+      | strategy         | docker                                                                                |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc               |
@@ -1038,6 +1038,6 @@ Feature: build 'apps' with CLI
     Given a pod becomes ready with labels:
       | run=myapp |
     When I execute on the pod:
-      | ls | -l | newdir1/newdir2/newdir3|
+      | ls | -l | newdir1/newdir2/newdir3 |
     And the output should match:
       | -rw-------.*configmap1.test |

@@ -40,9 +40,9 @@ Feature: Machine-api components upgrade tests
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
   Examples:
-    | cluster_operator           |
-    | "machine-api"              | # @case_id OCP-22712
-    | "cluster-autoscaler"       | # @case_id OCP-27664
+    | case_id   | cluster_operator     |
+    | OCP-22712 | "machine-api"        | # @case_id OCP-22712
+    | OCP-27664 | "cluster-autoscaler" | # @case_id OCP-27664
 
   @upgrade-prepare
   @4.11 @4.10 @4.9
@@ -223,14 +223,14 @@ Feature: Machine-api components upgrade tests
 
     @aws-ipi
     Examples:
-      | iaas_type | machineset_name        | value                   |
-      | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
+      | case_id   | iaas_type | machineset_name        | value                   |
+      | OCP-41175 | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
 
     @gcp-ipi
     @heterogeneous
     Examples:
-      | iaas_type | machineset_name        | value                   |
-      | gcp       | machineset-clone-41803 | "preemptible": true     | # @case_id OCP-41803
+      | case_id   | iaas_type | machineset_name        | value               |
+      | OCP-41803 | gcp       | machineset-clone-41803 | "preemptible": true | # @case_id OCP-41803
 
   @upgrade-prepare
   @destructive
@@ -316,7 +316,7 @@ Feature: Machine-api components upgrade tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @arm64 @amd64
-  Scenario: Registering Components delays should not be more than liveliness probe - prepare 
+  Scenario: Registering Components delays should not be more than liveliness probe - prepare
     Given the expression should be true> "True" == "True"
 
   # @author miyadav@redhat.com
@@ -329,7 +329,7 @@ Feature: Machine-api components upgrade tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: Registering Components delays should not be more than liveliness probe 
+  Scenario: Registering Components delays should not be more than liveliness probe
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -341,6 +341,6 @@ Feature: Machine-api components upgrade tests
       | resource_name | <%= pod.name %>       |
       | c             | machineset-controller |
 
-    And I save the output to file> logtime.txt 
+    And I save the output to file> logtime.txt
     Given I get time difference using "Registering Components." and "Starting the Cmd." in logtime.txt file
     Then the step should succeed

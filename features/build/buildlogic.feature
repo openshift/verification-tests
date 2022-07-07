@@ -110,10 +110,10 @@ Feature: buildlogic.feature
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
-      | template                            |
-      | buildconfig-docker-ImageStream.json | # @case_id OCP-10651
-      | buildconfig-s2i-ImageStream.json    | # @case_id OCP-11148
-      | buildconfig-docker-dockerimage.json | # @case_id OCP-10652
+      | case_id   | template                            |
+      | OCP-10651 | buildconfig-docker-ImageStream.json | # @case_id OCP-10651
+      | OCP-11148 | buildconfig-s2i-ImageStream.json    | # @case_id OCP-11148
+      | OCP-10652 | buildconfig-docker-dockerimage.json | # @case_id OCP-10652
 
     @upgrade-sanity
     @singlenode

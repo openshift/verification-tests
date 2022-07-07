@@ -148,12 +148,12 @@ Feature: ONLY ONLINE Storage related scripts in this file
     Then the step should succeed
 
     Examples: create pvc with annotation in aws
-      |  pvc-name               | status  | output                                                                     |
-      | pvc-annotation-default  | bound   | StorageClass:\s+gp2-encrypted                                              |
-      | pvc-annotation-notexist | pending | "yasun-test-class-not-exist" not found                                     |
-      | pvc-annotation-blank    | pending | no persistent volumes available for this claim and no storage class is set |
-      | pvc-annotation-alpha    | bound   | StorageClass:\s+gp2-encrypted                                              |
-      | pvc-annotation-ebs      | bound   | StorageClass:\s+ebs                                                        |
+      | case_id   | pvc-name                | status  | output                                                                     |
+      | OCP-10529 | pvc-annotation-default  | bound   | StorageClass:\s+gp2-encrypted                                              |
+      | OCP-10529 | pvc-annotation-notexist | pending | "yasun-test-class-not-exist" not found                                     |
+      | OCP-10529 | pvc-annotation-blank    | pending | no persistent volumes available for this claim and no storage class is set |
+      | OCP-10529 | pvc-annotation-alpha    | bound   | StorageClass:\s+gp2-encrypted                                              |
+      | OCP-10529 | pvc-annotation-ebs      | bound   | StorageClass:\s+ebs                                                        |
 
   # @author yasun@redhat.com
   # @case_id OCP-9792

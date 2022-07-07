@@ -53,23 +53,23 @@ Feature: ONLY ONLINE STI related scripts in this file
 
     # @case_id OCP-10089
     Examples: Python
-      | image  | image_tag | env_name      | env_value                                              | error_message               |
-      | python | 2.7       | PIP_INDEX_URL | https://mirror.openshift.com/mirror/python/web/simple/ | Cannot fetch index base URL |
-      | python | 3.3       | PIP_INDEX_URL | https://mirror.openshift.com/mirror/python/web/simple/ | Cannot fetch index base URL |
-      | python | 3.4       | PIP_INDEX_URL | https://mirror.openshift.com/mirror/python/web/simple/ | Cannot fetch index base URL |
-      | python | 3.5       | PIP_INDEX_URL | https://mirror.openshift.com/mirror/python/web/simple/ | Cannot fetch index base URL |
+      | case_id   | image  | image_tag | env_name      | env_value                                              | error_message               |
+      | OCP-10089 | python | 2.7       | PIP_INDEX_URL | https://mirror.openshift.com/mirror/python/web/simple/ | Cannot fetch index base URL |
+      | OCP-10089 | python | 3.3       | PIP_INDEX_URL | https://mirror.openshift.com/mirror/python/web/simple/ | Cannot fetch index base URL |
+      | OCP-10089 | python | 3.4       | PIP_INDEX_URL | https://mirror.openshift.com/mirror/python/web/simple/ | Cannot fetch index base URL |
+      | OCP-10089 | python | 3.5       | PIP_INDEX_URL | https://mirror.openshift.com/mirror/python/web/simple/ | Cannot fetch index base URL |
 
     # @case_id OCP-10088
     Examples: Ruby
-      | image | image_tag | env_name       | env_value                    | error_message              |
+      | case_id | image | image_tag | env_name       | env_value                    | error_message              |
       # ruby 2.0 has no environment variable for mirror url.
-      | ruby | 2.2 | RUBYGEM_MIRROR | https://gems.ruby-china.com/ | Could not fetch specs from |
-      | ruby | 2.3 | RUBYGEM_MIRROR | https://gems.ruby-china.com/ | Could not fetch specs from |
+      | OCP-10088 | ruby | 2.2 | RUBYGEM_MIRROR | https://gems.ruby-china.com/ | Could not fetch specs from |
+      | OCP-10088 | ruby | 2.3 | RUBYGEM_MIRROR | https://gems.ruby-china.com/ | Could not fetch specs from |
 
     # @case_id OCP-10087
     Examples: Perl
-      | image | image_tag | env_name    | env_value                                      | error_message |
-      | perl  | 5.16      | CPAN_MIRROR | https://mirror.openshift.com/mirror/perl/CPAN/ | Fetching      |
-      | perl  | 5.20      | CPAN_MIRROR | https://mirror.openshift.com/mirror/perl/CPAN/ | Fetching      |
-      | perl  | 5.24      | CPAN_MIRROR | https://mirror.openshift.com/mirror/perl/CPAN/ | Fetching      |
+       | case_id   | image | image_tag | env_name    | env_value                                      | error_message |
+       | OCP-10087 | perl  | 5.16      | CPAN_MIRROR | https://mirror.openshift.com/mirror/perl/CPAN/ | Fetching      |
+       | OCP-10087 | perl  | 5.20      | CPAN_MIRROR | https://mirror.openshift.com/mirror/perl/CPAN/ | Fetching      |
+       | OCP-10087 | perl  | 5.24      | CPAN_MIRROR | https://mirror.openshift.com/mirror/perl/CPAN/ | Fetching      |
 

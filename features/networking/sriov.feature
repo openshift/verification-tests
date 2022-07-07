@@ -207,9 +207,9 @@ Feature: Sriov related scenarios
       | 10.56.217 |
 
     Examples:
-      | cardname |
-      | mlx277   | # @case_id OCP-24774
-      | mlx278   | # @case_id OCP-24775
+      | case_id   | cardname |
+      | OCP-24774 | mlx277   | # @case_id OCP-24774
+      | OCP-24775 | mlx278   | # @case_id OCP-24775
 
   # @author zzhao@redhat.com
   # @case_id OCP-24780
@@ -229,7 +229,7 @@ Feature: Sriov related scenarios
     Then the step should succeed
 
     And admin checks that the "intel-netdevice-rhcos" network_attachment_definition exists in the "<%= cb.usr_project1 %>" project
-    Given admin ensures "intel-netdevice-rhcos" sriov_network is deleted from the "openshift-sriov-network-operator" project 
+    Given admin ensures "intel-netdevice-rhcos" sriov_network is deleted from the "openshift-sriov-network-operator" project
     And admin checks that there are no network_attachment_definition in the "<%= cb.usr_project1 %>" project
 
   # @author zzhao@redhat.com
@@ -452,9 +452,9 @@ Feature: Sriov related scenarios
     """
 
     Examples:
-      | sriov-feature             | keyword           |
-      | SR-IOV resource injector  | injector          |  # @case_id OCP-25814
-      | Admission webhook         | operator-webhook  |  # @case_id OCP-25847
+      | case_id   | sriov-feature            | keyword          |
+      | OCP-25814 | SR-IOV resource injector | injector         | # @case_id OCP-25814
+      | OCP-25847 | Admission webhook        | operator-webhook | # @case_id OCP-25847
 
   # @author zzhao@redhat.com
   # @case_id OCP-25835
@@ -517,11 +517,11 @@ Feature: Sriov related scenarios
     And the output should contain "<Error message>"
 
     Examples:
-      | file              | Error message                |
-      | invalidname.yaml  | invalid characters           |
-      | non-deviceid      | not supported                |
-      | non-vondor        | vendor 15b4 is not supported |
-      | vfnum0            | numVfs(0) in CR              |
+      | case_id   | file             | Error message                |
+      | OCP-25844 | invalidname.yaml | invalid characters           |
+      | OCP-25844 | non-deviceid     | not supported                |
+      | OCP-25844 | non-vondor       | vendor 15b4 is not supported |
+      | OCP-25844 | vfnum0           | numVfs(0) in CR              |
 
 
   # @author zzhao@redhat.com

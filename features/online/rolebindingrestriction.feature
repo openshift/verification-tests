@@ -17,9 +17,9 @@ Feature: rolebindingrestriction.feature
     And the output should match:
       | <output> |
     Examples:
-      | username         | output                                               | result  |
-      | userA            | .*"edit".*forbidden:.*"userA".*"<%= project.name %>" | fail    | # @case_id OCP-13120
-      | <%= user.name %> | role "edit" added: "<%= user.name %>"                | succeed | # @case_id OCP-13146
+      | case_id   | username         | output                                               | result  |
+      | OCP-13120 | userA            | .*"edit".*forbidden:.*"userA".*"<%= project.name %>" | fail    | # @case_id OCP-13120
+      | OCP-13146 | <%= user.name %> | role "edit" added: "<%= user.name %>"                | succeed | # @case_id OCP-13146
 
   # @author zhaliu@redhat.com
   Scenario Outline: Restrict making a role binding to service accounts except in own project by default
@@ -38,9 +38,9 @@ Feature: rolebindingrestriction.feature
     And the output should match:
       | <output> |
     Examples:
-      | serviceaccount                                     | output                                                    | result  |
-      | system:serviceaccount:openshift:deployer           | .*"view".*forbidden:.*".*deployer".*"<%= project.name %>" | fail    | # @case_id OCP-13805
-      | system:serviceaccount:<%= project.name %>:deployer | view added: ".*deployer"                           | succeed | # @case_id OCP-13115
+      | case_id   | serviceaccount                                     | output                                                    | result  |
+      | OCP-13805 | system:serviceaccount:openshift:deployer           | .*"view".*forbidden:.*".*deployer".*"<%= project.name %>" | fail    | # @case_id OCP-13805
+      | OCP-13115 | system:serviceaccount:<%= project.name %>:deployer | view added: ".*deployer"                                  | succeed | # @case_id OCP-13115
 
   # @author zhaliu@redhat.com
   Scenario Outline: Restrict making a role binding to groups except system group built in own project by default
@@ -60,14 +60,14 @@ Feature: rolebindingrestriction.feature
       | <output> |
     # @case_id OCP-13121
     Examples: Restrict making a role binding to the groups
-      | group_name                       | output                                                                          | result |
-      | groupA                           | .*"view".*forbidden:.*"groupA".*"<%= project.name %>"                           | fail   |
-      | system:serviceaccounts           | .*"view".*forbidden:.*"system:serviceaccounts".*"<%= project.name %>"           | fail   |
-      | system:serviceaccounts:openshift | .*"view".*forbidden:.*"system:serviceaccounts:openshift".*"<%= project.name %>" | fail   |
+      | case_id   | group_name                       | output                                                                          | result |
+      | OCP-13121 | groupA                           | .*"view".*forbidden:.*"groupA".*"<%= project.name %>"                           | fail   |
+      | OCP-13121 | system:serviceaccounts           | .*"view".*forbidden:.*"system:serviceaccounts".*"<%= project.name %>"           | fail   |
+      | OCP-13121 | system:serviceaccounts:openshift | .*"view".*forbidden:.*"system:serviceaccounts:openshift".*"<%= project.name %>" | fail   |
     # @case_id OCP-13795
     Examples: Allow to make a role binding to the system service account group
-      | group_name                                 | output                                                          | result  |
-      | system:serviceaccounts:<%= project.name %> | view added: ".*serviceaccounts:<%= project.name %>" | succeed |
+      | case_id   | group_name                                 | output                                              | result  |
+      | OCP-13795 | system:serviceaccounts:<%= project.name %> | view added: ".*serviceaccounts:<%= project.name %>" | succeed | # @case_id OCP-13795
 
   # @author zhaliu@redhat.com
   # @case_id OCP-13798

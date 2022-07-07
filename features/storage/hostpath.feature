@@ -54,5 +54,5 @@ Feature: Storage of Hostpath plugin testing
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | access_mode   | reclaim_policy | pv_status | step_status |
-      | ReadWriteOnce | Retain         | released  | succeed     | # @case_id OCP-9639
+      | case_id  | access_mode   | reclaim_policy | pv_status | step_status |
+      | OCP-9639 | ReadWriteOnce | Retain         | released  | succeed     | # @case_id OCP-9639
