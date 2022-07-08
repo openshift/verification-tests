@@ -45,6 +45,6 @@ Feature: eventrouter related test
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
-    | index_name  |
-    | .operations | # @case_id OCP-25899
-    | infra       | # @case_id OCP-29738
+    | case_id   | index_name  |
+    | OCP-25899 | .operations | # @case_id OCP-25899
+    | OCP-29738 | infra       | # @case_id OCP-29738

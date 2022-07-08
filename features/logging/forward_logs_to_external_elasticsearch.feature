@@ -93,9 +93,9 @@ Feature: Cases to test forward logs to external elasticsearch
     @proxy @noproxy @disconnected @connected
     @heterogeneous
     Examples:
-      | scheme | client_auth | file                 |
-      | https  | true        | clf-with-secret.yaml | # @case_id OCP-29845
-      | http   | false       | clf-insecure.yaml    | # @case_id OCP-29846
+      | case_id   | scheme | client_auth | file                 |
+      | OCP-29845 | https  | true        | clf-with-secret.yaml | # @case_id OCP-29845
+      | OCP-29846 | http   | false       | clf-insecure.yaml    | # @case_id OCP-29846
 
   # @author qitang@redhat.com
   @admin
@@ -200,7 +200,7 @@ Feature: Cases to test forward logs to external elasticsearch
     """
 
     Examples:
-      | version | scheme | client_auth | username | password | secret_name |
-      | 7.16    | https  | true        | test1    | redhat   | test1       | #@case_id OCP-41807
-      | 6.8     | http   | false       | test2    | redhat   | test2       | #@case_id OCP-41805
-      | 6.8     | https  | false       | test4    | redhat   | test4       | #@case_id OCP-41806
+      | case_id   | version | scheme | client_auth | username | password | secret_name |
+      | OCP-41807 | 7.16    | https  | true        | test1    | redhat   | test1       | # @case_id OCP-41807
+      | OCP-41805 | 6.8     | http   | false       | test2    | redhat   | test2       | # @case_id OCP-41805
+      | OCP-41806 | 6.8     | https  | false       | test4    | redhat   | test4       | # @case_id OCP-41806

@@ -42,10 +42,10 @@ Feature: Persistent Volume Claim binding policies
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | accessMode1   | accessMode2   | accessMode3   |
-      | ReadOnlyMany  | ReadWriteMany | ReadWriteOnce | # @case_id OCP-9702
-      | ReadWriteOnce | ReadOnlyMany  | ReadWriteMany | # @case_id OCP-10680
-      | ReadWriteMany | ReadWriteOnce | ReadOnlyMany  | # @case_id OCP-11168
+      | case_id   | accessMode1   | accessMode2   | accessMode3   |
+      | OCP-9702  | ReadOnlyMany  | ReadWriteMany | ReadWriteOnce | # @case_id OCP-9702
+      | OCP-10680 | ReadWriteOnce | ReadOnlyMany  | ReadWriteMany | # @case_id OCP-10680
+      | OCP-11168 | ReadWriteMany | ReadWriteOnce | ReadOnlyMany  | # @case_id OCP-11168
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11933
@@ -103,10 +103,10 @@ Feature: Persistent Volume Claim binding policies
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | access_mode   |
-      | ReadOnlyMany  | # @case_id OCP-26880
-      | ReadWriteMany | # @case_id OCP-26881
-      | ReadWriteOnce | # @case_id OCP-26879
+      | case_id   | access_mode   |
+      | OCP-26880 | ReadOnlyMany  | # @case_id OCP-26880
+      | OCP-26881 | ReadWriteMany | # @case_id OCP-26881
+      | OCP-26879 | ReadWriteOnce | # @case_id OCP-26879
 
 
   # @author lxia@redhat.com
@@ -144,7 +144,7 @@ Feature: Persistent Volume Claim binding policies
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | pv_access_mode | pvc_access_mode1 | pvc_access_mode2 |
-      | ReadOnlyMany   | ReadWriteMany    | ReadWriteOnce    | # @case_id OCP-26882
-      | ReadWriteMany  | ReadWriteOnce    | ReadOnlyMany     | # @case_id OCP-26883
-      | ReadWriteOnce  | ReadOnlyMany     | ReadWriteMany    | # @case_id OCP-26884
+      | case_id   | pv_access_mode | pvc_access_mode1 | pvc_access_mode2 |
+      | OCP-26882 | ReadOnlyMany   | ReadWriteMany    | ReadWriteOnce    | # @case_id OCP-26882
+      | OCP-26883 | ReadWriteMany  | ReadWriteOnce    | ReadOnlyMany     | # @case_id OCP-26883
+      | OCP-26884 | ReadWriteOnce  | ReadOnlyMany     | ReadWriteMany    | # @case_id OCP-26884

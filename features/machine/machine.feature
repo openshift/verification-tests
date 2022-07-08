@@ -103,10 +103,10 @@ Feature: Machine features testing
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | url                                                                          |
-      | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
-      | https://cluster-autoscaler-operator.openshift-machine-api.svc:9192/metrics   | # @case_id OCP-26111
-      | https://machine-approver.openshift-cluster-machine-approver.svc:9192/metrics | # @case_id OCP-26102
+      | case_id   | url                                                                          |
+      | OCP-25652 | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
+      | OCP-26111 | https://cluster-autoscaler-operator.openshift-machine-api.svc:9192/metrics   | # @case_id OCP-26111
+      | OCP-26102 | https://machine-approver.openshift-cluster-machine-approver.svc:9192/metrics | # @case_id OCP-26102
 
   # @author zhsun@redhat.com
   # @case_id OCP-25608
@@ -309,14 +309,14 @@ Feature: Machine features testing
 
     @aws-ipi
     Examples:
-      | iaas_type | machineset_name        |
-      | aws       | machineset-clone-29199 | # @case_id OCP-29199
+      | case_id   | iaas_type | machineset_name        |
+      | OCP-29199 | aws       | machineset-clone-29199 | # @case_id OCP-29199
 
     @gcp-ipi
     @heterogeneous @arm64 @amd64
     Examples:
-      | iaas_type | machineset_name        |
-      | gcp       | machineset-clone-32126 | # @case_id OCP-32126
+      | case_id   | iaas_type | machineset_name        |
+      | OCP-32126 | gcp       | machineset-clone-32126 | # @case_id OCP-32126
 
   # @author zhsun@redhat.com
   # @case_id OCP-32620
@@ -399,10 +399,10 @@ Feature: Machine features testing
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | name                    | file_name                 | Validation                    |
-      | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
-      | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-37132
-      | default-valued-42346    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-42346
+      | case_id   | name                    | file_name                 | Validation                    |
+      | OCP-32269 | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
+      | OCP-37132 | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-37132
+      | OCP-42346 | default-valued-42346    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-42346
 
   # @author miyadav@redhat.com
   # @case_id OCP-33056
@@ -487,9 +487,9 @@ Feature: Machine features testing
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | name                    | file_name               | Validation                |
-      | default-valued-33058    | ms_default_values.yaml  | Public IP                 | # @case_id OCP-33058
-      | encrypt-at-rest-39639   | ms_encrypt_at_rest.yaml | Encryption At Host:  true | # @case_id OCP-39639
+      | case_id   | name                    | file_name               | Validation                |
+      | OCP-33058 | default-valued-33058    | ms_default_values.yaml  | Public IP                 | # @case_id OCP-33058
+      | OCP-39639 | encrypt-at-rest-39639   | ms_encrypt_at_rest.yaml | Encryption At Host:  true | # @case_id OCP-39639
 
   # @author miyadav@redhat.com
   # @case_id OCP-33455
@@ -603,14 +603,14 @@ Feature: Machine features testing
 
     @vsphere-ipi
     Examples:
-      | name                         | template                           | diskGiB           |
-      | default-valued-33380         | <%= cb.template %>                 | <%= cb.diskGiB %> | # @case_id OCP-33380
+      | case_id   | name                         | template                           | diskGiB           |
+      | OCP-33380 | default-valued-33380         | <%= cb.template %>                 | <%= cb.diskGiB %> | # @case_id OCP-33380
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | name                         | template                           | diskGiB           |
-      | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
+      | case_id   | name                         | template                           | diskGiB           |
+      | OCP-35421 | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
 
   # @author miyadav@redhat.com
   # @case_id OCP-36489
@@ -708,8 +708,8 @@ Feature: Machine features testing
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | name                    | file_name                 | Validation                    |
-      | default-valued-48463    | ms_default_values.yaml    | Placement                     | # @case_id OCP-48463
-      | tenancy-dedicated-48464 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-48464
-      | default-valued-48462    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-48462
+      | case_id   | name                    | file_name                 | Validation                    |
+      | OCP-48463 | default-valued-48463    | ms_default_values.yaml    | Placement                     | # @case_id OCP-48463
+      | OCP-48464 | tenancy-dedicated-48464 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-48464
+      | OCP-48462 | default-valued-48462    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-48462
     

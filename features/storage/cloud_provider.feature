@@ -32,20 +32,20 @@ Feature: kubelet restart and node restart
     @azure-ipi
     @azure-upi
     Examples:
-      | platform       |
-      | azure-disk     | # @case_id OCP-13333
+      | case_id   | platform       |
+      | OCP-13333 | azure-disk     | # @case_id OCP-13333
 
     @openstack-ipi
     @openstack-upi
     Examples:
-      | platform       |
-      | cinder         | # @case_id OCP-11317
+      | case_id   | platform       |
+      | OCP-11317 | cinder         | # @case_id OCP-11317
 
     @gcp-ipi
     @gcp-upi
     Examples:
-      | platform       |
-      | gce            | # @case_id OCP-11613
+      | case_id   | platform       |
+      | OCP-11613 | gce            | # @case_id OCP-11613
 
     @vsphere-ipi
     @vsphere-upi
@@ -54,5 +54,5 @@ Feature: kubelet restart and node restart
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | platform       |
-      | vsphere-volume | # @case_id OCP-13631
+      | case_id   | platform       |
+      | OCP-13631 | vsphere-volume | # @case_id OCP-13631

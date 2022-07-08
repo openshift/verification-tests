@@ -110,14 +110,14 @@ Feature: storage security check
     @gcp-ipi
     @gcp-upi
     Examples:
-      | storage_type         | volume_name | type   |
-      | gcePersistentDisk    | pdName      | gce    | # @case_id OCP-9700
+      | case_id  | storage_type         | volume_name | type   |
+      | OCP-9700 | gcePersistentDisk    | pdName      | gce    | # @case_id OCP-9700
 
     @aws-ipi
     @aws-upi
     Examples:
-      | storage_type         | volume_name | type   |
-      | awsElasticBlockStore | volumeID    | ebs    | # @case_id OCP-9699
+      | case_id  | storage_type         | volume_name | type   |
+      | OCP-9699 | awsElasticBlockStore | volumeID    | ebs    | # @case_id OCP-9699
 
     @openstack-ipi
     @openstack-upi
@@ -126,8 +126,8 @@ Feature: storage security check
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | storage_type         | volume_name | type   |
-      | cinder               | volumeID    | cinder | # @case_id OCP-9721
+      | case_id  | storage_type         | volume_name | type   |
+      | OCP-9721 | cinder               | volumeID    | cinder | # @case_id OCP-9721
 
   # @author chaoyang@redhat.com
   # @case_id OCP-9709

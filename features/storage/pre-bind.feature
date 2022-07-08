@@ -208,7 +208,7 @@ Feature: Testing for pv and pvc pre-bind feature
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | pre-bind-pvc | pre-bind-pv                |
-      | nfsc         | nfspv1-<%= project.name %> | # @case_id OCP-10108
-      | nfsc1        | nfspv-<%= project.name %>  | # @case_id OCP-10112
+      | case_id   | pre-bind-pvc | pre-bind-pv                |
+      | OCP-10108 | nfsc         | nfspv1-<%= project.name %> | # @case_id OCP-10108
+      | OCP-10112 | nfsc1        | nfspv-<%= project.name %>  | # @case_id OCP-10112
 
