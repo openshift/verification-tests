@@ -12,7 +12,7 @@ Feature: oc_volume.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12194 Create a pod that consumes the secret in a volume
+  Scenario: OCP-12194:Node Create a pod that consumes the secret in a volume
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/secret.yaml"
     Given I run the :create client command with:
@@ -60,7 +60,7 @@ Feature: oc_volume.feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11906 Add secret volume to dc and rc
+  Scenario: OCP-11906:Storage Add secret volume to dc and rc
     Given I have a project
     When I run the :new_app_as_dc client command with:
       | docker_image | quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623 |

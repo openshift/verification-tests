@@ -9,7 +9,7 @@ Feature: UPI GCP Tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-34697 MachineSets in GCP should create Machines in a Shared (XPN) VPC environment
+  Scenario: OCP-34697:ClusterInfrastructure MachineSets in GCP should create Machines in a Shared (XPN) VPC environment
     Given I have an UPI deployment and machinesets are enabled
 
   # @author zhsun@redhat.com
@@ -21,7 +21,7 @@ Feature: UPI GCP Tests
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-25034 GCP Scaling OCP Cluster on UPI
+  Scenario: OCP-25034:ClusterInfrastructure GCP Scaling OCP Cluster on UPI
     Given I have an UPI deployment and machinesets are enabled
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project

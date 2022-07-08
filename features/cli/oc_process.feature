@@ -12,7 +12,7 @@ Feature: oc_process.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11044 Supply oc new-app parameter list+env vars via a file
+  Scenario: OCP-11044:BuildAPI Supply oc new-app parameter list+env vars via a file
     Given I have a project
     Given a "test1.env" file is created with the following lines:
     """

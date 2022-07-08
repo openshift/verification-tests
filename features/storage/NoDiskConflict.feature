@@ -7,7 +7,7 @@ Feature: NoDiskConflict
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9929 Only one pod with the same persistent volume can be scheduled when NoDiskConflicts policy is enabled
+  Scenario: OCP-9929:Storage Only one pod with the same persistent volume can be scheduled when NoDiskConflicts policy is enabled
     Given a 5 characters random string of type :dns is stored into the :proj_name clipboard
     When I run the :oadm_new_project admin command with:
       | project_name  | <%= cb.proj_name %>                 |

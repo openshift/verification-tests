@@ -140,7 +140,7 @@ Feature: storage security check
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9709 secret volume security check
+  Scenario: OCP-9709:Storage secret volume security check
     Given I have a project
     Given I obtain test data file "storage/secret/secret.yaml"
     When I run the :create client command with:

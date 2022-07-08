@@ -10,7 +10,7 @@ Feature: change the policy of user/service account
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11074 User can view ,add, remove and modify roleBinding via admin role user
+  Scenario: OCP-11074:Authentication User can view ,add, remove and modify roleBinding via admin role user
     Given I have a project
     When I run the :get client command with:
       | resource      | rolebinding |
@@ -65,7 +65,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12430 Could get projects for new role which has permission to get projects
+  Scenario: OCP-12430:Authentication Could get projects for new role which has permission to get projects
     Given an 8 characters random string of type :dns is stored into the :random clipboard
     And admin ensures "clusterrole-12430-<%= cb.random %>" cluster_role is deleted after scenario
     Given I obtain test data file "authorization/policy/clustergetproject.json"
@@ -89,7 +89,7 @@ Feature: change the policy of user/service account
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11442 User can view, add , modify and delete specific role to/from new added project via admin role user
+  Scenario: OCP-11442:Authentication User can view, add , modify and delete specific role to/from new added project via admin role user
     Given I have a project
     Given I obtain test data file "authorization/policy/projectviewservice.json"
     When I run the :create client command with:
@@ -147,7 +147,7 @@ Feature: change the policy of user/service account
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10211 DaemonSet only support Always restartPolicy
+  Scenario: OCP-10211:Node DaemonSet only support Always restartPolicy
     Given I have a project
     Given cluster role "sudoer" is added to the "first" user
     Given I obtain test data file "daemon/daemonset-negtive-onfailure.yaml"
@@ -178,7 +178,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10447 Basic user could not get deeper storageclass object info
+  Scenario: OCP-10447:Storage Basic user could not get deeper storageclass object info
     Given I have a project
     When I run the :get client command with:
       | resource | storageclass |
@@ -228,7 +228,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10448 User with role storage-admin can check deeper storageclass object info
+  Scenario: OCP-10448:Storage User with role storage-admin can check deeper storageclass object info
     Given I have a project
     And admin ensures "sc-<%= project.name %>" storageclasses is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
@@ -291,7 +291,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10466 User with role storage-admin can check deeper pv object info
+  Scenario: OCP-10466:Storage User with role storage-admin can check deeper pv object info
     Given I have a project
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
@@ -355,7 +355,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10467 User with role storage-admin can get pvc object info
+  Scenario: OCP-10467:Storage User with role storage-admin can get pvc object info
     Given I have a project
     And evaluation of `project.name` is stored in the :project clipboard
 
@@ -403,7 +403,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10465 Basic user could not get pv object info
+  Scenario: OCP-10465:Storage Basic user could not get pv object info
     Given I have a project
     Then I run the :get client command with:
       | resource | pv |
@@ -430,7 +430,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9551 User can know if he can create podspec against the current scc rules via CLI
+  Scenario: OCP-9551:Authentication User can know if he can create podspec against the current scc rules via CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview_privileged_false.json"
     Given I run the :policy_scc_subject_review client command with:
@@ -468,7 +468,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9552 User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
+  Scenario: OCP-9552:Authentication User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
@@ -512,7 +512,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9553 User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
+  Scenario: OCP-9553:Authentication User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
     # If user is specified but not groups, it is interpreted as "what if the user

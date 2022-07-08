@@ -10,7 +10,7 @@ Feature: Downward API
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10707 Pods can get IPs via downward API under race condition
+  Scenario: OCP-10707:Node Pods can get IPs via downward API under race condition
     Given I have a project
     Given I obtain test data file "downwardapi/ocp10707/pod-downwardapi-env.yaml"
     When I run the :create client command with:
@@ -32,7 +32,7 @@ Feature: Downward API
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10628 downward api pod name and pod namespace as env variables
+  Scenario: OCP-10628:Node downward api pod name and pod namespace as env variables
     Given I have a project
     Given I obtain test data file "downwardapi/ocp10628/downward-example.yaml"
     When I run the :create client command with:
@@ -57,7 +57,7 @@ Feature: Downward API
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10708 Container consume infomation from the downward API using a volume plugin
+  Scenario: OCP-10708:Node Container consume infomation from the downward API using a volume plugin
     Given I have a project
     Given I obtain test data file "downwardapi/pod-dapi-volume.yaml"
     When I run the :create client command with:
@@ -124,7 +124,7 @@ Feature: Downward API
   # @case_id OCP-11977
   @admin
   @inactive
-  Scenario: OCP-11977 Using resources downward API via volume plugin should be compatible with metadata downward API
+  Scenario: OCP-11977:Node Using resources downward API via volume plugin should be compatible with metadata downward API
     Given I have a project
     Given I obtain test data file "downwardapi/dapi-resources-metadata-volume-pod.yaml"
     When I run the :create client command with:
@@ -210,7 +210,7 @@ Feature: Downward API
   # @case_id OCP-11618
   @admin
   @inactive
-  Scenario: OCP-11618 Could expose resouces limits and requests via volume plugin from Downward APIs with magics keys
+  Scenario: OCP-11618:Node Could expose resouces limits and requests via volume plugin from Downward APIs with magics keys
     Given I have a project
     Given I obtain test data file "downwardapi/dapi-resources-volume-magic-keys-pod.yaml"
     When I run the :create client command with:
@@ -264,7 +264,7 @@ Feature: Downward API
   # @case_id OCP-11816
   @admin
   @inactive
-  Scenario: OCP-11816 Using resources downward API via ENV should be compatible with metadata downward API
+  Scenario: OCP-11816:Node Using resources downward API via ENV should be compatible with metadata downward API
     Given I have a project
     Given I obtain test data file "downwardapi/dapi-resources-metadata-env-pod.yaml"
     When I run the :create client command with:

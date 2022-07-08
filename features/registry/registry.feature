@@ -12,7 +12,7 @@ Feature: Testing registry
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12400 Prune images by command oadm_prune_images
+  Scenario: OCP-12400:ImageRegistry Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
     Given I enable image-registry default route
     Given default image registry route is stored in the :registry_ip clipboard
@@ -51,7 +51,7 @@ Feature: Testing registry
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-18994 Copy image to another tag via 'oc image mirror'
+  Scenario: OCP-18994:ImageRegistry Copy image to another tag via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
     Then I run the :image_mirror client command with:
@@ -75,7 +75,7 @@ Feature: Testing registry
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-18998 Mirror multiple locations to another registry via 'oc image mirror'
+  Scenario: OCP-18998:ImageRegistry Mirror multiple locations to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
     Then I run the :image_mirror client command with:
@@ -101,7 +101,7 @@ Feature: Testing registry
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-23030 Enable must-gather object refs in image-registry cluster
+  Scenario: OCP-23030:ImageRegistry Enable must-gather object refs in image-registry cluster
     When I run the :get admin command with:
       | resource      | co             |
       | resource_name | image-registry |
@@ -178,7 +178,7 @@ Feature: Testing registry
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-23063 Check the related log from must-gather tool
+  Scenario: OCP-23063:ImageRegistry Check the related log from must-gather tool
     When I run the :delete admin command with:
       | object_type       | co             |
       | object_name_or_id | image-registry |
@@ -201,7 +201,7 @@ Feature: Testing registry
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-18995 Mirror image to another registry via 'oc image mirror'
+  Scenario: OCP-18995:ImageRegistry Mirror image to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
     Then I run the :image_mirror client command with:
@@ -226,7 +226,7 @@ Feature: Testing registry
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-29696 Use node credentials in imagestream import
+  Scenario: OCP-29696:ImageRegistry Use node credentials in imagestream import
     Given I have a project
     When I run the :tag client command with:
       | source           | registry.redhat.io/rhel8/mysql-80:latest |
@@ -263,7 +263,7 @@ Feature: Testing registry
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-29693 Disconnect Import image from a secure registry using node credentials
+  Scenario: OCP-29693:ImageRegistry Disconnect Import image from a secure registry using node credentials
     Given I have a project
     And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard
     When I run the :tag client command with:
@@ -298,7 +298,7 @@ Feature: Testing registry
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-29706 Node secret takes effect when common secret is removed
+  Scenario: OCP-29706:ImageRegistry Node secret takes effect when common secret is removed
     Given I have a project
     When I run the :extract admin command with:
       | resource  | secret/pull-secret |

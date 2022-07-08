@@ -5,7 +5,7 @@ Feature: oc_secrets.feature
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy
-  Scenario: OCP-12600 Add secrets to serviceaccount via oc secrets add
+  Scenario: OCP-12600:Authentication Add secrets to serviceaccount via oc secrets add
     Given I have a project
     When I run the :secrets client command with:
       | action | new        |
@@ -63,7 +63,7 @@ Feature: oc_secrets.feature
   @singlenode
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10631 Project admin can process local directory or files and convert it to kubernetes secret
+  Scenario: OCP-10631:Authentication Project admin can process local directory or files and convert it to kubernetes secret
     Given I have a project
     When the "tmpfoo" file is created with the following lines:
       | somecontent |
@@ -113,7 +113,7 @@ Feature: oc_secrets.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: OCP-11900 Check name requirements for oc secret
+  Scenario: OCP-11900:Authentication Check name requirements for oc secret
     Given I have a project
     And I run the :get client command with:
       | resource      | project |

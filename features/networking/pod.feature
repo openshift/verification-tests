@@ -10,7 +10,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9747 Pod cannot claim UDP port 4789 on the node as part of a port mapping
+  Scenario: OCP-9747:SDN Pod cannot claim UDP port 4789 on the node as part of a port mapping
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     Given I obtain test data file "networking/pod_with_udp_port_4789.json"
@@ -35,7 +35,7 @@ Feature: Pod related networking scenarios
   @upgrade-sanity
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10031 Container could reach the dns server
+  Scenario: OCP-10031:SDN Container could reach the dns server
     Given I have a project
     Given I obtain test data file "pods/ocp10031/pod.json"
     When I run the :create client command with:
@@ -59,7 +59,7 @@ Feature: Pod related networking scenarios
   @proxy @noproxy @connected
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-14986 The openflow list will be cleaned after delete the pods
+  Scenario: OCP-14986:SDN The openflow list will be cleaned after delete the pods
     Given I have a project
     Given I have a pod-for-ping in the project
     Then evaluation of `pod.node_name` is stored in the :node_name clipboard
@@ -94,7 +94,7 @@ Feature: Pod related networking scenarios
   @proxy @noproxy @connected
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10817 Check QoS after creating pod
+  Scenario: OCP-10817:SDN Check QoS after creating pod
     Given I have a project
     # setup iperf server to receive the traffic
     Given I obtain test data file "networking/egress-ingress/qos/iperf-server.json"
@@ -158,7 +158,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-23890 A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
+  Scenario: OCP-23890:SDN A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I select a random node's host
@@ -197,7 +197,7 @@ Feature: Pod related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-23891 A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
+  Scenario: OCP-23891:SDN A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
     Given I store the masters in the :masters clipboard
     And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard
     Given I select a random node's host
@@ -221,7 +221,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-23893 A pod in a namespace with an egress IP cannot access the MCS
+  Scenario: OCP-23893:SDN A pod in a namespace with an egress IP cannot access the MCS
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I select a random node's host
@@ -258,7 +258,7 @@ Feature: Pod related networking scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-23894 User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
+  Scenario: OCP-23894:SDN User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I have a project
@@ -290,7 +290,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21846 ovn pod can be scheduled even if the node taint to unschedule
+  Scenario: OCP-21846:SDN ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
     #Tainting all worker nodes to NoSchedule
@@ -342,7 +342,7 @@ Feature: Pod related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-26822 4.x Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
+  Scenario: OCP-26822:SDN 4.x Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given I store the workers in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
     Given I have a project
@@ -430,7 +430,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: OCP-25294 Pod should be accesible via node ip and host port
+  Scenario: OCP-25294:SDN Pod should be accesible via node ip and host port
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
@@ -461,7 +461,7 @@ Feature: Pod related networking scenarios
   @destructive
   @inactive
   @network-ovnkubernetes
-  Scenario: OCP-26373 Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode
+  Scenario: OCP-26373:SDN Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
   And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
@@ -499,7 +499,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-26014 Pod readiness check for OVN
+  Scenario: OCP-26014:SDN Pod readiness check for OVN
     Given the env is using "OVNKubernetes" networkType
     And OVN is functional on the cluster
     Given I switch to cluster admin pseudo user
@@ -539,7 +539,7 @@ Feature: Pod related networking scenarios
   @admin
   @destructive
   @inactive
-  Scenario: OCP-33413 xt_u32 kernel module functionality check from NET_ADMIN pods
+  Scenario: OCP-33413:SDN xt_u32 kernel module functionality check from NET_ADMIN pods
     Given I have a project
     And I have a pod-for-ping in the project
     Then evaluation of `pod.name` is stored in the :client_pod clipboard
@@ -600,7 +600,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-22034 Check the unused ip are released after node reboot
+  Scenario: OCP-22034:SDN Check the unused ip are released after node reboot
     Given I store the workers in the :workers clipboard
     Given I use the "<%= cb.workers[0].name %>" node
     And I run commands on the host:
@@ -619,7 +619,7 @@ Feature: Pod related networking scenarios
   @long-duration
   @admin
   @destructive
-  Scenario: OCP-41666 Pod stuck in container creating - failed to run CNI IPAM ADD: failed to allocate for range 0: no IP addresses available in range set
+  Scenario: OCP-41666:SDN Pod stuck in container creating - failed to run CNI IPAM ADD: failed to allocate for range 0: no IP addresses available in range set
     Given I switch to cluster admin pseudo user
     When I run the :label admin command with:
       | resource  | machineconfigpool         |

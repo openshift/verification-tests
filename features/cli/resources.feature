@@ -10,7 +10,7 @@ Feature: resouces related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11882 Return description of resources with cli describe
+  Scenario: OCP-11882:Workloads Return description of resources with cli describe
     Given I have a project
     And I create a new application with:
       | file     | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-stibuild.json |
