@@ -14,7 +14,7 @@ Feature: quickstarts.feature
     Then the output should contain "<output>"
 
     Examples: OS Type
-      | template                 | buildcfg                 | output      | podno |
-      | rails-postgresql-example | rails-postgresql-example | Rails       | 2     | # @case_id OCP-12296
-      | dotnet-example           | dotnet-example           | ASP.NET     | 1     | # @case_id OCP-13749
-      | openjdk18-web-basic-s2i  | openjdk-app              | Hello World | 1     | # @case_id OCP-17826
+      | case_id   | template                 | buildcfg                 | output      | podno |
+      | OCP-12296 | rails-postgresql-example | rails-postgresql-example | Rails       | 2     | # @case_id OCP-12296
+      | OCP-13749 | dotnet-example           | dotnet-example           | ASP.NET     | 1     | # @case_id OCP-13749
+      | OCP-17826 | openjdk18-web-basic-s2i  | openjdk-app              | Hello World | 1     | # @case_id OCP-17826

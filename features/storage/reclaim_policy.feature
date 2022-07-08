@@ -43,14 +43,14 @@ Feature: Persistent Volume reclaim policy tests
     @gcp-ipi
     @gcp-upi
     Examples:
-      | storage_type         | volume_name | path   | file                |
-      | gcePersistentDisk    | pdName      | gce    | pv-default-rwo.json | # @case_id OCP-9949
+      | case_id  | storage_type         | volume_name | path   | file                |
+      | OCP-9949 | gcePersistentDisk    | pdName      | gce    | pv-default-rwo.json | # @case_id OCP-9949
 
     @aws-ipi
     @aws-upi
     Examples:
-      | storage_type         | volume_name | path   | file                |
-      | awsElasticBlockStore | volumeID    | ebs    | pv-rwo.yaml         | # @case_id OCP-9943
+      | case_id  | storage_type         | volume_name | path   | file                |
+      | OCP-9943 | awsElasticBlockStore | volumeID    | ebs    | pv-rwo.yaml         | # @case_id OCP-9943
     
     @openstack-ipi
     @openstack-upi
@@ -58,5 +58,5 @@ Feature: Persistent Volume reclaim policy tests
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | storage_type         | volume_name | path   | file                |
-      | cinder               | volumeID    | cinder | pv-rwx-default.json | # @case_id OCP-9944
+      | case_id  | storage_type         | volume_name | path   | file                |
+      | OCP-9944 | cinder               | volumeID    | cinder | pv-rwx-default.json | # @case_id OCP-9944

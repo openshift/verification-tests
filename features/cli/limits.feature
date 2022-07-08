@@ -28,10 +28,10 @@ Feature: limit range related scenarios:
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | path     | expr1                                                | expr2                                                |
-      | ocp10697 | Container\\s+cpu\\s+\-\\s+\-\\s+200m\\s+200m\\s+\-   | Container\\s+memory\\s+\-\\s+\-\\s+1Gi\\s+1Gi\\s+\-  | # @case_id OCP-10697
-      | ocp11175 | Container\\s+cpu\\s+200m\\s+\-\\s+200m\\s+\-\\s+\-   | Container\\s+memory\\s+1Gi\\s+\-\\s+1Gi\\s+\-\\s+\-  | # @case_id OCP-11175
-      | ocp11519 | Container\\s+cpu\\s+\-\\s+200m\\s+200m\\s+200m\\s+\- | Container\\s+memory\\s+\-\\s+1Gi\\s+1Gi\\s+1Gi\\s+\- | # @case_id OCP-11519
+      | case_id   | path     | expr1                                                | expr2                                                |
+      | OCP-10697 | ocp10697 | Container\\s+cpu\\s+\-\\s+\-\\s+200m\\s+200m\\s+\-   | Container\\s+memory\\s+\-\\s+\-\\s+1Gi\\s+1Gi\\s+\-  | # @case_id OCP-10697
+      | OCP-11175 | ocp11175 | Container\\s+cpu\\s+200m\\s+\-\\s+200m\\s+\-\\s+\-   | Container\\s+memory\\s+1Gi\\s+\-\\s+1Gi\\s+\-\\s+\-  | # @case_id OCP-11175
+      | OCP-11519 | ocp11519 | Container\\s+cpu\\s+\-\\s+200m\\s+200m\\s+200m\\s+\- | Container\\s+memory\\s+\-\\s+1Gi\\s+1Gi\\s+1Gi\\s+\- | # @case_id OCP-11519
 
   # @author pruan@redhat.com
   # @author azagayno@redhat.com
@@ -59,9 +59,9 @@ Feature: limit range related scenarios:
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 | expr11 |expr12 | expr13| expr14 | expr15 | expr16 | expr17 | expr18 | expr19| expr20 |
-      | ocp11745 | 400m | default request | 400m | max | 200m | 200m | default | 400m | max | 200m | 2Gi | default request | 2Gi | max | 1Gi | 1Gi | default | 2Gi  | max   | 1Gi    | # @case_id OCP-11745
-      | ocp12200 | 200m | min | 400m | default request | 200m | 400m | min | 400m | default | 200m | 1Gi | min | 2Gi | default request | 1Gi | 2Gi | min | 2Gi  | default   | 1Gi    | # @case_id OCP-12200
+      | case_id   | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 | expr11 |expr12 | expr13| expr14 | expr15 | expr16 | expr17 | expr18 | expr19| expr20 |
+      | OCP-11745 | ocp11745 | 400m | default request | 400m | max | 200m | 200m | default | 400m | max | 200m | 2Gi | default request | 2Gi | max | 1Gi | 1Gi | default | 2Gi  | max   | 1Gi    | # @case_id OCP-11745
+      | OCP-12200 | ocp12200 | 200m | min | 400m | default request | 200m | 400m | min | 400m | default | 200m | 1Gi | min | 2Gi | default request | 1Gi | 2Gi | min | 2Gi  | default   | 1Gi    | # @case_id OCP-12200
 
   # @author pruan@redhat.com
   # @author azagayno@redhat.com

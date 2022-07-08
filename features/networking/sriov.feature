@@ -207,9 +207,9 @@ Feature: Sriov related scenarios
       | 10.56.217 |
 
     Examples:
-      | cardname |
-      | mlx277   | # @case_id OCP-24774
-      | mlx278   | # @case_id OCP-24775
+      | case_id   | cardname |
+      | OCP-24774 | mlx277   | # @case_id OCP-24774
+      | OCP-24775 | mlx278   | # @case_id OCP-24775
 
   # @author zzhao@redhat.com
   # @case_id OCP-24780
@@ -452,9 +452,9 @@ Feature: Sriov related scenarios
     """
 
     Examples:
-      | sriov-feature             | keyword           |
-      | SR-IOV resource injector  | injector          |  # @case_id OCP-25814
-      | Admission webhook         | operator-webhook  |  # @case_id OCP-25847
+      | case_id   | sriov-feature             | keyword           |
+      | OCP-25814 | SR-IOV resource injector  | injector          | # @case_id OCP-25814
+      | OCP-25847 | Admission webhook         | operator-webhook  | # @case_id OCP-25847
 
   # @author zzhao@redhat.com
   # @case_id OCP-25835

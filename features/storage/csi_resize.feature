@@ -42,14 +42,14 @@ Feature: CSI Resizing related feature
     @gcp-ipi
     @gcp-upi
     Examples:
-      | sc_name      |
-      | standard-csi | # @case_id OCP-37479
+      | case_id   | sc_name      |
+      | OCP-37479 | standard-csi | # @case_id OCP-37479
 
     @aws-ipi
     @aws-upi
     Examples:
-      | sc_name      |
-      | gp2-csi      | # @case_id OCP-25808
+      | case_id   | sc_name      |
+      | OCP-25808 | gp2-csi      | # @case_id OCP-25808
 
     @openstack-ipi
     @openstack-upi
@@ -59,8 +59,8 @@ Feature: CSI Resizing related feature
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | sc_name      |
-      | standard-csi | # @case_id OCP-37559
+      | case_id   | sc_name      |
+      | OCP-37559 | standard-csi | # @case_id OCP-37559
 
   # @author wduan@redhat.com
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -95,8 +95,8 @@ Feature: CSI Resizing related feature
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | sc_name |
-      | gp2-csi | # @case_id OCP-25809
+      | case_id   | sc_name |
+      | OCP-25809 | gp2-csi | # @case_id OCP-25809
 
   # @author ropatil@redhat.com
   @admin
@@ -177,5 +177,5 @@ Feature: CSI Resizing related feature
       | No space left on device |
 
     Examples:
-      | sc_name     |
-      | managed-csi | # @case_id OCP-41452
+      | case_id   | sc_name     |
+      | OCP-41452 | managed-csi | # @case_id OCP-41452

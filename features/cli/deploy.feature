@@ -184,10 +184,10 @@ Feature: deployment related features
     @proxy @noproxy @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | change_scaling_settings | change_strategy | changed_val1  | changed_val2       |
-      | :false                  | :false          |               |                    | # @case_id OCP-12116
-      |                         | :false          | "replicas": 1 |                    | # @case_id OCP-12018
-      |                         |                 | "replicas": 1 | "type": "Recreate" | # @case_id OCP-12624
+      | case_id   | change_scaling_settings | change_strategy | changed_val1  | changed_val2       |
+      | OCP-12116 | :false                  | :false          |               |                    | # @case_id OCP-12116
+      | OCP-12018 |                         | :false          | "replicas": 1 |                    | # @case_id OCP-12018
+      | OCP-12624 |                         |                 | "replicas": 1 | "type": "Recreate" | # @case_id OCP-12624
 
   # @author xxing@redhat.com
   # @case_id OCP-11877
