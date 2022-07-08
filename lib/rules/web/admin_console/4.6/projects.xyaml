@@ -88,3 +88,7 @@ switch_to_all_projects:
   params:
     project_name: all projects
   action: switch_to_project
+check_timestamp:
+  element:
+    selector:
+      xpath: //span[contains(@data-test, 'timestamp')]

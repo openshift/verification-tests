@@ -55,4 +55,3 @@ click_item_in_breadcrumb:
     selector:
       xpath: //li[contains(@class,'pf-c-breadcrumb__item')]//button[contains(.,'<breadcrumb_item>')]
     op: click
-
