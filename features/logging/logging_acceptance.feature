@@ -37,13 +37,6 @@ Feature: Logging smoke test case
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
     And default storageclass is stored in the :default_sc clipboard
-    # check each pod's container logs
-    Given I register clean-up steps:
-    """
-    Given I record all pods logs in the "openshift-operators-redhat" project
-    And I record all pods logs in the "openshift-logging" project
-    Then I delete the clusterlogging instance
-    """
 
     Given I obtain test data file "logging/clusterlogging/cl-storage-with-im-template.yaml"
     When I create clusterlogging instance with:
@@ -71,6 +64,13 @@ Feature: Logging smoke test case
     And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "infra"}.map {|x| x["index"]}` is stored in the :infra_indices clipboard
     And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "audit"}.map {|x| x["index"]}` is stored in the :audit_indices clipboard
 
+    # revert the changes
+    Given I register clean-up steps:
+    """
+    Given I use the "openshift-logging" project
+    And I successfully merge patch resource "clusterlogging/instance" with:
+      | {"spec": {"logStore": {"retentionPolicy": {"application": {"maxAge": "60h"}, "audit": {"maxAge": "3h"}, "infra": {"maxAge": "1d"}}}}} |
+    """
     # for testing purpose, update the schedule of cronjobs and maxAge of each log types
     Given I successfully merge patch resource "clusterlogging/instance" with:
       | {"spec": {"logStore": {"retentionPolicy": {"application": {"maxAge": "6m"}, "audit": {"maxAge": "6m"}, "infra": {"maxAge": "6m"}}}}} |
@@ -79,6 +79,13 @@ Feature: Logging smoke test case
     Given the expression should be true> elasticsearch("elasticsearch").delete_min_age(cached: false, name: "app-policy") == "6m"
     And the expression should be true> elasticsearch("elasticsearch").delete_min_age(name: "infra-policy") == "6m"
     And the expression should be true> elasticsearch("elasticsearch").delete_min_age(name: "audit-policy") == "6m"
+    """
+    # revert the changes
+    Given I register clean-up steps:
+    """
+    Given I use the "openshift-logging" project
+    And I successfully merge patch resource "elasticsearch/elasticsearch" with:
+      | {"spec": {"managementState": "Managed"}} |
     """
     Given I successfully merge patch resource "elasticsearch/elasticsearch" with:
       | {"spec": {"managementState": "Unmanaged"}} |
