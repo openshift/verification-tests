@@ -10,7 +10,7 @@ Feature: oc import-image related feature
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10585 Do not create tags for ImageStream if image repository does not have tags
+  Scenario: OCP-10585:ImageRegistry Do not create tags for ImageStream if image repository does not have tags
     When I have a project
     Given I obtain test data file "image-streams/is_without_tags.json"
     And I run the :create client command with:
@@ -35,7 +35,7 @@ Feature: oc import-image related feature
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10721 Could not import the tag when reference is true
+  Scenario: OCP-10721:ImageRegistry Could not import the tag when reference is true
     Given I have a project
     Given I obtain test data file "image-streams/ocp10721.json"
     When I run the :create client command with:
@@ -53,7 +53,7 @@ Feature: oc import-image related feature
   # @author wjiang@redhat.com
   # @case_id OCP-11760
   @inactive
-  Scenario: OCP-11760 Import Image when spec.DockerImageRepository not defined
+  Scenario: OCP-11760:ImageRegistry Import Image when spec.DockerImageRepository not defined
     Given I have a project
     Given I obtain test data file "image-streams/ocp11760.json"
     When I run the :create client command with:
@@ -74,7 +74,7 @@ Feature: oc import-image related feature
   # @case_id OCP-12052
   @smoke
   @inactive
-  Scenario: OCP-12052 Import image when spec.DockerImageRepository with some tags defined when Kind==DockerImage
+  Scenario: OCP-12052:ImageRegistry Import image when spec.DockerImageRepository with some tags defined when Kind==DockerImage
     Given I have a project
     Given I obtain test data file "image-streams/ocp12052.json"
     When I run the :create client command with:
@@ -99,7 +99,7 @@ Feature: oc import-image related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11089 Tags should be added to ImageStream if image repository is from an external docker registry
+  Scenario: OCP-11089:ImageRegistry Tags should be added to ImageStream if image repository is from an external docker registry
     Given I have a project
     Given I obtain test data file "image-streams/external.json"
     When I run the :create client command with:
@@ -127,7 +127,7 @@ Feature: oc import-image related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12765 Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
+  Scenario: OCP-12765:ImageRegistry Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :tag client command with:
       | source_type | docker                                                |
@@ -196,7 +196,7 @@ Feature: oc import-image related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12766 Allow imagestream request build config triggers by different mode('TagreferencePolicy':source/local)
+  Scenario: OCP-12766:ImageRegistry Allow imagestream request build config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :import_image client command with:
       | from       | registry.redhat.io/rhscl/ruby-26-rhel7:latest |

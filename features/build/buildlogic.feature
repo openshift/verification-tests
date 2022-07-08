@@ -11,7 +11,7 @@ Feature: buildlogic.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11545 Build with specified Dockerfile via new-build -D
+  Scenario: OCP-11545:BuildAPI Build with specified Dockerfile via new-build -D
     Given I have a project
     When I run the :new_build client command with:
       | D    | FROM quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22\nRUN echo "hello" |
@@ -24,7 +24,7 @@ Feature: buildlogic.feature
   # @author xiazhao@redhat.com
   # @case_id OCP-11170
   @inactive
-  Scenario: OCP-11170 Result image will be tried to push after multi-build
+  Scenario: OCP-11170:BuildAPI Result image will be tried to push after multi-build
     Given I have a project
     Given I obtain test data file "image/language-image-templates/php-55-rhel7-stibuild.json"
     When I run the :new_app client command with:
@@ -50,7 +50,7 @@ Feature: buildlogic.feature
   # @author gpei@redhat.com
   # @case_id OCP-11767
   @inactive
-  Scenario: OCP-11767 Create build without output
+  Scenario: OCP-11767:BuildAPI Create build without output
     Given I have a project
     When I run the :new_build client command with:
       | app_repo  | openshift/ruby~https://github.com/openshift/ruby-hello-world.git |
@@ -72,7 +72,7 @@ Feature: buildlogic.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-10799 Create new build config use dockerfile with source repo
+  Scenario: OCP-10799:BuildAPI Create new build config use dockerfile with source repo
     Given I have a project
     When I run the :new_build client command with:
       | app_repo | https://github.com/openshift/ruby-hello-world   |
@@ -136,7 +136,7 @@ Feature: buildlogic.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-10745 Build with specified Dockerfile to image with same image name via new-build
+  Scenario: OCP-10745:BuildAPI Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
       | D  | FROM quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5 |
@@ -180,7 +180,7 @@ Feature: buildlogic.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11720 Build from private git repo with/without ssh key
+  Scenario: OCP-11720:BuildAPI Build from private git repo with/without ssh key
     Given I have a project
     And I have an ssh-git service in the project
     And the "secret" file is created with the following lines:
@@ -232,7 +232,7 @@ Feature: buildlogic.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11896 Create new-app from private git repo with ssh key
+  Scenario: OCP-11896:BuildAPI Create new-app from private git repo with ssh key
     Given I have a project
     When I run the :new_app client command with:
       | image_stream   | openshift/perl:latest                            |
@@ -276,7 +276,7 @@ Feature: buildlogic.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-13683 Check s2i build substatus and times
+  Scenario: OCP-13683:BuildAPI Check s2i build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
     When I run the :new_app client command with:
@@ -305,7 +305,7 @@ Feature: buildlogic.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-13684 Check docker build substatus and times
+  Scenario: OCP-13684:BuildAPI Check docker build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-dockerbuild.json"
     When I run the :new_app client command with:
@@ -325,7 +325,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-13914
   @inactive
-  Scenario: OCP-13914 Prune old builds automaticly
+  Scenario: OCP-13914:BuildAPI Prune old builds automaticly
     #Should prune completed builds based on the successfulBuildsHistoryLimit setting
     Given I have a project
     When I run the :new_build client command with:
@@ -353,7 +353,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-24154
   @inactive
-  Scenario: OCP-24154 Should prune canceled builds based on the failedBuildsHistoryLimit setting
+  Scenario: OCP-24154:BuildAPI Should prune canceled builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :new_app client command with:
       | template | rails-postgresql-example |
@@ -387,7 +387,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-24155
   @inactive
-  Scenario: OCP-24155 Should prune failed builds based on the failedBuildsHistoryLimit setting
+  Scenario: OCP-24155:BuildAPI Should prune failed builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :new_app client command with:
       | template | rails-postgresql-example                                         |
@@ -413,7 +413,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-24156
   @inactive
-  Scenario: OCP-24156 Should prune errored builds based on the failedBuildsHistoryLimit setting
+  Scenario: OCP-24156:BuildAPI Should prune errored builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/builds/build-pruning/errored-build-config.yaml |
@@ -436,7 +436,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-24158
   @inactive
-  Scenario: OCP-24158 Should prune builds after a buildConfig change
+  Scenario: OCP-24158:BuildAPI Should prune builds after a buildConfig change
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | ruby                                              |
@@ -482,7 +482,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-24159
   @inactive
-  Scenario: OCP-24159 Buildconfigs should have a default history limit set when created via the group api
+  Scenario: OCP-24159:BuildAPI Buildconfigs should have a default history limit set when created via the group api
     Given I have a project
     When I run the :new_build client command with:
       | app_repo | https://github.com/openshift/ruby-hello-world.git |
@@ -507,7 +507,7 @@ Feature: buildlogic.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-19133 Pipeline build can be pruned automatically
+  Scenario: OCP-19133:BuildAPI Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application
     When I run the :new_app client command with:
@@ -566,7 +566,7 @@ Feature: buildlogic.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-40366 Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's
+  Scenario: OCP-40366:BuildAPI Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's
     Given I have a project
     Given I save a htpasswd registry auth to the :combine_dockercfg clipboard
     And default image registry route is stored in the :integrated_reg_host clipboard

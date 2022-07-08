@@ -2,7 +2,7 @@ Feature: idle service related scenarios
 
   # @author hongli@redhat.com
   # @case_id OCP-10935
-  Scenario: OCP-10935 Pod can be changed to un-idle when there is unsecure or edge or passthrough route coming
+  Scenario: OCP-10935:NetworkEdge Pod can be changed to un-idle when there is unsecure or edge or passthrough route coming
     Given I have a project
     Given I obtain test data file "routing/web-server-rc.yaml"
     When I run the :create client command with:
@@ -97,7 +97,7 @@ Feature: idle service related scenarios
 
   # @author hongli@redhat.com
   # @case_id OCP-13837
-  Scenario: OCP-13837 Pod can be changed to un-idle when there is reencrypt route coming
+  Scenario: OCP-13837:NetworkEdge Pod can be changed to un-idle when there is reencrypt route coming
     Given I have a project
     Given I obtain test data file "routing/web-server-rc.yaml"
     When I run the :create client command with:

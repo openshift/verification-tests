@@ -10,7 +10,7 @@ Feature: remote registry related scenarios
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10904 Support unauthenticated with registry-admin role
+  Scenario: OCP-10904:ImageRegistry Support unauthenticated with registry-admin role
     Given I have a project
     Given I find a bearer token of the default service account
     When I run the :policy_add_role_to_user client command with:

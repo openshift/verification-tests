@@ -9,7 +9,7 @@ Feature: kata and pod related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-38468 Pod using kata runtime can have an initcontainer
+  Scenario: OCP-38468:Kata Pod using kata runtime can have an initcontainer
     Given I have a project
     And I obtain test data file "kata/OCP-38468/pod_with_init_container.yaml"
     And I run the :create client command with:

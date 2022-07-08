@@ -11,7 +11,7 @@ Feature: set deployment-hook/build-hook with CLI
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11805 Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
+  Scenario: OCP-11805:Workloads Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift/rails-ex/master/openshift/templates/rails-postgresql.json |
@@ -103,7 +103,7 @@ Feature: set deployment-hook/build-hook with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11298 Set invalid pre/mid/post deployment hooks on deployment config via oc set deployment-hook
+  Scenario: OCP-11298:BuildAPI Set invalid pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:
       | template | rails-postgresql-example |

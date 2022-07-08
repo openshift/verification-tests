@@ -57,7 +57,7 @@ Feature: stibuild.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-30858 STI build with dockerImage with specified tag
+  Scenario: OCP-30858:BuildAPI STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
       | docker_image | quay.io/openshifttest/ruby-27:multiarch   |
@@ -99,7 +99,7 @@ Feature: stibuild.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-22596 Create app with template eap73-basic-s2i with jbosseap rhel7 image
+  Scenario: OCP-22596:ImageRegistry Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:
       | template | eap73-basic-s2i |
@@ -124,7 +124,7 @@ Feature: stibuild.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-28891 Test s2i build in disconnect cluster
+  Scenario: OCP-28891:BuildAPI Test s2i build in disconnect cluster
     Given I have a project
     When I have an http-git service in the project
     And I run the :set_env client command with:
@@ -158,7 +158,7 @@ Feature: stibuild.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-42159 Mount source secret and configmap to builder container- sourcestrategy
+  Scenario: OCP-42159:BuildAPI Mount source secret and configmap to builder container- sourcestrategy
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |

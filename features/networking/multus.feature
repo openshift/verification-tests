@@ -11,7 +11,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21151 Create pods with multus-cni - macvlan bridge mode
+  Scenario: OCP-21151:SDN Create pods with multus-cni - macvlan bridge mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
     And the multus is enabled on the cluster
@@ -79,7 +79,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21489 Create pods with multus-cni - macvlan private mode
+  Scenario: OCP-21489:SDN Create pods with multus-cni - macvlan private mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
     And the multus is enabled on the cluster
@@ -145,7 +145,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21496 Create pods with multus-cni - macvlan vepa mode
+  Scenario: OCP-21496:SDN Create pods with multus-cni - macvlan vepa mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
     And the multus is enabled on the cluster
@@ -212,7 +212,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21853 Create pods with multus-cni - host-device
+  Scenario: OCP-21853:SDN Create pods with multus-cni - host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
     And the multus is enabled on the cluster
@@ -289,7 +289,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21854 Create pods with muliple cni plugins via multus-cni - macvlan + macvlan
+  Scenario: OCP-21854:SDN Create pods with muliple cni plugins via multus-cni - macvlan + macvlan
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
     And the multus is enabled on the cluster
@@ -341,7 +341,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21855 Create pods with muliple cni plugins via multus-cni - macvlan + host-device
+  Scenario: OCP-21855:SDN Create pods with muliple cni plugins via multus-cni - macvlan + host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
     And the multus is enabled on the cluster
@@ -413,7 +413,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21859 Create pods with muliple cni plugins via multus-cni - host-device + host-device
+  Scenario: OCP-21859:SDN Create pods with muliple cni plugins via multus-cni - host-device + host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
     And the multus is enabled on the cluster
@@ -492,7 +492,7 @@ Feature: Multus-CNI related scenarios
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24488 Create pod with Multus bridge CNI plugin without vlan
+  Scenario: OCP-24488:SDN Create pod with Multus bridge CNI plugin without vlan
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -548,7 +548,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24489 Create pod with Multus bridge CNI plugin and vlan tag
+  Scenario: OCP-24489:SDN Create pod with Multus bridge CNI plugin and vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -596,7 +596,7 @@ Feature: Multus-CNI related scenarios
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24467 CNO manager mavlan configured manually with static
+  Scenario: OCP-24467:SDN CNO manager mavlan configured manually with static
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -637,7 +637,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-21946
   @admin
-  Scenario: OCP-21946 The multus admission controller should be able to detect the syntax issue in the net-attach-def
+  Scenario: OCP-21946:SDN The multus admission controller should be able to detect the syntax issue in the net-attach-def
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin and simulating syntax errors
@@ -664,7 +664,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-21949
   @admin
-  Scenario: OCP-21949 The multus admission controller should be able to detect the issue in the pod template
+  Scenario: OCP-21949:SDN The multus admission controller should be able to detect the issue in the pod template
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -692,7 +692,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21793 User cannot consume the net-attach-def created in other project which is namespace isolated
+  Scenario: OCP-21793:SDN User cannot consume the net-attach-def created in other project which is namespace isolated
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     Given I have a project
@@ -734,7 +734,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24490 Pods can communicate each other with same vlan tag
+  Scenario: OCP-24490:SDN Pods can communicate each other with same vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
@@ -826,7 +826,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24491 Pods cannot communicate each other with different vlan tag
+  Scenario: OCP-24491:SDN Pods cannot communicate each other with different vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
@@ -934,7 +934,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24607 macvlan plugin without master parameter
+  Scenario: OCP-24607:SDN macvlan plugin without master parameter
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def without master pmtr via cluster admin
@@ -967,7 +967,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-25676 Supported runtimeConfig/capability for MAC/IP
+  Scenario: OCP-25676:SDN Supported runtimeConfig/capability for MAC/IP
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
 
@@ -1011,7 +1011,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24465 Multus CNI type bridge with DHCP
+  Scenario: OCP-24465:SDN Multus CNI type bridge with DHCP
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -1070,7 +1070,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @inactive
-  Scenario: OCP-24466 CNO manager macvlan configured manually with DHCP
+  Scenario: OCP-24466:SDN CNO manager macvlan configured manually with DHCP
     Given the multus is enabled on the cluster
     And I store the masters in the :master clipboard
     And I store all worker nodes to the :worker clipboard
@@ -1152,7 +1152,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-25909 Assign static IP address using pod annotation
+  Scenario: OCP-25909:SDN Assign static IP address using pod annotation
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
 
@@ -1194,7 +1194,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-25910 Assign static MAC address using pod annotation
+  Scenario: OCP-25910:SDN Assign static MAC address using pod annotation
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -1234,7 +1234,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @connected
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-25915 Multus default route overwrite
+  Scenario: OCP-25915:SDN Multus default route overwrite
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -1272,7 +1272,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-25917 Multus Telemetry Adds capability to track usage of network attachment definitions
+  Scenario: OCP-25917:SDN Multus Telemetry Adds capability to track usage of network attachment definitions
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     Given I switch to cluster admin pseudo user
@@ -1336,7 +1336,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-22504 The multus admission controller should be able to detect that the pod is using net-attach-def in other namespaces when the isolation is enabled
+  Scenario: OCP-22504:SDN The multus admission controller should be able to detect that the pod is using net-attach-def in other namespaces when the isolation is enabled
     Given I create 2 new projects
     # Create the net-attach-def via cluster admin
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
@@ -1373,7 +1373,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24492 Create pod with Multus ipvlan CNI plugin
+  Scenario: OCP-24492:SDN Create pod with Multus ipvlan CNI plugin
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     And the default interface on nodes is stored in the :default_interface clipboard
@@ -1433,7 +1433,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-28633 Dynamic IP address assignment with Whereabouts
+  Scenario: OCP-28633:SDN Dynamic IP address assignment with Whereabouts
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -1497,7 +1497,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-28518 Multus custom route change with route override
+  Scenario: OCP-28518:SDN Multus custom route change with route override
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -1534,7 +1534,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-30054 Multus namespaceIsolation should allow references to CRD in the default namespace
+  Scenario: OCP-30054:SDN Multus namespaceIsolation should allow references to CRD in the default namespace
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def in default namespace via cluster admin
@@ -1567,7 +1567,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-29742 Log pod IP and pod UUID when pod start
+  Scenario: OCP-29742:SDN Log pod IP and pod UUID when pod start
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     # Create the net-attach-def via cluster admin
@@ -1620,7 +1620,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-31999 Whereabouts with exclude IP address
+  Scenario: OCP-31999:SDN Whereabouts with exclude IP address
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -1683,7 +1683,7 @@ Feature: Multus-CNI related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: OCP-33579 Additional network IPAM should support changes in range and overlapping ranges
+  Scenario: OCP-33579:SDN Additional network IPAM should support changes in range and overlapping ranges
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def with whereabouts-shortrange
@@ -1763,7 +1763,7 @@ Feature: Multus-CNI related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-41789 BZ1944678 Whereabouts IPAM CNI duplicate IP addresses assigned to pods
+  Scenario: OCP-41789:SDN BZ1944678 Whereabouts IPAM CNI duplicate IP addresses assigned to pods
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     # Create the net-attach-def via cluster admin
@@ -1822,7 +1822,7 @@ Feature: Multus-CNI related scenarios
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: OCP-46116 BZ1897431 CIDR support for additional network attachment with the bridge CNI plug-in
+  Scenario: OCP-46116:SDN BZ1897431 CIDR support for additional network attachment with the bridge CNI plug-in
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard

@@ -55,7 +55,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12292 The quota usage should NOT be incremented if Requests and Limits aren't specified
+  Scenario: OCP-12292:Node The quota usage should NOT be incremented if Requests and Limits aren't specified
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -95,7 +95,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12256 The quota usage should NOT be incremented if Requests > Limits
+  Scenario: OCP-12256:Node The quota usage should NOT be incremented if Requests > Limits
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -139,7 +139,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12206 The quota usage should NOT be incremented if Requests = Limits but exceeding hard quota
+  Scenario: OCP-12206:Node The quota usage should NOT be incremented if Requests = Limits but exceeding hard quota
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -172,7 +172,7 @@ Feature: Quota related scenarios
   # @case_id OCP-11566
   @admin
   @inactive
-  Scenario: OCP-11566 The quota status is calculated ASAP when editing its quota spec
+  Scenario: OCP-11566:Node The quota status is calculated ASAP when editing its quota spec
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -236,7 +236,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10801 Check BestEffort scope of resourcequota
+  Scenario: OCP-10801:Node Check BestEffort scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-besteffort.yaml"
     When I run the :create admin command with:
@@ -297,7 +297,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11251 Check NotBestEffort scope of resourcequota
+  Scenario: OCP-11251:Node Check NotBestEffort scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-notbesteffort.yaml"
     When I run the :create admin command with:
@@ -378,7 +378,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11568 Check NotTerminating scope of resourcequota
+  Scenario: OCP-11568:Node Check NotTerminating scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-notterminating.yaml"
     When I run the :create admin command with:
@@ -453,7 +453,7 @@ Feature: Quota related scenarios
   # @case_id OCP-11780
   @admin
   @inactive
-  Scenario: OCP-11780 Check Terminating scope of resourcequota
+  Scenario: OCP-11780:Node Check Terminating scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-terminating.yaml"
     When I run the :create admin command with:
@@ -544,7 +544,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10706 Could create quota if existing resources exceed to the hard quota but prevent to create further resources
+  Scenario: OCP-10706:Node Could create quota if existing resources exceed to the hard quota but prevent to create further resources
     Given I have a project
     Given I obtain test data file "quota/quota_template.yaml"
     When I run the :new_app admin command with:
@@ -616,7 +616,7 @@ Feature: Quota related scenarios
   # @case_id OCP-11779
   @admin
   @inactive
-  Scenario: OCP-11779 The usage for cpu/mem/pod counts are fixed up ASAP if delete a pod
+  Scenario: OCP-11779:Node The usage for cpu/mem/pod counts are fixed up ASAP if delete a pod
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -680,7 +680,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10033 Quota events for compute resource failures shouldn't be redundant
+  Scenario: OCP-10033:Node Quota events for compute resource failures shouldn't be redundant
     Given I have a project
     Given I obtain test data file "templates/ocp10033/quota.yaml"
     When I run the :create admin command with:
@@ -707,7 +707,7 @@ Feature: Quota related scenarios
   # @case_id OCP-11247
   @admin
   @inactive
-  Scenario: OCP-11247 The current quota usage is calculated ASAP when adding a quota
+  Scenario: OCP-11247:Node The current quota usage is calculated ASAP when adding a quota
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -760,7 +760,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11927 The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
+  Scenario: OCP-11927:Node The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -808,7 +808,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10945 The quota usage should be released when pod completed
+  Scenario: OCP-10945:Node The quota usage should be released when pod completed
     Given I have a project
     When I run the :create_quota admin command with:
       | name | myquota                    |
@@ -853,7 +853,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11983 Quota with BestEffort and NotBestEffort scope
+  Scenario: OCP-11983:Node Quota with BestEffort and NotBestEffort scope
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | quota-besteffort     |
@@ -912,7 +912,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12086 Quota with Terminating and NotTerminating scope
+  Scenario: OCP-12086:Node Quota with Terminating and NotTerminating scope
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | quota-terminating |
@@ -980,7 +980,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11348 Quota combined scopes
+  Scenario: OCP-11348:Node Quota combined scopes
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | quota-notbesteffortandnotterminating |
@@ -1080,7 +1080,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11636 Quota scope conflict BestEffort and NotBestEffort
+  Scenario: OCP-11636:Node Quota scope conflict BestEffort and NotBestEffort
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | quota-besteffortnot      |
@@ -1101,7 +1101,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11827 Quota scope conflict Terminating and NotTerminating
+  Scenario: OCP-11827:Node Quota scope conflict Terminating and NotTerminating
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | quota-terminatingnot       |
@@ -1122,7 +1122,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11000 Negative test for requests.storage of quota
+  Scenario: OCP-11000:Node Negative test for requests.storage of quota
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | my-quota             |
@@ -1174,7 +1174,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10283 Annotation selector supports special characters
+  Scenario: OCP-10283:Node Annotation selector supports special characters
     Given I have a project
     Given admin ensures "crq-<%= project.name %>" cluster_resource_quota is deleted after scenario
     When I run the :create_clusterresourcequota admin command with:
@@ -1210,7 +1210,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11660 Quota requests.storage with PVC existing
+  Scenario: OCP-11660:Node Quota requests.storage with PVC existing
     Given I have a project
     Given I obtain test data file "storage/nfs/claim-rox.json"
     When I run the :create client command with:
@@ -1268,7 +1268,7 @@ Feature: Quota related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11389 Prevent creating further PVC if existing PVC exceeds the quota of requests.storage
+  Scenario: OCP-11389:Node Prevent creating further PVC if existing PVC exceeds the quota of requests.storage
     Given I have a project
     # Only quota requests.storage < 5Gi
     When I run the :create_quota admin command with:

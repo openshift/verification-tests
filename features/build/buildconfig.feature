@@ -3,7 +3,7 @@ Feature: buildconfig.feature
   # @author wzheng@redhat.com
   # @case_id OCP-12121
   @inactive
-  Scenario: OCP-12121 Start build from buildConfig/build
+  Scenario: OCP-12121:ImageRegistry Start build from buildConfig/build
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/ruby:latest |
@@ -25,7 +25,7 @@ Feature: buildconfig.feature
   # @author haowang@redhat.com
   # @case_id OCP-10667
   @inactive
-  Scenario: OCP-10667 Rebuild image when the underlying image changed for Docker build
+  Scenario: OCP-10667:BuildAPI Rebuild image when the underlying image changed for Docker build
     Given I have a project
     When I run the :new_build client command with:
       | D    | FROM quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22\nRUN echo "hello" |
@@ -44,7 +44,7 @@ Feature: buildconfig.feature
   # @author dyan@redhat.com
   # @case_id OCP-12020
   @inactive
-  Scenario: OCP-12020 Trigger chain builds from a image update
+  Scenario: OCP-12020:BuildAPI Trigger chain builds from a image update
     Given I have a project
     When I run the :new_build client command with:
       | app_repo     | registry.redhat.io/rhscl/ruby-27-rhel7:latest~https://github.com/openshift/ruby-hello-world.git |
@@ -109,7 +109,7 @@ Feature: buildconfig.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-12057 Using secret to pull a docker image which be used as source input
+  Scenario: OCP-12057:BuildAPI Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:
      | name        | pull                                                                            |

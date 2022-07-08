@@ -5,7 +5,7 @@ Feature: Service-catalog related scenarios
   @admin
   @destructive
   @inactive
-  Scenario: OCP-15600 service-catalog walkthrough example
+  Scenario: OCP-15600:OperatorSDK service-catalog walkthrough example
     Given I have a project
     When I run the :get admin command with:
       | resource | clusterservicebroker |
@@ -97,7 +97,7 @@ Feature: Service-catalog related scenarios
   @admin
   @destructive
   @inactive
-  Scenario: OCP-15604 Create/get/update/delete for ClusterServiceBroker resource
+  Scenario: OCP-15604:OperatorSDK Create/get/update/delete for ClusterServiceBroker resource
     Given I have a project
     When I run the :get admin command with:
       | resource | clusterservicebroker |
@@ -176,7 +176,7 @@ Feature: Service-catalog related scenarios
   @admin
   @destructive
   @inactive
-  Scenario: OCP-15603 Create/get/update/delete for ServiceInstance resource
+  Scenario: OCP-15603:OperatorSDK Create/get/update/delete for ServiceInstance resource
     Given I have a project
     When I run the :get admin command with:
       | resource | clusterservicebroker |
@@ -237,7 +237,7 @@ Feature: Service-catalog related scenarios
   @admin
   @destructive
   @inactive
-  Scenario: OCP-15605 Create/get/update/delete for ServiceBinding resource
+  Scenario: OCP-15605:OperatorSDK Create/get/update/delete for ServiceBinding resource
     Given I have a project
     When I run the :get admin command with:
       | resource | clusterservicebroker |
@@ -313,7 +313,7 @@ Feature: Service-catalog related scenarios
   @admin
   @destructive
   @inactive
-  Scenario: OCP-15602 Create/get/update/delete for Clusterserviceclass/Clusterserviceplan resource
+  Scenario: OCP-15602:OperatorSDK Create/get/update/delete for Clusterserviceclass/Clusterserviceplan resource
     Given I have a project
     When I run the :get admin command with:
       | resource | clusterservicebroker |

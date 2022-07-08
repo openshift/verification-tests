@@ -3,7 +3,7 @@ Feature: Secure Computing Test Scenarios
   # @author wmeng@redhat.com
   # @case_id OCP-10483
   @inactive
-  Scenario: OCP-10483 seccomp=unconfined used by default
+  Scenario: OCP-10483:Node seccomp=unconfined used by default
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"
     When I run the :create client command with:
@@ -29,7 +29,7 @@ Feature: Secure Computing Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-32065 Using Secure Computing Profiles with Pod Annotations
+  Scenario: OCP-32065:Node Using Secure Computing Profiles with Pod Annotations
     # Create custom machine config that contains the seccomp
     Given I switch to cluster admin pseudo user
     And I obtain test data file "node/machineconfig_nostat.yaml"

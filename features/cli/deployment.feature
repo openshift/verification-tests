@@ -2,7 +2,7 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-11421
-  Scenario: OCP-11421 Add perma-failed - Deplyment succeed after change pod template by edit deployment
+  Scenario: OCP-11421:Workloads Add perma-failed - Deplyment succeed after change pod template by edit deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-1.yaml"
     When I run the :create client command with:
@@ -76,7 +76,7 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-11046
-  Scenario: OCP-11046 Add perma-failed - Deployment failed after pausing and resuming
+  Scenario: OCP-11046:Workloads Add perma-failed - Deployment failed after pausing and resuming
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-1.yaml"
     When I run the :create client command with:
@@ -169,7 +169,7 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-11681
-  Scenario: OCP-11681 Add perma-failed - Failing deployment can be rolled back successful
+  Scenario: OCP-11681:Workloads Add perma-failed - Failing deployment can be rolled back successful
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-3.yaml"
     When I run the :create client command with:
@@ -268,7 +268,7 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-12110
-  Scenario: OCP-12110 Add perma-failed - Rolling back to a failing deployment revision
+  Scenario: OCP-12110:Workloads Add perma-failed - Rolling back to a failing deployment revision
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-3.yaml"
     When I run the :create client command with:
@@ -375,7 +375,7 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-11865
-  Scenario: OCP-11865 Add perma-failed - Make a change outside pod template for failing deployment
+  Scenario: OCP-11865:Workloads Add perma-failed - Make a change outside pod template for failing deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-1.yaml"
     When I run the :create client command with:
@@ -467,7 +467,7 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-12009
-  Scenario: OCP-12009 Add perma-failed - Negative value test of progressDeadlineSeconds in failing deployment
+  Scenario: OCP-12009:Workloads Add perma-failed - Negative value test of progressDeadlineSeconds in failing deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-2.yaml"
     When I run the :create client command with:

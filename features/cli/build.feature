@@ -3,7 +3,7 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   # @case_id OCP-11132
   @inactive
-  Scenario: OCP-11132 Create a build config based on the provided image and source code
+  Scenario: OCP-11132:ImageRegistry Create a build config based on the provided image and source code
     Given I have a project
     When I run the :new_build client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
@@ -79,7 +79,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11133 Create a build config based on the source code in the current git repository
+  Scenario: OCP-11133:BuildAPI Create a build config based on the source code in the current git repository
     Given I have a project
     And I git clone the repo "https://github.com/openshift/ruby-hello-world.git"
     When I run the :new_build client command with:
@@ -149,7 +149,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11139 Create applications only with multiple db images
+  Scenario: OCP-11139:BuildAPI Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
       | image_stream      | openshift/mysql                                      |
@@ -194,7 +194,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11227 Add multiple source inputs
+  Scenario: OCP-11227:BuildAPI Add multiple source inputs
     Given I have a project
     Given I obtain test data file "templates/ocp11227/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
@@ -228,7 +228,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-10771 Add a image with multiple paths as source input
+  Scenario: OCP-10771:BuildAPI Add a image with multiple paths as source input
     Given I have a project
     Given I obtain test data file "templates/ocp10771/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
@@ -255,7 +255,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11943 Using a docker image as source input using new-build cmd
+  Scenario: OCP-11943:BuildAPI Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
       | source | quay.io/openshifttest/python:3.6 |
@@ -325,7 +325,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11776 Cannot create secret from local file and with same name via oc new-build
+  Scenario: OCP-11776:BuildAPI Cannot create secret from local file and with same name via oc new-build
     Given I have a project
     Given I obtain test data file "secrets/testsecret1.json"
     When I run the :create client command with:
@@ -361,7 +361,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11552 Using a docker image as source input for docker build
+  Scenario: OCP-11552:BuildAPI Using a docker image as source input for docker build
     Given I have a project
     Given I obtain test data file "templates/ocp11552/ruby22rhel7-template-docker.json"
     When I run the :new_app client command with:
@@ -427,7 +427,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11582 Change runpolicy to SerialLatestOnly build
+  Scenario: OCP-11582:BuildAPI Change runpolicy to SerialLatestOnly build
     Given I have a project
     When I run the :new_build client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
@@ -733,7 +733,7 @@ Feature: build 'apps' with CLI
   @proxy
   @4.10 @4.9
   @inactive
-  Scenario: OCP-10944 Simple error message return when no value followed with oc build-logs
+  Scenario: OCP-10944:ImageRegistry Simple error message return when no value followed with oc build-logs
     Given I have a project
     When I run the :logs client command with:
       | resource_name | |
@@ -768,7 +768,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-11023 Handle build naming collisions
+  Scenario: OCP-11023:BuildAPI Handle build naming collisions
     Given I have a project
     When I run the :new_build client command with:
       | app_repo     | https://github.com/openshift/ruby-hello-world.git |
@@ -801,7 +801,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-17523 io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
+  Scenario: OCP-17523:BuildAPI io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
     Given I have a project
     When I run the :new_app client command with:
       | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world#config |
@@ -826,7 +826,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-19631 Insert configmap when create a buildconfig
+  Scenario: OCP-19631:BuildAPI Insert configmap when create a buildconfig
     Given I have a project
     Given a "configmap.test" file is created with the following lines:
     """
@@ -966,7 +966,7 @@ Feature: build 'apps' with CLI
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-18962 Allow using a configmap as an input to a docker build
+  Scenario: OCP-18962:BuildAPI Allow using a configmap as an input to a docker build
     Given I have a project
     Given a "configmap1.test" file is created with the following lines:
     """

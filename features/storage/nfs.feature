@@ -11,7 +11,7 @@ Feature: NFS Persistent Volume
   @singlenode
   @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9572 Share NFS with multiple pods with ReadWriteMany mode
+  Scenario: OCP-9572:Storage Share NFS with multiple pods with ReadWriteMany mode
     Given I have a project
     And I have a NFS service in the project
 
@@ -64,7 +64,7 @@ Feature: NFS Persistent Volume
   @singlenode
   @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10281 Permission denied when nfs pv annotaion is not right
+  Scenario: OCP-10281:Storage Permission denied when nfs pv annotaion is not right
     Given I have a project
     And I have a NFS service in the project
     When I execute on the pod:

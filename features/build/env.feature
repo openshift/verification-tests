@@ -9,7 +9,7 @@ Feature: env.feature
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @inactive
-  Scenario: OCP-11543 Can set env vars on buildconfig with new-app --env and --env-file
+  Scenario: OCP-11543:BuildAPI Can set env vars on buildconfig with new-app --env and --env-file
     Given I have a project
     When I run the :new_app client command with:
       | app_repo | ruby:latest~https://github.com/openshift/ruby-hello-world |
@@ -86,7 +86,7 @@ Feature: env.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
-  Scenario: OCP-31247 Can set env vars on buildconfig with new-app --env and --env-file test
+  Scenario: OCP-31247:BuildAPI Can set env vars on buildconfig with new-app --env and --env-file test
     Given I have a project
     When I run the :new_app client command with:
       | app_repo | ruby:latest~https://github.com/openshift/ruby-hello-world |

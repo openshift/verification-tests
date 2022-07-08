@@ -301,7 +301,7 @@ Feature: storageClass related feature
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10159 PVC with storage class won't provisioned pv if no storage class or wrong storage class object
+  Scenario: OCP-10159:Storage PVC with storage class won't provisioned pv if no storage class or wrong storage class object
     Given I have a project
     # No sc exists
     Given I obtain test data file "storage/misc/pvc.json"
@@ -330,7 +330,7 @@ Feature: storageClass related feature
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10228 AWS ebs volume is dynamic provisioned with default storageclass
+  Scenario: OCP-10228:Storage AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
     Given I obtain test data file "storage/ebs/pvc-retain.json"
     When I run oc create over "pvc-retain.json" replacing paths:
