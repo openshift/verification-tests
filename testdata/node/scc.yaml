@@ -5,7 +5,7 @@ allowHostPID: false
 allowHostPorts: false
 allowPrivilegedContainer: false
 allowedCapabilities: null
-apiVersion: v1
+apiVersion: security.openshift.io/v1
 defaultAddCapabilities: null
 fsGroup:
   type: RunAsAny
