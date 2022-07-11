@@ -59,10 +59,10 @@ Feature: Sriov IB related scenarios
     Then the output should contain "infiniband"
 
     Examples:
-      | case_id   | cardname | 
-      | OCP-33812 | cx4   | # @case_id OCP-33812
-      | OCP-33813 | cx5   | # @case_id OCP-33813
-      | OCP-33814 | cx6   | # @case_id OCP-33814
+      | case_id       | cardname |
+      | OCP-33812:SDN | cx4      | # @case_id OCP-33812
+      | OCP-33813:SDN | cx5      | # @case_id OCP-33813
+      | OCP-33814:SDN | cx6      | # @case_id OCP-33814
 
   # @author zzhao@redhat.com
   # @case_id OCP-33852

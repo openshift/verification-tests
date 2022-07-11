@@ -117,8 +117,8 @@ Feature: collector related tests
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
-      | case_id   | index_name  |
-      | OCP-25365 | .operations | # @case_id OCP-25365
+      | case_id           | index_name  |
+      | OCP-25365:Logging | .operations | # @case_id OCP-25365
 
   # @author qitang@redhat.com
   # @case_id OCP-18147

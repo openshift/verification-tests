@@ -39,10 +39,10 @@ Feature: Quota related scenarios
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id   | path     | file                           | pod_name                  | expr1             | expr2                       |
-      | OCP-11754 | ocp11754 | pod-request-limit-valid-3.yaml | pod-request-limit-valid-3 | cpu\\s+100m\\s+30 | memory\\s+(134217728\|128Mi)\\s+16Gi | # @case_id OCP-11754
-      | OCP-12049 | ocp12049 | pod-request-limit-valid-1.yaml | pod-request-limit-valid-1 | cpu\\s+500m\\s+30 | memory\\s+(536870912\|512Mi)\\s+16Gi | # @case_id OCP-12049
-      | OCP-12145 | ocp12145 | pod-request-limit-valid-2.yaml | pod-request-limit-valid-2 | cpu\\s+200m\\s+30 | memory\\s+(268435456\|256Mi)\\s+16Gi | # @case_id OCP-12145
+      | case_id        | path     | file                           | pod_name                  | expr1             | expr2                 |
+      | OCP-11754:Node | ocp11754 | pod-request-limit-valid-3.yaml | pod-request-limit-valid-3 | cpu\\s+100m\\s+30 | memory\\s+(134217728\ | 128Mi)\\s+16Gi | # @case_id OCP-11754
+      | OCP-12049:Node | ocp12049 | pod-request-limit-valid-1.yaml | pod-request-limit-valid-1 | cpu\\s+500m\\s+30 | memory\\s+(536870912\ | 512Mi)\\s+16Gi | # @case_id OCP-12049
+      | OCP-12145:Node | ocp12145 | pod-request-limit-valid-2.yaml | pod-request-limit-valid-2 | cpu\\s+200m\\s+30 | memory\\s+(268435456\ | 256Mi)\\s+16Gi | # @case_id OCP-12145
 
   # @author qwang@redhat.com
   # @case_id OCP-12292

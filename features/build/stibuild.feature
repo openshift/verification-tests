@@ -43,8 +43,8 @@ Feature: stibuild.feature
     @heterogeneous @arm64 @amd64
     @inactive
     Examples:
-      | case_id   | template          |
-      | OCP-12041 | ocp12041-s2i.json | # @case_id OCP-12041
+      | case_id            | template          |
+      | OCP-12041:BuildAPI | ocp12041-s2i.json | # @case_id OCP-12041
 
   # @author wzheng@redhat.com
   # @case_id OCP-30858

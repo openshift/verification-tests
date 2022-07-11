@@ -53,6 +53,6 @@ Feature: Webhook REST Related Tests
     @heterogeneous @arm64 @amd64
     @inactive
     Examples:
-      | case_id   | type    | negative1 | negative2   | negative3 | path              | file              | header1        | header2 |
-      | OCP-11693 | generic | GitHub    | ImageChange | github    | generic/testdata/ | push-generic.json |                |         | # @case_id OCP-11693
-      | OCP-11875 | github  | Generic   | ImageChange | generic   | github/testdata/  | pushevent.json    | X-Github-Event | push    | # @case_id OCP-11875
+      | case_id            | type    | negative1 | negative2   | negative3 | path              | file              | header1        | header2 |
+      | OCP-11693:BuildAPI | generic | GitHub    | ImageChange | github    | generic/testdata/ | push-generic.json |                |         | # @case_id OCP-11693
+      | OCP-11875:BuildAPI | github  | Generic   | ImageChange | generic   | github/testdata/  | pushevent.json    | X-Github-Event | push    | # @case_id OCP-11875

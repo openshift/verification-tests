@@ -183,8 +183,8 @@ Feature: secrets related scenarios
     @heterogeneous @arm64 @amd64
     @inactive
     Examples:
-      | case_id   | type   | build_secret         | path      | command | expression               |
-      | OCP-11947 | docker | testsecret1:mysecret1| mysecret1 | ls      | true                     | # @case_id OCP-11947
+      | case_id            | type   | build_secret          | path      | command | expression |
+      | OCP-11947:BuildAPI | docker | testsecret1:mysecret1 | mysecret1 | ls      | true       | # @case_id OCP-11947
 
   # @author chezhang@redhat.com
   # @case_id OCP-10814

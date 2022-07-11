@@ -29,20 +29,20 @@ Feature: storageClass related feature
     @aws-ipi
     @aws-upi
     Examples:
-      | case_id   | storage-class-name |
-      | OCP-12269 | gp2                | # @case_id OCP-12269
+      | case_id           | storage-class-name |
+      | OCP-12269:Storage | gp2                | # @case_id OCP-12269
 
     @gcp-ipi
     @gcp-upi
     Examples:
-      | case_id   | storage-class-name |
-      | OCP-12089 | standard           | # @case_id OCP-12089
+      | case_id           | storage-class-name |
+      | OCP-12089:Storage | standard           | # @case_id OCP-12089
 
     @openstack-ipi
     @openstack-upi
     Examples:
-      | case_id   | storage-class-name |
-      | OCP-12272 | standard           | # @case_id OCP-12272
+      | case_id           | storage-class-name |
+      | OCP-12272:Storage | standard           | # @case_id OCP-12272
 
     @azure-ipi
     @azure-upi
@@ -50,8 +50,8 @@ Feature: storageClass related feature
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id   | storage-class-name |
-      | OCP-13488 | managed-premium    | # @case_id OCP-13488
+      | case_id           | storage-class-name |
+      | OCP-13488:Storage | managed-premium    | # @case_id OCP-13488
 
   # @author lxia@redhat.com
   # @author chaoyang@redhat.com
@@ -96,9 +96,9 @@ Feature: storageClass related feature
     @gcp-ipi
     @gcp-upi
     Examples:
-      | case_id   | provisioner | type        | zone          | is-default | size  |
-      | OCP-11359 | gce-pd      | pd-ssd      | us-central1-a | false      | 1Gi   | # @case_id OCP-11359
-      | OCP-11640 | gce-pd      | pd-standard | us-central1-a | false      | 2Gi   | # @case_id OCP-11640
+      | case_id           | provisioner | type        | zone          | is-default | size |
+      | OCP-11359:Storage | gce-pd      | pd-ssd      | us-central1-a | false      | 1Gi  | # @case_id OCP-11359
+      | OCP-11640:Storage | gce-pd      | pd-standard | us-central1-a | false      | 2Gi  | # @case_id OCP-11640
 
     @aws-ipi
     @aws-upi
@@ -107,10 +107,10 @@ Feature: storageClass related feature
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id   | provisioner | type        | zone          | is-default | size  |
-      | OCP-10160 | aws-ebs     | gp2         | us-east-1d    | false      | 1Gi   | # @case_id OCP-10160
-      | OCP-10161 | aws-ebs     | sc1         | us-east-1d    | false      | 500Gi | # @case_id OCP-10161
-      | OCP-10424 | aws-ebs     | st1         | us-east-1d    | false      | 500Gi | # @case_id OCP-10424
+      | case_id           | provisioner | type | zone       | is-default | size  |
+      | OCP-10160:Storage | aws-ebs     | gp2  | us-east-1d | false      | 1Gi   | # @case_id OCP-10160
+      | OCP-10161:Storage | aws-ebs     | sc1  | us-east-1d | false      | 500Gi | # @case_id OCP-10161
+      | OCP-10424:Storage | aws-ebs     | st1  | us-east-1d | false      | 500Gi | # @case_id OCP-10424
 
   # @author lxia@redhat.com
   @admin
@@ -154,26 +154,26 @@ Feature: storageClass related feature
     @aws-ipi
     @aws-upi
     Examples:
-      | case_id   | provisioner    |
-      | OCP-12226 | aws-ebs        | # @case_id OCP-12226
+      | case_id           | provisioner |
+      | OCP-12226:Storage | aws-ebs     | # @case_id OCP-12226
 
     @azure-ipi
     @azure-upi
     Examples:
-      | case_id   | provisioner    |
-      | OCP-13490 | azure-disk     | # @case_id OCP-13490
+      | case_id           | provisioner |
+      | OCP-13490:Storage | azure-disk  | # @case_id OCP-13490
 
     @openstack-ipi
     @openstack-upi
     Examples:
-      | case_id   | provisioner    |
-      | OCP-12227 | cinder         | # @case_id OCP-12227
+      | case_id           | provisioner |
+      | OCP-12227:Storage | cinder      | # @case_id OCP-12227
 
     @gcp-ipi
     @gcp-upi
     Examples:
-      | case_id   | provisioner    |
-      | OCP-12223 | gce-pd         | # @case_id OCP-12223
+      | case_id           | provisioner |
+      | OCP-12223:Storage | gce-pd      | # @case_id OCP-12223
 
     @vsphere-ipi
     @vsphere-upi
@@ -182,8 +182,8 @@ Feature: storageClass related feature
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id   | provisioner    |
-      | OCP-24259 | vsphere-volume | # @case_id OCP-24259
+      | case_id           | provisioner    |
+      | OCP-24259:Storage | vsphere-volume | # @case_id OCP-24259
 
   # @author lxia@redhat.com
   @inactive
@@ -196,12 +196,12 @@ Feature: storageClass related feature
     And the expression should be true> pvc("mypvc").storage_class == "<default-storage-class-name>"
 
     Examples:
-      | case_id   | provisioner    | default-storage-class-name |
-      | OCP-12176 | aws-ebs        | gp2                        | # @case_id OCP-12176
-      | OCP-13492 | azure-disk     | managed-premium            | # @case_id OCP-13492
-      | OCP-12177 | cinder         | standard                   | # @case_id OCP-12177
-      | OCP-12171 | gce-pd         | standard                   | # @case_id OCP-12171
-      | OCP-25789 | vsphere-volume | thin                       | # @case_id OCP-25789
+      | case_id           | provisioner    | default-storage-class-name |
+      | OCP-12176:Storage | aws-ebs        | gp2                        | # @case_id OCP-12176
+      | OCP-13492:Storage | azure-disk     | managed-premium            | # @case_id OCP-13492
+      | OCP-12177:Storage | cinder         | standard                   | # @case_id OCP-12177
+      | OCP-12171:Storage | gce-pd         | standard                   | # @case_id OCP-12171
+      | OCP-25789:Storage | vsphere-volume | thin                       | # @case_id OCP-25789
 
   # @author chaoyang@redhat.com
   @admin
@@ -249,9 +249,9 @@ Feature: storageClass related feature
     @proxy @noproxy @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id   | size  |
-      | OCP-10158 | 4Gi   | # @case_id OCP-10158
-      | OCP-10162 | 800Gi | # @case_id OCP-10162
+      | case_id           | size  |
+      | OCP-10158:Storage | 4Gi   | # @case_id OCP-10158
+      | OCP-10162:Storage | 800Gi | # @case_id OCP-10162
 
   # @author chaoyang@redhat.com
   @admin
@@ -288,9 +288,9 @@ Feature: storageClass related feature
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id   | type | size | errorMessage                  |
-      | OCP-10164 | sc1  | 5Gi  | at least 125 GiB              | # @case_id OCP-10164
-      | OCP-10425 | st1  | 17Ti | too large for volume type st1 | # @case_id OCP-10425
+      | case_id           | type | size | errorMessage                  |
+      | OCP-10164:Storage | sc1  | 5Gi  | at least 125 GiB              | # @case_id OCP-10164
+      | OCP-10425:Storage | st1  | 17Ti | too large for volume type st1 | # @case_id OCP-10425
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10159

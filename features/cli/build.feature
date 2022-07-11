@@ -63,9 +63,9 @@ Feature: build 'apps' with CLI
 
     @inactive
     Examples:
-      | case_id   | number   | build_status |
-      | OCP-11224 | ocp11224 | :complete    | # @case_id OCP-11224
-      | OCP-11550 | ocp11550 | :failed      | # @case_id OCP-11550
+      | case_id            | number   | build_status |
+      | OCP-11224:BuildAPI | ocp11224 | :complete    | # @case_id OCP-11224
+      | OCP-11550:BuildAPI | ocp11550 | :failed      | # @case_id OCP-11550
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11133
@@ -412,8 +412,8 @@ Feature: build 'apps' with CLI
 
     @inactive
     Examples:
-      | case_id   | bc_name              | build_name             | file_name        |
-      | OCP-11580 | ruby-sample-build-ns | ruby-sample-build-ns-1 | Nonesrc-sti.json | # @case_id OCP-11580
+      | case_id            | bc_name              | build_name             | file_name        |
+      | OCP-11580:BuildAPI | ruby-sample-build-ns | ruby-sample-build-ns-1 | Nonesrc-sti.json | # @case_id OCP-11580
 
   # @author cryan@redhat.com
   # @case_id OCP-11582
@@ -651,8 +651,8 @@ Feature: build 'apps' with CLI
     @heterogeneous @arm64 @amd64
     @inactive
     Examples:
-      | case_id   | num1 | num2 | num3 | num4 | num5 |
-      | OCP-15019 | 5    | 5    | 5    | 5    | 5    | # @case_id OCP-15019
+      | case_id            | num1 | num2 | num3 | num4 | num5 |
+      | OCP-15019:BuildAPI | 5    | 5    | 5    | 5    | 5    | # @case_id OCP-15019
 
   # @author haowang@redhat.com
   @proxy
@@ -700,8 +700,8 @@ Feature: build 'apps' with CLI
     And the "ruby-hello-world-5" build was cancelled
     And the "ruby-hello-world-3" build is :running
     Given I run the :patch client command with:
-      | resource      | bc                                                                                |
-      | resource_name | ruby-hello-world                                                                  |
+      | resource      | bc                                                                             |
+      | resource_name | ruby-hello-world                                                               |
       | p             | {"spec":{"source":{"git":{"uri":"https://xxxgithub.com/sclorg/ruby-ex.git"}}}} |
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
@@ -724,9 +724,9 @@ Feature: build 'apps' with CLI
     @heterogeneous @arm64 @amd64
     @inactive
     Examples:
-      | case_id   | cmd       |
-      | OCP-12066 | new_build | # @case_id OCP-12066
-      | OCP-11954 | new_app   | # @case_id OCP-11954
+      | case_id            | cmd       |
+      | OCP-12066:BuildAPI | new_build | # @case_id OCP-12066
+      | OCP-11954:BuildAPI | new_app   | # @case_id OCP-11954
 
   # @author pruan@redhat.com
   # @case_id OCP-10944

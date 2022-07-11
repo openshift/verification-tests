@@ -94,8 +94,8 @@ Feature: buildconfig.feature
     @heterogeneous @arm64 @amd64
     @inactive
     Examples:
-      | case_id   | template                  |
-      | OCP-11474 | test-buildconfig-s2i.json | # @case_id OCP-11474
+      | case_id            | template                  |
+      | OCP-11474:BuildAPI | test-buildconfig-s2i.json | # @case_id OCP-11474
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12057

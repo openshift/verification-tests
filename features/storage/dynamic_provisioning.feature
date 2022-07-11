@@ -60,20 +60,20 @@ Feature: Dynamic provisioning
     @aws-ipi
     @aws-upi
     Examples:
-      | case_id  | cloud_provider |
-      | OCP-9685 | ebs            | # @case_id OCP-9685
+      | case_id          | cloud_provider |
+      | OCP-9685:Storage | ebs            | # @case_id OCP-9685
 
     @gcp-ipi
     @gcp-upi
     Examples:
-      | case_id   | cloud_provider |
-      | OCP-12665 | gce            | # @case_id OCP-12665
+      | case_id           | cloud_provider |
+      | OCP-12665:Storage | gce            | # @case_id OCP-12665
 
     @azure-ipi
     @azure-upi
     Examples:
-      | case_id   | cloud_provider |
-      | OCP-13787 | azure          | # @case_id OCP-13787
+      | case_id           | cloud_provider |
+      | OCP-13787:Storage | azure          | # @case_id OCP-13787
 
     @openstack-ipi
     @openstack-upi
@@ -82,5 +82,5 @@ Feature: Dynamic provisioning
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id  | cloud_provider |
-      | OCP-9656 | cinder         | # @case_id OCP-9656
+      | case_id          | cloud_provider |
+      | OCP-9656:Storage | cinder         | # @case_id OCP-9656

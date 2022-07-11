@@ -30,10 +30,10 @@ Feature: ONLY ONLINE subscription plan related scripts in this file
     Then the expression should be true> cb.acrq.hard_quota(cached: false).<type>_raw  == "<total>Gi"
 
     Examples:
-      | case_id   | resource           | exceed_amount | current | total | acrq_name  | resource_page_name | previous | type             |
-      | OCP-10426 | storage            | 149           | 148     | 150   | noncompute | storage            | 0        | storage_requests | # @case_id OCP-10426
-      | OCP-10427 | memory             | 47            | 46      | 48    | compute    | memory             | 0        | memory_limit     | # @case_id OCP-10427
-      | OCP-13347 | terminating_memory | 19            | 18      | 20    | timebound  | terminating memory | 0        | memory_limit     | # @case_id OCP-13347
+      | case_id                       | resource           | exceed_amount | current | total | acrq_name  | resource_page_name | previous | type             |
+      | OCP-10426:ServiceDevelopmentB | storage            | 149           | 148     | 150   | noncompute | storage            | 0        | storage_requests | # @case_id OCP-10426
+      | OCP-10427:ServiceDevelopmentB | memory             | 47            | 46      | 48    | compute    | memory             | 0        | memory_limit     | # @case_id OCP-10427
+      | OCP-13347:ServiceDevelopmentB | terminating_memory | 19            | 18      | 20    | timebound  | terminating memory | 0        | memory_limit     | # @case_id OCP-13347
 
   # @author yuwei@redhat.com
   Scenario Outline: Check elements on Manage add-on Page - UI
@@ -58,8 +58,8 @@ Feature: ONLY ONLINE subscription plan related scripts in this file
     Then the step should succeed
 
     Examples: Check elements on Manage add-on Page - UI
-    | case_id   | resource           | resource_title     | max_value |
-    | OCP-12753 | memory             | memory             | 46        | # @case_id OCP-12753
-    | OCP-14276 | terminating_memory | terminating memory | 18        | # @case_id OCP-14276
-    | OCP-14893 | storage            | persistent storage | 148       | # @case_id OCP-14893
+    | case_id                       | resource           | resource_title     | max_value |
+    | OCP-12753:ServiceDevelopmentB | memory             | memory             | 46        | # @case_id OCP-12753
+    | OCP-14276:ServiceDevelopmentB | terminating_memory | terminating memory | 18        | # @case_id OCP-14276
+    | OCP-14893:ServiceDevelopmentB | storage            | persistent storage | 148       | # @case_id OCP-14893
 

@@ -76,8 +76,8 @@ Feature: jenkins.feature
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy
     Examples:
-      | case_id   | ver |
-      | OCP-11369 | 2   | # @case_id OCP-11369
+      | case_id                    | ver |
+      | OCP-11369:OpenshiftJenkins | 2   | # @case_id OCP-11369
 
   # @author xiuwang@redhat.com
   @console
@@ -107,8 +107,8 @@ Feature: jenkins.feature
     @amd64
     @inactive
     Examples:
-      | case_id   | version |
-      | OCP-10980 | 2       | # @case_id OCP-10980
+      | case_id            | version |
+      | OCP-10980:BuildAPI | 2       | # @case_id OCP-10980
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12773
