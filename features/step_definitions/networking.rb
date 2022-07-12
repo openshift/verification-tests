@@ -1505,7 +1505,7 @@ Given /^I switch the ovn gateway mode on this cluster$/ do
       @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": true}}}}}", type: "merge")
     end
   else
-    #for version < 4.10 we need to check if gateway-mode-config cm i spresent under CNO NS
+    #for version < 4.10 we need to check if gateway-mode-config cm is present under CNO NS
     @result = admin.cli_exec(:get, resource: "cm", n: "openshift-network-operator")   
     if @result[:response].include? "gateway-mode-config"
       logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
