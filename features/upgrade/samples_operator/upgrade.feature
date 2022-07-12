@@ -4,14 +4,14 @@ Feature: image-registry operator upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: samples/openshift-controller-manager/image-registry operators should be in correct status after upgrade - prepare
     Given I switch to cluster admin pseudo user
     # Check cluster operator openshift-samples should be in correct status
@@ -32,7 +32,7 @@ Feature: image-registry operator upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
