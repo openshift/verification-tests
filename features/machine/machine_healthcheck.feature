@@ -4,7 +4,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25897
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -44,7 +44,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-26311
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -76,7 +76,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25734
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -110,7 +110,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25691
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -164,7 +164,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-28718
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
@@ -205,7 +205,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25727
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -263,7 +263,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-28859
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -304,7 +304,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author miyadav@redhat.com
   # @case_id OCP-33714
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
@@ -325,7 +325,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author miyadav@redhat.com
   # @case_id OCP-34095
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64

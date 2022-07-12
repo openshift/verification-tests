@@ -3,7 +3,7 @@ Feature: dockerbuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-12115
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -33,7 +33,7 @@ Feature: dockerbuild.feature
   # @case_id OCP-30854
   @flaky
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -99,7 +99,7 @@ Feature: dockerbuild.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-12855
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -164,7 +164,7 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42157
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -207,7 +207,7 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42158
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -249,7 +249,7 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42184
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -293,7 +293,7 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42185
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -333,7 +333,7 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42529
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi

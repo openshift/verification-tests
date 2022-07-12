@@ -194,14 +194,14 @@ Feature: apiserver and auth related upgrade check
   @upgrade-prepare
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Check the default SCCs should not be stomped by CVO - prepare
     Given as admin I successfully merge patch resource "scc/anyuid" with:
       | {"users": ["system:serviceaccount:test-scc:test-scc"]} |
@@ -225,7 +225,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -253,14 +253,14 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.11 @4.10 @4.9 @4.8
+  @4.12 @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -291,7 +291,7 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-check
   @users=upuser1,upuser2
-  @4.11 @4.10 @4.9 @4.8
+  @4.12 @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -322,14 +322,14 @@ Feature: apiserver and auth related upgrade check
   @upgrade-prepare
   @qeci
   @admin
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade - prepare
     # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
     # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -341,7 +341,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @qeci
   @admin
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode

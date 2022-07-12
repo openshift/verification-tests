@@ -6,7 +6,7 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -156,7 +156,7 @@ Feature: cluster-logging-operator related test
   @console
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -237,7 +237,7 @@ Feature: cluster-logging-operator related test
   # @case_id OCP-33894
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode

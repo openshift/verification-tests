@@ -2,7 +2,7 @@ Feature: oc_delete.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-11184
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -121,7 +121,7 @@ Feature: oc_delete.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-12144
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -154,7 +154,7 @@ Feature: oc_delete.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-11526
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity

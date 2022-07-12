@@ -15,7 +15,7 @@ Feature: kata related features
   @admin
   @destructive
   @flaky
-  @4.11 @4.10 @4.9 @4.8
+  @4.12 @4.11 @4.10 @4.9 @4.8
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @baremetal-upi @azure-upi
   @upgrade-sanity
@@ -38,7 +38,7 @@ Feature: kata related features
   @admin
   @destructive
   @flaky
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @baremetal-upi @azure-upi
   @network-ovnkubernetes @network-openshiftsdn
