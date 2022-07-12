@@ -38,30 +38,30 @@ Feature: Node operations test scenarios
     @gcp-ipi
     @gcp-upi
     Examples:
-      | case_id   | cloud_provider |
-      | OCP-15287 | gcp            | # @case_id OCP-15287
+      | case_id           | cloud_provider |
+      | OCP-15287:Storage | gcp            | # @case_id OCP-15287
 
     @azure-ipi
     @azure-upi
     Examples:
-      | case_id   | cloud_provider |
-      | OCP-15275 | azure-disk     | # @case_id OCP-15275
+      | case_id           | cloud_provider |
+      | OCP-15275:Storage | azure-disk     | # @case_id OCP-15275
 
     @vsphere-ipi
     @vsphere-upi
     Examples:
-      | case_id   | cloud_provider |
-      | OCP-15268 | vsphere-volume | # @case_id OCP-15268
+      | case_id           | cloud_provider |
+      | OCP-15268:Storage | vsphere-volume | # @case_id OCP-15268
 
     @openstack-ipi
     @openstack-upi
     Examples:
-      | case_id   | cloud_provider |
-      | OCP-15276 | cinder         | # @case_id OCP-15276
+      | case_id           | cloud_provider |
+      | OCP-15276:Storage | cinder         | # @case_id OCP-15276
 
     @upgrade-sanity
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id   | cloud_provider |
-      | OCP-15283 | aws-ebs        | # @case_id OCP-15283
+      | case_id           | cloud_provider |
+      | OCP-15283:Storage | aws-ebs        | # @case_id OCP-15283

@@ -84,9 +84,9 @@ Feature: elasticsearch-operator related tests
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id   | cluster_setting |
-      | OCP-21530 | transient       | # @case_id OCP-21530
-      | OCP-30092 | persistent      | # @case_id OCP-30092
+      | case_id           | cluster_setting |
+      | OCP-21530:Logging | transient       | # @case_id OCP-21530
+      | OCP-30092:Logging | persistent      | # @case_id OCP-30092
 
   # @author qitang@redhat.com
   # @case_id OCP-33883

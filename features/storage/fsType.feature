@@ -35,23 +35,23 @@ Feature: testing for parameter fsType
     @openstack-ipi @gcp-ipi @aws-ipi
     @openstack-upi @gcp-upi @aws-upi
     Examples:
-      | case_id   | fsType | type   |
-      | OCP-10095 | ext3   | gce    | # @case_id OCP-10095
-      | OCP-10094 | ext4   | gce    | # @case_id OCP-10094
-      | OCP-10096 | xfs    | gce    | # @case_id OCP-10096
+      | case_id           | fsType | type |
+      | OCP-10095:Storage | ext3   | gce  | # @case_id OCP-10095
+      | OCP-10094:Storage | ext4   | gce  | # @case_id OCP-10094
+      | OCP-10096:Storage | xfs    | gce  | # @case_id OCP-10096
 
     Examples:
-      | case_id   | fsType | type   |
-      | OCP-10048 | ext3   | ebs    | # @case_id OCP-10048
-      | OCP-9612  | ext4   | ebs    | # @case_id OCP-9612
-      | OCP-10049 | xfs    | ebs    | # @case_id OCP-10049
+      | case_id           | fsType | type |
+      | OCP-10048:Storage | ext3   | ebs  | # @case_id OCP-10048
+      | OCP-9612:Storage  | ext4   | ebs  | # @case_id OCP-9612
+      | OCP-10049:Storage | xfs    | ebs  | # @case_id OCP-10049
 
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id   | fsType | type   |
-      | OCP-10097 | ext3   | cinder | # @case_id OCP-10097
-      | OCP-10098 | ext4   | cinder | # @case_id OCP-10098
-      | OCP-10099 | xfs    | cinder | # @case_id OCP-10099
+      | case_id           | fsType | type   |
+      | OCP-10097:Storage | ext3   | cinder | # @case_id OCP-10097
+      | OCP-10098:Storage | ext4   | cinder | # @case_id OCP-10098
+      | OCP-10099:Storage | xfs    | cinder | # @case_id OCP-10099

@@ -62,10 +62,10 @@ Feature: vSphere test scenarios
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | case_id   | disk_format      |
-      | OCP-13386 | thin             | # @case_id OCP-13386
-      | OCP-13387 | zeroedthick      | # @case_id OCP-13387
-      | OCP-13388 | eagerzeroedthick | # @case_id OCP-13388
+      | case_id           | disk_format      |
+      | OCP-13386:Storage | thin             | # @case_id OCP-13386
+      | OCP-13387:Storage | zeroedthick      | # @case_id OCP-13387
+      | OCP-13388:Storage | eagerzeroedthick | # @case_id OCP-13388
 
   # @author jhou@redhat.com
   # @case_id OCP-13389

@@ -111,9 +111,9 @@ Feature: buildlogic.feature
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
       | case_id   | template                            |
-      | OCP-10651 | buildconfig-docker-ImageStream.json | # @case_id OCP-10651
-      | OCP-11148 | buildconfig-s2i-ImageStream.json    | # @case_id OCP-11148
-      | OCP-10652 | buildconfig-docker-dockerimage.json | # @case_id OCP-10652
+      | OCP-10651:BuildAPI | buildconfig-docker-ImageStream.json | # @case_id OCP-10651
+      | OCP-11148:BuildAPI | buildconfig-s2i-ImageStream.json    | # @case_id OCP-11148
+      | OCP-10652:BuildAPI | buildconfig-docker-dockerimage.json | # @case_id OCP-10652
 
     @upgrade-sanity
     @singlenode
@@ -122,8 +122,8 @@ Feature: buildlogic.feature
     @heterogeneous @arm64 @amd64
     @inactive
     Examples:
-      | case_id   | template                            |
-      | OCP-11149 | buildconfig-s2i-dockerimage.json    | # @case_id OCP-11149
+      | case_id            | template                         |
+      | OCP-11149:BuildAPI | buildconfig-s2i-dockerimage.json | # @case_id OCP-11149
 
   # @author yantan@redhat.com
   # @case_id OCP-10745
