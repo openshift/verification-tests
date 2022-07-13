@@ -1494,21 +1494,33 @@ end
 
 Given /^I switch the ovn gateway mode on this cluster$/ do
   ensure_admin_tagged
-  step "I store the masters in the clipboard"
-  ovnkube_master = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash| pod.node_name == node.name}.first
-  @result = admin.cli_exec(:logs, resource_name: ovnkube_master.name, n: "openshift-ovn-kubernetes", c: "ovnkube-master")
-
-  if @result[:response].include? "Gateway:{Mode:local"
-    logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
-    @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": false}}}}}", type: "merge")
+  if env.version_gt("4.9", user: user)
+    #for version 4.10+ we can check exposed routingViaHost value under CNO object to evaluate ovn gateway mode
+    @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig.gatewayConfig.routingViaHost}")
+    if @result[:response].include? "true"
+      logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
+      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": false}}}}}", type: "merge")
+    else
+      logger.info "OVN Gateway mode is Shared. Changing Gateway mode to Local now..."
+      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": true}}}}}", type: "merge")
+    end
   else
-    logger.info "OVN Gateway mode is Shared. Changing Gateway mode to Local now..."
-    @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": true}}}}}", type: "merge")
+    #for version < 4.10 we need to check if gateway-mode-config cm is present under CNO NS
+    @result = admin.cli_exec(:get, resource: "cm", n: "openshift-network-operator")   
+    if @result[:response].include? "gateway-mode-config"
+      logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
+      #config map (LGW) deletion will be noticed by CNO which will cause cluster to rollout on SGW
+      @result = admin.cli_exec(:delete, object_type: "cm", object_name_or_id: "gateway-mode-config", n: "openshift-network-operator")
+    else
+      logger.info "OVN Gateway mode is Shared. Changing Gateway mode to Local now..."
+      #we need to create config map under CNO namespace if it does not exist to transition to LGW
+      @result = admin.cli_exec(:apply, f: "#{BushSlicer::HOME}/testdata/networking/sgw-lgw-cm.yaml")
+    end
   end
-  raise "Failed to patch network operator for gateway mode" unless @result[:success]
-  logger.info "Waiting upto 30 sec for network operator to change status to Progressing as a result of patch"
-  @result = admin.cli_exec(:wait, resource: "co", resource_name: "network", for: "condition=PROGRESSING=True", timeout: "30s")
-  raise "Patch was successful but CNO didn't change status to Progressing" unless @result[:success]
+  raise "Failed to patch network operator or apply config map for gateway mode" unless @result[:success]
+  logger.info "Waiting upto 240 sec for network operator to change status to Progressing as a result of patch or config map operation"
+  @result = admin.cli_exec(:wait, resource: "co", resource_name: "network", for: "condition=PROGRESSING=True", timeout: "240s")
+  raise "Patch or config map application was successful but CNO didn't change status to Progressing" unless @result[:success]
   @result = admin.cli_exec(:rollout_status, resource: "daemonset", name: "ovnkube-master", n: "openshift-ovn-kubernetes")
   raise "Failed to rollout masters" unless @result[:success]
 end
