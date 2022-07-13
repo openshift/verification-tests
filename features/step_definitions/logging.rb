@@ -362,6 +362,9 @@ Given /^I delete the clusterlogging instance$/ do
     end
       step %Q/logging collector name is stored in the :collector_name clipboard/
     unless cluster_logging('instance').collection_spec(cached: true).nil?
+      if daemon_set(collector_name).exists?
+        @result = admin.cli_exec(:delete, object_type: 'daemonset', object_name_or_id: collector_name, n: 'openshift-logging')
+      end
       step %Q/I wait for the resource "daemonset" named "#{cb.collector_name}" to disappear/
     end
   end
