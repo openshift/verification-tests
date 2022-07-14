@@ -4,13 +4,13 @@ Feature: ipv6 dual stack cluster test scenarios
   # @case_id OCP-40581
   @admin
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-40581 Project should be in isolation when using multitenant policy for ipv6 dual stack
+  Scenario: OCP-40581:SDN Project should be in isolation when using multitenant policy for ipv6 dual stack
     # create project and pods
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -87,13 +87,13 @@ Feature: ipv6 dual stack cluster test scenarios
   # @case_id OCP-46816
   @admin
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-46816 ipv6 for nodeport service
+  Scenario: OCP-46816:SDN ipv6 for nodeport service
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ipv4 clipboard    
     And the Internal IPv6 of node "<%= cb.workers[0].name %>" is stored in the :worker0_ipv6 clipboard

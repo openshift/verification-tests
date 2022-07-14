@@ -4,11 +4,11 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   # @case_id OCP-26360
   @admin
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-26360 Ensure Pods and Service communication across window and linux nodes
+  Scenario: OCP-26360:SDN Ensure Pods and Service communication across window and linux nodes
     Given the env is using windows nodes
     Given I have a project
     And I obtain test data file "networking/list_for_pods.json"
@@ -57,14 +57,14 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-37519
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-37519 Create Loadbalancer service for a window container
+  Scenario: OCP-37519:SDN Create Loadbalancer service for a window container
     Given the env is using windows nodes
     Given I have a project
     And I have a pod-for-ping in the project

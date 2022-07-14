@@ -1256,6 +1256,12 @@ end
 Given /^I install machineconfigs load-sctp-module$/ do
   ensure_admin_tagged
   _admin = admin
+  @result = _admin.cli_exec(:get, resource: "nodes")
+    if @result[:response].include?("SchedulingDisabled") || @result[:response].include?("NotReady")
+      logger.warn "There are some nodes already in not normal status."
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
+    end
   if cb.workers.count > 1
     @result = _admin.cli_exec(:get, resource: "machineconfigs", output: 'jsonpath={.items[?(@.metadata.name=="load-sctp-module")].metadata.name}')
     if @result[:response] != "load-sctp-module"
@@ -1488,21 +1494,33 @@ end
 
 Given /^I switch the ovn gateway mode on this cluster$/ do
   ensure_admin_tagged
-  step "I store the masters in the clipboard"
-  ovnkube_master = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash| pod.node_name == node.name}.first
-  @result = admin.cli_exec(:logs, resource_name: ovnkube_master.name, n: "openshift-ovn-kubernetes", c: "ovnkube-master")
-
-  if @result[:response].include? "Gateway:{Mode:local"
-    logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
-    @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": false}}}}}", type: "merge")
+  if env.version_gt("4.9", user: user)
+    #for version 4.10+ we can check exposed routingViaHost value under CNO object to evaluate ovn gateway mode
+    @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig.gatewayConfig.routingViaHost}")
+    if @result[:response].include? "true"
+      logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
+      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": false}}}}}", type: "merge")
+    else
+      logger.info "OVN Gateway mode is Shared. Changing Gateway mode to Local now..."
+      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": true}}}}}", type: "merge")
+    end
   else
-    logger.info "OVN Gateway mode is Shared. Changing Gateway mode to Local now..."
-    @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": true}}}}}", type: "merge")
+    #for version < 4.10 we need to check if gateway-mode-config cm is present under CNO NS
+    @result = admin.cli_exec(:get, resource: "cm", n: "openshift-network-operator")   
+    if @result[:response].include? "gateway-mode-config"
+      logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
+      #config map (LGW) deletion will be noticed by CNO which will cause cluster to rollout on SGW
+      @result = admin.cli_exec(:delete, object_type: "cm", object_name_or_id: "gateway-mode-config", n: "openshift-network-operator")
+    else
+      logger.info "OVN Gateway mode is Shared. Changing Gateway mode to Local now..."
+      #we need to create config map under CNO namespace if it does not exist to transition to LGW
+      @result = admin.cli_exec(:apply, f: "#{BushSlicer::HOME}/testdata/networking/sgw-lgw-cm.yaml")
+    end
   end
-  raise "Failed to patch network operator for gateway mode" unless @result[:success]
-  logger.info "Waiting upto 30 sec for network operator to change status to Progressing as a result of patch"
-  @result = admin.cli_exec(:wait, resource: "co", resource_name: "network", for: "condition=PROGRESSING=True", timeout: "30s")
-  raise "Patch was successful but CNO didn't change status to Progressing" unless @result[:success]
+  raise "Failed to patch network operator or apply config map for gateway mode" unless @result[:success]
+  logger.info "Waiting upto 240 sec for network operator to change status to Progressing as a result of patch or config map operation"
+  @result = admin.cli_exec(:wait, resource: "co", resource_name: "network", for: "condition=PROGRESSING=True", timeout: "240s")
+  raise "Patch or config map application was successful but CNO didn't change status to Progressing" unless @result[:success]
   @result = admin.cli_exec(:rollout_status, resource: "daemonset", name: "ovnkube-master", n: "openshift-ovn-kubernetes")
   raise "Failed to rollout masters" unless @result[:success]
 end
@@ -1527,4 +1545,48 @@ Given /^the cluster has workers for sctp$/ do
     logger.warn "We will skip this scenario"
     skip_this_scenario
   end
+end
+ 
+Given /^I save cluster type to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "cluster_type" unless cb_name
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.serviceNetwork}")
+  if @result[:response].count(":") >= 2 && @result[:response].count(".") >= 2
+    cb[cb_name]="dualstack"
+  elsif @result[:response].count(":") >= 2
+    cb[cb_name]="ipv6single"
+  elsif @result[:response].count(".") >= 2
+    cb[cb_name]="ipv4single"
+  else
+    raise "unknown cluster_type"
+    skip_this_scenario
+  end
+  logger.info "The cluster type #{cb[cb_name]} is stored to the #{cb_name} clipboard."
+end
+
+Given /^the egressfirewall policy is applied to the "(.+?)" namespace$/ do | project_name |
+  ensure_admin_tagged
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  policy_file = ''
+  case network_type
+  when "OVNKubernetes"
+    step "I save cluster type to the clipboard"
+    if cb.cluster_type == "dualstack"
+      policy_file = "networking/ovn-egressfirewall/limit_policy_dualstack.json"
+    elsif cb.cluster_type == "ipv4single"
+      policy_file = "networking/ovn-egressfirewall/limit_policy.json"
+    else
+      skip_this_scenario
+    end
+  when "OpenShiftSDN"
+    policy_file = "networking/egressnetworkpolicy/limit_policy.json"
+  else
+    raise "unknown network_type"
+  end
+  @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/#{policy_file}")
+  unless @result[:success]
+    raise "Failed to apply the egressnetworkpolicy to specified namespace."
+  end
+  logger.info "The egressfirewall type is applied."
 end

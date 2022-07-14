@@ -8,7 +8,7 @@ Feature: Testing imagestream
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: OCP-13895 Should prune the extenal image correctly
+  Scenario: OCP-13895:ImageRegistry Should prune the extenal image correctly
     Given default registry service ip is stored in the :registry_hostname clipboard
     Given I have a project
     And I have a skopeo pod in the project
@@ -94,14 +94,14 @@ Feature: Testing imagestream
   # @case_id OCP-19196
   @destructive
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-19196 Prune images when DC reference to invalid image
+  Scenario: OCP-19196:ImageRegistry Prune images when DC reference to invalid image
     Given I have a project
     Given I enable image-registry default route
     Given default image registry route is stored in the :registry_hostname clipboard
@@ -143,14 +143,14 @@ Feature: Testing imagestream
   # @case_id OCP-16495
   @destructive
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-16495 Do not prune layer of a valid Image due to minimum aging
+  Scenario: OCP-16495:ImageRegistry Do not prune layer of a valid Image due to minimum aging
     Given I have a project
     Given I enable image-registry default route
     Given default image registry route is stored in the :registry_hostname clipboard

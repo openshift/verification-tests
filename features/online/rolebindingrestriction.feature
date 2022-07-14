@@ -17,9 +17,9 @@ Feature: rolebindingrestriction.feature
     And the output should match:
       | <output> |
     Examples:
-      | username         | output                                               | result  |
-      | userA            | .*"edit".*forbidden:.*"userA".*"<%= project.name %>" | fail    | # @case_id OCP-13120
-      | <%= user.name %> | role "edit" added: "<%= user.name %>"                | succeed | # @case_id OCP-13146
+      | case_id                       | username         | output                                               | result  |
+      | OCP-13120:ServiceDevelopmentB | userA            | .*"edit".*forbidden:.*"userA".*"<%= project.name %>" | fail    | # @case_id OCP-13120
+      | OCP-13146:ServiceDevelopmentB | <%= user.name %> | role "edit" added: "<%= user.name %>"                | succeed | # @case_id OCP-13146
 
   # @author zhaliu@redhat.com
   Scenario Outline: Restrict making a role binding to service accounts except in own project by default
@@ -38,9 +38,9 @@ Feature: rolebindingrestriction.feature
     And the output should match:
       | <output> |
     Examples:
-      | serviceaccount                                     | output                                                    | result  |
-      | system:serviceaccount:openshift:deployer           | .*"view".*forbidden:.*".*deployer".*"<%= project.name %>" | fail    | # @case_id OCP-13805
-      | system:serviceaccount:<%= project.name %>:deployer | view added: ".*deployer"                           | succeed | # @case_id OCP-13115
+      | case_id                       | serviceaccount                                     | output                                                    | result  |
+      | OCP-13805:ServiceDevelopmentB | system:serviceaccount:openshift:deployer           | .*"view".*forbidden:.*".*deployer".*"<%= project.name %>" | fail    | # @case_id OCP-13805
+      | OCP-13115:ServiceDevelopmentB | system:serviceaccount:<%= project.name %>:deployer | view added: ".*deployer"                                  | succeed | # @case_id OCP-13115
 
   # @author zhaliu@redhat.com
   Scenario Outline: Restrict making a role binding to groups except system group built in own project by default
@@ -98,4 +98,3 @@ Feature: rolebindingrestriction.feature
       | match-project-admin-user        |
       | match-own-service-accounts      |
       | match-own-service-account-group |
-

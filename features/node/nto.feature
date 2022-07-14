@@ -4,7 +4,7 @@ Feature: Node Tuning Operator related scenarios
   # @case_id OCP-27491
   @admin
   @destructive
-  Scenario: OCP-27491 Node tuning operator: tuning is working - add profile
+  Scenario: OCP-27491:PSAP Node tuning operator: tuning is working - add profile
     # Cleaning after test if some step failed
     Given admin ensures "nf-conntrack-max" tuned is deleted from the "openshift-cluster-node-tuning-operator" project after scenario
     And I obtain test data file "pods/hello-pod.json"

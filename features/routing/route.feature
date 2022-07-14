@@ -3,7 +3,7 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-12122
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -11,7 +11,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12122 Alias will be invalid after removing it
+  Scenario: OCP-12122:NetworkEdge Alias will be invalid after removing it
     Given I have a project
     Given I obtain test data file "routing/header-test/dc.json"
     When I run the :create client command with:
@@ -37,7 +37,7 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-10660
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -45,7 +45,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10660 Service endpoint can be work well if the mapping pod ip is updated
+  Scenario: OCP-10660:NetworkEdge Service endpoint can be work well if the mapping pod ip is updated
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
     When I run oc create over "list_for_pods.json" replacing paths:
@@ -90,7 +90,7 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-12652
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -98,7 +98,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12652 The later route should be HostAlreadyClaimed when there is a same host exist
+  Scenario: OCP-12652:NetworkEdge The later route should be HostAlreadyClaimed when there is a same host exist
     Given I have a project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"
     When I run the :create client command with:
@@ -120,7 +120,7 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-12562
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -128,7 +128,7 @@ Feature: Testing route
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12562 The path specified in route can work well for edge terminated
+  Scenario: OCP-12562:NetworkEdge The path specified in route can work well for edge terminated
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
@@ -203,7 +203,7 @@ Feature: Testing route
 
   # @author shudili@redhat.com
   # @case_id OCP-12564
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -211,7 +211,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12564 The path specified in route can work well for reencrypt terminated
+  Scenario: OCP-12564:NetworkEdge The path specified in route can work well for reencrypt terminated
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
@@ -251,7 +251,7 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-9651
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -259,7 +259,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9651 Config insecureEdgeTerminationPolicy to Redirect for route
+  Scenario: OCP-9651:NetworkEdge Config insecureEdgeTerminationPolicy to Redirect for route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
@@ -303,7 +303,7 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-9650
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -311,7 +311,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9650 Config insecureEdgeTerminationPolicy to Allow for route
+  Scenario: OCP-9650:NetworkEdge Config insecureEdgeTerminationPolicy to Allow for route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
@@ -374,7 +374,7 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-10024
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -382,7 +382,7 @@ Feature: Testing route
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10024 Route could NOT be updated after created
+  Scenario: OCP-10024:NetworkEdge Route could NOT be updated after created
     Given I have a project
     Given I obtain test data file "routing/route_withouthost1.json"
     When I run the :create client command with:
@@ -397,7 +397,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-11036
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -405,7 +405,7 @@ Feature: Testing route
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11036 Set insecureEdgeTerminationPolicy to Redirect for passthrough route
+  Scenario: OCP-11036:NetworkEdge Set insecureEdgeTerminationPolicy to Redirect for passthrough route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
@@ -453,7 +453,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13839
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -461,7 +461,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-13839 Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
+  Scenario: OCP-13839:NetworkEdge Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
@@ -520,7 +520,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13248
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -528,7 +528,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-13248 The hostname should be converted to available route when met special character
+  Scenario: OCP-13248:NetworkEdge The hostname should be converted to available route when met special character
     Given I have a project
     Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
@@ -566,7 +566,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13753
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -574,7 +574,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-13753 Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
+  Scenario: OCP-13753:NetworkEdge Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
@@ -654,7 +654,7 @@ Feature: Testing route
   # @author zzhao@redhat.com
   # @case_id OCP-14059
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -662,7 +662,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @amd64
-  Scenario: OCP-14059 Use the default destination CA of router if the route does not specify one for reencrypt route
+  Scenario: OCP-14059:NetworkEdge Use the default destination CA of router if the route does not specify one for reencrypt route
     # since console route is using the reencrypt route without destination CA so we use it to check
     Given I switch to cluster admin pseudo user
     And I use the "openshift-console" project
@@ -679,7 +679,7 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-14678
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -687,7 +687,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-14678 Only the host in whitelist could access the route - unsecure route
+  Scenario: OCP-14678:NetworkEdge Only the host in whitelist could access the route - unsecure route
     Given I have a project
     And I have a header test service in the project
     And evaluation of `"haproxy.router.openshift.io/ip_whitelist=#{cb.req_headers["x-forwarded-for"]}"` is stored in the :my_whitelist clipboard
@@ -721,7 +721,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-15976
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -729,7 +729,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-15976 The edge route should support HSTS
+  Scenario: OCP-15976:NetworkEdge The edge route should support HSTS
     Given the master version >= "3.7"
     And I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -785,7 +785,7 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-16368
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -793,7 +793,7 @@ Feature: Testing route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-16368 The reencrypt route should support HSTS
+  Scenario: OCP-16368:NetworkEdge The reencrypt route should support HSTS
     Given the master version >= "3.7"
     And I have a project
 

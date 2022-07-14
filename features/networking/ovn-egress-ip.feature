@@ -4,7 +4,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33618
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -12,7 +12,7 @@ Feature: OVN Egress IP related features
   @qeci
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33618 EgressIP works for all pods in the matched namespace when only configure namespaceSelector
+  Scenario: OCP-33618:SDN EgressIP works for all pods in the matched namespace when only configure namespaceSelector
     Given I save ipecho url to the clipboard
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
@@ -75,7 +75,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33723
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -83,7 +83,7 @@ Feature: OVN Egress IP related features
   @qeci
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33723 Multiple EgressIP objects can have multiple Egress IPs
+  Scenario: OCP-33723:SDN Multiple EgressIP objects can have multiple Egress IPs
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -149,7 +149,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33641
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -157,7 +157,7 @@ Feature: OVN Egress IP related features
   @qeci
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33641 Multi-project can share same EgressIP
+  Scenario: OCP-33641:SDN Multi-project can share same EgressIP
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -225,14 +225,14 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33699
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33699 Removed matched labels from project will not use EgressIP
+  Scenario: OCP-33699:SDN Removed matched labels from project will not use EgressIP
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -282,14 +282,14 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33700
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33700 Removed matched labels from pods will not use EgressIP
+  Scenario: OCP-33700:SDN Removed matched labels from pods will not use EgressIP
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -346,7 +346,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33631
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -354,7 +354,7 @@ Feature: OVN Egress IP related features
   @qeci
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33631 EgressIP was removed after delete egressIP object
+  Scenario: OCP-33631:SDN EgressIP was removed after delete egressIP object
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -400,14 +400,14 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33704
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33704 After reboot node or reboot OVN services EgressIP still work
+  Scenario: OCP-33704:SDN After reboot node or reboot OVN services EgressIP still work
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -465,12 +465,12 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-34938 Warning event will be triggered if apply EgressIP object but no EgressIP nodes
+  Scenario: OCP-34938:SDN Warning event will be triggered if apply EgressIP object but no EgressIP nodes
     #Get unused IP as egress ip
     Given I store a random unused IP address from the reserved range to the clipboard
 
@@ -499,14 +499,14 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33706
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33706 The pod located on different node than EgressIP nodes
+  Scenario: OCP-33706:SDN The pod located on different node than EgressIP nodes
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -553,14 +553,14 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33718
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33718 Deleting EgressIP object and recreating it will work
+  Scenario: OCP-33718:SDN Deleting EgressIP object and recreating it will work
     Given I save ipecho url to the clipboard
 
     #Get unused IP as egress ip
@@ -619,13 +619,13 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33710
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @baremetal-ipi
   @vsphere-upi @baremetal-upi
   @network-ovnkubernetes
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33710 An EgressIP object can not have multiple egress IP assignments on the same node
+  Scenario: OCP-33710:SDN An EgressIP object can not have multiple egress IP assignments on the same node
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
 
@@ -653,13 +653,13 @@ Feature: OVN Egress IP related features
   # @author huirwang@redhat.com
   # @case_id OCP-33617
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @aws-ipi
   @aws-upi
   @network-ovnkubernetes
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33617 Common user cannot tag the nodes by labelling them as egressIP nodes
+  Scenario: OCP-33617:SDN Common user cannot tag the nodes by labelling them as egressIP nodes
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
 
@@ -677,12 +677,12 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @aws-ipi
   @aws-upi
   @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33719 Any egress IP can only be assigned to one node only
+  Scenario: OCP-33719:SDN Any egress IP can only be assigned to one node only
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
     And label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[1].name %>" node
@@ -726,13 +726,13 @@ Feature: OVN Egress IP related features
   # @case_id OCP-44250
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-44250 lr-policy-list and snat should be updated correctly after remove pods
+  Scenario: OCP-44250:SDN lr-policy-list and snat should be updated correctly after remove pods
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
 
@@ -839,13 +839,13 @@ Feature: OVN Egress IP related features
   # @case_id OCP-44251
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @network-ovnkubernetes
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-44251 lr-policy-list and snat should be updated correctly after remove egressip objects 
+  Scenario: OCP-44251:SDN lr-policy-list and snat should be updated correctly after remove egressip objects 
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
 
@@ -933,14 +933,14 @@ Feature: OVN Egress IP related features
   # @case_id OCP-42925
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi
   @vsphere-upi
   @qeci
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-42925 Traffic is load balanced between egress nodes in OVN cluster
+  Scenario: OCP-42925:SDN Traffic is load balanced between egress nodes in OVN cluster
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node

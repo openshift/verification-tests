@@ -2,14 +2,14 @@ Feature: job.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-11206
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11206 Create job with multiple completions
+  Scenario: OCP-11206:Workloads Create job with multiple completions
     Given I have a project
     Given I obtain test data file "templates/ocp11206/job.yaml"
     When I run the :create client command with:
@@ -53,14 +53,14 @@ Feature: job.feature
 
   # @author qwang@redhat.com
   # @case_id OCP-11539
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11539 Create job with pod parallelism
+  Scenario: OCP-11539:Workloads Create job with pod parallelism
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
     When I run oc create over "job_with_0_activeDeadlineSeconds.yaml" replacing paths:
@@ -156,7 +156,7 @@ Feature: job.feature
   # @author qwang@redhat.com
   # @case_id OCP-9948
   @inactive
-  Scenario: OCP-9948 Create job with activeDeadlineSeconds
+  Scenario: OCP-9948:Workloads Create job with activeDeadlineSeconds
     Given I have a project
     Given I obtain test data file "job/job_with_lessthan_runtime_activeDeadlineSeconds.yaml"
     When I run the :create client command with:
@@ -177,14 +177,14 @@ Feature: job.feature
 
   # @author qwang@redhat.com
   # @case_id OCP-9952
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9952 Specifying your own pod selector for job
+  Scenario: OCP-9952:Workloads Specifying your own pod selector for job
     Given I have a project
     Given I obtain test data file "job/job-manualselector.yaml"
     When I run the :create client command with:
@@ -204,7 +204,7 @@ Feature: job.feature
   # @author qwang@redhat.com
   # @case_id OCP-10734
   @inactive
-  Scenario: OCP-10734 Create job with different pod restartPolicy
+  Scenario: OCP-10734:Node Create job with different pod restartPolicy
     Given I have a project
     Given I obtain test data file "job/job-restartpolicy.yaml"
     # Create job without restartPolicy
@@ -311,14 +311,14 @@ Feature: job.feature
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10781
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10781 Create job with specific deadline
+  Scenario: OCP-10781:Workloads Create job with specific deadline
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
     When I run the :create client command with:
@@ -371,14 +371,14 @@ Feature: job.feature
 
   # @author geliu@redhat.com
   # @case_id OCP-17515
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-17515 User can schedule a Cronjob execution with cron format time
+  Scenario: OCP-17515:Workloads User can schedule a Cronjob execution with cron format time
     Given I have a project
     When I run the :create_cronjob client command with:
        | name             | sj3       |

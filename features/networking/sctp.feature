@@ -5,7 +5,7 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   @4.10 @4.9
-  Scenario: OCP-28757 Establish pod to pod SCTP connections
+  Scenario: OCP-28757:SDN Establish pod to pod SCTP connections
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
     And I have a project
@@ -57,14 +57,14 @@ Feature: SCTP related scenarios
   # @case_id OCP-28758
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-28758 Expose SCTP ClusterIP Services
+  Scenario: OCP-28758:SDN Expose SCTP ClusterIP Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
     And I have a project
@@ -122,17 +122,17 @@ Feature: SCTP related scenarios
   # @case_id OCP-28759
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-28759 Expose SCTP NodePort Services
+  Scenario: OCP-28759:SDN Expose SCTP NodePort Services
     Given I store the ready and schedulable workers in the :workers clipboard
-    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     Given I install machineconfigs load-sctp-module
+    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
@@ -189,14 +189,14 @@ Feature: SCTP related scenarios
   # @case_id OCP-29645
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-29645 Networkpolicy allow SCTP Client
+  Scenario: OCP-29645:SDN Networkpolicy allow SCTP Client
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
     And I have a project

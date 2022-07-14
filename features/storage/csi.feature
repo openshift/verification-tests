@@ -5,7 +5,7 @@ Feature: CSI testing related feature
   @admin
   @stage-only
   @proxy @noproxy @connected
-  Scenario: OCP-30787 CSI images checking in stage and prod env
+  Scenario: OCP-30787:Storage CSI images checking in stage and prod env
     Given the master version >= "4.4"
     Given I switch to cluster admin pseudo user
     Given admin uses the "csihostpath" project
@@ -20,7 +20,7 @@ Feature: CSI testing related feature
   @admin
   @stage-only
   @proxy @noproxy @connected
-  Scenario: OCP-31345 CSI images checking in stage env in OCP4.3
+  Scenario: OCP-31345:Storage CSI images checking in stage env in OCP4.3
     Given the master version == "4.3"
     Given I switch to cluster admin pseudo user
     Given admin uses the "csihostpath" project
@@ -32,7 +32,7 @@ Feature: CSI testing related feature
   @admin
   @stage-only
   @proxy @noproxy @connected
-  Scenario: OCP-31346 CSI images checking in stage env in OCP4.2
+  Scenario: OCP-31346:Storage CSI images checking in stage env in OCP4.2
     Given the master version == "4.2"
     Given I switch to cluster admin pseudo user
     Given admin uses the "csihostpath" project
@@ -40,7 +40,7 @@ Feature: CSI testing related feature
 
   # @author chaoyang@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Configure 'Retain' reclaim policy
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -75,8 +75,8 @@ Feature: CSI testing related feature
     @aws-ipi
     @aws-upi
     Examples:
-      | sc_name      |
-      | gp2-csi      | # @case_id OCP-24575
+      | case_id           | sc_name |
+      | OCP-24575:Storage | gp2-csi | # @case_id OCP-24575
 
     @openstack-ipi
     @openstack-upi
@@ -87,14 +87,14 @@ Feature: CSI testing related feature
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | sc_name      |
-      | standard-csi | # @case_id OCP-37572
+      | case_id           | sc_name      |
+      | OCP-37572:Storage | standard-csi | # @case_id OCP-37572
 
 
   # @author wduan@redhat.com
   @admin
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   Scenario Outline: CSI dynamic provisioning with default fstype
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -172,14 +172,14 @@ Feature: CSI testing related feature
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | sc_name      |
-      | standard-csi | # @case_id OCP-37562
+      | case_id           | sc_name      |
+      | OCP-37562:Storage | standard-csi | # @case_id OCP-37562
 
 
   # @author wduan@redhat.com
   @admin
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   Scenario Outline: CSI dynamic provisioning with fstype
     Given I have a project
     When admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -228,13 +228,13 @@ Feature: CSI testing related feature
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | sc_name       | fstype |
-      | standard-csi  | xfs    | # @case_id OCP-37560
-      | standard-csi  | ext4   | # @case_id OCP-37558
+      | case_id           | sc_name      | fstype |
+      | OCP-37560:Storage | standard-csi | xfs    | # @case_id OCP-37560
+      | OCP-37558:Storage | standard-csi | ext4   | # @case_id OCP-37558
 
 
   # @author wduan@redhat.com
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   Scenario Outline: CSI dynamic provisioning with block
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -272,8 +272,8 @@ Feature: CSI testing related feature
     @openstack-upi
     @qeci
     Examples:
-      | sc_name      |
-      | standard-csi | # @case_id OCP-37564
+      | case_id           | sc_name      |
+      | OCP-37564:Storage | standard-csi | # @case_id OCP-37564
 
     @upgrade-sanity
     @singlenode
@@ -281,13 +281,13 @@ Feature: CSI testing related feature
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | sc_name      |
-      | standard-csi | # @case_id OCP-37511
+      | case_id           | sc_name      |
+      | OCP-37511:Storage | standard-csi | # @case_id OCP-37511
 
 
   # @author wduan@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: CSI dynamic provisioning with different type
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -325,22 +325,22 @@ Feature: CSI testing related feature
     @aws-ipi
     @aws-upi
     Examples:
-      | sc_name      | type   | size  |
-      | gp2-csi      | sc1    | 125Gi | # @case_id OCP-24546
-      | gp2-csi      | st1    | 125Gi | # @case_id OCP-24572
+      | case_id           | sc_name | type | size  |
+      | OCP-24546:Storage | gp2-csi | sc1  | 125Gi | # @case_id OCP-24546
+      | OCP-24572:Storage | gp2-csi | st1  | 125Gi | # @case_id OCP-24572
 
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | sc_name      | type   | size  |
-      | standard-csi | pd-ssd | 1Gi   | # @case_id OCP-37478
+      | case_id           | sc_name      | type   | size |
+      | OCP-37478:Storage | standard-csi | pd-ssd | 1Gi  | # @case_id OCP-37478
 
 
   # @author wduan@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Check CSI Driver Operator installation
     When I run the :get admin command with:
       | resource | clusteroperator/storage                                                            |
@@ -374,14 +374,14 @@ Feature: CSI testing related feature
     @openstack-ipi
     @openstack-upi
     Examples:
-      | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
-      | cinder.csi.openstack.org | standard-csi | openstack-cinder-csi-driver-operator | openstack-cinder-csi-driver-controller | openstack-cinder-csi-driver-node | # @case_id OCP-37557
+      | case_id           | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
+      | OCP-37557:Storage | cinder.csi.openstack.org | standard-csi | openstack-cinder-csi-driver-operator | openstack-cinder-csi-driver-controller | openstack-cinder-csi-driver-node | # @case_id OCP-37557
 
     @aws-ipi
     @aws-upi
     Examples:
-      | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
-      | ebs.csi.aws.com          | gp2-csi      | aws-ebs-csi-driver-operator          | aws-ebs-csi-driver-controller          | aws-ebs-csi-driver-node          | # @case_id OCP-34144
+      | case_id           | provisioner     | sc_name | deployment_operator         | deployment_controller         | daemonset_node          |
+      | OCP-34144:Storage | ebs.csi.aws.com | gp2-csi | aws-ebs-csi-driver-operator | aws-ebs-csi-driver-controller | aws-ebs-csi-driver-node | # @case_id OCP-34144
 
     @upgrade-sanity
     @singlenode
@@ -389,5 +389,5 @@ Feature: CSI testing related feature
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
-      | pd.csi.storage.gke.io    | standard-csi | gcp-pd-csi-driver-operator           | gcp-pd-csi-driver-controller           | gcp-pd-csi-driver-node           | # @case_id OCP-37474
+      | case_id           | provisioner           | sc_name      | deployment_operator        | deployment_controller        | daemonset_node         |
+      | OCP-37474:Storage | pd.csi.storage.gke.io | standard-csi | gcp-pd-csi-driver-operator | gcp-pd-csi-driver-controller | gcp-pd-csi-driver-node | # @case_id OCP-37474

@@ -2,7 +2,7 @@ Feature: Testing timeout route
 
   # @author yadu@redhat.com
   # @case_id OCP-11635
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -10,7 +10,7 @@ Feature: Testing timeout route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11635 Set timeout server for passthough route
+  Scenario: OCP-11635:NetworkEdge Set timeout server for passthough route
     Given I have a project
     Given I obtain test data file "routing/routetimeout/httpbin-pod-2.json"
     When I run the :create client command with:

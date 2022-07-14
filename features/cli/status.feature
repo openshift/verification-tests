@@ -2,12 +2,12 @@ Feature: Check status via oc status, wait etc
 
   # @author yapei@redhat.com
   # @case_id OCP-11147
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11147 Show RC info and indicate bad secrets reference in 'oc status'
+  Scenario: OCP-11147:Workloads Show RC info and indicate bad secrets reference in 'oc status'
     Given I have a project
 
     # Check standalone RC info is dispalyed in oc status output

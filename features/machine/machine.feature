@@ -4,14 +4,14 @@ Feature: Machine features testing
   # @case_id OCP-21196
   @smoke
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21196 Machines should be linked to nodes
+  Scenario: OCP-21196:ClusterInfrastructure Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
 
@@ -19,13 +19,13 @@ Feature: Machine features testing
   # @case_id OCP-22115
   @smoke
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-22115 machine-api clusteroperator should be in Available state
+  Scenario: OCP-22115:ClusterInfrastructure machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
 
@@ -49,7 +49,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-37706 Baremetal clusteroperator should be disabled in any deployment that is not baremetal
+  Scenario: OCP-37706:ClusterInfrastructure Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
 
@@ -57,13 +57,13 @@ Feature: Machine features testing
   # @case_id OCP-25436
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-25436 Scale up and scale down a machineSet
+  Scenario: OCP-25436:ClusterInfrastructure Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -82,9 +82,9 @@ Feature: Machine features testing
 
   # @author jhou@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Metrics is exposed on https
-    Given the first user is cluster-admin 
+    Given the first user is cluster-admin
     And I use the "openshift-monitoring" project
     And evaluation of `service_account('prometheus-k8s').cached_tokens.first` is stored in the :token clipboard
 
@@ -103,21 +103,21 @@ Feature: Machine features testing
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | url                                                                          |
-      | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
-      | https://cluster-autoscaler-operator.openshift-machine-api.svc:9192/metrics   | # @case_id OCP-26111
-      | https://machine-approver.openshift-cluster-machine-approver.svc:9192/metrics | # @case_id OCP-26102
+      | case_id                         | url                                                                          |
+      | OCP-25652:ClusterInfrastructure | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
+      | OCP-26111:ClusterInfrastructure | https://cluster-autoscaler-operator.openshift-machine-api.svc:9192/metrics   | # @case_id OCP-26111
+      | OCP-26102:ClusterInfrastructure | https://machine-approver.openshift-cluster-machine-approver.svc:9192/metrics | # @case_id OCP-26102
 
   # @author zhsun@redhat.com
   # @case_id OCP-25608
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-25608 Machine should have immutable field providerID and nodeRef
+  Scenario: OCP-25608:ClusterInfrastructure Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
     And evaluation of `machine_machine_openshift_io(cb.machine).node_name` is stored in the :nodeRef_name clipboard
@@ -157,11 +157,11 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-27627
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-27627 Verify all machine instance-state should be consistent with their providerStats.instanceState
+  Scenario: OCP-27627:ClusterInfrastructure Verify all machine instance-state should be consistent with their providerStats.instanceState
     Given I have an IPI deployment
     And evaluation of `BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
     Then the expression should be true> cb.machines.select{|m|m.instance_state == m.annotation_instance_state}.count == cb.machines.count
@@ -170,12 +170,12 @@ Feature: Machine features testing
   # @case_id OCP-27609
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-27609 Scaling a machineset with providerSpec.publicIp set to true
+  Scenario: OCP-27609:ClusterInfrastructure Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -191,12 +191,12 @@ Feature: Machine features testing
   # @case_id OCP-24363
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24363 Reconciling machine taints with nodes
+  Scenario: OCP-24363:ClusterInfrastructure Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -227,7 +227,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Required configuration should be added to the ProviderSpec to enable spot instances
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -309,25 +309,25 @@ Feature: Machine features testing
 
     @aws-ipi
     Examples:
-      | iaas_type | machineset_name        |
-      | aws       | machineset-clone-29199 | # @case_id OCP-29199
+      | case_id                         | iaas_type | machineset_name        |
+      | OCP-29199:ClusterInfrastructure | aws       | machineset-clone-29199 | # @case_id OCP-29199
 
     @gcp-ipi
     @heterogeneous @arm64 @amd64
     Examples:
-      | iaas_type | machineset_name        |
-      | gcp       | machineset-clone-32126 | # @case_id OCP-32126
+      | case_id                         | iaas_type | machineset_name        |
+      | OCP-32126:ClusterInfrastructure | gcp       | machineset-clone-32126 | # @case_id OCP-32126
 
   # @author zhsun@redhat.com
   # @case_id OCP-32620
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-32620 Labels specified in a machineset should propagate to nodes
+  Scenario: OCP-32620:ClusterInfrastructure Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -354,13 +354,13 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Implement defaulting machineset values for AWS
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     Then admin ensures machine number is restored after scenario
-    
+
     Given I pick a earliest created machineset and store in :machineset clipboard
     When evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
     And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
@@ -399,21 +399,21 @@ Feature: Machine features testing
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | name                    | file_name                 | Validation                    |
-      | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
-      | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-37132
-      | default-valued-42346    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-42346
+      | case_id                         | name                    | file_name                 | Validation                    |
+      | OCP-32269:ClusterInfrastructure | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
+      | OCP-37132:ClusterInfrastructure | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-37132
+      | OCP-42346:ClusterInfrastructure | default-valued-42346    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-42346
 
   # @author miyadav@redhat.com
   # @case_id OCP-33056
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @gcp-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33056 Implement defaulting machineset values for GCP
+  Scenario: OCP-33056:ClusterInfrastructure Implement defaulting machineset values for GCP
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -447,7 +447,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -487,18 +487,18 @@ Feature: Machine features testing
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | name                    | file_name               | Validation                |
-      | default-valued-33058    | ms_default_values.yaml  | Public IP                 | # @case_id OCP-33058
-      | encrypt-at-rest-39639   | ms_encrypt_at_rest.yaml | Encryption At Host:  true | # @case_id OCP-39639
+      | case_id                         | name                  | file_name               | Validation                |
+      | OCP-33058:ClusterInfrastructure | default-valued-33058  | ms_default_values.yaml  | Public IP                 | # @case_id OCP-33058
+      | OCP-39639:ClusterInfrastructure | encrypt-at-rest-39639 | ms_encrypt_at_rest.yaml | Encryption At Host:  true | # @case_id OCP-39639
 
   # @author miyadav@redhat.com
   # @case_id OCP-33455
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33455 Run machine api Controllers using leader election
+  Scenario: OCP-33455:ClusterInfrastructure Run machine api Controllers using leader election
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -523,11 +523,11 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   # @case_id OCP-34718
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-34718 Node labels and Affinity definition in PV should match
+  Scenario: OCP-34718:ClusterInfrastructure Node labels and Affinity definition in PV should match
     Given I have a project
 
     # Create a pvc
@@ -556,7 +556,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Implement defaulting machineset values for vsphere
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -603,23 +603,24 @@ Feature: Machine features testing
 
     @vsphere-ipi
     Examples:
-      | name                         | template                           | diskGiB           |
-      | default-valued-33380         | <%= cb.template %>                 | <%= cb.diskGiB %> | # @case_id OCP-33380
+      | case_id                         | name                 | template           | diskGiB           |
+      | OCP-33380:ClusterInfrastructure | default-valued-33380 | <%= cb.template %> | <%= cb.diskGiB %> | # @case_id OCP-33380
+
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | name                         | template                           | diskGiB           |
-      | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
+      | case_id   | name                         | template                           | diskGiB           |
+      | OCP-35421:ClusterInfrastructure | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
 
   # @author miyadav@redhat.com
   # @case_id OCP-36489
   @admin
   @proxy @noproxy @disconnected
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-36489 Machineset should not be created when publicIP:true in disconnected Azure enviroment
+  Scenario: OCP-36489:ClusterInfrastructure Machineset should not be created when publicIP:true in disconnected Azure enviroment
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
@@ -638,11 +639,11 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-47658
   @admin
-  @4.11 @4.10
+  @4.12 @4.11 @4.10
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: OCP-47658 Operator cloud-controller-manager should not show empty version
+  Scenario: OCP-47658:ClusterInfrastructure Operator cloud-controller-manager should not show empty version
     Given I switch to cluster admin pseudo user
     Then evaluation of `cluster_operator('cloud-controller-manager').versions` is stored in the :versions clipboard
     And the expression should be true> cb.versions[0].include? "4"
@@ -650,20 +651,20 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-47989
   @admin
-  @4.11 @4.10
-  @vsphere-ipi @openstack-ipi @baremetal-ipi 
+  @4.12 @4.11 @4.10
+  @vsphere-ipi @openstack-ipi @baremetal-ipi
   @vsphere-upi @openstack-upi @baremetal-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: OCP-47989 Baremetal clusteroperator should be enabled in vsphere and osp 
+  Scenario: OCP-47989:ClusterInfrastructure Baremetal clusteroperator should be enabled in vsphere and osp
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="False"
 
-  # @author miyadav@redhat.com    
+  # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Implement defaulting machineset values for AWS proxy clusters
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -708,8 +709,8 @@ Feature: Machine features testing
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | name                    | file_name                 | Validation                    |
-      | default-valued-48463    | ms_default_values.yaml    | Placement                     | # @case_id OCP-48463
-      | tenancy-dedicated-48464 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-48464
-      | default-valued-48462    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-48462
-    
+      | case_id                         | name                    | file_name                 | Validation                    |
+      | OCP-48463:ClusterInfrastructure | default-valued-48463    | ms_default_values.yaml    | Placement                     | # @case_id OCP-48463
+      | OCP-48464:ClusterInfrastructure | tenancy-dedicated-48464 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-48464
+      | OCP-48462:ClusterInfrastructure | default-valued-48462    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-48462
+

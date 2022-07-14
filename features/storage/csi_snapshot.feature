@@ -2,7 +2,7 @@ Feature: Volume snapshot test
 
   # @author wduan@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Volume snapshot create and restore test
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -56,14 +56,14 @@ Feature: Volume snapshot test
     @aws-ipi
     @aws-upi
     Examples:
-      | csi-sc  | csi-vsc     |
-      | gp2-csi | csi-aws-vsc | # @case_id OCP-27727
+      | case_id           | csi-sc  | csi-vsc     |
+      | OCP-27727:Storage | gp2-csi | csi-aws-vsc | # @case_id OCP-27727
 
     @azure-ipi
     @azure-upi
     Examples:
-      | csi-sc      | csi-vsc           |
-      | managed-csi | csi-azuredisk-vsc | # @case_id OCP-41449
+      | case_id           | csi-sc      | csi-vsc           |
+      | OCP-41449:Storage | managed-csi | csi-azuredisk-vsc | # @case_id OCP-41449
 
     @openstack-ipi
     @openstack-upi
@@ -74,12 +74,12 @@ Feature: Volume snapshot test
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | csi-sc       | csi-vsc      |
-      | standard-csi | standard-csi |# @case_id OCP-37568
+      | case_id           | csi-sc       | csi-vsc      |
+      | OCP-37568:Storage | standard-csi | standard-csi | # @case_id OCP-37568
 
   # @author wduan@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Volume snapshot create and restore test with block
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -147,5 +147,5 @@ Feature: Volume snapshot test
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     Examples:
-      | csi-sc       | csi-vsc      |
-      | standard-csi | standard-csi | # @case_id OCP-37569
+      | case_id           | csi-sc       | csi-vsc      |
+      | OCP-37569:Storage | standard-csi | standard-csi | # @case_id OCP-37569

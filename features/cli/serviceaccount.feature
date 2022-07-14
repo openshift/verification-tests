@@ -2,7 +2,7 @@ Feature: ServiceAccount and Policy Managerment
 
   # @author anli@redhat.com
   # @case_id OCP-10642
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -10,7 +10,7 @@ Feature: ServiceAccount and Policy Managerment
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10642 Could grant admin permission for the service account username to access to its own project
+  Scenario: OCP-10642:Authentication Could grant admin permission for the service account username to access to its own project
     Given I have a project
     When I create a new application with:
       | image_stream | ruby         |
@@ -39,7 +39,7 @@ Feature: ServiceAccount and Policy Managerment
   # @author xiaocwan@redhat.com
   # @case_id OCP-11494
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -47,7 +47,7 @@ Feature: ServiceAccount and Policy Managerment
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11494 Could grant admin permission for the service account group to access to its own project
+  Scenario: OCP-11494:Authentication Could grant admin permission for the service account group to access to its own project
     Given I have a project
     When I run the :new_app client command with:
       | app_repo | quay.io/openshifttest/hello-openshift:multiarch |
@@ -83,7 +83,7 @@ Feature: ServiceAccount and Policy Managerment
   # @author wjiang@redhat.com
   # @case_id OCP-11249
   # There is no oc create token command below version 4.11, this case is not critical feature, so need to remove versions below 4.11
-  @4.11
+  @4.12 @4.11
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -91,7 +91,7 @@ Feature: ServiceAccount and Policy Managerment
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11249 User can get the serviceaccount token via client
+  Scenario: OCP-11249:Authentication User can get the serviceaccount token via client
     Given I have a project
     When I run the :create_token client command with:
       | serviceaccount | default |

@@ -1,7 +1,7 @@
 Feature: stibuild.feature
 
   # @author xiuwang@redhat.com
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     Given I obtain test data file "templates/<template>"
@@ -41,21 +41,23 @@ Feature: stibuild.feature
     @proxy @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
-      | template          |
-      | ocp12041-s2i.json | # @case_id OCP-12041
+      | case_id            | template          |
+      | OCP-12041:BuildAPI | ocp12041-s2i.json | # @case_id OCP-12041
 
   # @author wzheng@redhat.com
   # @case_id OCP-30858
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-30858 STI build with dockerImage with specified tag
+  @inactive
+  Scenario: OCP-30858:BuildAPI STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
       | docker_image | quay.io/openshifttest/ruby-27:multiarch   |
@@ -90,14 +92,14 @@ Feature: stibuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-22596
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-22596 Create app with template eap73-basic-s2i with jbosseap rhel7 image
+  Scenario: OCP-22596:ImageRegistry Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:
       | template | eap73-basic-s2i |
@@ -114,14 +116,15 @@ Feature: stibuild.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-28891
   @noproxy @disconnected
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-28891 Test s2i build in disconnect cluster
+  @inactive
+  Scenario: OCP-28891:BuildAPI Test s2i build in disconnect cluster
     Given I have a project
     When I have an http-git service in the project
     And I run the :set_env client command with:
@@ -146,7 +149,7 @@ Feature: stibuild.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-42159
   @flaky
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -154,7 +157,8 @@ Feature: stibuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-42159 Mount source secret and configmap to builder container- sourcestrategy
+  @inactive
+  Scenario: OCP-42159:BuildAPI Mount source secret and configmap to builder container- sourcestrategy
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |

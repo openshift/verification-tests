@@ -10,7 +10,7 @@ Feature: permission related test
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-25364 BZ1446217 View the project mapping index as different roles
+  Scenario: OCP-25364:Logging BZ1446217 View the project mapping index as different roles
     Given I switch to the first user
     Given I create a project with non-leading digit name
     And evaluation of `project` is stored in the :project clipboard
@@ -55,14 +55,14 @@ Feature: permission related test
   @admin
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-30356 Normal User can only view project owned by himself
+  Scenario: OCP-30356:Logging Normal User can only view project owned by himself
     Given I switch to the first user
     And evaluation of `user.cached_tokens.first` is stored in the :user_token clipboard
     Given I create a project with non-leading digit name
@@ -106,14 +106,14 @@ Feature: permission related test
   @admin
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-30359 cluster-admin view all projects
+  Scenario: OCP-30359:Logging cluster-admin view all projects
     Given I switch to the first user
     Given I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard

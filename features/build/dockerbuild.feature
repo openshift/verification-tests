@@ -3,7 +3,7 @@ Feature: dockerbuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-12115
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -11,7 +11,8 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12115 Docker build with both SourceURI and context dir
+  @inactive
+  Scenario: OCP-12115:BuildAPI Docker build with both SourceURI and context dir
     Given I have a project
     Given I obtain test data file "build/ruby20rhel7-context-docker.json"
     When I run the :create client command with:
@@ -32,14 +33,15 @@ Feature: dockerbuild.feature
   # @case_id OCP-30854
   @flaky
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-30854 Docker build with dockerImage with specified tag
+  @inactive
+  Scenario: OCP-30854:BuildAPI Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
       | docker_image | quay.io/openshifttest/ruby-27:multiarch |
@@ -79,7 +81,8 @@ Feature: dockerbuild.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13083
-  Scenario: OCP-13083 Docker build using Dockerfile with 'FROM scratch'
+  @inactive
+  Scenario: OCP-13083:BuildAPI Docker build using Dockerfile with 'FROM scratch'
     Given I have a project
     When I run the :new_build client command with:
       | D  | FROM scratch\nENV NUM 1 |
@@ -96,7 +99,7 @@ Feature: dockerbuild.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-12855
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -104,7 +107,8 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12855 Add ARGs in docker build
+  @inactive
+  Scenario: OCP-12855:BuildAPI Add ARGs in docker build
     Given I have a project
     When I run the :new_build client command with:
       | code         | http://github.com/openshift/ruby-hello-world.git |
@@ -149,7 +153,7 @@ Feature: dockerbuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-18501
   @inactive
-  Scenario: OCP-18501 Support additional EXPOSE values in new-app
+  Scenario: OCP-18501:ImageRegistry Support additional EXPOSE values in new-app
     Given I have a project
     When I run the :new_app client command with:
       | code | https://github.com/openshift-qe/oc_newapp_expose |
@@ -160,7 +164,7 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42157
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -168,7 +172,8 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-42157 Mount source secret to builder container- dockerstrategy
+  @inactive
+  Scenario: OCP-42157:BuildAPI Mount source secret to builder container- dockerstrategy
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |
@@ -202,7 +207,7 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42158
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -210,7 +215,8 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-42158 Mount source configmap to builder container- dockerstrategy
+  @inactive
+  Scenario: OCP-42158:BuildAPI Mount source configmap to builder container- dockerstrategy
     Given I have a project
     When I run the :create_configmap client command with:
       | name         | myconfig  |
@@ -243,7 +249,7 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42184
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -251,7 +257,8 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-42184 Mount multi paths to builder container
+  @inactive
+  Scenario: OCP-42184:BuildAPI Mount multi paths to builder container
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |
@@ -286,7 +293,7 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42185
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -294,7 +301,8 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-42185 Can't add relative path for mount path
+  @inactive
+  Scenario: OCP-42185:BuildAPI Can't add relative path for mount path
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |
@@ -325,7 +333,7 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42529
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
@@ -333,7 +341,8 @@ Feature: dockerbuild.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-42529 Mount source name must be unique
+  @inactive
+  Scenario: OCP-42529:BuildAPI Mount source name must be unique
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |

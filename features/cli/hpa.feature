@@ -2,7 +2,7 @@ Feature: hpa scale
 
   # @author chezhang@redhat.com
   # @case_id OCP-10931
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -10,7 +10,7 @@ Feature: hpa scale
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10931 HPA shouldn't scale up target if the replicas of dc is 0
+  Scenario: OCP-10931:Node HPA shouldn't scale up target if the replicas of dc is 0
     Given I have a project
     Given I obtain test data file "hpa/dc-hello-openshift.yaml"
     When I run the :create client command with:
@@ -46,7 +46,7 @@ Feature: hpa scale
 
   # @author chezhang@redhat.com
   # @case_id OCP-11338
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -54,7 +54,7 @@ Feature: hpa scale
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11338 HPA shouldn't scale up target if the replicas of rc is 0
+  Scenario: OCP-11338:Node HPA shouldn't scale up target if the replicas of rc is 0
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"
     When I run the :create client command with:
@@ -89,14 +89,14 @@ Feature: hpa scale
   # @author chezhang@redhat.com
   # @case_id OCP-11259
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11259 Creates autoscaler for replication controller by oc autoscale
+  Scenario: OCP-11259:Node Creates autoscaler for replication controller by oc autoscale
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"
     When I run the :create client command with:
@@ -144,7 +144,7 @@ Feature: hpa scale
 
   # @author chezhang@redhat.com
   # @case_id OCP-11576
-  Scenario: OCP-11576 Creates autoscaler for replication controller with invalid value
+  Scenario: OCP-11576:Node Creates autoscaler for replication controller with invalid value
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"
     When I run the :create client command with:

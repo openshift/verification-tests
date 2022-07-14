@@ -11,7 +11,7 @@ Feature: Kibana related features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-25599 Show logs on Kibana web console according to different user role
+  Scenario: OCP-25599:Logging Show logs on Kibana web console according to different user role
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
@@ -64,14 +64,14 @@ Feature: Kibana related features
   @console
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-30362 Normal User can only view logs out of the projects owned by himself --kibana
+  Scenario: OCP-30362:Logging Normal User can only view logs out of the projects owned by himself --kibana
     Given I switch to the first user
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard
@@ -122,14 +122,14 @@ Feature: Kibana related features
   @console
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-30361 User with cluster-admin role can show logs out of all projects -- kibana
+  Scenario: OCP-30361:Logging User with cluster-admin role can show logs out of all projects -- kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
@@ -190,7 +190,7 @@ Feature: Kibana related features
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: OCP-32002 Kibana logout function should log off user
+  Scenario: OCP-32002:Logging Kibana logout function should log off user
     Given the master version < "4.5"
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -236,13 +236,13 @@ Feature: Kibana related features
   @console
   @commonlogging
   @proxy @noproxy @disconnected @connected
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-30343 Logs can be redirected from Webconsole to kibana
+  Scenario: OCP-30343:Logging Logs can be redirected from Webconsole to kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project.name` is stored in the :proj_name clipboard

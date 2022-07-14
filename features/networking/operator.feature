@@ -3,14 +3,14 @@ Feature: Operator related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-22704
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-22704 The clusteroperator should be able to reflect the network operator version corresponding to the OCP version
+  Scenario: OCP-22704:SDN The clusteroperator should be able to reflect the network operator version corresponding to the OCP version
 
     Given the master version > "3.11"
     #Getting OCP version
@@ -25,11 +25,11 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22706
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-22706 The clusteroperator should be able to reflect the correct version field post bad network operator config
+  Scenario: OCP-22706:SDN The clusteroperator should be able to reflect the correct version field post bad network operator config
 
     Given the master version >= "4.1"
     #Getting OCP version
@@ -70,14 +70,14 @@ Feature: Operator related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-22201
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-22201 Should have a clusteroperator object created under config.openshift.io api group for network-operator
+  Scenario: OCP-22201:SDN Should have a clusteroperator object created under config.openshift.io api group for network-operator
     Given the master version >= "4.1"
     # Check the operator object has version
     Given the expression should be true> cluster_operator('network').versions.length > 0
@@ -91,7 +91,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22419
   @admin
   @destructive
-  Scenario: OCP-22419 The clusteroperator should be able to reflect the realtime status of the network when the config has problem
+  Scenario: OCP-22419:SDN The clusteroperator should be able to reflect the realtime status of the network when the config has problem
     Given the master version >= "4.1"
     # Check that the operator is not Degraded
     Given the expression should be true> cluster_operator('network').condition(type: 'Degraded')['status'] == "False"
@@ -143,7 +143,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22202
   @admin
   @destructive
-  Scenario: OCP-22202 The clusteroperator should be able to reflect the realtime status of the network when a new node added
+  Scenario: OCP-22202:SDN The clusteroperator should be able to reflect the realtime status of the network when a new node added
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -177,13 +177,13 @@ Feature: Operator related networking scenarios
   # @case_id OCP-24918
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24918 Service should not get unidle when config flag is disabled under CNO
+  Scenario: OCP-24918:SDN Service should not get unidle when config flag is disabled under CNO
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
@@ -263,14 +263,14 @@ Feature: Operator related networking scenarios
   # @case_id OCP-21574
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21574 Should not allow to change the openshift-sdn config
+  Scenario: OCP-21574:SDN Should not allow to change the openshift-sdn config
     #Trying to change network mode to Subnet or any other
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec": {"defaultNetwork": {"openshiftSDNConfig": {"mode": "Subnet"}}}} |
@@ -300,13 +300,13 @@ Feature: Operator related networking scenarios
   # @case_id OCP-25856
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-25856 CNO should delete non-relevant resources
+  Scenario: OCP-25856:SDN CNO should delete non-relevant resources
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -385,12 +385,12 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-27333 Changing mtu in CNO should not be allowed
+  Scenario: OCP-27333:SDN Changing mtu in CNO should not be allowed
     Given the mtu value "1750" is patched in CNO config according to the networkType
     And admin uses the "openshift-network-operator" project
     When I run the :get admin command with:

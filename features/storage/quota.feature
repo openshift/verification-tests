@@ -3,14 +3,14 @@ Feature: ResourceQuata for storage
   # @author jhou@redhat.com
   # @case_id OCP-14173
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-14173 Requested storage can not exceed the namespace's storage quota
+  Scenario: OCP-14173:Storage Requested storage can not exceed the namespace's storage quota
     Given I have a project
     And I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
@@ -80,14 +80,14 @@ Feature: ResourceQuata for storage
   # @author jhou@redhat.com
   # @case_id OCP-14382
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-14382 Setting quota for a StorageClass
+  Scenario: OCP-14382:Storage Setting quota for a StorageClass
     Given I have a project
     Given admin clones storage class "sc-<%= project.name %>" from ":default" with:
       | ["volumeBindingMode"] | Immediate |

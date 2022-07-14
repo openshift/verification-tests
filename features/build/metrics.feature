@@ -4,14 +4,15 @@ Feature: Builds and samples related metrics test
   # @case_id OCP-33220
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33220 Alerts on imagestream import retries
+  @inactive
+  Scenario: OCP-33220:BuildAPI Alerts on imagestream import retries
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
     And I register clean-up steps:
@@ -66,14 +67,15 @@ Feature: Builds and samples related metrics test
   # @author xiuwang@redhat.com
   # @case_id OCP-33722
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33722 Check build metrics
+  @inactive
+  Scenario: OCP-33722:BuildAPI Check build metrics
     Given I have a project
     When I run the :new_app client command with:
       | template | cakephp-mysql-example |
@@ -160,7 +162,8 @@ Feature: Builds and samples related metrics test
   @proxy @noproxy @connected
   @4.6
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-33770 Adding metric for registry v1 protocol imports
+  @inactive
+  Scenario: OCP-33770:BuildAPI Adding metric for registry v1 protocol imports
     Given I have a project
     #Importing a image with regsitry v1 api
     When I run the :import_image client command with:
@@ -194,7 +197,7 @@ Feature: Builds and samples related metrics test
   # @case_id OCP-25598
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -202,7 +205,8 @@ Feature: Builds and samples related metrics test
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-25598 Monitoring, Alerting, and Degraded Status Reporting-Samples-operator
+  @inactive
+  Scenario: OCP-25598:BuildAPI Monitoring, Alerting, and Degraded Status Reporting-Samples-operator
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
     And I register clean-up steps:

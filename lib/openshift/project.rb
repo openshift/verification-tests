@@ -104,6 +104,15 @@ module BushSlicer
       else
         res = by.cli_exec(:new_project, project_name: name, **opts)
       end
+      started_at = Time.now
+      success = wait_for(60, interval: 5) {
+        uid_range = by.cli_exec(:get, resource: "namespace", resource_name: name, template: '{{ index .metadata.annotations "openshift.io/sa.scc.uid-range" }}')
+        !uid_range.nil? && !uid_range.empty? && uid_range.to_s !~ /no value/
+      }
+      wait_since = Time.now - started_at
+      unless success
+        raise "timeout waiting for project #{name} to get annotation openshift.io/sa.scc.uid-range after #{wait_since} seconds, consider reporting a bug"
+      end
       res[:project] = self
       return res
     end

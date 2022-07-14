@@ -3,7 +3,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-10805
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -11,7 +11,7 @@ Feature: configMap
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10805 Consume ConfigMap in environment variables
+  Scenario: OCP-10805:Node Consume ConfigMap in environment variables
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
@@ -44,7 +44,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-11255
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -52,7 +52,7 @@ Feature: configMap
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11255 Consume ConfigMap via volume plugin
+  Scenario: OCP-11255:Node Consume ConfigMap via volume plugin
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
@@ -93,7 +93,7 @@ Feature: configMap
 
   # @author chezhang@redhat.com
   # @case_id OCP-11572
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -101,7 +101,7 @@ Feature: configMap
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11572 Perform CRUD operations against a ConfigMap resource
+  Scenario: OCP-11572:Node Perform CRUD operations against a ConfigMap resource
     Given I have a project
     Given I obtain test data file "configmap/configmap-example.yaml"
     When I run the :create client command with:
@@ -143,7 +143,7 @@ Feature: configMap
   # @case_id OCP-9882
   @smoke
   @inactive
-  Scenario: OCP-9882 Set command-line arguments with ConfigMap
+  Scenario: OCP-9882:Node Set command-line arguments with ConfigMap
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
@@ -175,7 +175,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-9884
   @inactive
-  Scenario: OCP-9884 Configuring redis using ConfigMap
+  Scenario: OCP-9884:Node Configuring redis using ConfigMap
     Given I have a project
     Given a "redis-config" file is created with the following lines:
     """
@@ -212,7 +212,7 @@ Feature: configMap
   # @case_id OCP-9880
   @smoke
   @inactive
-  Scenario: OCP-9880 Create ConfigMap from file
+  Scenario: OCP-9880:Node Create ConfigMap from file
     Given I have a project
     Given I create the "configmap-test" directory
     Given a "configmap-test/game.properties" file is created with the following lines:
@@ -306,7 +306,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-9881
   @inactive
-  Scenario: OCP-9881 Create ConfigMap from literal values
+  Scenario: OCP-9881:Node Create ConfigMap from literal values
     Given I have a project
     When I run the :create_configmap client command with:
       | name         | special-config     |
@@ -330,7 +330,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-9879
   @inactive
-  Scenario: OCP-9879 Create ConfigMap from directories
+  Scenario: OCP-9879:Node Create ConfigMap from directories
     Given I have a project
     Given I create the "configmap-test" directory
     Given a "configmap-test/game.properties" file is created with the following lines:
@@ -381,7 +381,7 @@ Feature: configMap
   # @author xiuli@redhat.com
   # @case_id OCP-16721
   @inactive
-  Scenario: OCP-16721 Changes to ConfigMap should be auto-updated into container
+  Scenario: OCP-16721:Node Changes to ConfigMap should be auto-updated into container
     Given I have a project
     Given I obtain test data file "configmap/configmap.json"
     When I run the :create client command with:

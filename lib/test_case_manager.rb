@@ -47,6 +47,8 @@ module BushSlicer
         attachments = handle_current_artifacts(test_suite.artifacts_format)
         test_suite.test_case_execute_finish!(finish_event, attach: attachments)
         reset_hooks_status
+      when :skip_case
+        test_suite.current_test_record = nil unless test_suite.current_test_record.nil?
       when :finish_before_hook
         test_case = args[0]
         err = args[1]

@@ -6,14 +6,14 @@ Feature: elasticsearch-operator related tests
   @admin
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21332 ServiceMonitor Object for Elasticsearch is deployed along with the Elasticsearch cluster
+  Scenario: OCP-21332:Logging ServiceMonitor Object for Elasticsearch is deployed along with the Elasticsearch cluster
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | _prometheus/metrics |
@@ -84,9 +84,9 @@ Feature: elasticsearch-operator related tests
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | cluster_setting |
-      | transient       | # @case_id OCP-21530
-      | persistent      | # @case_id OCP-30092
+      | case_id           | cluster_setting |
+      | OCP-21530:Logging | transient       | # @case_id OCP-21530
+      | OCP-30092:Logging | persistent      | # @case_id OCP-30092
 
   # @author qitang@redhat.com
   # @case_id OCP-33883
@@ -94,14 +94,14 @@ Feature: elasticsearch-operator related tests
   @console
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33883 Additional essential metrics ES dashboard
+  Scenario: OCP-33883:Logging Additional essential metrics ES dashboard
     Given I switch to the first user
     And the first user is cluster-admin
     And I open admin console in a browser

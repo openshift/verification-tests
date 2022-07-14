@@ -4,7 +4,7 @@ Feature: storage security check
   # @author piqin@redhat.com
   @admin
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: volume security testing
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -110,14 +110,14 @@ Feature: storage security check
     @gcp-ipi
     @gcp-upi
     Examples:
-      | storage_type         | volume_name | type   |
-      | gcePersistentDisk    | pdName      | gce    | # @case_id OCP-9700
+      | case_id          | storage_type      | volume_name | type |
+      | OCP-9700:Storage | gcePersistentDisk | pdName      | gce  | # @case_id OCP-9700
 
     @aws-ipi
     @aws-upi
     Examples:
-      | storage_type         | volume_name | type   |
-      | awsElasticBlockStore | volumeID    | ebs    | # @case_id OCP-9699
+      | case_id          | storage_type         | volume_name | type |
+      | OCP-9699:Storage | awsElasticBlockStore | volumeID    | ebs  | # @case_id OCP-9699
 
     @openstack-ipi
     @openstack-upi
@@ -126,21 +126,21 @@ Feature: storage security check
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     Examples:
-      | storage_type         | volume_name | type   |
-      | cinder               | volumeID    | cinder | # @case_id OCP-9721
+      | case_id          | storage_type | volume_name | type   |
+      | OCP-9721:Storage | cinder       | volumeID    | cinder | # @case_id OCP-9721
 
   # @author chaoyang@redhat.com
   # @case_id OCP-9709
   @admin
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-9709 secret volume security check
+  Scenario: OCP-9709:Storage secret volume security check
     Given I have a project
     Given I obtain test data file "storage/secret/secret.yaml"
     When I run the :create client command with:

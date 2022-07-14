@@ -12,7 +12,7 @@ Feature: cluster log forwarder features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-25989 ClusterLogForwarder `default` behavior testing
+  Scenario: OCP-25989:Logging ClusterLogForwarder `default` behavior testing
     Given the master version >= "4.6"
     # create project to generate logs
     Given I switch to the first user
@@ -144,7 +144,7 @@ Feature: cluster log forwarder features
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous
-  Scenario: OCP-29843 ClusterLogForwarder: Forward logs to fluentd as insecure
+  Scenario: OCP-29843:Logging ClusterLogForwarder: Forward logs to fluentd as insecure
     Given I switch to the first user
     And I have a project
     And evaluation of `project` is stored in the :fluentd_proj clipboard
@@ -237,11 +237,11 @@ Feature: cluster log forwarder features
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous
     Examples:
-      | auth_type         |
-      | mTLS_share        | # @case_id OCP-29844
-      | mTLS              | # @case_id OCP-39041
-      | server_auth       | # @case_id OCP-39042
-      | server_auth_share | # @case_id OCP-39043
+      | case_id           | auth_type         |
+      | OCP-29844:Logging | mTLS_share        | # @case_id OCP-29844
+      | OCP-39041:Logging | mTLS              | # @case_id OCP-39041
+      | OCP-39042:Logging | server_auth       | # @case_id OCP-39042
+      | OCP-39043:Logging | server_auth_share | # @case_id OCP-39043
 
   # @author qitang@redhat.com
   @admin
@@ -302,9 +302,9 @@ Feature: cluster log forwarder features
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
-      | file                                 | app_pipeline_name     | infra_pipeline_name   | audit_pipeline_name   |
-      | clf-forward-with-same-tag.yaml       | forward-to-default-es | forward-to-default-es | forward-to-default-es | # @case_id OCP-33750
-      | clf-forward-with-different-tags.yaml | forward-app-logs      | forward-infra-logs    | forward-audit-logs    | # @case_id OCP-33893
+      | case_id           | file                                 | app_pipeline_name     | infra_pipeline_name   | audit_pipeline_name   |
+      | OCP-33750:Logging | clf-forward-with-same-tag.yaml       | forward-to-default-es | forward-to-default-es | forward-to-default-es | # @case_id OCP-33750
+      | OCP-33893:Logging | clf-forward-with-different-tags.yaml | forward-app-logs      | forward-infra-logs    | forward-audit-logs    | # @case_id OCP-33893
 
   # @author gkarager@redhat.com
   # @case_id OCP-33627
@@ -316,7 +316,7 @@ Feature: cluster log forwarder features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-33627 Forward logs to remote-syslog - config error
+  Scenario: OCP-33627:Logging Forward logs to remote-syslog - config error
     Given the master version >= "4.6"
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
@@ -380,10 +380,10 @@ Feature: cluster log forwarder features
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
-      | file                  | protocol |
-      | rsys_clf_RFC3164.yaml | tls      | # @case_id OCP-32643
-      | rsys_clf_RFC5424.yaml | tcp      | # @case_id OCP-32967
-      | rsys_clf_default.yaml | udp      | # @case_id OCP-32864
+      | case_id           | file                  | protocol |
+      | OCP-32643:Logging | rsys_clf_RFC3164.yaml | tls      | # @case_id OCP-32643
+      | OCP-32967:Logging | rsys_clf_RFC5424.yaml | tcp      | # @case_id OCP-32967
+      | OCP-32864:Logging | rsys_clf_default.yaml | udp      | # @case_id OCP-32864
 
   # @author anli@redhat.com
   # @case_id OCP-32697
@@ -395,7 +395,7 @@ Feature: cluster log forwarder features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-32697 Forward logs to different kafka topics
+  Scenario: OCP-32697:Logging Forward logs to different kafka topics
     Given I switch to the first user
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :kafka_project clipboard
@@ -444,7 +444,7 @@ Feature: cluster log forwarder features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-32628 Fluentd continues to ship logs even when one of multiple destination is down
+  Scenario: OCP-32628:Logging Fluentd continues to ship logs even when one of multiple destination is down
     # create project to generate logs
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -558,7 +558,7 @@ Feature: cluster log forwarder features
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-39786 Send logs to both external fluentd and internalES
+  Scenario: OCP-39786:Logging Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
     Given I switch to cluster admin pseudo user
     Given fluentd receiver is deployed as secure with server_auth_share enabled in the "openshift-logging" project

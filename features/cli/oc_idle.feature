@@ -2,7 +2,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11633
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -10,7 +10,7 @@ Feature: oc idle
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11633 CLI - Idle all the service in the same project
+  Scenario: OCP-11633:Node CLI - Idle all the service in the same project
     Given I have a project
     Given I obtain test data file "rc/idle-rc-1.yaml"
     When I run the :create client command with:
@@ -53,7 +53,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11980
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -61,7 +61,7 @@ Feature: oc idle
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-11980 CLI - Idle service by label
+  Scenario: OCP-11980:Node CLI - Idle service by label
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
     When I run the :create client command with:
@@ -97,7 +97,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-12085
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -105,7 +105,7 @@ Feature: oc idle
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12085 CLI - Idle service from file
+  Scenario: OCP-12085:Node CLI - Idle service from file
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
     When I run the :create client command with:
@@ -146,7 +146,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-12169
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -154,7 +154,7 @@ Feature: oc idle
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12169 CLI - Idle service with dry-run
+  Scenario: OCP-12169:Node CLI - Idle service with dry-run
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
     When I run the :create client command with:
@@ -190,7 +190,7 @@ Feature: oc idle
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-10941 Idling service with dc
+  Scenario: OCP-10941:Node Idling service with dc
     Given I have a project
     Given I obtain test data file "rc/idling-echo-server.yaml"
     When I run the :create client command with:
@@ -260,7 +260,7 @@ Feature: oc idle
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-11345 Idling service with rc
+  Scenario: OCP-11345:Node Idling service with rc
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
     When I run the :create client command with:

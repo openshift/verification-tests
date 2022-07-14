@@ -3,7 +3,7 @@ Feature: SDN sctp compoment upgrade testing
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @upgrade
@@ -72,7 +72,7 @@ Feature: SDN sctp compoment upgrade testing
   # @case_id OCP-44765
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @upgrade

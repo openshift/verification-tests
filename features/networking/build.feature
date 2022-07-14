@@ -48,9 +48,9 @@ Feature: Testing the isolation during build scenarios
     @noproxy
     @heterogeneous @arm64 @amd64
     Examples:
-      | type   | repo                                                           | strategy       |
-      | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15741
-      | sti    | ruby~https://github.com/zhaozhanqi/ruby-docker-test/#isolation | sourceStrategy | # @case_id OCP-15734
+      | case_id       | type   | repo                                                           | strategy       |
+      | OCP-15741:SDN | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15741
+      | OCP-15734:SDN | sti    | ruby~https://github.com/zhaozhanqi/ruby-docker-test/#isolation | sourceStrategy | # @case_id OCP-15734
 
   # @author zzhao@redhat.com
   # @bug_id 1487652
@@ -122,7 +122,7 @@ Feature: Testing the isolation during build scenarios
     @network-openshiftsdn @network-networkpolicy
     @heterogeneous @arm64 @amd64
     Examples:
-      | type   | repo                                                           | strategy       |
-      | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15731
-      | sti    | ruby~https://github.com/zhaozhanqi/ruby-docker-test/#isolation | sourceStrategy | # @case_id OCP-15744
+      | case_id       | type   | repo                                                           | strategy       |
+      | OCP-15731:SDN | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15731
+      | OCP-15744:SDN | sti    | ruby~https://github.com/zhaozhanqi/ruby-docker-test/#isolation | sourceStrategy | # @case_id OCP-15744
 

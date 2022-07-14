@@ -4,13 +4,13 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-28108
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-28108 Cluster should automatically scale up and scale down with clusterautoscaler deployed
+  Scenario: OCP-28108:ClusterInfrastructure Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -75,7 +75,7 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-21516
   @admin
   @destructive
-  Scenario: OCP-21516 Cao listens and deploys cluster-autoscaler based on ClusterAutoscaler resource
+  Scenario: OCP-21516:ClusterInfrastructure Cao listens and deploys cluster-autoscaler based on ClusterAutoscaler resource
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -92,7 +92,7 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-21517
   @admin
   @destructive
-  Scenario: OCP-21517 CAO listens and annotations machineSets based on MachineAutoscaler resource
+  Scenario: OCP-21517:ClusterInfrastructure CAO listens and annotations machineSets based on MachineAutoscaler resource
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -128,12 +128,12 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-22102
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-22102 Update machineAutoscaler to reference a different MachineSet
+  Scenario: OCP-22102:ClusterInfrastructure Update machineAutoscaler to reference a different MachineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -204,12 +204,12 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-23745
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-23745 Machineautoscaler can be deleted when its referenced machineset does not exist
+  Scenario: OCP-23745:ClusterInfrastructure Machineautoscaler can be deleted when its referenced machineset does not exist
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project

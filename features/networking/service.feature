@@ -4,7 +4,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-9604
   @admin
   @network-multitenant
-  Scenario: OCP-9604 tenants can access their own services
+  Scenario: OCP-9604:SDN tenants can access their own services
     # create pod and service in project1
     Given the env is using multitenant network
     Given I have a project
@@ -48,7 +48,7 @@ Feature: Service related networking scenarios
   @admin
   @inactive
   @network-multitenant
-  Scenario: OCP-15032 The openflow list will be cleaned after delete the services
+  Scenario: OCP-15032:SDN The openflow list will be cleaned after delete the services
     Given the env is using one of the listed network plugins:
       | subnet      |
       | multitenant |
@@ -77,13 +77,13 @@ Feature: Service related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23895
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-23895 User cannot access the MCS by creating a LoadBalancer service that points to the MCS
+  Scenario: OCP-23895:SDN User cannot access the MCS by creating a LoadBalancer service that points to the MCS
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I select a random node's host
@@ -109,13 +109,13 @@ Feature: Service related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-21814
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-21814 The headless service can publish the pods even if they are not ready
+  Scenario: OCP-21814:SDN The headless service can publish the pods even if they are not ready
     Given I have a project
     Given I obtain test data file "networking/headless_notreadypod.json"
     When I run the :create client command with:
@@ -139,14 +139,14 @@ Feature: Service related networking scenarios
 
   # @author weliang@redhat.com
   # @case_id OCP-24668
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24668 externalIP defined in service but no spec.externalIP defined
+  Scenario: OCP-24668:SDN externalIP defined in service but no spec.externalIP defined
     Given I have a project
     # Create a service with a externalIP
     Given I obtain test data file "networking/externalip_service1.json"
@@ -158,14 +158,14 @@ Feature: Service related networking scenarios
   # @case_id OCP-24669
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24669 externalIP defined in service with set ExternalIP in allowedCIDRs
+  Scenario: OCP-24669:SDN externalIP defined in service with set ExternalIP in allowedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     Given I store the schedulable nodes in the :nodes clipboard
@@ -209,14 +209,14 @@ Feature: Service related networking scenarios
   # @case_id OCP-24692
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24692 A rejectedCIDRs inside an allowedCIDRs
+  Scenario: OCP-24692:SDN A rejectedCIDRs inside an allowedCIDRs
     # Create additional network through CNO
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
       | {"spec":{"externalIP":{"policy":{"allowedCIDRs":["22.2.2.0/24"],"rejectedCIDRs":["22.2.2.0/25"]}}}} |
@@ -264,14 +264,14 @@ Feature: Service related networking scenarios
   # @case_id OCP-24670
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24670 externalIP defined in service with set ExternalIP in rejectedCIDRs
+  Scenario: OCP-24670:SDN externalIP defined in service with set ExternalIP in rejectedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     Given I store the schedulable nodes in the :nodes clipboard
@@ -302,14 +302,14 @@ Feature: Service related networking scenarios
   # @case_id OCP-24739
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24739 An allowedCIDRs inside an rejectedCIDRs
+  Scenario: OCP-24739:SDN An allowedCIDRs inside an rejectedCIDRs
     # Create additional network through CNO
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
       | {"spec":{"externalIP":{"policy":{"allowedCIDRs":["22.2.2.0/25"],"rejectedCIDRs":["22.2.2.0/24"]}}}} |
@@ -344,13 +344,13 @@ Feature: Service related networking scenarios
   # @case_id OCP-24691
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24691 Defined Multiple allowedCIDRs
+  Scenario: OCP-24691:SDN Defined Multiple allowedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     Given I store the schedulable nodes in the :nodes clipboard
@@ -422,14 +422,14 @@ Feature: Service related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26035
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-26035 Idling/Unidling services on sdn/OVN
+  Scenario: OCP-26035:SDN Idling/Unidling services on sdn/OVN
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
@@ -458,7 +458,7 @@ Feature: Service related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-11645
   @inactive
-  Scenario: OCP-11645 Create loadbalancer service
+  Scenario: OCP-11645:SDN Create loadbalancer service
     Given I have a project
     Given I obtain test data file "networking/ping_for_pod_containerPort.json"
     When I run the :create client command with:
@@ -501,13 +501,13 @@ Feature: Service related networking scenarios
   # @case_id OCP-24694
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-24694 Taint node with too small MTU value
+  Scenario: OCP-24694:SDN Taint node with too small MTU value
     Given the default interface on nodes is stored in the :default_interface clipboard
     And the node's MTU value is stored in the :mtu_actual clipboard
     And the node's active nmcli connection is stored in the :nmcli_active_con_uuid clipboard
@@ -561,7 +561,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-33848
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -569,7 +569,7 @@ Feature: Service related networking scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-33848 User can expand the nodePort range by patch the serviceNodePortRange in network
+  Scenario: OCP-33848:SDN User can expand the nodePort range by patch the serviceNodePortRange in network
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
     Given I have a project
@@ -610,7 +610,7 @@ Feature: Service related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-33850 User cannot decrease the nodePort range in post action
+  Scenario: OCP-33850:SDN User cannot decrease the nodePort range in post action
     When I run the :patch admin command with:
       | resource      | networks.config.openshift.io                     |
       | resource_name | cluster                                          |
@@ -622,13 +622,13 @@ Feature: Service related networking scenarios
   # @author zzhao@redhat.com
   # @case_id OCP-10216
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10216 The iptables rules for the service should be DNAT or REDIRECT to node after being idled
+  Scenario: OCP-10216:SDN The iptables rules for the service should be DNAT or REDIRECT to node after being idled
     Given I have a project
     And evaluation of `project.name` is stored in the :proj_name clipboard
     Given I obtain test data file "networking/list_for_pods.json"
@@ -687,14 +687,14 @@ Feature: Service related networking scenarios
   # @case_id OCP-43493
   @admin
   @destructive
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-43493 Update externalIP from oc edit svc
+  Scenario: OCP-43493:SDN Update externalIP from oc edit svc
     Given I have a project
     And evaluation of `project.name` is stored in the :proj_name clipboard
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -757,14 +757,14 @@ Feature: Service related networking scenarios
 
   # @author zzhao@redhat.com
   # @case_id OCP-47087
-  @4.11 @4.10
+  @4.12 @4.11 @4.10
   @admin
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @connected
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-47087 Other node cannot be accessed for nodePort when externalTrafficPolicy is Local
+  Scenario: OCP-47087:SDN Other node cannot be accessed for nodePort when externalTrafficPolicy is Local
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
     And the Internal IP of node "<%= cb.masters[1].name %>" is stored in the :master1_ip clipboard
@@ -808,14 +808,14 @@ Feature: Service related networking scenarios
 
   # @author zzhao@redhat.com
   # @case_id OCP-10770
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @admin
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10770 Be able to access the service via the nodeport
+  Scenario: OCP-10770:SDN Be able to access the service via the nodeport
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
     And evaluation of `rand(30000..32767)` is stored in the :port clipboard

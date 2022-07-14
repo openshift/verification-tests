@@ -305,7 +305,6 @@ Feature: ONLY ONLINE Imagestreams related scripts in this file
     And the output should match:
       | <isoutput> |
     Examples:
-      | file             | tag         | isttemplate                                        | istoutput                                                  | isname  | istemplate                                                                               | isoutput                                         |
-      | annotations.json | testa:prod  | {{range .items}} {{.metadata.annotations}} {{end}} | map\[color:blue\]                                          | testa   | "{{range .spec.tags}} {{.annotations}} {{end}}; {{range .status.tags}} {{.tag}} {{end}}" | map\[color:blue\].*prod\|prod.*map\[color:blue\] | # @case_id OCP-10090
-      | busybox.json     | busybox:2.0 | "{{range .items}} {{.metadata.name}} {{end}}"      | busybox:latest.*busybox:2\.0\|busybox:2\.0.*busybox:latest | busybox | "{{range .status.tags}} {{.tag}} {{end}}"                                                | latest.*2\.0\|2\.0.*latest                       | # @case_id OCP-10093
-
+      | case_id                       | file             | tag         | isttemplate                                        | istoutput                                                  | isname  | istemplate                                                                               | isoutput                                         |
+      | OCP-10090:ServiceDevelopmentB | annotations.json | testa:prod  | {{range .items}} {{.metadata.annotations}} {{end}} | map\[color:blue\]                                          | testa   | "{{range .spec.tags}} {{.annotations}} {{end}}; {{range .status.tags}} {{.tag}} {{end}}" | map\[color:blue\].*prod\|prod.*map\[color:blue\] | # @case_id OCP-10090
+      | OCP-10093:ServiceDevelopmentB | busybox.json     | busybox:2.0 | "{{range .items}} {{.metadata.name}} {{end}}"      | busybox:latest.*busybox:2\.0\|busybox:2\.0.*busybox:latest | busybox | "{{range .status.tags}} {{.tag}} {{end}}"                                                | latest.*2\.0\|2\.0.*latest                       | # @case_id OCP-10093

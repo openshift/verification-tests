@@ -4,12 +4,12 @@ Feature: Machine misc features testing
   # @case_id OCP-34940
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-34940 PVCs can still be provisioned after the password has been changed vSphere
+  Scenario: OCP-34940:ClusterInfrastructure PVCs can still be provisioned after the password has been changed vSphere
     Given I have an IPI deployment
     Then I switch to cluster admin pseudo user
 
@@ -63,12 +63,12 @@ Feature: Machine misc features testing
   # @case_id OCP-35454
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-35454 Reconciliation of MutatingWebhookConfiguration values should happen
+  Scenario: OCP-35454:ClusterInfrastructure Reconciliation of MutatingWebhookConfiguration values should happen
     Given I switch to cluster admin pseudo user
 
     Given I use the "openshift-cluster-version" project
@@ -120,13 +120,13 @@ Feature: Machine misc features testing
   # @author miyadav@redhat.com
   # @case_id OCP-37744
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-37744 kube-rbac-proxy should not expose tokens, have excessive verbosity
+  Scenario: OCP-37744:ClusterInfrastructure kube-rbac-proxy should not expose tokens, have excessive verbosity
     Given I switch to cluster admin pseudo user
 
     Given I use the "openshift-machine-api" project
@@ -167,11 +167,11 @@ Feature: Machine misc features testing
   # @author miyadav@redhat.com
   # @case_id OCP-37180
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-37180 Report vCenter version to telemetry
+  Scenario: OCP-37180:ClusterInfrastructure Report vCenter version to telemetry
     Given I switch to cluster admin pseudo user
     When I perform the GET prometheus rest client with:
       | path  | /api/v1/query?                         |
@@ -183,12 +183,12 @@ Feature: Machine misc features testing
   # @case_id OCP-40665
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8
+  @4.12 @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-40665 Deattach disk before destroying vm from vsphere
+  Scenario: OCP-40665:ClusterInfrastructure Deattach disk before destroying vm from vsphere
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
     And I clone a machineset and name it "machineset-clone-40665"

@@ -5,7 +5,7 @@ Feature: Elasticsearch related tests
   # @case_id OCP-22050
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -13,7 +13,7 @@ Feature: Elasticsearch related tests
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-22050 Elasticsearch using dynamic volumes
+  Scenario: OCP-22050:Logging Elasticsearch using dynamic volumes
     Given default storageclass is stored in the :default_sc clipboard
     Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"
     Given I create clusterlogging instance with:
@@ -54,7 +54,7 @@ Feature: Elasticsearch related tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OCP-30776 Elasticsearch6 new data modle indices
+  Scenario: OCP-30776:Logging Elasticsearch6 new data modle indices
     Given I switch to the first user
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard
@@ -88,7 +88,7 @@ Feature: Elasticsearch related tests
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: OCP-28140 Elasticsearch retention policy testing
+  Scenario: OCP-28140:Logging Elasticsearch retention policy testing
     Given I switch to the first user
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard

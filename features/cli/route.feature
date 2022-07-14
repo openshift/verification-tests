@@ -3,7 +3,7 @@ Feature: route related features via cli
   # @author cryan@redhat.com
   # @case_id OCP-10629
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -11,7 +11,7 @@ Feature: route related features via cli
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-10629 Expose routes from services
+  Scenario: OCP-10629:Workloads Expose routes from services
     Given I have a project
     When I run the :new_app client command with:
       | code | https://github.com/sclorg/s2i-perl-container |
@@ -36,7 +36,7 @@ Feature: route related features via cli
 
   # @author cryan@redhat.com
   # @case_id OCP-12022
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -44,7 +44,7 @@ Feature: route related features via cli
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-12022 Be unable to add an existed alias name for service
+  Scenario: OCP-12022:NetworkEdge Be unable to add an existed alias name for service
     Given I have a project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"
     When I run the :create client command with:

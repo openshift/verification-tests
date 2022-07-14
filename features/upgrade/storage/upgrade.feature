@@ -4,14 +4,13 @@ Feature: Storage upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @singlenode
-  @disconnected @connected
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     # Check cluster operator storage should be in correct status
@@ -79,7 +78,7 @@ Feature: Storage upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @singlenode
@@ -166,14 +165,13 @@ Feature: Storage upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @baremetal-ipi
   @baremetal-upi
   @singlenode
-  @disconnected @connected
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @arm64 @amd64
+  @heterogeneous @arm64 @amd64
   Scenario: Cluster operator storage should be in correct status after upgrade - prepare
     Given I switch to cluster admin pseudo user
     # Check cluster operator storage should be in correct status
@@ -187,7 +185,7 @@ Feature: Storage upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @baremetal-ipi
   @baremetal-upi
   @singlenode
@@ -392,7 +390,7 @@ Feature: Storage upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @aws-ipi
   @aws-upi
   @singlenode
@@ -491,7 +489,7 @@ Feature: Storage upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @aws-ipi
   @aws-upi
   @singlenode
