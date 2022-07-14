@@ -1,0 +1,145 @@
+send_metrics_query:
+  elements:
+  - selector: &metrics_query_input
+      xpath: //div[contains(@contenteditable,'true') and contains(@class,'cm-content')]
+    op: send_keys :backspace
+  - selector:
+      <<: *metrics_query_input
+    op: send_keys <metrics_name>
+query_metrics:
+  params:
+    button_text: Run queries
+  action: send_metrics_query
+  action: click_button_text
+check_metrics_query_result:
+  elements:
+  - selector:
+      xpath: //td[text()='<metrics_name>']
+  - selector:
+      xpath: //td[text()='https://<data>']
+  - selector:
+      xpath: //td[text()='1']
+check_alerts_tab:
+  params:
+    tab_name: Alerts
+  action: check_tab
+check_silences_tab:
+  params:
+    tab_name: Silences
+  action: check_tab
+browse_to_receiver_config:
+  element:
+    selector:
+      xpath: //*[@role='gridcell' and text()='<receiver>']/following-sibling::td//*[text()='Configure']
+    op: click
+  action: wait_box_loaded
+set_pagerduty_key:
+  params:
+    input_field_id: integration-key
+  action: set_input_value
+  action: 
+    if_element:
+      selector:
+        xpath: //span[contains(@class,'co-required') and contains(., "Routing labels")] 
+    ref: 
+    - set_routing_labels_name
+    - set_routing_labels_value
+set_routing_labels_name:
+  params:
+    name: Name
+  action: set_placeholder_input
+set_routing_labels_value:
+  params:
+    name: Value
+  action: set_placeholder_input
+# metering rules
+check_reports_table:
+  action: goto_chargeback_reports_page
+  action: check_report_table_columns
+  action: check_report_data
+check_report_table_columns:
+  elements:
+  - selector:
+      xpath: //thead//th[@data-label='Name']
+  - selector:
+      xpath: //thead//th[@data-label='Namespace']
+  - selector:
+      xpath: //thead//th[@data-label='Report Query']
+  - selector:
+      xpath: //thead//th[@data-label='Reporting Start']
+  - selector:
+      xpath: //thead//th[@data-label='Reporting End']
+check_report_data:
+  elements:
+  - selector:
+      xpath: //tbody//td[1]//a[contains(@href,'/k8s/ns/<namespace>/metering.openshift.io~v1~Report/<report_name>')]
+  - selector:
+      xpath: //tbody//td[2]//a[contains(@href,'/k8s/cluster/namespaces/<namespace>')]
+  - selector:
+      xpath: //tbody//td[3]//a[contains(@href,'/k8s/ns/<namespace>/metering.openshift.io~v1~ReportQuery/<reportquery_name>')]
+navigate_to_chargeback_reportquery_page:
+  params:
+    tab_name: Report Queries
+  action: click_tab
+check_reportquery_details:
+  action: goto_one_reportquery_page
+  action: check_reportquery_query_string
+  action: check_reportquery_columns_table
+check_reportquery_query_string:
+  action:
+    if_param:
+      reportquery_name: namespace-cpu-usage
+    ref: check_namespace_cpu_usage_rq_query_string
+check_reportquery_columns_table:
+  action:
+    if_param:
+      reportquery_name: namespace-cpu-usage
+    ref: check_namespace_cpu_usage_rq_columns_table
+check_namespace_cpu_usage_rq_query_string:
+  element:
+    selector:
+      xpath: //code[contains(.,'FROM {| .Report.Inputs.NamespaceCPUUsageReportName')]
+check_namespace_cpu_usage_rq_columns_table:
+  elements:
+  - selector:
+      xpath: //tbody//td[text()='period_start']
+  - selector:
+      xpath: //tbody//td[text()='period_end']
+  - selector:
+      xpath: //tbody//td[text()='namespace']
+  - selector:
+      xpath: //tbody//td[text()='pod_usage_cpu_core_seconds']
+check_usage_report_table:
+  action: goto_one_report_page
+  action:
+    if_param:
+      report_name: namespace-cpu-usage
+    ref: check_namespace_cpu_usage_usage_report_table
+check_namespace_cpu_usage_usage_report_table:
+  elements:
+  - selector:
+      xpath: //thead//span[text()='period start']
+  - selector:
+      xpath: //thead//span[text()='period end']
+  - selector:
+      xpath: //thead//span[text()='namespace']
+  - selector:
+      xpath: //thead//span[text()='period start']
+  - selector:
+      xpath: //tbody//td[contains(@class,'column-0')]/*[contains(@class,'co-timestamp')]
+  - selector:
+      xpath: //tbody//td[contains(@class,'column-1')]/*[contains(@class,'co-timestamp')]
+  - selector:
+      xpath: //tbody//td[contains(@class,'column-2')]/*[contains(.,'co-resource-item')]
+check_invalid_start_end_date_conditions_table:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-conditions__message') and contains(.,'must be after spec.reportingStart')]
+  - selector:
+      xpath: //div[contains(.,'Report contains no results')]
+check_non_exist_reportquery_conditions_table:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-conditions__message') and contains(.,'ReportQuery (namespace-memory-request-testtest) does not exist')]
+  - selector:
+      xpath: //div[contains(.,'error getting reportQuery')]
