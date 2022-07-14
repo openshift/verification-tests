@@ -1,0 +1,99 @@
+check_ocm_subscription:
+  element:
+    selector:
+      xpath: //a[contains(., 'OpenShift Cluster Manager') and @href='https://console.redhat.com/openshift/details/<cluster_id>']
+check_help_info_on_channel_popup:
+  params:
+    help_info: Channels help to control the pace of updates and recommend the appropriate release versions
+  action: click_channel_help_icon
+  action: check_help_info
+  action: check_doc_link_for_upgrade
+  action: click_close_icon
+check_help_info_in_update_channel_modal:
+  params:
+    help_info: a channel that reflects the desired version
+  action: click_update_channel_button
+  action: check_help_info
+  action: check_doc_link_for_upgrade
+click_channel_help_icon:
+  element:
+    selector:
+      xpath: //*[contains(text(), 'Channel')]/button
+    op: click
+check_help_info:
+  elements:
+  - selector:
+      xpath: //p[contains(., '<help_info>')]
+check_doc_link_for_upgrade:
+  params:
+    text: Learn more about OpenShift update channels
+    link_url: https://access.redhat.com/documentation/en-us/openshift_container_platform/<product_version>/html/updating_clusters/understanding-upgrade-channels-releases
+  action: check_link_and_text
+click_update_channel_button:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='current-channel-update-link']
+    op: click
+check_drop_down_items:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='dropdown-menu' and contains(., 'stable-<product_version>')]
+  - selector:
+      xpath: //button[@data-test-id='dropdown-menu' and contains(., 'fast-<product_version>')]
+  - selector:
+      xpath: //button[@data-test-id='dropdown-menu' and contains(., 'candidate-<product_version>')]
+check_list_of_channels_in_channel_modal: {}
+check_kebab_menus_for_default_cs:
+  params:
+    resource_name: community-operators
+  action: click_kebab_of_one_resource
+  elements:
+  - selector:
+      xpath: //button[@data-test-action='Disable']
+  - selector:
+      xpath: //button[@data-test-action='Edit CatalogSource']
+  action: click_kebab_of_one_resource
+check_kebab_menus_for_custom_cs:
+  params:
+    resource_name: <cs_name>
+  action: click_kebab_of_one_resource
+  elements:
+  - selector:
+      xpath: //button[@data-test-action='Edit labels']
+  - selector:
+      xpath: //button[@data-test-action='Edit annotations']
+  - selector:
+      xpath: //button[@data-test-action='Edit CatalogSource']
+  - selector:
+      xpath: //button[@data-test-action='Delete CatalogSource']
+  action: click_kebab_of_one_resource
+check_columns_for_cs:
+  elements:
+  - selector:
+      xpath: //a[text()='<cs_name>']/ancestor::tr//td[contains(.,'<cs_status>')]
+  - selector:
+      xpath: //a[text()='<cs_name>']/ancestor::tr//td[contains(.,'<registrypullinterval>')]
+  - selector:
+      xpath: //a[text()='<cs_name>']/ancestor::tr//td[contains(.,'<endpoint>')]
+  - selector:
+      xpath: //a[text()='<cs_name>']/ancestor::tr//td[contains(.,'<publisher>')]
+check_catalogsource_operators_info:
+  params:
+    tab_name: Operators
+  action: click_tab
+  action: wait_table_loaded
+  elements:
+  - selector:
+      xpath: //h1[contains(.,'Anzo Operator')]
+check_packagemanifests_have_cs_link:
+  url: /search/all-namespaces?kind=packages.operators.coreos.com~v1~PackageManifest
+  action: wait_table_loaded
+  elements:
+  - selector:
+      xpath: //th[@data-label='CatalogSource']
+  - selector:
+      xpath: //a[@data-test-id='redhat-operators' and contains(@class,'co-resource-item__resource-name')]
+check_co_related_objs:
+  elements:
+  - selector:
+      xpath: //a[text()='<name>']/ancestor::tr[//td[text()='<resource>'] and //td[text()='<group>'] and //a[text()='<namespace>']] | //a[text()='<name>']/ancestor::tr[//td[text()='<resource>'] and //td[text()='<group>'] and //td[text()='<namespace>']]

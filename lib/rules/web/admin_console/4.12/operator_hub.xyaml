@@ -1,0 +1,966 @@
+create_custom_resource:
+  params:
+    button_text: Create
+  action: click_provided_apis_of_operators
+  action: click_button
+click_provided_apis_of_operators:
+  element:
+    selector:
+      xpath: //a[contains(.,'<api>')]
+    op: click
+    timeout: 60
+click_create_operand_button:
+  element:
+    selector:
+      xpath: //button[contains(.,'Create') and contains(.,'<operand_kind>') and not(disabled)]
+    op: click
+create_cr_etcdcluster:
+  params:
+    api: etcd Cluster
+  action: create_custom_resource
+  action: switch_to_yaml_view
+  action: click_create_button
+create_cr_topic:
+  params:
+    api: Topic
+  action: create_custom_resource
+  action: switch_to_yaml_view
+  action: click_create_button
+create_cr_infinispancluster:
+  params:
+    api: Infinispan Cluster
+  action: create_custom_resource
+  action: switch_to_yaml_view
+  action: click_create_button 
+create_operand:
+  params:
+    tab_name: <operand_kind>
+  action: goto_csv_detail_page
+  action: click_tab
+  action: click_create_operand_button
+  action: wait_box_loaded
+  action: submit_changes
+set_operand_name:
+  params:
+    label_text: Name
+    input_value: <operand_name>
+  action: set_label_input_simple
+remove_operand_label:
+  elements:
+  - selector:
+      xpath: //tags-input//button[contains(@aria-label,'Close')]
+    op: click
+set_selector_value:
+  params:
+    label_text: Select
+    button_text: <selector_value>
+  action: click_label_dropdown_button
+  action: click_button_text
+set_password:
+  params:
+    label_text: Password
+    input_value: <password>
+  action: set_label_input_simple
+set_k8s_resource:
+  params:
+    label_text: K8s Resource Prefix
+    filter_text: <k8s_resource>
+  action: click_label_dropdown_button
+  action: set_strings_in_dropdown_filter_box
+  elements:
+  - selector:
+      xpath: //ul//a[@id='<k8s_resource>-Project-link' and contains(@class,'dropdown__menu-item')]
+    op: click
+set_pod_count:
+  params:
+    label_text: Pod Count
+    input_value: <pod_count>
+  action: set_label_input_simple
+increase_pod_count:
+  element:
+    selector:
+      xpath: //button[@aria-label='Increment']
+    op: click
+decrease_pod_count:
+  element:
+    selector:
+      xpath: //button[@aria-label='Decrement']
+    op: click
+toggle_boolean_switch:
+  params:
+    label_text: Boolean Switch
+  action: toggle_label_input
+toggle_checkbox:
+  element:
+    selector:
+      xpath: (//label[contains(.,'Checkbox')]/following::div[contains(@class,'pf-c-check')]//label[contains(@class,'pf-c-check__label')])[1]
+    op: click
+set_image_pull_policy:
+  params:
+    label_text: Image Pull Policy
+    radio_input_value: <image_pull_policy>
+  action: set_label_radio_input
+set_update_strategy:
+  elements:
+  - selector:
+      xpath: //div[@id='root_spec_updateStrategy_field']//input[@type='radio' and @value='<update_strategy>']
+    op: click
+set_simple_text:
+  params:
+    label_text: Text
+    input_value: <simple_text>
+  action: set_label_input_simple
+set_simple_number:
+  params:
+    label_text: Number
+    input_value: <simple_number>
+  action: set_label_input_simple
+set_field_group:
+  elements:
+  - selector:
+      xpath: //button[@id='root_spec_fieldGroup_accordion-toggle']
+    op: click
+  - selector: &field_group_item_one_input
+      xpath: //div[@id='root_spec_fieldGroup_itemOne_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *field_group_item_one_input
+    op: send_keys <field_group_value_one>
+  - selector: &field_group_item_two_input
+      xpath: //div[@id='root_spec_fieldGroup_itemTwo_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *field_group_item_two_input
+    op: send_keys <field_group_value_two>
+set_array_field_group:
+  elements:
+  - selector:
+      xpath: //button[@id='root_spec_arrayFieldGroup_accordion-toggle']
+    op: click
+  - selector:
+      xpath: //div[contains(@class,'co-dynamic-form__array-field-group-remove')]/button
+    op: click
+  - selector: &add_item_button
+      xpath: //button[@id='root_spec_arrayFieldGroup_add-btn']
+    op: click
+  - selector: &array_field_group_0_item_one_input
+      xpath: //div[@id='root_spec_arrayFieldGroup_0_itemOne_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *array_field_group_0_item_one_input
+    op: send_keys <array_field_group_value_one>
+  - selector: &array_field_group_0_item_two_input
+      xpath: //div[@id='root_spec_arrayFieldGroup_0_itemTwo_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *array_field_group_0_item_two_input
+    op: send_keys <array_field_group_value_two>
+  - selector:
+      <<: *add_item_button
+    op: click
+  - selector: &array_field_group_1_item_one_input
+      xpath: //div[@id='root_spec_arrayFieldGroup_1_itemOne_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *array_field_group_1_item_one_input
+    op: send_keys <additional_array_field_group_value_one>
+  - selector: &array_field_group_1_item_two_input
+      xpath: //div[@id='root_spec_arrayFieldGroup_1_itemTwo_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *array_field_group_1_item_two_input
+    op: send_keys <additional_array_field_group_value_two>
+set_advanced_configuration:
+  elements:
+  - selector:
+      xpath: //button[contains(@class,'pf-c-expandable-section__toggle')]
+    op: click
+  params:
+    label_text: Advanced
+    input_value: <advanced_text>
+  action: set_label_input_simple
+check_operand_des_during_creating_operand:
+  params:
+    tab_name: <operand_kind>
+  action: goto_csv_detail_page
+  action: click_tab
+  action: click_create_operand_button
+  action: check_complete_description
+  action: submit_changes
+create_catalog_source:
+  params:
+    button_text: Create CatalogSource
+    button_id: catalog-source-namespace
+    radio_text: 1
+  action: goto_catalog_source_page
+  action: click_button
+  action: input_catalog_source_name
+  action: input_display_name
+  action: input_publisher_name
+  action: input_image
+  action:
+    if_param: item
+    ref:
+    - click_radio_input
+    - select_resource_item
+  action: submit_changes
+subscribe_operator_to_namespace:
+  params:
+    project_name: <target_namespace>
+  action: goto_operator_subscription_page
+  action: select_target_namespace
+  action: click_subscribe_button
+check_operand_des_during_operator_subscription:
+  params:
+    project_name: <target_namespace>
+  action: goto_operator_subscription_page
+  action: select_target_namespace
+  action: check_truncated_description
+  action: click_subscribe_button
+input_catalog_source_name:
+  params:
+    input_field_id: catalog-source-name
+    input_value: <catalog_source_name>
+  action: set_input_value
+input_display_name:
+  params:
+    input_field_id: catalog-source-display-name
+    input_value: <display_name>
+  action: set_input_value
+input_publisher_name:
+  params:
+    input_field_id: catalog-source-publisher
+    input_value: <publisher_name>
+  action: set_input_value
+input_image:
+  params:
+    input_field_id: catalog-source-image
+    input_value: <image>
+  action: set_input_value
+clear_custom_resource_name_in_form:
+  element:
+    selector:
+      id: metadata.name
+    type: input
+  scripts:
+    - command: |
+        document.querySelector("input[id$='name']").value = '';
+        return document.querySelector("input[id$='name']").value == '';
+      expect_result: true
+check_error_message_for_missing_required_name:
+  params:
+    content: name or generateName is required
+  action: check_page_contains
+check_catalogsource_removed_message:
+  params:
+    content: CatalogSource removed
+  action: check_page_match
+check_quay_image_security_popup:
+  elements:
+  - selector:
+      xpath: //button[contains(.,'Image Vulnerabilities')]
+    op: click
+  - selector:
+      xpath: //div[contains(@class,'co-status-popup') and contains(.,'Impact') and contains(.,'Vulnerabilities')]
+  action: check_link_and_text
+check_affected_pods_tab:
+  params:
+    tab_name: Affected Pods
+  action: check_tab
+check_link_for_marketplace:
+  params:
+    text: Red Hat Marketplace
+    link_url: marketplace.redhat.com
+  action: check_link_and_text
+check_link_for_developer_catalog:
+  params:
+    text: Developer Catalog
+    link_url: catalog
+  action: check_link_and_text
+check_catalog_badge_by_checkbox:
+  action: click_checkbox_from_provider_type
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-badge') and text()='<text>']
+    timeout: 30
+  action: click_checkbox_from_provider_type
+check_marketplace_operator_description_on_overlay:
+  params:
+    text: Marketplace
+    description: This Operator is purchased through Red Hat Marketplace
+  action: click_checkbox_from_provider_type
+  action: open_first_card_in_overlay
+  action: check_operator_description_on_overlay
+  action: click_close_icon
+  action: click_checkbox_from_provider_type
+check_community_operator_description_on_overlay:
+  params:
+    text: Community
+    description: This is a community provided Operator
+  action: click_checkbox_from_provider_type
+  action: open_first_card_in_overlay
+  action: check_operator_description_on_overlay
+  action: click_close_icon
+  action: click_checkbox_from_provider_type
+check_operator_description_on_overlay:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'<text> Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'<description>')] ]
+    timeout: 30
+check_basic_install_capability:
+  params:
+    capability_name: Basic Install
+  action: check_ticked_capability_level
+check_seamless_upgrade_capability:
+  params:
+    capability_name: Seamless Upgrades
+  action: check_ticked_capability_level
+check_full_lifecycle_capability:
+  params:
+    capability_name: Full Lifecycle
+  action: check_ticked_capability_level
+check_deep_insights_capability:
+  params:
+    capability_name: Deep Insights
+  action: check_ticked_capability_level
+check_auto_pilot_capability:
+  params:
+    capability_name: Auto Pilot
+  action: check_ticked_capability_level
+check_ticked_capability_level:
+  elements:
+  - selector:
+      xpath: //li[contains(., '<capability_name>')]/*[name()='svg']
+click_checkbox_from_provider_type:
+  action:
+    if_element:
+      selector: &show_more_prodiver_button
+        xpath: //form[@data-test-group-name='catalogSourceDisplayName']//button[contains(.,'more')]
+    ref: show_all_provider_type
+  elements:
+  - selector:
+      xpath: //form[@data-test-group-name='catalogSourceDisplayName']//*[contains(@class, 'pf-c-check__label') and contains(text(), '<text>')]
+    op: click
+    timeout: 40
+show_all_provider_type:
+  element:
+    selector:
+      <<: *show_more_prodiver_button
+    op: click
+click_qe_customized_provider:
+  params:
+    text: OpenShift QE
+  action: click_checkbox_from_provider_type
+open_first_card_overlay_panel:
+  action:
+    if_element:
+      selector:
+        xpath: //button[@type='submit' and not(@disabled)]
+    ref: submit_changes
+  action: open_first_card_in_overlay
+click_checkbox_from_capability_level:
+  elements:
+  - selector:
+      xpath:  //form[@data-test-group-name='capabilityLevel']
+    timeout: 30
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
+    op: click
+click_continue_button:
+  params:
+    button_text: Continue
+  action: click_button_text
+open_first_card_in_overlay:
+  elements:
+  - selector:
+      xpath: (//a[contains(@class, 'pf-c-card')])[1]
+    op: click
+  action:
+    if_element:
+      selector:
+        xpath: //button[text()='Continue']
+    ref: click_continue_button
+uninstall_operator_on_console:
+  params:
+    button_text: Uninstall Operator
+  action: click_resource_action_icon
+  action: click_button
+  action: submit_changes
+uninstall_operator_and_remove_operands:
+  params:
+    button_text: Uninstall Operator
+    text: Delete all operand instances
+    content: Operand instances
+  action: click_resource_action_icon
+  action: click_button
+  action: check_page_match
+  action: click_checkbox_input_by_text
+  action: submit_changes
+wait_filter_section_loaded:
+  element:
+    selector:
+      xpath: //form[@data-test-group-name='<filter_type_value>']
+choose_one_checkbox:
+  element:
+    selector:
+      xpath: //input[contains(@class, 'pf-c-check__input') and contains(@title,'<checkbox_text>')]
+    op: click
+check_property_label_and_value:
+  element:
+    selector:
+      xpath: //h5[contains(@class,'property-label') and contains(text(),'<label>')]/../div[contains(@class,'property-value')]/div[contains(text(),'<value>')]
+check_property_label_missing:
+  element:
+    selector:
+      xpath: //h5[contains(@class,'property-label') and contains(text(),'<label>')]
+    missing: true
+check_validsubscription_property_missing:
+  params:
+    label: Valid Subscriptions
+  action: check_property_label_missing
+check_infrastructure_property_missing:
+  params:
+    label: Infrastructure features
+  action: check_property_label_missing
+check_disconnected_infra_value:
+  params:
+    label: Infrastructure features
+    value: Disconnected
+  action: check_property_label_and_value
+check_proxy_infra_value:
+  params:
+    label: Infrastructure features
+    value: Proxy-aware
+  action: check_property_label_and_value
+check_fips_infra_value:
+  params:
+    label: Infrastructure features
+    value: FIPS Mode
+  action: check_property_label_and_value
+check_singlenodecluster_infra_value:
+  params:
+    label: Infrastructure features
+    value: Single Node Clusters
+  action: check_property_label_and_value
+check_3scale_subs_value:
+  params:
+    label: Valid Subscriptions
+    value: 3Scale Commercial License
+  action: check_property_label_and_value
+check_integration_subs_value:
+  params:
+    label: Valid Subscriptions
+    value: Red Hat Managed Integration
+  action: check_property_label_and_value
+check_other_subs_value:
+  params:
+    label: Valid Subscriptions
+    value: OpenShift Container Platform
+  action: check_property_label_and_value
+click_checkbox_disconnected_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: Disconnected
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+click_checkbox_proxy_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: Proxy-aware
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+click_checkbox_fips_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: FIPS Mode
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+click_checkbox_singlenodecluster_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: Single Node Clusters
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+check_singlenodecluster_infra_value_in_operator_modal:
+  action: click_checkbox_singlenodecluster_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_singlenodecluster_infra_value
+  action: click_close_icon
+  action: click_checkbox_singlenodecluster_from_infrastructure_features
+check_disconnected_infra_value_in_operator_modal:
+  action: click_checkbox_disconnected_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_disconnected_infra_value
+  action: click_close_icon
+  action: click_checkbox_disconnected_from_infrastructure_features
+check_proxy_infra_value_in_operator_modal:
+  action: click_checkbox_proxy_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_proxy_infra_value
+  action: click_close_icon
+  action: click_checkbox_proxy_from_infrastructure_features
+check_fips_mode_infras_value_in_operator_modal:
+  action: click_checkbox_fips_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_fips_infra_value
+  action: click_close_icon
+  action: click_checkbox_fips_from_infrastructure_features
+filter_by_keyword_on_catalog_page:
+  elements:
+  - selector: &search_input
+      xpath: //div[@data-test='search-operatorhub']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *search_input
+    op: send_keys <keyword>
+open_operator_modal:
+  params:
+    keyword: <operator_name>
+  action: filter_by_keyword_on_catalog_page
+  action: open_first_card_in_overlay
+check_default_view_is_form_view:
+  params:
+    content: Some fields may not be represented in this form
+  action: check_page_contains
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='form' and @checked]
+open_edit_form_view:
+  params:
+    radio_text: form
+  action:
+    if_element:
+      selector:
+        xpath: //input[@data-checked-state='false' and @value='form']
+    ref: click_radio_input
+switch_to_yaml_view:
+  params:
+    radio_text: yaml
+  scripts:
+  - command: return document.querySelector("input[value=yaml]").scrollIntoView(false)
+    expect_result: ~
+  action: click_radio_input
+  action: wait_box_loaded
+  element:
+    selector:
+      xpath: //div[contains(@class,'monaco-editor')]
+    timeout: 40
+switch_to_form_view:
+  element:
+    selector:
+      id: form
+    op: click
+select_installed_namespace:
+  action: click_project_list_dropdown
+  action: choose_project_from_dropdown_list
+check_all_namespace_installation_mode_with_recommended_ns:
+  params:
+    button_text: <recommended_ns>
+  action: check_button_contains_text
+check_all_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: OwnNamespace
+    checked_radio_text: AllNamespaces
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_with_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: <recommended_ns>
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: OwnNamespace
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+enable_cluster_monitoring:
+  element:
+    selector:
+      xpath: //input[contains(@type,'checkbox') and contains(@id,'enable-monitoring-checkbox')]
+    op: click
+click_radio_to_pick_ns:
+  params:
+    text: Select
+  action: click_radio_input_by_text
+click_approve_button:
+  params:
+    button_text: Approve
+  action: click_button
+subscribe_operator_to_namespace_with_manually_approval:
+  params:
+    approval_strategy: Manual
+    project_name: <target_namespace>
+  action: goto_operator_subscription_page
+  action: select_target_namespace
+  action: choose_approval_strategy
+  action: click_subscribe_button
+review_and_approve:
+  elements:
+  - selector:
+      xpath: //span[contains(.,'requires approval')]
+    op: click
+  - selector:
+      xpath: //button[contains(.,'review')]
+    op: click
+  - selector:
+      xpath: //button[contains(.,'pprove')]
+    op: click
+manual_approve:
+  action: goto_one_project_subscription_page
+  action: review_and_approve
+check_manual_approve_info:
+  elements:
+  - selector:
+      xpath: //h2[contains(., 'Manual approval required')]
+    timeout: 50
+check_installation_failure_message:
+  action: goto_csv_detail_page
+  elements:
+  - selector:
+      xpath: //*[contains(text(), 'ailed')]
+    timeout: 30
+check_view_error_button: {}
+check_customized_operator_purchase_link:
+  params:
+    text: Purchase
+    link_url: https://test-remote-workflow/pricing
+  action: check_link_and_text
+check_phase_status:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
+      xpath: //td/span[contains(.,'Phase')]/span[contains(.,'<status>')]
+check_state_status:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
+      xpath: //span[contains(.,'State') and contains(.,'<status>')]
+check_condition_status:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
+      xpath: //span[contains(.,'Condition') and contains(.,'<status>')]
+    timeout: 20
+## project selector: one project
+check_column_header_for_one_namespace:
+  action: check_managed_namespace_column_header
+  action: check_namesapce_column_header_missing
+## project selector: all projects
+check_column_header_for_all_namespace:
+  action: check_managed_namespace_column_header
+  action: check_namesapce_column_header
+
+check_managed_namespace_column_header:
+  params:
+    column_name: Managed Namespaces
+  action: check_column_header
+check_namesapce_column_header:
+  params:
+    column_name: Namespace
+  action: check_column_header
+check_namesapce_column_header_missing:
+  params:
+    column_name: Namespace
+  action: check_column_header_missing
+## project selector: one project
+#check column: Managed Namespaces
+check_managed_namespace_column_installed_for_one_ns:
+  params:
+    col_index: 2
+  action: check_operator_column_one_namespace
+check_managed_namespace_column_installed_for_all_ns:
+  params:
+    col_index: 2
+  action: check_operator_column_all_namespace
+## project selector: all projects
+#check column: Namespace
+check_namespace_column_installed_for_one_ns_under_all_projects:
+  params:
+    col_index: 2
+  action: check_operator_column_one_namespace
+check_namespace_column_installed_for_all_ns_under_all_projects:
+  params:
+    col_index: 2
+    project_name: openshift-operators
+  action: check_operator_column_one_namespace
+#check column: Managed Namespaces
+check_managed_namespace_column_installed_for_one_ns_under_all_projects:
+  params:
+    col_index: 3
+  action: check_operator_column_one_namespace
+check_managed_namespace_column_installed_for_all_ns_under_all_projects:
+  params:
+    col_index: 3
+  action: check_operator_column_all_namespace
+
+check_operator_column_one_namespace:
+  elements:
+  - selector:
+      xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>]//a[contains(text(),'<project_name>') and @href='/k8s/cluster/namespaces/<project_name>']
+check_operator_column_all_namespace:
+  elements:
+  - selector:
+      xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>][contains(text(),'All Namespaces')]
+check_logging_operator_filtered_out:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'catalog-tile-pf-title') and contains(text(), 'Logging')]
+click_create_mockk8sdropdownresouce:
+  params:
+    button_text: Create MockK8sDropdownResource
+  action: click_button
+open_k8sresource_dropdown:
+  action:
+    if_element:
+      selector:
+        id: form
+    ref: switch_to_form_view
+  element:
+    selector:
+      id: root_spec_k8sResourcePrefix
+    type: button
+    op: click
+check_k8sresource_dropdown_items:
+  element:
+    selector:
+      xpath: //li//span[contains(@class,'co-resource-item__resource-name') and contains(text(),'<item>')]
+check_required_badge_on_operator_installation_page:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(text(),'Ditto')]/following::span[contains(text(),'Required')]
+check_required_badge_during_installation:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(text(),'Ditto')]/following::span[contains(text(),'Required')]
+check_create_operand_button_and_requied_badge_when_ready:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class,'co-clusterserviceversion-install__heading') and contains(.,'Installed operator') and contains(.,'operand required')]
+    timeout: 30
+  - selector: &create_operand_button
+      xpath: //button[contains(.,'Create Ditto') and not(disabled)]
+check_create_operand_button_and_requied_badge_on_csv_details:
+  elements:
+  - selector:
+      xpath: //h4[contains(@class,'pf-c-alert__title') and contains(.,'required')]
+  action: check_operand_button_link
+check_operand_button_link:
+  element:
+    selector:
+      xpath: //button[contains(.,'Create') and contains(.,'Ditto') and not(disabled)]/parent::a[contains(@href,'/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/ditto-operator.v0.2.0/iot.eclipse.org~v1alpha1~Ditto/~new')]
+click_create_ditto_button:
+  params:
+    operand_kind: Ditto
+  action: click_create_operand_button
+check_status_descriptor_grouping:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Namespace')]
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Labels')]
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Status')]
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Cluster Size')]
+check_spec_descriptor_grouping:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Size')]
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Pod')]
+click_field_resource_limits_edit_button:
+  elements:
+  - selector:
+      xpath: //dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[text()='Resource limits']/following::button[1]
+    op: click
+click_field_resource_requests_edit_button:
+  elements:
+  - selector:
+      xpath: //dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[text()='Resource requests']/following::button[1]
+    op: click
+set_cpu_cores_value:
+  params:
+    label_text: CPU cores
+    input_value: <cpu_cores_value>
+  action: set_label_input_simple
+set_memory_value:
+  params:
+    label_text: Memory
+    input_value: <memory_value>
+  action: set_label_input_simple
+set_storage_value:
+  params:
+    label_text: Storage
+    input_value: <storage_value>
+  action: set_label_input_simple
+set_field_resource_limits:
+  action: click_field_resource_limits_edit_button
+  action: set_cpu_cores_value
+  action: set_memory_value
+  action: set_storage_value
+  action: submit_changes
+set_field_resource_requests:
+  action: click_field_resource_requests_edit_button
+  action: set_cpu_cores_value
+  action: set_memory_value
+  action: set_storage_value
+  action: submit_changes
+set_pod_resource_limits:
+  params:
+    field_group_name: Pod
+  action: set_field_resource_limits
+set_pod_resource_requests:
+  params:
+    field_group_name: Pod
+  action: set_field_resource_requests
+check_resource_requirement_values:
+  elements:
+  - selector:
+      xpath: //button[contains(@class,'pf-m-inline') and contains(.,'CPU')]
+  scripts:
+  - command: |
+      var all_buttons = document.querySelectorAll('button[class*="pf-m-inline"]')
+      var contains = false
+      for (var i = 0; i < all_buttons.length; i++){
+        contains = contains || all_buttons[i].innerText.indexOf('CPU: <cpu_cores_value>, Memory: <memory_value>, Storage: <storage_value>') != -1 ? true : false
+      }
+      return contains
+    expect_result: true
+check_truncated_description:
+  params:
+    operand_kind: Application
+    operand_description: longlonglongveryveryverylong…
+  action: check_operand_description
+check_complete_description:
+  params:
+    operand_kind: Application
+    operand_description: veryverylongAn Application is a group of Kubernetes resources as defined by a manifest
+  action: check_operand_description
+check_operand_description:
+  element:
+    selector:
+      xpath: //span[text()='<operand_kind>']/ancestor::article//iframe | //h1[text()='<operand_kind>']/ancestor::div//iframe
+    timeout: 20
+  scripts:
+  - command: |
+      var all_operands_iframs = document.querySelectorAll('iframe')
+      var contains = false
+      for (var i = 0; i < all_operands_iframs.length; i++) {
+        contains = contains || all_operands_iframs[i].getAttribute('srcDoc').indexOf('<operand_description>') != -1 ? true : false
+      }
+      return contains
+    expect_result: true
+check_operator_subscription_details:
+  params:
+    tab_name: Subscription
+    name: <subscription_name>
+    catalogsource_name: <catalogsource_name>
+  action: click_tab
+  action: check_resource_name
+  action: check_catalogsource_name_and_icon
+  action: check_healthy_icon_and_text
+check_operator_hidden_on_operatorhub_page:
+  action: goto_operator_hub_page
+  action: click_checkbox_from_provider_type
+  action: filter_by_keyword
+  action: check_no_result_on_operatorhub_page
+check_no_result_on_operatorhub_page:
+  elements:
+  - selector:
+      xpath: //h2[contains(., 'No Results Match the Filter Criteria')]
+check_extension_help_block:
+  elements:
+  - selector:
+      xpath: //label[contains(.,'Console plugins')]/following::button[1][contains(@class,'help')]
+    op: click
+  - selector: &help_block1
+      xpath: //div[contains(.,'a custom interface')]
+  - selector:
+      xpath: //div[contains(.,'console plugin')]
+  action: click_close_icon
+check_plugins_are_disabled_bydefault:
+  elements:
+  - selector:
+      xpath: //input[@value='disabled' and @name='prometheus-plugin1' and @checked]
+  - selector:
+      xpath: //input[@value='disabled' and @name='prometheus-plugin2' and @checked]
+check_warning_for_enablement:
+  elements:
+  - selector:
+      xpath: //legend[text()='<plugin_name>']/following::input[@value='enabled'][1]
+    op: click
+  - selector:
+      <<: *help_block1
+  - selector:
+      xpath: //div[contains(.,'trust it before enabling')]
+check_extension_available_guide:
+  elements:
+  - selector:
+      xpath: //button[text()='Plugin available']
+    op: click
+  - selector:
+      xpath: //div[contains(.,'enable its console plugin in the operator detail')]
+  - selector:
+      xpath: //a[contains(.,'View operator details')]
+    op: click
+check_plugin_status_on_operator_details_page:
+  elements:
+  - selector:
+      xpath: //strong[contains(.,'<plugin_1_name>')]/parent::dd//button[text()='<plugin_1_status>']
+  - selector:
+      xpath: //strong[contains(.,'<plugin_2_name>')]/parent::dd//button[text()='<plugin_2_status>']
+enable_plugin:
+  params:
+    source_status: Disabled
+    target_status: enabled
+  action: toggle_plugin_status
+disable_plugin:
+  params:
+    source_status: Enabled
+    target_status: disabled
+  action: toggle_plugin_status
+enable_plugin_from_install_page:
+  elements:
+  - selector:
+      xpath: //input[@name='<plugin_name>' and @data-test='Enable-radio-input']
+    op: click
+uninstall_operator_and_check_pluginremoval_msg:
+  params:
+    check_msg: console plugins provided by this operator will be disabled and removed
+  action: uninstall_operator_with_msg_check
+uninstall_operator_and_check_operandremoval_msg:
+  params:
+    check_msg: Cannot load Operands
+  action: uninstall_operator_with_msg_check
+uninstall_operator_with_msg_check:
+  params:
+    button_text: Uninstall Operator
+    content: <check_msg>
+  action: click_resource_action_icon
+  action: click_button
+  action: check_page_match
+  action: submit_changes
+check_no_plugin_message_on_uninstall_modal:
+  params:
+    item: Remove Subscription
+    content: console plugins provided by this operator will be disabled and removed
+  action: click_one_dropdown_action
+  action: check_page_not_match
+toggle_plugin_status:
+  elements:
+  - selector:
+      xpath: //strong[contains(.,'<plugin_name>')]/parent::dd//button[text()='<source_status>']
+    op: click
+  params:
+    radio_text: <target_status>
+    button_text: Save
+  action: click_radio_input
+  action: click_button_text
