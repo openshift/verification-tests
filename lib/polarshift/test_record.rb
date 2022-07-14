@@ -199,7 +199,7 @@ module BushSlicer
         return scenario
       end
 
-      # @param event [Cucumber::Events::TestRunFinished]
+      # @param event [Cucumber::Events::TestCaseFinished]
       # @param attach [Array<String>] URLs to put in comment
       def finished!(event, attach: [])
         scenario = current_scenario_for(event)
