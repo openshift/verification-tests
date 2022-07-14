@@ -362,7 +362,7 @@ Given /^I delete the clusterlogging instance$/ do
     end
       step %Q/logging collector name is stored in the :collector_name clipboard/
     unless cluster_logging('instance').collection_spec(cached: true).nil?
-      step %Q/I wait for the resource "daemonset" named "#{cb.collector_name}" to disappear/
+      step %Q/admin ensures "#{cb.collector_name}" ds is deleted/
     end
   end
 end
