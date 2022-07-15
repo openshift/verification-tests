@@ -14,7 +14,7 @@ Feature: set deployment-hook/build-hook with CLI
   Scenario: OCP-11805:Workloads Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift/rails-ex/master/openshift/templates/rails-postgresql.json |
+      | template | rails-postgresql-example |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | deployment=rails-postgresql-example-1 |
