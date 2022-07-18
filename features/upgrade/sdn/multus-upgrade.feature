@@ -34,12 +34,6 @@
     Then the step should succeed
     And the pod named "multus-default-route-pod" becomes ready
 
-    # Check pod1 has correct macvlan mode on interface net1
-    When I execute on the pod:
-      | ip | -d | link |
-    Then the output should contain:
-      | net1                |
-      | macvlan mode bridge |
     # Check created pod has correct ip address on interface net1
     When I execute on the pod:
       | ip | a |
@@ -62,12 +56,6 @@
     When I use the "multus-upgrade" project
     Given a pod becomes ready with labels:
       | multus-default-route-pod |
-    # Check pod1 has correct macvlan mode on interface net1
-    When I execute on the pod:
-      | ip | -d | link |
-    Then the output should contain:
-      | net1                |
-      | macvlan mode bridge |
     # Check created pod has correct ip address on interface net1
     When I execute on the pod:
       | ip | a |
