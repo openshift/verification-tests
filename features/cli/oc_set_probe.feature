@@ -158,11 +158,13 @@ Feature: oc_set_probe.feature
   @heterogeneous @arm64 @amd64
   Scenario: OCP-31241:Workloads Set a probe to open a TCP socket test
     Given I have a project
-    When I run the :new_app client command with:
-      | image_stream | openshift/mysql:latest |
-      | env          | MYSQL_USER=user        |
-      | env          | MYSQL_PASSWORD=pass    |
-      | env          | MYSQL_DATABASE=db      |
+    When I run the :create_deployment client command with:
+      | name          | mysql                                 |
+      | image         | quay.io/openshifttest/mysql:multiarch |
+    Then the step should succeed
+    When I run the :set_env client command with:
+      | resource | deploy/mysql               |
+      | e        | MARIADB_ROOT_PASSWORD=pass |
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     When I run the :set_probe client command with:
@@ -176,10 +178,10 @@ Feature: oc_set_probe.feature
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     And a pod becomes ready with labels:
-      | deployment=mysql |
+      | app=mysql |
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | deployment=mysql |
+      | resource | pod       |
+      | l        | app=mysql |
     Then the output should match:
       | Readiness        |
       | tcp-socket :3306 |
@@ -203,8 +205,8 @@ Feature: oc_set_probe.feature
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | deployment=mysql |
+      | resource | pod       |
+      | l        | app=mysql |
     Then the output should match:
       | Readiness       |
       | tcp-socket :33  |
@@ -222,11 +224,13 @@ Feature: oc_set_probe.feature
   @heterogeneous @arm64 @amd64
   Scenario: OCP-31245:Workloads Set a probe over HTTPS/HTTP test
     Given I have a project
-    When I run the :new_app client command with:
-      | image_stream | openshift/mysql:latest |
-      | env          | MYSQL_USER=user        |
-      | env          | MYSQL_PASSWORD=pass    |
-      | env          | MYSQL_DATABASE=db      |
+    When I run the :create_deployment client command with:
+      | name          | mysql                                 |
+      | image         | quay.io/openshifttest/mysql:multiarch |
+    Then the step should succeed
+    When I run the :set_env client command with:
+      | resource | deploy/mysql               |
+      | e        | MARIADB_ROOT_PASSWORD=pass |
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     When I run the :set_probe client command with:
@@ -240,8 +244,8 @@ Feature: oc_set_probe.feature
     When I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | deployment=mysql |
+      | resource | pod       |
+      | l        | app=mysql |
     Then the output should contain:
       | Readiness                 |
       | http-get http://:8080/opt |
@@ -257,7 +261,7 @@ Feature: oc_set_probe.feature
     """
     When I run the :describe client command with:
       | resource | pod              |
-      | l        | deployment=mysql |
+      | l        | app=mysql |
     Then the output should contain:
       | Readiness                             |
       | http-get https://127.0.0.1:1936/stats |
@@ -275,11 +279,13 @@ Feature: oc_set_probe.feature
   @heterogeneous @arm64 @amd64
   Scenario: OCP-31246:Workloads Set an exec action probe test
     Given I have a project
-    When I run the :new_app client command with:
-      | image_stream | openshift/mysql:latest |
-      | env          | MYSQL_USER=user        |
-      | env          | MYSQL_PASSWORD=pass    |
-      | env          | MYSQL_DATABASE=db      |
+    When I run the :create_deployment client command with:
+      | name          | mysql                                 |
+      | image         | quay.io/openshifttest/mysql:multiarch |
+    Then the step should succeed
+    When I run the :set_env client command with:
+      | resource | deploy/mysql               |
+      | e        | MARIADB_ROOT_PASSWORD=pass |
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     When I run the :set_probe client command with:
@@ -290,10 +296,10 @@ Feature: oc_set_probe.feature
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     And a pod becomes ready with labels:
-      | deployment=mysql |
+      | app=mysql |
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | deployment=mysql |
+      | resource | pod       |
+      | l        | app=mysql |
     Then the output should contain:
       | Liveness |
       | true     |
@@ -305,10 +311,10 @@ Feature: oc_set_probe.feature
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     And a pod becomes ready with labels:
-      | deployment=mysql |
+      | app=mysql |
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | deployment=mysql |
+      | resource | pod       |
+      | l        | app=mysql |
     Then the output should contain:
       | Liveness     |
       | false        |
