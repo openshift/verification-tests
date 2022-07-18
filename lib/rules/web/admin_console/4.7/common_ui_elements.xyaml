@@ -1,7 +1,7 @@
 expand_primary_menu:
   elements:
   - selector:
-      xpath: //li[contains(@class, 'pf-m-expandable') and contains(@class,'pf-c-nav__item')]/*[contains(@class,'pf-c-nav__link') and contains(text(), '<primary_menu>')]
+      xpath: //button[text()='<primary_menu>' and @aria-expanded='false']
     op: click
 expand_monitoring_menu:
   params:
@@ -713,16 +713,25 @@ click_link_with_text_only:
       xpath: //a[contains(text(),'<text>')]
     op: click
 click_primary_menu:
-  elements:
-  - selector:
-      xpath: //*[@class='pf-c-nav__link' and text()='<primary_menu>']
-    op: click
+  action:
+    if_element:
+      selector:
+        xpath: //button[text()='<primary_menu>' and @aria-expanded='false']
+    ref: expand_primary_menu
+  element:
+    selector:
+      xpath: //button[text()='<primary_menu>' and @aria-expanded='true']
 click_secondary_menu:
   action: click_primary_menu
   elements:
   - selector: &secondary_menu
-      xpath: //li[contains(@class, 'pf-m-expandable')]/section[contains(@class,'pf-c-nav__subnav')]//a[contains(@class,'pf-c-nav__link') and text()='<secondary_menu>']
+      xpath: //a[text()='<secondary_menu>']
     op: click
+navigate_to_secondary_menu_deployments:
+  params:
+    primary_menu: Workloads
+    secondary_menu: Deployments
+  action: click_secondary_menu
 check_secondary_menu:
   element:
     selector: *secondary_menu

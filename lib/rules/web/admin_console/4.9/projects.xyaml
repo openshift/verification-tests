@@ -85,26 +85,37 @@ set_strings_in_project_dropdown_filter_box:
   - selector:
       <<: *dropdown_filter
     op: send_keys <project_name>
-switch_to_project:
+toggle_namespace_dropdown:
   params:
     dropdown_name: namespace-bar
   action: click_dropdown
-  element:
-    selector:
-      xpath: //span[contains(@class,'pf-c-switch__toggle')]
-    op: click
+switch_to_project:
+  action:
+    if_element:
+      selector: &namespace_dropdown_exist
+        xpath: //*[@data-test='namespace-dropdown-menu']
+      missing: true
+    ref: toggle_namespace_dropdown
+  action:
+    if_element:
+      selector: &system_projects_hidden
+        xpath: //input[@data-test='showSystemSwitch' and @data-checked-state='false']
+      visible: false
+    ref: toggle_system_projects
   action: set_strings_in_project_dropdown_filter_box
   element:
     selector:
       xpath: //span[text()='<project_name>']
     op: click
-  action: click_dropdown
-  elements:
-  - selector:
+  action:
+    if_element:
+      selector: &namespace_dropdown_exist
+        xpath: //*[@data-test='namespace-dropdown-menu']
+    ref: toggle_namespace_dropdown
+toggle_system_projects:
+  element:
+    selector:
       xpath: //span[contains(@class,'pf-c-switch__toggle')]
-    op: click
-  - selector:
-      xpath: //div[contains(@data-test-id, 'namespace-bar')]//button[contains(@class,'pf-c-menu-toggle')]
     op: click
 switch_to_all_projects:
   params:
