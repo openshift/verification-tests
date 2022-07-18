@@ -19,22 +19,20 @@
       | project_name | multus-upgrade |
     Then the step should succeed
     When I use the "multus-upgrade" project
-    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
-    When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
-      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                      |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/32"} }' |
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/ipam-static.yaml"
+    When I run oc create as admin over "ipam-static.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                      |
+      | ["metadata"]["name"]      | bridge-static                                                                                                                            |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "bridge", "ipam": {"type":"static","addresses": [{"address": "22.2.2.22/24","gateway": "22.2.2.1"}]}}' |
     Then the step should succeed
 
     # Create a pod absorbing above net-attach-def
-    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod_upgrade.yaml"
-    When I run oc create over "generic_multus_pod_upgrade.yaml" replacing paths:
-      | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"]                             | test-pod1                       |
-      | ["items"][0]["metadata"]["name"]                                                           | macvlan-bridge-whereabouts-pod1 |
-      | ["items"][0]["spec"]["template"]["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-whereabouts      |
-      | ["items"][0]["spec"]["template"]["spec"]["containers"][0]["name"]                          | macvlan-bridge-whereabouts      |
+    Given I obtain test data file "networking/multus-cni/Pods/multus-default-route-pod.yaml"
+    When I run the :create client command with:
+      | f | multus-default-route-pod.yaml |
+      | n | <%= project.name %>           |
     Then the step should succeed
-    Given a pod becomes ready with labels:
-      | name=test-pod1 |
+    And the pod named "multus-default-route-pod" becomes ready
 
     # Check pod1 has correct macvlan mode on interface net1
     When I execute on the pod:
@@ -46,7 +44,7 @@
     When I execute on the pod:
       | ip | a |
     Then the output should contain:
-      | 192.168.22.101 |
+      | 22.2.2.22 |
 
   # @author weliang@redhat.com
   # @case_id OCP-44898
@@ -63,7 +61,7 @@
     Given I switch to cluster admin pseudo user
     When I use the "multus-upgrade" project
     Given a pod becomes ready with labels:
-      | name=test-pod1 |
+      | multus-default-route-pod |
     # Check pod1 has correct macvlan mode on interface net1
     When I execute on the pod:
       | ip | -d | link |
@@ -74,7 +72,7 @@
     When I execute on the pod:
       | ip | a |
     Then the output should contain:
-      | 192.168.22.101 |
+      | 22.2.2.22 |
 
     # Delete the created project from testing cluster
     Given the "multus-upgrade" project is deleted
