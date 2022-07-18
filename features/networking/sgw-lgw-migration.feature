@@ -194,8 +194,10 @@ Feature: SGW<->LGW migration related scenarios
       | Hello OpenShift! |
       
     Given admin ensure "<%= cb.ovnkube_node_pod %>" pod is deleted from the "openshift-ovn-kubernetes" project
+    And I wait up to 120 seconds for the steps to pass:
+    """
     And OVN is functional on the cluster
-    Given I use the "<%= cb.masters[1].name %>" node
+    """
     When I run commands on the host:
       | curl --connect-timeout 5 [<%= cb.hostip %>]:<%= cb.port %> |
     Then the step should succeed
