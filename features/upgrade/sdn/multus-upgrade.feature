@@ -22,7 +22,7 @@
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
     When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                      |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/30"} }' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/32"} }' |
     Then the step should succeed
 
     # Create a pod absorbing above net-attach-def
