@@ -54,8 +54,7 @@
   Scenario: Check the multus works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "multus-upgrade" project
-    Given a pod becomes ready with labels:
-      | multus-default-route-pod |
+    Given the pod named "multus-default-route-pod" becomes ready
     # Check created pod has correct ip address on interface net1
     When I execute on the pod:
       | ip | a |
