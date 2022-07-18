@@ -17,15 +17,25 @@ module BushSlicer
         conf = YAML.load(str)
         uhash = conf["users"].first # minify should show us only current user
 
-        crt = uhash["user"]["client-certificate-data"]
-        key = uhash["user"]["client-key-data"]
-
-        return APIAccessor.new(
-          id: "admin",
-          client_cert: OpenSSL::X509::Certificate.new(Base64.decode64(crt)),
-          client_key: OpenSSL::PKey::RSA.new(Base64.decode64(key)),
-          env: env
-        )
+        if uhash.dig("user", "client-certificate-data") && uhash.dig("user", "client-key-data")
+          crt = uhash["user"]["client-certificate-data"]
+          key = uhash["user"]["client-key-data"]
+          return APIAccessor.new(
+            id: "admin",
+            client_cert: OpenSSL::X509::Certificate.new(Base64.decode64(crt)),
+            client_key: OpenSSL::PKey::RSA.new(Base64.decode64(key)),
+            env: env
+          )
+        elsif uhash.dig("user", "token")
+          token = uhash["user"]["token"]
+          return APIAccessor.new(
+            id: "admin",
+            token: token,
+            env: env
+          )
+        else
+          raise "Require auth info in kubeconfig, but can not find client-certificate-data/client-key-data or token, #{conf}"
+        end
     end
   end
 
