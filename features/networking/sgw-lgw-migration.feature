@@ -154,6 +154,8 @@ Feature: SGW<->LGW migration related scenarios
     Given a pod becomes ready with labels:
       | name=hello-pod |
     And evaluation of `pod.node_ip` is stored in the :hostip clipboard
+    And I store "<%= pod.node_name %>" node's corresponding default networkType pod name in the :ovnkube_node_pod clipboard
+
     When I obtain test data file "networking/nodeport_test_service.yaml"
     When I run oc create over "nodeport_test_service.yaml" replacing paths:
       | ["spec"]["ports"][0]["nodePort"]  | <%= cb.port %> |
@@ -183,7 +185,6 @@ Feature: SGW<->LGW migration related scenarios
       | Hello OpenShift! |
     When I run commands on the host:
       | curl --connect-timeout 5 [<%= cb.master0_ip %>]:<%= cb.port %> |
-    Then the step should fail
     And the output should not contain:
       | Hello OpenShift! |
     When I run commands on the host:
@@ -191,10 +192,31 @@ Feature: SGW<->LGW migration related scenarios
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift! |
+      
+    Given admin ensure "<%= cb.ovnkube_node_pod %>" pod is deleted from the "openshift-ovn-kubernetes" project
+    And OVN is functional on the cluster
+    Given I use the "<%= cb.masters[1].name %>" node
+    When I run commands on the host:
+      | curl --connect-timeout 5 [<%= cb.hostip %>]:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
+    When I run commands on the host:
+      | curl --connect-timeout 5 [<%= cb.master0_ip %>]:<%= cb.port %> |
+    And the output should not contain:
+      | Hello OpenShift! |
+    When I run commands on the host:
+      | curl --connect-timeout 5 [<%= cb.master1_ip %>]:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
+    Given I use the "<%= cb.proj1 %>" project
     Given I ensure "hello-pod" service is deleted
     When I run commands on the host:
       | curl --connect-timeout 5 [<%= cb.hostip %>]:<%= cb.port %> |
-    Then the step should fail
+    And the output should not contain:
+      | Hello OpenShift! |
+
 
   # @author weliang@redhat.com
   # @case_id OCP-48066
