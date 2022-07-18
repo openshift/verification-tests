@@ -119,11 +119,10 @@ module BushSlicer
         test_case_expected?(test_case)
       end
 
-      # @param test_case [Cucumber::Events::TestRunFinished]
+      # @param event [Cucumber::Events::TestCaseFinished]
       def test_case_execute_finish!(event, attach:)
         unless current_test_record
           puts "Bug in test case management - current test record is not set but we finished scenario '#{event.test_case.name}'"
-          #raise "Bug in test case management - current test record is not set but we finished scenario '#{event.test_case.name}'"
         end
         test_case_expected?(event.test_case)
         current_test_record.finished!(event, attach: attach)
