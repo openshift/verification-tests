@@ -759,6 +759,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-47087
   @4.12 @4.11 @4.10
   @admin
+  @destructive	
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @connected
