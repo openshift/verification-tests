@@ -21,7 +21,7 @@ Feature: Testing for pv and pvc pre-bind feature
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Then admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv2-<%= project.name %> |
-      | ["spec"]["claimRef"]["namespace"] | <%= project.name %>     |
+      | ["spec"]["claimRef"]["namespace"] | "<%= project.name %>"   |
       | ["spec"]["claimRef"]["name"]      | mypvc                   |
       | ["spec"]["storageClassName"]      | sc-<%= project.name %>  |
     And the "pv2-<%= project.name %>" PV status is :available
@@ -39,7 +39,7 @@ Feature: Testing for pv and pvc pre-bind feature
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv-<%= project.name %> |
-      | ["spec"]["claimRef"]["namespace"] | <%= project.name %>    |
+      | ["spec"]["claimRef"]["namespace"] | "<%= project.name %>"  |
       | ["spec"]["claimRef"]["name"]      | mypvc                  |
       | ["spec"]["storageClassName"]      | sc-<%= project.name %> |
     Then the step should succeed
@@ -169,7 +169,7 @@ Feature: Testing for pv and pvc pre-bind feature
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv-<%= project.name %> |
-      | ["spec"]["claimRef"]["namespace"] | <%= project.name %>    |
+      | ["spec"]["claimRef"]["namespace"] | "<%= project.name %>"  |
       | ["spec"]["claimRef"]["name"]      | mypvc2                 |
       | ["spec"]["storageClassName"]      | sc-<%= project.name %> |
     Given I obtain test data file "storage/nfs/claim-rwo.json"
@@ -192,7 +192,7 @@ Feature: Testing for pv and pvc pre-bind feature
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv-<%= project.name %> |
-      | ["spec"]["claimRef"]["namespace"] | <%= project.name %>    |
+      | ["spec"]["claimRef"]["namespace"] | "<%= project.name %>"  |
       | ["spec"]["claimRef"]["name"]      | <pre-bind-pvc>         |
       | ["spec"]["storageClassName"]      | sc-<%= project.name %> |
     Then the step should succeed
