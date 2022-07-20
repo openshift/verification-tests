@@ -22,6 +22,7 @@ Feature: kata related features
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-36509:Kata test delete kata installation
     Given I remove kata operator from the namespace
 
