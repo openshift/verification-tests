@@ -8,7 +8,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
   Scenario: OCP-10107:Storage Prebound pv is availabe due to requested pvc status is bound
-    Given I have a project
+    Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
       | ["metadata"]["name"]         | pv1-<%= project.name %> |
@@ -21,7 +21,7 @@ Feature: Testing for pv and pvc pre-bind feature
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Then admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv2-<%= project.name %> |
-      | ["spec"]["claimRef"]["namespace"] | "<%= project.name %>"   |
+      | ["spec"]["claimRef"]["namespace"] | <%= project.name %>     |
       | ["spec"]["claimRef"]["name"]      | mypvc                   |
       | ["spec"]["storageClassName"]      | sc-<%= project.name %>  |
     And the "pv2-<%= project.name %>" PV status is :available
@@ -35,11 +35,11 @@ Feature: Testing for pv and pvc pre-bind feature
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
   Scenario: OCP-10109:Storage Prebound pv is availabe due to mismatched accessmode with requested pvc
-    Given I have a project
+    Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv-<%= project.name %> |
-      | ["spec"]["claimRef"]["namespace"] | "<%= project.name %>"  |
+      | ["spec"]["claimRef"]["namespace"] | <%= project.name %>    |
       | ["spec"]["claimRef"]["name"]      | mypvc                  |
       | ["spec"]["storageClassName"]      | sc-<%= project.name %> |
     Then the step should succeed
@@ -165,11 +165,11 @@ Feature: Testing for pv and pvc pre-bind feature
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
   Scenario: OCP-9940:Storage PV and PVC bound successfully when pv created prebound to pvc
-    Given I have a project
+    Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv-<%= project.name %> |
-      | ["spec"]["claimRef"]["namespace"] | "<%= project.name %>"  |
+      | ["spec"]["claimRef"]["namespace"] | <%= project.name %>    |
       | ["spec"]["claimRef"]["name"]      | mypvc2                 |
       | ["spec"]["storageClassName"]      | sc-<%= project.name %> |
     Given I obtain test data file "storage/nfs/claim-rwo.json"
@@ -188,11 +188,11 @@ Feature: Testing for pv and pvc pre-bind feature
   @admin
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Prebound pv/pvc is availabe/pending due to requested pvc/pv prebound to other pv/pvc
-    Given I have a project
+    Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv-<%= project.name %> |
-      | ["spec"]["claimRef"]["namespace"] | "<%= project.name %>"  |
+      | ["spec"]["claimRef"]["namespace"] | <%= project.name %>    |
       | ["spec"]["claimRef"]["name"]      | <pre-bind-pvc>         |
       | ["spec"]["storageClassName"]      | sc-<%= project.name %> |
     Then the step should succeed
