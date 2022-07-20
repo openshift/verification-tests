@@ -89,30 +89,6 @@ Feature: stibuild.feature
     Then the step should succeed
     And the output should contain "error"
 
-  # @author wzheng@redhat.com
-  # @case_id OCP-22596
-  @proxy
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @singlenode
-  @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
-  Scenario: OCP-22596:ImageRegistry Create app with template eap73-basic-s2i with jbosseap rhel7 image
-    Given I have a project
-    When I run the :new_app client command with:
-      | template | eap73-basic-s2i |
-    Then the step should succeed
-    Given the "eap-app-build-artifacts-1" build was created
-    And the "eap-app-build-artifacts-1" build completed
-    Given 1 pod becomes ready with labels:
-      | openshift.io/build.name=eap-app-build-artifacts-1 |
-    Given the "eap-app-2" build was created
-    And the "eap-app-2" build completed
-    Given 1 pod becomes ready with labels:
-      | application=eap-app |
-
   # @author xiuwang@redhat.com
   # @case_id OCP-28891
   @noproxy @disconnected
