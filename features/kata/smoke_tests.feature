@@ -11,6 +11,7 @@ Feature: kata smoke tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-41263:Kata Namespace installed by operator
     Given kata container has been installed successfully
     Then the expression should be true> project.name == 'openshift-sandboxed-containers-operator'
