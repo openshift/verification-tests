@@ -51,7 +51,7 @@ module BushSlicer
         return false
       elsif result[:response] =~ /connection to the server \S+ was refused - did you specify the right host or port/ && env.nodes.length == 1
         logger.info(result[:response])
-        return false
+        return true
       else
         # e.g. when called by user without rights to list Resource
         raise "error getting #{self.class.name} '#{name}' existence: #{result[:response]}"
