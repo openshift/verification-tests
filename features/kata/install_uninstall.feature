@@ -26,7 +26,7 @@ Feature: kata related features
   Scenario: OCP-36509:Kata test delete kata installation
     Given I remove kata operator from the namespace
 
-
+  @inactive
   Scenario: test install kata-webhook
     Given I have a project
     And evaluation of `project.name` is stored in the :test_project_name clipboard
@@ -45,6 +45,7 @@ Feature: kata related features
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-39344:Kata Operator can be installed through web console
     Given the kata-operator is installed using OLM GUI
 
@@ -59,6 +60,7 @@ Feature: kata related features
 
   # @author pruan@redhat.com
   # @case_id OCP-41813
+  @inactive
   @admin
   @destructive
   @upgrade-sanity
