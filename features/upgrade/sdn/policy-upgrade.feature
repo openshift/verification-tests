@@ -545,7 +545,7 @@ Feature: SDN compoment upgrade testing
       | configmap_file  | config-map.yaml               |
       | deployment_file | rsyslogserver_deployment.yaml |
       | pod_label       | component=rsyslogserver       |
-    And evaluation of `service("rsyslogserver").ip` is stored in the :svc_ip clipboard
+    And evaluation of `service("rsyslogserver").ip_url` is stored in the :svc_ip clipboard
     And evaluation of `pod(0).name` is stored in the :rsyslog_server_pod clipboard
     Then the step should succeed
 
@@ -653,7 +653,7 @@ Feature: SDN compoment upgrade testing
     Given I wait for the "rsyslogserver" service to become ready
     Given a pod becomes ready with labels:
       | appname=rsyslogserver |
-    And evaluation of `service("rsyslogserver").ip` is stored in the :svc_ip clipboard
+    And evaluation of `service("rsyslogserver").ip_url` is stored in the :svc_ip clipboard
     And evaluation of `pod(0).name` is stored in the :rsyslog_server_pod clipboard
     Then the step should succeed
 
