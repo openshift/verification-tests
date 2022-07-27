@@ -6,7 +6,7 @@ Please follow this step by step guide to create a new Prow job to run cucushift 
 
 ## Create a Test Run Query
 
-1. Go to OSE project in Polarion, select `Workitems`, in the search box create your test run query matching your test profile. When constructing the test run query, select only `Critical`,`High` and `Medium` automated test cases.
+1. Go to OSE project in Polarion, select `Workitems`, in the search box create your test run query matching your test profile.
 2. Upon completion of the query, click the `Convert Query to Text`. See the example of *query_aws-ipi.json*.
 3. Copy your query and create a `doc/prow/query_$tag.json`, add a PR in this repo and ask qe-productivity for review.
 
