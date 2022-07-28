@@ -139,7 +139,7 @@ check_triggered_by_popover_info:
   action: check_page_contains
 check_update_strategy_popover_info:
   params:
-    content: the name of a deployment strategy
+    content: strategy
     popover_item: Update strategy
   action: wait_resource_summary_loaded
   action: click_open_popover
