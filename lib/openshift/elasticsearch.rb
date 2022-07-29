@@ -92,7 +92,7 @@ module BushSlicer
     end
 
     def cluster_status(user: nil, quiet: false, cached: false)
-      return status(user: nil, quiet: false, cached: false).dig('cluster') unless status.nil?
+      return status(user: user, quiet: quiet, cached: cached).dig('cluster') unless status.nil?
     end
 
     def cluster_health(user: nil, cached: false, quiet: false)
