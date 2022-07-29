@@ -291,6 +291,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-27686:Storage Cinder CSI Clone Clone a pvc with different storage class is failed
     # Create mypvc-ori with sc1
     Given I have a project
