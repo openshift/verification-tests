@@ -88,11 +88,11 @@ module BushSlicer
     end
 
     def status(user: nil, quiet: true, cached: false)
-      return raw_resource(user: user, cached: cached, quiet: quiet).dig('status')
+      return raw_resource(user: user, cached: cached, quiet: quiet).dig('status') unless raw_resource.nil?
     end
 
     def cluster_status(user: nil, quiet: false, cached: false)
-      return status.dig('cluster')
+      return status(user: nil, quiet: false, cached: false).dig('cluster') unless status.nil?
     end
 
     def cluster_health(user: nil, cached: false, quiet: false)
@@ -129,67 +129,67 @@ module BushSlicer
     end
 
     def nodes_status(user: nil, cached: false, quiet: true)
-      return status(user: user, cached: cached, quiet: quiet).dig('nodes')
+      return status(user: user, cached: cached, quiet: quiet).dig('nodes') unless status.nil?
     end
 
     def nodes_conditions(user: nil, cached: false, quiet: true)
-      return nodes_status(user: user, cached: cached, quiet: quiet).first['conditions']
+      return nodes_status(user: user, cached: cached, quiet: quiet).first['conditions'] unless nodes_status.nil?
     end
 
     def cluster_conditions(user: nil, cached: false, quiet: true)
-      return status(user: user, cached: cached, quiet: quiet).dig('conditions')
+      return status(user: user, cached: cached, quiet: quiet).dig('conditions') unless status.nil?
     end
 
     def es_pods(user: nil, cached: false, quiet: true)
-      return status(user: user, cached: cached, quiet: quiet).dig('pods')
+      return status(user: user, cached: cached, quiet: quiet).dig('pods') unless status.nil?
     end
 
     def es_master_pods(user: nil, cached: false, quiet: true)
-      return es_pods(user: user, cached: cached, quiet: quiet)['master']
+      return es_pods(user: user, cached: cached, quiet: quiet)['master'] unless es_pods.nil?
     end
 
     def es_master_ready_pod_names(user: nil, cached: false, quiet: true)
-      return es_master_pods(user: user, cached: cached, quiet: quiet)['ready']
+      return es_master_pods(user: user, cached: cached, quiet: quiet)['ready'] unless es_master_pods.nil?
     end
 
     def es_master_not_ready_pod_names(user: nil, cached: false, quiet: true)
-      return es_master_pods(user: user, cached: cached, quiet: quiet)['notReady']
+      return es_master_pods(user: user, cached: cached, quiet: quiet)['notReady'] unless es_master_pods.nil?
     end
 
     def es_master_failed_pod_names(user: nil, cached: false, quiet: true)
-      return es_master_pods(user: user, cached: cached, quiet: quiet)['failed']
+      return es_master_pods(user: user, cached: cached, quiet: quiet)['failed'] unless es_master_pods.nil?
     end
 
     def es_client_pods(user: nil, cached: false, quiet: true)
-      return es_pods(user: user, cached: cached, quiet: quiet)['client']
+      return es_pods(user: user, cached: cached, quiet: quiet)['client'] unless es_pods.nil?
     end
 
     def es_client_ready_pod_names(user: nil, cached: false, quiet: true)
-      return es_client_pods(user: user, cached: cached, quiet: quiet)['ready']
+      return es_client_pods(user: user, cached: cached, quiet: quiet)['ready'] unless es_client_pods.nil?
     end
 
     def es_client_not_ready_pod_names(user: nil, cached: false, quiet: true)
-      return es_client_pods(user: user, cached: cached, quiet: quiet)['notReady']
+      return es_client_pods(user: user, cached: cached, quiet: quiet)['notReady'] unless es_client_pods.nil?
     end
 
     def es_client_failed_pod_names(user: nil, cached: false, quiet: true)
-      return es_client_pods(user: user, cached: cached, quiet: quiet)['failed']
+      return es_client_pods(user: user, cached: cached, quiet: quiet)['failed'] unless es_client_pods.nil?
     end
 
     def es_data_pods(user: nil, cached: false, quiet: true)
-      return es_pods(user: user, cached: cached, quiet: quiet)['data']
+      return es_pods(user: user, cached: cached, quiet: quiet)['data'] unless es_pods.nil?
     end
 
     def es_data_ready_pod_names(user: nil, cached: false, quiet: true)
-      return es_data_pods(user: user, cached: cached, quiet: quiet)['ready']
+      return es_data_pods(user: user, cached: cached, quiet: quiet)['ready'] unless es_data_pods.nil?
     end
 
     def es_data_not_ready_pod_names(user: nil, cached: false, quiet: true)
-      return es_data_pods(user: user, cached: cached, quiet: quiet)['notReady']
+      return es_data_pods(user: user, cached: cached, quiet: quiet)['notReady'] unless es_data_pods.nil?
     end
 
     def es_data_failed_pod_names(user: nil, cached: false, quiet: true)
-      return es_data_pods(user: user, cached: cached, quiet: quiet)['failed']
+      return es_data_pods(user: user, cached: cached, quiet: quiet)['failed'] unless es_data_pods.nil?
     end
 
   end
