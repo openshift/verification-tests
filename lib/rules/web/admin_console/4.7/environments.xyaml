@@ -7,6 +7,19 @@ check_env_editor_loaded:
     selector:
       css: .pairs-list__row
     timeout: 30
+check_env_editor_disabled:
+  elements:
+  - selector:
+      xpath: //input[@data-test='pairs-list-name' and @disabled]
+  action:
+    if_element:
+      selector:
+        xpath: //h3[contains(.,'envFrom')]
+    ref: check_env_from_editor_disabled
+check_env_from_editor_disabled:
+  element:
+    selector:
+      xpath: //input[@placeholder='ConfigMap/Secret' and @disabled]
 add_env_vars:
   action: add_env_var_name
   action:
@@ -85,12 +98,6 @@ remove_env_vars:
   - selector: *env_var_delete_icon
     type: js
     op: click
-check_env_editor_disabled:
-  elements:
-  - selector:
-      xpath: //div[contains(@class,'pairs-list__name-field')]/input[@disabled]
-  - selector:
-      xpath: //div[contains(@class,'pairs-list__value-field')]/input[@disabled]
 check_link_to_parent_resource:
   element:
     selector:
@@ -102,3 +109,9 @@ check_info_and_link_to_parent_resource:
   action: check_alert_title
   action: check_alert_description
   action: check_link_to_parent_resource
+check_env_value_pair:
+  elements:
+  - selector:
+      xpath: //input[contains(@value,'<value_from>')]
+  - selector:
+      xpath: //input[contains(@value, '<key>')]
