@@ -196,6 +196,10 @@ click_machine_configs_tab:
   params:
     tab_name: MachineConfigs
   action: click_tab
+click_pods_tab:
+  params:
+    tab_name: Pods
+  action: click_tab
 check_edit_yaml_enabled:
   params:
     button_text: Save

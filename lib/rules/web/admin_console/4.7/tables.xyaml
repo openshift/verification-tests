@@ -239,6 +239,27 @@ reset_default_columns:
   action: click_table_column_management_tooltip
   action: click_reset_default_columns_button
   action: submit_changes
+show_namespace_column_on_node_pods_page:
+  params:
+    line_index: 1
+  action: goto_node_page
+  action: wait_box_loaded
+  action: click_item_in_resource_list
+  action: click_pods_tab
+  action: click_table_column_management_tooltip
+  action: click_reset_default_columns_button
+  action: submit_changes
+  elements:
+  - selector:
+      xpath: //thead//th[.='Namespace']
+hide_namespace_column_on_node_pods_page:
+  action: click_table_column_management_tooltip
+  action: unselect_namespace_column
+  action: submit_changes
+  elements:
+  - selector:
+      xpath: //thead//th[.='Namespace']
+    missing: true
 check_table_column_heading:
   element:
     selector:
