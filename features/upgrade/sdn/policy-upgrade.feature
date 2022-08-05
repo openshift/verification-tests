@@ -494,7 +494,7 @@ Feature: SDN compoment upgrade testing
     And I execute on the pod:
       | bash | -c | conntrack -L \| grep "<%= cb.host_pod1.ip %>" |
     Then the step should succeed
-    And the output should contain:
+    And the output should match:
       |<%= cb.host_pod1.ip %>|
     """
     #Deleting the udp listener pod which will trigger a new udp listener pod with new IP
@@ -516,8 +516,8 @@ Feature: SDN compoment upgrade testing
     """
     When I execute on the "<%= cb.network_pod %>" pod:
       | bash | -c | conntrack -L \| grep "<%= cb.host_pod2.ip %>" |
-    Then the output should contain "<%= cb.host_pod2.ip %>"
-    And the output should not contain "<%= cb.host_pod1.ip %>"
+    Then the output should match "<%= cb.host_pod2.ip %>"
+    And the output should not match "<%= cb.host_pod1.ip %>"
     """
 
   # @author asood@redhat.com
