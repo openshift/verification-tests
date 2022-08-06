@@ -100,7 +100,11 @@ Then /^(the|all)? outputs?( by order)? should( not)? (contain|match)(?: (\d+) ti
         else
           found = o.include? p
         end
-        raise "pattern#{negative ? "" : " not"} found: #{p}" unless found ^ negative
+          unless found ^ negative
+            ecode = 'E001'
+            logger.error("#{ecode}: #{@error_codes[ecode]}")
+            raise "pattern#{negative ? "" : " not"} found: #{p}"
+          end
       end
     end
   end

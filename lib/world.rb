@@ -15,7 +15,7 @@ module BushSlicer
       # we want to keep a reference to current World in the manager
       # hopefully cucumber does not instantiate us too early
       manager.world = self
-
+      @error_codes = YAML.load(open(File.expand_path(HOME + "/lib/error_codes/errors_lookup_table.yaml")))
       @clipboard = OpenStruct.new
       @browsers = []
       @bg_processes = []
