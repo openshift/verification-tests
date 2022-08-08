@@ -163,6 +163,7 @@ Feature: creating 'apps' with CLI
   @singlenode
   @proxy @noproxy @connected
   @arm64 @amd64
+  @inactive
   Scenario: OCP-22515:Authentication 4.x Could not create any context in non-existent project
     Given I create a new application with:
       | docker image | openshift/ruby-20-centos7~https://github.com/openshift/ruby-hello-world |

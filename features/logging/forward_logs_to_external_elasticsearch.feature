@@ -91,7 +91,7 @@ Feature: Cases to test forward logs to external elasticsearch
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
-    @heterogeneous
+    @arm64 @amd64 @heterogeneous
     Examples:
       | case_id           | scheme | client_auth | file                 |
       | OCP-29845:Logging | https  | true        | clf-with-secret.yaml | # @case_id OCP-29845
@@ -199,6 +199,11 @@ Feature: Cases to test forward logs to external elasticsearch
     And the expression should be true> JSON.parse(@result[:stdout])['count'] > 0
     """
 
+    @heterogeneous @arm64 @amd64
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @proxy @noproxy @disconnected @connected
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | case_id           | version | scheme | client_auth | username | password | secret_name |
       | OCP-41807:Logging | 7.16    | https  | true        | test1    | redhat   | test1       | # @case_id OCP-41807

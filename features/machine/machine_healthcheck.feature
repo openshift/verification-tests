@@ -168,6 +168,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: OCP-28718:ClusterInfrastructure Machine Node startup timeout should be configurable
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -236,6 +237,7 @@ Feature: MachineHealthCheck Test Scenarios
   @admin
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: OCP-29857:ClusterInfrastructure MaxUnhealthy should not allow malformed values
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -308,6 +310,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: OCP-33714:ClusterInfrastructure Leverage OpenAPI validation within MHC
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
@@ -329,6 +332,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: OCP-34095:ClusterInfrastructure timeout field without units(h,m,s) shoud not be allowed to be stored
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

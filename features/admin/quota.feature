@@ -38,6 +38,7 @@ Feature: Quota related scenarios
     @proxy @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
       | case_id        | path     | file                           | pod_name                  | expr1             | expr2                                |
       | OCP-11754:Node | ocp11754 | pod-request-limit-valid-3.yaml | pod-request-limit-valid-3 | cpu\\s+100m\\s+30 | memory\\s+(134217728\|128Mi)\\s+16Gi | # @case_id OCP-11754

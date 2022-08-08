@@ -161,6 +161,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: OCP-27627:ClusterInfrastructure Verify all machine instance-state should be consistent with their providerStats.instanceState
     Given I have an IPI deployment
     And evaluation of `BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
@@ -314,6 +315,8 @@ Feature: Machine features testing
 
     @gcp-ipi
     @heterogeneous @arm64 @amd64
+    @proxy @noproxy @disconnected @connected
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | case_id                         | iaas_type | machineset_name        |
       | OCP-32126:ClusterInfrastructure | gcp       | machineset-clone-32126 | # @case_id OCP-32126
@@ -498,6 +501,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: OCP-33455:ClusterInfrastructure Run machine api Controllers using leader election
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -527,6 +531,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: OCP-34718:ClusterInfrastructure Node labels and Affinity definition in PV should match
     Given I have a project
 
@@ -620,6 +625,7 @@ Feature: Machine features testing
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @azure-ipi
   Scenario: OCP-36489:ClusterInfrastructure Machineset should not be created when publicIP:true in disconnected Azure enviroment
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -643,6 +649,8 @@ Feature: Machine features testing
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-47658:ClusterInfrastructure Operator cloud-controller-manager should not show empty version
     Given I switch to cluster admin pseudo user
     Then evaluation of `cluster_operator('cloud-controller-manager').versions` is stored in the :versions clipboard

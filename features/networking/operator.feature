@@ -29,6 +29,8 @@ Feature: Operator related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-22706:SDN The clusteroperator should be able to reflect the correct version field post bad network operator config
 
     Given the master version >= "4.1"

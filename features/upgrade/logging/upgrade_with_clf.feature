@@ -7,8 +7,10 @@ Feature: Upgrade Logging with ClusterLogForwarder
   @users=upuser1,upuser2
   @stage-only
   @singlenode
-  @connected
-  @4.6
+  @4.7 @4.6
+  @gcp-ipi
+  @gcp-upi
+  @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @connected
   Scenario: Upgrade clusterlogging with mulitple external log store enabled - prepare
     Given the master version >= "4.6"
@@ -111,7 +113,10 @@ Feature: Upgrade Logging with ClusterLogForwarder
   @stage-only
   @singlenode
   @proxy @noproxy @connected
-  @4.6
+  @4.7 @4.6
+  @gcp-ipi
+  @gcp-upi
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: Upgrade clusterlogging with mulitple external log store enabled
     Given the master version >= "4.6"
     #check data

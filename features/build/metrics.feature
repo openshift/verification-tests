@@ -163,6 +163,8 @@ Feature: Builds and samples related metrics test
   @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @inactive
+  @openstack-ipi @baremetal-ipi
+  @openstack-upi @baremetal-upi
   Scenario: OCP-33770:BuildAPI Adding metric for registry v1 protocol imports
     Given I have a project
     #Importing a image with regsitry v1 api

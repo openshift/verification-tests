@@ -827,6 +827,7 @@ Feature: deployment related features
   # @author yinzhou@redhat.com
   # @case_id OCP-11326
   @smoke
+  @inactive
   Scenario: OCP-11326:Workloads Support verbs of Deployment in OpenShift
     Given I have a project
     Given I obtain test data file "deployment/extensions/deployment.yaml"

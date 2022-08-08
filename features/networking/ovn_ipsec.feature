@@ -199,8 +199,12 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @admin
   @destructive
   @inactive
-  @network-ovnkubernetes @ipsec
-  @4.12
+  @network-ovnkubernetes @network-openshiftsdn @ipsec
+  @4.12 @4.11
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @proxy @noproxy @disconnected @connected
+  @singlenode
   Scenario: OCP-40569:SDN Allow enablement/disablement ipsec at runtime
     Given the env is using "OVNKubernetes" networkType
     Given I store all worker nodes to the :workers clipboard

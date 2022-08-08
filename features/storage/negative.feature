@@ -16,6 +16,8 @@ Feature: negative testing
     @singlenode
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
+    @gcp-ipi
+    @gcp-upi
     Examples:
       | case_id           | dir | file               | error                        |
       | OCP-10310:Storage | gce | pv-retain-rwx.json | error querying GCE PD volume | # @case_id OCP-10310

@@ -171,6 +171,8 @@ Feature: Machine misc features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi
+  @vsphere-upi
   Scenario: OCP-37180:ClusterInfrastructure Report vCenter version to telemetry
     Given I switch to cluster admin pseudo user
     When I perform the GET prometheus rest client with:
