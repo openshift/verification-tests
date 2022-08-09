@@ -8,6 +8,8 @@ Feature: rhel8images.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @inactive
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-22950:BuildAPI Using new-app cmd to create app with ruby rhel8 image
     Given I have a project
     When I run the :tag admin command with:

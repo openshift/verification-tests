@@ -153,7 +153,10 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @arm64 @amd64 @heterogeneous
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario Outline: Spot/preemptible instances should not block upgrade - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -200,6 +203,9 @@ Feature: Machine-api components upgrade tests
   @admin
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @arm64 @amd64 @heterogeneous
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario Outline: Spot/preemptible instances should not block upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -227,7 +233,6 @@ Feature: Machine-api components upgrade tests
       | OCP-41175:ClusterInfrastructure | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
 
     @gcp-ipi
-    @heterogeneous
     Examples:
       | case_id                         | iaas_type | machineset_name        | value               |
       | OCP-41803:ClusterInfrastructure | gcp       | machineset-clone-41803 | "preemptible": true | # @case_id OCP-41803

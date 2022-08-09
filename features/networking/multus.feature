@@ -664,6 +664,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-21949
   @admin
+  @inactive
   Scenario: OCP-21949:SDN The multus admission controller should be able to detect the issue in the pod template
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1822,6 +1823,8 @@ Feature: Multus-CNI related scenarios
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-46116:SDN BZ1897431 CIDR support for additional network attachment with the bridge CNI plug-in
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard

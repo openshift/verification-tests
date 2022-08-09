@@ -430,7 +430,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @4.12
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario: OCP-25294:SDN Pod should be accesible via node ip and host port
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard

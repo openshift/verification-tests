@@ -135,6 +135,8 @@ Feature: Multus-CNI ipv6 related scenarios
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-44941:SDN Whereabouts IPv6 should be calculated if first hextet of IPv6 has leading zeros	
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1919048
   # Make sure that the multus is enabled

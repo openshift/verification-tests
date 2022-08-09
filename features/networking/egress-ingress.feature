@@ -9,7 +9,7 @@ Feature: Egress-ingress related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
-  @network-openshiftsdn @network-networkpolicy @network-multitenant
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
   Scenario: OCP-11639:SDN EgressNetworkPolicy will not take effect after delete it
     Given I have a project
@@ -733,6 +733,8 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn	
   @singlenode
   @proxy @noproxy @disconnected @connected
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-44940:SDN bug2000057 No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted
     Given the env is using "OVNKubernetes" networkType
     And I have a project

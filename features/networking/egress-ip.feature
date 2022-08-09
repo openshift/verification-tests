@@ -344,6 +344,8 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-15998:SDN Invalid egressIP should not be acceptable
     Given I select a random node's host
     Given evaluation of `["fe80::5054:ff:fedd:3698", "a.b.c.d", "10.10.10.-1", "10.0.0.1/64", "10.1.1/24", "A008696"]` is stored in the :ips clipboard
@@ -958,10 +960,13 @@ Feature: Egress IP related features
   # @case_id OCP-46637
   @admin
   @destructive
-  @4.12 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
+  @heterogeneous @arm64 @amd64
+  @network-openshiftsdn
+  @noproxy
   Scenario: OCP-46637:SDN Bug2024880 EgressIP should work when configuring networkpolicy
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :workers clipboard

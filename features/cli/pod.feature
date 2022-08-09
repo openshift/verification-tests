@@ -113,6 +113,8 @@ Feature: pods related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-11753:Workloads Pod should be immediately deleted if it's not scheduled even if graceful termination period is set
     Given I have a project
     Given I obtain test data file "pods/graceful-delete/10.json"

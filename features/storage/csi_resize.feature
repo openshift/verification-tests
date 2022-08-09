@@ -94,6 +94,8 @@ Feature: CSI Resizing related feature
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
+    @aws-ipi
+    @aws-upi
     Examples:
       | case_id           | sc_name |
       | OCP-25809:Storage | gp2-csi | # @case_id OCP-25809

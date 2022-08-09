@@ -208,6 +208,8 @@ Feature: OVN related networking scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-32184:SDN ovnkube-masters should allocate pod IP and mac addresses
     Given the env is using "OVNKubernetes" networkType
     And I have a project

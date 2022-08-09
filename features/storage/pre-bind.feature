@@ -7,6 +7,8 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-10107:Storage Prebound pv is availabe due to requested pvc status is bound
     Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -34,6 +36,8 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-10109:Storage Prebound pv is availabe due to mismatched accessmode with requested pvc
     Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
@@ -60,6 +64,8 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-10111:Storage Prebound pvc is pending due to requested pv status is bound
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -86,6 +92,8 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-10113:Storage Prebound PVC is pending due to mismatched accessmode with requested PV
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -111,6 +119,8 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-10114:Storage Prebound PVC is pending due to mismatched volume size with requested PV
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -136,6 +146,8 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-9941:Storage PV and PVC bound successfully when pvc created prebound to pv
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -164,6 +176,8 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OCP-9940:Storage PV and PVC bound successfully when pv created prebound to pvc
     Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
@@ -207,6 +221,8 @@ Feature: Testing for pv and pvc pre-bind feature
     @singlenode
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
       | case_id           | pre-bind-pvc | pre-bind-pv                |
       | OCP-10108:Storage | nfsc         | nfspv1-<%= project.name %> | # @case_id OCP-10108

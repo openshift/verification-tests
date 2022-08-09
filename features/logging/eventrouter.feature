@@ -5,7 +5,7 @@ Feature: eventrouter related test
   # @author qitang@redhat.com
   @admin
   @destructive
-  @4.6
+  @4.12 @4.11 @4.10 @4.6
   Scenario Outline: The Openshift Events be parsed
     Given I switch to the first user
     Given I create a project with non-leading digit name
