@@ -109,6 +109,7 @@ Feature: Testing imagestream
     When I run the :new_app_as_dc client command with:
       | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
+    And I wait for the "ruby-27:multiarch" image_stream_tag to appear
     And the "ruby-ex-1" build was created
     And the "ruby-ex-1" build completes
     When I run the :patch client command with:
@@ -172,6 +173,7 @@ Feature: Testing imagestream
     When I run the :new_app client command with:
       | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
+    And I wait for the "ruby-27:multiarch" image_stream_tag to appear
     And the "ruby-ex-1" build was created
     And the "ruby-ex-1" build completes
     And the "ruby-ex:latest" image stream tag was created
