@@ -52,6 +52,7 @@ Feature: SDN related networking scenarios
     # we do not detect incomplete rule removal since ~4.3, BZ-1810316
     # so only test on >= 4.3
     Given the master version >= "4.3"
+    Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host
     And the node iptables config is checked
     And the step succeeded
@@ -91,6 +92,7 @@ Feature: SDN related networking scenarios
   @heterogeneous @arm64 @amd64
   Scenario: OCP-13847:SDN an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
     Given the master version >= "3.6"
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
     Then evaluation of `pod.node_name` is stored in the :node_name clipboard
@@ -518,6 +520,7 @@ Feature: SDN related networking scenarios
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   Scenario: OCP-41132:SDN UDP offloads were disabled on vsphere platform
+    Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host
     Given the default interface on nodes is stored in the :default_interface clipboard
     And I run commands on the host:

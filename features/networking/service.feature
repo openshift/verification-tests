@@ -508,6 +508,7 @@ Feature: Service related networking scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   Scenario: OCP-24694:SDN Taint node with too small MTU value
+    Given the env is using "OpenShiftSDN" networkType
     Given the default interface on nodes is stored in the :default_interface clipboard
     And the node's MTU value is stored in the :mtu_actual clipboard
     And the node's active nmcli connection is stored in the :nmcli_active_con_uuid clipboard
@@ -765,6 +766,7 @@ Feature: Service related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   Scenario: OCP-47087:SDN Other node cannot be accessed for nodePort when externalTrafficPolicy is Local
+    Given the env is using "OVNKubernetes" networkType
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
     And the Internal IP of node "<%= cb.masters[1].name %>" is stored in the :master1_ip clipboard

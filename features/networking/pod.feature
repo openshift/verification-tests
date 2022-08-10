@@ -11,6 +11,7 @@ Feature: Pod related networking scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   Scenario: OCP-9747:SDN Pod cannot claim UDP port 4789 on the node as part of a port mapping
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     Given I obtain test data file "networking/pod_with_udp_port_4789.json"
@@ -36,6 +37,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   Scenario: OCP-10031:SDN Container could reach the dns server
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     Given I obtain test data file "pods/ocp10031/pod.json"
     When I run the :create client command with:
@@ -60,6 +62,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   Scenario: OCP-14986:SDN The openflow list will be cleaned after delete the pods
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
     Then evaluation of `pod.node_name` is stored in the :node_name clipboard
@@ -95,6 +98,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   Scenario: OCP-10817:SDN Check QoS after creating pod
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     # setup iperf server to receive the traffic
     Given I obtain test data file "networking/egress-ingress/qos/iperf-server.json"
@@ -602,6 +606,7 @@ Feature: Pod related networking scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   Scenario: OCP-22034:SDN Check the unused ip are released after node reboot
+    Given the env is using "OpenShiftSDN" networkType
     Given I store the workers in the :workers clipboard
     Given I use the "<%= cb.workers[0].name %>" node
     And I run commands on the host:
@@ -621,6 +626,7 @@ Feature: Pod related networking scenarios
   @admin
   @destructive
   Scenario: OCP-41666:SDN Pod stuck in container creating - failed to run CNI IPAM ADD: failed to allocate for range 0: no IP addresses available in range set
+    Given the env is using "OpenShiftSDN" networkType
     Given I switch to cluster admin pseudo user
     When I run the :label admin command with:
       | resource  | machineconfigpool         |
