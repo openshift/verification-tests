@@ -1590,3 +1590,12 @@ Given /^the egressfirewall policy is applied to the "(.+?)" namespace$/ do | pro
   end
   logger.info "The egressfirewall type is applied."
 end
+
+Given /^the cluster is dual stack network type$/ do
+  ensure_admin_tagged
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.serviceNetwork}")
+  unless @result[:response].count(":") >= 2 && @result[:response].count(".") >= 2  
+    logger.warn "the cluster is not dual stack cluster, will skip this scenario"
+    skip_this_scenario
+  end
+end
