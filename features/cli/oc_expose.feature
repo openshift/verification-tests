@@ -10,6 +10,7 @@ Feature: oc_expose.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @aro @osd_ccs
   Scenario: OCP-10873:APIServer Access app througth secure service and regenerate service serving certs if it about to expire
     Given the master version >= "3.3"
     Given I have a project
