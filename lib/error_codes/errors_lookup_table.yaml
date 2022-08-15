@@ -1,3 +1,4 @@
 ---
-E001: 'Pattern not found'
-E002: 'Pod not ready'
+E0001: 'Pattern not found'
+E0002: 'Pod not ready'
+E0003: 'Error getting bearer token'

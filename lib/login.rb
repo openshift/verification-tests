@@ -41,9 +41,12 @@ module BushSlicer
                                       login_url: login_url,
                                       proxy: env.client_proxy)
       end
-
+      require 'pry'
+      binding.pry
       unless res[:success]
         msg = "Error getting bearer token, see log"
+        err_code = "E0003"
+        Http.logger.error("#{err_code}: #{@error_codes[err_code]}")
         if res[:error]
           raise res[:error] rescue raise msg rescue e=$!
         else
