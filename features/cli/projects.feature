@@ -11,6 +11,7 @@ Feature: projects related features via cli
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @aro @osd_ccs
   Scenario: OCP-11887:APIServer Could delete all resources when delete the project
     Given a 5 characters random string of type :dns is stored into the :prj_name clipboard
     When I run the :new_project client command with:
@@ -83,6 +84,7 @@ Feature: projects related features via cli
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @rosa @aro @osd_ccs
   Scenario: OCP-12193:APIServer User can get node selector from a project
     Given  an 8 character random string of type :dns is stored into the :oadmproj1 clipboard
     Given  an 8 character random string of type :dns is stored into the :oadmproj2 clipboard
