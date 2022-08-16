@@ -34,6 +34,7 @@ Feature: Pod related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @admin
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   Scenario: OCP-10031:SDN Container could reach the dns server
