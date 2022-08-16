@@ -11,6 +11,7 @@ Feature: Testing haproxy router
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-11903:NetworkEdge haproxy cookies based sticky session for unsecure routes
     #create route and service which has two endpoints
     Given I have a project
@@ -74,6 +75,7 @@ Feature: Testing haproxy router
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-11130:NetworkEdge haproxy cookies based sticky session for edge termination routes
     #create route and service which has two endpoints
     Given I have a project
@@ -142,6 +144,7 @@ Feature: Testing haproxy router
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-11619:NetworkEdge Limit the number of TCP connection per IP in specified time period
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -291,6 +294,7 @@ Feature: Testing haproxy router
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-10043:NetworkEdge Set balance leastconn for passthrough routes
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -345,6 +349,7 @@ Feature: Testing haproxy router
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-11679:NetworkEdge Disable haproxy hash based sticky session for unsecure routes
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -394,6 +399,7 @@ Feature: Testing haproxy router
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-15872:NetworkEdge can set cookie name for unsecure routes by annotation
     #create route and service which has two endpoints
     Given the master version >= "3.7"
@@ -445,6 +451,7 @@ Feature: Testing haproxy router
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-15873:NetworkEdge can set cookie name for edge routes by annotation
     #create route and service which has two endpoints
     Given the master version >= "3.7"
