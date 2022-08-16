@@ -366,6 +366,7 @@ Feature: Egress-ingress related networking scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   Scenario: OCP-19615:SDN Iptables should be updated with correct endpoints when egress DNS policy was used
+    Given the env is using "OpenShiftSDN" networkType	
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
     When I run oc create over "list_for_pods.json" replacing paths:
@@ -421,6 +422,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   Scenario: OCP-33530:SDN EgressFirewall allows traffic to destination ports
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -462,6 +464,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   Scenario: OCP-33531:SDN EgressFirewall rules take effect in order
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -487,6 +490,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   Scenario: OCP-33539:SDN EgressFirewall policy should not take effect for traffic between pods and pods to service
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     # Create EgressFirewall policy to deny all outbound traffic
     When I obtain test data file "networking/ovn-egressfirewall/limit_policy.json"
@@ -526,6 +530,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   Scenario: OCP-33565:SDN EgressFirewall policy take effect for multiple port
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -557,6 +562,7 @@ Feature: Egress-ingress related networking scenarios
   @network-openshiftsdn @network-networkpolicy
   @heterogeneous @arm64 @amd64
   Scenario: OCP-35341:SDN EgressNetworkPolicy maxItems is 1000
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     Given I obtain test data file "networking/egressnetworkpolicy/egressnetworkpolicy_1000.yaml"
     When I run the :create admin command with:
@@ -585,6 +591,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   Scenario: OCP-37491:SDN EgressFirewall allows traffic to destination dnsName
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -621,6 +628,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   Scenario: OCP-37495:SDN EgressFirewall denys traffic to destination dnsName
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
 
     When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy4.yaml"
@@ -657,6 +665,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   Scenario: OCP-37496:SDN Edit EgressFirewall should take effect
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -695,6 +704,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   Scenario: OCP-41179:SDN bug1947917 Egress Firewall should reliably apply firewall rules
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
