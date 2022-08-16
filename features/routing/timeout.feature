@@ -10,6 +10,7 @@ Feature: Testing timeout route
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-11635:NetworkEdge Set timeout server for passthough route
     Given I have a project
     Given I obtain test data file "routing/routetimeout/httpbin-pod-2.json"
