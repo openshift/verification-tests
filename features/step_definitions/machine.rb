@@ -53,6 +53,11 @@ Given(/^I store the last provisioned machine in the#{OPT_SYM} clipboard$/) do | 
   cb[cb_name] = machines.max_by(&:created_at).name
 end
 
+Given(/^I store the last machine name in the#{OPT_SYM} clipboard$/) do | cb_name |
+  machine = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))[0].name
+  cb[cb_name] = machine
+end
+
 Given(/^I wait for the node of machine_machine_openshift_io(?: named "(.+)")? to appear/) do | machine_name |
   machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machines
