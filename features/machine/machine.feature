@@ -640,11 +640,8 @@ Feature: Machine features testing
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["publicIP"]                         | true                                        |
     
     And admin ensures "disconnected-azure-36489" machine_set_machine_openshift_io is deleted after scenario
-    Then I store the last machine name in the :machine_latest clipboard 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    Then the expression should be true> machine_machine_openshift_io(cb.machine_latest).phase(cached: false) == "Failed"
-    """
+    Then I store the last provisioned machine in the :machine_latest clipboard 
+    
     When I run the :describe admin command with:
       | resource | machines.machine.openshift.io |
       | name     | <%= cb.machine_latest %>      |
