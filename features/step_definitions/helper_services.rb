@@ -500,9 +500,9 @@ end
 Given /^I have a iSCSI setup in the environment$/ do
   ensure_admin_tagged
 
-  _project = project("iscsi-target", switch: false)
+  _project = project("openshift-iscsi-target", switch: false)
   if !_project.exists?(user:admin, quiet: true)
-    @result = admin.cli_exec(:create_namespace, name: 'iscsi-target')
+    @result = admin.cli_exec(:create_namespace, name: 'openshift-iscsi-target')
     raise 'failed to "iscsi-target" project' unless @result[:success]
   end
 
