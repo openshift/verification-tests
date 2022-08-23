@@ -5,7 +5,6 @@ Feature: Descheduler major upgrade should work fine
   @upgrade-prepare
   @users=upuser1,upuser2
   @destructive
-  @flaky
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -47,7 +46,6 @@ Feature: Descheduler major upgrade should work fine
   @upgrade-check
   @users=upuser1,upuser2
   @destructive
-  @flaky
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -61,16 +59,8 @@ Feature: Descheduler major upgrade should work fine
     Given I store master major version in the clipboard
     Given a pod becomes ready with labels:
       | app=descheduler |
-    Given cluster-kube-descheduler-operator channel name is stored in the :kdo_channel clipboard
-    When I run the :patch client command with:
-      | resource      | subscription                                                                   |
-      | resource_name | cluster-kube-descheduler-operator                                              |
-      | p             | [{"op": "replace", "path": "/spec/channel", "value": "<%= cb.kdo_channel %>"}] |
-      | type          | json                                                                           |
-      | n             | openshift-kube-descheduler-operator                                            |
-    Then the step should succeed
+    Given I make sure the descheduler operator gets updated successfully if needed
     And I use the "openshift-kube-descheduler-operator" project
-    Given I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And status becomes :running of exactly 1 pods labeled:
       | name=descheduler-operator |
     And status becomes :running of exactly 1 pods labeled:
