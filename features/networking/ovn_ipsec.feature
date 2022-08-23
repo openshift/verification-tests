@@ -198,9 +198,8 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-40569
   @admin
   @destructive
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes
   @4.12 @4.11
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
   @singlenode
