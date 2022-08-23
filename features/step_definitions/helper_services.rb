@@ -500,10 +500,14 @@ end
 Given /^I have a iSCSI setup in the environment$/ do
   ensure_admin_tagged
 
-  _project = project("openshift-iscsi-target", switch: false)
+  _project = project("iscsi-target", switch: false)
   if !_project.exists?(user:admin, quiet: true)
-    @result = admin.cli_exec(:create_namespace, name: 'openshift-iscsi-target')
-    raise 'failed to "iscsi-target" project' unless @result[:success]
+    @result = admin.cli_exec(:create_namespace, name: 'iscsi-target')
+    raise 'failed to create "iscsi-target" project' unless @result[:success]
+    @result = admin.cli_exec(:label, resource: 'ns/iscsi-target', key_val: 'security.openshift.io/scc.podSecurityLabelSync=false', overwrite: 'true')
+    raise 'failed to add label "security.openshift.io/scc.podSecurityLabelSync=false" to "iscsi-target" namespace' unless @result[:success]
+    @result = admin.cli_exec(:label, resource: 'ns/iscsi-target', key_val: 'pod-security.kubernetes.io/enforce=privileged', overwrite: 'true')
+    raise 'failed to add label "pod-security.kubernetes.io/enforce=privileged" to "iscsi-target" namespace' unless @result[:success]
   end
 
   _pod = cb.iscsi_pod = pod("iscsi-target", _project)
