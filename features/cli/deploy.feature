@@ -9,6 +9,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-12543:Workloads Restart a failed deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -47,6 +48,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-10643:Workloads Manually make deployment
     Given I have a project
     Given I obtain test data file "deployment/manual.json"
@@ -92,6 +94,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-11695:Workloads CLI rollback output to file
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -198,6 +201,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-11877:Workloads CLI rollback with one component
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -248,6 +252,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-12133:Workloads Can't stop a deployment in Failed status
     Given I have a project
     Given I obtain test data file "deployment/test-stop-failed-deployment.json"
@@ -289,6 +294,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-12246:Workloads Stop a "Running" deployment
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -320,6 +326,7 @@ Feature: deployment related features
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-10648:Workloads Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -469,6 +476,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-9566:Workloads Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
@@ -648,6 +656,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-11769:Workloads Start new deployment when deployment running
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -775,6 +784,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   Scenario: OCP-11221:Workloads Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
