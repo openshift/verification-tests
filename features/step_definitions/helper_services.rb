@@ -161,6 +161,17 @@ Given /^I have LDAP service in my project$/ do
     # So take the second one since this one can be implemented currently
     ###
     stats = {}
+    if env.version_ge("4.12", user: user)
+      step %Q/I run the :label admin command with:/, table(%{
+        | resource  | namespace/<%= project.name %>                        |
+        | overwrite | true                                                 |
+        | key_val   | security.openshift.io/scc.podSecurityLabelSync=false |
+        | key_val   | pod-security.kubernetes.io/enforce=privileged        |
+        | key_val   | pod-security.kubernetes.io/audit=privileged          |
+        | key_val   | pod-security.kubernetes.io/warn=privileged           |
+        })
+      step %Q/the step should succeed/
+    end
     step 'I obtain test data file "pods/ldapserver.yaml"'
     step %Q/I run the :create admin command with:/, table(%{
       | f | ldapserver.yaml      |
