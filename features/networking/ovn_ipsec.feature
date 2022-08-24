@@ -210,9 +210,9 @@ Feature: OVNKubernetes IPsec related networking scenarios
     # Enable ipsec through CNO
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"ipsecConfig":{}}}}} |
+    Given I select a random node's host
     Given I wait up to 60 seconds for the steps to pass:
     """
-    Given I select a random node's host
     And I run commands on the host:
       | ip x s \| grep -i "mode transport" |
     Then the step should succeed
@@ -223,7 +223,6 @@ Feature: OVNKubernetes IPsec related networking scenarios
       | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"ipsecConfig":null}}}} |
     Given I wait up to 90 seconds for the steps to pass:
     """
-    Given I select a random node's host
     And I run commands on the host:
       | ip x s \| grep -i "mode transport" |
     Then the step should fail
