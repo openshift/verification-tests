@@ -60,14 +60,14 @@ Feature: stibuild.feature
   Scenario: OCP-30858:BuildAPI STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/ruby-27:multiarch   |
+      | docker_image | quay.io/openshifttest/ruby-27:1.2.0   |
       | app_repo     | https://github.com/sclorg/ruby-ex   |
     Then the step should succeed
     And the "ruby-ex-1" build completes
     When I run the :patch client command with:
       | resource      | buildconfig                                                                                                                                      |
       | resource_name | ruby-ex                                                                                                                                          |
-      | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "quay.io/openshifttest/ruby-27@sha256:cdb6a13032184468b1e0607f36cfb8834c97dbeffeeff800e9e6834323bed8fc"}}},"type": "Source"}} |
+      | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "quay.io/openshifttest/ruby-27@sha256:8f71dd40e3f55d90662a63cb9f02b59e75ed7ac1e911c7919fd14fbfad431348"}}},"type": "Source"}} |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-ex |

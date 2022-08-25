@@ -28,7 +28,7 @@ Feature: buildconfig.feature
   Scenario: OCP-10667:BuildAPI Rebuild image when the underlying image changed for Docker build
     Given I have a project
     When I run the :new_build client command with:
-      | D    | FROM quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22\nRUN echo "hello" |
+      | D    | FROM quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c\nRUN echo "hello" |
       | to   | centos  |
       | name | mybuild |
     Then the step should succeed

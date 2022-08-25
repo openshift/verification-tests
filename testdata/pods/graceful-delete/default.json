@@ -12,7 +12,7 @@
     "containers": [
       {
         "name": "sleep",
-        "image": "quay.io/openshifttest/hello-openshift@sha256:0ed6e7163863e52438a5ed189d82e572a6c2ddd1b4db224c2c4b0688fee2c2cc",
+        "image": "quay.io/openshifttest/hello-openshift@sha256:f79669a4290b8917fc6f93eb1d2508a9517f36d8887e38745250db2ef4b0bc40",
         "ports": [
           {
             "containerPort": 8080,

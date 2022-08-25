@@ -43,8 +43,8 @@ Feature: registry related test scenario
     And I add the insecure registry to docker config on the node
     And I log into auth registry on the node
     When I docker push on the node to the registry the following images:
-      | quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22     | busybox:latest |
-      | quay.io/openshifttest/ruby-27@sha256:cdb6a13032184468b1e0607f36cfb8834c97dbeffeeff800e9e6834323bed8fc | test/centos7   |
+      | quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c     | busybox:latest |
+      | quay.io/openshifttest/ruby-27@sha256:8f71dd40e3f55d90662a63cb9f02b59e75ed7ac1e911c7919fd14fbfad431348 | test/centos7   |
     Then the step should succeed
 
   @admin
@@ -56,7 +56,7 @@ Feature: registry related test scenario
     And I add the insecure registry to docker config on the node
     And I log into auth registry on the node
     When I docker push on the node to the registry the following images:
-      | quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22 | busybox:latest |
+      | quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c | busybox:latest |
     Then the step should succeed
 
   @admin
@@ -67,8 +67,8 @@ Feature: registry related test scenario
     And I have a registry with htpasswd authentication enabled in my project
     And I add the insecure registry to docker config on the node
     When I docker push on the node to the registry the following images:
-      | quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22     | busybox:latest |
-      | quay.io/openshifttest/ruby-27@sha256:cdb6a13032184468b1e0607f36cfb8834c97dbeffeeff800e9e6834323bed8fc | test/centos7   |
+      | quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c     | busybox:latest |
+      | quay.io/openshifttest/ruby-27@sha256:8f71dd40e3f55d90662a63cb9f02b59e75ed7ac1e911c7919fd14fbfad431348 | test/centos7   |
     Then the step should fail
 
   Scenario: Obtain registry ip by creating a build in the project

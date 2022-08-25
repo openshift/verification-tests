@@ -18,7 +18,7 @@ spec:
             - start
             - master
             - --config=/config/master-config.yaml
-          image: "quay.io/openshifttest/base-alpine:multiarch"
+          image: "quay.io/openshifttest/base-alpine:1.2.0"
           name: origin
           ports:
             - containerPort: 8443

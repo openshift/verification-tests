@@ -22,7 +22,7 @@
             "spec": {
                 "containers": [
                     {
-                        "image": "quay.io/openshifttest/mcast-pod@sha256:7cccaa51ca2da1dba019ca2817674d0f35762e6dd099187184ff73e01f8764e4",
+                        "image": "quay.io/openshifttest/mcast-pod@sha256:aa2a8fdcfeddb09097e6a7201cfdb062db8d92d523cbcf758ef7d3545a1f5776",
                         "name": "iperf",
                         "imagePullPolicy": "IfNotPresent",
                         "resources":{

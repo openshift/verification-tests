@@ -18,7 +18,7 @@ Feature: projects related features via cli
       | project_name | <%= cb.prj_name %> |
     Then the step should succeed
     When I create a new application with:
-      | docker image | quay.io/openshifttest/mysql:multiarch         |
+      | docker image | quay.io/openshifttest/mysql:1.2.0         |
       | code         | https://github.com/openshift/ruby-hello-world |
     ### get project resource
     When I run the :get client command with:

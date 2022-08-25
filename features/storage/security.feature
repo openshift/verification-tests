@@ -26,7 +26,7 @@ Feature: storage security check
     When I run oc create over "privileged-test.json" replacing paths:
       | ["metadata"]["name"]                                        | mypod                                                                                                 |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt                                                                                                  |
-      | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623 |
+      | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | ["spec"]["securityContext"]["seLinuxOptions"]["level"]      | s0:c13,c2                                                                                             |
       | ["spec"]["securityContext"]["fsGroup"]                      | 24680                                                                                                 |
       | ["spec"]["securityContext"]["runAsUser"]                    | 1000160000                                                                                            |
@@ -70,7 +70,7 @@ Feature: storage security check
     Given I obtain test data file "storage/security/privileged-test.json"
     When I run oc create over "privileged-test.json" replacing paths:
       | ["metadata"]["name"]                                        | mypod2                                                                                                |
-      | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623 |
+      | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt                                                                                                  |
       | ["spec"]["securityContext"]["seLinuxOptions"]["level"]      | s0:c13,c2                                                                                             |
       | ["spec"]["securityContext"]["fsGroup"]                      | 24680                                                                                                 |

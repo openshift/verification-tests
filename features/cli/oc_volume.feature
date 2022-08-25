@@ -23,7 +23,7 @@ Feature: oc_volume.feature
       | sa_name     | default     |
     Then the step should succeed
     When I run the :new_app_as_dc client command with:
-      | docker_image | quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623 |
+      | docker_image | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | name         | mydc                                                                                                  |
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -63,7 +63,7 @@ Feature: oc_volume.feature
   Scenario: OCP-11906:Storage Add secret volume to dc and rc
     Given I have a project
     When I run the :new_app_as_dc client command with:
-      | docker_image | quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623 |
+      | docker_image | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | name         | mydc                                                                                                  |
     Then the step should succeed
     When I run the :create_secret client command with:

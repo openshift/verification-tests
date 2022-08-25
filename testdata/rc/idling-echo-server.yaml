@@ -20,7 +20,7 @@ items:
           deploymentconfig: idling-echo
       spec:
         containers:
-        - image: quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22
+        - image: quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c
           name: idling-tcp-echo
           command:
             - /usr/bin/socat
@@ -29,7 +29,7 @@ items:
           ports:
           - containerPort: 8675
             protocol: TCP
-        - image: quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22
+        - image: quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c
           name: idling-udp-echo
           command:
             - /usr/bin/socat

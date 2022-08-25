@@ -12,7 +12,7 @@
     "containers": [
       {
         "name": "aws",
-        "image": "quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623",
+        "image": "quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339",
         "ports": [
           {
             "containerPort": 8080,

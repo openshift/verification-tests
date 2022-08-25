@@ -23,7 +23,7 @@ Feature: Testing registry
     Then the step should succeed
 
     When I run the :import_image client command with:
-      | from       | quay.io/openshifttest/base-alpine:multiarch |
+      | from       | quay.io/openshifttest/base-alpine:1.2.0 |
       | confirm    | true                                        |
       | image_name | mystream                                    |
     Then the step should succeed

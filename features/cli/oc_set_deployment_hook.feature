@@ -14,7 +14,7 @@ Feature: set deployment-hook/build-hook with CLI
   Scenario: OCP-11805:Workloads Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :create_deploymentconfig client command with:
-      | image | quay.io/openshifttest/hello-openshift:multiarch |
+      | image | quay.io/openshifttest/hello-openshift:1.2.0 |
       | name  | hello-openshift                                 |
     Then the step should succeed
     Given a pod becomes ready with labels:

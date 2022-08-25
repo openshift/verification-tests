@@ -15,7 +15,7 @@ Feature: Testing imagestream
     And master CA is added to the "skopeo" dc
     When I run the :tag client command with:
       | source_type | docker                                      |
-      | source      | quay.io/openshifttest/base-alpine:multiarch |
+      | source      | quay.io/openshifttest/base-alpine:1.2.0 |
       | dest        | myis13895:latest                            |
     Then the step should succeed
     When I run the :policy_add_role_to_user client command with:
@@ -107,7 +107,7 @@ Feature: Testing imagestream
     Given default image registry route is stored in the :registry_hostname clipboard
     Given certification for default image registry is stored to the :reg_crt_name clipboard
     When I run the :new_app_as_dc client command with:
-      | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/sclorg/ruby-ex.git |
+      | app_repo | quay.io/openshifttest/ruby-27:1.2.0~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     And I wait for the "ruby-27:multiarch" image_stream_tag to appear
     And the "ruby-ex-1" build was created
@@ -158,7 +158,7 @@ Feature: Testing imagestream
     Given certification for default image registry is stored to the :reg_crt_name clipboard
 
     When I run the :new_app client command with:
-      | app_repo | quay.io/openshifttest/ruby-27@sha256:cdb6a13032184468b1e0607f36cfb8834c97dbeffeeff800e9e6834323bed8fc~https://github.com/sclorg/ruby-ex.git |
+      | app_repo | quay.io/openshifttest/ruby-27@sha256:8f71dd40e3f55d90662a63cb9f02b59e75ed7ac1e911c7919fd14fbfad431348~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     Given the "ruby-27" image stream was created 
     Given the "ruby-27" image stream becomes ready 
@@ -171,7 +171,7 @@ Feature: Testing imagestream
 
     Given I create a new project
     When I run the :new_app client command with:
-      | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/sclorg/ruby-ex.git |
+      | app_repo | quay.io/openshifttest/ruby-27:1.2.0~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     And I wait for the "ruby-27:multiarch" image_stream_tag to appear
     And the "ruby-ex-1" build was created

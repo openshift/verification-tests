@@ -9,7 +9,7 @@ items:
   spec:
     containers:
       - name: nfs-server
-        image: quay.io/openshifttest/nfs-server@sha256:29df73f1250a030a3b94d763cc7109ff543bf4e367624071a3363160915b15ef
+        image: quay.io/openshifttest/nfs-server@sha256:505779658a0ed49a09771d958396f5ad2d051f67b9358fd894ccb55d5fe5ee76
         imagePullPolicy: IfNotPresent
         ports:
           - name: nfs

@@ -80,7 +80,7 @@ Feature: basic verification for upgrade oc client testing
     When I run the :new_project client command with:
       | project_name | workloads-upgrade |
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/hello-openshift@sha256:eb47fdebd0f2cc0c130228ca972f15eb2858b425a3df15f10f7bb519f60f0c96 |
+      | docker_image | quay.io/openshifttest/hello-openshift@sha256:b6296396b632d15daf9b5e62cf26da20d76157161035fefddbd0e7f7749f4167 |
     Then the step should succeed
 
   # @author yinzhou@redhat.com
