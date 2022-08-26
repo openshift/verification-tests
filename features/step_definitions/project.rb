@@ -34,6 +34,21 @@ Given /^I have a project$/ do
   end
 end
 
+Given /^I have a project with proper privilege$/ do
+  step %Q/I have a project/
+  if env.version_ge("4.12", user: user)
+    step %Q/I run the :label admin command with:/, table(%{
+      | resource  | namespace/<%= project.name %>                        |
+      | overwrite | true                                                 |
+      | key_val   | security.openshift.io/scc.podSecurityLabelSync=false |
+      | key_val   | pod-security.kubernetes.io/enforce=privileged        |
+      | key_val   | pod-security.kubernetes.io/audit=privileged          |
+      | key_val   | pod-security.kubernetes.io/warn=privileged           |
+      })
+    step %Q/the step should succeed/
+  end
+end
+
 # try to create a new project with current user
 When /^I create a new project(?: via (.*?))?$/ do |via|
   @result = BushSlicer::Project.create(by: user, name: rand_str(5, :dns), _via: (via.to_sym if via))
