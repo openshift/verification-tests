@@ -210,23 +210,21 @@ Feature: OVNKubernetes IPsec related networking scenarios
     # Enable ipsec through CNO
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"ipsecConfig":{}}}}} |
-    Given I select a random node's host
-    Given I wait up to 60 seconds for the steps to pass:
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    Given I wait up to 90 seconds for the steps to pass:
     """
-    And I run commands on the host:
-      | ip x s \| grep -i "mode transport" |
-    Then the step should succeed
-    And the output should contain "mode transport"
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl --no-leader-only get nb_global . ipsec \| grep true |
+    And the output should contain "true"
     """
     # Disable ipsec through CNO
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"ipsecConfig":null}}}} |
     Given I wait up to 90 seconds for the steps to pass:
     """
-    And I run commands on the host:
-      | ip x s \| grep -i "mode transport" |
-    Then the step should fail
-    Then the output should not contain "mode transport"
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl --no-leader-only get nb_global . ipsec \| grep false |
+    And the output should contain "false"
     """
 
    
