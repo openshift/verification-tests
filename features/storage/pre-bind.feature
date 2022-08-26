@@ -200,6 +200,9 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @author lxia@redhat.com
   @admin
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Prebound pv/pvc is availabe/pending due to requested pvc/pv prebound to other pv/pvc
     Given I create a project with non-leading digit name
@@ -218,13 +221,10 @@ Feature: Testing for pv and pvc pre-bind feature
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     And the "mypvc" PVC becomes :pending
     And the "pv-<%= project.name %>" PV status is :available
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    @heterogeneous @arm64 @amd64
+
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
       | case_id           | pre-bind-pvc | pre-bind-pv                |
       | OCP-10108:Storage | nfsc         | nfspv1-<%= project.name %> | # @case_id OCP-10108
       | OCP-10112:Storage | nfsc1        | nfspv-<%= project.name %>  | # @case_id OCP-10112
-

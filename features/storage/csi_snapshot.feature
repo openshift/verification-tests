@@ -2,6 +2,12 @@ Feature: Volume snapshot test
 
   # @author wduan@redhat.com
   @admin
+  @upgrade-sanity
+  @qeci
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Volume snapshot create and restore test
     Given I have a project
@@ -67,18 +73,17 @@ Feature: Volume snapshot test
 
     @openstack-ipi
     @openstack-upi
-    @upgrade-sanity
-    @qeci
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
     Examples:
       | case_id           | csi-sc       | csi-vsc      |
       | OCP-37568:Storage | standard-csi | standard-csi | # @case_id OCP-37568
 
   # @author wduan@redhat.com
   @admin
+  @upgrade-sanity
+  @qeci
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Volume snapshot create and restore test with block
     Given I have a project
@@ -141,11 +146,6 @@ Feature: Volume snapshot test
 
     @openstack-ipi
     @openstack-upi
-    @upgrade-sanity
-    @qeci
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    @heterogeneous @arm64 @amd64
     Examples:
       | case_id           | csi-sc       | csi-vsc      |
       | OCP-37569:Storage | standard-csi | standard-csi | # @case_id OCP-37569
