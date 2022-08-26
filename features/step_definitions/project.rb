@@ -34,34 +34,8 @@ Given /^I have a project$/ do
   end
 end
 
-Given /^I have a privileged project$/ do
-  # system projects should not be selected by default
-  sys_projects = BushSlicer::Project::SYSTEM_PROJECTS
-
-  project = @projects.reverse.find {|p|
-    !sys_projects.include?(p.name) &&
-      p.is_user_admin?(user: user, cached: true) &&
-      p.active?(user: user, cached: true)
-  }
-  if project
-    # project does exist as visible is doing an actual query
-    # also move project up the stack
-    @projects << @projects.delete(project)
-  else
-    projects = (user.projects - sys_projects).select {|p|
-      p.is_user_admin?(user: user, cached: true) &&
-      p.active?(user: user, cached: true)
-    }
-    if projects.empty?
-      step 'I create a new project'
-      unless @result[:success]
-        logger.error(@result[:response])
-        raise "unable to create project, see log"
-      end
-    else
-      cache_resources *projects
-    end
-  end
+Given /^I have a project with proper privilege$/ do
+  step %Q/I have a project/
   if env.version_ge("4.12", user: user)
     step %Q/I run the :label admin command with:/, table(%{
       | resource  | namespace/<%= project.name %>                        |
