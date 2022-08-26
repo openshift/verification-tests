@@ -3,6 +3,7 @@ Feature: Cluster Autoscaler Tests
   # @author jhou@redhat.com
   # @case_id OCP-28108
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -127,6 +128,7 @@ Feature: Cluster Autoscaler Tests
   # @author zhsun@redhat.com
   # @case_id OCP-22102
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -203,6 +205,7 @@ Feature: Cluster Autoscaler Tests
   # @author zhsun@redhat.com
   # @case_id OCP-23745
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi

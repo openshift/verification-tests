@@ -4,6 +4,7 @@ Feature: Machine features testing
   # @case_id OCP-21196
   @smoke
   @admin
+  @osd_ccs @aro @rosa
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
@@ -19,6 +20,7 @@ Feature: Machine features testing
   # @case_id OCP-22115
   @smoke
   @admin
+  @aro
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -56,6 +58,7 @@ Feature: Machine features testing
   # @author jhou@redhat.com
   # @case_id OCP-25436
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -111,6 +114,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   # @case_id OCP-25608
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -157,6 +161,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-27627
   @admin
+  @osd_ccs @aro
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -191,6 +196,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-24363
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -324,6 +330,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   # @case_id OCP-32620
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -497,6 +504,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-33455
   @admin
+  @osd_ccs @aro
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -587,6 +595,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-36489
   @admin
+  @aro
   @proxy @noproxy @disconnected
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
@@ -618,6 +627,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-47658
   @admin
+  @aro
   @4.12 @4.11 @4.10
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn

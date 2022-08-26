@@ -3,6 +3,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author jhou@redhat.com
   # @case_id OCP-25897
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -43,6 +44,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author jhou@redhat.com
   # @case_id OCP-26311
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -75,6 +77,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author jhou@redhat.com
   # @case_id OCP-25734
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -109,6 +112,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author jhou@redhat.com
   # @case_id OCP-25691
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -163,6 +167,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author miyadav@redhat.com
   # @case_id OCP-28718
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
@@ -205,6 +210,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author jhou@redhat.com
   # @case_id OCP-25727
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -264,6 +270,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author miyadav@redhat.com
   # @case_id OCP-28859
   @admin
+  @aro
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
@@ -306,6 +313,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author miyadav@redhat.com
   # @case_id OCP-33714
   @admin
+  @osd_ccs @aro
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -328,6 +336,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author miyadav@redhat.com
   # @case_id OCP-34095
   @admin
+  @osd_ccs @aro
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
