@@ -18,6 +18,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
     #Using socat tool to send ESP packets to host worker1 from worker0. Port 50 is for ESP protocol. Simulating a hostnetwork pod on worker0 with privileged mode to allow socat tool leverage
     Given evaluation of `50` is stored in the :protocol clipboard
     Given I have a project
+    And the appropriate pod security labels are applied to the "<%= project.name %>" namespace
     Given I obtain test data file "networking/net_admin_cap_pod.yaml"
     When I run oc create as admin over "net_admin_cap_pod.yaml" replacing paths:
        | ["spec"]["nodeName"]                                       | <%= cb.workers[0].name %>                                                          |

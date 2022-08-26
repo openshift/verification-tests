@@ -19,6 +19,7 @@ Feature: IPsec upgrade scenarios
     When I run the :new_project client command with:
       | project_name | ipsec-upgrade |
     Then the step should succeed
+    And the appropriate pod security labels are applied to the "ipsec-upgrade" namespace
     When I use the "ipsec-upgrade" project
     Given I obtain test data file "networking/list_for_pods.json"
     #Creating two test pods for pod-pod encryption check. Pods needs to be deployment/rc backed so that they can be migrate successfuly to the upgraded cluster.Creating each separat as they need to be on diff

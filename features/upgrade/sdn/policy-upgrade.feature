@@ -420,6 +420,7 @@ Feature: SDN compoment upgrade testing
     When I run the :new_project client command with:
       | project_name | conntrack-upgrade |
     Then the step should succeed
+    And the appropriate pod security labels are applied to the "conntrack-upgrade" namespace
     Given I use the "conntrack-upgrade" project
     And I obtain test data file "networking/pod_with_udp_port_4789_nodename.json"
     When I run oc create over "pod_with_udp_port_4789_nodename.json" replacing paths:
