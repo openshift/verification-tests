@@ -2,6 +2,9 @@ Feature: Persistent Volume reclaim policy tests
 
   # @author lxia@redhat.com
   @admin
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Persistent volume with RWO access mode and Delete policy
     Given I have a project
@@ -54,9 +57,6 @@ Feature: Persistent Volume reclaim policy tests
 
     @openstack-ipi
     @openstack-upi
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    @heterogeneous @arm64 @amd64
     Examples:
       | case_id          | storage_type | volume_name | path   | file                |
       | OCP-9944:Storage | cinder       | volumeID    | cinder | pv-rwx-default.json | # @case_id OCP-9944

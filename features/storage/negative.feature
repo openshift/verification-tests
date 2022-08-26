@@ -3,6 +3,9 @@ Feature: negative testing
   # @author jhou@redhat.com
   # @author lxia@redhat.com
   @admin
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   @4.8 @4.7 @4.6
   Scenario Outline: PV with invalid volume id should be prevented from creating
     Given admin ensures "mypv" pv is deleted after scenario
@@ -13,9 +16,6 @@ Feature: negative testing
     And the output should contain:
       | <error> |
 
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    @heterogeneous @arm64 @amd64
     @gcp-ipi
     @gcp-upi
     Examples:

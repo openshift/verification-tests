@@ -4,6 +4,10 @@ Feature: storage security check
   # @author piqin@redhat.com
   @admin
   @smoke
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: volume security testing
     Given I have a project
@@ -121,10 +125,6 @@ Feature: storage security check
 
     @openstack-ipi
     @openstack-upi
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
     Examples:
       | case_id          | storage_type | volume_name | type   |
       | OCP-9721:Storage | cinder       | volumeID    | cinder | # @case_id OCP-9721
