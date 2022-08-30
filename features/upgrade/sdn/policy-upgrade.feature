@@ -221,7 +221,7 @@ Feature: SDN compoment upgrade testing
       | name=hello-idle |
     And evaluation of `pod(2).name` is stored in the :pod3 clipboard
     And evaluation of `pod(2).ip_url` is stored in the :pod3ip clipboard
-    And I wait up to 10 seconds for the steps to pass:
+    And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
@@ -238,7 +238,7 @@ Feature: SDN compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=hello-idle |
     And evaluation of `pod(4).name` is stored in the :pod5 clipboard
-    And I wait up to 10 seconds for the steps to pass:
+    And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.pod4 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
