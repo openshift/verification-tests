@@ -11,7 +11,7 @@
     "spec": {
         "containers": [{
             "name": "hello-openshift",
-            "image": "quay.io/openshifttest/client-cert:multiarch",
+            "image": "quay.io/openshifttest/client-cert:1.2.0",
             "ports": [{
                 "containerPort": 9443,
                 "protocol": "TCP"

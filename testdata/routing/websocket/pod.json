@@ -12,7 +12,7 @@
   "spec": {
       "containers": [{
         "name": "hello-websocket",
-        "image": "quay.io/openshifttest/hello-websocket@sha256:bf4d3128d2cae4fdcae79ff7b6c133b8154f59b3826d4998c664c602ea168482",
+        "image": "quay.io/openshifttest/hello-websocket@sha256:d485f1fedd2bc929551e68288812c10957b99db3e833ec150071f00291ea77db",
         "ports": [
           {
             "containerPort": 9999

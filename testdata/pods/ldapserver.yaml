@@ -6,7 +6,7 @@ metadata:
   name: ldapserver
 spec:
   containers:
-    - image: quay.io/openshifttest/ldap:multiarch
+    - image: quay.io/openshifttest/ldap:1.2.0
       imagePullPolicy: IfNotPresent
       name: ldapserver
       securityContext:

@@ -160,7 +160,7 @@ Feature: oc_set_probe.feature
     Given I have a project
     When I run the :create_deployment client command with:
       | name          | mysql                                 |
-      | image         | quay.io/openshifttest/mysql:multiarch |
+      | image         | quay.io/openshifttest/mysql:1.2.0 |
     Then the step should succeed
     When I run the :set_env client command with:
       | resource | deploy/mysql               |
@@ -226,7 +226,7 @@ Feature: oc_set_probe.feature
     Given I have a project
     When I run the :create_deployment client command with:
       | name          | mysql                                 |
-      | image         | quay.io/openshifttest/mysql:multiarch |
+      | image         | quay.io/openshifttest/mysql:1.2.0 |
     Then the step should succeed
     When I run the :set_env client command with:
       | resource | deploy/mysql               |
@@ -281,7 +281,7 @@ Feature: oc_set_probe.feature
     Given I have a project
     When I run the :create_deployment client command with:
       | name          | mysql                                 |
-      | image         | quay.io/openshifttest/mysql:multiarch |
+      | image         | quay.io/openshifttest/mysql:1.2.0 |
     Then the step should succeed
     When I run the :set_env client command with:
       | resource | deploy/mysql               |

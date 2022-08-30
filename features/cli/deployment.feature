@@ -50,7 +50,7 @@ Feature: deployment related steps
     When I run the :patch client command with:
       | resource      | deployment                                                                                                     |
       | resource_name | hello-openshift                                                                                                |
-      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/openshifttest/hello-openshift@sha256:eb47fdebd0f2cc0c130228ca972f15eb2858b425a3df15f10f7bb519f60f0c96"}]}}}} |
+      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/openshifttest/hello-openshift@sha256:b6296396b632d15daf9b5e62cf26da20d76157161035fefddbd0e7f7749f4167"}]}}}} |
     Then the step should succeed
     And I wait for the steps to pass:
     """

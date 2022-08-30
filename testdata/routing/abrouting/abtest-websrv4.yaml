@@ -15,7 +15,7 @@ items:
           name: abtest-websrv4
       spec:
         containers:
-        - image: quay.io/openshifttest/nginx-alpine@sha256:f266733786efb10c4353d4b44ada6f22434e983d22f0975d20803f1817d38f56
+        - image: quay.io/openshifttest/nginx-alpine@sha256:04f316442d48ba60e3ea0b5a67eb89b0b667abf1c198a3d0056ca748736336a0
           name: nginx
 - apiVersion: v1
   kind: Service

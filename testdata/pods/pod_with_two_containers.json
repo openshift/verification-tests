@@ -12,7 +12,7 @@
     "containers": [
       {
         "name": "hello-openshift",
-        "image": "quay.io/openshifttest/hello-openshift@sha256:1e70b596c05f46425c39add70bf749177d78c1e98b2893df4e5ae3883c2ffb5e",
+        "image": "quay.io/openshifttest/hello-openshift@sha256:4200f438cf2e9446f6bcff9d67ceea1f69ed07a2f83363b7fb52529f7ddd8a83",
         "ports": [
           {
             "containerPort": 8080,
@@ -40,7 +40,7 @@
       },
       {
         "name": "hello-openshift-fedora",
-        "image": "quay.io/openshifttest/hello-openshift@sha256:eb47fdebd0f2cc0c130228ca972f15eb2858b425a3df15f10f7bb519f60f0c96",
+        "image": "quay.io/openshifttest/hello-openshift@sha256:b6296396b632d15daf9b5e62cf26da20d76157161035fefddbd0e7f7749f4167",
         "ports": [
           {
             "containerPort": 8081,

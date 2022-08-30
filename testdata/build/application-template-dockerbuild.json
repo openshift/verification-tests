@@ -125,7 +125,7 @@
           "dockerStrategy": {
             "from": {
               "kind": "DockerImage",
-              "name": "quay.io/openshifttest/ruby-27:multiarch"
+              "name": "quay.io/openshifttest/ruby-27:1.2.0"
             },
             "env": [
               {

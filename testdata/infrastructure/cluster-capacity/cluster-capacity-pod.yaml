@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: cluster-capacity
-    image: quay.io/openshifttest/origin-cluster-capacity@sha256:2468e47c696c905be1c0e54357b2defc976e924691ffbc53409eb1c87ee7bcc6
+    image: quay.io/openshifttest/origin-cluster-capacity@sha256:2614dd8d130b0ff451e7824082471a093eef90d6d4b5ba172e58cb8db107a864
     volumeMounts:
     - mountPath: /test-pod
       name: test-volume
