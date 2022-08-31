@@ -10,7 +10,7 @@ Feature: storage security check
   @heterogeneous @arm64 @amd64
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: volume security testing
-    Given I have a project
+    Given I have a project with proper privilege
     Given I obtain test data file "storage/misc/pvc.json"
     When I run oc create over "pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc1 |
@@ -141,7 +141,7 @@ Feature: storage security check
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   Scenario: OCP-9709:Storage secret volume security check
-    Given I have a project
+    Given I have a project with proper privilege
     Given I obtain test data file "storage/secret/secret.yaml"
     When I run the :create client command with:
       | filename | secret.yaml |
