@@ -206,25 +206,90 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @singlenode
   Scenario: OCP-40569:SDN Allow enablement/disablement ipsec at runtime
     Given the env is using "OVNKubernetes" networkType
-    
-    # Enable ipsec through CNO
+    Given I store all worker nodes to the :workers clipboard
+    Given the default interface on nodes is stored in the :default_interface clipboard
+
+    #Enable ipsec through CNO
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"ipsecConfig":{}}}}} |
+
+    Given I have a project with proper privilege
+    And evaluation of `project.name` is stored in the :hello_pod_project clipboard
+    Given I obtain test data file "networking/pod-for-ping.json"
+    When I run oc create over "pod-for-ping.json" replacing paths:
+      | ["spec"]["nodeName"] | <%= cb.workers[1].name %> |
+      | ["metadata"]["name"] | pod-worker1               |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=hello-pod |
+    And evaluation of `pod.ip_url` is stored in the :test_pod_worker1 clipboard
+
+    Given I obtain test data file "networking/pod-for-ping.json"
+    When I run oc create over "pod-for-ping.json" replacing paths:
+      | ["spec"]["nodeName"]                 | <%= cb.workers[0].name %>                                                                                          |
+      | ["metadata"]["name"]                 | pod-worker0                                                                                                        |
+      | ["spec"]["containers"][0]["command"] | ["bash", "-c", "for f in {0..3600}; do curl <%= cb.test_pod_worker1 %>:8080 ; --connect-timeout 5; sleep 1; done"] |
+    Then the step should succeed
+    #Above command will curl "hello openshift" traffic every 1 second to worker1 test pod which is expected to cause ESP traffic generation across those nodes
+    And a pod becomes ready with labels:
+      | name=hello-pod |
+
+    Given I obtain test data file "networking/net_admin_cap_pod.yaml"
+    When I run oc create as admin over "net_admin_cap_pod.yaml" replacing paths:
+      | ["spec"]["nodeName"]                                       | <%= cb.workers[1].name %>   |
+      | ["metadata"]["namespace"]                                  | <%= cb.hello_pod_project %> |
+      | ["metadata"]["name"]                                       | hostnw-pod-worker1          |
+      | ["spec"]["containers"][0]["securityContext"]["privileged"] | true                        |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=network-pod |
+    And evaluation of `pod.name` is stored in the :hello_pod_worker1 clipboard
+
+    #Check ESP traffic between two pods crossing nodes after enabling IPsec
+    Given I wait up to 90 seconds for the steps to pass:
+    """
+    When admin executes on the "<%= cb.hello_pod_worker1 %>" pod:
+      | bash | -c | timeout  --preserve-status 2 tcpdump -v -i <%= cb.default_interface %> esp |
+    Then the step should succeed
+    And the output should contain "ESP"
+    """
+
+    #Need to restart ovnkube-master "north" leader after enabling ipsec to make sure use correct "north" leader
     Given I store the ovnkube-master "north" leader pod in the clipboard
+    Given admin ensures "<%= cb.north_leader.name %>" pod is deleted from the "openshift-ovn-kubernetes" project    
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    #Check "north" leader return ipsec enabled/ture information
     Given I wait up to 90 seconds for the steps to pass:
     """
     And admin executes on the pod "northd" container:
       | bash | -c | ovn-nbctl --no-leader-only get nb_global . ipsec \| grep true |
     And the output should contain "true"
     """
+    
     # Disable ipsec through CNO
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"ipsecConfig":null}}}} |
+
+    Given I switch to the first user
+    And I use the "<%= cb.hello_pod_project %>" project
+    #Check NO ESP traffic between two pods crossing nodes after enabling IPsec
+    Given I wait up to 90 seconds for the steps to pass:
+    """
+    When admin executes on the "<%= cb.hello_pod_worker1 %>" pod:
+      | bash | -c | timeout  --preserve-status 2 tcpdump -v -i <%= cb.default_interface %> esp |
+    Then the step should succeed
+    And the output should not contain "ESP"
+    """
+    
+    #Need to restart ovnkube-master "north" leader after enabling ipsec to make sure use correct "north" leader
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    Given admin ensures "<%= cb.north_leader.name %>" pod is deleted from the "openshift-ovn-kubernetes" project    
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    #Check "north" leader return ipsec disabled/false information
     Given I wait up to 90 seconds for the steps to pass:
     """
     And admin executes on the pod "northd" container:
       | bash | -c | ovn-nbctl --no-leader-only get nb_global . ipsec \| grep false |
     And the output should contain "false"
     """
-
    
