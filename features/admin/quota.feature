@@ -46,8 +46,8 @@ Feature: Quota related scenarios
       | OCP-12145:Node | ocp12145 | pod-request-limit-valid-2.yaml | pod-request-limit-valid-2 | cpu\\s+200m\\s+30 | memory\\s+(268435456\|256Mi)\\s+16Gi | # @case_id OCP-12145
 
   # @author qwang@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-12292
-  @flaky
   @admin
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
