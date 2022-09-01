@@ -78,7 +78,7 @@ Feature: Quota related scenarios
       | f | pod-request-limit-invalid-1.yaml |
     Then the step should fail
     And the output should match:
-      | (?i)Failed quota: myquota: must specify cpu,memory |
+      | (?i)Failed quota: myquota: must specify cpu.*memory |
     When I run the :describe client command with:
       | resource | quota   |
       | name     | myquota |
