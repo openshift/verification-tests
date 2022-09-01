@@ -5,8 +5,17 @@ metadata:
   labels:
     app: hello-openshift-invalid
 spec:
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
   containers:
   - name: hello-openshift-invalid
     image: wrong
     ports:
     - containerPort: 80
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL

@@ -888,7 +888,7 @@ check_overlay_edit_modal:
   action: check_overlay_edit_modal_title
   elements:
   - selector:
-      xpath: //*[contains(@class, 'modal-content') and contains(@class, 'modal-content--no-inner-scroll') and not(contains(., 'co-p-new-user-modal'))]
+      xpath: //*[contains(@class, 'modal-content')]
 check_overlay_edit_modal_title:
   elements:
   - selector:

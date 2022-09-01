@@ -1,5 +1,6 @@
 check_default_columns_in_one_project_pods_list_table:
   action: goto_project_pods_list_page
+  action: reset_default_columns
   elements:
   - selector:
       xpath: //thead//th[.='Name']
@@ -53,6 +54,7 @@ check_changed_one_project_pods_list_columns:
     expect_result: true
 check_default_columns_in_projects_list_table:
   action: goto_projects_list_page
+  action: reset_default_columns
   elements:
   - selector:
       xpath: //thead//th[.='Name']
@@ -88,6 +90,7 @@ check_changed_projects_list_columns:
     expect_result: true
 check_default_columns_in_namespaces_list_table:
   action: goto_namespace_list_page
+  action: reset_default_columns
   elements:
   - selector:
       xpath: //thead//th[.='Name']
@@ -133,13 +136,14 @@ check_changed_namespaces_list_columns:
     expect_result: true
 check_default_columns_in_nodes_list_table:
   action: goto_node_page
+  action: reset_default_columns
   elements:
   - selector:
       xpath: //thead//th[.='Name']
   - selector:
       xpath: //thead//th[.='Status']
   - selector:
-      xpath: //thead//th[.='Role']
+      xpath: //thead//th[.='Roles']
   - selector:
       xpath: //thead//th[.='Pods']
   - selector:
@@ -169,7 +173,7 @@ check_changed_nodes_list_columns:
   - selector:
       xpath: //thead//th[.='Status']
   - selector:
-      xpath: //thead//th[.='Role']
+      xpath: //thead//th[.='Roles']
   - selector:
       xpath: //thead//th[.='Memory']
   - selector:
@@ -209,6 +213,7 @@ check_updated_columns_in_all_projects_pods_list_table:
   - selector:
       xpath: //thead//th[.='IP address']
 check_default_columns_in_all_projects_pods_list_table:
+  action: reset_default_columns
   elements:
   - selector:
       xpath: //thead//th[.='Name']
