@@ -49,6 +49,17 @@ Given /^I have a project with proper privilege$/ do
   end
 end
 
+Given /^the appropriate pod security labels are applied to the#{OPT_QUOTED} namespace$/ do | project_name |
+  ensure_admin_tagged
+  project_name ||= project.name
+  if env.version_ge("4.12", user: user)
+    admin.cli_exec(:label, resource: "namespace", name: project_name, key_val: 'security.openshift.io/scc.podSecurityLabelSync=false', overwrite: true)
+    admin.cli_exec(:label, resource: "namespace", name: project_name, key_val: 'pod-security.kubernetes.io/enforce=privileged', overwrite: true)
+    admin.cli_exec(:label, resource: "namespace", name: project_name, key_val: 'pod-security.kubernetes.io/audit=privileged', overwrite: true)
+    admin.cli_exec(:label, resource: "namespace", name: project_name, key_val: 'pod-security.kubernetes.io/warn=privileged', overwrite: true)
+  end
+end
+
 # try to create a new project with current user
 When /^I create a new project(?: via (.*?))?$/ do |via|
   @result = BushSlicer::Project.create(by: user, name: rand_str(5, :dns), _via: (via.to_sym if via))
