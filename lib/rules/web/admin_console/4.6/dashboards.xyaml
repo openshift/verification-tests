@@ -180,8 +180,12 @@ check_cluster_utilization_items:
       xpath: //h4[text()='Network Transfer']
   - selector:
       xpath: //h4[text()='Pod count']
+  - selector:
+      xpath: //*[@data-test-id='utilization-item']
   scripts:
-  - command: return document.querySelectorAll('h4[data-test="utilization-item-title"]')[4].scrollIntoView(true)
+  - command: |
+      var alltitles = document.querySelectorAll("[data-test-id='utilization-item']")
+      return alltitles[alltitles.length-1].scrollIntoView(true)
     expect_result: ~
 click_cpu_data:
   element:
