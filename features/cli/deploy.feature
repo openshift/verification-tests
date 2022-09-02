@@ -31,7 +31,7 @@ Feature: deployment related features
   # @author xxing@redhat.com
   # @case_id OCP-10643
   @smoke
-  Scenario: OCP-10643 Manually make deployment
+  Scenario: OCP-10643:Workloads Manually make deployment
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/manual.json |

@@ -54,7 +54,7 @@ Feature: oc_secrets.feature
   # @author qwang@redhat.com
   # @case_id OCP-12244
   @smoke
-  Scenario: OCP-12244 CRUD operations on secrets
+  Scenario: OCP-12244:Node CRUD operations on secrets
     Given I have a project
     # 1.1 Create a secret with a non-existing namespace
     When I run the :create client command with:

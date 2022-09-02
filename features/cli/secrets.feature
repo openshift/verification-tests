@@ -59,7 +59,7 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12281
   @smoke
-  Scenario: OCP-12281 Pods do not have access to each other's secrets in the same namespace
+  Scenario: OCP-12281:Node Pods do not have access to each other's secrets in the same namespace
     Given I have a project
     When I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483168/first-secret.json |
@@ -362,7 +362,7 @@ Feature: secrets related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10814
   @smoke
-  Scenario: OCP-10814 Consume the same Secrets as environment variables in multiple pods
+  Scenario: OCP-10814:Node Consume the same Secrets as environment variables in multiple pods
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/secret.yaml |
@@ -410,7 +410,7 @@ Feature: secrets related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11260
   @smoke
-  Scenario: OCP-11260 Using Secrets as Environment Variables
+  Scenario: OCP-11260:Node Using Secrets as Environment Variables
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/secret.yaml |
@@ -588,7 +588,7 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11311
   @smoke
-  Scenario: OCP-11311 Secret volume should update when secret is updated
+  Scenario: OCP-11311:Node Secret volume should update when secret is updated
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483169/secret1.json |

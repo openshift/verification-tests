@@ -70,7 +70,7 @@ Feature: hpa scale
   # @author chezhang@redhat.com
   # @case_id OCP-11259
   @smoke
-  Scenario: OCP-11259 Creates autoscaler for replication controller by oc autoscale
+  Scenario: OCP-11259:Node Creates autoscaler for replication controller by oc autoscale
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/hpa/rc-hello-openshift.yaml |

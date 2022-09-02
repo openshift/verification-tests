@@ -3,7 +3,7 @@ Feature: Testing route
   # @author zzhao@redhat.com
   # @case_id OCP-12122
   @smoke
-  Scenario: OCP-12122 Alias will be invalid after removing it
+  Scenario: OCP-12122:NetworkEdge Alias will be invalid after removing it
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/routing/header-test/dc.json |
@@ -27,7 +27,7 @@ Feature: Testing route
   # @author yadu@redhat.com
   # @case_id OCP-10660
   @smoke
-  Scenario: OCP-10660 Service endpoint can be work well if the mapping pod ip is updated
+  Scenario: OCP-10660:NetworkEdge Service endpoint can be work well if the mapping pod ip is updated
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
@@ -71,7 +71,7 @@ Feature: Testing route
   # @author zzhao@redhat.com
   # @case_id OCP-12652
   @smoke
-  Scenario: OCP-12652 The later route should be HostAlreadyClaimed when there is a same host exist
+  Scenario: OCP-12652:NetworkEdge The later route should be HostAlreadyClaimed when there is a same host exist
     Given I have a project
     When I run the :create client command with:
       | f |  https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/route_unsecure.json  |
@@ -452,7 +452,7 @@ Feature: Testing route
   # @author yadu@redhat.com
   # @case_id OCP-10024
   @smoke
-  Scenario: OCP-10024 Route could NOT be updated after created
+  Scenario: OCP-10024:NetworkEdge Route could NOT be updated after created
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/tc/tc470732/route_withouthost1.json |

@@ -3,7 +3,7 @@ Feature: check page info related
   # @author wsun@redhat.com
   # @case_id OCP-10605
   @smoke
-  Scenario: OCP-10605 Check Events page
+  Scenario: OCP-10605:UserInterface Check Events page
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/nodejs:latest                |

@@ -3,7 +3,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-10805
   @smoke
-  Scenario: OCP-10805 Consume ConfigMap in environment variables
+  Scenario: OCP-10805:Node Consume ConfigMap in environment variables
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/configmap/configmap.yaml |
@@ -34,7 +34,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-11255
   @smoke
-  Scenario: OCP-11255 Consume ConfigMap via volume plugin
+  Scenario: OCP-11255:Node Consume ConfigMap via volume plugin
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/configmap/configmap.yaml |

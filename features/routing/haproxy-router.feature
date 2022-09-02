@@ -731,7 +731,7 @@ Feature: Testing haproxy router
 
   # @author hongli@redhat.com
   # @case_id OCP-15872
-  Scenario: OCP-15872 can set cookie name for unsecure routes by annotation
+  Scenario: OCP-15872:NetworkEdge can set cookie name for unsecure routes by annotation
     #create route and service which has two endpoints
     Given the master version >= "3.7"
     Given I have a project
