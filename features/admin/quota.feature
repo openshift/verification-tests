@@ -536,6 +536,7 @@ Feature: Quota related scenarios
       | requests.memory\\s+0\\s+1Gi |
 
   # @author chezhang@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-10706
   @flaky
   @admin
@@ -572,7 +573,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+2                   |
       | replicationcontrollers\\s+0\\s+3 |
       | resourcequotas\\s+1\\s+3         |
-      | secrets\\s+9\\s+5                |
+      | secrets\\s+6\\s+5                |
       | services\\s+0\\s+5               |
     Given I obtain test data file "quota/ocp10706/mysecret.json"
     When I run the :create client command with:
@@ -596,7 +597,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+2                   |
       | replicationcontrollers\\s+0\\s+3 |
       | resourcequotas\\s+1\\s+3         |
-      | secrets\\s+9\\s+15               |
+      | secrets\\s+6\\s+15               |
       | services\\s+0\\s+5               |
     Given I obtain test data file "quota/ocp10706/mysecret.json"
     When I run the :create client command with:
@@ -612,7 +613,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+2                   |
       | replicationcontrollers\\s+0\\s+3 |
       | resourcequotas\\s+1\\s+3         |
-      | secrets\\s+10\\s+15              |
+      | secrets\\s+7\\s+15               |
       | services\\s+0\\s+5               |
 
   # @author chezhang@redhat.com
