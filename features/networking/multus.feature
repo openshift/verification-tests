@@ -331,6 +331,7 @@ Feature: Multus-CNI related scenarios
 
   # @author bmeng@redhat.com
   # @case_id OCP-21855
+  @flaky
   @admin
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -1002,6 +1003,7 @@ Feature: Multus-CNI related scenarios
 
   # @author anusaxen@redhat.com
   # @case_id OCP-24465
+  @inactive
   @admin
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
