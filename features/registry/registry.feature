@@ -118,27 +118,3 @@ Feature: Testing registry
       | resource_name | image-registry            |
       | namespace     | openshift-image-registry  |
     Then the step should succeed
-
-  # @author wewang@redhat.com
-  # @case_id OCP-23063
-  @admin
-  @destructive
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @singlenode
-  @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
-  Scenario: OCP-23063:ImageRegistry Check the related log from must-gather tool
-    When I run the :delete admin command with:
-      | object_type       | co             |
-      | object_name_or_id | image-registry |
-    Then the step should succeed
-    When I run the :oadm_inspect admin command with:
-      | resource_type | co             |
-      | resource_name | image-registry |
-    Then the step should succeed
-    And the output should match:
-      | Gathering data for ns/openshift-image-registry... |
-      | Wrote inspect data to inspect.local.*             |
