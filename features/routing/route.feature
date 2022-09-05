@@ -157,7 +157,7 @@ Feature: Testing route
       | curl |
       | https://<%= route("edge-route", service("edge-route")).dns(by: user) %>/test/ |
       | -c |
-      | /tmp/cookie.txt |
+      | /data/cookie-12562 |
       | -k |
     Then the output should contain "Hello-OpenShift-Path-Test"
     """
@@ -167,7 +167,7 @@ Feature: Testing route
       | -k |
     Then the output should contain "Application is not available"
     When I execute on the pod:
-      | cat | /tmp/cookie.txt |
+      | cat | /data/cookie-12562 |
     Then the step should succeed
     And the output should not contain "OPENSHIFT"
     And the output should not match "\d+\.\d+\.\d+\.\d+"
@@ -365,14 +365,14 @@ Feature: Testing route
       | http://<%= route("myroute", service("service-unsecure")).dns(by: user) %>/                   |
       | -v                                                                                           |
       | -c                                                                                           |
-      | /tmp/cookie                                                                                  |
+      | /data/cookie-9650                                                                            |
     Then the step should succeed
     And the output should contain:
       | Hello-OpenShift |
     And the output should not contain:
       | HTTP/1.1 302 Found |
     And I execute on the pod:
-      | cat | /tmp/cookie |
+      | cat | /data/cookie-9650 |
     Then the step should succeed
     And the output should match:
       | FALSE.*FALSE |
@@ -615,7 +615,7 @@ Feature: Testing route
       | http://<%= route("myroute", service("service-unsecure")).dns(by: user) %>/ |
       | -k |
       | -c |
-      | /tmp/cookie |
+      | /data/cookie-13753-edge |
     Then the step should succeed
     And the output should contain:
       | Hello-OpenShift |
@@ -623,7 +623,7 @@ Feature: Testing route
       | ocation: https:// |
     """
     And I execute on the pod:
-      | cat | /tmp/cookie |
+      | cat | /data/cookie-13753-edge |
     Then the step should succeed
     And the output should match:
       | FALSE.*TRUE |
@@ -650,7 +650,7 @@ Feature: Testing route
       | http://<%= route("reen", service("service-secure")).dns(by: user) %>/ |
       | -k |
       | -c |
-      | /tmp/cookie-reen |
+      | /data/cookie-13753-reen |
     Then the step should succeed
     And the output should contain:
       | Hello-OpenShift |
@@ -658,7 +658,7 @@ Feature: Testing route
       | ocation: https:// |
     """
     And I execute on the pod:
-      | cat | /tmp/cookie-reen |
+      | cat | /data/cookie-13753-reen |
     Then the step should succeed
     And the output should match:
       | FALSE.*TRUE |

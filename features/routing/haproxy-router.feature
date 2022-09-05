@@ -39,7 +39,7 @@ Feature: Testing haproxy router
       | -sS |
       | http://<%= route("service-unsecure", service("service-unsecure")).dns(by: user) %>/ |
       | -c |
-      | /tmp/cookies |
+      | /data/cookies-11903 |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-2"
     """
@@ -60,7 +60,7 @@ Feature: Testing haproxy router
       | -sS |
       | http://<%= route("service-unsecure", service("service-unsecure")).dns(by: user) %>/ |
       | -b |
-      | /tmp/cookies |
+      | /data/cookies-11903 |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-2"
     """
@@ -106,7 +106,7 @@ Feature: Testing haproxy router
       | https://<%= route("route-edge", service("route-edge")).dns(by: user) %>/ |
       | -k |
       | -c |
-      | /tmp/cookies |
+      | /data/cookies-11130 |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-1"
     """
@@ -129,7 +129,7 @@ Feature: Testing haproxy router
       | https://<%= route("route-edge", service("route-edge")).dns(by: user) %>/ |
       | -k |
       | -b |
-      | /tmp/cookies |
+      | /data/cookies-11130 |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-1"
     """
@@ -378,11 +378,11 @@ Feature: Testing haproxy router
       | -sS |
       | http://<%= route("service-unsecure", service("service-unsecure")).dns(by: user) %>/ |
       | -c |
-      | /tmp/cookies |
+      | /data/cookies-11679 |
     Then the step should succeed
     And the output should contain "Hello-OpenShift"
     When I execute on the pod:
-      | bash | -c | for i in {1..10} ; do curl -sS  http://<%= route("service-unsecure", service("service-unsecure")).dns(by: user) %>/ -b /tmp/cookies ; done |
+      | bash | -c | for i in {1..10} ; do curl -sS  http://<%= route("service-unsecure", service("service-unsecure")).dns(by: user) %>/ -b /data/cookies-11679 ; done |
     Then the step should succeed
     And the output should contain:
       | Hello-OpenShift web-server-1 |
