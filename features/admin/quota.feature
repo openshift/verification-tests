@@ -2,7 +2,7 @@ Feature: Quota related scenarios
 
   # @author qwang@redhat.com
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11
   Scenario Outline: The quota usage should be incremented if meet the following requirement
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
