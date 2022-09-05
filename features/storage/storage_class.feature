@@ -277,7 +277,7 @@ Feature: storageClass related feature
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10228
-  Scenario: OCP-10228 AWS ebs volume is dynamic provisioned with default storageclass
+  Scenario: OCP-10228:Storage AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/pvc-retain.json" replacing paths:
       | ["metadata"]["name"]                         | pvc-<%= project.name %> |

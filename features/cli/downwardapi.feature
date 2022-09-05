@@ -15,7 +15,7 @@ Feature: Downward API
   # @author cryan@redhat.com
   # @case_id OCP-10628
   @smoke
-  Scenario: OCP-10628 downward api pod name and pod namespace as env variables
+  Scenario: OCP-10628:Node downward api pod name and pod namespace as env variables
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/downwardapi/tc483203/downward-example.yaml |
@@ -31,7 +31,7 @@ Feature: Downward API
   # @author qwang@redhat.com
   # @case_id OCP-10708
   @smoke
-  Scenario: OCP-10708 Container consume infomation from the downward API using a volume plugin
+  Scenario: OCP-10708:Node Container consume infomation from the downward API using a volume plugin
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/downwardapi/pod-dapi-volume.yaml |

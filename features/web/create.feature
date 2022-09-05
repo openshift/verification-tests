@@ -3,7 +3,7 @@ Feature: create app on web console related
   # @author xxing@redhat.com
   # @case_id OCP-11171
   @smoke
-  Scenario: OCP-11171 Create application from image on web console
+  Scenario: OCP-11171:UserInterface Create application from image on web console
     Given I have a project
     Given I wait for the :create_app_from_image web console action to succeed with:
       | project_name | <%= project.name %>                        |

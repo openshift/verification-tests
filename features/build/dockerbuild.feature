@@ -16,7 +16,7 @@ Feature: dockerbuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-12115
   @smoke
-  Scenario: OCP-12115 Docker build with both SourceURI and context dir
+  Scenario: OCP-12115:BuildAPI Docker build with both SourceURI and context dir
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby20rhel7-context-docker.json |

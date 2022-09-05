@@ -263,7 +263,7 @@ Feature: change the policy of user/service account
   # @author chaoyang@redhat.com
   # @case_id OCP-10466
   @admin
-  Scenario: OCP-10466 User with role storage-admin can check deeper pv object info
+  Scenario: OCP-10466:Storage User with role storage-admin can check deeper pv object info
     Given I have a project
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user

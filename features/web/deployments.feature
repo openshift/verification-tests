@@ -3,7 +3,7 @@ Feature: Check deployments function
   # @author yapei@redhat.com
   # @case_id OCP-10679
   @smoke
-  Scenario: OCP-10679 make deployment from web console
+  Scenario: OCP-10679:UserInterface make deployment from web console
     Given I have a project
     # create dc
     When I run the :create client command with:

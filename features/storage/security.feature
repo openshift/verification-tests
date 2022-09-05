@@ -103,7 +103,7 @@ Feature: storage security check
   # @author chaoyang@redhat.com
   # @case_id OCP-9709
   @admin
-  Scenario: OCP-9709 secret volume security check
+  Scenario: OCP-9709:Storage secret volume security check
     Given I have a project
     When I run the :create client command with:
       | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/secret/secret.yaml |
