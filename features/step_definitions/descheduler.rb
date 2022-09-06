@@ -42,7 +42,7 @@ Given /^(cluster-kube-descheduler-operator) channel name is stored in the#{OPT_S
   if (descheduler_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
-    when '4.6','4.7','4.8','4.9','4.10'
+    when '4.6','4.7','4.8','4.9','4.10','4.11'
       cb[cb_name] = version
     else
       cb[cb_name] = "stable"
@@ -153,7 +153,7 @@ Given /^I upgrade the descheduler operator with:$/ do | table |
   # wait till new csv to be installed
   success = wait_for(180, interval: 10) {
     if channel != "stable"
-      (subscription(subscription).installplan_csv.include? channel) || (subscription(subscription).installplan_csv.include? (channel.split('-')[1]))
+      (subscription(subscription).installplan_csv.include? channel)
     else
       subscription(subscription).installplan_csv != pre_csv
     end
