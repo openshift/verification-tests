@@ -19,9 +19,12 @@ Feature: image-registry operator upgrade tests
     Given the expression should be true> cluster_operator('openshift-samples').condition(type: 'Progressing')['status'] == "False"
     Given the expression should be true> cluster_operator('openshift-samples').condition(type: 'Degraded')['status'] == "False"
     # Check cluster operator image-registry should be in correct status
+    And I wait for the steps to pass:
+    """
     Given the expression should be true> cluster_operator('image-registry').condition(type: 'Available')['status'] == "True"
     Given the expression should be true> cluster_operator('image-registry').condition(type: 'Progressing')['status'] == "False"
     Given the expression should be true> cluster_operator('image-registry').condition(type: 'Degraded')['status'] == "False"
+    """
     # Check cluster operator openshift-controller-manager should be in correct status
     Given the expression should be true> cluster_operator('openshift-controller-manager').condition(type: 'Available')['status'] == "True"
     Given the expression should be true> cluster_operator('openshift-controller-manager').condition(type: 'Progressing')['status'] == "False"
@@ -47,9 +50,12 @@ Feature: image-registry operator upgrade tests
     Given the expression should be true> cluster_operator('openshift-samples').condition(type: 'Progressing')['status'] == "False"
     Given the expression should be true> cluster_operator('openshift-samples').condition(type: 'Degraded')['status'] == "False"
     # Check cluster operator image-registry should be in correct status
+    And I wait for the steps to pass:
+    """
     Given the expression should be true> cluster_operator('image-registry').condition(type: 'Available')['status'] == "True"
     Given the expression should be true> cluster_operator('image-registry').condition(type: 'Progressing')['status'] == "False"
     Given the expression should be true> cluster_operator('image-registry').condition(type: 'Degraded')['status'] == "False"
+    """
     # Check cluster operator openshift-controller-manager should be in correct status
     Given the expression should be true> cluster_operator('openshift-controller-manager').condition(type: 'Available')['status'] == "True"
     Given the expression should be true> cluster_operator('openshift-controller-manager').condition(type: 'Progressing')['status'] == "False"
