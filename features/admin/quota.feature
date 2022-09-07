@@ -2,7 +2,7 @@ Feature: Quota related scenarios
 
   # @author qwang@redhat.com
   @admin
-  @4.12 @4.11
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: The quota usage should be incremented if meet the following requirement
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -539,7 +539,7 @@ Feature: Quota related scenarios
   # @author weinliu@redhat.com
   # @case_id OCP-10706
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
