@@ -385,8 +385,10 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
   if (logging_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
-    when '4.11'
+    when '4.12'
       cb[cb_name] = "stable"
+    when '4.11'
+      cb[cb_name] = "stable-5.5"
     when '4.10'
       cb[cb_name] = "stable-5.4"
     when '4.9'
@@ -490,7 +492,7 @@ Given /^logging eventrouter is installed in the cluster$/ do
 
   image_version = ""
   # for logging 5.2 and later, use image tag v0.3.0/v0.4.0
-  if (clo_version.include? "5.5") || (clo_version.include? "5.4")
+  if (clo_version.include? "5.6") || (clo_version.include? "5.5") || (clo_version.include? "5.4")
     image_version = "0.4.0"
   elsif (clo_version.include? "5.3") || (clo_version.include? "5.2")
     image_version = "0.3.0"
