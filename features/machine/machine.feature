@@ -613,16 +613,8 @@ Feature: Machine features testing
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | disconnected-azure-36489                    |
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["publicIP"]                         | true                                        |
-    
-    And admin ensures "disconnected-azure-36489" machine_set_machine_openshift_io is deleted after scenario
-    Then I store the last provisioned machine in the :machine_latest clipboard 
-    
-    When I run the :describe admin command with:
-      | resource | machines.machine.openshift.io |
-      | name     | <%= cb.machine_latest %>      |
-    Then the step should succeed
     And the output should contain:
-      | InvalidConfiguration |
+      | providerSpec.publicIP: Forbidden: publicIP is not allowed in Azure disconnected installation |
 
   # @author miyadav@redhat.com
   # @case_id OCP-47658
