@@ -289,7 +289,6 @@ Feature: Egress-ingress related networking scenarios
       |tcp,nw_dst=<%= cb.hostip %>,tp_dst=53|
       |udp,nw_dst=<%= cb.hostip %>,tp_dst=53|
 
-
     # Create egress policy to allow www.baidu.com
     When I obtain test data file "networking/egress-ingress/dns-egresspolicy1.json"
     And I replace lines in "dns-egresspolicy1.json":
@@ -303,7 +302,7 @@ Feature: Egress-ingress related networking scenarios
     Given I wait up to 10 seconds for the steps to pass:
     """
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-ofctl| -O | openflow13 | dump-flows | br0 | table=101 |
+      | ovs-ofctl| -O | openflow13 | dump-flows | br0 | table=100 |
     And the output should contain:
       | actions=drop |
     """
