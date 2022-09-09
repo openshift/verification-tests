@@ -63,6 +63,7 @@ Feature: oc_secrets.feature
   @singlenode
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
   Scenario: OCP-10631:Authentication Project admin can process local directory or files and convert it to kubernetes secret
     Given I have a project
     When the "tmpfoo" file is created with the following lines:
