@@ -33,3 +33,8 @@ RUN set -x && \
     /verification-tests/tools/hack_bundle.rb && \
     yum clean all -y && \
     rm -rf /var/cache/yum /var/tmp/* /tmp/* /verification-tests/Gemfile.lock
+
+# Fixing OCPQE-11756
+RUN set -x && \
+    mkdir /verification-tests/.local && \
+    chmod -R 777 /verification-tests/.local
