@@ -385,8 +385,10 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
   if (logging_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
-    when '4.11'
+    when '4.12'
       cb[cb_name] = "stable"
+    when '4.11'
+      cb[cb_name] = "stable-5.5"
     when '4.10'
       cb[cb_name] = "stable-5.4"
     when '4.9'
@@ -480,28 +482,29 @@ Given /^logging eventrouter is installed in the cluster$/ do
   step %Q/admin ensures "eventrouter" config_map is deleted from the "openshift-logging" project after scenario/
   step %Q/admin ensures "eventrouter" deployment is deleted from the "openshift-logging" project after scenario/
   clo_csv_version = subscription("cluster-logging").current_csv(cached: false)
-  image_version = clo_csv_version.split(".", 2).last.split(/[A-Za-z]/).last
-  if image_version.start_with?("5")
+  clo_version = clo_csv_version.split(".", 2).last.split(/[A-Za-z]/).last
+  if clo_version.start_with?("5")
     # from logging 5.0, the image name is changed to eventrouter-rhel8
     image_name = "eventrouter-rhel8"
   else
     image_name = "logging-eventrouter"
   end
 
-  if image_content_source_policy('brew-registry').exists?
-    registry = image_content_source_policy('brew-registry').mirror_repository[0]
-    if image_version.start_with?("5")
-      # from logging 5.0, the image namespace is changed to openshift-logging
-      image = "#{registry}/rh-osbs/openshift-logging-#{image_name}:v#{image_version}"
-    else
-      image = "#{registry}/rh-osbs/openshift-ose-#{image_name}:v#{image_version}"
-    end
+  image_version = ""
+  # for logging 5.2 and later, use image tag v0.3.0/v0.4.0
+  if (clo_version.include? "5.6") || (clo_version.include? "5.5") || (clo_version.include? "5.4")
+    image_version = "0.4.0"
+  elsif (clo_version.include? "5.3") || (clo_version.include? "5.2")
+    image_version = "0.3.0"
   else
-    # get image registry from CLO
-    clo_image = deployment('cluster-logging-operator').container_spec(name: 'cluster-logging-operator').image
-    registry = clo_image.split(/cluster-logging(.*)/)[0]
-    image = "#{registry}#{image_name}:v#{image_version}"
+    image_version = clo_version
   end
+
+  # get image registry from CLO
+  clo_image = deployment('cluster-logging-operator').container_spec(name: 'cluster-logging-operator').image
+  registry = clo_image.split(/cluster-logging(.*)/)[0]
+  image = "#{registry}#{image_name}:v#{image_version}"
+
   step %Q/I process and create:/, table(%{
     | f | #{BushSlicer::HOME}/testdata/logging/eventrouter/internal_eventrouter.yaml |
     | p | IMAGE=#{image} |
