@@ -233,6 +233,7 @@ Feature: pods related scenarios
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
   Scenario: OCP-22283:Authentication 4.0 Oauth provider info should be consumed in a pod
     Given I have a project
     When I run the :new_app client command with:

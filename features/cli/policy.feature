@@ -10,6 +10,7 @@ Feature: change the policy of user/service account
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
   Scenario: OCP-11074:Authentication User can view ,add, remove and modify roleBinding via admin role user
     Given I have a project
     When I run the :get client command with:
@@ -65,6 +66,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
   Scenario: OCP-12430:Authentication Could get projects for new role which has permission to get projects
     Given an 8 characters random string of type :dns is stored into the :random clipboard
     And admin ensures "clusterrole-12430-<%= cb.random %>" cluster_role is deleted after scenario
@@ -89,6 +91,7 @@ Feature: change the policy of user/service account
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
   Scenario: OCP-11442:Authentication User can view, add , modify and delete specific role to/from new added project via admin role user
     Given I have a project
     Given I obtain test data file "authorization/policy/projectviewservice.json"
@@ -430,6 +433,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
   Scenario: OCP-9551:Authentication User can know if he can create podspec against the current scc rules via CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview_privileged_false.json"
@@ -468,6 +472,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
   Scenario: OCP-9552:Authentication User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
@@ -512,6 +517,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
   Scenario: OCP-9553:Authentication User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
