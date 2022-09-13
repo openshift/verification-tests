@@ -36,5 +36,5 @@ RUN set -x && \
 
 # Fixing OCPQE-11756
 RUN set -x && \
-    mkdir /verification-tests/.local && \
-    chmod -R 777 /verification-tests/.local
+    mkdir /.local && \
+    chmod -R 777 /.local
