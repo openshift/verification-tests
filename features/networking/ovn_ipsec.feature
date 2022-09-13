@@ -158,6 +158,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
     Given I store all worker nodes to the :workers clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/pod-for-ping.json"
     When I run oc create over "pod-for-ping.json" replacing paths:
       | ["spec"]["nodeName"] | <%= cb.workers[1].name %> |
