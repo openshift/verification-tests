@@ -753,10 +753,10 @@ Feature: Quota related scenarios
     """
 
   # @author qwang@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-11927
-  @flaky
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -781,7 +781,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+20                   |
       | replicationcontrollers\\s+0\\s+30 |
       | resourcequotas\\s+1\\s+1          |
-      | secrets\\s+9\\s+15                |
+      | secrets\\s+6\\s+15                |
       | services\\s+0\\s+10               |
     Given I obtain test data file "quota/ocp11927/pod-request-limit-valid-4.yaml"
     When I run the :create client command with:
@@ -798,7 +798,7 @@ Feature: Quota related scenarios
       | pods\\s+1\\s+20                   |
       | replicationcontrollers\\s+0\\s+30 |
       | resourcequotas\\s+1\\s+1          |
-      | secrets\\s+9\\s+15                |
+      | secrets\\s+6\\s+15                |
       | services\\s+0\\s+10               |
 
   # @author chezhang@redhat.com
