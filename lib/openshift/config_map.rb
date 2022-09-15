@@ -4,6 +4,15 @@ module BushSlicer
     RESOURCE = 'configmaps'
 
     # see #raw_resource
+    def metadata(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('metadata')
+    end
+
+    def annotations(key: nil, user: nil, cached: true, quiet: false)
+      self.metadata.dig('annotations', key)
+    end
+
     def data(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('data')
