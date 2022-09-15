@@ -1609,5 +1609,12 @@ Given /^I store kubernetes elected leader pod for ovnkube-master in the#{OPT_SYM
   # the annotation result is a string reprensation of a JSON, convert it to a
   # yaml object for easier access
   annotation_hash = YAML.load(cm_annotation)
-  cb[cb_leader_name] = annotation_hash['holderIdentity']
+  holder_id =  annotation_hash['holderIdentity']
+  ### cli way
+  # @result= admin.cli_exec(:get, namespace: "openshift-ovn-kubernetes", resource: "pod",  o: 'yaml', fieldSelector: "spec.nodeName=#{holder_id}")
+  # cb[cb_leader_name] = pod(@result[:parsed]["items"][0]['metadata']['name'])
+  ###  oop way
+  pods = project.pods(by:user)
+  target_pod = pods.select {|p| p.props[:node_name] == holder_id }.first
+  cb[cb_leader_name ] = target_pod
 end
