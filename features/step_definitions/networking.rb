@@ -612,13 +612,13 @@ Given /^the multus is enabled on the cluster$/ do
   success = wait_for(120, interval: 10)  {
     desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
     available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
-    if (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0 
+    if (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0
       true
     else
       logger.info("Multus is not running correctly, continue checking")
       false
     end
-  } 
+  }
   unless success
     logger.warn "Multus is not running correctly!"
     logger.warn "We will skip this scenario"
@@ -1379,7 +1379,7 @@ Given /^the IPsec is enabled on the cluster$/ do
     logger.warn "env doesn't have IPSec enabled"
     logger.warn "We will skip this scenario"
     skip_this_scenario
-  end 
+  end
 end
 
 Given /^the node's active nmcli connection is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
@@ -1506,7 +1506,7 @@ Given /^I switch the ovn gateway mode on this cluster$/ do
     end
   else
     #for version < 4.10 we need to check if gateway-mode-config cm is present under CNO NS
-    @result = admin.cli_exec(:get, resource: "cm", n: "openshift-network-operator")   
+    @result = admin.cli_exec(:get, resource: "cm", n: "openshift-network-operator")
     if @result[:response].include? "gateway-mode-config"
       logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
       #config map (LGW) deletion will be noticed by CNO which will cause cluster to rollout on SGW
@@ -1546,7 +1546,7 @@ Given /^the cluster has workers for sctp$/ do
     skip_this_scenario
   end
 end
- 
+
 Given /^I save cluster type to the#{OPT_SYM} clipboard$/ do | cb_name |
   ensure_admin_tagged
   cb_name = "cluster_type" unless cb_name
@@ -1594,8 +1594,27 @@ end
 Given /^the cluster is dual stack network type$/ do
   ensure_admin_tagged
   @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.serviceNetwork}")
-  unless @result[:response].count(":") >= 2 && @result[:response].count(".") >= 2  
+  unless @result[:response].count(":") >= 2 && @result[:response].count(".") >= 2
     logger.warn "the cluster is not dual stack cluster, will skip this scenario"
     skip_this_scenario
   end
+end
+
+Given /^I store kubernetes elected leader pod for ovnkube-master in the#{OPT_SYM} clipboard$/ do |cb_leader_name|
+  ensure_admin_tagged
+  cb_leader_name ||= "leader_pod"
+  step %/I switch to cluster admin pseudo user/
+  step %/I use the "openshift-ovn-kubernetes" project/
+  cm_annotation = config_map('ovn-kubernetes-master').annotations(key: 'control-plane.alpha.kubernetes.io/leader')
+  # the annotation result is a string reprensation of a JSON, convert it to a
+  # yaml object for easier access
+  annotation_hash = YAML.load(cm_annotation)
+  holder_id =  annotation_hash['holderIdentity']
+  ### cli way
+  # @result= admin.cli_exec(:get, namespace: "openshift-ovn-kubernetes", resource: "pod",  o: 'yaml', fieldSelector: "spec.nodeName=#{holder_id}")
+  # cb[cb_leader_name] = pod(@result[:parsed]["items"][0]['metadata']['name'])
+  ###  oop way
+  pods = project.pods(by:user)
+  target_pod = pods.select {|p| p.props[:node_name] == holder_id }.first
+  cb[cb_leader_name ] = target_pod
 end
