@@ -75,6 +75,7 @@ Feature: jenkins.feature
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy
+    @flaky
     Examples:
       | case_id                    | ver |
       | OCP-11369:OpenshiftJenkins | 2   | # @case_id OCP-11369
@@ -121,6 +122,7 @@ Feature: jenkins.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
+  @flaky
   Scenario: OCP-12773:BuildAPI new-app/new-build support for pipeline buildconfigs
     Given I have a project
     When I run the :new_app client command with:
@@ -313,6 +315,7 @@ Feature: jenkins.feature
     @proxy @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
     @amd64
+    @flaky
     Examples:
       | version |
       | 1       |
@@ -320,6 +323,7 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-15384
+  @flaky
   @console
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
@@ -370,6 +374,7 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-35068
+  @flaky
   @admin
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
