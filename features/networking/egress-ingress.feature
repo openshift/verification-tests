@@ -367,6 +367,7 @@ Feature: Egress-ingress related networking scenarios
   Scenario: OCP-19615:SDN Iptables should be updated with correct endpoints when egress DNS policy was used
     Given the env is using "OpenShiftSDN" networkType	
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/list_for_pods.json"
     When I run oc create over "list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
