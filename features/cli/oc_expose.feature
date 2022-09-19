@@ -11,9 +11,11 @@ Feature: oc_expose.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @rosa @aro @osd_ccs
+  @admin
   Scenario: OCP-10873:APIServer Access app througth secure service and regenerate service serving certs if it about to expire
     Given the master version >= "3.3"
     Given I have a project
+    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     Given I obtain test data file "deployment/OCP-10873/svc.json"
     When I run the :create client command with:
       | f | svc.json |
