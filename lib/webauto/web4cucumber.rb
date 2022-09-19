@@ -112,8 +112,8 @@ require_relative 'chrome_extension'
       client.open_timeout = 180
       client.read_timeout = 600
       headless
-      # Selenium::WebDriver.logger.level = :debug
-      # Watir.logger.level = :debug
+      Selenium::WebDriver.logger.level = :debug
+      Watir.logger.level = :debug
       if @browser_type == :firefox
         logger.info "Launching Firefox Marionette/Geckodriver"
         raise "auth proxy not implemented for Firefox" if proxy_pass
@@ -148,7 +148,7 @@ require_relative 'chrome_extension'
           chrome_caps[:element_scroll_behavior] = @scroll_strategy
         end
         if self.class.container?
-          chrome_switches.concat %w[--headless --no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage --disable-extensions]
+          chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage --disable-extensions]
         end
         options = {
           browser_name: 'chrome',
