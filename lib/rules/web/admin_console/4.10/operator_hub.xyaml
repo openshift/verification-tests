@@ -575,6 +575,10 @@ check_specific_namespace_installation_mode_without_recommended_ns:
     checked_radio_text: OwnNamespace
   action: check_disabled_radio_input
   action: check_checked_radio_input
+check_ns_dont_support_installationmode_warn:
+  params:
+    content: can cause unexpected behavior
+  action: check_page_contains
 enable_cluster_monitoring:
   element:
     selector:
