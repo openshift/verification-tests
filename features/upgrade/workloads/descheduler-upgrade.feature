@@ -63,8 +63,11 @@ Feature: Descheduler major upgrade should work fine
     And I use the "openshift-kube-descheduler-operator" project
     And status becomes :running of exactly 1 pods labeled:
       | name=descheduler-operator |
+    Given I wait up to 180 seconds for the steps to pass:
+    """
     And status becomes :running of exactly 1 pods labeled:
       | app=descheduler |
+    """
     When I run the :get client command with:
       | resource     | csv                                 |
       | n            | openshift-kube-descheduler-operator |
