@@ -741,6 +741,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml"
     When I run the :create admin command with:
       | f | bridge-host-local-vlan.yaml |
