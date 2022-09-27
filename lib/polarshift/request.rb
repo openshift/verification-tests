@@ -16,6 +16,10 @@ module BushSlicer
           @options = conf[:services, svc_name.to_sym].merge options
         end
 
+        # error checking to make sure the `private` repo is present
+        if @options.nil?
+          raise "\nCan't find polarshift credentials to do REST call.  Please check the `private` repo is cloned into your repo"
+        end
         unless @options[:user]
           Timeout::timeout(120) {
             STDERR.puts "PolarShift user (timeout in 2 minutes): "
