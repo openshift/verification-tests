@@ -9,6 +9,12 @@
     }
   },
   "spec": {
+    "securityContext": {
+      "runAsNonRoot": true,
+      "seccompProfile": {
+        "type": "RuntimeDefault"
+      }
+    },
     "containers": [
       {
         "name": "hello-openshift",
@@ -29,8 +35,10 @@
         "terminationMessagePath": "/dev/termination-log",
         "imagePullPolicy": "IfNotPresent",
         "securityContext": {
-          "capabilities": {},
-          "privileged": false
+          "allowPrivilegeEscalation": false,
+          "capabilities": {
+            "drop": ["ALL"]
+          }
         }
       }
     ],
