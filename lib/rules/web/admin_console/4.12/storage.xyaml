@@ -49,7 +49,7 @@ choose_access_mode:
 set_request_size:
   elements:
   - selector: &pvc_request_size_input
-      xpath: //input[@name='requestSizeValue']
+      xpath: //input[@data-test='pvc-size']
     op: clear
   - selector:
       <<: *pvc_request_size_input
