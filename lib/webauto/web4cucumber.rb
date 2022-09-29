@@ -148,7 +148,7 @@ require_relative 'chrome_extension'
           chrome_caps[:element_scroll_behavior] = @scroll_strategy
         end
         if self.class.container?
-          chrome_switches.concat %w[--headless --no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage]
+          chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage]
         end
         options = {
           browser_name: 'chrome',
