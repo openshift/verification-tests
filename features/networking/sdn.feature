@@ -228,13 +228,13 @@ Feature: SDN related networking scenarios
     When I run commands on the host:
       | iptables-save --version |
     Then the step should succeed
-    And evaluation of `@result[:stdout].scan(/\d\.\d.\d/)` is stored in the :iptables_version_host clipboard
+    And evaluation of `@result[:stdout].scan(/\d\.\d.\d/)[0]` is stored in the :iptables_version_host clipboard
     #Comparing host and sdn container version for iptables binary
     When I run command on the node's sdn pod:
       | iptables-save | --version |
     Then the step should succeed
-    And evaluation of `@result[:stdout].scan(/\d\.\d.\d/)` is stored in the :iptables_version_pod clipboard
-    Then the expression should be true> cb.iptables_version_host == cb.iptables_version_pod
+    And the output should contain:
+      | <%= cb.iptables_version_host %> |
 
     When I run commands on the host:
       | iptables -S \| wc -l |
@@ -245,7 +245,7 @@ Feature: SDN related networking scenarios
       | bash | -c | iptables -S \| wc -l |
     Then the step should succeed
     And evaluation of `@result[:stdout].split("\n")[0]` is stored in the :sdn_pod_rules clipboard
-    Then the expression should be true> cb.host_rules == cb.sdn_pod_rules
+    Then the expression should be true> cb.sdn_pod_rules >= cb.host_rules
 
   # @author huirwang@redhat.com
   # @case_id OCP-25707
