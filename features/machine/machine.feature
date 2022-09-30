@@ -593,38 +593,6 @@ Feature: Machine features testing
       | OCP-35421:ClusterInfrastructure | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
 
   # @author miyadav@redhat.com
-  # @case_id OCP-36489
-  @admin
-  @aro
-  @proxy @noproxy @disconnected
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
-  @azure-ipi
-  Scenario: OCP-36489:ClusterInfrastructure Machineset should not be created when publicIP:true in disconnected Azure enviroment
-    Given I have an IPI deployment
-    And I switch to cluster admin pseudo user
-    Then I use the "openshift-machine-api" project
-
-    Given I obtain test data file "cloud/ms-azure/ms_disconnected_env.yaml"
-    When I run oc create over "ms_disconnected_env.yaml" replacing paths:
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | disconnected-azure-36489                    |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | disconnected-azure-36489                    |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["publicIP"]                         | true                                        |
-    
-    And admin ensures "disconnected-azure-36489" machine_set_machine_openshift_io is deleted after scenario
-    Then I store the last provisioned machine in the :machine_latest clipboard 
-    
-    When I run the :describe admin command with:
-      | resource | machines.machine.openshift.io |
-      | name     | <%= cb.machine_latest %>      |
-    Then the step should succeed
-    And the output should contain:
-      | InvalidConfiguration |
-
-  # @author miyadav@redhat.com
   # @case_id OCP-47658
   @admin
   @aro
