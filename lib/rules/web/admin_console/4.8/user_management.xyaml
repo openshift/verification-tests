@@ -35,7 +35,10 @@ check_rolebinding_of_user:
 impersonate_one_user:
   params:
     kebab_item: Impersonate User <resource_name>
+    test_id_value: item-filter
+    filter_text: <resource_name>
   action: goto_users_list_page
+  action: set_strings_in_filter_box
   action: click_one_operation_in_kebab
 check_impersonate_notifications:
   elements:
