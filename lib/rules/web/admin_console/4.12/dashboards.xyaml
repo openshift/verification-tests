@@ -707,6 +707,7 @@ check_matched_number_of_resource:
       for (var i=0; i < all_links.length; i++){
         if (all_links[i].innerText.toLowerCase().includes('<resource_type>')) {
           expected_link = all_links[i];
+          break;
         }
       }
       var num = expected_link.innerText.toLowerCase().split(" ")[0];
