@@ -345,7 +345,7 @@ show_alert_graph:
 hide_show_alert_graph_button:
   element:
     selector:
-      xpath: //h2[@class='co-section-heading']/../button
+      xpath: //*[@class="pf-c-toolbar__item"]/button
     op: click
 
 Disable_all_filters:
