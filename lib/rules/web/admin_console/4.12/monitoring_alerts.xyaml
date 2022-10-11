@@ -345,7 +345,7 @@ show_alert_graph:
 hide_show_alert_graph_button:
   element:
     selector:
-      xpath: //*[@class="pf-c-toolbar__item"]/button
+      xpath: //div[@class="pf-c-toolbar__item"]/button
     op: click
 
 Disable_all_filters:
