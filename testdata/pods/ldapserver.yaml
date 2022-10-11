@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: ldapserver
+  name: ldapserver
+spec:
+  containers:
+    - image: quay.io/openshifttest/ldap:1.2.0
+      imagePullPolicy: IfNotPresent
+      name: ldapserver
+      securityContext:
+        allowPrivilegeEscalation: false
+

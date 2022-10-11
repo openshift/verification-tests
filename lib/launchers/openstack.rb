@@ -732,6 +732,14 @@ module BushSlicer
       end
     end
 
+    def network_id_to_name(network_id)
+      network = floating_ip_networks.find { |n| n["id"] == network_id }
+      unless network
+        raise "could not find network for id #{network_id} in current tenant."
+      end
+      return network["name"]
+    end
+
     def allocate_floating_ip(network_name, reuse: true, designator: nil)
       network = floating_ip_networks.find { |n| n["name"] == network_name }
       unless network
@@ -981,6 +989,43 @@ module BushSlicer
 
       raise res[:response] unless res[:success]
       return res[:parsed]["ports"]
+    end
+
+    # return free network IP pool free capacity in OpenStack by network ID
+    # @param id [String] the ID of examined network in OpenStack
+    # @return free network IP capacity as reported by OpenStack
+    def get_network_free_capacity_by_id(id)
+      raise "Network ID is nil!" if id.nil?
+      id.strip!
+      raise "Network ID is empty!" unless id.length > 0
+      res = self.rest_run(self.os_network_url + "/v2.0/network-ip-availabilities/#{id}", "GET", {}, self.os_token)
+      raise res[:response] unless res[:success]
+      begin
+        network = res[:parsed]['network_ip_availability']
+        return network['total_ips'].to_i - network['used_ips'].to_i 
+      rescue => e
+        raise "Issue occurred during getting network free capacity: #{e}"
+      end
+    end
+
+    # return free network IP pool free capacity in OpenStack by network name
+    # @param name [String] the name of examined network in OpenStack
+    # @return free network IP capacity as reported by OpenStack
+    def get_network_free_capacity_by_name(name)
+      raise "Network name is nil!" if name.nil?
+      name.strip!
+      raise "Network name is empty!" unless name.length > 0
+      get_opts = {}
+      get_opts["network_name"] = name
+      res = self.rest_run(self.os_network_url + "/v2.0/network-ip-availabilities", "GET", get_opts, self.os_token)
+      raise res[:response] unless res[:success]
+      raise "Network name '#{name}' not found!" if res[:parsed]['network_ip_availabilities'].empty?
+      begin
+        network = res[:parsed]['network_ip_availabilities'][0]
+        return network['total_ips'].to_i - network['used_ips'].to_i
+      rescue => e
+        raise "Issue occurred during getting network free capacity: #{e}"
+      end
     end
 
     # @param service_name [String] the service name of this openstack instance

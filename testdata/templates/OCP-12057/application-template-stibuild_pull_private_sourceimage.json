@@ -1,6 +1,6 @@
 {
   "kind": "Template",
-  "apiVersion": "v1",
+  "apiVersion": "template.openshift.io/v1",
   "metadata": {
     "name": "ruby-helloworld-sample",
     "annotations": {
@@ -49,7 +49,7 @@
     },
     {
       "kind": "Route",
-      "apiVersion": "v1",
+      "apiVersion": "route.openshift.io/v1",
       "metadata": {
         "name": "route-edge",
         "annotations": {
@@ -70,7 +70,7 @@
     },
     {
       "kind": "ImageStream",
-      "apiVersion": "v1",
+      "apiVersion": "image.openshift.io/v1",
       "metadata": {
         "name": "origin-ruby-sample"
       },
@@ -81,7 +81,7 @@
     },
     {
       "kind": "ImageStream",
-      "apiVersion": "v1",
+      "apiVersion": "image.openshift.io/v1",
       "metadata": {
         "name": "ruby-22-centos7"
       },
@@ -94,7 +94,7 @@
     },
     {
       "kind": "BuildConfig",
-      "apiVersion": "v1",
+      "apiVersion": "build.openshift.io/v1",
       "metadata": {
         "name": "ruby-sample-build",
         "labels": {
@@ -136,7 +136,7 @@
             {
               "from": {
                 "kind": "DockerImage",
-                "name": "quay.io/openshifttest/ruby-27@sha256:cdb6a13032184468b1e0607f36cfb8834c97dbeffeeff800e9e6834323bed8fc"
+                "name": "quay.io/openshifttest/ruby-27@sha256:8f71dd40e3f55d90662a63cb9f02b59e75ed7ac1e911c7919fd14fbfad431348"
               },
               "pullSecret": { "name": "pull" },
               "paths": [
@@ -181,7 +181,7 @@
     },
     {
       "kind": "DeploymentConfig",
-      "apiVersion": "v1",
+      "apiVersion": "apps.openshift.io/v1",
       "metadata": {
         "name": "frontend",
         "annotations": {
@@ -335,7 +335,7 @@
     },
     {
       "kind": "DeploymentConfig",
-      "apiVersion": "v1",
+      "apiVersion": "apps.openshift.io/v1",
       "metadata": {
         "name": "database",
         "annotations": {
@@ -416,7 +416,7 @@
             "containers": [
               {
                 "name": "ruby-helloworld-database",
-                "image": "quay.io/openshifttest/mysql@sha256:7a6a500fbdc89871973f1f2fe1e64ebb2548dea06df2cb1b3a2989236a26289e",
+                "image": "quay.io/openshifttest/mysql@sha256:0c76fd1a2eb31b0a196c7c557e4e56a11a6a8b26d745289e75fc983602035ba5",
                 "ports": [
                   {
                     "containerPort": 3306,

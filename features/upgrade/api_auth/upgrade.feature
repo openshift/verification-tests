@@ -194,13 +194,14 @@ Feature: apiserver and auth related upgrade check
   @upgrade-prepare
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Check the default SCCs should not be stomped by CVO - prepare
     Given as admin I successfully merge patch resource "scc/anyuid" with:
       | {"users": ["system:serviceaccount:test-scc:test-scc"]} |
@@ -224,24 +225,17 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Check the default SCCs should not be stomped by CVO
     Given the "kube-apiserver" operator version matches the current cluster version
     And the "openshift-apiserver" operator version matches the current cluster version
-    Given the expression should be true> cluster_operator('kube-apiserver').condition(type: 'Progressing')['status'] == "False"
-    And the expression should be true> cluster_operator('kube-apiserver').condition(type: 'Available')['status'] == "True"
-    And the expression should be true> cluster_operator('kube-apiserver').condition(type: 'Degraded')['status'] == "False"
-    And the expression should be true> cluster_operator('kube-apiserver').condition(type: 'Upgradeable')['status'] == "True"
-    Given the expression should be true> cluster_operator('openshift-apiserver').condition(type: 'Progressing')['status'] == "False"
-    And the expression should be true> cluster_operator('openshift-apiserver').condition(type: 'Available')['status'] == "True"
-    And the expression should be true> cluster_operator('openshift-apiserver').condition(type: 'Degraded')['status'] == "False"
-    And the expression should be true> cluster_operator('openshift-apiserver').condition(type: 'Upgradeable')['status'] == "True"
     When I run the :get admin command with:
       | resource      | scc               |
       | resource_name | anyuid            |
@@ -259,13 +253,14 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.11 @4.10 @4.9 @4.8
+  @4.12 @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -276,7 +271,7 @@ Feature: apiserver and auth related upgrade check
       | f | headless-services.yaml |
     Then the step should succeed
     Given I use the "service-ca-upgrade" project
-    And I wait for the "test-serving-cert" secret to appear
+    And I wait for the "test-serving-cert" secret to appear up to 120 seconds
     And I run the :extract client command with:
       | resource | secret/test-serving-cert |
       | confirm  | true                     |
@@ -296,13 +291,14 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-check
   @users=upuser1,upuser2
-  @4.11 @4.10 @4.9 @4.8
+  @4.12 @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
     Given the master version >= "4.8"
     Given I switch to cluster admin pseudo user
@@ -326,13 +322,15 @@ Feature: apiserver and auth related upgrade check
   @upgrade-prepare
   @qeci
   @admin
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
+  @rosa @aro @osd_ccs
   Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade - prepare
     # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
     # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -344,13 +342,15 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @qeci
   @admin
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
+  @rosa @aro @osd_ccs
   Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade
     # This case needs keep running oc commands against servers during upgrade, but our framework does not support
     # So using a workaround: run them in a background script during upgrade CI job and check result here

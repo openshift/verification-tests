@@ -4,7 +4,11 @@ Feature: kubelet restart and node restart
   @admin
   @destructive
   @inactive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @upgrade-sanity
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: kubelet restart should not affect attached/mounted volumes
     Given I have a project
     When I run the :new_app client command with:
@@ -32,26 +36,23 @@ Feature: kubelet restart and node restart
     @azure-ipi
     @azure-upi
     Examples:
-      | platform       |
-      | azure-disk     | # @case_id OCP-13333
+      | case_id           | platform   |
+      | OCP-13333:Storage | azure-disk | # @case_id OCP-13333
 
     @openstack-ipi
     @openstack-upi
     Examples:
-      | platform       |
-      | cinder         | # @case_id OCP-11317
+      | case_id           | platform |
+      | OCP-11317:Storage | cinder   | # @case_id OCP-11317
 
     @gcp-ipi
     @gcp-upi
     Examples:
-      | platform       |
-      | gce            | # @case_id OCP-11613
+      | case_id           | platform |
+      | OCP-11613:Storage | gce      | # @case_id OCP-11613
 
     @vsphere-ipi
     @vsphere-upi
-    @upgrade-sanity
-    @singlenode
-    @proxy @noproxy @disconnected @connected
     Examples:
-      | platform       |
-      | vsphere-volume | # @case_id OCP-13631
+      | case_id           | platform       |
+      | OCP-13631:Storage | vsphere-volume | # @case_id OCP-13631

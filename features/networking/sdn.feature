@@ -8,7 +8,7 @@ Feature: SDN related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy
-  Scenario: kubelet proxy could change to userspace mode
+  Scenario: OCP-10025:SDN kubelet proxy could change to userspace mode
     Given the env is using one of the listed network plugins:
       | subnet      |
       | multitenant |
@@ -41,16 +41,18 @@ Feature: SDN related networking scenarios
   # @case_id OCP-11286
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  Scenario: iptables rules will be repaired automatically once it gets destroyed
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11286:SDN iptables rules will be repaired automatically once it gets destroyed
     # we do not detect incomplete rule removal since ~4.3, BZ-1810316
     # so only test on >= 4.3
     Given the master version >= "4.3"
+    Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host
     And the node iptables config is checked
     And the step succeeded
@@ -81,14 +83,16 @@ Feature: SDN related networking scenarios
   # @author hongli@redhat.com
   # @case_id OCP-13847
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-openshiftsdn
-  Scenario: an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-13847:SDN an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
     Given the master version >= "3.6"
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
     Then evaluation of `pod.node_name` is stored in the :node_name clipboard
@@ -105,7 +109,7 @@ Feature: SDN related networking scenarios
   @admin
   @destructive
   @inactive
-  Scenario: net.ipv4.ip_forward should be always enabled on node service startup
+  Scenario: OCP-15251:SDN net.ipv4.ip_forward should be always enabled on node service startup
     Given I select a random node's host
     And the node service is verified
     And the node network is verified
@@ -139,7 +143,7 @@ Feature: SDN related networking scenarios
   @admin
   @destructive
   @inactive
-  Scenario: The openflow list will be cleaned after deleted the node
+  Scenario: OCP-14985:SDN The openflow list will be cleaned after deleted the node
     Given the env is using "OpenShiftSDN" networkType
     Given environment has at least 2 schedulable nodes
     And I store the schedulable workers in the :nodes clipboard
@@ -189,13 +193,14 @@ Feature: SDN related networking scenarios
   # @author hongli@redhat.com
   # @case_id OCP-18535
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: should not show "No such device" message when run "ovs-vsctl show" command
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-18535:SDN should not show "No such device" message when run "ovs-vsctl show" command
     Given I have a project
     And I have a pod-for-ping in the project
     And evaluation of `pod.node_name` is stored in the :node_name clipboard
@@ -212,34 +217,35 @@ Feature: SDN related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23543
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-openshiftsdn
   @proxy @noproxy
-  Scenario: The iptables binary and rules on sdn containers should be the same as host
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-23543:SDN The iptables binary and rules on sdn containers should be the same as host
     Given I select a random node's host
     When I run commands on the host:
       | iptables-save --version |
     Then the step should succeed
-    And evaluation of `@result[:response].scan(/\d\.\d.\d/)` is stored in the :iptables_version_host clipboard
+    And evaluation of `@result[:stdout].scan(/\d\.\d.\d/)[0]` is stored in the :iptables_version_host clipboard
     #Comparing host and sdn container version for iptables binary
     When I run command on the node's sdn pod:
       | iptables-save | --version |
     Then the step should succeed
-    And evaluation of `@result[:response].scan(/\d\.\d.\d/)` is stored in the :iptables_version_pod clipboard
-    Then the expression should be true> cb.iptables_version_host == cb.iptables_version_pod
+    And the output should contain:
+      | <%= cb.iptables_version_host %> |
 
     When I run commands on the host:
       | iptables -S \| wc -l |
     Then the step should succeed
-    And evaluation of `@result[:response].split("\n")[0]` is stored in the :host_rules clipboard
+    And evaluation of `@result[:stdout].split("\n")[0]` is stored in the :host_rules clipboard
     #Comparing host and sdn container rules for iptables
     When I run command on the node's sdn pod:
       | bash | -c | iptables -S \| wc -l |
     Then the step should succeed
-    And evaluation of `@result[:response].split("\n")[0]` is stored in the :sdn_pod_rules clipboard
-    Then the expression should be true> cb.host_rules == cb.sdn_pod_rules
+    And evaluation of `@result[:stdout].split("\n")[0]` is stored in the :sdn_pod_rules clipboard
+    Then the expression should be true> cb.sdn_pod_rules >= cb.host_rules
 
   # @author huirwang@redhat.com
   # @case_id OCP-25707
@@ -249,7 +255,7 @@ Feature: SDN related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: ovs-vswitchd process must be running on all ovs pods
+  Scenario: OCP-25707:SDN ovs-vswitchd process must be running on all ovs pods
     Given I switch to cluster admin pseudo user
     When I run cmds on all ovs pods:
       | pgrep | ovs-vswitchd |
@@ -265,7 +271,7 @@ Feature: SDN related networking scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-openshiftsdn
-  Scenario: Killing ovs process should not put sdn and ovs pods in bad shape
+  Scenario: OCP-25706:SDN Killing ovs process should not put sdn and ovs pods in bad shape
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
     Given I obtain test data file "networking/list_for_pods.json"
@@ -313,7 +319,8 @@ Feature: SDN related networking scenarios
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Networking should work on default namespace
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-27655:SDN Networking should work on default namespace
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157
     Given I switch to cluster admin pseudo user
     And I use the "default" project
@@ -362,12 +369,13 @@ Feature: SDN related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-25787
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
-  Scenario: Don't write CNI configuration file until ovn-controller has done at least one iteration
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-25787:SDN Don't write CNI configuration file until ovn-controller has done at least one iteration
     Given the env is using "OVNKubernetes" networkType
     And I store the masters in the :master clipboard
     And I store "<%= cb.master[0].name %>" node's corresponding default networkType pod name in the :ovnkube_pod clipboard
@@ -416,12 +424,13 @@ Feature: SDN related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-25933
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
-  Scenario: NetworkManager should consider OVS interfaces as unmanaged
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-25933:SDN NetworkManager should consider OVS interfaces as unmanaged
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
   And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
@@ -435,11 +444,11 @@ Feature: SDN related networking scenarios
   # And veths ovs interfaces also needs to be unmanaged
   And I run commands on the host:
     | nmcli device \| grep ethernet \| grep -c unmanaged |
-  And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_unmanaged_veths clipboard
+  And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_unmanaged_infs clipboard
   And I run commands on the host:
     | nmcli \| grep veth \| wc -l |
   And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_veths clipboard
-  Then the expression should be true> cb.no_of_veths == cb.no_of_unmanaged_veths
+  Then the expression should be true> cb.no_of_unmanaged_infs >=cb.no_of_veths
 
   # @author huirwang@redhat.com
   # @case_id OCP-29299
@@ -450,7 +459,7 @@ Feature: SDN related networking scenarios
   @baremetal-upi
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Without allow the migration operation, migration cannot be executed
+  Scenario: OCP-29299:SDN Without allow the migration operation, migration cannot be executed
     When I run the :annotate client command with:
        | resource     | network.operator.openshift.io                       |
        | resourcename | cluster                                             |
@@ -484,12 +493,13 @@ Feature: SDN related networking scenarios
   # @case_id OCP-36287
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: Netnamespace should be recreated after deleting it before the project is deleted
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-36287:SDN Netnamespace should be recreated after deleting it before the project is deleted
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     And admin checks that the "<%= project.name %>" net_namespace exists
@@ -503,12 +513,14 @@ Feature: SDN related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-41132
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: UDP offloads were disabled on vsphere platform
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-41132:SDN UDP offloads were disabled on vsphere platform
+    Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host
     Given the default interface on nodes is stored in the :default_interface clipboard
     And I run commands on the host:
@@ -521,12 +533,13 @@ Feature: SDN related networking scenarios
   # @author zzhao@redhat.com
   # @case_id OCP-43146
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
   @network-openshiftsdn
-  Scenario: Disable conntrack for vxlan traffic
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-43146:SDN Disable conntrack for vxlan traffic
     Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host
     And I run commands on the host:

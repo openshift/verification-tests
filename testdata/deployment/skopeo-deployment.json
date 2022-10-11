@@ -1,5 +1,5 @@
 {
-    "apiVersion": "v1",
+    "apiVersion": "apps.openshift.io/v1",
     "kind": "DeploymentConfig",
     "metadata": {
         "labels": {
@@ -38,7 +38,7 @@
                             "-c",
                             "while : ; do sleep 15m ; done"
                         ],
-                        "image": "quay.io/openshifttest/skopeo@sha256:426196e376cf045012289d53fec986554241496ed7f38e347fc56505aa8ad322",
+                        "image": "quay.io/openshifttest/skopeo@sha256:d5f288968744a8880f983e49870c0bfcf808703fe126e4fb5fc393fb9e599f65",
                         "imagePullPolicy": "IfNotPresent",
                         "name": "skopeo",
                         "resources": {},

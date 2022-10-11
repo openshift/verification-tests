@@ -1,4 +1,5 @@
 Feature: test nodes relates steps
+
   @admin
   @destructive
   Scenario: nodes test
@@ -17,3 +18,10 @@ Feature: test nodes relates steps
   Scenario: fips test
     Given fips is disabled
     Given fips is enabled
+
+  @admin
+  Scenario: test fix of "PodSecurity violation error" in 4.12
+    Given I select a random node's host
+    When I run commands on the host:
+      | df -h / |
+    Then the step should succeed

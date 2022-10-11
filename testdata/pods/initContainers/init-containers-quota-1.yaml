@@ -7,7 +7,7 @@ metadata:
   annotations:
     pod.alpha.kubernetes.io/init-containers: '[{
     "name": "wait1",
-    "image": "quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22",
+    "image": "quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c",
     "command": ["/bin/sh", "-c", "sleep 10"],
     "resources": {
         "limits": {
@@ -22,7 +22,7 @@ metadata:
     },
     {
     "name": "wait2",
-    "image": "quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22",
+    "image": "quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c",
     "command": ["/bin/sh", "-c", "sleep 10"],
     "resources": {
         "limits": {
@@ -37,7 +37,7 @@ metadata:
     }]'
 spec:
   containers:
-    - image: "quay.io/openshifttest/hello-openshift@sha256:1e70b596c05f46425c39add70bf749177d78c1e98b2893df4e5ae3883c2ffb5e"
+    - image: "quay.io/openshifttest/hello-openshift@sha256:4200f438cf2e9446f6bcff9d67ceea1f69ed07a2f83363b7fb52529f7ddd8a83"
       imagePullPolicy: IfNotPresent
       name: hello-pod
       ports:
@@ -57,7 +57,7 @@ spec:
       volumeMounts:
         - mountPath: /tmp
           name: tmp
-    - image: "quay.io/openshifttest/hello-openshift@sha256:1e70b596c05f46425c39add70bf749177d78c1e98b2893df4e5ae3883c2ffb5e"
+    - image: "quay.io/openshifttest/hello-openshift@sha256:4200f438cf2e9446f6bcff9d67ceea1f69ed07a2f83363b7fb52529f7ddd8a83"
       imagePullPolicy: IfNotPresent
       name: hello-pod-1
       env:

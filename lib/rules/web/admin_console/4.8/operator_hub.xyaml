@@ -261,9 +261,6 @@ check_quay_image_security_popup:
     op: click
   - selector:
       xpath: //div[contains(@class,'co-status-popup') and contains(.,'Impact') and contains(.,'Vulnerabilities')]
-  - selector:
-      xpath: //div[contains(@class,'co-status-popup') and contains(.,'<severity>')]
-    timeout: 40
   action: check_link_and_text
 check_affected_pods_tab:
   params:
@@ -508,6 +505,11 @@ switch_to_yaml_view:
   action: click_radio_input
   action: check_page_contains
   action: wait_box_loaded
+switch_to_form_view:
+  element:
+    selector:
+      id: form
+    op: click
 select_installed_namespace:
   action: click_project_list_dropdown
   action: choose_project_from_dropdown_list
@@ -533,6 +535,7 @@ check_specific_namespace_installation_mode_without_recommended_ns:
     checked_radio_text: OwnNamespace
   action: check_disabled_radio_input
   action: check_checked_radio_input
+check_ns_dont_support_installationmode_warn: {}
 enable_cluster_monitoring:
   element:
     selector:
@@ -560,7 +563,7 @@ check_manual_approve_info:
   elements:
   - selector:
       xpath: //h2[contains(., 'Manual approval required')]
-    timeout: 20
+    timeout: 50
 check_installation_failure_message:
   elements:
   - selector:
@@ -667,6 +670,11 @@ click_create_mockk8sdropdownresouce:
     button_text: Create MockK8sDropdownResource
   action: click_button
 open_k8sresource_dropdown:
+  action:
+    if_element:
+      selector:
+        id: form
+    ref: switch_to_form_view
   element:
     selector:
       id: root_spec_k8sResourcePrefix

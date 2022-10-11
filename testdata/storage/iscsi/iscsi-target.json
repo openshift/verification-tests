@@ -27,7 +27,7 @@
         "containers": [
             {
                 "name": "iscsi-target",
-                "image": "quay.io/openshifttest/iscsi@sha256:298bbfd7474bf1dce215ea6a1311996aa07e7fa3f3c3e05888fe888d220b0954",
+                "image": "quay.io/openshifttest/iscsi@sha256:6a1be064e9374cbd6b075f396343307b10a108c72eea34206942355343385141",
                 "securityContext": {
                     "privileged": true
                 },

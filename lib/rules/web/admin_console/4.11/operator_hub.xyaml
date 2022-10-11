@@ -48,7 +48,7 @@ set_operand_name:
 remove_operand_label:
   elements:
   - selector:
-      xpath: //tags-input//a[contains(@class,'remove-button')]
+      xpath: //tags-input//button[contains(@aria-label,'Close')]
     op: click
 set_selector_value:
   params:
@@ -262,9 +262,6 @@ check_quay_image_security_popup:
     op: click
   - selector:
       xpath: //div[contains(@class,'co-status-popup') and contains(.,'Impact') and contains(.,'Vulnerabilities')]
-  - selector:
-      xpath: //div[contains(@class,'co-status-popup') and contains(.,'<severity>')]
-    timeout: 40
   action: check_link_and_text
 check_affected_pods_tab:
   params:
@@ -510,11 +507,11 @@ check_fips_mode_infras_value_in_operator_modal:
   action: click_checkbox_fips_from_infrastructure_features
 filter_by_keyword_on_catalog_page:
   elements:
-  - selector:
-      xpath: //input[contains(@class, 'co-catalog-page__input')]
+  - selector: &search_input
+      xpath: //div[@data-test='search-operatorhub']//input
     op: send_keys :backspace
   - selector:
-      xpath: //input[contains(@class, 'co-catalog-page__input')]
+      <<: *search_input
     op: send_keys <keyword>
 open_operator_modal:
   params:
@@ -548,6 +545,11 @@ switch_to_yaml_view:
     selector:
       xpath: //div[contains(@class,'monaco-editor')]
     timeout: 40
+switch_to_form_view:
+  element:
+    selector:
+      id: form
+    op: click
 select_installed_namespace:
   action: click_project_list_dropdown
   action: choose_project_from_dropdown_list
@@ -573,6 +575,10 @@ check_specific_namespace_installation_mode_without_recommended_ns:
     checked_radio_text: OwnNamespace
   action: check_disabled_radio_input
   action: check_checked_radio_input
+check_ns_dont_support_installationmode_warn:
+  params:
+    content: can cause unexpected behavior
+  action: check_page_contains
 enable_cluster_monitoring:
   element:
     selector:
@@ -612,7 +618,7 @@ check_manual_approve_info:
   elements:
   - selector:
       xpath: //h2[contains(., 'Manual approval required')]
-    timeout: 20
+    timeout: 50
 check_installation_failure_message:
   action: goto_csv_detail_page
   elements:
@@ -716,6 +722,11 @@ click_create_mockk8sdropdownresouce:
     button_text: Create MockK8sDropdownResource
   action: click_button
 open_k8sresource_dropdown:
+  action:
+    if_element:
+      selector:
+        id: form
+    ref: switch_to_form_view
   element:
     selector:
       id: root_spec_k8sResourcePrefix

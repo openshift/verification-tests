@@ -2,13 +2,14 @@ Feature: secrets related scenarios
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10725
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  Scenario: deployment hook volume inheritance --with secret volume
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10725:Workloads deployment hook volume inheritance --with secret volume
     Given I have a project
     And I run the :create_secret client command with:
       | secret_type | generic    |
@@ -35,14 +36,15 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12281
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Pods do not have access to each other's secrets in the same namespace
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12281:Node Pods do not have access to each other's secrets in the same namespace
     Given I have a project
     Given I obtain test data file "secrets/ocp12281/first-secret.json"
     When I run the :create client command with:
@@ -87,14 +89,15 @@ Feature: secrets related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-12310
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Pods do not have access to each other's secrets with the same secret name in different namespaces
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12310:Node Pods do not have access to each other's secrets with the same secret name in different namespaces
     Given I have a project
     Given evaluation of `project.name` is stored in the :project0 clipboard
     Given I obtain test data file "secrets/secret1.json"
@@ -133,7 +136,7 @@ Feature: secrets related scenarios
 
   # @author yantan@redhat.com
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Insert secret to builder container via oc new-build - source/docker build
     Given I have a project
     Given I obtain test data file "secrets/testsecret1.json"
@@ -177,21 +180,24 @@ Feature: secrets related scenarios
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
-      | type   | build_secret         | path      | command | expression               |
-      | docker | testsecret1:mysecret1| mysecret1 | ls      | true                     | # @case_id OCP-11947
+      | case_id            | type   | build_secret          | path      | command | expression |
+      | OCP-11947:BuildAPI | docker | testsecret1:mysecret1 | mysecret1 | ls      | true       | # @case_id OCP-11947
 
   # @author chezhang@redhat.com
   # @case_id OCP-10814
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Consume the same Secrets as environment variables in multiple pods
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10814:Node Consume the same Secrets as environment variables in multiple pods
     Given I have a project
     Given I obtain test data file "secrets/secret.yaml"
     When I run the :create client command with:
@@ -241,14 +247,15 @@ Feature: secrets related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11260
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Using Secrets as Environment Variables
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11260:Node Using Secrets as Environment Variables
     Given I have a project
     Given I obtain test data file "secrets/secret.yaml"
     When I run the :create client command with:
@@ -278,7 +285,7 @@ Feature: secrets related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: Secret volume should update when secret is updated
+  Scenario: OCP-11311:Node Secret volume should update when secret is updated
     Given I have a project
     Given I obtain test data file "secrets/secret1.json"
     When I run the :create client command with:
@@ -313,14 +320,15 @@ Feature: secrets related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-10899
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Mapping specified secret volume should update when secret is updated
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10899:Node Mapping specified secret volume should update when secret is updated
     Given I have a project
     Given I obtain test data file "secrets/secret1.json"
     When I run the :create client command with:
@@ -352,14 +360,15 @@ Feature: secrets related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-10569
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Allow specifying secret data using strings and images
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10569:Node Allow specifying secret data using strings and images
     Given I have a project
     Given I obtain test data file "secrets/secret-datastring-image.json"
     When I run the :create client command with:
@@ -405,14 +414,16 @@ Feature: secrets related scenarios
 
   # @author xiuwang@redhat.com
   # @case_id OCP-10982
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: oc new-app to gather git creds
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-10982:BuildAPI oc new-app to gather git creds
     Given I have a project
     When I have an http-git service in the project
     And I run the :set_env client command with:
@@ -492,7 +503,8 @@ Feature: secrets related scenarios
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12838
-  Scenario: Use build source secret based on annotation on Secret --http
+  @inactive
+  Scenario: OCP-12838:BuildAPI Use build source secret based on annotation on Secret --http
     Given I have a project
     When I have an http-git service in the project
     And I run the :set_env client command with:

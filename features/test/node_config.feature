@@ -1,4 +1,5 @@
 Feature: test node config related steps
+
   Background:
     Given I select a random node's host
     And the value with path " " in node config is stored into the :original_cfg clipboard

@@ -1,13 +1,13 @@
 Given(/^I pick a random( windows)? machineset to scale$/) do | windows |
   ensure_admin_tagged
-  machine_sets = BushSlicer::MachineSet.list(user: admin, project: project("openshift-machine-api")).
+  machine_sets = BushSlicer::MachineSetMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api")).
     select { |ms| ms.available_replicas >= 1 && (windows ? ms.is_windows_machinesets? : !ms.is_windows_machinesets?) }
   cache_resources *machine_sets.shuffle
 end
 
 Given(/^I pick a earliest created machineset and store in#{OPT_SYM} clipboard$/) do | cb_name | 
   ensure_admin_tagged
-  machine_sets = BushSlicer::MachineSet.list(user: admin, project: project("openshift-machine-api"))
+  machine_sets = BushSlicer::MachineSetMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machine_sets
   cb[cb_name] = machine_sets.min_by(&:created_at).name
 end
@@ -17,9 +17,9 @@ When(/^I scale the machineset to ([\+\-]?)#{NUMBER}$/) do | op, num |
 
   case op
   when "-"
-    replicas = machine_set.available_replicas - num.to_i
+    replicas = machine_set_machine_openshift_io.available_replicas - num.to_i
   when "+"
-    replicas = machine_set.available_replicas + num.to_i
+    replicas = machine_set_machine_openshift_io.available_replicas + num.to_i
   when ""
     replicas = num.to_i
   else
@@ -27,20 +27,20 @@ When(/^I scale the machineset to ([\+\-]?)#{NUMBER}$/) do | op, num |
   end
 
   step %Q/I run the :scale admin command with:/, table(%{
-    | n        | openshift-machine-api   |
-    | resource | machineset              |
-    | name     | <%= machine_set.name %> |
-    | replicas | #{replicas.to_s}        |
+    | n        | openshift-machine-api                        |
+    | resource | machinesets.machine.openshift.io             |
+    | name     | <%= machine_set_machine_openshift_io.name %> |
+    | replicas | #{replicas.to_s}                             |
   })
 end
 
 Then(/^the machineset should have expected number of running machines$/) do
-  machine_set.wait_till_ready(admin, 900)
+  machine_set_machine_openshift_io.wait_till_ready(admin, 900)
 
   num_running_machines = 0
-  machine_set.machines.each do | machine |
+  machine_set_machine_openshift_io.machines.each do | machine |
     if machine.deleting?
-      step %Q{I wait for the resource "machine" named "#{machine.name}" to disappear within 1200 seconds}
+      step %Q{I wait for the resource "machines.machine.openshift.io" named "#{machine.name}" to disappear within 1200 seconds}
       step %Q{the step should succeed}
       next
     end
@@ -57,16 +57,16 @@ Then(/^the machineset should have expected number of running machines$/) do
     num_running_machines+=1
   end
 
-  available_replicas = machine_set.available_replicas(user: nil, cached: false, quiet: false)
+  available_replicas = machine_set_machine_openshift_io.available_replicas(user: nil, cached: false, quiet: false)
   if available_replicas != num_running_machines
-    raise "Machineset #{machine_set.name} has #{num_running_machines} running machines, expected #{available_replicas}"
+    raise "Machineset #{machine_set_machine_openshift_io.name} has #{num_running_machines} running machines, expected #{available_replicas}"
   end
 end
 
 Given(/^I clone a( windows)? machineset and name it "([^"]*)"$/) do | os_type, ms_name |
   step %Q{I pick a random#{os_type} machineset to scale}
 
-  ms_yaml = machine_set.raw_resource.to_yaml
+  ms_yaml = machine_set_machine_openshift_io.raw_resource.to_yaml
   new_spec = YAML.load ms_yaml
   new_spec["metadata"]["name"] = ms_name
   new_spec["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] = ms_name
@@ -76,10 +76,10 @@ Given(/^I clone a( windows)? machineset and name it "([^"]*)"$/) do | os_type, m
   new_spec["spec"]["replicas"] = 1
   new_spec.delete("status")
 
-  BushSlicer::MachineSet.create(by: admin, project: project("openshift-machine-api"), spec: new_spec)
-  step %Q{admin ensures "#{ms_name}" machineset is deleted after scenario}
+  BushSlicer::MachineSetMachineOpenshiftIo.create(by: admin, project: project("openshift-machine-api"), spec: new_spec)
+  step %Q{admin ensures "#{ms_name}" machine_set_machine_openshift_io is deleted after scenario}
 
-  machine_sets = BushSlicer::MachineSet.list(user: admin, project: project("openshift-machine-api"))
+  machine_sets = BushSlicer::MachineSetMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machine_sets.max_by(&:created_at)
 
   step %Q{the machineset should have expected number of running machines}
@@ -88,7 +88,7 @@ end
 Given(/^I create a spot instance machineset and name it "([^"]*)" on (aws|gcp|azure)$/) do | ms_name, iaas_type |
   step %Q{I pick a random machineset to scale}
 
-  ms_yaml = machine_set.raw_resource.to_yaml
+  ms_yaml = machine_set_machine_openshift_io.raw_resource.to_yaml
   new_spec = YAML.load ms_yaml
   new_spec["metadata"]["name"] = ms_name
   new_spec["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] = ms_name
@@ -105,10 +105,10 @@ Given(/^I create a spot instance machineset and name it "([^"]*)" on (aws|gcp|az
   new_spec["spec"]["replicas"] = 1
   new_spec.delete("status")
 
-  BushSlicer::MachineSet.create(by: admin, project: project("openshift-machine-api"), spec: new_spec)
-  step %Q{admin ensures "#{ms_name}" machineset is deleted after scenario}
+  BushSlicer::MachineSetMachineOpenshiftIo.create(by: admin, project: project("openshift-machine-api"), spec: new_spec)
+  step %Q{admin ensures "#{ms_name}" machine_set_machine_openshift_io is deleted after scenario}
 
-  machine_sets = BushSlicer::MachineSet.list(user: admin, project: project("openshift-machine-api"))
+  machine_sets = BushSlicer::MachineSetMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machine_sets.max_by(&:created_at)
 
   step %Q{the machineset should have expected number of running machines}

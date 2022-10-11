@@ -1,15 +1,18 @@
 Feature: dockerbuild.feature
+
   # @author wzheng@redhat.com
   # @case_id OCP-12115
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Docker build with both SourceURI and context dir
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-12115:BuildAPI Docker build with both SourceURI and context dir
     Given I have a project
     Given I obtain test data file "build/ruby20rhel7-context-docker.json"
     When I run the :create client command with:
@@ -30,16 +33,18 @@ Feature: dockerbuild.feature
   # @case_id OCP-30854
   @flaky
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Docker build with dockerImage with specified tag
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-30854:BuildAPI Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/ruby-27:multiarch |
+      | docker_image | quay.io/openshifttest/ruby-27:1.2.0 |
       | app_repo     | http://github.com/openshift/ruby-hello-world  |
       | strategy     | docker                                        |
     Then the step should succeed
@@ -76,7 +81,8 @@ Feature: dockerbuild.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13083
-  Scenario: Docker build using Dockerfile with 'FROM scratch'
+  @inactive
+  Scenario: OCP-13083:BuildAPI Docker build using Dockerfile with 'FROM scratch'
     Given I have a project
     When I run the :new_build client command with:
       | D  | FROM scratch\nENV NUM 1 |
@@ -93,18 +99,20 @@ Feature: dockerbuild.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-12855
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Add ARGs in docker build
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-12855:BuildAPI Add ARGs in docker build
     Given I have a project
     When I run the :new_build client command with:
       | code         | http://github.com/openshift/ruby-hello-world.git |
-      | docker_image | quay.io/openshifttest/ruby-27:multiarch          |
+      | docker_image | quay.io/openshifttest/ruby-27:1.2.0          |
       | strategy     | docker                                           |
       | build_arg    | ARG=VALUE                                        |
     Then the step should succeed
@@ -145,7 +153,7 @@ Feature: dockerbuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-18501
   @inactive
-  Scenario: Support additional EXPOSE values in new-app
+  Scenario: OCP-18501:ImageRegistry Support additional EXPOSE values in new-app
     Given I have a project
     When I run the :new_app client command with:
       | code | https://github.com/openshift-qe/oc_newapp_expose |
@@ -156,14 +164,16 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42157
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Mount source secret to builder container- dockerstrategy
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-42157:BuildAPI Mount source secret to builder container- dockerstrategy
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |
@@ -172,7 +182,7 @@ Feature: dockerbuild.feature
       | from_literal | password=redhat    |
     Then the step should succeed
     When I run the :new_build client command with:
-      | D | FROM quay.io/openshifttest/base-alpine:multiarch\nRUN ls -l /var/run/secret/sourcesecret |
+      | D | FROM quay.io/openshifttest/base-alpine:1.2.0\nRUN ls -l /var/run/secret/sourcesecret |
     Then the step should succeed
     Then the "base-alpine" image stream was created
     And the "base-alpine-1" build was created
@@ -197,14 +207,16 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42158
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Mount source configmap to builder container- dockerstrategy
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-42158:BuildAPI Mount source configmap to builder container- dockerstrategy
     Given I have a project
     When I run the :create_configmap client command with:
       | name         | myconfig  |
@@ -212,7 +224,7 @@ Feature: dockerbuild.feature
       | from_literal | value=bar |
     Then the step should succeed
     When I run the :new_build client command with:
-      | D | FROM quay.io/openshifttest/base-alpine:multiarch\nRUN ls -l /var/run/secret/config |
+      | D | FROM quay.io/openshifttest/base-alpine:1.2.0\nRUN ls -l /var/run/secret/config |
     Then the step should succeed
     Then the "base-alpine" image stream was created
     And the "base-alpine-1" build was created
@@ -237,14 +249,16 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42184
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Mount multi paths to builder container
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-42184:BuildAPI Mount multi paths to builder container
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |
@@ -253,7 +267,7 @@ Feature: dockerbuild.feature
       | from_literal | password=redhat    |
     Then the step should succeed
     When I run the :new_build client command with:
-      | D | FROM quay.io/openshifttest/base-alpine:multiarch\nRUN ls -l /var/run/secret/secret-1\nRUN ls -l /var/run/secret/secret-2 |
+      | D | FROM quay.io/openshifttest/base-alpine:1.2.0\nRUN ls -l /var/run/secret/secret-1\nRUN ls -l /var/run/secret/secret-2 |
     Then the step should succeed
     Then the "base-alpine" image stream was created
     And the "base-alpine-1" build was created
@@ -279,14 +293,16 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42185
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Can't add relative path for mount path
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-42185:BuildAPI Can't add relative path for mount path
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |
@@ -295,7 +311,7 @@ Feature: dockerbuild.feature
       | from_literal | password=redhat    |
     Then the step should succeed
     When I run the :new_build client command with:
-      | D | FROM quay.io/openshifttest/base-alpine:multiarch\nRUN ls -l /var/run/secret/secret-1|
+      | D | FROM quay.io/openshifttest/base-alpine:1.2.0\nRUN ls -l /var/run/secret/secret-1|
     Then the step should succeed
     Then the "base-alpine" image stream was created
     And the "base-alpine-1" build was created
@@ -317,14 +333,16 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42529
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Mount source name must be unique
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-42529:BuildAPI Mount source name must be unique
     Given I have a project
     When I run the :create_secret client command with:
       | secret_type  | generic            |
@@ -338,7 +356,7 @@ Feature: dockerbuild.feature
       | from_literal | value=bar  |
     Then the step should succeed
     When I run the :new_build client command with:
-      | D | FROM quay.io/openshifttest/base-alpine:multiarch\nRUN ls -l /var/run/secret |
+      | D | FROM quay.io/openshifttest/base-alpine:1.2.0\nRUN ls -l /var/run/secret |
     Then the step should succeed
     Then the "base-alpine" image stream was created
     And the "base-alpine-1" build was created

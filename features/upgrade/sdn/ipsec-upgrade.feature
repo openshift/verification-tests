@@ -3,13 +3,13 @@ Feature: IPsec upgrade scenarios
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
-  @network-ovnkubernetes @ipsec
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-networkpolicy @ipsec
   @upgrade
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade - prepare
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -19,6 +19,7 @@ Feature: IPsec upgrade scenarios
     When I run the :new_project client command with:
       | project_name | ipsec-upgrade |
     Then the step should succeed
+    And the appropriate pod security labels are applied to the "ipsec-upgrade" namespace
     When I use the "ipsec-upgrade" project
     Given I obtain test data file "networking/list_for_pods.json"
     #Creating two test pods for pod-pod encryption check. Pods needs to be deployment/rc backed so that they can be migrate successfuly to the upgraded cluster.Creating each separat as they need to be on diff
@@ -72,11 +73,12 @@ Feature: IPsec upgrade scenarios
   @admin
   @upgrade-check
   @network-ovnkubernetes @network-networkpolicy @ipsec
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade
     Given the IPsec is enabled on the cluster
     Given evaluation of `50` is stored in the :protocol clipboard

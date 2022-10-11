@@ -17,6 +17,7 @@ class MyTest < Test::Unit::TestCase
     ENV['OCM_REGION'] = nil
     ENV['OCM_VERSION'] = nil
     ENV['OCM_LIFESPAN'] = nil
+    ENV['OCM_MULTI_AZ'] = nil
     ENV['AWS_REGION'] = nil
     ENV['AWS_ACCOUNT_ID'] = nil
     ENV['AWS_ACCESS_KEY'] = nil
@@ -45,6 +46,21 @@ class MyTest < Test::Unit::TestCase
     ocm = BushSlicer::OCMCluster.new(options)
     json = ocm.generate_cluster_data('myosd4').to_json
     assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"ccs":{"enabled":false}}', json)
+  end
+
+  def test_generating_cluster_data_with_multi_az
+    options = { :token => "abc", :multi_az => true }
+    ocm = BushSlicer::OCMCluster.new(options)
+    json = ocm.generate_cluster_data('myosd4').to_json
+    assert_equal('{"name":"myosd4","managed":true,"multi_az":true,"ccs":{"enabled":false}}', json)
+  end
+
+  def test_generating_cluster_data_with_multi_az_envvars    
+    ENV['OCM_MULTI_AZ'] = "true"
+    options = { :token => "abc" }
+    ocm = BushSlicer::OCMCluster.new(options)
+    json = ocm.generate_cluster_data('myosd4').to_json
+    assert_equal('{"name":"myosd4","managed":true,"multi_az":true,"ccs":{"enabled":false}}', json)
   end
 
   def test_generating_cluster_data_with_region

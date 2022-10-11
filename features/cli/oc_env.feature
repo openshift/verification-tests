@@ -3,14 +3,16 @@ Feature: oc_env.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-11032
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Set environment variables when creating application using non-DeploymentConfig template
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11032:BuildAPI Set environment variables when creating application using non-DeploymentConfig template
     Given I have a project
     When I run the :new_app client command with:
       | template | cakephp-mysql-example |

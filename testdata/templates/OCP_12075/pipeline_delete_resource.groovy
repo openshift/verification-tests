@@ -2,7 +2,7 @@ node{
     stage 'build'
     openshiftDeleteResourceByJsonYaml (apiURL: '<repl_env>', authToken: '', jsonyaml: '''{
 	"kind": "DeploymentConfig",
-	"apiVersion": "v1",
+	"apiVersion": "apps.openshift.io/v1",
 	"metadata": {
 		"name": "frontend"
 	},

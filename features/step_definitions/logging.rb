@@ -3,7 +3,6 @@
 
 ### none configurable, just use default parameters
 Given /^logging service has been installed successfully$/ do
-  ensure_destructive_tagged
   ensure_admin_tagged
   if env.version_cmp('4.5', user: user) < 0
     example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml"
@@ -28,7 +27,6 @@ end
 # :sub_elasticsearch_yaml -- http url for elastic search yaml
 #
 Given /^logging operators are installed successfully$/ do
-  ensure_destructive_tagged
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
@@ -153,6 +151,9 @@ Given /^I wait for clusterlogging(?: named "(.+)")? to be functional in the#{OPT
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "#{proj_name}" project/
 
+  # log the clusterlogging and elasticsearch status before checking logging pods' status.
+  raise "Can't find clusterlogging/instance or elasticsearch/elasticsearch, please check if logging stack is deployed or not" unless cluster_logging("instance").exists? && elasticsearch("elasticsearch").exists?
+
   cb.cluster_logging ||= cluster_logging(logging_name)
   cl = cb.cluster_logging
   logger.info("### checking logging subcomponent status")
@@ -234,7 +235,6 @@ Given /^I wait until ES cluster is ready$/ do
   step %Q/#{cluster_logging('instance').logstore_node_count.to_i} pods become ready with labels:/, table(%{
     | cluster-name=elasticsearch,component=elasticsearch |
   })
-  cluster_logging('instance').wait_until_es_is_ready
 end
 
 Given /^I wait until kibana is ready$/ do
@@ -336,7 +336,6 @@ end
 
 Given /^I delete the clusterlogging instance$/ do
   ensure_admin_tagged
-  ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-logging" project/
 
@@ -363,7 +362,7 @@ Given /^I delete the clusterlogging instance$/ do
     end
       step %Q/logging collector name is stored in the :collector_name clipboard/
     unless cluster_logging('instance').collection_spec(cached: true).nil?
-      step %Q/I wait for the resource "daemonset" named "#{cb.collector_name}" to disappear/
+      step %Q/admin ensures "#{cb.collector_name}" ds is deleted/
     end
   end
 end
@@ -386,8 +385,12 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
   if (logging_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
+    when '4.12'
+      cb[cb_name] = "stable-5.6"
+    when '4.11'
+      cb[cb_name] = "stable-5.5"
     when '4.10'
-      cb[cb_name] = "stable"
+      cb[cb_name] = "stable-5.4"
     when '4.9'
       cb[cb_name] = "stable-5.3"
     when '4.8'
@@ -479,32 +482,29 @@ Given /^logging eventrouter is installed in the cluster$/ do
   step %Q/admin ensures "eventrouter" config_map is deleted from the "openshift-logging" project after scenario/
   step %Q/admin ensures "eventrouter" deployment is deleted from the "openshift-logging" project after scenario/
   clo_csv_version = subscription("cluster-logging").current_csv(cached: false)
-  if clo_csv_version.include? "cluster-logging"
-    image_version = clo_csv_version.match(/cluster-logging\.(.*)/)[1].split('-')[0]
-  else
-    image_version = clo_csv_version.match(/clusterlogging\.(.*)/)[1].split('-')[0]
-  end
-  if image_version.start_with?("5")
+  clo_version = clo_csv_version.split(".", 2).last.split(/[A-Za-z]/).last
+  if clo_version.start_with?("5")
     # from logging 5.0, the image name is changed to eventrouter-rhel8
     image_name = "eventrouter-rhel8"
   else
     image_name = "logging-eventrouter"
   end
 
-  if image_content_source_policy('brew-registry').exists?
-    registry = image_content_source_policy('brew-registry').mirror_repository[0]
-    if image_version.start_with?("5")
-      # from logging 5.0, the image namespace is changed to openshift-logging
-      image = "#{registry}/rh-osbs/openshift-logging-#{image_name}:v#{image_version}"
-    else
-      image = "#{registry}/rh-osbs/openshift-ose-#{image_name}:v#{image_version}"
-    end
+  image_version = ""
+  # for logging 5.2 and later, use image tag v0.3.0/v0.4.0
+  if (clo_version.include? "5.6") || (clo_version.include? "5.5") || (clo_version.include? "5.4")
+    image_version = "0.4.0"
+  elsif (clo_version.include? "5.3") || (clo_version.include? "5.2")
+    image_version = "0.3.0"
   else
-    # get image registry from CLO
-    clo_image = deployment('cluster-logging-operator').container_spec(name: 'cluster-logging-operator').image
-    registry = clo_image.split(/cluster-logging(.*)/)[0]
-    image = "#{registry}#{image_name}:v#{image_version}"
+    image_version = clo_version
   end
+
+  # get image registry from CLO
+  clo_image = deployment('cluster-logging-operator').container_spec(name: 'cluster-logging-operator').image
+  registry = clo_image.split(/cluster-logging(.*)/)[0]
+  image = "#{registry}#{image_name}:v#{image_version}"
+
   step %Q/I process and create:/, table(%{
     | f | #{BushSlicer::HOME}/testdata/logging/eventrouter/internal_eventrouter.yaml |
     | p | IMAGE=#{image} |
@@ -720,8 +720,10 @@ Given /^I upgrade the operator with:$/ do | table |
       # wait for the ES cluster to be ready
       success = wait_for(600, interval: 10) {
         esPods = BushSlicer::Pod.get_labeled("component=elasticsearch", project: project, user: user, quiet: true).map(&:name)
-        readyPods = (elasticsearch('elasticsearch').es_master_ready_pod_names + elasticsearch('elasticsearch').es_client_ready_pod_names(cached: true) + elasticsearch('elasticsearch').es_data_ready_pod_names(cached:true)).uniq
-        elasticsearch('elasticsearch').cluster_health == "green" && (esPods - readyPods).blank? && (readyPods - esPods).blank?
+        unless (elasticsearch('elasticsearch').es_master_ready_pod_names.nil?) || (elasticsearch('elasticsearch').es_client_ready_pod_names.nil?) || (elasticsearch('elasticsearch').es_data_ready_pod_names.nil?)
+          readyPods = (elasticsearch('elasticsearch').es_master_ready_pod_names + elasticsearch('elasticsearch').es_client_ready_pod_names(cached: true) + elasticsearch('elasticsearch').es_data_ready_pod_names(cached:true)).uniq
+          elasticsearch('elasticsearch').cluster_health == "green" && (esPods - readyPods).blank? && (readyPods - esPods).blank?
+        end
       }
       raise "ES cluster isn't in a good status" unless success
       # check pvc count
@@ -814,9 +816,9 @@ end
 Given /^I check the cronjob status$/ do
   # check logging version
   step %Q/I use the "openshift-operators-redhat" project/
-  eo_version = subscription("elasticsearch-operator").current_csv(cached: false)[23..-1].split('-')[0]
+  eo_version = subscription("elasticsearch-operator").current_csv(cached: false).split(".", 2).last.split(/[A-Za-z]/).last
   step %Q/I use the "openshift-logging" project/
-  clo_version = subscription("cluster-logging").current_csv(cached: false)[16..-1].split('-')[0]
+  clo_version = subscription("cluster-logging").current_csv(cached: false).split(".", 2).last.split(/[A-Za-z]/).last
   #csv version >= 4.5, check rollover/delete cronjobs, csv < 4.5, only check curator cronjob
   if ["4.0", "4.1", "4.2", "4.3", "4.4"].include? clo_version.split('.').take(2).join('.')
     if cron_job('curator').exists?
@@ -1189,9 +1191,9 @@ Given /^I have index pattern #{QUOTED}$/ do | pattern_name |
     unless @result[:success]
       step %Q/I run the :go_to_kibana_management_page web action/
       step %Q/I perform the :create_index_pattern_in_kibana web action with:/, table(%{
-        | index_pattern_name | "#{pattern_name}" |
-       })
-       raise "Failed to create index pattern #{pattern_name}" unless @result[:success]
+        | index_pattern_name | #{pattern_name} |
+      })
+      raise "Failed to create index pattern #{pattern_name}" unless @result[:success]
     end
 end
 
@@ -1277,15 +1279,92 @@ Given /^logging collector name is stored in the#{OPT_SYM} clipboard$/ do | colle
   collector_name ||= "collector_name"
   fluentd_component_label ||= "collector"
 
-  clo_csv_version = subscription("cluster-logging").current_csv(cached: false)
-  if clo_csv_version.include? "cluster-logging"
-    clo_release_version = clo_csv_version.match(/cluster-logging\.(.*)/)[1].split('-')[0]
-  else
-    clo_release_version = clo_csv_version.match(/clusterlogging\.(.*)/)[1].split('-')[0]
-  end
+  clo_csv_version = subscription("cluster-logging").current_csv(cached: false).split(".", 2).last.split(/[A-Za-z]/).last
 
-  if Integer(clo_release_version.split('.')[0]) < 5 || (Integer(clo_release_version.split('.')[0]) ==5 &&  Integer(clo_release_version.split('.')[1]) < 3 )
+  if Integer(clo_csv_version.split('.')[0]) < 5 || (Integer(clo_csv_version.split('.')[0]) ==5 &&  Integer(clo_csv_version.split('.')[1]) < 3 )
      fluentd_component_label="fluentd"
   end
   cb[collector_name] = fluentd_component_label
+end
+
+Given /^I check if the remaining_resources in woker nodes meet the requirements for logging stack$/ do
+  ensure_admin_tagged
+  linux_nodes = BushSlicer::Node.get_labeled("kubernetes.io/os=linux", user: admin)
+  worker_nodes = linux_nodes.select { |n| n.is_worker? && n.ready? && n.schedulable? }
+  total_remaning_cpu = 0
+  total_remaning_memory = 0
+
+  # calculate node.remaining_resources
+  worker_nodes.each do |n|
+    total_remaning_cpu += n.remaining_resources[:cpu]
+    total_remaning_memory += n.remaining_resources[:memory]
+  end
+  # we need 3 ES pods, memory: (1Gi+256Mi)*3, cpu: 200m*3
+  # for kibana, memory: (256+736)Mi, cpu: 200m
+  # for collector, memory: 736Mi*worker_nodes_count, cpu: 100m*worker_nodes_count
+  if total_remaning_cpu < 800+100*worker_nodes.count || total_remaning_memory < 5066719232+771751936*worker_nodes.count
+    raise "Cluster doesn't have sufficient cpu or memory for logging pods to deploy, skip the logging case"
+  end
+end
+
+Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\d+) seconds)?$/ do | action, namespace, seconds |
+  ensure_admin_tagged
+  def check_log(logs, errors, exceptions)
+    error_logs = []
+    unless logs.empty? || logs.nil?
+      logs.split("\n").each do | log |
+        if !(exceptions.nil?)
+          ignore = false
+          exceptions.each do | exception |
+            if log.include? exception
+              ignore = true
+              break
+            end
+          end
+          if ignore
+            next
+          end
+        else
+          errors.each do | error_string |
+            if log.include? error_string
+              error_logs.append(log)
+            end
+            #raise "found error/failure logs: #{log}" unless !(log.include? error_string)
+          end
+        end
+      end
+    end
+    return error_logs
+  end
+
+  error_strings = ["error", "Error"]
+  pods = BushSlicer::Pod.list(user: admin, project: project(namespace))
+  pods.each do | pod |
+    # skip index management jobs and not ready pods
+    if (pod.name.include? "elasticsearch-im-") || !(pod.ready?[:success])
+      next
+    end
+    pod.containers.each do | container |
+      if seconds.nil?
+        @result = admin.cli_exec(:logs, n: namespace,resource_name: pod.name, c: container.name)
+      else
+        @result = admin.cli_exec(:logs, n: namespace,resource_name: pod.name, c: container.name, since: seconds+"s")
+      end
+      if action == "check"
+        # read logs line by line
+        # ignore errors in https://issues.redhat.com/browse/LOG-2674 and https://issues.redhat.com/browse/LOG-2702
+        case container.name
+        when "logfilesmetricexporter"
+          log = check_log(@result[:response], error_strings, ["can't remove non-existent inotify watch for"])
+        when "kibana"
+          log = check_log(@result[:response], error_strings, ["java.lang.UnsupportedOperationException"])
+        when "collector"
+          log = check_log(@result[:response], error_strings, ["Timeout flush: kubernetes.var.log"])
+        else
+          log = check_log(@result[:response], error_strings, nil)
+        end
+        raise "find error/failure log in #{pod.name}/#{container.name}: #{log}" unless log.empty?
+      end
+    end
+  end
 end

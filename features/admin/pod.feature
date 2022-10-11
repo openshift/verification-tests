@@ -2,14 +2,15 @@ Feature: pod related features
 
   # @author xiuli@redhat.com
   # @case_id OCP-15808
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: Endpoints should update in time and no delay
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-15808:Node Endpoints should update in time and no delay
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
@@ -24,7 +25,7 @@ Feature: pod related features
   @admin
   @destructive
   @inactive
-  Scenario: Existing pods will not be affected when node is unschedulable
+  Scenario: OCP-10598:Workloads Existing pods will not be affected when node is unschedulable
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/examples/hello-openshift/hello-pod.json |
@@ -54,7 +55,7 @@ Feature: pod related features
   @admin
   @destructive
   @inactive
-  Scenario: New pods creation will be disabled on unschedulable nodes
+  Scenario: OCP-11116:Workloads New pods creation will be disabled on unschedulable nodes
     Given I have a project
     Given I store the schedulable nodes in the :nodes clipboard
     Given node schedulable status should be restored after scenario
@@ -82,7 +83,7 @@ Feature: pod related features
   @admin
   @destructive
   @inactive
-  Scenario: Recovering an unschedulable node
+  Scenario: OCP-11466:Workloads Recovering an unschedulable node
     Given I have a project
     Given I run the :patch admin command with:
       | resource | namespace |
@@ -109,7 +110,7 @@ Feature: pod related features
   # @case_id OCP-11752
   @admin
   @inactive
-  Scenario: Pod will not be copied to nodes which does not match it's node selector
+  Scenario: OCP-11752:Node Pod will not be copied to nodes which does not match it's node selector
     Given I have a project
     Given I run the :patch admin command with:
       | resource | namespace |
@@ -140,14 +141,15 @@ Feature: pod related features
   # @case_id OCP-11925
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Pods will still be created by DaemonSet when nodes are SchedulingDisabled
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11925:Node Pods will still be created by DaemonSet when nodes are SchedulingDisabled
     Given I have a project
     Given I store the schedulable workers in the :nodes clipboard
     Given node schedulable status should be restored after scenario
@@ -176,14 +178,15 @@ Feature: pod related features
   # @author weinliu@redhat.com
   # @case_id OCP-12047
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12047:Node When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
     Given I have a project
     Given I run the :patch admin command with:
       | resource | namespace |
@@ -237,7 +240,7 @@ Feature: pod related features
   @admin
   @destructive
   @inactive
-  Scenario: Secret is valid after node reboot
+  Scenario: OCP-12338:Node Secret is valid after node reboot
     Given I have a project
     Given I run the :patch admin command with:
       | resource | namespace |

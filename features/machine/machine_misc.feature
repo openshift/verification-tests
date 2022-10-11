@@ -4,11 +4,12 @@ Feature: Machine misc features testing
   # @case_id OCP-34940
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: PVCs can still be provisioned after the password has been changed vSphere
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-34940:ClusterInfrastructure PVCs can still be provisioned after the password has been changed vSphere
     Given I have an IPI deployment
     Then I switch to cluster admin pseudo user
 
@@ -46,7 +47,7 @@ Feature: Machine misc features testing
 
    Then I get project events
    And the output should match:
-     | Failed to provision volume with StorageClass "thin": ServerFaultCode: Cannot complete login |
+     | Failed to provision volume with StorageClass "thin": Credentials not found|
 
    Then I run the :replace admin command with:
       | _tool | oc                           |
@@ -61,12 +62,14 @@ Feature: Machine misc features testing
   # @author miyadav@redhat.com
   # @case_id OCP-35454
   @admin
+  @aro
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Reconciliation of MutatingWebhookConfiguration values should happen
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-35454:ClusterInfrastructure Reconciliation of MutatingWebhookConfiguration values should happen
     Given I switch to cluster admin pseudo user
 
     Given I use the "openshift-cluster-version" project
@@ -118,12 +121,14 @@ Feature: Machine misc features testing
   # @author miyadav@redhat.com
   # @case_id OCP-37744
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @aro
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: kube-rbac-proxy should not expose tokens, have excessive verbosity
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-37744:ClusterInfrastructure kube-rbac-proxy should not expose tokens, have excessive verbosity
     Given I switch to cluster admin pseudo user
 
     Given I use the "openshift-machine-api" project
@@ -164,10 +169,13 @@ Feature: Machine misc features testing
   # @author miyadav@redhat.com
   # @case_id OCP-37180
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Report vCenter version to telemetry
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi
+  @vsphere-upi
+  Scenario: OCP-37180:ClusterInfrastructure Report vCenter version to telemetry
     Given I switch to cluster admin pseudo user
     When I perform the GET prometheus rest client with:
       | path  | /api/v1/query?                         |
@@ -179,17 +187,18 @@ Feature: Machine misc features testing
   # @case_id OCP-40665
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8
+  @4.12 @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Deattach disk before destroying vm from vsphere
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-40665:ClusterInfrastructure Deattach disk before destroying vm from vsphere
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
     And I clone a machineset and name it "machineset-clone-40665"
 
     Given I store the last provisioned machine in the :new_machine clipboard
-    And evaluation of `machine(cb.new_machine).node_name` is stored in the :nodeRef clipboard
+    And evaluation of `machine_machine_openshift_io(cb.new_machine).node_name` is stored in the :nodeRef clipboard
 
     When I run the :label admin command with:
       | resource | node                |
@@ -211,7 +220,7 @@ Feature: Machine misc features testing
 
     Given I obtain test data file "cloud/mhc/kubelet-killer-pod.yml"
     When I run oc create over "kubelet-killer-pod.yml" replacing paths:
-	    | ["spec"]["nodeName"]  | "<%= machine(cb.new_machine).node_name %>" |
+	    | ["spec"]["nodeName"]  | "<%= machine_machine_openshift_io(cb.new_machine).node_name %>" |
     Then the step should succeed
 
     When I run the :delete admin command with:

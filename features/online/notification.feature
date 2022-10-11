@@ -2,7 +2,7 @@ Feature: Online "Notification" related scripts in this file
 
   # @author bingli@redhat.com
   # @case_id OCP-12870
-  Scenario: Notification UI should correctly display in web console
+  Scenario: OCP-12870 Notification UI should correctly display in web console
     Given I have a project
     When I perform the :check_notification_message web console action with:
       | project_name | <%= project.name %> |
@@ -12,7 +12,7 @@ Feature: Online "Notification" related scripts in this file
   # @author bingli@redhat.com
   # @case_id OCP-10334
   @inactive
-  Scenario: Enable/Disable online notification in web console - UI
+  Scenario: OCP-10334 Enable/Disable online notification in web console - UI
     Given I have a project
     When I perform the :goto_notification_page web console action with:
       | project_name | <%= project.name %> |

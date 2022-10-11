@@ -4,11 +4,15 @@ Feature: build related upgrade check
   @upgrade-prepare
   @users=upuser1,upuser2
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
+  @inactive
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check docker and sti build works well before and after upgrade - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -18,7 +22,7 @@ Feature: build related upgrade check
       | app_repo | openshift/ruby~https://github.com/openshift/ruby-ex |
     Then the step should succeed
     When I run the :new_app_as_dc client command with:
-      | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world |
+      | app_repo | quay.io/openshifttest/ruby-27:1.2.0~https://github.com/openshift/ruby-hello-world |
       | strategy | docker                                                                                |
     Then the step should succeed
     Given I use the "build-upgrade" project
@@ -30,11 +34,15 @@ Feature: build related upgrade check
   @upgrade-check
   @users=upuser1,upuser2
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
+  @inactive
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check docker and sti build works well before and after upgrade
     Given I switch to the first user
     When I use the "build-upgrade" project

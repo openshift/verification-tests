@@ -11,7 +11,7 @@ Feature: Kibana related features
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Show logs on Kibana web console according to different user role
+  Scenario: OCP-25599:Logging Show logs on Kibana web console according to different user role
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
@@ -64,13 +64,14 @@ Feature: Kibana related features
   @console
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Normal User can only view logs out of the projects owned by himself --kibana
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-30362:Logging Normal User can only view logs out of the projects owned by himself --kibana
     Given I switch to the first user
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard
@@ -87,7 +88,7 @@ Feature: Kibana related features
     Given I switch to the first user
     When I login to kibana logging web console
     Then the step should succeed
-    Given I have index pattern "*app"
+    Given I have index pattern "app"
     Then the step should succeed
     Given I wait up to 300 seconds for the steps to pass:
     """
@@ -96,7 +97,7 @@ Feature: Kibana related features
     """
     # check the log count, wait for the Kibana console to be loaded
     When I perform the :kibana_find_index_pattern web action with:
-      | index_pattern_name | *app |
+      | index_pattern_name | app* |
     Then the step should succeed
     Given I wait up to 300 seconds for the steps to pass:
     """
@@ -121,13 +122,14 @@ Feature: Kibana related features
   @console
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: User with cluster-admin role can show logs out of all projects -- kibana
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-30361:Logging User with cluster-admin role can show logs out of all projects -- kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
@@ -145,10 +147,9 @@ Feature: Kibana related features
     And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
     When I login to kibana logging web console
     Then the step should succeed
-    Given I have index pattern "*app"
+    Given I have index pattern "app"
     Then the step should succeed
-    Given I have index pattern "*infra"
-    Then the step should succeed
+    And I have index pattern "infra"
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """
@@ -157,7 +158,7 @@ Feature: Kibana related features
     """
 
     When I perform the :kibana_find_index_pattern web action with:
-      | index_pattern_name | *app |
+      | index_pattern_name | app* |
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """
@@ -167,12 +168,12 @@ Feature: Kibana related features
     And I run the :kibana_expand_index_patterns web action
     Then the step should succeed
     When I perform the :kibana_click_index web action with:
-      | index_pattern_name | *infra |
+      | index_pattern_name | infra* |
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """
     When I perform the :kibana_find_index_pattern web action with:
-      | index_pattern_name | *infra |
+      | index_pattern_name | infra* |
     Then the step should succeed
     When I run the :check_log_count web action
     Then the step should succeed
@@ -189,7 +190,7 @@ Feature: Kibana related features
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Kibana logout function should log off user
+  Scenario: OCP-32002:Logging Kibana logout function should log off user
     Given the master version < "4.5"
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -235,12 +236,13 @@ Feature: Kibana related features
   @console
   @commonlogging
   @proxy @noproxy @disconnected @connected
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Logs can be redirected from Webconsole to kibana
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-30343:Logging Logs can be redirected from Webconsole to kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project.name` is stored in the :proj_name clipboard
@@ -250,7 +252,7 @@ Feature: Kibana related features
     Then the step should succeed
     Given a pod becomes ready with labels:
       | run=centos-logtest,test=centos-logtest |
-    And evaluation of `pod.name` is stored in the :pod_name clipboard 
+    And evaluation of `pod.name` is stored in the :pod_name clipboard
     Given the first user is cluster-admin
     And I use the "openshift-logging" project
     Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
@@ -266,12 +268,12 @@ Feature: Kibana related features
       | project_name | <%= cb.proj_name %> |
       | pod_name     | <%= cb.pod_name %>  |
     Then the step should succeed
-    
+
     When I click the following "a" element:
       | text  | Show in Kibana   |
       | class | co-external-link |
     Then the step should succeed
-    
+
     # This step is to store the redirecting url of new window, does not check anything
     And I wait up to 15 seconds for the steps to pass:
     """
@@ -288,9 +290,9 @@ Feature: Kibana related features
       | idp        | <%= env.idp %>               |
     Then the step should succeed
 
-    Given I have index pattern "*app"
+    Given I have index pattern "app"
     Then the step should succeed
-    Given I have index pattern "*infra"
+    Given I have index pattern "infra"
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """
@@ -299,7 +301,7 @@ Feature: Kibana related features
     """
 
     When I perform the :kibana_find_index_pattern web action with:
-      | index_pattern_name | *app |
+      | index_pattern_name | app* |
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """
@@ -309,12 +311,12 @@ Feature: Kibana related features
     And I run the :kibana_expand_index_patterns web action
     Then the step should succeed
     When I perform the :kibana_click_index web action with:
-      | index_pattern_name | *infra |
+      | index_pattern_name | infra* |
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """
     When I perform the :kibana_find_index_pattern web action with:
-      | index_pattern_name | *infra |
+      | index_pattern_name | infra* |
     Then the step should succeed
     When I run the :check_log_count web action
     Then the step should succeed

@@ -42,7 +42,7 @@ Given /^(cluster-kube-descheduler-operator) channel name is stored in the#{OPT_S
   if (descheduler_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
-    when '4.6','4.7','4.8','4.9','4.10'
+    when '4.6','4.7','4.8','4.9','4.10','4.11'
       cb[cb_name] = version
     else
       cb[cb_name] = "stable"
@@ -118,6 +118,7 @@ Given /^kubedescheduler operator has been installed successfully$/ do
     end
   end
   # check csv existense
+  csv = nil
   success = wait_for(300, interval: 10) {
     csv = subscription('cluster-kube-descheduler-operator').current_csv
     !(csv.nil?) && cluster_service_version(csv).exists?
@@ -132,4 +133,60 @@ Given /^cluster descheduler operator is ready$/ do
   step %Q/a pod becomes ready with labels:/, table(%{
     | name=descheduler-operator |
   })
+end
+
+# upgrade operator and check the descheduler pods status
+Given /^I upgrade the descheduler operator with:$/ do | table |
+  opts = opts_array_to_hash(table.raw)
+  subscription = opts[:subscription]
+  channel = opts[:channel]
+  catsrc = opts[:catsrc]
+  namespace = opts[:namespace]
+  step %Q/I use the "#{namespace}" project/
+
+  pre_csv = subscription(subscription).current_csv
+  # upgrade operator
+  patch_json = {"spec": {"channel": "#{channel}", "source": "#{catsrc}"}}
+  patch_opts = {resource: "subscription", resource_name: subscription, p: patch_json.to_json, n: namespace, type: "merge"}
+  @result = admin.cli_exec(:patch, **patch_opts)
+  raise "Patch failed with #{@result[:response]}" unless @result[:success]
+  # wait till new csv to be installed
+  success = wait_for(180, interval: 10) {
+    if channel != "stable"
+      (subscription(subscription).installplan_csv.include? channel)
+    else
+      subscription(subscription).installplan_csv != pre_csv
+    end
+  }
+  raise "the new CSV can't be installed" unless success
+  # wait till new csv is ready
+  success = wait_for(600, interval: 10) {
+    new_csv = subscription(subscription).current_csv(cached: false)
+    cluster_service_version(new_csv).ready?[:success]
+  }
+  raise "can't upgrade operator #{subscription}" unless success
+end
+
+# only check the major version, such as 4.4, 4.5, 4.6, don't care about versions like 4.6.0-2020xxxxxxxx
+Given /^I make sure the descheduler operator gets updated successfully if needed$/ do
+  step %Q/I switch to cluster admin pseudo user/
+  # check if channel name in subscription is same to the target channel
+  step %Q/cluster-kube-descheduler-operator channel name is stored in the :kdo_channel clipboard/
+  step %Q/cluster-kube-descheduler-operator catalog source name is stored in the :kdo_catsrc clipboard/
+  # check DO
+  step %Q/I use the "openshift-kube-descheduler-operator" project/
+  kdo_current_channel = subscription("cluster-kube-descheduler-operator").channel(cached: false)
+  kdo_current_catsrc = subscription("cluster-kube-descheduler-operator").source
+  if cb.kdo_channel != kdo_current_channel || cb.kdo_catsrc != kdo_current_catsrc
+    upgrade_kdo = true
+    step %Q/I upgrade the descheduler operator with:/, table(%{
+      | namespace    | openshift-kube-descheduler-operator |
+      | subscription | cluster-kube-descheduler-operator   |
+      | channel      | #{cb.kdo_channel}                   |
+      | catsrc       | #{cb.kdo_catsrc}                    |
+    })
+    step %Q/the step should succeed/
+  else
+    upgrade_kdo = false
+  end
 end

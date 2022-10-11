@@ -3,7 +3,7 @@
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @upgrade
@@ -95,13 +95,14 @@
   # @case_id OCP-44636
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   Scenario: Check the multicast works well after upgrade
+    Given the cluster is not migration from sdn plugin
     Given I switch to cluster admin pseudo user
     When I use the "multicast-upgrade" project
     Given 3 pods become ready with labels:

@@ -30,7 +30,7 @@ spec:
         - "-n"
         command:
         - "/usr/sbin/rsyslogd"
-        image: quay.io/openshifttest/rsyslogd-container@sha256:d36d0f9f1f427ec0cfb48946a531266b1bf8510ebb15c492c2cb6b5db0080b36
+        image: quay.io/openshifttest/rsyslogd-container@sha256:e806eb41f05d7cc6eec96bf09c7bcb692f97562d4a983cb019289bd048d9aee2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 6514

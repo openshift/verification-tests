@@ -1,4 +1,5 @@
 Feature: test ini files
+
   @admin
   Scenario: parse ini formated file
     Given I obtain test data file "logging_metrics/default_inventory_prometheus"

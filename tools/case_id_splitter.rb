@@ -193,6 +193,9 @@ module BushSlicer
         insert_at_line_version = 0
         insert_at_line_ipi = 0
         insert_at_line_upi = 0
+        insert_at_line_proxy = 0
+        insert_at_line_network = 0
+        insert_at_line_arch = 0
         indention = ''
 
         content = IO.readlines(res[:file])
@@ -206,11 +209,20 @@ module BushSlicer
           if content[i] =~ /^\s+(@4.)/
             insert_at_line_version = i
             next
+          elsif content[i] =~ /^\s+(@.*amd)/ || content[i] =~ /^\s+(@.*arm)/ || content[i] =~ /^\s+(@.*heterogeneous)/
+            insert_at_line_arch = i
+            next
           elsif content[i] =~ /^\s+(@.*ipi)/
             insert_at_line_ipi = i
             next
           elsif content[i] =~ /^\s+(@.*upi)/
             insert_at_line_upi = i
+            next
+          elsif content[i] =~ /^\s+(@.*connected)/ || content[i] =~ /^\s+(@.*proxy)/
+            insert_at_line_proxy = i
+            next
+          elsif content[i] =~ /^\s+(@.*network)/
+            insert_at_line_network = i
             next
           elsif content[i] =~ /^\s+(Scenario:)/
             insert_at_line = i
@@ -235,12 +247,21 @@ module BushSlicer
           if tag =~ /@4[.][0-9]+/ && insert_at_line_version != 0
             content_to_add = "  #{tag} "
             content[insert_at_line_version].lstrip!.prepend(content_to_add)
+          elsif (tag =~ /@.*amd/ || tag =~ /@.*arm/ || tag =~ /@.*heterogeneous/) && insert_at_line_arch != 0
+            content_to_add = "#{indention}#{tag} "
+            content[insert_at_line_arch].lstrip!.prepend(content_to_add)
           elsif tag =~ /@.*ipi/ && insert_at_line_ipi != 0
             content_to_add = "#{indention}#{tag} "
             content[insert_at_line_ipi].lstrip!.prepend(content_to_add)
           elsif tag =~ /@.*upi/ && insert_at_line_upi != 0
             content_to_add = "#{indention}#{tag} "
             content[insert_at_line_upi].lstrip!.prepend(content_to_add)
+          elsif tag =~ /@.*network/ && insert_at_line_network != 0
+            content_to_add = "#{indention}#{tag} "
+            content[insert_at_line_network].lstrip!.prepend(content_to_add)
+          elsif (tag =~ /@.*connected/ || tag =~ /@.*proxy/) && insert_at_line_proxy != 0
+            content_to_add = "#{indention}#{tag} "
+            content[insert_at_line_proxy].lstrip!.prepend(content_to_add)
           else
             content_to_add = "#{indention}#{tag}"
             content.insert(insert_at_line, content_to_add)

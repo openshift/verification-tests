@@ -3,11 +3,14 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10107
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  Scenario: Prebound pv is availabe due to requested pvc status is bound
-    Given I have a project
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-10107:Storage Prebound pv is availabe due to requested pvc status is bound
+    Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
       | ["metadata"]["name"]         | pv1-<%= project.name %> |
@@ -29,11 +32,14 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-10109
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  Scenario: Prebound pv is availabe due to mismatched accessmode with requested pvc
-    Given I have a project
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-10109:Storage Prebound pv is availabe due to mismatched accessmode with requested pvc
+    Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv-<%= project.name %> |
@@ -54,10 +60,13 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-10111
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  Scenario: Prebound pvc is pending due to requested pv status is bound
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-10111:Storage Prebound pvc is pending due to requested pv status is bound
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
@@ -79,10 +88,13 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-10113
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  Scenario: Prebound PVC is pending due to mismatched accessmode with requested PV
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-10113:Storage Prebound PVC is pending due to mismatched accessmode with requested PV
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
@@ -103,10 +115,13 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-10114
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  Scenario: Prebound PVC is pending due to mismatched volume size with requested PV
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-10114:Storage Prebound PVC is pending due to mismatched volume size with requested PV
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
@@ -127,10 +142,13 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-9941
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  Scenario: PV and PVC bound successfully when pvc created prebound to pv
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-9941:Storage PV and PVC bound successfully when pvc created prebound to pv
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
     Given admin creates a PV from "nfs.json" where:
@@ -154,11 +172,14 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author lxia@redhat.com
   # @case_id OCP-9940
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  Scenario: PV and PVC bound successfully when pv created prebound to pvc
-    Given I have a project
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-9940:Storage PV and PVC bound successfully when pv created prebound to pvc
+    Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv-<%= project.name %> |
@@ -179,9 +200,12 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @author lxia@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Prebound pv/pvc is availabe/pending due to requested pvc/pv prebound to other pv/pvc
-    Given I have a project
+    Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
     Given admin creates a PV from "preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | pv-<%= project.name %> |
@@ -197,10 +221,10 @@ Feature: Testing for pv and pvc pre-bind feature
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     And the "mypvc" PVC becomes :pending
     And the "pv-<%= project.name %>" PV status is :available
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    Examples:
-      | pre-bind-pvc | pre-bind-pv                |
-      | nfsc         | nfspv1-<%= project.name %> | # @case_id OCP-10108
-      | nfsc1        | nfspv-<%= project.name %>  | # @case_id OCP-10112
 
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    Examples:
+      | case_id           | pre-bind-pvc | pre-bind-pv                |
+      | OCP-10108:Storage | nfsc         | nfspv1-<%= project.name %> | # @case_id OCP-10108
+      | OCP-10112:Storage | nfsc1        | nfspv-<%= project.name %>  | # @case_id OCP-10112

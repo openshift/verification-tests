@@ -1,15 +1,17 @@
 Feature: SGW<->LGW migration related scenarios
+
   
   # @author anusaxen@redhat.com
   # @case_id OCP-47561
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @admin
   @destructive
   @network-ovnkubernetes
   @vsphere-ipi
   @noproxy @connected
   @vsphere-upi
-  Scenario: [SDN-2290] SGW <-> LGW migration scenario	for vsphere platform
+  @amd64
+  Scenario: OCP-47561:SDN SGW <-> LGW migration scenario for vsphere platform
     Given the env is using "OVNKubernetes" networkType
 
     ######## Prepare Data Pre Migration for multiple use cases############
@@ -17,6 +19,7 @@ Feature: SGW<->LGW migration related scenarios
     #OCP-47087 - [bug_1903408]Other node cannot be accessed for nodePort when externalTrafficPolicy is Local	
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
+    And the Internal IP of node "<%= cb.masters[1].name %>" is stored in the :master1_ip clipboard
     And evaluation of `rand(30000..32767)` is stored in the :port clipboard
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -97,6 +100,11 @@ Feature: SGW<->LGW migration related scenarios
     Then the step should fail
     And the output should not contain:
       | Hello OpenShift! |
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.master1_ip %>:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
     Given I use the "<%= cb.proj1 %>" project
     Given I ensure "hello-pod" service is deleted
     When I run commands on the host:
@@ -121,13 +129,14 @@ Feature: SGW<->LGW migration related scenarios
  
   # @author anusaxen@redhat.com
   # @case_id OCP-47641
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @admin
   @destructive
   @network-ovnkubernetes
   @baremetal-upi
   @proxy @noproxy @disconnected @connected
-  Scenario: [SDN-2290] SGW <-> LGW migration scenario	for BM platform
+  @amd64
+  Scenario: OCP-47641:SDN SGW <-> LGW migration scenario for BM platform
     Given the env is using "OVNKubernetes" networkType
 
     ######## Prepare Data Pre Migration for multiple use cases############
@@ -135,6 +144,7 @@ Feature: SGW<->LGW migration related scenarios
     #OCP-47087 - [bug_1903408]Other node cannot be accessed for nodePort when externalTrafficPolicy is Local	
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
+    And the Internal IP of node "<%= cb.masters[1].name %>" is stored in the :master1_ip clipboard
     And evaluation of `rand(30000..32767)` is stored in the :port clipboard
     Given I have a project
     Given I obtain test data file "networking/nodeport_test_pod.yaml"
@@ -167,23 +177,28 @@ Feature: SGW<->LGW migration related scenarios
     #OCP-47087 - [bug_1903408]Other node cannot be accessed for nodePort when externalTrafficPolicy is Local	
     Given I use the "<%= cb.masters[1].name %>" node
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.hostip %>]:<%= cb.port %> |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift! |
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.master0_ip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.master0_ip %>]:<%= cb.port %> |
     Then the step should fail
     And the output should not contain:
       | Hello OpenShift! |
+    When I run commands on the host:
+      | curl --connect-timeout 5 [<%= cb.master1_ip %>]:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
     Given I ensure "hello-pod" service is deleted
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.hostip %>]:<%= cb.port %> |
     Then the step should fail
 
   # @author weliang@redhat.com
   # @case_id OCP-48066
-  @4.11 @4.10
+  @4.12 @4.11 @4.10
   @admin
   @destructive
   @network-ovnkubernetes
@@ -191,7 +206,8 @@ Feature: SGW<->LGW migration related scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  Scenario: [SDN-2290] SGW <-> LGW migration scenarios for externalIP	
+  @amd64
+  Scenario: OCP-48066:SDN SGW <-> LGW migration scenarios for externalIP
     Given the env is using "OVNKubernetes" networkType
     ######## Prepare Data Pre Migration ############
     #OCP-24669 - externalIP defined in service with set ExternalIP in allowedCIDRs

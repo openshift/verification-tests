@@ -46,7 +46,9 @@ Given /^the env is using one of the listed network plugins:$/ do |table|
     # only check stdout because stderr can contain "-" and cause the split to fail
     plugin_name = @result[:stdout].to_s.split("-").last
     unless plugin_list.include? plugin_name
-      raise "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
+      logger.warn "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
     end
   else
     _host = node.host rescue nil
@@ -76,7 +78,9 @@ Given /^the env is using one of the listed network plugins:$/ do |table|
     logger.info("environment network plugin name: #{plugin_name}")
 
     unless plugin_list.include? plugin_name
-      raise "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
+      logger.warn "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
     end
   end
 end
@@ -145,7 +149,9 @@ Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
   end
 
   unless plugin_type.include?("openshift-ovs-networkpolicy")
-    raise "#{plugin_type} != openshift-ovs-networkpolicy.  This is unsupported?"
+    logger.warn "#{plugin_type} != openshift-ovs-networkpolicy.  This is unsupported?"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
 
   logger.info "OpenShift version >= 3.9 and uses networkpolicy plugin."
@@ -458,7 +464,9 @@ Given /^I restart the openvswitch service on the node$/ do
         pod.node_name == node.name
       }.first
     else
-      raise "unknown network_type"
+      logger.warn "unknown network_type"
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
     end
     @result = ovs_pod.ensure_deleted(user: _admin)
   end
@@ -486,7 +494,9 @@ Given /^I restart the network components on the node( after scenario)?$/ do |aft
           pod.node_name == _node.name
         }.first
       else
-        raise "unknown network_type"
+        logger.warn "unknown network_type"
+        logger.warn "We will skip this scenario"
+        skip_this_scenario
       end
       @result = net_pod.ensure_deleted(user: _admin)
   }
@@ -517,7 +527,9 @@ Given /^I get the networking components logs of the node since "(.+)" ago$/ do |
     }.first
     @result = admin.cli_exec(:logs, resource_name: ovnkube_pod.name, n: "openshift-ovn-kubernetes", since: duration)
   else
-    raise "unknown network_type"
+    logger.warn "unknown network_type"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
 end
 
@@ -587,7 +599,7 @@ Given /^an IP echo service is setup on the master node and the ip is stored in t
   cb_name = "ipecho_ip" unless cb_name
   cb[cb_name] = host.local_ip
 
-  @result = host.exec_admin("docker run --name ipecho -d -p 8888:80 quay.io/openshifttest/ip-echo:multiarch")
+  @result = host.exec_admin("docker run --name ipecho -d -p 8888:80 quay.io/openshifttest/ip-echo:1.2.0")
   raise "Failed to create the IP echo service." unless @result[:success]
   teardown_add {
     @result = host.exec_admin("docker rm -f ipecho")
@@ -600,15 +612,17 @@ Given /^the multus is enabled on the cluster$/ do
   success = wait_for(120, interval: 10)  {
     desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
     available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
-    if (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0 
+    if (desired_multus_replicas == available_multus_replicas || desired_multus_replicas > env.nodes.count) && available_multus_replicas != 0
       true
     else
       logger.info("Multus is not running correctly, continue checking")
       false
     end
-  } 
+  }
   unless success
-    raise "Multus is not running correctly! Exit Testing" 
+    logger.warn "Multus is not running correctly!"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
 end
 
@@ -653,7 +667,9 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
     cache_resources ovnkube_pod
     @result = ovnkube_pod.exec(network_cmd, container: "ovn-controller", as: admin)
   else
-    raise "unknown network_type"
+    logger.warn "unknown network_type"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
   # Don't check success here, let the testcase do thad
 end
@@ -687,7 +703,9 @@ Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
         pod.node_name == node_name
       }.first
     else
-      raise "unknown network_type"
+      logger.warn "unknown network_type"
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
     end
     @result = ovs_pod.ensure_deleted(user: _admin)
     unless @result[:success]
@@ -711,7 +729,9 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   when "OpenShiftSDN"
     step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
-    raise "unknown network_type"
+    logger.warn "unknown network_type"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
   # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
   cb[cb_name] = @result[:response].split("\n").first.split[4]
@@ -793,7 +813,9 @@ Given /^I run cmds on all ovs pods:$/ do | table |
     when "OVNKubernetes"
       ovs_pods = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true)
     else
-      raise "unknown network_type"
+      logger.warn "unknown network_type"
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
     end
     ovs_pods.each do |pod|
       @result = pod.exec(network_cmd, as: admin)
@@ -828,7 +850,9 @@ Given /^I run command on the#{OPT_QUOTED} node's ovs pod:$/ do |node_name, table
         pod.node_name == node_name
       }.first
     else
-      raise "unknown network_type"
+      logger.warn "unknown network_type"
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
     end
     cache_resources ovs_pod
     @result = ovs_pod.exec(network_cmd, as: admin)
@@ -853,7 +877,11 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   ensure_admin_tagged
   _admin = admin
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
-  raise "the networkType is not #{network_type}" unless network_operator.network_type(user: _admin) == network_type
+  unless network_operator.network_type(user: _admin) == network_type
+    logger.warn  "the networkType is not #{network_type}"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
+  end
 end
 
 Given /^the cluster has "([^"]*)" endpoint publishing strategy$/ do |ep_pub_strategy|
@@ -868,7 +896,8 @@ Given /^the env is using windows nodes$/ do
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "nodes", show_label:true)
   unless @result[:response].include? "kubernetes.io/os=windows"
-    logger.info "env doesn't have any windows node"
+    logger.warn "env doesn't have any windows node"
+    logger.warn "We will skip this scenario"
     skip_this_scenario
   end
 end
@@ -877,7 +906,11 @@ Given /^the env has hybridOverlayConfig enabled$/ do
   ensure_admin_tagged
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig}")
-  raise "env doesn't have hybridOverlayConfig enabled" unless @result[:response].include? "hybridOverlayConfig"
+  unless @result[:response].include? "hybridOverlayConfig"
+    logger.warn "env doesn't have hybridOverlayConfig enabled"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
+  end
 end
 
 
@@ -967,6 +1000,8 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   logger.info "The tunnel interface address is stored in the #{cb_address} clipboard."
 end
 
+# Internal IP will support single stack clusters either IPv4 or IPv6. Internal IPv6 will extend support in case of Dual Stack.
+# This is more focussed on supporting single stack clusters and interoperability of such cases IPv4/IPv6 in verification-tests repo
 Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do | v6, node_name, cb_ipaddr|
   ensure_admin_tagged
   node = node(node_name)
@@ -976,26 +1011,26 @@ Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipbo
   network_type = network_operator.network_type(user: admin)
   case network_type
   when "OVNKubernetes"
-    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
     if v6
-       step %Q/I run command on the node's ovnkube pod:/, table("| ip | -6 | route | show | default |")
+      step %Q/I run command on the node's ovnkube pod:/, table("| ip | -6 | route | show | default |")
     else
-       step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
+      inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[?(@.type==\"InternalIP\")].address}")
     end
   when "OpenShiftSDN"
-    step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
+    inf_address = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.status.addresses[?(@.type==\"InternalIP\")].address}")
   else
-    raise "unknown networkType"
+    logger.warn "unknown networkType"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
   # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
-  def_inf = @result[:response].split("\n").first.split[4]
-  logger.info "The node's default interface is #{def_inf}"
   if v6
-     @result = host.exec_admin("ip -6 -brief addr show #{def_inf}")
-     cb[cb_ipaddr]=@result[:response].match(/([a-f0-9:]+:+)+[a-f0-9]+/)[0]
+    def_inf = @result[:response].split("\n").first.split[4]
+    logger.info "The node's default interface is #{def_inf}"
+    @result = host.exec_admin("ip -6 -brief addr show #{def_inf}")
+    cb[cb_ipaddr]=@result[:response].match(/([a-f0-9:]+:+)+[a-f0-9]+/)[0]
   else
-     @result = host.exec_admin("ip -4 -brief addr show #{def_inf}")
-     cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
+    cb[cb_ipaddr]=inf_address[:response].split(" ").first
   end
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
@@ -1221,6 +1256,12 @@ end
 Given /^I install machineconfigs load-sctp-module$/ do
   ensure_admin_tagged
   _admin = admin
+  @result = _admin.cli_exec(:get, resource: "nodes")
+    if @result[:response].include?("SchedulingDisabled") || @result[:response].include?("NotReady")
+      logger.warn "There are some nodes already in not normal status."
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
+    end
   if cb.workers.count > 1
     @result = _admin.cli_exec(:get, resource: "machineconfigs", output: 'jsonpath={.items[?(@.metadata.name=="load-sctp-module")].metadata.name}')
     if @result[:response] != "load-sctp-module"
@@ -1228,7 +1269,9 @@ Given /^I install machineconfigs load-sctp-module$/ do
       raise "Failed to install load-sctp-module" unless @result[:success]
     end
   else
-    raise "At least two schedulable workers are needed"
+    logger.warn "At least two schedulable workers are needed"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
 end
 
@@ -1292,7 +1335,9 @@ Given /^I save egress data file directory to the#{OPT_SYM} clipboard$/ do | cb_n
   when "OpenShiftSDN"
     cb[cb_name]="egressnetworkpolicy"
   else
-    raise "unknown network_type"
+    logger.warn "unknown network_type"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
   logger.info "The egressfirewall file directory path is stored to the #{cb_name} clipboard."
 end
@@ -1308,7 +1353,9 @@ Given /^I save egress type to the#{OPT_SYM} clipboard$/ do | cb_name |
   when "OpenShiftSDN"
     cb[cb_name] = "egressnetworkpolicy"
   else
-    raise "unknown network_type"
+    logger.warn "unknown network_type"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
   logger.info "The egressfirewall type is stored to the #{cb_name} clipboard."
 end
@@ -1329,9 +1376,10 @@ Given /^the IPsec is enabled on the cluster$/ do
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
   default_network = network_operator.default_network(user: admin)
   unless default_network["ipsecConfig"]
-     logger.info "env doesn't have IPSec enabled"
-     skip_this_scenario
-  end 
+    logger.warn "env doesn't have IPSec enabled"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
+  end
 end
 
 Given /^the node's active nmcli connection is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
@@ -1446,18 +1494,127 @@ end
 
 Given /^I switch the ovn gateway mode on this cluster$/ do
   ensure_admin_tagged
-  step "I store the masters in the clipboard"
-  ovnkube_master = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash| pod.node_name == node.name}.first
-  @result = admin.cli_exec(:logs, resource_name: ovnkube_master.name, n: "openshift-ovn-kubernetes", c: "ovnkube-master")
-
-  if @result[:response].include? "Gateway:{Mode:local"
-    logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
-    @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": false}}}}}", type: "merge")
+  if env.version_gt("4.9", user: user)
+    #for version 4.10+ we can check exposed routingViaHost value under CNO object to evaluate ovn gateway mode
+    @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig.gatewayConfig.routingViaHost}")
+    if @result[:response].include? "true"
+      logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
+      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": false}}}}}", type: "merge")
+    else
+      logger.info "OVN Gateway mode is Shared. Changing Gateway mode to Local now..."
+      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": true}}}}}", type: "merge")
+    end
   else
-    logger.info "OVN Gateway mode is Shared. Changing Gateway mode to Local now..."
-    @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": true}}}}}", type: "merge")
+    #for version < 4.10 we need to check if gateway-mode-config cm is present under CNO NS
+    @result = admin.cli_exec(:get, resource: "cm", n: "openshift-network-operator")
+    if @result[:response].include? "gateway-mode-config"
+      logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
+      #config map (LGW) deletion will be noticed by CNO which will cause cluster to rollout on SGW
+      @result = admin.cli_exec(:delete, object_type: "cm", object_name_or_id: "gateway-mode-config", n: "openshift-network-operator")
+    else
+      logger.info "OVN Gateway mode is Shared. Changing Gateway mode to Local now..."
+      #we need to create config map under CNO namespace if it does not exist to transition to LGW
+      @result = admin.cli_exec(:apply, f: "#{BushSlicer::HOME}/testdata/networking/sgw-lgw-cm.yaml")
+    end
   end
-  raise "Failed to patch network operator for gateway mode" unless @result[:success]
+  raise "Failed to patch network operator or apply config map for gateway mode" unless @result[:success]
+  logger.info "Waiting upto 240 sec for network operator to change status to Progressing as a result of patch or config map operation"
+  @result = admin.cli_exec(:wait, resource: "co", resource_name: "network", for: "condition=PROGRESSING=True", timeout: "240s")
+  raise "Patch or config map application was successful but CNO didn't change status to Progressing" unless @result[:success]
   @result = admin.cli_exec(:rollout_status, resource: "daemonset", name: "ovnkube-master", n: "openshift-ovn-kubernetes")
   raise "Failed to rollout masters" unless @result[:success]
+end
+
+Given /^the cluster is not migration from sdn plugin$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration}")
+  if @result[:stdout]["networkType"]
+    logger.warn "the cluster is migration from sdn plugin"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
+  end
+end
+
+Given /^the cluster has workers for sctp$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:describe, resource: "node")
+  if @result[:response].match(/desiredConfig: rendered-worker/).nil?
+    logger.warn "No proper worker nodes to run sctp tests, skip!!!"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
+  end
+end
+
+Given /^I save cluster type to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "cluster_type" unless cb_name
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.serviceNetwork}")
+  if @result[:response].count(":") >= 2 && @result[:response].count(".") >= 2
+    cb[cb_name]="dualstack"
+  elsif @result[:response].count(":") >= 2
+    cb[cb_name]="ipv6single"
+  elsif @result[:response].count(".") >= 2
+    cb[cb_name]="ipv4single"
+  else
+    raise "unknown cluster_type"
+    skip_this_scenario
+  end
+  logger.info "The cluster type #{cb[cb_name]} is stored to the #{cb_name} clipboard."
+end
+
+Given /^the egressfirewall policy is applied to the "(.+?)" namespace$/ do | project_name |
+  ensure_admin_tagged
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  policy_file = ''
+  case network_type
+  when "OVNKubernetes"
+    step "I save cluster type to the clipboard"
+    if cb.cluster_type == "dualstack"
+      policy_file = "networking/ovn-egressfirewall/limit_policy_dualstack.json"
+    elsif cb.cluster_type == "ipv4single"
+      policy_file = "networking/ovn-egressfirewall/limit_policy.json"
+    else
+      skip_this_scenario
+    end
+  when "OpenShiftSDN"
+    policy_file = "networking/egressnetworkpolicy/limit_policy.json"
+  else
+    raise "unknown network_type"
+  end
+  @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/#{policy_file}")
+  unless @result[:success]
+    raise "Failed to apply the egressnetworkpolicy to specified namespace."
+  end
+  logger.info "The egressfirewall type is applied."
+end
+
+Given /^the cluster is dual stack network type$/ do
+  ensure_admin_tagged
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.serviceNetwork}")
+  unless @result[:response].count(":") >= 2 && @result[:response].count(".") >= 2
+    logger.warn "the cluster is not dual stack cluster, will skip this scenario"
+    skip_this_scenario
+  end
+end
+
+Given /^I store kubernetes elected leader pod for ovnkube-master in the#{OPT_SYM} clipboard$/ do |cb_leader_name|
+  ensure_admin_tagged
+  cb_leader_name ||= "leader_pod"
+  step %/I switch to cluster admin pseudo user/
+  step %/I use the "openshift-ovn-kubernetes" project/
+  cm_annotation = config_map('ovn-kubernetes-master').annotations(key: 'control-plane.alpha.kubernetes.io/leader')
+  # the annotation result is a string reprensation of a JSON, convert it to a
+  # yaml object for easier access
+  annotation_hash = YAML.load(cm_annotation)
+  holder_id =  annotation_hash['holderIdentity']
+  ### cli way
+  # @result= admin.cli_exec(:get, namespace: "openshift-ovn-kubernetes", resource: "pod",  o: 'yaml', fieldSelector: "spec.nodeName=#{holder_id}")
+  # cb[cb_leader_name] = pod(@result[:parsed]["items"][0]['metadata']['name'])
+  ###  oop way
+  pods = project.pods(by:user)
+  target_pod = pods.select {|p| p.props[:node_name] == holder_id }.first
+  cb[cb_leader_name ] = target_pod
 end

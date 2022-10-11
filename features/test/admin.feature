@@ -1,4 +1,5 @@
 Feature: Testing Admin Scenarios
+
   @admin
   Scenario: simple create project admin scenario
     When I run the :oadm_new_project admin command with:

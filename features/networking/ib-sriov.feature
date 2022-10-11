@@ -59,16 +59,16 @@ Feature: Sriov IB related scenarios
     Then the output should contain "infiniband"
 
     Examples:
-      | cardname | 
-      | cx4   | # @case_id OCP-33812
-      | cx5   | # @case_id OCP-33813
-      | cx6   | # @case_id OCP-33814
+      | case_id       | cardname |
+      | OCP-33812:SDN | cx4      | # @case_id OCP-33812
+      | OCP-33813:SDN | cx5      | # @case_id OCP-33813
+      | OCP-33814:SDN | cx6      | # @case_id OCP-33814
 
   # @author zzhao@redhat.com
   # @case_id OCP-33852
   @destructive
   @admin
-  Scenario: Set the infiniband-guid for pod
+  Scenario: OCP-33852:SDN Set the infiniband-guid for pod
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/ib/cx6/cx6-ib.yaml"
     Given I create sriov resource with following:

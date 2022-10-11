@@ -1,9 +1,9 @@
-require 'openshift/cluster_resource'
+require 'openshift/project_resource'
 
 module BushSlicer
   # represents MachineSet
-  class MachineSet < ProjectResource
-    RESOURCE = 'machinesets'
+  class MachineSetMachineOpenshiftIo < ProjectResource
+    RESOURCE = 'machinesets.machine.openshift.io'
 
     def desired_replicas(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
@@ -25,7 +25,7 @@ module BushSlicer
     def machines(user: nil, cached: true, quiet: true)
       unless cached && props[:machines]
         user ||= default_user(user)
-        all_machines = Machine.list(user: user, project: project, get_opts: [[:_quiet, quiet]])
+        all_machines = MachineMachineOpenshiftIo.list(user: user, project: project, get_opts: [[:_quiet, quiet]])
         props[:machines] = all_machines.select {|m| m.machine_set_name == name}
       end
       return props[:machines]

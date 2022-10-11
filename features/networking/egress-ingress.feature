@@ -4,13 +4,14 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-11639
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
-  @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: EgressNetworkPolicy will not take effect after delete it
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @network-multitenant
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11639:SDN EgressNetworkPolicy will not take effect after delete it
     Given I have a project
     Given I have a pod-for-ping in the project
     Given I save egress data file directory to the clipboard
@@ -48,13 +49,14 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-13502
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: Apply different egress network policy in different projects
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-13502:SDN Apply different egress network policy in different projects
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -117,13 +119,14 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-13507
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @proxy @noproxy
-  Scenario: The rules of egress network policy are added in openflow
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-13507:SDN The rules of egress network policy are added in openflow
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -162,13 +165,14 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-13509
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: Egress network policy use dnsname with multiple ipv4 addresses
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-13509:SDN Egress network policy use dnsname with multiple ipv4 addresses
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -197,13 +201,14 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-15005
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-15005:SDN Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -258,13 +263,14 @@ Feature: Egress-ingress related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-15017
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: Add nodes local IP address to OVS rules for egressnetworkpolicy
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-15017:SDN Add nodes local IP address to OVS rules for egressnetworkpolicy
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -283,7 +289,6 @@ Feature: Egress-ingress related networking scenarios
       |tcp,nw_dst=<%= cb.hostip %>,tp_dst=53|
       |udp,nw_dst=<%= cb.hostip %>,tp_dst=53|
 
-
     # Create egress policy to allow www.baidu.com
     When I obtain test data file "networking/egress-ingress/dns-egresspolicy1.json"
     And I replace lines in "dns-egresspolicy1.json":
@@ -297,7 +302,7 @@ Feature: Egress-ingress related networking scenarios
     Given I wait up to 10 seconds for the steps to pass:
     """
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-ofctl| -O | openflow13 | dump-flows | br0 | table=101 |
+      | ovs-ofctl| -O | openflow13 | dump-flows | br0 | table=100 |
     And the output should contain:
       | actions=drop |
     """
@@ -313,12 +318,13 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-13506
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: Update different dnsname in same egress network policy
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-13506:SDN Update different dnsname in same egress network policy
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -352,13 +358,16 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-19615
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @proxy @noproxy
-  Scenario: Iptables should be updated with correct endpoints when egress DNS policy was used
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-19615:SDN Iptables should be updated with correct endpoints when egress DNS policy was used
+    Given the env is using "OpenShiftSDN" networkType	
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/list_for_pods.json"
     When I run oc create over "list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
@@ -405,13 +414,15 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33530
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes
-  Scenario: [SDN-682] EgressFirewall allows traffic to destination ports
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-33530:SDN EgressFirewall allows traffic to destination ports
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -445,13 +456,15 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33531
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes
-  Scenario:  [SDN-682] EgressFirewall rules take effect in order
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-33531:SDN EgressFirewall rules take effect in order
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -470,12 +483,14 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33539
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @network-ovnkubernetes
-  Scenario:  [SDN-682] EgressFirewall policy should not take effect for traffic between pods and pods to service
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-33539:SDN EgressFirewall policy should not take effect for traffic between pods and pods to service
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     # Create EgressFirewall policy to deny all outbound traffic
     When I obtain test data file "networking/ovn-egressfirewall/limit_policy.json"
@@ -508,12 +523,14 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-33565
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @network-ovnkubernetes
-  Scenario: [SDN-682] EgressFirewall policy take effect for multiple port
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-33565:SDN EgressFirewall policy take effect for multiple port
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -538,12 +555,14 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-35341
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  Scenario: EgressNetworkPolicy maxItems is 1000
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-35341:SDN EgressNetworkPolicy maxItems is 1000
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     Given I obtain test data file "networking/egressnetworkpolicy/egressnetworkpolicy_1000.yaml"
     When I run the :create admin command with:
@@ -558,19 +577,21 @@ Feature: Egress-ingress related networking scenarios
       | f | egressnetworkpolicy_1001.yaml |
       | n | <%= project.name %>           |
     Then the step should fail
-    And the output should contain:
-      | spec.egress in body should have at most 1000 items |
+    And the output should match:
+      | spec.egress.*have at most 1000 items |
 
   # @author huirwang@redhat.com
   # @case_id OCP-37491
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes
-  Scenario: [SDN-1181] EgressFirewall allows traffic to destination dnsName
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-37491:SDN EgressFirewall allows traffic to destination dnsName
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -599,13 +620,15 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37495
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes
-  Scenario: [SDN-1181] EgressFirewall denys traffic to destination dnsName
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-37495:SDN EgressFirewall denys traffic to destination dnsName
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
 
     When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy4.yaml"
@@ -635,12 +658,14 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37496
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @network-ovnkubernetes
-  Scenario: [SDN-1181] Edit EgressFirewall should take effect
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-37496:SDN Edit EgressFirewall should take effect
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -671,13 +696,15 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-41179
   @admin
-  @4.11 @4.10 @4.9 @4.8
+  @4.12 @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes
-  Scenario: [bug1947917] Egress Firewall should reliably apply firewall rules
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-41179:SDN bug1947917 Egress Firewall should reliably apply firewall rules
+    Given the env is using "OVNKubernetes" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
 
@@ -712,11 +739,13 @@ Feature: Egress-ingress related networking scenarios
   # @author jechen@redhat.com
   # @case_id OCP-44940
   @admin
-  @4.11 @4.10 @4.9    
+  @4.12 @4.11 @4.10 @4.9    
   @network-ovnkubernetes @network-openshiftsdn	
   @singlenode
   @proxy @noproxy @disconnected @connected
-  Scenario: [bug2000057] No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-44940:SDN bug2000057 No segmentation error occurs in ovnkube-master after egressfirewall resource that references a DNS name is deleted
     Given the env is using "OVNKubernetes" networkType
     And I have a project
     Given I obtain test data file "networking/list_for_pods.json"

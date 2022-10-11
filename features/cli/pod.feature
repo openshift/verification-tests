@@ -3,7 +3,7 @@ Feature: pods related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11218
   @inactive
-  Scenario: kubectl describe pod should show qos tier info when pod without limits and request info
+  Scenario: OCP-11218:Node kubectl describe pod should show qos tier info when pod without limits and request info
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"
     When I run the :create client command with:
@@ -20,14 +20,15 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-11527
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: kubectl describe pod should show qos tier info
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11527:Node kubectl describe pod should show qos tier info
     Given I have a project
     Given I obtain test data file "quota/pod-notbesteffort.yaml"
     When I run the :create client command with:
@@ -62,7 +63,7 @@ Feature: pods related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10729
   @inactive
-  Scenario: Implement supplemental groups for pod
+  Scenario: OCP-10729:Node Implement supplemental groups for pod
     Given I have a project
     Given I obtain test data file "pods/ocp10729/pod-supplementalGroups.yaml"
     When I run the :create client command with:
@@ -107,11 +108,14 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-11753
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Pod should be immediately deleted if it's not scheduled even if graceful termination period is set
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-11753:Workloads Pod should be immediately deleted if it's not scheduled even if graceful termination period is set
     Given I have a project
     Given I obtain test data file "pods/graceful-delete/10.json"
     When I run the :create client command with:
@@ -129,7 +133,7 @@ Feature: pods related scenarios
   # @case_id OCP-10813
   # @bug_id 1324396
   @inactive
-  Scenario: Update ActiveDeadlineSeconds for pod
+  Scenario: OCP-10813:Node Update ActiveDeadlineSeconds for pod
     Given I have a project
     Given I obtain test data file "pods/ocp10813/hello-pod.json"
     When I run the :create client command with:
@@ -162,14 +166,15 @@ Feature: pods related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-11055
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: /dev/shm can be automatically shared among all of a pod's containers
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11055:Node /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project
     Given I obtain test data file "pods/pod_with_two_containers.json"
     When I run the :create client command with:
@@ -220,14 +225,16 @@ Feature: pods related scenarios
   # @author chuyu@redhat.com
   # @case_id OCP-22283
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: 4.0 Oauth provider info should be consumed in a pod
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-22283:Authentication 4.0 Oauth provider info should be consumed in a pod
     Given I have a project
     When I run the :new_app client command with:
       | docker_image | aosqe/ruby-ex |

@@ -30,7 +30,7 @@ module BushSlicer
     def clean_up
       if @world
         begin
-          # this is likely not going to work in at_exit pahse with
+          # this is likely not going to work in at_exit phase with
           # cucumber 2.4 because builtin methods like `#step` are messed up
           # at that stage. Should we continue on failures in `#at_exit`?
           @world.after_scenario

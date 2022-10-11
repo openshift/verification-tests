@@ -2,14 +2,16 @@ Feature: change the policy of user/service account
 
   # @author xxing@redhat.com
   # @case_id OCP-11074
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: User can view ,add, remove and modify roleBinding via admin role user
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-11074:Authentication User can view ,add, remove and modify roleBinding via admin role user
     Given I have a project
     When I run the :get client command with:
       | resource      | rolebinding |
@@ -57,13 +59,15 @@ Feature: change the policy of user/service account
   # @author xxing@redhat.com
   # @case_id OCP-12430
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  Scenario: Could get projects for new role which has permission to get projects
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-12430:Authentication Could get projects for new role which has permission to get projects
     Given an 8 characters random string of type :dns is stored into the :random clipboard
     And admin ensures "clusterrole-12430-<%= cb.random %>" cluster_role is deleted after scenario
     Given I obtain test data file "authorization/policy/clustergetproject.json"
@@ -79,73 +83,74 @@ Feature: change the policy of user/service account
   # @author xiaocwan@redhat.com
   # @case_id OCP-11442
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: [origin_platformexp_214] User can view, add , modify and delete specific role to/from new added project via admin role user
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-11442:Authentication User can view, add , modify and delete specific role to/from new added project via admin role user
     Given I have a project
     Given I obtain test data file "authorization/policy/projectviewservice.json"
     When I run the :create client command with:
       | f | projectviewservice.json |
     Then the step should succeed
     And the output should contain:
-      | created      |
+      | created |
     When I run the :describe client command with:
-      | namespace    | <%= project.name %> |
-      | resource     | role                |
-      | name         | viewservices        |
+      | namespace | <%= project.name %> |
+      | resource  | role                |
+      | name      | viewservices        |
     Then the step should succeed
     And the output should contain:
-      | get                                |
-      | list                               |
-      | watch                              |
-    Given I obtain test data file "authorization/policy/projectviewservice.json"
-    When I delete matching lines from "projectviewservice.json":
-      | "get",       |
-    Then the step should succeed
+      | get   |
+      | list  |
+      | watch |
+    Given I delete matching lines from "projectviewservice.json":
+      | "get", |
     When I run the :replace client command with:
-      | f            | projectviewservice.json      |
+      | f | projectviewservice.json |
     Then the step should succeed
     And the output should contain:
-      | replaced     |
+      | replaced |
     When I run the :describe client command with:
-      | namespace    | <%= project.name %> |
-      | resource     | role                |
-      | name         | viewservices        |
+      | namespace | <%= project.name %> |
+      | resource  | role                |
+      | name      | viewservices        |
     Then the step should succeed
     And the output should not contain:
-      | get          |
+      | get |
 
     When I run the :delete client command with:
-      | object_type       | role                    |
-      | object_name_or_id | viewservices            |
+      | object_type       | role         |
+      | object_name_or_id | viewservices |
     Then the step should succeed
     And the output should contain:
-      | deleted          |
+      | deleted |
     When I run the :describe client command with:
-      | namespace    | <%= project.name %>          |
-      | resource     | role                       |
-      | name         | viewservices                      |
+      | namespace | <%= project.name %> |
+      | resource  | role                |
+      | name      | viewservices        |
     Then the step should fail
     And the output should not contain:
-      | list          |
-      | watch         |
+      | list  |
+      | watch |
 
   # @author chezhang@redhat.com
   # @case_id OCP-10211
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: DaemonSet only support Always restartPolicy
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10211:Node DaemonSet only support Always restartPolicy
     Given I have a project
     Given cluster role "sudoer" is added to the "first" user
     Given I obtain test data file "daemon/daemonset-negtive-onfailure.yaml"
@@ -170,12 +175,13 @@ Feature: change the policy of user/service account
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10447
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @aws-ipi
   @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  Scenario: Basic user could not get deeper storageclass object info
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10447:Storage Basic user could not get deeper storageclass object info
     Given I have a project
     When I run the :get client command with:
       | resource | storageclass |
@@ -219,12 +225,13 @@ Feature: change the policy of user/service account
   # @author chaoyang@redhat.com
   # @case_id OCP-10448
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @aws-ipi
   @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  Scenario: User with role storage-admin can check deeper storageclass object info
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10448:Storage User with role storage-admin can check deeper storageclass object info
     Given I have a project
     And admin ensures "sc-<%= project.name %>" storageclasses is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
@@ -280,13 +287,14 @@ Feature: change the policy of user/service account
   # @case_id OCP-10466
   @admin
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @aws-ipi
   @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  Scenario: User with role storage-admin can check deeper pv object info
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10466:Storage User with role storage-admin can check deeper pv object info
     Given I have a project
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
@@ -343,13 +351,14 @@ Feature: change the policy of user/service account
   # @author lxia@redhat.com
   # @case_id OCP-10467
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  Scenario: User with role storage-admin can get pvc object info
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10467:Storage User with role storage-admin can get pvc object info
     Given I have a project
     And evaluation of `project.name` is stored in the :project clipboard
 
@@ -391,12 +400,13 @@ Feature: change the policy of user/service account
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10465
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  Scenario: Basic user could not get pv object info
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10465:Storage Basic user could not get pv object info
     Given I have a project
     Then I run the :get client command with:
       | resource | pv |
@@ -416,13 +426,15 @@ Feature: change the policy of user/service account
 
   # @author chuyu@redhat.com
   # @case_id OCP-9551
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  Scenario: User can know if he can create podspec against the current scc rules via CLI
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-9551:Authentication User can know if he can create podspec against the current scc rules via CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview_privileged_false.json"
     Given I run the :policy_scc_subject_review client command with:
@@ -454,12 +466,14 @@ Feature: change the policy of user/service account
   # @author chuyu@redhat.com
   # @case_id OCP-9552
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
-  Scenario: User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-9552:Authentication User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
@@ -467,31 +481,16 @@ Feature: change the policy of user/service account
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
+    # Test explicit serviceaccount
     Given I run the :policy_scc_review client command with:
-      | f | PodSecurityPolicyReview.json |
-      | n | <%= project.name %>                                                                            |
-    Then the step should succeed
-    And the output should not match:
-      | .*default.*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
+      | serviceaccount | default                      |
       | f              | PodSecurityPolicyReview.json |
-    Then the step should succeed
-    And the output should not match:
-      | .*default.*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
-      | f              | PodSecurityPolicyReview.json |
-      | n              | <%= project.name %>                                                                            |
+      | n              | <%= project.name %>          |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
     Given SCC "restricted" is added to the "default" service account
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    And I wait for the steps to pass:
+    Then I wait for the steps to pass:
     """
     Given I run the :policy_scc_review client command with:
       | f | PodSecurityPolicyReview.json |
@@ -499,74 +498,42 @@ Feature: change the policy of user/service account
     And the output should match:
       | .*default.*restricted |
     """
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    And I wait for the steps to pass:
-    """
+
+    # Test explicit serviceaccount
     Given I run the :policy_scc_review client command with:
-      | f | PodSecurityPolicyReview.json |
-      | n | <%= project.name %>                                                                            |
-    Then the step should succeed
-    And the output should match:
-      | .*default.*restricted |
-    """
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    And I wait for the steps to pass:
-    """
-    Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
+      | serviceaccount | default                      |
       | f              | PodSecurityPolicyReview.json |
-    Then the step should succeed
-    And the output should match:
-      | .*default.*restricted |
-    """
-    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
-    Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
-      | f              | PodSecurityPolicyReview.json |
-      | n              | <%= project.name %>                                                                            |
+      | n              | <%= project.name %>          |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
 
   # @author chuyu@redhat.com
   # @case_id OCP-9553
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  Scenario: User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-9553:Authentication User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
     Given I have a project
     Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
+    # If user is specified but not groups, it is interpreted as "what if the user
+    # is not a member of any groups", see "oc policy scc-subject-review -h"
     Given I run the :policy_scc_subject_review client command with:
-      | user | <%= user.name %>                                                                                      |
+      | user | <%= user.name %>                    |
       | f    | PodSecurityPolicySubjectReview.json |
     Then the step should succeed
     And the output should not match:
       | .*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
-      | user | <%= user.name %>                                                                                      |
-      | f    | PodSecurityPolicySubjectReview.json |
-      | n    | <%= project.name %>                                                                                   |
-    Then the step should succeed
-    And the output should not match:
-      | .*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
-    Given I run the :policy_scc_subject_review client command with:
-      | user  | <%= user.name %>                                                                                      |
-      | group | system:authenticated                                                                                  |
+      | user  | <%= user.name %>                    |
+      | group | system:authenticated                |
       | f     | PodSecurityPolicySubjectReview.json |
-    Then the step should succeed
-    And the output should match:
-      | .*restricted |
-    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
-    Given I run the :policy_scc_subject_review client command with:
-      | user  | <%= user.name %>                                                                                      |
-      | group | system:authenticated                                                                                  |
-      | f     | PodSecurityPolicySubjectReview.json |
-      | n     | <%= project.name %>                                                                                   |
+      | n     | <%= project.name %>                 |
     Then the step should succeed
     And the output should match:
       | .*restricted |

@@ -4,22 +4,24 @@ Feature: UPI GCP Tests
   # @case_id OCP-34697
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @gcp-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: MachineSets in GCP should create Machines in a Shared (XPN) VPC environment
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-34697:ClusterInfrastructure MachineSets in GCP should create Machines in a Shared (XPN) VPC environment
     Given I have an UPI deployment and machinesets are enabled
 
   # @author zhsun@redhat.com
   # @case_id OCP-25034
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @gcp-upi
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: [GCP] Scaling OCP Cluster on UPI
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-25034:ClusterInfrastructure GCP Scaling OCP Cluster on UPI
     Given I have an UPI deployment and machinesets are enabled
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -42,7 +44,7 @@ Feature: UPI GCP Tests
       | ["metadata"]["name"]               | maotest                 |
       | ["spec"]["minReplicas"]            | 1                       |
       | ["spec"]["maxReplicas"]            | 3                       |
-      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set.name %> |
+      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set_machine_openshift_io.name %> |
     Then the step should succeed
     And admin ensures "maotest" machineautoscaler is deleted after scenario
 
@@ -56,7 +58,7 @@ Feature: UPI GCP Tests
     # Verify machineset has scaled
     Given I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 3
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 3
     """
     Then the machineset should have expected number of running machines
 
@@ -65,6 +67,6 @@ Feature: UPI GCP Tests
     # Check cluster auto scales down
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines

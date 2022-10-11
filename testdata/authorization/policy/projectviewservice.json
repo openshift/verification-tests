@@ -1,20 +1,23 @@
 {
     "kind": "Role",
-    "apiVersion": "v1",
+    "apiVersion": "rbac.authorization.k8s.io/v1",
     "metadata": {
         "name": "viewservices",
         "creationTimestamp": null
     },
     "rules": [
         {
-        "verbs": [
-            "get",
-            "list",
-            "watch"
-        ],
-        "resources": [
-            "services"
-        ]
+            "apiGroups": [
+                ""
+            ],
+            "resources": [
+                "services"
+            ],
+            "verbs": [
+                "get",
+                "list",
+                "watch"
+            ]
         }
     ]
 }

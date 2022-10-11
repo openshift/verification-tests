@@ -3,7 +3,7 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-12076
   @admin
-  Scenario: Set backends weight for unsecure route
+  Scenario: OCP-12076:NetworkEdge Set backends weight for unsecure route
     Given I switch to cluster admin pseudo user
     And I use the router project
     Given all default router pods become ready
@@ -85,7 +85,7 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-11970
   @admin
-  Scenario: Set backends weight for reencrypt route
+  Scenario: OCP-11970:NetworkEdge Set backends weight for reencrypt route
     Given I switch to cluster admin pseudo user
     And I use the router project
     Given all default router pods become ready
@@ -183,7 +183,7 @@ Feature: Testing abrouting
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: The edge route with multiple service will set load balance policy to RoundRobin by default
+  Scenario: OCP-13519:NetworkEdge The edge route with multiple service will set load balance policy to RoundRobin by default
     #Create pod/service/route
     Given I have a project
     Given I obtain test data file "routing/abrouting/abtest-websrv1.yaml"
@@ -272,14 +272,15 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-15910
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-15910:NetworkEdge Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
     Given I switch to cluster admin pseudo user
     And I use the router project
     Given all default router pods become ready
@@ -359,14 +360,15 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-15994
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-15994:NetworkEdge Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
     Given I switch to cluster admin pseudo user
     And I use the router project
     Given all default router pods become ready

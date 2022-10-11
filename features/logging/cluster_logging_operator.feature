@@ -6,14 +6,15 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-21333:Logging ServiceMonitor Object for collector is deployed along with cluster logging
     Given logging collector name is stored in the :collector_name clipboard
     Given I wait for the "<%= cb.collector_name %>" service_monitor to appear
     And the expression should be true> service_monitor("<%= cb.collector_name %>").service_monitor_endpoint_spec(port: "metrics").path == "/metrics"
@@ -36,7 +37,7 @@ Feature: cluster-logging-operator related test
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: Scale Elasticsearch nodes by nodeCount 2->3->4 in clusterlogging
+  Scenario: OCP-22492:Logging Scale Elasticsearch nodes by nodeCount 2->3->4 in clusterlogging
     Given I obtain test data file "logging/clusterlogging/scalebase.yaml"
     Given I create clusterlogging instance with:
       | remove_logging_pods | true           |
@@ -93,7 +94,8 @@ Feature: cluster-logging-operator related test
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: Fluentd alert rule: FluentdNodeDown
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-23738:Logging Fluentd alert rule: FluentdNodeDown
     Given the master version >= "4.2"
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
@@ -125,7 +127,7 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   @inactive
-  Scenario: CLO should generate Elasticsearch Index Management
+  Scenario: OCP-28131:Logging CLO should generate Elasticsearch Index Management
     Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                         |
@@ -154,13 +156,14 @@ Feature: cluster-logging-operator related test
   @console
   @destructive
   @commonlogging
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: OpenShift Logging dashboard
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-33721:Logging OpenShift Logging dashboard
     Given I switch to the first user
     And the first user is cluster-admin
     And I open admin console in a browser
@@ -190,7 +193,7 @@ Feature: cluster-logging-operator related test
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments - Invalid Values
+  Scenario: OCP-33868:Logging Expose more fluentd knobs to support optimizing fluentd for different environments - Invalid Values
     Given I register clean-up steps:
     """
     Given I delete the clusterlogging instance
@@ -211,7 +214,8 @@ Feature: cluster-logging-operator related test
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-33793:Logging Expose more fluentd knobs to support optimizing fluentd for different environments
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer.yaml"
     And I create clusterlogging instance with:
       | remove_logging_pods | true                   |
@@ -233,13 +237,14 @@ Feature: cluster-logging-operator related test
   # @case_id OCP-33894
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Fluentd optimizing variable changes trigger new deployment
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-33894:Logging Fluentd optimizing variable changes trigger new deployment
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_default.yaml"
     And I create clusterlogging instance with:
       | remove_logging_pods | true                           |
@@ -253,14 +258,17 @@ Feature: cluster-logging-operator related test
     And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
     And the expression should be true> (cb.fluent_conf).include? "flush_mode interval"
     When I run the :patch client command with:
-      | resource      | clusterlogging                                                              |
-      | resource_name | instance                                                                    |
-      | p             | {"spec": {"forwarder": {"fluentd": {"buffer": {"flushMode":"lazy"}}}}}      |
-      | type          | merge                                                                       |
+      | resource      | clusterlogging                                                         |
+      | resource_name | instance                                                               |
+      | p             | {"spec": {"forwarder": {"fluentd": {"buffer": {"flushMode":"lazy"}}}}} |
+      | type          | merge                                                                  |
     Then the step should succeed
+    Given I wait up to 120 seconds for the steps to pass:
+    """
     When I run the :extract admin command with:
       | resource  | configmap/<%= cb.collector_name %> |
       | confirm   | true                               |
     Then the step should succeed
-    And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
-    Given the expression should be true> (cb.fluent_conf).include? "flush_mode lazy"
+    Given evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
+    Then the expression should be true> (cb.fluent_conf).include? "flush_mode lazy"
+    """

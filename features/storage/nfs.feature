@@ -4,13 +4,14 @@ Feature: NFS Persistent Volume
   # @author lxia@redhat.com
   # @case_id OCP-9572
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @disconnected @connected
-  Scenario: Share NFS with multiple pods with ReadWriteMany mode
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-9572:Storage Share NFS with multiple pods with ReadWriteMany mode
     Given I have a project
     And I have a NFS service in the project
 
@@ -56,13 +57,14 @@ Feature: NFS Persistent Volume
   # @author chaoyang@redhat.com
   # @case_id OCP-10281
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @baremetal-ipi @azure-ipi
   @vsphere-upi @openstack-upi @baremetal-upi @azure-upi
   @upgrade-sanity
   @singlenode
   @noproxy @disconnected @connected
-  Scenario: Permission denied when nfs pv annotaion is not right
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10281:Storage Permission denied when nfs pv annotaion is not right
     Given I have a project
     And I have a NFS service in the project
     When I execute on the pod:

@@ -3,12 +3,13 @@ Feature: SDN compoment upgrade testing
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @heterogeneous @arm64 @amd64
   Scenario: network operator should be available after upgrade - prepare
   # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
   # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -19,12 +20,13 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-22707
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @heterogeneous @arm64 @amd64
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-network-operator" project
@@ -42,13 +44,13 @@ Feature: SDN compoment upgrade testing
   # @author zzhao@redhat.com
   @admin
   @upgrade-prepare
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  @disconnected @connected
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
+  @heterogeneous @arm64 @amd64
   Scenario: Check the networkpolicy works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -86,12 +88,13 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-22735
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
+  @heterogeneous @arm64 @amd64
   Scenario: Check the networkpolicy works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade" project
@@ -107,14 +110,14 @@ Feature: SDN compoment upgrade testing
 
   # @author asood@redhat.com
   @admin
-  @network-ovnkubernetes  
   @upgrade-prepare
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Check the namespace networkpolicy for an application works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -199,14 +202,14 @@ Feature: SDN compoment upgrade testing
   # @author asood@redhat.com
   # @case_id OCP-38751
   @admin
-  @network-ovnkubernetes
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project
@@ -218,7 +221,7 @@ Feature: SDN compoment upgrade testing
       | name=hello-idle |
     And evaluation of `pod(2).name` is stored in the :pod3 clipboard
     And evaluation of `pod(2).ip_url` is stored in the :pod3ip clipboard
-    And I wait up to 10 seconds for the steps to pass:
+    And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
@@ -235,7 +238,7 @@ Feature: SDN compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=hello-idle |
     And evaluation of `pod(4).name` is stored in the :pod5 clipboard
-    And I wait up to 10 seconds for the steps to pass:
+    And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.pod4 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
@@ -276,12 +279,13 @@ Feature: SDN compoment upgrade testing
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
-  @4.11 @4.10 @4.9 @4.8
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -367,12 +371,13 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-40620
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade3" project
@@ -402,18 +407,20 @@ Feature: SDN compoment upgrade testing
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @azure-upi @aws-upi
   @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I store the workers in the :nodes clipboard
     When I run the :new_project client command with:
       | project_name | conntrack-upgrade |
     Then the step should succeed
+    And the appropriate pod security labels are applied to the "conntrack-upgrade" namespace
     Given I use the "conntrack-upgrade" project
     And I obtain test data file "networking/pod_with_udp_port_4789_nodename.json"
     When I run oc create over "pod_with_udp_port_4789_nodename.json" replacing paths:
@@ -436,12 +443,13 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-44901
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @azure-upi @aws-upi
   @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "conntrack-upgrade" project
@@ -485,9 +493,9 @@ Feature: SDN compoment upgrade testing
     Given I wait up to 20 seconds for the steps to pass:
     """
     And I execute on the pod:
-      | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
+      | bash | -c | conntrack -L \| grep "<%= cb.host_pod1.ip %>" |
     Then the step should succeed
-    And the output should contain:
+    And the output should match:
       |<%= cb.host_pod1.ip %>|
     """
     #Deleting the udp listener pod which will trigger a new udp listener pod with new IP
@@ -508,19 +516,18 @@ Feature: SDN compoment upgrade testing
     Given I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.network_pod %>" pod:
-      | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
-    Then the output should contain "<%= cb.host_pod2.ip %>"
-    And the output should not contain "<%= cb.host_pod1.ip %>"
+      | bash | -c | conntrack -L \| grep "<%= cb.host_pod2.ip %>" |
+    Then the output should match "<%= cb.host_pod2.ip %>"
+    And the output should not match "<%= cb.host_pod1.ip %>"
     """
 
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @destructive
-  @network-ovnkubernetes
   @network-ovnkubernetes @network-networkpolicy
   @upgrade
   @proxy @noproxy @disconnected @connected
@@ -539,7 +546,7 @@ Feature: SDN compoment upgrade testing
       | configmap_file  | config-map.yaml               |
       | deployment_file | rsyslogserver_deployment.yaml |
       | pod_label       | component=rsyslogserver       |
-    And evaluation of `service("rsyslogserver").ip` is stored in the :svc_ip clipboard
+    And evaluation of `service("rsyslogserver").ip_url` is stored in the :svc_ip clipboard
     And evaluation of `pod(0).name` is stored in the :rsyslog_server_pod clipboard
     Then the step should succeed
 
@@ -630,7 +637,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-44978
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @destructive
@@ -647,7 +654,7 @@ Feature: SDN compoment upgrade testing
     Given I wait for the "rsyslogserver" service to become ready
     Given a pod becomes ready with labels:
       | appname=rsyslogserver |
-    And evaluation of `service("rsyslogserver").ip` is stored in the :svc_ip clipboard
+    And evaluation of `service("rsyslogserver").ip_url` is stored in the :svc_ip clipboard
     And evaluation of `pod(0).name` is stored in the :rsyslog_server_pod clipboard
     Then the step should succeed
 

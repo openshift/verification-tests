@@ -8,7 +8,9 @@ When(/^I perform the (GET|POST) prometheus rest client with:$/) do | op_type, ta
   if opts.has_key? :token
     token = opts[:token]
   else
-    token = secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token
+    step %Q/I find a bearer token of the prometheus-k8s service account/
+    # get sa/prometheus-k8s token
+    token = service_account('prometheus-k8s').cached_tokens.first
   end
 
   https_opts = {}

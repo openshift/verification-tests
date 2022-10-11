@@ -3,7 +3,11 @@ Feature: Dynamic provisioning
   # @author lxia@redhat.com
   @admin
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @upgrade-sanity
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: dynamic provisioning
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -60,26 +64,23 @@ Feature: Dynamic provisioning
     @aws-ipi
     @aws-upi
     Examples:
-      | cloud_provider |
-      | ebs            | # @case_id OCP-9685
+      | case_id          | cloud_provider |
+      | OCP-9685:Storage | ebs            | # @case_id OCP-9685
 
     @gcp-ipi
     @gcp-upi
     Examples:
-      | cloud_provider |
-      | gce            | # @case_id OCP-12665
+      | case_id           | cloud_provider |
+      | OCP-12665:Storage | gce            | # @case_id OCP-12665
 
     @azure-ipi
     @azure-upi
     Examples:
-      | cloud_provider |
-      | azure          | # @case_id OCP-13787
+      | case_id           | cloud_provider |
+      | OCP-13787:Storage | azure          | # @case_id OCP-13787
 
     @openstack-ipi
     @openstack-upi
-    @upgrade-sanity
-    @singlenode
-    @proxy @noproxy @disconnected @connected
     Examples:
-      | cloud_provider |
-      | cinder         | # @case_id OCP-9656
+      | case_id          | cloud_provider |
+      | OCP-9656:Storage | cinder         | # @case_id OCP-9656

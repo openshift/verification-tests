@@ -3,13 +3,14 @@ Feature: SDN/OVN metrics related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-28519
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
   @network-openshiftsdn
-  Scenario: Prometheus should be able to monitor kubeproxy metrics
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-28519:SDN Prometheus should be able to monitor kubeproxy metrics
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sdn" project
     And evaluation of `endpoints('sdn').subsets.first.addresses.first.ip.to_s` is stored in the :metrics_ep_ip clipboard
@@ -17,7 +18,8 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `cb.metrics_ep_ip + ':' +cb.metrics_ep_port` is stored in the :metrics_ep clipboard
 
     Given I use the "openshift-monitoring" project
-    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
+    Given I find a bearer token of the prometheus-k8s service account
+    And evaluation of `service_account('prometheus-k8s').cached_tokens.first` is stored in the :sa_token clipboard
 
     #Running curl -k http://<%= cb.metrics_ep %>/metrics if version is < 4.6
     #Running curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn mmetrics should be using https scheme
@@ -41,12 +43,13 @@ Feature: SDN/OVN metrics related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-16016
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @connected
   @network-openshiftsdn
-  Scenario: Should be able to monitor the openshift-sdn related metrics by prometheus
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-16016:SDN Should be able to monitor the openshift-sdn related metrics by prometheus
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sdn" project
     And evaluation of `endpoints('sdn').subsets.first.addresses.first.ip.to_s` is stored in the :metrics_ep_ip clipboard
@@ -54,7 +57,8 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `cb.metrics_ep_ip + ':' +cb.metrics_ep_port` is stored in the :metrics_ep clipboard
 
     Given I use the "openshift-monitoring" project
-    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
+    Given I find a bearer token of the prometheus-k8s service account
+    And evaluation of `service_account('prometheus-k8s').cached_tokens.first` is stored in the :sa_token clipboard
 
     #Running curl -k http://<%= cb.metrics_ep %>/metrics if version is < 4.6
     #Running curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn metrics should be using https scheme
@@ -72,19 +76,22 @@ Feature: SDN/OVN metrics related networking scenarios
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9101
     And the output should contain:
-      | kubeproxy_sync_proxy_rules_duration       |
-      | kubeproxy_sync_proxy_rules_last_timestamp |
+      | openshift_sdn_arp  |
+      | openshift_sdn_pod  |
+      | openshift_sdn_vnid |
+      | openshift_sdn_ovs  |
   
   # @author anusaxen@redhat.com
   # @case_id OCP-37704
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes
   @proxy @noproxy @disconnected @connected
-  Scenario: Should be able to monitor various ovnkube-master and ovnkube-node metrics via prometheus
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-37704:SDN Should be able to monitor various ovnkube-master and ovnkube-node metrics via prometheus
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ovn-kubernetes" project
     And evaluation of `endpoints('ovn-kubernetes-master').subsets.first.addresses.first.ip.to_s` is stored in the :ovn_master_metrics_ep_ip clipboard
@@ -96,7 +103,8 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `cb.ovn_node_metrics_ep_ip + ':' +cb.ovn_node_metrics_ep_port` is stored in the :ovn_node_metrics_ep clipboard
     
     Given I use the "openshift-monitoring" project
-    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
+    Given I find a bearer token of the prometheus-k8s service account
+    And evaluation of `service_account('prometheus-k8s').cached_tokens.first` is stored in the :sa_token clipboard
 
     #Storing respective curl queries in clipboards to be able to call them during execution on prometheus pods
     Given evaluation of `%Q{curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.ovn_master_metrics_ep %>/metrics}` is stored in the :curl_query_for_ovn_master clipboard
@@ -117,9 +125,7 @@ Feature: SDN/OVN metrics related networking scenarios
       | ovnkube_master_nb_e2e_timestamp           |
       | ovnkube_master_pod_creation_latency       |
       | ovnkube_master_ready_duration             |
-      | ovnkube_master_resource_update_total      |
       | ovnkube_master_sb_e2e_timestamp           |
-      | ovnkube_master_skipped_nbctl_daemon_total |
     
     When I run the :exec admin command with:
       | n                | openshift-monitoring              |

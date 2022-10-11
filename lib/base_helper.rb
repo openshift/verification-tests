@@ -192,7 +192,7 @@ module BushSlicer
           when String
             l
           when Array
-            if l.size < 1 && l.size > 2
+            if l.size < 1 || l.size > 2
               raise "array parameters need to have 1 or 2 elements: #{l}"
             end
 
@@ -215,7 +215,7 @@ module BushSlicer
         end
       end
 
-      # test if a stirng is a number or not
+      # test if a string is a number or not
       # @return float of int equivalent if the val is a number otherwise return val unmodified
       def str_to_num(val)
         num = Integer(val) rescue nil
@@ -408,9 +408,6 @@ module BushSlicer
       end
 
     end
-
-
-
 
     module BaseHelperStatic
       extend BaseHelper

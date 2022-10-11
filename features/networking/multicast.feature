@@ -3,27 +3,38 @@ Feature: testing multicast scenarios
   # @author hongli@redhat.com
   # @case_id OCP-12926
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-multitenant
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
-  Scenario: pods should be able to subscribe send and receive multicast traffic
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12926:SDN pods should be able to subscribe send and receive multicast traffic
     # create some multicast testing pods
+    Given I store the schedulable workers in the :nodes clipboard
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
-    When I run the :create client command with:
-      | f | multicast-rc.json |
+    When I run oc create over "multicast-rc.json" replacing paths:
+      | ["spec"]["replicas"] | 2                       |
+      | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
-    Given 3 pods become ready with labels:
+    Given 2 pods become ready with labels:
       | name=mcast-pods |
     And evaluation of `pod(0).ip` is stored in the :pod1ip clipboard
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
     And evaluation of `pod(1).ip` is stored in the :pod2ip clipboard
     And evaluation of `pod(1).name` is stored in the :pod2 clipboard
+    When I run oc create over "multicast-rc.json" replacing paths:
+      | ["metadata"]["name"]                               | "mcast-rc2"             |
+      | ["spec"]["replicas"]                               | 1                       |
+      | ["spec"]["nodeName"]                               | <%= cb.nodes[1].name %> |
+      | ["spec"]["template"]["metadata"]["labels"]["name"] | "mcast2-pods"           |
+    Then the step should succeed
+    Given 1 pod becomes ready with labels:
+      | name=mcast2-pods |
     And evaluation of `pod(2).ip` is stored in the :pod3ip clipboard
     And evaluation of `pod(2).name` is stored in the :pod3 clipboard
 
@@ -91,14 +102,15 @@ Feature: testing multicast scenarios
   # @author hongli@redhat.com
   # @case_id OCP-12977
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @network-multitenant
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  Scenario: multicast is disabled by default if not annotate the namespace
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12977:SDN multicast is disabled by default if not annotate the namespace
     # create multicast testing pods in the project and without multicast enable
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -161,13 +173,14 @@ Feature: testing multicast scenarios
   # @author weliang@redhat.com
   # @case_id OCP-12930
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-multitenant
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  Scenario: Same multicast groups can be created in multiple namespace
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12930:SDN Same multicast groups can be created in multiple namespace
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
@@ -305,12 +318,13 @@ Feature: testing multicast scenarios
   # @case_id OCP-12931
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: pods in default project should not be able to receive multicast traffic from other namespace
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12931:SDN pods in default project should not be able to receive multicast traffic from other namespace
     # create multicast testing pod in one project
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -387,12 +401,13 @@ Feature: testing multicast scenarios
   # @author hongli@redhat.com
   # @case_id OCP-12928
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: pods should be able to join multiple multicast groups at same time  
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12928:SDN pods should be able to join multiple multicast groups at same time  
     # create some multicast testing pods in the project
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -487,18 +502,19 @@ Feature: testing multicast scenarios
   # @author hongli@redhat.com
   # @case_id OCP-12929
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: pods should not be able to receive multicast traffic from other pods in different namespace
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12929:SDN pods should not be able to receive multicast traffic from other pods in different namespace
     # create some multicast testing pods in one project
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
     When I run oc create over "multicast-rc.json" replacing paths:
-      | ["spec"]["replicas"] | 1 |
+      | ["spec"]["replicas"] | 1                       |
     Then the step should succeed
     Given 1 pod becomes ready with labels:
       | name=mcast-pods |
@@ -513,7 +529,7 @@ Feature: testing multicast scenarios
     And evaluation of `project.name` is stored in the :proj2 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
     When I run oc create over "multicast-rc.json" replacing paths:
-      | ["spec"]["replicas"] | 1 |
+      | ["spec"]["replicas"] | 1                       |
     Then the step should succeed
     Given 1 pod becomes ready with labels:
       | name=mcast-pods |
@@ -568,12 +584,13 @@ Feature: testing multicast scenarios
   # @case_id OCP-12966
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  Scenario: pods in default project should be able to receive multicast traffic from other default project pods
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12966:SDN pods in default project should be able to receive multicast traffic from other default project pods
     # enable multicast and create testing pods
     Given I switch to cluster admin pseudo user
     And I use the "default" project

@@ -3,7 +3,7 @@ Feature: oc_set_probe.feature
   # @author dyan@redhat.com
   # @case_id OCP-9870
   @inactive
-  Scenario: Set a probe to open a TCP socket
+  Scenario: OCP-9870:ImageRegistry Set a probe to open a TCP socket
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:latest |
@@ -61,7 +61,7 @@ Feature: oc_set_probe.feature
   # @author dyan@redhat.com
   # @case_id OCP-9871
   @inactive
-  Scenario: Set a probe over HTTPS/HTTP
+  Scenario: OCP-9871:ImageRegistry Set a probe over HTTPS/HTTP
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:latest |
@@ -107,7 +107,7 @@ Feature: oc_set_probe.feature
   # @author dyan@redhat.com
   # @case_id OCP-9872
   @inactive
-  Scenario: Set an exec action probe
+  Scenario: OCP-9872:ImageRegistry Set an exec action probe
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/mysql:latest |
@@ -149,19 +149,22 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31241
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Set a probe to open a TCP socket test
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-31241:Workloads Set a probe to open a TCP socket test
     Given I have a project
-    When I run the :new_app client command with:
-      | image_stream | openshift/mysql:latest |
-      | env          | MYSQL_USER=user        |
-      | env          | MYSQL_PASSWORD=pass    |
-      | env          | MYSQL_DATABASE=db      |
+    When I run the :create_deployment client command with:
+      | name          | mysql                                 |
+      | image         | quay.io/openshifttest/mysql:1.2.0 |
+    Then the step should succeed
+    When I run the :set_env client command with:
+      | resource | deploy/mysql               |
+      | e        | MARIADB_ROOT_PASSWORD=pass |
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     When I run the :set_probe client command with:
@@ -175,10 +178,10 @@ Feature: oc_set_probe.feature
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     And a pod becomes ready with labels:
-      | deployment=mysql |
+      | app=mysql |
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | deployment=mysql |
+      | resource | pod       |
+      | l        | app=mysql |
     Then the output should match:
       | Readiness        |
       | tcp-socket :3306 |
@@ -202,8 +205,8 @@ Feature: oc_set_probe.feature
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | deployment=mysql |
+      | resource | pod       |
+      | l        | app=mysql |
     Then the output should match:
       | Readiness       |
       | tcp-socket :33  |
@@ -211,20 +214,23 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31245
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Set a probe over HTTPS/HTTP test
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-31245:Workloads Set a probe over HTTPS/HTTP test
     Given I have a project
-    When I run the :new_app client command with:
-      | image_stream | openshift/mysql:latest |
-      | env          | MYSQL_USER=user        |
-      | env          | MYSQL_PASSWORD=pass    |
-      | env          | MYSQL_DATABASE=db      |
+    When I run the :create_deployment client command with:
+      | name          | mysql                                 |
+      | image         | quay.io/openshifttest/mysql:1.2.0 |
+    Then the step should succeed
+    When I run the :set_env client command with:
+      | resource | deploy/mysql               |
+      | e        | MARIADB_ROOT_PASSWORD=pass |
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     When I run the :set_probe client command with:
@@ -238,8 +244,8 @@ Feature: oc_set_probe.feature
     When I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | deployment=mysql |
+      | resource | pod       |
+      | l        | app=mysql |
     Then the output should contain:
       | Readiness                 |
       | http-get http://:8080/opt |
@@ -255,7 +261,7 @@ Feature: oc_set_probe.feature
     """
     When I run the :describe client command with:
       | resource | pod              |
-      | l        | deployment=mysql |
+      | l        | app=mysql |
     Then the output should contain:
       | Readiness                             |
       | http-get https://127.0.0.1:1936/stats |
@@ -263,20 +269,23 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31246
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Set an exec action probe test
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-31246:Workloads Set an exec action probe test
     Given I have a project
-    When I run the :new_app client command with:
-      | image_stream | openshift/mysql:latest |
-      | env          | MYSQL_USER=user        |
-      | env          | MYSQL_PASSWORD=pass    |
-      | env          | MYSQL_DATABASE=db      |
+    When I run the :create_deployment client command with:
+      | name          | mysql                                 |
+      | image         | quay.io/openshifttest/mysql:1.2.0 |
+    Then the step should succeed
+    When I run the :set_env client command with:
+      | resource | deploy/mysql               |
+      | e        | MARIADB_ROOT_PASSWORD=pass |
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     When I run the :set_probe client command with:
@@ -287,10 +296,10 @@ Feature: oc_set_probe.feature
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     And a pod becomes ready with labels:
-      | deployment=mysql |
+      | app=mysql |
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | deployment=mysql |
+      | resource | pod       |
+      | l        | app=mysql |
     Then the output should contain:
       | Liveness |
       | true     |
@@ -302,10 +311,10 @@ Feature: oc_set_probe.feature
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     And a pod becomes ready with labels:
-      | deployment=mysql |
+      | app=mysql |
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | deployment=mysql |
+      | resource | pod       |
+      | l        | app=mysql |
     Then the output should contain:
       | Liveness     |
       | false        |

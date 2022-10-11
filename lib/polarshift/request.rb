@@ -16,6 +16,10 @@ module BushSlicer
           @options = conf[:services, svc_name.to_sym].merge options
         end
 
+        # error checking to make sure the `private` repo is present
+        if @options.nil?
+          raise "\nCan't find polarshift credentials to do REST call.  Please check the `private` repo is cloned into your repo"
+        end
         unless @options[:user]
           Timeout::timeout(120) {
             STDERR.puts "PolarShift user (timeout in 2 minutes): "
@@ -113,7 +117,7 @@ module BushSlicer
 
       def get_run(project_id, run_id, with_cases: "automation")
         params = with_cases ? {test_cases: with_cases} : {}
-        Http.request(
+        Http.request_with_retry(
           method: :get,
           url: "#{base_url}project/#{project_id}/run/#{run_id}",
           params: params,
@@ -162,7 +166,7 @@ module BushSlicer
         }
 
 
-        Http.request(
+        Http.request_with_retry(
           method: :post,
           url: "#{base_url}project/#{project_id}/run",
           payload: create_opts.to_json,
@@ -210,7 +214,7 @@ module BushSlicer
         }
 
 
-        Http.request(
+        Http.request_with_retry(
           method: :post,
           url: "#{base_url}project/#{project_id}/test-cases/query",
           payload: create_opts.to_json,
@@ -246,7 +250,7 @@ module BushSlicer
 
       # @param case_ids [Array<String>] test case IDs
       def get_cases(project_id, case_ids)
-        Http.request(
+        Http.request_with_retry(
           method: :get,
           url: "#{base_url}project/#{project_id}/test-cases",
           params: {"case_ids" => case_ids},
@@ -276,9 +280,9 @@ module BushSlicer
         return list
       end
 
-      # refresh PolarShift cashe of test cases
+      # refresh PolarShift cache of test cases
       def refresh_cases(project_id, case_ids)
-        Http.request(
+        Http.request_with_retry(
           method: :put,
           url: "#{base_url}project/#{project_id}/test-cases",
           payload: {case_ids: case_ids}.to_json,
@@ -302,7 +306,7 @@ module BushSlicer
         unless Array === updates
           updates = [updates]
         end
-        Http.request(
+        Http.request_with_retry(
           method: :post,
           url: "#{base_url}project/#{project_id}/run/#{run_id}/records",
           payload: {case_records: updates}.to_json,
@@ -315,7 +319,7 @@ module BushSlicer
       # @param updates [Hash<String, Hash>] with format:
       #   {case_id => { field => value, ...}, ...}
       def update_test_case_custom_fields(project_id, updates)
-        Http.request(
+        Http.request_with_retry(
           method: :put,
           url: "#{base_url}project/#{project_id}/update-test-cases-custom-fields",
           payload: {updates: updates}.to_json,
@@ -328,7 +332,7 @@ module BushSlicer
       # @param project_id [String]
       # @param run_id [String]
       def push_test_run_results(project_id, run_id, force: false)
-        res = Http.request(
+        res = Http.request_with_retry(
           method: :put,
           url: "#{base_url}project/#{project_id}/run/#{run_id}/push",
           payload: {force_uploaded: force}.to_json,
@@ -346,7 +350,7 @@ module BushSlicer
       def check_op(url: nil, id: nil)
         raise "specify operation URL or id" unless url || id
         url ||= "#{base_url}/polarion/request/#{id}"
-        res = Http.request(
+        res = Http.request_with_retry(
           method: :get,
           url: url,
           raise_on_error: false,

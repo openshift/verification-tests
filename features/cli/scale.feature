@@ -4,7 +4,7 @@ Feature: scaling related scenarios
   # @case_id OCP-10626
   @proxy
   @inactive
-  Scenario: Scale replicas via replicationcontrollers and deploymentconfig
+  Scenario: OCP-10626:ImageRegistry Scale replicas via replicationcontrollers and deploymentconfig
     Given I have a project
     And I create a new application with:
       | image_stream | openshift/perl:5.26                          |

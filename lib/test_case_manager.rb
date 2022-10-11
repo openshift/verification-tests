@@ -47,6 +47,8 @@ module BushSlicer
         attachments = handle_current_artifacts(test_suite.artifacts_format)
         test_suite.test_case_execute_finish!(finish_event, attach: attachments)
         reset_hooks_status
+      when :skip_case
+        test_suite.current_test_record = nil unless test_suite.current_test_record.nil?
       when :finish_before_hook
         test_case = args[0]
         err = args[1]
@@ -70,7 +72,7 @@ module BushSlicer
             Kernel.puts("#{job.human_id} - already reserved")
           end
           test_suite.incomplete.each do |job|
-            Kernel.puts("#{job.human_id} - could not find all scenarios")
+            Kernel.puts("#{job.human_id} - could not find scenario, or scenario not suitable for current TEST_MODE")
           end
           test_suite.non_runnable.each do |job|
             Kernel.puts("#{job.human_id} - not runnable")

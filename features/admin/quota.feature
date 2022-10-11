@@ -2,7 +2,7 @@ Feature: Quota related scenarios
 
   # @author qwang@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: The quota usage should be incremented if meet the following requirement
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -37,23 +37,27 @@ Feature: Quota related scenarios
     @singlenode
     @proxy @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
-      | path     | file                           | pod_name                  | expr1             | expr2                       |
-      | ocp11754 | pod-request-limit-valid-3.yaml | pod-request-limit-valid-3 | cpu\\s+100m\\s+30 | memory\\s+(134217728\|128Mi)\\s+16Gi | # @case_id OCP-11754
-      | ocp12049 | pod-request-limit-valid-1.yaml | pod-request-limit-valid-1 | cpu\\s+500m\\s+30 | memory\\s+(536870912\|512Mi)\\s+16Gi | # @case_id OCP-12049
-      | ocp12145 | pod-request-limit-valid-2.yaml | pod-request-limit-valid-2 | cpu\\s+200m\\s+30 | memory\\s+(268435456\|256Mi)\\s+16Gi | # @case_id OCP-12145
+      | case_id        | path     | file                           | pod_name                  | expr1             | expr2                                |
+      | OCP-11754:Node | ocp11754 | pod-request-limit-valid-3.yaml | pod-request-limit-valid-3 | cpu\\s+100m\\s+30 | memory\\s+(134217728\|128Mi)\\s+16Gi | # @case_id OCP-11754
+      | OCP-12049:Node | ocp12049 | pod-request-limit-valid-1.yaml | pod-request-limit-valid-1 | cpu\\s+500m\\s+30 | memory\\s+(536870912\|512Mi)\\s+16Gi | # @case_id OCP-12049
+      | OCP-12145:Node | ocp12145 | pod-request-limit-valid-2.yaml | pod-request-limit-valid-2 | cpu\\s+200m\\s+30 | memory\\s+(268435456\|256Mi)\\s+16Gi | # @case_id OCP-12145
 
   # @author qwang@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-12292
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: The quota usage should NOT be incremented if Requests and Limits aren't specified
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12292:Node The quota usage should NOT be incremented if Requests and Limits aren't specified
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -74,7 +78,7 @@ Feature: Quota related scenarios
       | f | pod-request-limit-invalid-1.yaml |
     Then the step should fail
     And the output should match:
-      | (?i)Failed quota: myquota: must specify cpu,memory |
+      | (?i)Failed quota: myquota: must specify cpu.*memory |
     When I run the :describe client command with:
       | resource | quota   |
       | name     | myquota |
@@ -85,14 +89,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12256
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: The quota usage should NOT be incremented if Requests > Limits
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12256:Node The quota usage should NOT be incremented if Requests > Limits
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -128,14 +133,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12206
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: The quota usage should NOT be incremented if Requests = Limits but exceeding hard quota
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12206:Node The quota usage should NOT be incremented if Requests = Limits but exceeding hard quota
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -168,7 +174,7 @@ Feature: Quota related scenarios
   # @case_id OCP-11566
   @admin
   @inactive
-  Scenario: The quota status is calculated ASAP when editing its quota spec
+  Scenario: OCP-11566:Node The quota status is calculated ASAP when editing its quota spec
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -224,14 +230,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-10801
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Check BestEffort scope of resourcequota
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10801:Node Check BestEffort scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-besteffort.yaml"
     When I run the :create admin command with:
@@ -284,14 +291,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11251
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Check NotBestEffort scope of resourcequota
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11251:Node Check NotBestEffort scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-notbesteffort.yaml"
     When I run the :create admin command with:
@@ -364,14 +372,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11568
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Check NotTerminating scope of resourcequota
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11568:Node Check NotTerminating scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-notterminating.yaml"
     When I run the :create admin command with:
@@ -446,7 +455,7 @@ Feature: Quota related scenarios
   # @case_id OCP-11780
   @admin
   @inactive
-  Scenario: Check Terminating scope of resourcequota
+  Scenario: OCP-11780:Node Check Terminating scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-terminating.yaml"
     When I run the :create admin command with:
@@ -527,16 +536,18 @@ Feature: Quota related scenarios
       | requests.memory\\s+0\\s+1Gi |
 
   # @author chezhang@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-10706
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Could create quota if existing resources exceed to the hard quota but prevent to create further resources
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10706:Node Could create quota if existing resources exceed to the hard quota but prevent to create further resources
     Given I have a project
     Given I obtain test data file "quota/quota_template.yaml"
     When I run the :new_app admin command with:
@@ -561,7 +572,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+2                   |
       | replicationcontrollers\\s+0\\s+3 |
       | resourcequotas\\s+1\\s+3         |
-      | secrets\\s+9\\s+5                |
+      | secrets\\s+6\\s+5                |
       | services\\s+0\\s+5               |
     Given I obtain test data file "quota/ocp10706/mysecret.json"
     When I run the :create client command with:
@@ -585,7 +596,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+2                   |
       | replicationcontrollers\\s+0\\s+3 |
       | resourcequotas\\s+1\\s+3         |
-      | secrets\\s+9\\s+15               |
+      | secrets\\s+6\\s+15               |
       | services\\s+0\\s+5               |
     Given I obtain test data file "quota/ocp10706/mysecret.json"
     When I run the :create client command with:
@@ -601,14 +612,14 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+2                   |
       | replicationcontrollers\\s+0\\s+3 |
       | resourcequotas\\s+1\\s+3         |
-      | secrets\\s+10\\s+15              |
+      | secrets\\s+7\\s+15               |
       | services\\s+0\\s+5               |
 
   # @author chezhang@redhat.com
   # @case_id OCP-11779
   @admin
   @inactive
-  Scenario: The usage for cpu/mem/pod counts are fixed up ASAP if delete a pod
+  Scenario: OCP-11779:Node The usage for cpu/mem/pod counts are fixed up ASAP if delete a pod
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -664,14 +675,15 @@ Feature: Quota related scenarios
   # @case_id OCP-10033
   # @bug_id 1333122
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Quota events for compute resource failures shouldn't be redundant
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10033:Node Quota events for compute resource failures shouldn't be redundant
     Given I have a project
     Given I obtain test data file "templates/ocp10033/quota.yaml"
     When I run the :create admin command with:
@@ -698,7 +710,7 @@ Feature: Quota related scenarios
   # @case_id OCP-11247
   @admin
   @inactive
-  Scenario: The current quota usage is calculated ASAP when adding a quota
+  Scenario: OCP-11247:Node The current quota usage is calculated ASAP when adding a quota
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -741,16 +753,18 @@ Feature: Quota related scenarios
     """
 
   # @author qwang@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-11927
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11927:Node The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
@@ -767,7 +781,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+20                   |
       | replicationcontrollers\\s+0\\s+30 |
       | resourcequotas\\s+1\\s+1          |
-      | secrets\\s+9\\s+15                |
+      | secrets\\s+6\\s+15                |
       | services\\s+0\\s+10               |
     Given I obtain test data file "quota/ocp11927/pod-request-limit-valid-4.yaml"
     When I run the :create client command with:
@@ -784,20 +798,21 @@ Feature: Quota related scenarios
       | pods\\s+1\\s+20                   |
       | replicationcontrollers\\s+0\\s+30 |
       | resourcequotas\\s+1\\s+1          |
-      | secrets\\s+9\\s+15                |
+      | secrets\\s+6\\s+15                |
       | services\\s+0\\s+10               |
 
   # @author chezhang@redhat.com
   # @case_id OCP-10945
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: The quota usage should be released when pod completed
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10945:Node The quota usage should be released when pod completed
     Given I have a project
     When I run the :create_quota admin command with:
       | name | myquota                    |
@@ -834,14 +849,15 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11983
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Quota with BestEffort and NotBestEffort scope
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11983:Node Quota with BestEffort and NotBestEffort scope
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | quota-besteffort     |
@@ -891,15 +907,17 @@ Feature: Quota related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-12086
+  @flaky
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Quota with Terminating and NotTerminating scope
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12086:Node Quota with Terminating and NotTerminating scope
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | quota-terminating |
@@ -957,16 +975,18 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+10  |
 
   # @author chezhang@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-11348
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Quota combined scopes
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11348:Node Quota combined scopes
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | quota-notbesteffortandnotterminating |
@@ -1044,8 +1064,11 @@ Feature: Quota related scenarios
       | name=pod-besteffort-terminating |
     And I wait up to 70 seconds for the steps to pass:
     """
-    When I get project pods
-    Then the output should match "pod-besteffort-terminating.*DeadlineExceeded"
+      When I run the :describe client command with:
+        | resource | pod                        |
+        | name     | pod-besteffort-terminating |
+       Then the output should match:
+        | DeadlineExceeded |
     """
     When I run the :describe client command with:
       | resource | quota |
@@ -1058,14 +1081,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11636
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Quota scope conflict BestEffort and NotBestEffort
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11636:Node Quota scope conflict BestEffort and NotBestEffort
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | quota-besteffortnot      |
@@ -1078,14 +1102,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11827
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Quota scope conflict Terminating and NotTerminating
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11827:Node Quota scope conflict Terminating and NotTerminating
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | quota-terminatingnot       |
@@ -1098,14 +1123,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11000
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Negative test for requests.storage of quota
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11000:Node Negative test for requests.storage of quota
     Given I have a project
     When I run the :create_quota admin command with:
       | name   | my-quota             |
@@ -1149,14 +1175,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-10283
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Annotation selector supports special characters
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10283:Node Annotation selector supports special characters
     Given I have a project
     Given admin ensures "crq-<%= project.name %>" cluster_resource_quota is deleted after scenario
     When I run the :create_clusterresourcequota admin command with:
@@ -1184,14 +1211,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11660
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Quota requests.storage with PVC existing
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11660:Node Quota requests.storage with PVC existing
     Given I have a project
     Given I obtain test data file "storage/nfs/claim-rox.json"
     When I run the :create client command with:
@@ -1241,14 +1269,15 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11389
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Prevent creating further PVC if existing PVC exceeds the quota of requests.storage
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11389:Node Prevent creating further PVC if existing PVC exceeds the quota of requests.storage
     Given I have a project
     # Only quota requests.storage < 5Gi
     When I run the :create_quota admin command with:

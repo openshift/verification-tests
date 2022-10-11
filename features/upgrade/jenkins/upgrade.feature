@@ -1,16 +1,18 @@
 Feature: Jenkins feature upgrade test
 
   # @author xiuwang@redhat.com
+  @flaky
   @upgrade-prepare
   @users=upuser1,upuser2
   @console
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @gcp-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @amd64
   Scenario: Jenkins feature upgrade test - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -23,16 +25,18 @@ Feature: Jenkins feature upgrade test
 
   # @author xiuwang@redhat.com
   # @case_id OCP-16932
+  @flaky
   @upgrade-check
   @users=upuser1,upuser2
   @console
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @gcp-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @amd64
   Scenario: Jenkins feature upgrade test
     Given I switch to the first user
     When I use the "jenkins-upgrade" project

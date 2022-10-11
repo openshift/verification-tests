@@ -3,14 +3,15 @@ Feature: Testing haproxy rate limit related features
   # @author hongli@redhat.com
   # @case_id OCP-18482
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: limits backend pod max concurrent connections for unsecure, edge, reen route
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-18482:NetworkEdge limits backend pod max concurrent connections for unsecure, edge, reen route
     Given I switch to cluster admin pseudo user
     And I use the router project
     Given all default router pods become ready
@@ -62,7 +63,7 @@ Feature: Testing haproxy rate limit related features
 
     Given I switch to cluster admin pseudo user
     And I use the router project
-    And I wait up to 60 seconds for the steps to pass:
+    And I wait up to 120 seconds for the steps to pass:
     """
     When I execute on the "<%=cb.router_pod %>" pod:
       | bash | -lc | grep -w "<%= cb.proj_name %>:unsecure-route" haproxy.config -A20 \| grep <%=cb.pod_ip %> |
@@ -73,7 +74,7 @@ Feature: Testing haproxy rate limit related features
     Then the output should contain:
       | maxconn 2 |
     When I execute on the "<%=cb.router_pod %>" pod:
-      | bash | -lc | grep -w  "<%= cb.proj_name %>:route-reencrypt" haproxy.config -A20 \| grep <%=cb.pod_ip %> |
+      | bash | -lc | grep -w "be_secure:<%= cb.proj_name %>:route-reencrypt" haproxy.config -A20 \| grep <%=cb.pod_ip %> |
     Then the output should contain:
       | maxconn 3 |
     """

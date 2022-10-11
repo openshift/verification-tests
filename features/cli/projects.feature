@@ -3,20 +3,22 @@ Feature: projects related features via cli
   # @author yapei@redhat.com
   # @case_id OCP-11887
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Could delete all resources when delete the project
+  @heterogeneous @arm64 @amd64
+  @rosa @aro @osd_ccs
+  Scenario: OCP-11887:APIServer Could delete all resources when delete the project
     Given a 5 characters random string of type :dns is stored into the :prj_name clipboard
     When I run the :new_project client command with:
       | project_name | <%= cb.prj_name %> |
     Then the step should succeed
     When I create a new application with:
-      | docker image | quay.io/openshifttest/mysql:multiarch         |
+      | docker image | quay.io/openshifttest/mysql:1.2.0         |
       | code         | https://github.com/openshift/ruby-hello-world |
     ### get project resource
     When I run the :get client command with:
@@ -75,13 +77,15 @@ Feature: projects related features via cli
   # @author cryan@redhat.com
   # @case_id OCP-12193
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: User can get node selector from a project
+  @heterogeneous @arm64 @amd64
+  @rosa @aro @osd_ccs
+  Scenario: OCP-12193:APIServer User can get node selector from a project
     Given  an 8 character random string of type :dns is stored into the :oadmproj1 clipboard
     Given  an 8 character random string of type :dns is stored into the :oadmproj2 clipboard
     When admin creates a project with:
@@ -107,14 +111,16 @@ Feature: projects related features via cli
 
   # @author cryan@redhat.com
   # @case_id OCP-12561
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: Could remove user and group from the current project
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-12561:Authentication Could remove user and group from the current project
     Given I have a project
     When I run the :oadm_policy_add_role_to_user client command with:
       | role_name        | admin                              |
@@ -149,14 +155,16 @@ Feature: projects related features via cli
   # @author yinzhou@redhat.com
   # @case_id OCP-11201
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-11201:Authentication Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"
     When I run the :create client command with:

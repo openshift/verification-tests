@@ -3,7 +3,7 @@ Feature: buildconfig.feature
   # @author wzheng@redhat.com
   # @case_id OCP-12121
   @inactive
-  Scenario: Start build from buildConfig/build
+  Scenario: OCP-12121:ImageRegistry Start build from buildConfig/build
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | openshift/ruby:latest |
@@ -24,10 +24,11 @@ Feature: buildconfig.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-10667
-  Scenario: Rebuild image when the underlying image changed for Docker build
+  @inactive
+  Scenario: OCP-10667:BuildAPI Rebuild image when the underlying image changed for Docker build
     Given I have a project
     When I run the :new_build client command with:
-      | D    | FROM quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22\nRUN echo "hello" |
+      | D    | FROM quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c\nRUN echo "hello" |
       | to   | centos  |
       | name | mybuild |
     Then the step should succeed
@@ -42,7 +43,8 @@ Feature: buildconfig.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-12020
-  Scenario: Trigger chain builds from a image update
+  @inactive
+  Scenario: OCP-12020:BuildAPI Trigger chain builds from a image update
     Given I have a project
     When I run the :new_build client command with:
       | app_repo     | registry.redhat.io/rhscl/ruby-27-rhel7:latest~https://github.com/openshift/ruby-hello-world.git |
@@ -68,7 +70,7 @@ Feature: buildconfig.feature
 
   # @author haowang@redhat.com
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Build with images pulled from private repositories
     Given I have a project
     When I run the :create_secret client command with:
@@ -89,21 +91,25 @@ Feature: buildconfig.feature
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
-      | template                  |
-      | test-buildconfig-s2i.json | # @case_id OCP-11474
+      | case_id            | template                  |
+      | OCP-11474:BuildAPI | test-buildconfig-s2i.json | # @case_id OCP-11474
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12057
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Using secret to pull a docker image which be used as source input
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-12057:BuildAPI Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:
      | name        | pull                                                                            |

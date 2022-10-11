@@ -6,14 +6,16 @@ Feature: Logging upgrading related features
   @destructive
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @amd64
   Scenario: Cluster logging checking during cluster upgrade - prepare
+    Given I check if the remaining_resources in woker nodes meet the requirements for logging stack
     Given I switch to the first user
     Given I have "json" log pod in project "logging-upg-prep-1"
     And I have "json" log pod in project "logging-upg-prep-share"
@@ -28,8 +30,8 @@ Feature: Logging upgrading related features
 
     Given I switch to the first user
     When I login to kibana logging web console
-    Given I have index pattern "*app"
-    Then I can display the pod logs of the "logging-upg-prep-1" project under the "*app" pattern in kibana
+    Given I have index pattern "app"
+    Then I can display the pod logs of the "logging-upg-prep-1" project under the "app*" pattern in kibana
     Then I close the current browser
     Given I run the :policy_add_role_to_group client command with:
       | group_name | project-group-share |
@@ -37,8 +39,8 @@ Feature: Logging upgrading related features
     Then the step should succeed
     Given I switch to the second user
     Given I login to kibana logging web console
-    Given I have index pattern "*app"
-    Then I can display the pod logs of the "logging-upg-prep-share" project under the "*app" pattern in kibana
+    Given I have index pattern "app"
+    Then I can display the pod logs of the "logging-upg-prep-share" project under the "app*" pattern in kibana
     Then I close the current browser
 
   # @case_id OCP-22911
@@ -48,13 +50,14 @@ Feature: Logging upgrading related features
   @destructive
   @upgrade-check
   @users=upuser1,upuser2
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @amd64
   Scenario: Cluster logging checking during cluster upgrade
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -68,11 +71,11 @@ Feature: Logging upgrading related features
     # check if kibana console is accessible
     Given I switch to the first user
     When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-1" project under the "*app" pattern in kibana
+    Then I can display the pod logs of the "logging-upg-prep-1" project under the "app*" pattern in kibana
     Then I close the current browser
     Given I switch to the second user
     When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-share" project under the "*app" pattern in kibana
+    Then I can display the pod logs of the "logging-upg-prep-share" project under the "app*" pattern in kibana
     Then I close the current browser
 
     # upgrade logging if needed
@@ -89,11 +92,11 @@ Feature: Logging upgrading related features
     # check if kibana console is accessible
     Given I switch to the first user
     When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-1" project under the "*app" pattern in kibana
+    Then I can display the pod logs of the "logging-upg-prep-1" project under the "app*" pattern in kibana
     Then I close the current browser
     Given I switch to the second user
     When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-share" project under the "*app" pattern in kibana
+    Then I can display the pod logs of the "logging-upg-prep-share" project under the "app*" pattern in kibana
     Then I close the current browser
     Given I switch to the first user
     Then the "<%= cb.proj1 %>" project is deleted

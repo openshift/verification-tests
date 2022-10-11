@@ -2,14 +2,16 @@ Feature: oc_set_env.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-11248
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: Set environment variables for resources using oc set env
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11248:BuildAPI Set environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
     When I run the :new_app client command with:
@@ -63,14 +65,16 @@ Feature: oc_set_env.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-10798
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Remove environment variables for resources using oc set env
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-10798:BuildAPI Remove environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
     When I run the :new_app client command with:

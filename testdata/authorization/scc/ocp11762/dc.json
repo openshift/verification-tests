@@ -1,6 +1,6 @@
 {
     "kind": "DeploymentConfig",
-    "apiVersion": "v1",
+    "apiVersion": "apps.openshift.io/v1",
     "metadata": {
         "name": "hooks",
         "creationTimestamp": null,
@@ -76,7 +76,7 @@
                 "containers": [
                     {
                         "name": "mysql-55-centos7",
-                        "image": "quay.io/openshifttest/mysql@sha256:7a6a500fbdc89871973f1f2fe1e64ebb2548dea06df2cb1b3a2989236a26289e",
+                        "image": "quay.io/openshifttest/mysql@sha256:0c76fd1a2eb31b0a196c7c557e4e56a11a6a8b26d745289e75fc983602035ba5",
                         "ports": [
                             {
                                 "containerPort": 3306,

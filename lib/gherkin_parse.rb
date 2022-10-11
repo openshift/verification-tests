@@ -91,7 +91,7 @@ module BushSlicer
               raise "invalid line following #{id_found} comment: #{line}"
             end
           else
-            id_matcher = line.match(case_id_re(*case_ids))
+            id_matcher = line.rstrip.match(case_id_re(*case_ids))
             if id_matcher
               id_found = id_matcher[2]
               pre_tag = id_matcher[1]

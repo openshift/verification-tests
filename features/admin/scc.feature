@@ -3,13 +3,14 @@ Feature: SCC policy related scenarios
   # @author pruan@redhat.com
   # @case_id OCP-11762
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  Scenario: deployment hook volume inheritance with hostPath volume
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11762:Workloads deployment hook volume inheritance with hostPath volume
     Given I have a project
     # Create hostdir pod again with new SCC
     Given I obtain test data file "authorization/scc/ocp11762/scc_hostdir.yaml"
@@ -37,13 +38,14 @@ Feature: SCC policy related scenarios
   # @case_id OCP-11775
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Create or update scc with illegal capability name should fail with prompt message
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11775:Authentication Create or update scc with illegal capability name should fail with prompt message
     Given I have a project
     Given cluster role "cluster-admin" is added to the "first" user
     Given admin ensures "scc-<%= project.name %>" scc is deleted after scenario

@@ -2,14 +2,16 @@ Feature: ServiceAccount and Policy Managerment
 
   # @author anli@redhat.com
   # @case_id OCP-10642
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Could grant admin permission for the service account username to access to its own project
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-10642:Authentication Could grant admin permission for the service account username to access to its own project
     Given I have a project
     When I create a new application with:
       | image_stream | ruby         |
@@ -38,17 +40,19 @@ Feature: ServiceAccount and Policy Managerment
   # @author xiaocwan@redhat.com
   # @case_id OCP-11494
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Could grant admin permission for the service account group to access to its own project
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-11494:Authentication Could grant admin permission for the service account group to access to its own project
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/hello-openshift:multiarch |
+      | app_repo | quay.io/openshifttest/hello-openshift:1.2.0 |
     Then the step should succeed
     When I run the :policy_add_role_to_group client command with:
       | role       | admin                                     |
@@ -60,9 +64,10 @@ Feature: ServiceAccount and Policy Managerment
     When I get project services
     Then the output should contain:
       | hello-openshift |
-    ## this template is to create an application without any build
-    Given I obtain test data file "deployment/deployments_nobc_cpulimit.json"
-    When I process and create "deployments_nobc_cpulimit.json"
+    # Verify the permission of various operations
+    When I run the :new_app client command with:
+      | app_repo | quay.io/openshifttest/hello-openshift:1.2.0 |
+      | name     | app2                                            |
     Then the step should succeed
     When I run the :delete client command with:
       | object_type       | svc             |
@@ -79,33 +84,31 @@ Feature: ServiceAccount and Policy Managerment
 
   # @author wjiang@redhat.com
   # @case_id OCP-11249
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  # There is no oc create token command below version 4.11, this case is not critical feature, so need to remove versions below 4.11
+  @4.12 @4.11
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: User can get the serviceaccount token via client
+  @heterogeneous @arm64 @amd64
+  @osd_ccs @aro @rosa
+  Scenario: OCP-11249:Authentication User can get the serviceaccount token via client
     Given I have a project
-    When I run the :serviceaccounts_get_token client command with:
-      |serviceaccount_name| default|
+    When I run the :create_token client command with:
+      | serviceaccount | default |
     Then the step should succeed
-    And the output should match "eyJhbGciOiJSUzI1NiIsI.*\.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOi"
-    When I run the :serviceaccounts_get_token client command with:
-      |serviceaccount_name|builder|
+    When I run the :create_token client command with:
+      | serviceaccount | builder |
     Then the step should succeed
-    And the output should match "eyJhbGciOiJSUzI1NiIsI.*\.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOi"
-    When I run the :serviceaccounts_get_token client command with:
-      |serviceaccount_name| deployer|
+    When I run the :create_token client command with:
+      | serviceaccount | deployer |
     Then the step should succeed
-    And the output should match "eyJhbGciOiJSUzI1NiIsI.*\.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOi"
     Given an 8 characters random string of type :dns is stored into the :serviceaccount_name clipboard
     When I run the :create_serviceaccount client command with:
-      |serviceaccount_name|<%= cb.serviceaccount_name %>|
+      | serviceaccount_name | <%= cb.serviceaccount_name %> |
     Then the step should succeed
-    When I run the :serviceaccounts_get_token client command with:
-      |serviceaccount_name|<%= cb.serviceaccount_name %>|
+    When I run the :create_token client command with:
+      | serviceaccount | <%= cb.serviceaccount_name %> |
     Then the step should succeed
-    And the output should match "eyJhbGciOiJSUzI1NiIsI.*\.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOi"
-

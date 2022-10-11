@@ -4,13 +4,15 @@ Feature: Machine features testing
   # @case_id OCP-21196
   @smoke
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @osd_ccs @aro @rosa
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Machines should be linked to nodes
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-21196:ClusterInfrastructure Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
 
@@ -18,12 +20,14 @@ Feature: Machine features testing
   # @case_id OCP-22115
   @smoke
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @aro
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: machine-api clusteroperator should be in Available state
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-22115:ClusterInfrastructure machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
 
@@ -46,20 +50,23 @@ Feature: Machine features testing
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-37706:ClusterInfrastructure Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
 
   # @author jhou@redhat.com
   # @case_id OCP-25436
   @admin
+  @aro
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Scale up and scale down a machineSet
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-25436:ClusterInfrastructure Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -78,11 +85,11 @@ Feature: Machine features testing
 
   # @author jhou@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Metrics is exposed on https
-    Given I switch to cluster admin pseudo user
+    Given the first user is cluster-admin
     And I use the "openshift-monitoring" project
-    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :token clipboard
+    And evaluation of `service_account('prometheus-k8s').cached_tokens.first` is stored in the :token clipboard
 
     When I run the :exec admin command with:
       | n                | openshift-monitoring                                           |
@@ -97,42 +104,45 @@ Feature: Machine features testing
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
+    @heterogeneous @arm64 @amd64
     Examples:
-      | url                                                                          |
-      | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
-      | https://cluster-autoscaler-operator.openshift-machine-api.svc:9192/metrics   | # @case_id OCP-26111
-      | https://machine-approver.openshift-cluster-machine-approver.svc:9192/metrics | # @case_id OCP-26102
+      | case_id                         | url                                                                          |
+      | OCP-25652:ClusterInfrastructure | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
+      | OCP-26111:ClusterInfrastructure | https://cluster-autoscaler-operator.openshift-machine-api.svc:9192/metrics   | # @case_id OCP-26111
+      | OCP-26102:ClusterInfrastructure | https://machine-approver.openshift-cluster-machine-approver.svc:9192/metrics | # @case_id OCP-26102
 
   # @author zhsun@redhat.com
   # @case_id OCP-25608
   @admin
+  @aro
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Machine should have immutable field providerID and nodeRef
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-25608:ClusterInfrastructure Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
-    And evaluation of `machine(cb.machine).node_name` is stored in the :nodeRef_name clipboard
-    And evaluation of `machine(cb.machine).provider_id` is stored in the :providerID clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).node_name` is stored in the :nodeRef_name clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).provider_id` is stored in the :providerID clipboard
 
     When I run the :patch admin command with:
-      | resource      | machine                                |
+      | resource      | machines.machine.openshift.io          |
       | resource_name | <%= cb.machine %>                      |
       | p             | {"status":{"nodeRef":{"name":"test"}}} |
       | type          | merge                                  |
       | n             | openshift-machine-api                  |
     Then the step should succeed
     When I run the :describe admin command with:
-      | resource      | machine                                |
+      | resource      | machines.machine.openshift.io          |
       | name          | <%= cb.machine %>                      |
       | n             | openshift-machine-api                  |
     Then the step should succeed
     And the output should match "Name:\s+<%= cb.nodeRef_name %>"
 
     When I run the :patch admin command with:
-      | resource      | machine                                |
+      | resource      | machines.machine.openshift.io          |
       | resource_name | <%= cb.machine %>                      |
       | p             | {"spec":{"providerID":"invalid"}}      |
       | type          | merge                                  |
@@ -141,7 +151,7 @@ Feature: Machine features testing
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe admin command with:
-      | resource      | machine                                |
+      | resource      | machines.machine.openshift.io                                |
       | name          | <%= cb.machine %>                      |
       | n             | openshift-machine-api                  |
     Then the step should succeed
@@ -151,30 +161,34 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-27627
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @osd_ccs @aro
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Verify all machine instance-state should be consistent with their providerStats.instanceState
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @gcp-ipi @azure-ipi @aws-ipi
+  Scenario: OCP-27627:ClusterInfrastructure Verify all machine instance-state should be consistent with their providerStats.instanceState
     Given I have an IPI deployment
-    And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
+    And evaluation of `BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
     Then the expression should be true> cb.machines.select{|m|m.instance_state == m.annotation_instance_state}.count == cb.machines.count
 
   # @author miyadav@redhat.com
   # @case_id OCP-27609
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Scaling a machineset with providerSpec.publicIp set to true
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-27609:ClusterInfrastructure Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-clone-27609"
-    Then as admin I successfully merge patch resource "machineset/machineset-clone-27609" with:
+    Then as admin I successfully merge patch resource "machinesets.machine.openshift.io/machineset-clone-27609" with:
       | {"spec":{"template": {"spec":{"providerSpec":{"value":{"publicIP": true}}}}}} |
     And I scale the machineset to +2
     Then the machineset should have expected number of running machines
@@ -182,20 +196,22 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-24363
   @admin
+  @aro
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: [MAO] Reconciling machine taints with nodes
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-24363:ClusterInfrastructure Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-24363"
-    And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
-    And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
+    And evaluation of `machine_set_machine_openshift_io.machines.first.node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_set_machine_openshift_io.machines.first.name` is stored in the :machine_name clipboard
 
     Given I saved following keys to list in :taintsid clipboard:
       | {"spec":{"taints": [{"effect": "NoExecute","key": "role","value": "master"}]}}  | |
@@ -204,7 +220,7 @@ Feature: Machine features testing
     And I use the "openshift-machine-api" project
     Then I repeat the following steps for each :id in cb.taintsid:
     """
-    Given as admin I successfully merge patch resource "machine/<%= cb.machine_name %>" with:
+    Given as admin I successfully merge patch resource "machines.machine.openshift.io/<%= cb.machine_name %>" with:
       | #{cb.id} |
     Then the step should succeed
     """
@@ -218,7 +234,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Required configuration should be added to the ProviderSpec to enable spot instances
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -227,13 +243,13 @@ Feature: Machine features testing
     #Create a spot machineset
     Given I use the "openshift-machine-api" project
     Given I create a spot instance machineset and name it "<machineset_name>" on <iaas_type>
-    And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
-    And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
+    And evaluation of `machine_set_machine_openshift_io.machines.first.node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_set_machine_openshift_io.machines.first.name` is stored in the :machine_name clipboard
 
     #Check machine and node were labelled as an `interruptible-instance`
     When I run the :describe admin command with:
-      | resource | machine                |
-      | name     | <%= cb.machine_name %> |
+      | resource | machines.machine.openshift.io |
+      | name     | <%= cb.machine_name %>        |
     Then the step should succeed
     And the output should match "machine.openshift.io/interruptible-instance"
     When I run the :describe admin command with:
@@ -274,7 +290,7 @@ Feature: Machine features testing
     # Verify machineset has scaled
     Given I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 3
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 3
     """
     Then the machineset should have expected number of running machines
 
@@ -283,13 +299,13 @@ Feature: Machine features testing
     # Check cluster auto scales down
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
 
     # Check autoscaler taints are deleted when min node is reached
     Given I store the last provisioned machine in the :machine clipboard
-    And evaluation of `machine(cb.machine).node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).node_name` is stored in the :noderef_name clipboard
     When I run the :describe admin command with:
       | resource | node                  |
       | name     | <%= cb.noderef_name%> |
@@ -300,30 +316,35 @@ Feature: Machine features testing
 
     @aws-ipi
     Examples:
-      | iaas_type | machineset_name        |
-      | aws       | machineset-clone-29199 | # @case_id OCP-29199
+      | case_id                         | iaas_type | machineset_name        |
+      | OCP-29199:ClusterInfrastructure | aws       | machineset-clone-29199 | # @case_id OCP-29199
 
     @gcp-ipi
+    @heterogeneous @arm64 @amd64
+    @proxy @noproxy @disconnected @connected
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
-      | iaas_type | machineset_name        |
-      | gcp       | machineset-clone-32126 | # @case_id OCP-32126
+      | case_id                         | iaas_type | machineset_name        |
+      | OCP-32126:ClusterInfrastructure | gcp       | machineset-clone-32126 | # @case_id OCP-32126
 
   # @author zhsun@redhat.com
   # @case_id OCP-32620
   @admin
+  @aro
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Labels specified in a machineset should propagate to nodes
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-32620:ClusterInfrastructure Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-clone-32620"
-    Given as admin I successfully merge patch resource "machineset/machineset-clone-32620" with:
+    Given as admin I successfully merge patch resource "machinesets.machine.openshift.io/machineset-clone-32620" with:
       | {"spec":{"template":{"spec":{"metadata":{"labels":{"node-role.kubernetes.io/infra": ""}}}}}} |
     Then the step should succeed
 
@@ -333,7 +354,7 @@ Feature: Machine features testing
 
     #Check labels are propagate to nodes
     Given I store the last provisioned machine in the :machine clipboard
-    And evaluation of `machine(cb.machine).node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).node_name` is stored in the :noderef_name clipboard
     When I run the :describe admin command with:
       | resource | node                   |
       | name     | <%= cb.noderef_name %> |
@@ -343,19 +364,19 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Implement defaulting machineset values for AWS
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     Then admin ensures machine number is restored after scenario
-    
+
     Given I pick a earliest created machineset and store in :machineset clipboard
-    When evaluation of `machine_set(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_subnet` is stored in the :default_subnet clipboard
-    Then admin ensures "<name>" machineset is deleted after scenario
+    When evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_subnet` is stored in the :default_subnet clipboard
+    Then admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-aws/<file_name>"
     When I run oc create over "<file_name>" replacing paths:
@@ -373,12 +394,12 @@ Feature: Machine features testing
     Then I store the last provisioned machine in the :machine_latest clipboard
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
+    Then the expression should be true> machine_machine_openshift_io(cb.machine_latest).phase(cached: false) == "Running"
     """
 
     When I run the :describe admin command with:
-      | resource | machine                  |
-      | name     | <%= cb.machine_latest %> |
+      | resource | machines.machine.openshift.io |
+      | name     | <%= cb.machine_latest %>      |
     Then the step should succeed
     And the output should contain:
       | <Validation> |
@@ -386,31 +407,33 @@ Feature: Machine features testing
     @aws-ipi
     @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
     Examples:
-      | name                    | file_name                 | Validation                    |
-      | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
-      | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-37132
-      | default-valued-42346    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-42346
+      | case_id                         | name                    | file_name                 | Validation                    |
+      | OCP-32269:ClusterInfrastructure | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
+      | OCP-37132:ClusterInfrastructure | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-37132
+      | OCP-42346:ClusterInfrastructure | default-valued-42346    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-42346
 
   # @author miyadav@redhat.com
   # @case_id OCP-33056
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @gcp-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Implement defaulting machineset values for GCP
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-33056:ClusterInfrastructure Implement defaulting machineset values for GCP
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     Then admin ensures machine number is restored after scenario
 
     Given I store the last provisioned machine in the :machine clipboard
-    When evaluation of `machine(cb.machine).gcp_region` is stored in the :default_region clipboard
-    And evaluation of `machine(cb.machine).gcp_zone` is stored in the :default_zone clipboard
-    And evaluation of `machine(cb.machine).gcp_service_account` is stored in the :default_service_account clipboard
-    Then admin ensures "default-valued-33056" machineset is deleted after scenario
+    When evaluation of `machine_machine_openshift_io(cb.machine).gcp_region` is stored in the :default_region clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).gcp_zone` is stored in the :default_zone clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).gcp_service_account` is stored in the :default_service_account clipboard
+    Then admin ensures "default-valued-33056" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-gcp/ms_default_values.yaml"
     When I run oc create over "ms_default_values.yaml" replacing paths:
@@ -427,14 +450,14 @@ Feature: Machine features testing
     # Verify machine could be created successful
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set("default-valued-33056").desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io("default-valued-33056").desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
 
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -442,8 +465,8 @@ Feature: Machine features testing
     Then admin ensures machine number is restored after scenario
 
     Given I store the last provisioned machine in the :machine clipboard
-    Then evaluation of `machine(cb.machine).azure_location` is stored in the :default_location clipboard
-    And admin ensures "<name>" machineset is deleted after scenario
+    Then evaluation of `machine_machine_openshift_io(cb.machine).azure_location` is stored in the :default_location clipboard
+    And admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-azure/<file_name>"
     When I run oc create over "<file_name>" replacing paths:
@@ -459,12 +482,12 @@ Feature: Machine features testing
     Then I store the last provisioned machine in the :machine_latest clipboard
     And I wait up to 400 seconds for the steps to pass:
     """
-    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
+    Then the expression should be true> machine_machine_openshift_io(cb.machine_latest).phase(cached: false) == "Running"
     """
 
     When I run the :describe admin command with:
-      | resource | machine                  |
-      | name     | <%= cb.machine_latest %> |
+      | resource | machines.machine.openshift.io |
+      | name     | <%= cb.machine_latest %>      |
     Then the step should succeed
     And the output should contain:
       | <Validation> |
@@ -472,18 +495,22 @@ Feature: Machine features testing
     @azure-ipi
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
+    @heterogeneous @arm64 @amd64
     Examples:
-      | name                    | file_name               | Validation                |
-      | default-valued-33058    | ms_default_values.yaml  | Public IP                 | # @case_id OCP-33058
-      | encrypt-at-rest-39639   | ms_encrypt_at_rest.yaml | Encryption At Host:  true | # @case_id OCP-39639
+      | case_id                         | name                  | file_name               | Validation                |
+      | OCP-33058:ClusterInfrastructure | default-valued-33058  | ms_default_values.yaml  | Public IP                 | # @case_id OCP-33058
+      | OCP-39639:ClusterInfrastructure | encrypt-at-rest-39639 | ms_encrypt_at_rest.yaml | Encryption At Host:  true | # @case_id OCP-39639
 
   # @author miyadav@redhat.com
   # @case_id OCP-33455
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @osd_ccs @aro
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Run machine api Controllers using leader election
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  Scenario: OCP-33455:ClusterInfrastructure Run machine api Controllers using leader election
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -505,42 +532,10 @@ Feature: Machine features testing
       | attempting to acquire leader lease (.*)openshift-machine-api/cluster-api-provider |
     """
 
-  # @author zhsun@redhat.com
-  # @case_id OCP-34718
-  @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @network-ovnkubernetes @network-openshiftsdn
-  @proxy @noproxy @disconnected @connected
-  Scenario: Node labels and Affinity definition in PV should match
-    Given I have a project
-
-    # Create a pvc
-    Given I obtain test data file "cloud/pvc-34718.yml"
-    When I run the :create client command with:
-      | f | pvc-34718.yml |
-    Then the step should succeed
-
-    # Create a pod
-    Given I obtain test data file "cloud/pod-34718.yml"
-    When I run the :create client command with:
-      | f | pod-34718.yml |
-    Then the step should succeed
-
-    #Check node labels and affinity definition in PV are match
-    Given the pod named "task-pv-pod" becomes ready
-    And I use the "<%= pod.node_name %>" node
-    And evaluation of `node.region` is stored in the :default_region clipboard
-    And evaluation of `node.zone` is stored in the :default_zone clipboard
-    When I run the :describe admin command with:
-      | resource | pv |
-    Then the step should succeed
-    And the output should contain:
-      | region in [<%= cb.default_region %>] |
-
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Implement defaulting machineset values for vsphere
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -548,15 +543,15 @@ Feature: Machine features testing
     Then admin ensures machine number is restored after scenario
 
     Given I store the last provisioned machine in the :machine clipboard
-    And evaluation of `machine(cb.machine).vsphere_datacenter` is stored in the :datacenter clipboard
-    And evaluation of `machine(cb.machine).vsphere_datastore` is stored in the :datastore clipboard
-    And evaluation of `machine(cb.machine).vsphere_folder` is stored in the :folder clipboard
-    And evaluation of `machine(cb.machine).vsphere_resourcePool` is stored in the :resourcePool clipboard
-    And evaluation of `machine(cb.machine).vsphere_server` is stored in the :server clipboard
-    And evaluation of `machine(cb.machine).vsphere_diskGiB` is stored in the :diskGiB clipboard
-    And evaluation of `machine(cb.machine).vsphere_memoryMiB` is stored in the :memoryMiB clipboard
-    And evaluation of `machine(cb.machine).vsphere_template` is stored in the :template clipboard
-    Then admin ensures "<name>" machineset is deleted after scenario
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_datacenter` is stored in the :datacenter clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_datastore` is stored in the :datastore clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_folder` is stored in the :folder clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_resourcePool` is stored in the :resourcePool clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_server` is stored in the :server clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_diskGiB` is stored in the :diskGiB clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_memoryMiB` is stored in the :memoryMiB clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_template` is stored in the :template clipboard
+    Then admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-vsphere/ms_default_values.yaml"
     When I run oc create over "ms_default_values.yaml" replacing paths:
@@ -579,7 +574,7 @@ Feature: Machine features testing
     And I wait up to 120 seconds for the steps to pass:
     """
     When I run the :get admin command with:
-      | resource | machine |
+      | resource | machines.machine.openshift.io |
     Then the step should succeed
     And the output should contain:
       | Provisioned  |
@@ -587,44 +582,27 @@ Feature: Machine features testing
 
     @vsphere-ipi
     Examples:
-      | name                         | template                           | diskGiB           |
-      | default-valued-33380         | <%= cb.template %>                 | <%= cb.diskGiB %> | # @case_id OCP-33380
+      | case_id                         | name                 | template           | diskGiB           |
+      | OCP-33380:ClusterInfrastructure | default-valued-33380 | <%= cb.template %> | <%= cb.diskGiB %> | # @case_id OCP-33380
+
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
+    @heterogeneous @arm64 @amd64
     Examples:
-      | name                         | template                           | diskGiB           |
-      | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
-
-  # @author miyadav@redhat.com
-  # @case_id OCP-36489
-  @admin
-  @proxy @noproxy @disconnected
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @network-ovnkubernetes @network-openshiftsdn
-  Scenario: [Azure] Machineset should not be created when publicIP:true in disconnected Azure enviroment
-    Given I have an IPI deployment
-    And I switch to cluster admin pseudo user
-    Then I use the "openshift-machine-api" project
-
-    Given I obtain test data file "cloud/ms-azure/ms_disconnected_env.yaml"
-    When I run oc create over "ms_disconnected_env.yaml" replacing paths:
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | disconnected-azure-36489                    |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | disconnected-azure-36489                    |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["publicIP"]                         | true                                        |
-
-    And the output should contain:
-      | Forbidden: publicIP is not allowed in Azure disconnected installation |
+      | case_id   | name                         | template                           | diskGiB           |
+      | OCP-35421:ClusterInfrastructure | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
 
   # @author miyadav@redhat.com
   # @case_id OCP-47658
   @admin
-  @4.11 @4.10
+  @aro
+  @4.12 @4.11 @4.10
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Operator cloud-controller-manager should not show empty version
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-47658:ClusterInfrastructure Operator cloud-controller-manager should not show empty version
     Given I switch to cluster admin pseudo user
     Then evaluation of `cluster_operator('cloud-controller-manager').versions` is stored in the :versions clipboard
     And the expression should be true> cb.versions[0].include? "4"
@@ -632,20 +610,20 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-47989
   @admin
-  @4.11 @4.10
-  @vsphere-ipi @openstack-ipi @baremetal-ipi 
+  @4.12 @4.11 @4.10
+  @vsphere-ipi @openstack-ipi @baremetal-ipi
   @vsphere-upi @openstack-upi @baremetal-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Baremetal clusteroperator should be enabled in vsphere and osp 
+  Scenario: OCP-47989:ClusterInfrastructure Baremetal clusteroperator should be enabled in vsphere and osp
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="False"
 
-  # @author miyadav@redhat.com    
+  # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Implement defaulting machineset values for AWS proxy clusters
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -653,11 +631,11 @@ Feature: Machine features testing
     Then admin ensures machine number is restored after scenario
 
     Given I pick a earliest created machineset and store in :machineset clipboard
-    When evaluation of `machine_set(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
-    And evaluation of `machine_set(cb.machineset).aws_machineset_subnet_proxy` is stored in the :default_subnet clipboard
-    Then admin ensures "<name>" machineset is deleted after scenario
+    When evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_ami_id` is stored in the :default_ami_id clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_subnet_proxy` is stored in the :default_subnet clipboard
+    Then admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-aws/proxy-clusters/<file_name>"
     When I run oc create over "<file_name>" replacing paths:
@@ -675,12 +653,12 @@ Feature: Machine features testing
     Then I store the last provisioned machine in the :machine_latest clipboard
     And I wait up to 540 seconds for the steps to pass:
     """
-    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
+    Then the expression should be true> machine_machine_openshift_io(cb.machine_latest).phase(cached: false) == "Running"
     """
 
     When I run the :describe admin command with:
-      | resource | machine                  |
-      | name     | <%= cb.machine_latest %> |
+      | resource | machines.machine.openshift.io |
+      | name     | <%= cb.machine_latest %>      |
     Then the step should succeed
     And the output should contain:
       | <Validation> |
@@ -688,9 +666,10 @@ Feature: Machine features testing
     @aws-ipi
     @proxy @disconnected
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
     Examples:
-      | name                    | file_name                 | Validation                    |
-      | default-valued-48463    | ms_default_values.yaml    | Placement                     | # @case_id OCP-48463
-      | tenancy-dedicated-48464 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-48464
-      | default-valued-48462    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-48462
-    
+      | case_id                         | name                    | file_name                 | Validation                    |
+      | OCP-48463:ClusterInfrastructure | default-valued-48463    | ms_default_values.yaml    | Placement                     | # @case_id OCP-48463
+      | OCP-48464:ClusterInfrastructure | tenancy-dedicated-48464 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-48464
+      | OCP-48462:ClusterInfrastructure | default-valued-48462    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-48462
+

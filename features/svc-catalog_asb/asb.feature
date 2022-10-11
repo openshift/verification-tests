@@ -69,16 +69,16 @@ Feature: Ansible-service-broker related scenarios
       | deployment=<%= cb.db.first.name %>-1 |
 
     Examples:
-      | db_name                         | db_secret_name                             | db_parameters                                                                                                                         | db_pattern |
-      | <%= cb.prefix %>-postgresql-apb | <%= cb.prefix %>-postgresql-apb-parameters | {"postgresql_database":"admin","postgresql_user":"admin","postgresql_version":"9.5","postgresql_password":"test"}                     | postgresql | # @case_id OCP-15328
-      | <%= cb.prefix %>-mariadb-apb    | <%= cb.prefix %>-mariadb-apb-parameters    | {"mariadb_database":"admin","mariadb_user":"admin","mariadb_version":"10.2","mariadb_root_password":"test","mariadb_password":"test"} | mariadb    | # @case_id OCP-16086
-      | <%= cb.prefix %>-mysql-apb      | <%= cb.prefix %>-mysql-apb-parameters      | {"mysql_database":"devel","mysql_user":"devel","mysql_version":"5.7","service_name":"mysql","mysql_password":"test"}                  | mysql      | # @case_id OCP-16087
+      | case_id               | db_name                         | db_secret_name                             | db_parameters                                                                                                                         | db_pattern |
+      | OCP-15328:OperatorSDK | <%= cb.prefix %>-postgresql-apb | <%= cb.prefix %>-postgresql-apb-parameters | {"postgresql_database":"admin","postgresql_user":"admin","postgresql_version":"9.5","postgresql_password":"test"}                     | postgresql | # @case_id OCP-15328
+      | OCP-16086:OperatorSDK | <%= cb.prefix %>-mariadb-apb    | <%= cb.prefix %>-mariadb-apb-parameters    | {"mariadb_database":"admin","mariadb_user":"admin","mariadb_version":"10.2","mariadb_root_password":"test","mariadb_password":"test"} | mariadb    | # @case_id OCP-16086
+      | OCP-16087:OperatorSDK | <%= cb.prefix %>-mysql-apb      | <%= cb.prefix %>-mysql-apb-parameters      | {"mysql_database":"devel","mysql_user":"devel","mysql_version":"5.7","service_name":"mysql","mysql_password":"test"}                  | mysql      | # @case_id OCP-16087
 
   # @author zitang@redhat.com
   # @case_id OCP-15354
   @admin
   @inactive
-  Scenario: Check multiple broker support for service catalog
+  Scenario: OCP-15354:OperatorSDK Check multiple broker support for service catalog
     Given admin checks that the "ansible-service-broker" cluster_service_broker exists
     And admin checks that the "template-service-broker" cluster_service_broker exists
 

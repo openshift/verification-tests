@@ -3,12 +3,13 @@ Feature: Egress compoment upgrade testing
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @upgrade
+  @heterogeneous @arm64 @amd64
   Scenario: Check egressfirewall is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
@@ -28,11 +29,7 @@ Feature: Egress compoment upgrade testing
     Then the step should succeed
     And the output should contain "redhat.com"
 
-    Given I save egress data file directory to the clipboard
-    Given I obtain test data file "networking/<%= cb.cb_egress_directory %>/limit_policy.json"
-    When I run the :create admin command with:
-      | f | limit_policy.json   |
-      | n | <%= project.name %> |
+    Given the egressfirewall policy is applied to the "egressfw-upgrade1" namespace
     Then the step should succeed
 
     And I wait up to 10 seconds for the steps to pass:
@@ -40,20 +37,21 @@ Feature: Egress compoment upgrade testing
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -I | --connect-timeout | 5 | redhat.com |
     Then the step should fail
-    And the output should contain "timed out"
     """
 
   # @author huirwang@redhat.com
   # @case_id OCP-44315
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
   Scenario: Check egressfirewall is functional post upgrade
+    Given the cluster is not migration from sdn plugin
     Given I switch to cluster admin pseudo user
     And I save egress type to the clipboard
     When I run the :get admin command with:
@@ -64,24 +62,25 @@ Feature: Egress compoment upgrade testing
     And the output should contain:
       | 0.0.0.0/0 |
     Given I use the "egressfw-upgrade1" project
+
     Given status becomes :running of 1 pod labeled:
       | name=test-pods |
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -I | --connect-timeout | 5 | redhat.com |
     Then the step should fail
-    And the output should contain "timed out"
 
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
   @upgrade
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Check ovn egressip is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I save ipecho url to the clipboard
@@ -134,12 +133,13 @@ Feature: Egress compoment upgrade testing
   @admin
   @upgrade-check
   @network-ovnkubernetes
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
   @upgrade
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
@@ -176,14 +176,16 @@ Feature: Egress compoment upgrade testing
   @admin
   @flaky
   @upgrade-prepare
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
   @upgrade
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Check sdn egressip is functional post upgrade - prepare
+    Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
     Given I store the schedulable workers in the :workers clipboard
@@ -247,14 +249,17 @@ Feature: Egress compoment upgrade testing
   @admin
   @flaky
   @upgrade-check
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
   @upgrade
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Check sdn egressip is functional post upgrade
+    Given the cluster is not migration from sdn plugin		
+    Given the env is using "OpenShiftSDN" networkType
     Given I run the :get admin command with:
       | resource      | hostsubnet                                  |
       | o             | jsonpath={.items[?(@.egressCIDRs)].host}    |

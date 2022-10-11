@@ -4,9 +4,13 @@ Feature: storage security check
   # @author piqin@redhat.com
   @admin
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  Scenario Outline: [origin_infra_20] volume security testing
-    Given I have a project
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  Scenario Outline: volume security testing
+    Given I have a project with proper privilege
     Given I obtain test data file "storage/misc/pvc.json"
     When I run oc create over "pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc1 |
@@ -22,7 +26,7 @@ Feature: storage security check
     When I run oc create over "privileged-test.json" replacing paths:
       | ["metadata"]["name"]                                        | mypod                                                                                                 |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt                                                                                                  |
-      | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623 |
+      | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | ["spec"]["securityContext"]["seLinuxOptions"]["level"]      | s0:c13,c2                                                                                             |
       | ["spec"]["securityContext"]["fsGroup"]                      | 24680                                                                                                 |
       | ["spec"]["securityContext"]["runAsUser"]                    | 1000160000                                                                                            |
@@ -66,7 +70,7 @@ Feature: storage security check
     Given I obtain test data file "storage/security/privileged-test.json"
     When I run oc create over "privileged-test.json" replacing paths:
       | ["metadata"]["name"]                                        | mypod2                                                                                                |
-      | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623 |
+      | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt                                                                                                  |
       | ["spec"]["securityContext"]["seLinuxOptions"]["level"]      | s0:c13,c2                                                                                             |
       | ["spec"]["securityContext"]["fsGroup"]                      | 24680                                                                                                 |
@@ -110,36 +114,34 @@ Feature: storage security check
     @gcp-ipi
     @gcp-upi
     Examples:
-      | storage_type         | volume_name | type   |
-      | gcePersistentDisk    | pdName      | gce    | # @case_id OCP-9700
+      | case_id          | storage_type      | volume_name | type |
+      | OCP-9700:Storage | gcePersistentDisk | pdName      | gce  | # @case_id OCP-9700
 
     @aws-ipi
     @aws-upi
     Examples:
-      | storage_type         | volume_name | type   |
-      | awsElasticBlockStore | volumeID    | ebs    | # @case_id OCP-9699
+      | case_id          | storage_type         | volume_name | type |
+      | OCP-9699:Storage | awsElasticBlockStore | volumeID    | ebs  | # @case_id OCP-9699
 
     @openstack-ipi
     @openstack-upi
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    @network-ovnkubernetes @network-openshiftsdn
     Examples:
-      | storage_type         | volume_name | type   |
-      | cinder               | volumeID    | cinder | # @case_id OCP-9721
+      | case_id          | storage_type | volume_name | type   |
+      | OCP-9721:Storage | cinder       | volumeID    | cinder | # @case_id OCP-9721
 
   # @author chaoyang@redhat.com
   # @case_id OCP-9709
   @admin
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  Scenario: secret volume security check
-    Given I have a project
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-9709:Storage secret volume security check
+    Given I have a project with proper privilege
     Given I obtain test data file "storage/secret/secret.yaml"
     When I run the :create client command with:
       | filename | secret.yaml |

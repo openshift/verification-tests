@@ -20,8 +20,8 @@ Feature: Machine-api components upgrade tests
   # @author huliu@redhat.com
   @upgrade-check
   @admin
-    @proxy @noproxy @disconnected @connected
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @proxy @noproxy @disconnected @connected
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -38,10 +38,11 @@ Feature: Machine-api components upgrade tests
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
   Examples:
-    | cluster_operator           |
-    | "machine-api"              | # @case_id OCP-22712
-    | "cluster-autoscaler"       | # @case_id OCP-27664
+    | case_id                         | cluster_operator     |
+    | OCP-22712:ClusterInfrastructure | "machine-api"        | # @case_id OCP-22712
+    | OCP-27664:ClusterInfrastructure | "cluster-autoscaler" | # @case_id OCP-27664
 
   @upgrade-prepare
   @4.11 @4.10 @4.9
@@ -54,12 +55,13 @@ Feature: Machine-api components upgrade tests
   # @case_id OCP-43331
   @upgrade-check
   @admin
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Cloud-controller-manager cluster operator should be available after upgrade
     Given evaluation of `cluster_operator('cloud-controller-manager').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -82,6 +84,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @heterogeneous @arm64 @amd64
   Scenario: There should be no pending or firing alerts for machine-api operators - prepare
     Given the expression should be true> "True" == "True"
 
@@ -95,6 +98,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @heterogeneous @arm64 @amd64
   Scenario: There should be no pending or firing alerts for machine-api operators
     Given I switch to cluster admin pseudo user
 
@@ -110,11 +114,12 @@ Feature: Machine-api components upgrade tests
   @admin
   @destructive
   @disconnected @connected
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
   Scenario: Scale up and scale down a machineSet after upgrade - prepare
     Given the expression should be true> "True" == "True"
 
@@ -123,11 +128,12 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -147,7 +153,10 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @arm64 @amd64 @heterogeneous
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario Outline: Spot/preemptible instances should not block upgrade - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -155,11 +164,11 @@ Feature: Machine-api components upgrade tests
     And I pick a random machineset to scale
 
     # Create a machineset
-    Given I get project machineset named "<%= machine_set.name %>" as YAML
+    Given I get project machine_set_machine_openshift_io named "<%= machine_set_machine_openshift_io.name %>" as YAML
     And I save the output to file> <machineset_name>.yaml
     And I replace content in "<machineset_name>.yaml":
-      | <%= machine_set.name %> | <machineset_name> |
-      | /replicas.*/            | replicas: 0       |
+      | <%= machine_set_machine_openshift_io.name %> | <machineset_name> |
+      | /replicas.*/                                 | replicas: 0       |
 
     When I run the :create admin command with:
       | f | <machineset_name>.yaml |
@@ -171,7 +180,7 @@ Feature: Machine-api components upgrade tests
     # Verify machine could be created successful
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set("<machineset_name>").desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io("<machineset_name>").desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
 
@@ -189,27 +198,25 @@ Feature: Machine-api components upgrade tests
       | iaas_type | machineset_name        | value                   |
       | gcp       | machineset-clone-41803 | "preemptible": true     |
 
-    @azure-ipi
-    Examples:
-      | iaas_type | machineset_name        | value                   |
-      | azure     | machineset-clone-41804 | "spotVMOptions": {}     |
-
   # @author zhsun@redhat.com
   @upgrade-check
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @arm64 @amd64 @heterogeneous
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario Outline: Spot/preemptible instances should not block upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
-    And admin ensures "<machineset_name>" machineset is deleted after scenario
+    And admin ensures "<machineset_name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given "machine-api-termination-handler" daemonset becomes ready in the "openshift-machine-api" project
     And 1 pod becomes ready with labels:
       | k8s-app=termination-handler |
 
-    Given admin ensures "<machineset_name>" machineset is deleted
+    Given admin ensures "<machineset_name>" machine_set_machine_openshift_io is deleted
     And I wait up to 300 seconds for the steps to pass:
     """
     When I run the :get admin command with:
@@ -222,30 +229,23 @@ Feature: Machine-api components upgrade tests
 
     @aws-ipi
     Examples:
-      | iaas_type | machineset_name        | value                   |
-      | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
+      | case_id                         | iaas_type | machineset_name        | value                   |
+      | OCP-41175:ClusterInfrastructure | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
 
     @gcp-ipi
     Examples:
-      | iaas_type | machineset_name        | value                   |
-      | gcp       | machineset-clone-41803 | "preemptible": true     | # @case_id OCP-41803
-
-    @azure-ipi
-    @upgrade
-    @network-ovnkubernetes @network-openshiftsdn
-    @proxy @noproxy @disconnected @connected
-    Examples:
-      | iaas_type | machineset_name        | value                   |
-      | azure     | machineset-clone-41804 | "spotVMOptions": {}     | # @case_id OCP-41804
+      | case_id                         | iaas_type | machineset_name        | value               |
+      | OCP-41803:ClusterInfrastructure | gcp       | machineset-clone-41803 | "preemptible": true | # @case_id OCP-41803
 
   @upgrade-prepare
   @destructive
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -263,11 +263,12 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -282,10 +283,10 @@ Feature: Machine-api components upgrade tests
     # Create machineautoscaler
     Given I obtain test data file "cloud/machine-autoscaler.yml"
     When I run oc create over "machine-autoscaler.yml" replacing paths:
-      | ["metadata"]["name"]               | maotest                 |
-      | ["spec"]["minReplicas"]            | 1                       |
-      | ["spec"]["maxReplicas"]            | 3                       |
-      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set.name %> |
+      | ["metadata"]["name"]               | maotest                                      |
+      | ["spec"]["minReplicas"]            | 1                                            |
+      | ["spec"]["maxReplicas"]            | 3                                            |
+      | ["spec"]["scaleTargetRef"]["name"] | <%= machine_set_machine_openshift_io.name %> |
     Then the step should succeed
     And admin ensures "maotest" machineautoscaler is deleted after scenario
 
@@ -299,7 +300,7 @@ Feature: Machine-api components upgrade tests
     # Verify machineset has scaled
     Given I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 3
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 3
     """
     Then the machineset should have expected number of running machines
 
@@ -308,30 +309,32 @@ Feature: Machine-api components upgrade tests
     # Check cluster auto scales down
     And I wait up to 300 seconds for the steps to pass:
     """
-    Then the expression should be true> machine_set.desired_replicas(cached: false) == 1
+    Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
 
   @upgrade-prepare
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Registering Components delays should not be more than liveliness probe - prepare 
+  @heterogeneous @arm64 @amd64
+  Scenario: Registering Components delays should not be more than liveliness probe - prepare
     Given the expression should be true> "True" == "True"
 
   # @author miyadav@redhat.com
   # @case_id OCP-39845
   @upgrade-check
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Registering Components delays should not be more than liveliness probe 
+  @heterogeneous @arm64 @amd64
+  Scenario: Registering Components delays should not be more than liveliness probe
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -343,6 +346,6 @@ Feature: Machine-api components upgrade tests
       | resource_name | <%= pod.name %>       |
       | c             | machineset-controller |
 
-    And I save the output to file> logtime.txt 
+    And I save the output to file> logtime.txt
     Given I get time difference using "Registering Components." and "Starting the Cmd." in logtime.txt file
     Then the step should succeed

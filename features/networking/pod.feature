@@ -3,13 +3,15 @@ Feature: Pod related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9747
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @network-openshiftsdn
   @proxy @noproxy
-  Scenario: Pod cannot claim UDP port 4789 on the node as part of a port mapping
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-9747:SDN Pod cannot claim UDP port 4789 on the node as part of a port mapping
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     Given I obtain test data file "networking/pod_with_udp_port_4789.json"
@@ -28,12 +30,15 @@ Feature: Pod related networking scenarios
   # @case_id OCP-10031
   @smoke
   @noproxy @disconnected
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
+  @admin
   @network-openshiftsdn
-  Scenario: Container could reach the dns server
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10031:SDN Container could reach the dns server
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     Given I obtain test data file "pods/ocp10031/pod.json"
     When I run the :create client command with:
@@ -50,22 +55,27 @@ Feature: Pod related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-14986
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-openshiftsdn
-  Scenario: The openflow list will be cleaned after delete the pods
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-14986:SDN The openflow list will be cleaned after delete the pods
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     Given I have a pod-for-ping in the project
     Then evaluation of `pod.node_name` is stored in the :node_name clipboard
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
+    Given I wait up to 20 seconds for the steps to pass:
+    """
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
+      | bash | -c | ovs-ofctl -O openflow13 dump-flows br0 \| grep <%=cb.pod_ip %> |
     Then the step should succeed
     And the output should contain:
       | <%=cb.pod_ip %> |
+    """
     When I run the :delete client command with:
       | object_type       | pod       |
       | object_name_or_id | hello-pod |
@@ -73,8 +83,7 @@ Feature: Pod related networking scenarios
     Given I wait up to 10 seconds for the steps to pass:
     """
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
-    Then the step should succeed
+     | bash | -c | ovs-ofctl -O openflow13 dump-flows br0 \| grep <%=cb.pod_ip %> |    
     And the output should not contain:
       | <%=cb.pod_ip %> |
     """
@@ -88,7 +97,9 @@ Feature: Pod related networking scenarios
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-openshiftsdn
-  Scenario: Check QoS after creating pod
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-10817:SDN Check QoS after creating pod
+    Given the env is using "OpenShiftSDN" networkType
     Given I have a project
     # setup iperf server to receive the traffic
     Given I obtain test data file "networking/egress-ingress/qos/iperf-server.json"
@@ -111,11 +122,11 @@ Feature: Pod related networking scenarios
 
     # check the ovs port and interface for the qos availibility
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-vsctl | list | qos |
+      | bash | -c | ovs-vsctl list qos \| grep max-rate |
     Then the step should succeed
     And the output should contain "max-rate="5000000""
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-vsctl | list | interface |
+      | bash | -c | ovs-vsctl list interface \| grep ingress_policing_rate |
     Then the step should succeed
     And the output should contain "ingress_policing_rate: 1953"
     # test the bandwidth limit with qos for egress
@@ -137,23 +148,22 @@ Feature: Pod related networking scenarios
     And I wait for the resource "pod" named "<%= cb.iperf_client %>" to disappear
 
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-vsctl | list | qos |
-    Then the step should succeed
+      | bash | -c | ovs-vsctl list qos \| grep max-rate |    
     And the output should not contain "max-rate="5000000""
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-vsctl | list | interface |
-    Then the step should succeed
+      | bash | -c | ovs-vsctl list interface \| grep ingress_policing_rate |    
     And the output should not contain "ingress_policing_rate: 1953"
 
   # @author anusaxen@redhat.com
   # @case_id OCP-23890
   @admin
   @proxy @noproxy @disconnected
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-23890:SDN A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I select a random node's host
@@ -186,12 +196,13 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23891
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-23891:SDN A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
     Given I store the masters in the :masters clipboard
     And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard
     Given I select a random node's host
@@ -209,12 +220,13 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23893
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @baremetal-upi @azure-upi @aws-upi
   @network-openshiftsdn
   @proxy @noproxy
-  Scenario: A pod in a namespace with an egress IP cannot access the MCS
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-23893:SDN A pod in a namespace with an egress IP cannot access the MCS
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I select a random node's host
@@ -244,13 +256,14 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23894
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-23894:SDN User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I have a project
@@ -276,12 +289,13 @@ Feature: Pod related networking scenarios
   # @case_id OCP-21846
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy
-  Scenario: ovn pod can be scheduled even if the node taint to unschedule
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-21846:SDN ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
     #Tainting all worker nodes to NoSchedule
@@ -326,18 +340,20 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26822
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: [4.x] Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-26822:SDN 4.x Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given I store the workers in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
     Given I have a project
     #privileges are needed to support network-pod as hostnetwork pod creation later
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/pod_with_udp_port_4789_nodename.json"
     When I run oc create over "pod_with_udp_port_4789_nodename.json" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
@@ -384,7 +400,7 @@ Feature: Pod related networking scenarios
     Given I wait up to 20 seconds for the steps to pass:
     """
     And I execute on the pod:
-      | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
+      | bash | -c | conntrack -L \| grep "<%= cb.host_pod1.ip %>" |
     Then the step should succeed
     And the output should contain:
       |<%= cb.host_pod1.ip %>|
@@ -408,7 +424,7 @@ Feature: Pod related networking scenarios
     Given I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.network_pod %>" pod:
-      | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
+      | bash | -c | conntrack -L \| grep "<%= cb.host_pod2.ip %>" |
     Then the output should contain "<%= cb.host_pod2.ip %>"
     And the output should not contain "<%= cb.host_pod1.ip %>"
     """
@@ -420,11 +436,12 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Pod should be accesible via node ip and host port
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  Scenario: OCP-25294:SDN Pod should be accesible via node ip and host port
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
-    And I have a project
+    And I have a project with proper privilege
     Given I obtain test data file "networking/pod-for-ping-with-hostport.yml"
     When I run oc create as admin over "pod-for-ping-with-hostport.yml" replacing paths:
       | ["metadata"]["namespace"] |  <%= project.name %>       |
@@ -435,13 +452,13 @@ Feature: Pod related networking scenarios
     #Pod should be accesible via node ip and host port from its home node
     Given I use the "<%= cb.workers[0].name %>" node
     And I run commands on the host:
-      | curl <%= cb.worker0_ip %>:9500 |
+      | curl --connect-timeout 5 [<%= cb.worker0_ip %>]:9500 |
     Then the output should contain:
       | Hello OpenShift |
     #Pod should be accesible via node ip and host port from another node as well. Remember worker0 is home node for that pod
     Given I use the "<%= cb.workers[1].name %>" node
     And I run commands on the host:
-      | curl <%= cb.worker0_ip %>:9500 |
+      | curl --connect-timeout 5 [<%= cb.worker0_ip %>]:9500 |
     Then the output should contain:
       | Hello OpenShift |
 
@@ -451,7 +468,7 @@ Feature: Pod related networking scenarios
   @destructive
   @inactive
   @network-ovnkubernetes
-  Scenario: Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode
+  Scenario: OCP-26373:SDN Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
   And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
@@ -483,12 +500,13 @@ Feature: Pod related networking scenarios
   # @case_id OCP-26014
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
-  Scenario: Pod readiness check for OVN
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-26014:SDN Pod readiness check for OVN
     Given the env is using "OVNKubernetes" networkType
     And OVN is functional on the cluster
     Given I switch to cluster admin pseudo user
@@ -528,7 +546,7 @@ Feature: Pod related networking scenarios
   @admin
   @destructive
   @inactive
-  Scenario: xt_u32 kernel module functionality check from NET_ADMIN pods
+  Scenario: OCP-33413:SDN xt_u32 kernel module functionality check from NET_ADMIN pods
     Given I have a project
     And I have a pod-for-ping in the project
     Then evaluation of `pod.name` is stored in the :client_pod clipboard
@@ -583,12 +601,14 @@ Feature: Pod related networking scenarios
   # @case_id OCP-22034
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-openshiftsdn
   @proxy @noproxy
-  Scenario: Check the unused ip are released after node reboot
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-22034:SDN Check the unused ip are released after node reboot
+    Given the env is using "OpenShiftSDN" networkType
     Given I store the workers in the :workers clipboard
     Given I use the "<%= cb.workers[0].name %>" node
     And I run commands on the host:
@@ -607,7 +627,8 @@ Feature: Pod related networking scenarios
   @long-duration
   @admin
   @destructive
-  Scenario: Pod stuck in container creating - failed to run CNI IPAM ADD: failed to allocate for range 0: no IP addresses available in range set
+  Scenario: OCP-41666:SDN Pod stuck in container creating - failed to run CNI IPAM ADD: failed to allocate for range 0: no IP addresses available in range set
+    Given the env is using "OpenShiftSDN" networkType
     Given I switch to cluster admin pseudo user
     When I run the :label admin command with:
       | resource  | machineconfigpool         |

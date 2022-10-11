@@ -1,4 +1,5 @@
 Feature: CSI clone testing related feature
+
   """
   This test can only work on a Cluster which has CSI driver deployed, OSP has csi deploy by default from 4.7. 
   From 4.7, OSP CSI driver was installed by default. Its storage class name is standard-csi.
@@ -7,7 +8,7 @@ Feature: CSI clone testing related feature
   
   # @author jianl@redhat.com
   # @case_id OCP-27615
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi
   @openstack-upi
   @upgrade-sanity
@@ -15,7 +16,8 @@ Feature: CSI clone testing related feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Clone a PVC and verify data consistency
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-27615:Storage Clone a PVC and verify data consistency
     # Step 1
     Given the master version >= "4.7"
     Given I have a project
@@ -54,14 +56,15 @@ Feature: CSI clone testing related feature
 
   # @author wduan@redhat.com
   # @case_id OCP-27689
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi
   @openstack-upi
   @qeci
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: [Cinder CSI Clone] Clone a pvc with capacity greater than original pvc
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-27689:Storage Cinder CSI Clone Clone a pvc with capacity greater than original pvc
     Given I have a project
     # Create mypvc-ori with 1Gi size
     Given I obtain test data file "storage/misc/pvc.json"
@@ -108,14 +111,15 @@ Feature: CSI clone testing related feature
 
   # @author wduan@redhat.com
   # @case_id OCP-27690
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi
   @openstack-upi
   @qeci
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: [Cinder CSI Clone] Clone a pvc with capacity less than original pvc will fail
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-27690:Storage Cinder CSI Clone Clone a pvc with capacity less than original pvc will fail
     Given I have a project
     # Create mypvc-ori with 2Gi size
     Given I obtain test data file "storage/misc/pvc.json"
@@ -160,7 +164,7 @@ Feature: CSI clone testing related feature
 
   # @author wduan@redhat.com
   # @case_id OCP-30315
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi
   @openstack-upi
   @upgrade-sanity
@@ -168,7 +172,8 @@ Feature: CSI clone testing related feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: [Cinder CSI clone] Clone a pvc with block VolumeMode successfully
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-30315:Storage Cinder CSI clone Clone a pvc with block VolumeMode successfully
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
@@ -219,14 +224,15 @@ Feature: CSI clone testing related feature
   # @case_id OCP-27617
   @admin
   @destructive
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @openstack-ipi
   @openstack-upi
   @qeci
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: [Cinder CSI Clone] Clone a pvc with default storageclass
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-27617:Storage Cinder CSI Clone Clone a pvc with default storageclass
     Given default storage class is patched to non-default
     And admin clones storage class "my-csi-default" from "standard-csi" with:
       | ["metadata"]["name"] | my-csi-default |
@@ -277,14 +283,16 @@ Feature: CSI clone testing related feature
   # @author wduan@redhat.com
   # @case_id OCP-27686
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @openstack-ipi
   @openstack-upi
   @qeci
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: [Cinder CSI Clone] Clone a pvc with different storage class is failed
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-27686:Storage Cinder CSI Clone Clone a pvc with different storage class is failed
     # Create mypvc-ori with sc1
     Given I have a project
     When admin clones storage class "sc-<%= project.name %>-1" from "standard-csi" with:

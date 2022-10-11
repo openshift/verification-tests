@@ -4,7 +4,7 @@ Feature: Multus-CNI ipv6 related scenarios
   # @case_id OCP-28968
   @admin
   @inactive
-  Scenario: IPv6 testing for OCP-21151: Create pods with multus-cni - macvlan bridge mode
+  Scenario: OCP-28968:SDN IPv6 testing for OCP-21151: Create pods with multus-cni - macvlan bridge mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
     And the multus is enabled on the cluster
@@ -55,13 +55,14 @@ Feature: Multus-CNI ipv6 related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-38521
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: IPv6 testing for OCP-31999: Whereabouts should exclude IPv6 ranges
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-38521:SDN IPv6 testing for OCP-31999: Whereabouts should exclude IPv6 ranges
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1913062
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1917984
   # Make sure that the multus is enabled
@@ -134,7 +135,9 @@ Feature: Multus-CNI ipv6 related scenarios
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  Scenario: Whereabouts IPv6 should be calculated if first hextet of IPv6 has leading zeros	
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  Scenario: OCP-44941:SDN Whereabouts IPv6 should be calculated if first hextet of IPv6 has leading zeros	
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1919048
   # Make sure that the multus is enabled
     Given the master version >= "4.6"

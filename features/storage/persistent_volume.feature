@@ -4,7 +4,11 @@ Feature: Persistent Volume Claim binding policies
   # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @upgrade-sanity
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @heterogeneous @arm64 @amd64
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: PVC with one accessMode can bind PV with all accessMode
     Given I have a project
 
@@ -37,19 +41,16 @@ Feature: Persistent Volume Claim binding policies
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-    @upgrade-sanity
-    @singlenode
-    @proxy @noproxy @disconnected @connected
     Examples:
-      | accessMode1   | accessMode2   | accessMode3   |
-      | ReadOnlyMany  | ReadWriteMany | ReadWriteOnce | # @case_id OCP-9702
-      | ReadWriteOnce | ReadOnlyMany  | ReadWriteMany | # @case_id OCP-10680
-      | ReadWriteMany | ReadWriteOnce | ReadOnlyMany  | # @case_id OCP-11168
+      | case_id           | accessMode1   | accessMode2   | accessMode3   |
+      | OCP-9702:Storage  | ReadOnlyMany  | ReadWriteMany | ReadWriteOnce | # @case_id OCP-9702
+      | OCP-10680:Storage | ReadWriteOnce | ReadOnlyMany  | ReadWriteMany | # @case_id OCP-10680
+      | OCP-11168:Storage | ReadWriteMany | ReadWriteOnce | ReadOnlyMany  | # @case_id OCP-11168
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11933
   @inactive
-  Scenario: deployment hook volume inheritance -- with persistentvolumeclaim Volume
+  Scenario: OCP-11933:Workloads deployment hook volume inheritance -- with persistentvolumeclaim Volume
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
@@ -74,7 +75,12 @@ Feature: Persistent Volume Claim binding policies
 
   # @author lxia@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @upgrade-sanity
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: PV can not bind PVC which request more storage
     Given I have a project
     # PV is 100Mi and PVC is 1Gi
@@ -96,20 +102,21 @@ Feature: Persistent Volume Claim binding policies
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-    @upgrade-sanity
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    @network-ovnkubernetes @network-openshiftsdn
     Examples:
-      | access_mode   |
-      | ReadOnlyMany  | # @case_id OCP-26880
-      | ReadWriteMany | # @case_id OCP-26881
-      | ReadWriteOnce | # @case_id OCP-26879
+      | case_id           | access_mode   |
+      | OCP-26880:Storage | ReadOnlyMany  | # @case_id OCP-26880
+      | OCP-26881:Storage | ReadWriteMany | # @case_id OCP-26881
+      | OCP-26879:Storage | ReadWriteOnce | # @case_id OCP-26879
 
 
   # @author lxia@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @upgrade-sanity
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: PV can not bind PVC with mismatched accessMode
     Given I have a project
     Given I obtain test data file "storage/nfs/auto/pv-template.json"
@@ -136,12 +143,8 @@ Feature: Persistent Volume Claim binding policies
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-    @upgrade-sanity
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    @network-ovnkubernetes @network-openshiftsdn
     Examples:
-      | pv_access_mode | pvc_access_mode1 | pvc_access_mode2 |
-      | ReadOnlyMany   | ReadWriteMany    | ReadWriteOnce    | # @case_id OCP-26882
-      | ReadWriteMany  | ReadWriteOnce    | ReadOnlyMany     | # @case_id OCP-26883
-      | ReadWriteOnce  | ReadOnlyMany     | ReadWriteMany    | # @case_id OCP-26884
+      | case_id           | pv_access_mode | pvc_access_mode1 | pvc_access_mode2 |
+      | OCP-26882:Storage | ReadOnlyMany   | ReadWriteMany    | ReadWriteOnce    | # @case_id OCP-26882
+      | OCP-26883:Storage | ReadWriteMany  | ReadWriteOnce    | ReadOnlyMany     | # @case_id OCP-26883
+      | OCP-26884:Storage | ReadWriteOnce  | ReadOnlyMany     | ReadWriteMany    | # @case_id OCP-26884

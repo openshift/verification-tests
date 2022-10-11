@@ -4,14 +4,15 @@ Feature: oc_volume.feature
   # @author weinliu@redhat.com
   # @case_id OCP-12194
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Create a pod that consumes the secret in a volume
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12194:Node Create a pod that consumes the secret in a volume
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/secret.yaml"
     Given I run the :create client command with:
@@ -22,7 +23,7 @@ Feature: oc_volume.feature
       | sa_name     | default     |
     Then the step should succeed
     When I run the :new_app_as_dc client command with:
-      | docker_image | quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623 |
+      | docker_image | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | name         | mydc                                                                                                  |
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -52,16 +53,17 @@ Feature: oc_volume.feature
   # @author xxia@redhat.com
   # @case_id OCP-11906
   @smoke
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  Scenario: Add secret volume to dc and rc
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11906:Storage Add secret volume to dc and rc
     Given I have a project
     When I run the :new_app_as_dc client command with:
-      | docker_image | quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623 |
+      | docker_image | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | name         | mydc                                                                                                  |
     Then the step should succeed
     When I run the :create_secret client command with:

@@ -1,25 +1,29 @@
 Given(/^I have an IPI deployment$/) do
   # In an IPI deployment, machine number equals to node number
-  machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+  machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   if machines.length == 0
-    raise "Not an IPI deployment, there are no machines"
+    logger.warn "Not an IPI deployment, there are no machines"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
 
   machines.each do | machine |
     if machine.node_name.nil?
-      raise "machine #{machine.name} has no node ref, this is not a ready IPI deployment."
+      logger.warn "machine #{machine.name} has no node ref, this is not a ready IPI deployment."
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
     end
   end
 end
 
 Given(/^I have an UPI deployment and machinesets are enabled$/) do
   # In an UPI deployment, if enabled machinesets, machines should be linked to nodes
-  machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+  machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   if machines.length == 0
     raise "Machinesets are not enabled, there are no machines"
-  end 
+  end
 
-  machines.each do | machine | 
+  machines.each do | machine |
     if machine.node_name.nil?
       raise "machine #{machine.name} does not have nodeRef."
     end
@@ -27,7 +31,7 @@ Given(/^I have an UPI deployment and machinesets are enabled$/) do
 end
 
 Then(/^the machines should be linked to nodes$/) do
-  machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+  machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machines
   machines.each do | machine |
     if machine.node_name == nil
@@ -37,20 +41,20 @@ Then(/^the machines should be linked to nodes$/) do
 end
 
 Given(/^I store the number of machines in the#{OPT_SYM} clipboard$/) do | cb_name |
-  machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+  machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machines
   cb[cb_name] = machines.length
 end
 
 
 Given(/^I store the last provisioned machine in the#{OPT_SYM} clipboard$/) do | cb_name |
-  machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+  machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machines
   cb[cb_name] = machines.max_by(&:created_at).name
 end
 
-Given(/^I wait for the node of machine(?: named "(.+)")? to appear/) do | machine_name |
-  machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+Given(/^I wait for the node of machine_machine_openshift_io(?: named "(.+)")? to appear/) do | machine_name |
+  machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machines
 
   machine = machines.select { |m | m.name == machine_name }.first
@@ -71,10 +75,10 @@ end
 
 Then(/^admin ensures machine number is restored after scenario$/) do
   ensure_admin_tagged
-  machine_names_orig = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api")).map(&:name)
+  machine_names_orig = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api")).map(&:name)
 
   teardown_add {
-    machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+    machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
     machine_names_current = machines.map(&:name)
     machine_names_waiting_del = machine_names_current - machine_names_orig
     machine_names_missing = machine_names_orig - machine_names_current
@@ -83,7 +87,7 @@ Then(/^admin ensures machine number is restored after scenario$/) do
     unless machine_names_missing.empty?
       raise "Machines deleted but never restored: #{machine_names_missing}."
     end
-    
+
     # Instead of delete a machine, wait for the deletion to complete, then loop another one.
     # We trigger a delete cmd for all machines, then wait for the deletions to complete
     machines_waiting_delete.each do | machine |

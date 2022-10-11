@@ -3,7 +3,7 @@ Feature: SDN externalIP compoment upgrade testing
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
@@ -40,7 +40,7 @@ Feature: SDN externalIP compoment upgrade testing
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=externalip-pod    |
-    And evaluation of `pod(1).name` is stored in the :pod1name clipboard
+    And evaluation of `pod.name` is stored in the :pod1name clipboard
 
     # Curl externalIP:portnumber should pass
     When I execute on the "<%= cb.pod1name %>" pod:
@@ -52,7 +52,7 @@ Feature: SDN externalIP compoment upgrade testing
   # @case_id OCP-44790
   @admin
   @upgrade-check
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
@@ -60,12 +60,12 @@ Feature: SDN externalIP compoment upgrade testing
   @proxy @noproxy @disconnected @connected
   Scenario: Check the externalIP works well after upgrade
     Given I switch to cluster admin pseudo user
-    Given I store the schedulable nodes in the :nodes clipboard
-    And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :hostip clipboard
+    # Get the external ip from  service
     When I use the "externalip-upgrade" project
+    And evaluation of `service('service-unsecure').raw_resource.dig('spec','externalIPs')[0]` is stored in the :hostip clipboard
     Given a pod becomes ready with labels:
       | name=externalip-pod    |
-    And evaluation of `pod(1).name` is stored in the :pod1name clipboard
+    And evaluation of `pod.name` is stored in the :pod1name clipboard
 
     # Curl externalIP:portnumber should pass
     When I execute on the "<%= cb.pod1name %>" pod:

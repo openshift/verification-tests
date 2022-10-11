@@ -4,7 +4,7 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   @admin
   @inactive
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Limit range default request tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -26,16 +26,17 @@ Feature: limit range related scenarios:
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
     Examples:
-      | path     | expr1                                                | expr2                                                |
-      | ocp10697 | Container\\s+cpu\\s+\-\\s+\-\\s+200m\\s+200m\\s+\-   | Container\\s+memory\\s+\-\\s+\-\\s+1Gi\\s+1Gi\\s+\-  | # @case_id OCP-10697
-      | ocp11175 | Container\\s+cpu\\s+200m\\s+\-\\s+200m\\s+\-\\s+\-   | Container\\s+memory\\s+1Gi\\s+\-\\s+1Gi\\s+\-\\s+\-  | # @case_id OCP-11175
-      | ocp11519 | Container\\s+cpu\\s+\-\\s+200m\\s+200m\\s+200m\\s+\- | Container\\s+memory\\s+\-\\s+1Gi\\s+1Gi\\s+1Gi\\s+\- | # @case_id OCP-11519
+      | case_id        | path     | expr1                                                | expr2                                                |
+      | OCP-10697:Node | ocp10697 | Container\\s+cpu\\s+\-\\s+\-\\s+200m\\s+200m\\s+\-   | Container\\s+memory\\s+\-\\s+\-\\s+1Gi\\s+1Gi\\s+\-  | # @case_id OCP-10697
+      | OCP-11175:Node | ocp11175 | Container\\s+cpu\\s+200m\\s+\-\\s+200m\\s+\-\\s+\-   | Container\\s+memory\\s+1Gi\\s+\-\\s+1Gi\\s+\-\\s+\-  | # @case_id OCP-11175
+      | OCP-11519:Node | ocp11519 | Container\\s+cpu\\s+\-\\s+200m\\s+200m\\s+200m\\s+\- | Container\\s+memory\\s+\-\\s+1Gi\\s+1Gi\\s+1Gi\\s+\- | # @case_id OCP-11519
 
   # @author pruan@redhat.com
   # @author azagayno@redhat.com
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Limit range invalid values tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -56,16 +57,17 @@ Feature: limit range related scenarios:
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
     Examples:
-      | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 | expr11 |expr12 | expr13| expr14 | expr15 | expr16 | expr17 | expr18 | expr19| expr20 |
-      | ocp11745 | 400m | default request | 400m | max | 200m | 200m | default | 400m | max | 200m | 2Gi | default request | 2Gi | max | 1Gi | 1Gi | default | 2Gi  | max   | 1Gi    | # @case_id OCP-11745
-      | ocp12200 | 200m | min | 400m | default request | 200m | 400m | min | 400m | default | 200m | 1Gi | min | 2Gi | default request | 1Gi | 2Gi | min | 2Gi  | default   | 1Gi    | # @case_id OCP-12200
+      | case_id        | path     | expr1 | expr2           | expr3 | expr4           | expr5 | expr6 | expr7   | expr8 | expr9   | expr10 | expr11 | expr12          | expr13 | expr14          | expr15 | expr16 | expr17  | expr18 | expr19  | expr20 |
+      | OCP-11745:Node | ocp11745 | 400m  | default request | 400m  | max             | 200m  | 200m  | default | 400m  | max     | 200m   | 2Gi    | default request | 2Gi    | max             | 1Gi    | 1Gi    | default | 2Gi    | max     | 1Gi    | # @case_id OCP-11745
+      | OCP-12200:Node | ocp12200 | 200m  | min             | 400m  | default request | 200m  | 400m  | min     | 400m  | default | 200m   | 1Gi    | min             | 2Gi    | default request | 1Gi    | 2Gi    | min     | 2Gi    | default | 1Gi    | # @case_id OCP-12200
 
   # @author pruan@redhat.com
   # @author azagayno@redhat.com
   # @case_id OCP-12286
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Limit range incorrect values
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -83,6 +85,7 @@ Feature: limit range related scenarios:
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
     Examples:
       | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 |
       | ocp12286 | 2Gi | min | 2Gi | max | 1Gi | 400m | min | 400m | max | 200m |
@@ -91,14 +94,15 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12250
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Limit range does not allow min > defaultRequest
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12250:Node Limit range does not allow min > defaultRequest
     Given I have a project
     Given I obtain test data file "limits/ocp12250/limit.yaml"
     When I run the :create admin command with:
@@ -113,14 +117,15 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-11918
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Limit range does not allow defaultRequest > default
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11918:Node Limit range does not allow defaultRequest > default
     Given I have a project
     Given I obtain test data file "limits/ocp11918/limit.yaml"
     When I run the :create admin command with:
@@ -135,14 +140,15 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12043
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Limit range does not allow defaultRequest > max
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12043:Node Limit range does not allow defaultRequest > max
     Given I have a project
     Given I obtain test data file "limits/ocp12043/limit.yaml"
     When I run the :create admin command with:
@@ -157,14 +163,15 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12139
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12139:Node Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
     Given I obtain test data file "limits/ocp12139/limit.yaml"
     When I run the :create admin command with:
@@ -188,14 +195,15 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12315
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Limit range with all values set with proper values
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12315:Node Limit range with all values set with proper values
     Given I have a project
     Given I obtain test data file "limits/ocp12315/limit.yaml"
     When I run the :create admin command with:

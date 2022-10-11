@@ -3,13 +3,14 @@ Feature: oc_portforward.feature
   # @author pruan@redhat.com
   # @case_id OCP-11195
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Forward multi local ports to a pod
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-11195:Workloads Forward multi local ports to a pod
     Given I have a project
     And evaluation of `rand(5000..7999)` is stored in the :porta clipboard
     And evaluation of `rand(5000..7999)` is stored in the :portb clipboard

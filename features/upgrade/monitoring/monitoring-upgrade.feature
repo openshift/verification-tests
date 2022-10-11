@@ -3,13 +3,14 @@ Feature: cluster monitoring related upgrade check
   # @author hongyli@redhat.com
   @upgrade-prepare
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @disconnected @connected
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
   Scenario: upgrade cluster monitoring along with OCP - prepare
     Given I switch to cluster admin pseudo user
     Given I obtain test data file "monitoring/upgrade/cm-monitoring-retention.yaml"
@@ -22,12 +23,13 @@ Feature: cluster monitoring related upgrade check
   # @case_id OCP-29797
   @upgrade-check
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @heterogeneous @arm64 @amd64
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
@@ -40,7 +42,8 @@ Feature: cluster monitoring related upgrade check
     Given the expression should be true> prometheus('k8s').retention == "3h"
 
     # get sa/prometheus-k8s token
-    When evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
+    Given I find a bearer token of the prometheus-k8s service account
+    When evaluation of `service_account('prometheus-k8s').cached_tokens.first` is stored in the :sa_token clipboard
 
     # curl -k -H "Authorization: Bearer $token" 'https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=cluster_installer'
     When I run the :exec admin command with:

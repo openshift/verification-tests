@@ -4,14 +4,16 @@ Feature: oc_set_build_hook
   # @case_id OCP-11602
   # @bug_id 1351797
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Set post-build-commit on buildconfig via oc set build-hook
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11602:BuildAPI Set post-build-commit on buildconfig via oc set build-hook
     Given I have a project
     When I process and create "https://raw.githubusercontent.com/openshift/rails-ex/master/openshift/templates/rails-postgresql.json"
     Then the step should succeed

@@ -11,6 +11,7 @@ module BushSlicer
     RULES_DIR = File.expand_path(HOME + "/lib/rules/cli")
     LOGIN_TIMEOUT = 20 # seconds
     CENSOR_LOGS = [
+      'create_token',
       'serviceaccounts_get_token',
       'whoami',
     ]

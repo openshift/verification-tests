@@ -3,7 +3,7 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9565
   @admin
-  Scenario: The pods in default namespace can communicate with all the other pods
+  Scenario: OCP-9565:SDN The pods in default namespace can communicate with all the other pods
     Given I have a project
     And evaluation of `project.name` is stored in the :u1p1 clipboard
     Given I obtain test data file "networking/list_for_pods.json"
@@ -146,8 +146,13 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9641
   @admin
-  @network-multitenant
-  Scenario: Make the network of given project be accessible to other projects
+  @network-openshiftsdn @network-multitenant
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @proxy @noproxy
+  Scenario: OCP-9641:SDN Make the network of given project be accessible to other projects
     # Create 3 projects and each contains 1 pod and 1 service
     Given the env is using multitenant network
     Given I have a project
@@ -303,13 +308,14 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-12659
   @admin
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-openshiftsdn @network-multitenant
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @proxy @noproxy
-  Scenario: Make the network of given projects be accessible globally
+  @heterogeneous @arm64 @amd64
+  Scenario: OCP-12659:SDN Make the network of given projects be accessible globally
     # Create 3 projects and each contains 1 pod and 1 service
     Given the env is using multitenant network
     Given I have a project
@@ -440,7 +446,7 @@ Feature: networking isolation related scenarios
   # @case_id OCP-9646
   @admin
   @network-multitenant
-  Scenario: Isolate the network for the project which already make network global
+  Scenario: OCP-9646:SDN Isolate the network for the project which already make network global
     Given the env is using multitenant network
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard

@@ -168,47 +168,54 @@ check_resources_pod_dashboard:
 check_cluster_utilization_items:
   elements:
   - selector:
-      xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='Cluster utilization']
+      xpath: //h2[text()='Cluster utilization']
     timeout: 30
   - selector:
-      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='CPU']
+      xpath: //h4[text()='CPU']
   - selector:
-      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Memory']
+      xpath: //h4[text()='Memory']
   - selector:
-      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Filesystem']
+      xpath: //h4[text()='Filesystem']
   - selector:
-      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Network transfer']
+      xpath: //h4[text()='Network transfer']
   - selector:
-      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Pod count']
+      xpath: //h4[text()='Pod count']
+  - selector:
+      xpath: //*[@data-test-id='utilization-item']
+  scripts:
+  - command: |
+      var alltitles = document.querySelectorAll("[data-test-id='utilization-item']")
+      return alltitles[alltitles.length-1].scrollIntoView(true)
+    expect_result: ~
 click_cpu_data:
   element:
     selector:
-      xpath: //h4[text()='CPU']/..//button[contains(@class,'co-dashboard-card__button-link')]
+      xpath: //h4[text()='CPU']/following::button[1]
     op: click
 click_memory_data:
   element:
     selector:
-      xpath: //h4[text()='Memory']/..//button[contains(@class,'co-dashboard-card__button-link')]
+      xpath: //h4[text()='Memory']/following::button[1]
     op: click
 click_filesystem_data:
   element:
     selector:
-      xpath: //h4[text()='Filesystem']/..//button[contains(@class,'co-dashboard-card__button-link')]
+      xpath: //h4[text()='Filesystem']/following::button[1]
     op: click
 click_pod_count_data:
   element:
     selector:
-      xpath: //h4[text()='Pod count']/..//button[contains(@class,'co-dashboard-card__button-link')]
+      xpath: //h4[text()='Pod count']/following::button[1]
     op: click
 click_network_in_data:
   element:
     selector:
-      xpath: //h4[text()='Network transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][1]
+      xpath: //h4[text()='Network transfer']/following::button[1]
     op: click
 click_network_out_data:
   element:
     selector:
-      xpath: //h4[text()='Network transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][2]
+      xpath: //h4[text()='Network transfer']/following::button[2]
     op: click
     timeout: 60
 choose_consumer_measure:
@@ -520,8 +527,9 @@ check_network_out_breakdown_info_when_filter_by_node:
 click_operator_status:
   elements:
   - selector:
-      xpath: //div[@class='co-status-card__health-item']/div[@class='co-dashboard-icon']/following-sibling::div[contains(., 'Operators')]//button[@aria-disabled='false']
+      xpath: //div[@class='co-status-card__health-item']//button[contains(.,'Operators')]    
     op: click
+    timeout: 60
 check_operator_status:
   elements:
   - selector:
@@ -544,20 +552,12 @@ check_view_all_for_operators:
   params:
     text: View all
     link_url: k8s/all-namespaces/operators.coreos.com~v1alpha1~ClusterServiceVersion
-    content: Installed Operators
-  action: goto_cluster_dashboards_page
-  action: click_operator_status
-  action: click_link_with_text
-  action: check_page_contains
+  action: check_link_and_text
 check_view_all_for_cluster_operators:
   params:
     text: View all
     link_url: settings/cluster/clusteroperators
-    content: Cluster Settings
-  action: goto_cluster_dashboards_page
-  action: click_operator_status
-  action: click_link_with_text
-  action: check_page_contains
+  action: check_link_and_text
 check_cluster_operator_status_on_status_card:
   params:
     operator_type: Cluster operators

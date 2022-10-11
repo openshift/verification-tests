@@ -15,9 +15,9 @@ objects:
         managementState: "Managed"
         logStore:
           type: "elasticsearch"
-          retentionPolicy: 
+          retentionPolicy:
             application:
-              maxAge: 60h 
+              maxAge: 60h
             infra:
               maxAge: 3h
             audit:
@@ -28,7 +28,7 @@ objects:
               requests:
                 cpu: 100m
                 memory: 1Gi
-            storage: 
+            storage:
               storageClassName: "${STORAGE_CLASS}"
               size: "${PVC_SIZE}"
             redundancyPolicy: "${REDUNDANCY_POLICY}"
@@ -45,7 +45,7 @@ parameters:
   - name: STORAGE_CLASS
     value: "gp2"
   - name: PVC_SIZE
-    value: "10Gi"
+    value: "20Gi"
   - name: ES_NODE_COUNT
     value: "1"
   - name: REDUNDANCY_POLICY

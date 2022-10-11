@@ -4,7 +4,7 @@
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
@@ -45,15 +45,15 @@
     # Check created pod has correct ip address on interface net1
     When I execute on the pod:
       | ip | a |
-    Then the output should contain:
-      | 192.168.22.101 |
+    Then the output should match:
+      | 192.168.22.10[12] |
 
   # @author weliang@redhat.com
   # @case_id OCP-44898
   @admin
   @upgrade-check
   @users=upuser1,upuser2
-  @4.11 @4.10 @4.9
+  @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
@@ -73,8 +73,8 @@
     # Check created pod has correct ip address on interface net1
     When I execute on the pod:
       | ip | a |
-    Then the output should contain:
-      | 192.168.22.101 |
+    Then the output should match:
+      | 192.168.22.10[12] |
 
     # Delete the created project from testing cluster
     Given the "multus-upgrade" project is deleted

@@ -3,7 +3,7 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   # @case_id OCP-11132
   @inactive
-  Scenario: Create a build config based on the provided image and source code
+  Scenario: OCP-11132:ImageRegistry Create a build config based on the provided image and source code
     Given I have a project
     When I run the :new_build client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
@@ -61,22 +61,25 @@ Feature: build 'apps' with CLI
     Then the output should not contain:
       | ruby-sample-build |
 
+    @inactive
     Examples:
-      | number   | build_status |
-      | ocp11224 | :complete    | # @case_id OCP-11224
-      | ocp11550 | :failed      | # @case_id OCP-11550
+      | case_id            | number   | build_status |
+      | OCP-11224:BuildAPI | ocp11224 | :complete    | # @case_id OCP-11224
+      | OCP-11550:BuildAPI | ocp11550 | :failed      | # @case_id OCP-11550
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11133
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Create a build config based on the source code in the current git repository
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11133:BuildAPI Create a build config based on the source code in the current git repository
     Given I have a project
     And I git clone the repo "https://github.com/openshift/ruby-hello-world.git"
     When I run the :new_build client command with:
@@ -137,14 +140,16 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11139
-  @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Create applications only with multiple db images
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11139:BuildAPI Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
       | image_stream      | openshift/mysql                                      |
@@ -180,14 +185,16 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   # @case_id OCP-11227
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Add multiple source inputs
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11227:BuildAPI Add multiple source inputs
     Given I have a project
     Given I obtain test data file "templates/ocp11227/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
@@ -212,14 +219,16 @@ Feature: build 'apps' with CLI
 
   # @case_id OCP-10771
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Add a image with multiple paths as source input
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-10771:BuildAPI Add a image with multiple paths as source input
     Given I have a project
     Given I obtain test data file "templates/ocp10771/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
@@ -237,14 +246,16 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   # @case_id OCP-11943
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Using a docker image as source input using new-build cmd
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11943:BuildAPI Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
       | source | quay.io/openshifttest/python:3.6 |
@@ -305,14 +316,16 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11776
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Cannot create secret from local file and with same name via oc new-build
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11776:BuildAPI Cannot create secret from local file and with same name via oc new-build
     Given I have a project
     Given I obtain test data file "secrets/testsecret1.json"
     When I run the :create client command with:
@@ -339,14 +352,16 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11552
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Using a docker image as source input for docker build
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11552:BuildAPI Using a docker image as source input for docker build
     Given I have a project
     Given I obtain test data file "templates/ocp11552/ruby22rhel7-template-docker.json"
     When I run the :new_app client command with:
@@ -395,21 +410,24 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     Given the "<build_name>" build becomes :complete
 
+    @inactive
     Examples:
-      | bc_name              | build_name             | file_name        |
-      | ruby-sample-build-ns | ruby-sample-build-ns-1 | Nonesrc-sti.json | # @case_id OCP-11580
+      | case_id            | bc_name              | build_name             | file_name        |
+      | OCP-11580:BuildAPI | ruby-sample-build-ns | ruby-sample-build-ns-1 | Nonesrc-sti.json | # @case_id OCP-11580
 
   # @author cryan@redhat.com
   # @case_id OCP-11582
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Change runpolicy to SerialLatestOnly build
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11582:BuildAPI Change runpolicy to SerialLatestOnly build
     Given I have a project
     When I run the :new_build client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
@@ -486,7 +504,8 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @flaky
   Scenario Outline: Cancel multiple new/pending/running builds
     Given I have a project
     When I run the :new_build client command with:
@@ -629,13 +648,15 @@ Feature: build 'apps' with CLI
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
-      | num1 | num2 | num3 | num4 | num5 |
-      | 5    | 5    | 5    | 5    | 5    | # @case_id OCP-15019
+      | case_id            | num1 | num2 | num3 | num4 | num5 |
+      | OCP-15019:BuildAPI | 5    | 5    | 5    | 5    | 5    | # @case_id OCP-15019
 
   # @author haowang@redhat.com
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: The default runpolicy is Serial build -- new-build/new-app command
     Given I have a project
     When I run the :<cmd> client command with:
@@ -679,8 +700,8 @@ Feature: build 'apps' with CLI
     And the "ruby-hello-world-5" build was cancelled
     And the "ruby-hello-world-3" build is :running
     Given I run the :patch client command with:
-      | resource      | bc                                                                                |
-      | resource_name | ruby-hello-world                                                                  |
+      | resource      | bc                                                                             |
+      | resource_name | ruby-hello-world                                                               |
       | p             | {"spec":{"source":{"git":{"uri":"https://xxxgithub.com/sclorg/ruby-ex.git"}}}} |
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
@@ -700,17 +721,19 @@ Feature: build 'apps' with CLI
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @heterogeneous @arm64 @amd64
+    @inactive
     Examples:
-      | cmd       |
-      | new_build | # @case_id OCP-12066
-      | new_app   | # @case_id OCP-11954
+      | case_id            | cmd       |
+      | OCP-12066:BuildAPI | new_build | # @case_id OCP-12066
+      | OCP-11954:BuildAPI | new_app   | # @case_id OCP-11954
 
   # @author pruan@redhat.com
   # @case_id OCP-10944
   @proxy
   @4.10 @4.9
   @inactive
-  Scenario: Simple error message return when no value followed with oc build-logs
+  Scenario: OCP-10944:ImageRegistry Simple error message return when no value followed with oc build-logs
     Given I have a project
     When I run the :logs client command with:
       | resource_name | |
@@ -736,14 +759,16 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11023
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Handle build naming collisions
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-11023:BuildAPI Handle build naming collisions
     Given I have a project
     When I run the :new_build client command with:
       | app_repo     | https://github.com/openshift/ruby-hello-world.git |
@@ -767,17 +792,19 @@ Feature: build 'apps' with CLI
   # @author wzheng@redhat.com
   # @case_id OCP-17523
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-17523:BuildAPI io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
     Given I have a project
     When I run the :new_app client command with:
-      | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world#config |
+      | app_repo | quay.io/openshifttest/ruby-27:1.2.0~https://github.com/openshift/ruby-hello-world#config |
     Then the step should succeed
     Given the "ruby-hello-world-1" build was created
     And the "ruby-hello-world-1" build completed
@@ -790,14 +817,16 @@ Feature: build 'apps' with CLI
   # @author xiuwang@redhat.com
   # @case_id OCP-19631
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Insert configmap when create a buildconfig
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-19631:BuildAPI Insert configmap when create a buildconfig
     Given I have a project
     Given a "configmap.test" file is created with the following lines:
     """
@@ -928,14 +957,16 @@ Feature: build 'apps' with CLI
   # @author xiuwang@redhat.com
   # @case_id OCP-18962
   @proxy
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  Scenario: Allow using a configmap as an input to a docker build
+  @heterogeneous @arm64 @amd64
+  @inactive
+  Scenario: OCP-18962:BuildAPI Allow using a configmap as an input to a docker build
     Given I have a project
     Given a "configmap1.test" file is created with the following lines:
     """
@@ -957,7 +988,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     #Insert cm and secret to bc with empty destination - succeed
     When I run the :new_build client command with:
-      | app_repo         | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world |
+      | app_repo         | quay.io/openshifttest/ruby-27:1.2.0~https://github.com/openshift/ruby-hello-world |
       | build_config_map | cmtest1:.                                                                                   |
       | build_config_map | cmtest2:./newdir                                                                            |
       | strategy         | docker                                                                                      |
@@ -989,7 +1020,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     #Add a configmaps with a multi-level dirs - succeed
     When I run the :new_build client command with:
-      | app_repo         | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world |
+      | app_repo         | quay.io/openshifttest/ruby-27:1.2.0~https://github.com/openshift/ruby-hello-world |
       | build_config_map | cmtest1:./newdir1/newdir2/newdir3                                                           |
       | strategy         | docker                                                                                      |
     Then the step should succeed

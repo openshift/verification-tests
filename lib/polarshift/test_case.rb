@@ -113,7 +113,7 @@ module BushSlicer
       # @param test_case [Cucumber::Core::Test::Case]
       # @return [Boolean] whether Cucumber scenario is matching this record
       # @note the difference with #match! is that this method only checks
-      #   for alteady matched Cucumber test cases as well internal state of
+      #   for already matched Cucumber test cases as well internal state of
       #   ScenarioWrapper objects would not be updated with the matched
       #   test case; useful at scenario execution finish when we only see
       #   outdated test_case object

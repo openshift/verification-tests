@@ -173,9 +173,14 @@ module BushSlicer
       def start_scenario_for!(test_case)
         scenario = self.test_case.scenarios.find { |s| s.match! test_case}
         unless scenario
-          raise "logic error: trying to start Cucumber scenario not part of this test record"
+          logger.warn "logic error"
+          logger.warn "trying to start Cucumber scenario for test case #{test_case}: #{test_case.name}"
+          logger.warn "but we are using test record from: #{self.test_case.scenarios.first.name}"
+          return false
+        else
+          scenario.start!
+          return true
         end
-        scenario.start!
       end
 
       # @param test_case [Cucumber::Core::Test::Case, Cucumber::Events::TestRunFinished]
@@ -188,13 +193,13 @@ module BushSlicer
         scenario = scenarios.first
 
         unless scenario.match! test_case
-          raise "expected to have current running scenario match the test case but it does not"
+          raise "expected to have current running scenario match the test case #{test_case} but it does not"
         end
 
         return scenario
       end
 
-      # @param event [Cucumber::Events::TestRunFinished]
+      # @param event [Cucumber::Events::TestCaseFinished]
       # @param attach [Array<String>] URLs to put in comment
       def finished!(event, attach: [])
         scenario = current_scenario_for(event)

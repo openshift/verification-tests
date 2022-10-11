@@ -19,6 +19,7 @@ module BushSlicer
   autoload :IBMCloud, "launchers/ibmcloud"
   autoload :ARMRdu2, "launchers/a_r_m_rdu2"
   autoload :Rdu_IPI_BM, "launchers/rdu_ipi_bm"
+  autoload :Nutanix, "launchers/nutanix"
   autoload :OCMCluster, "launchers/o_c_m_cluster"
   autoload :EnvironmentLauncher, "launchers/environment_launcher"
   autoload :PolarShift, "polarshift/autoload"
@@ -60,7 +61,7 @@ module BushSlicer
   # EXECUTOR_NAME is used as part of project name and workdir,
   # truncate it as the project name is limited to 63 chars,
   # apppend "x" to make sure it always ends with proper char
-  EXECUTOR_NAME = "#{EXECUTOR_NAME_TEMP[0..55]}x".freeze
+  EXECUTOR_NAME = "#{EXECUTOR_NAME_TEMP[0..50]}x".freeze
 
   START_TIME = Time.now
   TIME_SUFFIX = [
