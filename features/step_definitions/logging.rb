@@ -30,13 +30,18 @@ Given /^logging operators are installed successfully$/ do
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
-  step %Q/cluster-logging channel name is stored in the :clo_channel clipboard/
-  step %Q/elasticsearch-operator channel name is stored in the :eo_channel clipboard/
 
   unless project('openshift-operators-redhat').exists?
     eo_namespace_yaml = "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/01_eo-project.yaml"
     @result = admin.cli_exec(:create, f: eo_namespace_yaml)
     raise "Error creating namespace" unless @result[:success]
+  end
+
+  #check clusternetwork plugin name
+  #if it's redhat/openshift-ovs-multitenant, then execute `oc adm pod-network make-projects-global openshift-operators-redhat`
+  if cluster_network('default').plugin_name == "redhat/openshift-ovs-multitenant"
+    @result = admin.cli_exec(:oadm_pod_network_make_projects_global, project: "openshift-operators-redhat")
+    raise "Error making project/openshift-operators-redhat network global" unless @result[:success]
   end
 
   step %Q/I use the "openshift-operators-redhat" project/
@@ -72,6 +77,7 @@ Given /^logging operators are installed successfully$/ do
       else
         # create subscription in "openshift-operators-redhat" namespace:
         sub_elasticsearch_yaml ||= "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/4.2/eo-sub-template.yaml"
+        step %Q/elasticsearch-operator channel name is stored in the :eo_channel clipboard/
         step %Q/I process and create:/, table(%{
           | f | #{sub_elasticsearch_yaml} |
           | p | SOURCE=#{cb.eo_catsrc}    |
@@ -120,6 +126,7 @@ Given /^logging operators are installed successfully$/ do
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       else
         # create subscription in `openshift-logging` namespace:
+        step %Q/cluster-logging channel name is stored in the :clo_channel clipboard/
         sub_logging_yaml ||= "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
           | f | #{sub_logging_yaml}       |
