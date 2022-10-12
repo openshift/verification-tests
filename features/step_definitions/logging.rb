@@ -39,7 +39,7 @@ Given /^logging operators are installed successfully$/ do
 
   #check clusternetwork plugin name
   #if it's redhat/openshift-ovs-multitenant, then execute `oc adm pod-network make-projects-global openshift-operators-redhat`
-  if cluster_network('default').plugin_name == "redhat/openshift-ovs-multitenant"
+  if cluster_network("default").exists? && cluster_network('default').plugin_name == "redhat/openshift-ovs-multitenant"
     @result = admin.cli_exec(:oadm_pod_network_make_projects_global, project: "openshift-operators-redhat")
     raise "Error making project/openshift-operators-redhat network global" unless @result[:success]
   end
@@ -65,6 +65,7 @@ Given /^logging operators are installed successfully$/ do
       # first check packagemanifest exists for elasticsearch-operator
       raise "Required packagemanifest 'elasticsearch-operator' no found!" unless package_manifest('elasticsearch-operator').exists?
       step %Q/elasticsearch-operator catalog source name is stored in the :eo_catsrc clipboard/
+      step %Q/elasticsearch-operator channel name is stored in the :eo_channel clipboard/
       step %Q/I use the "openshift-operators-redhat" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for elasticsearch-operator
@@ -77,7 +78,6 @@ Given /^logging operators are installed successfully$/ do
       else
         # create subscription in "openshift-operators-redhat" namespace:
         sub_elasticsearch_yaml ||= "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/4.2/eo-sub-template.yaml"
-        step %Q/elasticsearch-operator channel name is stored in the :eo_channel clipboard/
         step %Q/I process and create:/, table(%{
           | f | #{sub_elasticsearch_yaml} |
           | p | SOURCE=#{cb.eo_catsrc}    |
@@ -115,6 +115,7 @@ Given /^logging operators are installed successfully$/ do
       # first check packagemanifest exists for cluster-logging
       raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
       step %Q/cluster-logging catalog source name is stored in the :clo_catsrc clipboard/
+      step %Q/cluster-logging channel name is stored in the :clo_channel clipboard/
       step %Q/I use the "openshift-logging" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for cluster-logging-operator
@@ -126,7 +127,6 @@ Given /^logging operators are installed successfully$/ do
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       else
         # create subscription in `openshift-logging` namespace:
-        step %Q/cluster-logging channel name is stored in the :clo_channel clipboard/
         sub_logging_yaml ||= "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
           | f | #{sub_logging_yaml}       |
@@ -233,6 +233,11 @@ end
 Given /^I wait until fluentd is ready$/ do
   step %Q/logging collector name is stored in the :collector_name clipboard/
   step %Q/I wait for the "<%= cb.collector_name %>" daemon_set to appear up to 300 seconds/
+  success = wait_for(180, interval: 10) {
+    daemon_set(cb.collector_name).replica_counters(cached:false)[:desired]>0 && daemon_set(cb.collector_name).replica_counters[:desired]==daemon_set(cb.collector_name).replica_counters[:ready] && daemon_set(cb.collector_name).replica_counters[:desired]==daemon_set(cb.collector_name).replica_counters[:updated_scheduled]
+  }
+  raise "the collector pods are not ready" unless success
+
   step %Q/#{daemon_set("#{cb.collector_name}").replica_counters[:desired]} pods become ready with labels:/, table(%{
     | logging-infra=#{cb.collector_name} |
   })
