@@ -15,6 +15,9 @@ Feature: cluster-logging-operator related test
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   Scenario: OCP-21333:Logging ServiceMonitor Object for collector is deployed along with cluster logging
+    # start from logging 5.5, the ds/collector is recreated several times when deploy clusterlogging
+    # here add a step to wait for index infra to appear in ES before checking servicemonitor to appear
+    Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
     Given logging collector name is stored in the :collector_name clipboard
     Given I wait for the "<%= cb.collector_name %>" service_monitor to appear
     And the expression should be true> service_monitor("<%= cb.collector_name %>").service_monitor_endpoint_spec(port: "metrics").path == "/metrics"
