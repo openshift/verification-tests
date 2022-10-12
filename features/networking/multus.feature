@@ -42,11 +42,11 @@ Feature: Multus-CNI related scenarios
     When I execute on the pod:
       | bash | -c | ip -f inet addr show net1 |
     Then the output should match "10.1.1.\d{1,3}"
-    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_multus_ip clipboard
+    And evaluation of `@result[:stdout].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_multus_ip clipboard
     When I execute on the pod:
       | bash | -c | ip -f inet addr show eth0 |
     Then the step should succeed
-    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_sdn_ip clipboard
+    And evaluation of `@result[:stdout].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_sdn_ip clipboard
 
     # Create the second pod which consumes the macvlan cr
     Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
