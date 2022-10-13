@@ -36,17 +36,7 @@ end
 
 Given /^I have a project with proper privilege$/ do
   step %Q/I have a project/
-  if env.version_ge("4.12", user: user)
-    step %Q/I run the :label admin command with:/, table(%{
-      | resource  | namespace/<%= project.name %>                        |
-      | overwrite | true                                                 |
-      | key_val   | security.openshift.io/scc.podSecurityLabelSync=false |
-      | key_val   | pod-security.kubernetes.io/enforce=privileged        |
-      | key_val   | pod-security.kubernetes.io/audit=privileged          |
-      | key_val   | pod-security.kubernetes.io/warn=privileged           |
-      })
-    step %Q/the step should succeed/
-  end
+  step %Q/the appropriate pod security labels are applied to the namespace/
 end
 
 Given /^the appropriate pod security labels are applied to the#{OPT_QUOTED} namespace$/ do | project_name |
@@ -205,16 +195,7 @@ Given /^admin creates a project with a random schedulable node selector$/ do
     })
   step %Q/I store the ready and schedulable workers in the :nodes clipboard/
   step %Q/label "<%= project.name %>=label" is added to the "<%= node.name %>" node/
-  if env.version_ge("4.12", user: user)
-    step %Q/I run the :label admin command with:/, table(%{
-      | resource  | namespace/<%= project.name %>                        |
-      | overwrite | true                                                 |
-      | key_val   | security.openshift.io/scc.podSecurityLabelSync=false |
-      | key_val   | pod-security.kubernetes.io/enforce=privileged        |
-      | key_val   | pod-security.kubernetes.io/audit=privileged          |
-      | key_val   | pod-security.kubernetes.io/warn=privileged           |
-      })
-  end
+  step %Q/the appropriate pod security labels are applied to the namespace/
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "<%= project.name %>" project/
 end
