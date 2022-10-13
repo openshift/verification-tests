@@ -766,16 +766,31 @@ check_deploymentconfig_secondary_menu_link:
   params:
     secondary_menu: DeploymentConfigs
     text: DeploymentConfigs
+    link_url: all-namespaces/apps.openshift.io~v1~DeploymentConfig
+  action: check_secondary_menu_link
+check_job_secondary_menu_link:
+  params:
+    secondary_menu: Jobs
+    text: Jobs
+    link_url: all-namespaces/batch~v1~Job
   action: check_secondary_menu_link
 check_replicaset_secondary_menu_link:
   params:
     secondary_menu: ReplicaSets
     text: ReplicaSets
+    link_url: all-namespaces/apps~v1~ReplicaSet
   action: check_secondary_menu_link
 check_replicationcontroller_secondary_menu_link:
   params:
     secondary_menu: ReplicationControllers
     text: ReplicationControllers
+    link_url: all-namespaces/core~v1~ReplicationController
+  action: check_secondary_menu_link
+check_secret_secondary_menu_link:
+  params:
+    secondary_menu: Secrets
+    text: Secrets
+    link_url: all-namespaces/core~v1~Secret
   action: check_secondary_menu_link
 click_dropdown:
   element:
