@@ -54,6 +54,14 @@ set_request_size:
   - selector:
       <<: *pvc_request_size_input
     op: send_keys <pvc_request_size>
+set_expand_size:
+  elements:
+  - selector: &pvc_expand_size_input
+      xpath: //input[@data-test='pvc-expand-size-input']
+    op: clear
+  - selector:
+      <<: *pvc_expand_size_input
+    op: send_keys <pvc_request_size>
 choose_request_size_unit:
   elements:
   - selector:
@@ -85,7 +93,7 @@ create_persistent_volume_claims:
 expand_pvc_size:
   params:
     button_text: Expand
-  action: set_request_size
+  action: set_expand_size
   action: choose_request_size_unit
   action: click_button
 attach_storage_to_container:

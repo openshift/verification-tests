@@ -747,16 +747,31 @@ check_deploymentconfig_secondary_menu_link:
   params:
     secondary_menu: DeploymentConfigs
     text: DeploymentConfigs
+    link_url: all-namespaces/deploymentconfigs
+  action: check_secondary_menu_link
+check_job_secondary_menu_link:
+  params:
+    secondary_menu: Jobs
+    text: Jobs
+    link_url: all-namespaces/jobs
   action: check_secondary_menu_link
 check_replicaset_secondary_menu_link:
   params:
     secondary_menu: ReplicaSets
     text: ReplicaSets
+    link_url: all-namespaces/replicasets
   action: check_secondary_menu_link
 check_replicationcontroller_secondary_menu_link:
   params:
     secondary_menu: ReplicationControllers
     text: ReplicationControllers
+    link_url: all-namespaces/replicationcontrollers
+  action: check_secondary_menu_link
+check_secret_secondary_menu_link:
+  params:
+    secondary_menu: Secrets
+    text: Secrets
+    link_url: all-namespaces/secrets
   action: check_secondary_menu_link
 click_dropdown:
   element:
