@@ -41,8 +41,8 @@ Feature: Testing the isolation during build scenarios
     Then the output should contain "Connection timed out after"
     """
 
-    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-openshiftsdn @network-multitenant
     @upgrade-sanity
     @noproxy
@@ -117,8 +117,8 @@ Feature: Testing the isolation during build scenarios
     Then the output should contain "Connection timed out after"
     """
     @noproxy @connected
-    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-openshiftsdn @network-networkpolicy
     @heterogeneous @arm64 @amd64
     Examples:
