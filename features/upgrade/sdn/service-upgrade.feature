@@ -46,6 +46,7 @@ Feature: service upgrade scenarios
   Scenario: Check the idle service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "idle-upgrade" project
+    And the appropriate pod security labels are applied to the "idle-upgrade" namespace
     When I run the :get client command with:
       | resource | endpoints |
     Then the step should succeed
