@@ -45,8 +45,8 @@ Feature: Webhook REST Related Tests
     """
     Then the step should fail
     Then the output should contain "not accept"
-    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
