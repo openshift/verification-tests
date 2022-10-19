@@ -5,10 +5,19 @@ metadata:
     name: hello-pod
   name: hello-pod
 spec:
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
   containers:
     - image: "quay.io/openshifttest/hello-openshift@sha256:4200f438cf2e9446f6bcff9d67ceea1f69ed07a2f83363b7fb52529f7ddd8a83"
       imagePullPolicy: IfNotPresent
       name: hello-pod
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
       ports:
         - containerPort: 8080
           protocol: TCP
