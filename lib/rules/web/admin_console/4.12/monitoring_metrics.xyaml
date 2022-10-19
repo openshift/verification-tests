@@ -91,7 +91,7 @@ set_query_input_text_area:
 choose_metrics_query:
   element:
     selector:
-      xpath: //span[contains(text(),'<metrics_name>')]/ancestor::a
+      xpath: //span[contains(text(),'<metrics_name>')]
     op: click
 check_query_input_text_area:
   element:
