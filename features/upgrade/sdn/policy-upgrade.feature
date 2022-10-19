@@ -453,6 +453,7 @@ Feature: SDN compoment upgrade testing
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "conntrack-upgrade" project
+    And the appropriate pod security labels are applied to the "conntrack-upgrade" namespace
     And a pod becomes ready with labels:
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod1 clipboard
