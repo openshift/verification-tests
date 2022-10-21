@@ -39,8 +39,8 @@ Feature: Persistent Volume Claim binding policies
     And the "mypvc" PVC becomes bound to the "pv1-<%= project.name %>" PV
     And the "pv2-<%= project.name %>" PV status is :available
 
-    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+    @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     Examples:
       | case_id           | accessMode1   | accessMode2   | accessMode3   |
       | OCP-9702:Storage  | ReadOnlyMany  | ReadWriteMany | ReadWriteOnce | # @case_id OCP-9702
@@ -100,8 +100,8 @@ Feature: Persistent Volume Claim binding policies
     And the "pv-<%= project.name %>" PV status is :available
     And the "mypvc" PVC becomes :pending
 
-    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+    @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     Examples:
       | case_id           | access_mode   |
       | OCP-26880:Storage | ReadOnlyMany  | # @case_id OCP-26880
@@ -141,8 +141,8 @@ Feature: Persistent Volume Claim binding policies
     And the "mypvc1" PVC becomes :pending
     And the "mypvc2" PVC becomes :pending
 
-    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+    @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     Examples:
       | case_id           | pv_access_mode | pvc_access_mode1 | pvc_access_mode2 |
       | OCP-26882:Storage | ReadOnlyMany   | ReadWriteMany    | ReadWriteOnce    | # @case_id OCP-26882
