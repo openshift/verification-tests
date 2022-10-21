@@ -347,7 +347,6 @@ hide_show_alert_graph_button:
     selector:
       xpath: //div[contains(@class,'alert-detail' )]//button
     op: click
-    timeout: 120
 
 Disable_all_filters:
   element:
