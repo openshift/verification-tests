@@ -61,6 +61,13 @@ Given /^authentication successfully rolls out after config changes$/ do
           })
       step %Q/the step should succeed/
       step %Q/the output should not contain "Terminating"/
+      step %Q/I run the :get admin command with:/, table(%{
+          | resource | pod                           |
+          | l        | app=openshift-oauth-apiserver |
+          | n        | openshift-oauth-apiserver     |
+          })
+      step %Q/the step should succeed/
+      step %Q/the output should not contain "Terminating"/
       true
     rescue => e
       error = e
