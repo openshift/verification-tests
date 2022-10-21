@@ -21,8 +21,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
@@ -89,8 +89,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
@@ -204,8 +204,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
@@ -372,8 +372,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
@@ -453,6 +453,7 @@ Feature: SDN compoment upgrade testing
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "conntrack-upgrade" project
+    And the appropriate pod security labels are applied to the "conntrack-upgrade" namespace
     And a pod becomes ready with labels:
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod1 clipboard
@@ -638,8 +639,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.12 @4.11 @4.10 @4.9
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @destructive
   @network-ovnkubernetes @network-networkpolicy
   @upgrade

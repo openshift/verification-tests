@@ -3,8 +3,8 @@ Feature: ServiceAccount and Policy Managerment
   # @author anli@redhat.com
   # @case_id OCP-10642
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
@@ -13,12 +13,11 @@ Feature: ServiceAccount and Policy Managerment
   @osd_ccs @aro @rosa
   Scenario: OCP-10642:Authentication Could grant admin permission for the service account username to access to its own project
     Given I have a project
-    When I create a new application with:
-      | image_stream | ruby         |
-      | code         | https://github.com/openshift/ruby-hello-world |
-      | name         | myapp         |
-    # TODO: anli, this is a work around for AEP, please add step `the step should succeed` according to latest good solution
-    Then I wait for the "myapp" service to be created
+    When I run the :create_deploymentconfig client command with:
+      | image | quay.io/openshifttest/hello-openshift@sha256:4200f438cf2e9446f6bcff9d67ceea1f69ed07a2f83363b7fb52529f7ddd8a83 |
+      | name  | myapp                                                                                                         |
+    Then the step should succeed
+    And I wait until the status of deployment "myapp" becomes :complete
     Given I create the serviceaccount "demo"
     And I give project admin role to the demo service account
     When I run the :get client command with:
@@ -41,8 +40,8 @@ Feature: ServiceAccount and Policy Managerment
   # @case_id OCP-11494
   @proxy
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
   @singlenode
   @connected
@@ -86,8 +85,8 @@ Feature: ServiceAccount and Policy Managerment
   # @case_id OCP-11249
   # There is no oc create token command below version 4.11, this case is not critical feature, so need to remove versions below 4.11
   @4.12 @4.11
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn

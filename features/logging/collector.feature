@@ -7,8 +7,8 @@ Feature: collector related tests
   @destructive
   @commonlogging
   @proxy @noproxy @disconnected @connected
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-25767:Logging All nodes logs are sent to Elasticsearch
     Given the master version == "4.1"
@@ -50,8 +50,8 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   Scenario: OCP-24837:Logging All nodes logs had sent logs to Elasticsearch
@@ -113,8 +113,8 @@ Feature: collector related tests
     """
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+    @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | case_id           | index_name  |
@@ -125,8 +125,8 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   Scenario: OCP-18147:Logging The Container logs metadata check
@@ -168,8 +168,8 @@ Feature: collector related tests
   @singlenode
   @proxy @noproxy @disconnected @connected
   @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-25768:Logging The container logs metadata check
     Given the master version >= "4.2"
@@ -207,8 +207,8 @@ Feature: collector related tests
   @destructive
   @commonlogging
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
@@ -255,8 +255,8 @@ Feature: collector related tests
   @destructive
   @singlenode
   @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   Scenario: OCP-32197:Logging Fluentd should write it's own logs to stdout and exclude them from collection

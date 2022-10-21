@@ -3,8 +3,8 @@ Feature: oc_expose.feature
   # @author pruan@redhat.com
   # @case_id OCP-10873
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
@@ -15,6 +15,7 @@ Feature: oc_expose.feature
   Scenario: OCP-10873:APIServer Access app througth secure service and regenerate service serving certs if it about to expire
     Given the master version >= "3.3"
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     Given I obtain test data file "deployment/OCP-10873/svc.json"
     When I run the :create client command with:

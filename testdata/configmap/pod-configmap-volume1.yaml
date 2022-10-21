@@ -3,8 +3,17 @@ kind: Pod
 metadata:
   name: dapi-test-pod-1
 spec:
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
   containers:
     - name: test-container
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
       image: quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c
       command: [ "/bin/cat", "/etc/config/special.how" ]
       volumeMounts:
