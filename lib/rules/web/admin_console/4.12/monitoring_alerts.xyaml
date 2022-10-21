@@ -345,7 +345,7 @@ show_alert_graph:
 hide_show_alert_graph_button:
   element:
     selector:
-      xpath: //span[text()='Alert details']/../../..//button
+      xpath: //div[contains(@class,'alert-detail' )]//button
     op: click
     timeout: 120
 
