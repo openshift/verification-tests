@@ -500,6 +500,8 @@ Feature: change the policy of user/service account
     """
 
     # Test explicit serviceaccount
+    Then I wait for the steps to pass:
+    """
     Given I run the :policy_scc_review client command with:
       | serviceaccount | default                      |
       | f              | PodSecurityPolicyReview.json |
@@ -507,6 +509,7 @@ Feature: change the policy of user/service account
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
+    """
 
   # @author chuyu@redhat.com
   # @case_id OCP-9553
