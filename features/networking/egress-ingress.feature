@@ -726,9 +726,12 @@ Feature: Egress-ingress related networking scenarios
     """
 
     #Check the last dns name in yaml file should be allowed
+    And I wait up to 60 seconds for the steps to pass:
+    """
     When I execute on the pod:
       | curl | --connect-timeout | 5 | --head | www.amihealthy.com |
     Then the step should succeed
+    """
 
     # Check another dnsname not in the yaml file should be blocked.
     When I execute on the pod:
