@@ -24,7 +24,7 @@ Feature: Sriov IB related scenarios
       | syncStatus: Succeeded |
     """
     Given I switch to the first user
-    And I have a project
+    And I have a project with proper privilege
     And evaluation of `project.name` is stored in the :usr_project clipboard
     Given I obtain test data file "networking/sriov/ib/<cardname>/sriovibnetwork-<cardname>.yaml"
     Given I create sriov resource with following:
@@ -89,7 +89,7 @@ Feature: Sriov IB related scenarios
       | syncStatus: Succeeded |
     """
     Given I switch to the first user
-    And I have a project
+    And I have a project with proper privilege
     And evaluation of `project.name` is stored in the :usr_project clipboard
     Given I obtain test data file "networking/sriov/ib/cx6/sriovibnetwork-static.yaml"
     Given I create sriov resource with following:
