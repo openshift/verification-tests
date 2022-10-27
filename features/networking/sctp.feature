@@ -8,7 +8,7 @@ Feature: SCTP related scenarios
   Scenario: OCP-28757:SDN Establish pod to pod SCTP connections
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
-    And I have a project
+    And I have a project with proper privilege
     And I wait up to 800 seconds for the steps to pass:
     """
     When I run the :get admin command with:
@@ -67,7 +67,7 @@ Feature: SCTP related scenarios
   Scenario: OCP-28758:SDN Expose SCTP ClusterIP Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
-    And I have a project
+    And I have a project with proper privilege
     And I wait up to 800 seconds for the steps to pass:
     """
     When I run the :get admin command with:
@@ -133,7 +133,7 @@ Feature: SCTP related scenarios
     Given I store the ready and schedulable workers in the :workers clipboard
     Given I install machineconfigs load-sctp-module
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
-    Given I have a project
+    Given I have a project with proper privilege
     And the appropriate pod security labels are applied to the namespace
     And I wait up to 800 seconds for the steps to pass:
     """
@@ -200,7 +200,7 @@ Feature: SCTP related scenarios
   Scenario: OCP-29645:SDN Networkpolicy allow SCTP Client
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
-    And I have a project
+    And I have a project with proper privilege
     And the appropriate pod security labels are applied to the namespace
     And I wait up to 800 seconds for the steps to pass:
     """
