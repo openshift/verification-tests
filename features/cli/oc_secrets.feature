@@ -7,13 +7,13 @@ Feature: oc_secrets.feature
   @proxy @noproxy
   Scenario: OCP-12600:Authentication Add secrets to serviceaccount via oc secrets add
     Given I have a project
-    When I run the :secrets client command with:
-      | action | new        |
-      | name   | test       |
-      | source | /etc/hosts |
+    When I run the :create_secret client command with:
+      | secret_type | generic    |
+      | name        | test       |
+      | from_file   | /etc/hosts |
     Then the step should succeed
     When I run the :secrets client command with:
-      | action         | add                    |
+      | action         | link                   |
       | serviceaccount | serviceaccount/default |
       | secrets_name   | secret/test            |
     Then the step should succeed
@@ -25,7 +25,7 @@ Feature: oc_secrets.feature
       |Mountable secrets|
       |test|
     When I run the :secrets client command with:
-      | action         | add                    |
+      | action         | link                   |
       | serviceaccount | serviceaccount/default |
       | secrets_name   | secret/test            |
       | for            | pull                   |
@@ -39,7 +39,7 @@ Feature: oc_secrets.feature
       |"imagePullSecrets"|
       |"name": "test"    |
     When I run the :secrets client command with:
-      | action         | add                    |
+      | action         | link                   |
       | serviceaccount | serviceaccount/default |
       | secrets_name   | secret/test            |
       | for            | pull,mount             |
@@ -126,41 +126,41 @@ Feature: oc_secrets.feature
     And I save the output to file> file.json
     And I save the output to file> file!@#$.json
 
-    When I run the :secrets client command with:
-      | action | new           |
-      | name   | mysecret1     |
-      | source | file!@#$.json |
+    When I run the :create_secret client command with:
+      | secret_type | generic       |
+      | name        | mysecret1     |
+      | from_file   | file!@#$.json |
     Then the step should fail
     And the output should match:
       | [Ee]rror |
       | valid |
 
-    When I run the :secrets client command with:
-      | action | new           |
-      | name   | mysecret1     |
-      | source | file-1234567890.com.json |
+    When I run the :create_secret client command with:
+      | secret_type | generic                  |
+      | name        | mysecret1                |
+      | from_file   | file-1234567890.com.json |
     Then the step should succeed
 
-    When I run the :secrets client command with:
-      | action | new           |
-      | name   | mysecret!@#$  |
-      | source | file.json |
+    When I run the :create_secret client command with:
+      | secret_type | generic      |
+      | name        | mysecret!@#$ |
+      | from_file   | file.json    |
     Then the step should fail
     And the output should match:
       | [Ii]nvalid     |
 
-    When I run the :secrets client command with:
-      | action | new       |
-      | name   | mysecret-1234567890.com  |
-      | source | file.json |
+    When I run the :create_secret client command with:
+      | secret_type  | generic                  |
+      | name         | mysecret-1234567890.com  |
+      | from_file    | file.json                |
     Then the step should succeed
 
     # Same filenames
-    When I run the :secrets client command with:
-      | action | new       |
-      | name   | mysecret2 |
-      | source | file.json |
-      | source | file.json |
+    When I run the :create_secret client command with:
+      | secret_type | generic   |
+      | name        | mysecret2 |
+      | from_file   | file.json |
+      | from_file   | file.json |
     Then the step should fail
     And the output should match:
       | cannot add key file.json.*another key by that name already exist |
