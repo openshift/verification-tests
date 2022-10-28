@@ -67,6 +67,8 @@ Feature: IPsec upgrade scenarios
        | sh | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
     Then the step should succeed
     And the output should contain "ESP"
+    And admin ensures "hostnw-pod-worker0" pod is deleted from the "ipsec-upgrade" project
+
 
   # @author anusaxen@redhat.com
   # @case_id OCP-44834
@@ -92,6 +94,7 @@ Feature: IPsec upgrade scenarios
       | name=hello-pod1 |
     And evaluation of `pod.node_name` is stored in the :worker1 clipboard
     And the Internal IP of node "<%= cb.worker1 %>" is stored in the :host_ip clipboard
+    Given the appropriate pod security labels are applied to the "ipsec-upgrade" namespace
     Given I obtain test data file "networking/net_admin_cap_pod.yaml"
     #Host network pod for running tcpdump on correcpdonding worker node
     When I run oc create as admin over "net_admin_cap_pod.yaml" replacing paths:
