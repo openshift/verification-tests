@@ -62,5 +62,4 @@
       | ip | a |
     Then the output should match:
       | 22.2.2.22 |
-    # Delete the created project from testing cluster
-    Given the "multus-upgrade" project is deleted
+
