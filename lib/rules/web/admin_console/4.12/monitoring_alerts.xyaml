@@ -197,7 +197,7 @@ set_silence_duration_null:
   action: click_duration_dropdown_button
   element:
     selector:
-      xpath: //ul[@class='pf-c-dropdown__menu']//li[1]
+      xpath: //ul[@class='pf-c-dropdown__menu']//a[text()='-']
     op: click
 check_silence_duration_null:
   element:
