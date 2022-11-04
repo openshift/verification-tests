@@ -51,7 +51,7 @@ Feature: creating 'apps' with CLI
       | env          | MYSQL_ROOT_PASSWORD=test |
     Given the "<%= cb.appname %>-1" build completes
     Given 1 pod becomes ready with labels:
-      | deployment=<%= cb.appname %>-1 |
+      | deployment=<%= cb.appname %> |
     And I wait for the steps to pass:
     """
     When I execute on the pod:
@@ -69,7 +69,7 @@ Feature: creating 'apps' with CLI
       | env          | MYSQL_ROOT_PASSWORD=test                      |
     Given the "<%= cb.appname1 %>-1" build completes
     Given 1 pod becomes ready with labels:
-      | deployment=<%= cb.appname1 %>-1 |
+      | deployment=<%= cb.appname1 %> |
     And I wait for the steps to pass:
     """
     When I execute on the pod:
@@ -87,7 +87,7 @@ Feature: creating 'apps' with CLI
       | env          | MYSQL_ROOT_PASSWORD=test                     |
     Given the "<%= cb.appname2 %>-1" build completes
     Given 1 pod becomes ready with labels:
-      | deployment=<%= cb.appname2 %>-1 |
+      | deployment=<%= cb.appname2 %> |
     And I wait for the steps to pass:
     """
     When I execute on the pod:
@@ -105,7 +105,7 @@ Feature: creating 'apps' with CLI
       | env          | MYSQL_ROOT_PASSWORD=test                      |
     Given the "<%= cb.appname3 %>-1" build completes
     Given 1 pod becomes ready with labels:
-      | deployment=<%= cb.appname3 %>-1 |
+      | deployment=<%= cb.appname3 %> |
     And I wait for the steps to pass:
     """
     When I execute on the pod:
