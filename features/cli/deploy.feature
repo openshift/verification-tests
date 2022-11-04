@@ -65,7 +65,7 @@ Feature: deployment related features
     Then the output should contain "rolled out"
     # Wait the deployment till complete
     And the pod named "hooks-1-deploy" becomes ready
-    Given I wait for the pod named "hooks-1-deploy" to die
+    And I wait until the status of deployment "hooks" becomes :complete
     When I run the :rollout_status client command with:
       | resource | deploymentConfig |
       | name     | hooks            |
