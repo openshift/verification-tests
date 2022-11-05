@@ -20,7 +20,7 @@ require 'google/apis/compute_v1'
 require 'googleauth'
 require 'launchers/openstack'
 
-require 'pry-byebug'
+# require 'pry-byebug'
 
 # user libs
 require 'resource_monitor'
