@@ -494,10 +494,9 @@ Feature: SDN compoment upgrade testing
     Given I wait up to 20 seconds for the steps to pass:
     """
     And I execute on the pod:
-      | bash | -c | conntrack -L \| grep "<%= cb.host_pod1.ip %>" |
+      | bash | -c | conntrack -L \| grep -w "<%= cb.host_pod1.ip %>" |
     Then the step should succeed
-    And the output should match:
-      |<%= cb.host_pod1.ip %>|
+    And the output should match "<%= cb.host_pod1.ip %> "
     """
     #Deleting the udp listener pod which will trigger a new udp listener pod with new IP
     Given I ensure "<%= cb.host_pod1.name %>" pod is deleted
@@ -517,11 +516,11 @@ Feature: SDN compoment upgrade testing
     Given I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.network_pod %>" pod:
-      | bash | -c | conntrack -L \| grep "<%= cb.host_pod2.ip %>" |
-    Then the output should match "<%= cb.host_pod2.ip %>"
-    And the output should not match "<%= cb.host_pod1.ip %>"
+      | bash | -c | conntrack -L \| grep -w "<%= cb.host_pod2.ip %>" |
+    Then the output should match "<%= cb.host_pod2.ip %> "
+    And the output should not match "<%= cb.host_pod1.ip %> "
     """
-
+    
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
