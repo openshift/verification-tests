@@ -421,7 +421,7 @@ Feature: deployment related features
       | env          | SUBTITLE=shardA                                                                                                  |
     Then the step should succeed
     When I run the :expose client command with:
-      | resource      | deploymentconfig |
+      | resource      | deployment       |
       | resource_name | ab-example-a     |
       | name          | ab-example       |
       | selector      | ab-example=true  |
@@ -436,11 +436,11 @@ Feature: deployment related features
       | env          | SUBTITLE=shardB                                                                                                  |
     Then the step should succeed
     Then I run the :scale client command with:
-      | resource | deploymentconfig |
+      | resource | deployment       |
       | name     | ab-example-a     |
       | replicas | 0                |
     Then the step should succeed
-    Given number of replicas of "ab-example-a" deployment config becomes:
+    Given number of replicas of "ab-example-a" deployment becomes:
       | desired   | 0 |
       | current   | 0 |
       | updated   | 0 |
@@ -449,16 +449,16 @@ Feature: deployment related features
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardB"
     Then I run the :scale client command with:
-      | resource | deploymentconfig |
+      | resource | deployment       |
       | name     | ab-example-b     |
       | replicas | 0                |
     Then the step should succeed
     Then I run the :scale client command with:
-      | resource | deploymentconfig |
+      | resource | deployment       |
       | name     | ab-example-a     |
       | replicas | 1                |
     Then the step should succeed
-    Given number of replicas of "ab-example-a" deployment config becomes:
+    Given number of replicas of "ab-example-a" deployment becomes:
       | desired   | 1 |
       | current   | 1 |
       | updated   | 1 |
