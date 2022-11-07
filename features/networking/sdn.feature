@@ -223,7 +223,7 @@ Feature: SDN related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
-  Scenario: OCP-23543:SDN The iptables binary and rules on sdn containers should be the same as host
+  Scenario: OCP-23543:SDN The iptables binary on sdn containers should be the same as host
     Given I select a random node's host
     When I run commands on the host:
       | iptables-save --version |
@@ -235,17 +235,6 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And the output should contain:
       | <%= cb.iptables_version_host %> |
-
-    When I run commands on the host:
-      | iptables -S \| wc -l |
-    Then the step should succeed
-    And evaluation of `@result[:stdout].split("\n")[0]` is stored in the :host_rules clipboard
-    #Comparing host and sdn container rules for iptables
-    When I run command on the node's sdn pod:
-      | bash | -c | iptables -S \| wc -l |
-    Then the step should succeed
-    And evaluation of `@result[:stdout].split("\n")[0]` is stored in the :sdn_pod_rules clipboard
-    Then the expression should be true> cb.sdn_pod_rules >= cb.host_rules
 
   # @author huirwang@redhat.com
   # @case_id OCP-25707
