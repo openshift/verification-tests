@@ -32,6 +32,14 @@ check_rolebinding_of_user:
   action:
     if_param: rolebinding
     ref: check_link_and_text
+check_impersonate_user_option_enable:
+  elements:
+  - selector: 
+      xpath: //a[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
+    op: click
+  - selector:
+      xpath: //button[text()='<kebab_item>']
+    op: click
 impersonate_one_user:
   params:
     kebab_item: Impersonate User <resource_name>
@@ -39,7 +47,7 @@ impersonate_one_user:
     filter_text: <resource_name>
   action: goto_users_list_page
   action: set_strings_in_filter_box
-  action: click_one_operation_in_kebab
+  action: check_impersonate_user_option_enable
 check_impersonate_notifications:
   elements:
   - selector:
