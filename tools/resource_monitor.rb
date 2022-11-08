@@ -147,7 +147,7 @@ module BushSlicer
 
       s3_buckets = @amz.s3_list_buckets
       s3_limits_msg = over_limit?(resource_type: "s3 buckets", resource_value: s3_buckets.count, resource_limit: s3_buckets_limits, percentage: 90)
-      limits_msgs << s3_buckets_msg unless s3_limits_msg.nil?
+      limits_msgs << s3_limits_msg unless s3_limits_msg.nil?
       notify_limits(limits_msgs)
       print("VPCS total: #{vpcs_total}\n")
       print("S3 bucket total: #{s3_buckets.count}\n")
