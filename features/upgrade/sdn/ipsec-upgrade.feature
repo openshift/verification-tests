@@ -64,7 +64,7 @@ Feature: IPsec upgrade scenarios
     #capturing tcpdump for 2 seconds
     Given I use the "ipsec-upgrade" project
     When admin executes on the "<%= cb.hostnw_pod_worker0 %>" pod:
-       | sh | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
+       | sh | -c | timeout  --preserve-status 4 tcpdump -i <%= cb.default_interface %> esp |
     Then the step should succeed
     And the output should contain "ESP"
     And admin ensures "hostnw-pod-worker0" pod is deleted from the "ipsec-upgrade" project
@@ -109,7 +109,7 @@ Feature: IPsec upgrade scenarios
     And evaluation of `pod.name` is stored in the :hostnw_pod_worker1 clipboard
     #capturing tcpdump for 2 seconds
     When admin executes on the "<%= cb.hostnw_pod_worker1 %>" pod:
-       | sh | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
+       | sh | -c | timeout  --preserve-status 4 tcpdump -i <%= cb.default_interface %> esp |
     Then the step should succeed
     #Following will confirm pod-pod encryption
     #Example ESP packet un-encrypted will look like 16:37:16.309297 IP ip-10-0-x-x.us-east-2.compute.internal > ip-10-0-x-x.us-east-2.compute.internal: ESP(spi=0xf50c771c,seq=0xfaad)
