@@ -18,13 +18,11 @@ spec:
         capabilities:
           drop:
           - ALL
+        privileged: false
       ports:
         - containerPort: 8080
           protocol: TCP
       resources: {}
-      securityContext:
-        capabilities: {}
-        privileged: false
       terminationMessagePath: /dev/termination-log
       volumeMounts:
         - mountPath: /tmp
