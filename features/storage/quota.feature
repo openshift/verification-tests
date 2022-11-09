@@ -11,7 +11,7 @@ Feature: ResourceQuata for storage
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   Scenario: OCP-14173:Storage Requested storage can not exceed the namespace's storage quota
-    Given I have a project
+    Given I have a project with proper privilege
     And I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
 
