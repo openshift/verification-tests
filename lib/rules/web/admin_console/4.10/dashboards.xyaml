@@ -163,10 +163,15 @@ check_resources_workloads_dashboard:
     dropdown_menu_item: Kubernetes / Compute Resources / Workload
   action: click_dashboard_dropdown
   action: click_dashboard_dropdown_item
+  action: change_to_openshiftapiserver_ns
   action: change_namespace
   action: change_workload
   action: check_chart_loaded
   action: check_no_errors_in_charts
+change_to_openshiftapiserver_ns:
+  params:
+    namespace: openshift-apiserver
+  action: change_namespace
 check_resources_pod_dashboard:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Pod
