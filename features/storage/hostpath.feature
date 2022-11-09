@@ -51,8 +51,8 @@ Feature: Storage of Hostpath plugin testing
       | ls /etc/origin/hostpath/<%= project.name %>/test |
     Then the step should <step_status>
 
-    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+    @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     Examples:
       | case_id          | access_mode   | reclaim_policy | pv_status | step_status |
       | OCP-9639:Storage | ReadWriteOnce | Retain         | released  | succeed     | # @case_id OCP-9639

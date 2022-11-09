@@ -5,10 +5,10 @@ Feature: ipv6 dual stack cluster test scenarios
   @admin
   @network-ovnkubernetes
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @heterogeneous @arm64 @amd64
   Scenario: OCP-40581:SDN Project should be in isolation when using multitenant policy for ipv6 dual stack
     # create project and pods
@@ -89,10 +89,10 @@ Feature: ipv6 dual stack cluster test scenarios
   @admin
   @network-ovnkubernetes
   @4.12 @4.11 @4.10 @4.9
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @heterogeneous @arm64 @amd64
   Scenario: OCP-46816:SDN ipv6 for nodeport service
     Given the cluster is dual stack network type

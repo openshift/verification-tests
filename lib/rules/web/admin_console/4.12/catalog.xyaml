@@ -31,12 +31,23 @@ set_app_name:
   action: set_input_value
 choose_dc_type:
   params:
-    radio_text: openshift
-  action: click_radio_input
+    resource_id: select-option-resources-openshift
+  action: choose_resource_type
 choose_k8s_type:
   params:
-    radio_text: k8s
-  action: click_radio_input
+    resource_id: select-option-resources-kubernetes
+  action: choose_resource_type
+choose_resource_type:
+  params:
+    button_text: Resource type
+  action: click_button
+  elements:
+  - selector:
+      xpath: //button[@id='form-select-input-resources-field']
+    op: click
+  - selector:
+      xpath: //li[@id='<resource_id>']
+    op: click
 open_env_edit_for_dc:
   action: choose_dc_type
   action: open_deployment_env_edit

@@ -91,7 +91,7 @@ set_query_input_text_area:
 choose_metrics_query:
   element:
     selector:
-      xpath: //a[contains(text(),'<metrics_name>')]
+      xpath: //span[contains(text(),'<metrics_name>')]
     op: click
 check_query_input_text_area:
   element:
@@ -133,12 +133,12 @@ choose_zoom_value:
 click_chart_zoom_dropdown:
   element:
     selector:
-      xpath: //div[contains(@class,'query-browser__controls' )]//button[@data-test-id='dropdown-button']
+      xpath: //div[contains(@class,'query-browser__controls' )]//button[@id]
     op: click
 click_zoom_value_button:
   element:
     selector:
-      xpath: //div[contains(@class,'query-browser__controls' )]//button[text()='<zoom_value>']
+      xpath: //div[contains(@class,'query-browser__controls' )]//a[text()='<zoom_value>']
     op: click
 click_reset_zoom_button:
   element:

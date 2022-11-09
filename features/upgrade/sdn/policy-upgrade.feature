@@ -21,8 +21,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
@@ -89,8 +89,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
@@ -204,8 +204,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
@@ -372,8 +372,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
@@ -453,6 +453,7 @@ Feature: SDN compoment upgrade testing
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "conntrack-upgrade" project
+    And the appropriate pod security labels are applied to the "conntrack-upgrade" namespace
     And a pod becomes ready with labels:
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod1 clipboard
@@ -493,10 +494,9 @@ Feature: SDN compoment upgrade testing
     Given I wait up to 20 seconds for the steps to pass:
     """
     And I execute on the pod:
-      | bash | -c | conntrack -L \| grep "<%= cb.host_pod1.ip %>" |
+      | bash | -c | conntrack -L \| grep -w "<%= cb.host_pod1.ip %>" |
     Then the step should succeed
-    And the output should match:
-      |<%= cb.host_pod1.ip %>|
+    And the output should match "<%= cb.host_pod1.ip %> "
     """
     #Deleting the udp listener pod which will trigger a new udp listener pod with new IP
     Given I ensure "<%= cb.host_pod1.name %>" pod is deleted
@@ -516,11 +516,11 @@ Feature: SDN compoment upgrade testing
     Given I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.network_pod %>" pod:
-      | bash | -c | conntrack -L \| grep "<%= cb.host_pod2.ip %>" |
-    Then the output should match "<%= cb.host_pod2.ip %>"
-    And the output should not match "<%= cb.host_pod1.ip %>"
+      | bash | -c | conntrack -L \| grep -w "<%= cb.host_pod2.ip %>" |
+    Then the output should match "<%= cb.host_pod2.ip %> "
+    And the output should not match "<%= cb.host_pod1.ip %> "
     """
-
+    
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
@@ -638,8 +638,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.12 @4.11 @4.10 @4.9
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @destructive
   @network-ovnkubernetes @network-networkpolicy
   @upgrade

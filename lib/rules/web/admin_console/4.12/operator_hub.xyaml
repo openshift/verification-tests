@@ -66,10 +66,9 @@ set_k8s_resource:
     label_text: K8s Resource Prefix
     filter_text: <k8s_resource>
   action: click_label_dropdown_button
-  action: set_strings_in_dropdown_filter_box
   elements:
   - selector:
-      xpath: //ul//a[@id='<k8s_resource>-Project-link' and contains(@class,'dropdown__menu-item')]
+      xpath: //ul//a[@id='<k8s_resource>-Project-link']
     op: click
 set_pod_count:
   params:

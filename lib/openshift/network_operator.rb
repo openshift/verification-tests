@@ -22,7 +22,7 @@ module BushSlicer
       rr.dig('spec', 'clusterNetwork')
     end
 
-    def default_network(user: nil, cached: true, quiet: false)
+    def ovn_kubernetes_config(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('spec', 'defaultNetwork', 'ovnKubernetesConfig')
     end
