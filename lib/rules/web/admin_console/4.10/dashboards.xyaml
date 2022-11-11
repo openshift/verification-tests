@@ -159,19 +159,9 @@ check_dashboard_dropdown_items:
   action: check_dashboard_use_method_node
   action: click_dashboard_dropdown
 check_resources_workloads_dashboard:
-  params:
-    dropdown_menu_item: Kubernetes / Compute Resources / Workload
-  action: click_dashboard_dropdown
-  action: click_dashboard_dropdown_item
-  action: change_to_openshiftapiserver_ns
-  action: change_namespace
-  action: change_workload
+  url: /monitoring/dashboards/grafana-dashboard-k8s-resources-workload?namespace=openshift-console&type=deployment&workload=downloads
   action: check_chart_loaded
   action: check_no_errors_in_charts
-change_to_openshiftapiserver_ns:
-  params:
-    namespace: openshift-apiserver
-  action: change_namespace
 check_resources_pod_dashboard:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Pod
