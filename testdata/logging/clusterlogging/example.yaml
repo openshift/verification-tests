@@ -10,11 +10,8 @@ spec:
     elasticsearch:
       nodeCount: 1
       resources:
-        limits:
-          memory: 2Gi
         requests:
-          cpu: 100m
-          memory: 1Gi
+          memory: 2Gi
       storage: {}
       redundancyPolicy: "ZeroRedundancy"
   visualization:

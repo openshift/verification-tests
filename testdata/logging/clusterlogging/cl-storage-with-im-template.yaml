@@ -26,8 +26,7 @@ objects:
             nodeCount: ${{ES_NODE_COUNT}}
             resources:
               requests:
-                cpu: 100m
-                memory: 1Gi
+                memory: ${ES_REQUESTS_MEMORY}
             storage:
               storageClassName: "${STORAGE_CLASS}"
               size: "${PVC_SIZE}"
@@ -50,3 +49,5 @@ parameters:
     value: "1"
   - name: REDUNDANCY_POLICY
     value: "ZeroRedundancy"
+  - name: ES_REQUESTS_MEMORY
+    value: "2Gi"

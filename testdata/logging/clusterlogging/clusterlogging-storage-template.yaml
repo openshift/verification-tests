@@ -19,8 +19,7 @@ objects:
             nodeCount: ${{ES_NODE_COUNT}}
             resources:
               requests:
-                cpu: 100m
-                memory: 1Gi
+                memory: 2Gi
             storage:
               storageClassName: "${STORAGE_CLASS}"
               size: "${PVC_SIZE}"

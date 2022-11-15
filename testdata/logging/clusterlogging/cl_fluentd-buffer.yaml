@@ -26,11 +26,8 @@ spec:
       nodeCount: 1
       redundancyPolicy: ZeroRedundancy
       resources:
-        limits:
-          memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 1Gi
+          memory: 2Gi
       storage: {}
     type: elasticsearch
   managementState: Managed
