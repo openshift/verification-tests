@@ -21,7 +21,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @proxy @noproxy @disconnected @connected
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -55,7 +55,7 @@ Feature: Machine-api components upgrade tests
   # @case_id OCP-43331
   @upgrade-check
   @admin
-  @4.12 @4.11 @4.10 @4.9
+  @4.13 @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
@@ -78,9 +78,8 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @admin
   @4.10 @4.9 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
@@ -114,8 +113,8 @@ Feature: Machine-api components upgrade tests
   @admin
   @destructive
   @disconnected @connected
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
@@ -128,7 +127,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @proxy @noproxy @disconnected @connected
   @upgrade
@@ -202,7 +201,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @arm64 @amd64 @heterogeneous
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
@@ -240,8 +239,8 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @destructive
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -263,7 +262,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
@@ -315,8 +314,8 @@ Feature: Machine-api components upgrade tests
 
   @upgrade-prepare
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -328,7 +327,7 @@ Feature: Machine-api components upgrade tests
   # @case_id OCP-39845
   @upgrade-check
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
