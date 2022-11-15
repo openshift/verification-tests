@@ -1,0 +1,137 @@
+# logs page
+click_dropdown_button:
+  element:
+    selector:
+      xpath: //button[contains(@data-test-id, 'dropdown-button')]
+    op: click
+switch_to_container:
+  params:
+    dropdown_item: <container_name>
+  action: click_dropdown_button
+  action: wait_dropdown_loaded
+  action: click_one_item
+wait_log_window_loaded:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'log-window')]
+    timeout: 30
+  - selector:
+      xpath: //div[contains(@class,'pf-c-log-viewer__main')]
+    timeout: 30
+check_log_content_contains:
+  element:
+    selector:
+      xpath: //span[contains(@class,'text') and contains(.,'<log_content>')]
+    timeout: 30
+check_download_logfile_name:
+  element:
+    selector:
+      xpath: //a[@download='<pod_name>-<container_name>.log']
+check_some_context_missing_in_expanded_log_view:
+  elements:
+  - selector: &expand_button
+      xpath: //button[contains(.,'Expand')]
+    missing: true
+check_required_context_shown_in_expanded_log_view:
+  elements:
+  - selector: &download_button
+      xpath: //a[contains(.,'Download')]
+  - selector: &collapse_button
+      xpath: //button[contains(.,'Collapse')]
+  - selector: &toggle_steaming_paused_button
+      xpath: //button[contains(@class,'co-toggle-play')]
+  - selector: &container_dropdown_button
+      xpath: //button[contains(@class,'dropdown__toggle')]
+check_required_context_shown_in_collapsed_log_view:
+  elements:
+  - selector:
+      <<: *download_button
+  - selector:
+      <<: *toggle_steaming_paused_button
+  - selector:
+      <<: *container_dropdown_button
+  - selector:
+      xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), 'Logs')]
+  - selector:
+      xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), 'Details')]
+check_some_context_missing_in_collapsed_log_view:
+  elements:
+  - selector:
+      <<: *collapse_button
+    missing: true
+expand_log:
+  params:
+    button_text: Expand
+  action: click_button
+collapse_log:
+  element:
+    selector:
+      <<: *collapse_button
+    op: click
+pause_log_streaming:
+  element:
+    selector:
+      xpath: //button[@aria-label='Pause event streaming']
+    op: click
+resume_log_streaming:
+  element:
+    selector:
+      xpath: //button[@aria-label='Start streaming events']
+    op: click
+check_log_streaming_is_paused:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-toolbar__item') and contains(.,'Log stream paused')]
+  - selector: &resume_button
+      xpath: //button[contains(.,'Resume stream')]
+check_log_streaming_is_resumed:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-toolbar__item') and contains(.,'Log streaming')]
+check_log_streaming_is_ended:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-toolbar__item') and contains(.,'Log stream ended')]
+check_event_is_streaming:
+  elements:
+  - selector:
+      xpath: //span[contains(.,'Streaming events')]
+check_logs_not_wrapped:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'pf-c-log-viewer__scroll-container') and contains(@style,'auto')]
+check_logs_wrapped:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'pf-c-log-viewer__scroll-container') and contains(@style,'hidden')]
+toggle_log_wraps:
+  element:
+    selector:
+      xpath: //input[@id='wrapLogLines']
+    op: click
+check_logs_history_not_present:
+  elements:
+  - selector:
+      xpath: //button[@disabled]//span[text()='Current log']
+  - selector:
+      xpath: //div[@class='pf-c-select']
+    op: hover
+  - selector:
+      xpath: //div[@class='pf-c-tooltip__content' and contains(text(),'Only the current log is available')]
+check_logs_history_is_present:
+  elements:
+  - selector:
+      xpath: //button//span[text()='Current log']
+  - selector:
+      xpath: //div[@class='pf-c-select']
+    op: click
+  - selector:
+      xpath: //button[@class='pf-c-select__menu-item pf-m-selected' and contains(text(),'Current log')]
+  - selector:
+      xpath: //button[@class='pf-c-select__menu-item' and contains(text(),'Previous log')]
+    op: click
+check_logs_option_not_present:
+  elements:
+  - selector:
+      xpath: //button//span[text()='Current log']
+    missing: true
