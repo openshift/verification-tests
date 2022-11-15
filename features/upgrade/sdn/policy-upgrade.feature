@@ -3,9 +3,9 @@ Feature: SDN compoment upgrade testing
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
@@ -20,7 +20,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-22707
   @admin
   @upgrade-check
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
@@ -44,9 +44,9 @@ Feature: SDN compoment upgrade testing
   # @author zzhao@redhat.com
   @admin
   @upgrade-prepare
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
@@ -88,7 +88,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-22735
   @admin
   @upgrade-check
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
@@ -111,9 +111,9 @@ Feature: SDN compoment upgrade testing
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
@@ -203,7 +203,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-38751
   @admin
   @upgrade-check
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
@@ -280,8 +280,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-prepare
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
@@ -407,7 +407,7 @@ Feature: SDN compoment upgrade testing
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @azure-upi @aws-upi
   @azure-ipi @aws-ipi
   @upgrade
@@ -443,7 +443,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-44901
   @admin
   @upgrade-check
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @azure-upi @aws-upi
   @azure-ipi @aws-ipi
   @upgrade
@@ -525,8 +525,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-prepare
   @4.12 @4.11 @4.10 @4.9
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @destructive
   @network-ovnkubernetes @network-networkpolicy
   @upgrade

@@ -5,12 +5,12 @@ Feature: basic verification for upgrade oc client testing
   @users=upuser1,upuser2
   @singlenode
   @connected
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @admin
   @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   Scenario: Check some container related oc commands still work after upgrade - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -65,9 +65,9 @@ Feature: basic verification for upgrade oc client testing
   # @author yinzhou@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @admin
   @proxy @noproxy @connected
@@ -88,7 +88,7 @@ Feature: basic verification for upgrade oc client testing
   @upgrade-check
   @admin
   @users=upuser1,upuser2
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode

@@ -3,11 +3,11 @@ Feature: fips enabled verification for upgrade
   # @author xiyuan@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
-  @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @fips
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @admin
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
@@ -52,9 +52,9 @@ Feature: fips enabled verification for upgrade
   # @case_id OCP-25821
   @upgrade-check
   @users=upuser1,upuser2
-  @admin
   @fips
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @admin
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected

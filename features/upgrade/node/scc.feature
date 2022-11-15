@@ -3,9 +3,9 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   # @author sunilc@redhat.com
   @upgrade-prepare
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
@@ -22,7 +22,7 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   # @case_id OCP-13065
   @upgrade-check
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
