@@ -4,7 +4,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   # @case_id OCP-26360
   @admin
   @network-ovnkubernetes
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64

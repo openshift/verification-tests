@@ -2,7 +2,7 @@ Feature: Check status via oc status, wait etc
 
   # @author yapei@redhat.com
   # @case_id OCP-11147
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
