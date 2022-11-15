@@ -2,7 +2,7 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-12543
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -41,7 +41,7 @@ Feature: deployment related features
   # @author xxing@redhat.com
   # @case_id OCP-10643
   @smoke
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -87,7 +87,7 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-11695
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -136,7 +136,7 @@ Feature: deployment related features
       | [tT]ype:\\s+ConfigChange |
 
   # @author xxing@redhat.com
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: CLI rollback two more components of deploymentconfig
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -194,7 +194,7 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-11877
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -245,7 +245,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12133
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -287,7 +287,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12246
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -318,7 +318,7 @@ Feature: deployment related features
 
   # @author cryan@redhat.com
   # @case_id OCP-10648
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -581,7 +581,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-11939
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -649,7 +649,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11769
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -677,7 +677,7 @@ Feature: deployment related features
 
   # @author cryan@redhat.com
   # @case_id OCP-12151
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -734,7 +734,7 @@ Feature: deployment related features
   # @author yinzhou@redhat.com
   # @case_id OCP-10617
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -777,7 +777,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11221
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -951,7 +951,7 @@ Feature: deployment related features
   # @author haowang@redhat.com
   # @case_id OCP-16443
   @proxy
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -974,7 +974,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-31200
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity

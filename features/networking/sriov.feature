@@ -694,7 +694,7 @@ Feature: Sriov related scenarios
   # @case_id OCP-25321
   @destructive
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @baremetal-ipi
   @baremetal-upi
   @singlenode

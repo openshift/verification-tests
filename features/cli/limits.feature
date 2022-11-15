@@ -4,7 +4,7 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   @admin
   @inactive
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Limit range default request tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -36,7 +36,7 @@ Feature: limit range related scenarios:
   # @author pruan@redhat.com
   # @author azagayno@redhat.com
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Limit range invalid values tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -67,7 +67,7 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12286
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Limit range incorrect values
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -94,7 +94,7 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12250
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -117,7 +117,7 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-11918
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -140,7 +140,7 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12043
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -163,7 +163,7 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12139
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -195,7 +195,7 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12315
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
