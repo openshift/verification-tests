@@ -11,8 +11,7 @@ spec:
       nodeCount: 1
       resources:
         requests:
-          cpu: 100m
-          memory: 1Gi
+          memory: 2Gi
       storage:
         storageClassName: "gp2"
         size: "10Gi"
@@ -21,10 +20,6 @@ spec:
     type: "kibana"
     kibana:
       replicas: 1
-  curation:
-    type: "curator"
-    curator:
-      schedule: "*/10 * * * *"
   collection:
     logs:
       type: "fluentd"

@@ -398,7 +398,7 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
     when '4.12'
-      cb[cb_name] = "stable-5.6"
+      cb[cb_name] = "stable"
     when '4.11'
       cb[cb_name] = "stable-5.5"
     when '4.10'
@@ -788,7 +788,11 @@ Given /^I make sure the logging operators match the cluster version$/ do
   step %Q/I use the "openshift-operators-redhat" project/
   eo_current_channel = subscription("elasticsearch-operator").channel(cached: false)
   eo_current_catsrc = subscription("elasticsearch-operator").source
-  if cb.eo_channel != eo_current_channel || cb.eo_catsrc != eo_current_catsrc
+  # in https://gitlab.cee.redhat.com/aosqe/jenkins-jcasc-n/-/blob/master/scripts/OCPQE-11466/upgrade_cluster_logging.sh#L9-10
+  # the channel is set to stable-5.6 when testing on OCP 4.12
+  # to avoid hitting issues like https://issues.redhat.com//browse/OCPQE-8932
+  # skip upgrade when current channel is stable-5.6
+  if eo_current_channel != "stable-5.6" && (cb.eo_channel != eo_current_channel || cb.eo_catsrc != eo_current_catsrc)
     upgrade_eo = true
     step %Q/I upgrade the operator with:/, table(%{
       | namespace    | openshift-operators-redhat |
@@ -804,7 +808,8 @@ Given /^I make sure the logging operators match the cluster version$/ do
   step %Q/I use the "openshift-logging" project/
   clo_current_channel = subscription("cluster-logging").channel(cached: false)
   clo_current_catsrc = subscription("cluster-logging").source
-  if clo_current_channel != cb.clo_channel || cb.clo_catsrc != clo_current_catsrc
+  # skip upgrade when current channel is stable-5.6
+  if clo_current_channel != "stable-5.6" && (clo_current_channel != cb.clo_channel || cb.clo_catsrc != clo_current_catsrc)
     upgrade_clo = true
     step %Q/I upgrade the operator with:/, table(%{
       | namespace    | openshift-logging |

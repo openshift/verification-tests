@@ -7,7 +7,7 @@ spec:
   managementState: "Managed"
   logStore:
     type: "elasticsearch"
-    retentionPolicy: 
+    retentionPolicy:
       application:
         maxAge: 9m
       infra:
@@ -19,8 +19,7 @@ spec:
       redundancyPolicy: "ZeroRedundancy"
       resources:
         requests:
-          cpu: 100m
-          memory: "1Gi"
+          memory: "2Gi"
       storage: {}
   visualization:
     type: "kibana"

@@ -6,7 +6,7 @@ Feature: Logging smoke test case
   @serial
   @console
   @rosa
-  @aro 
+  @aro
   @osd_ccs
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
