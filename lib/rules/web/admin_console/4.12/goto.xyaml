@@ -272,7 +272,7 @@ goto_one_report_page:
 
 #node
 goto_node_page:
-  url: k8s/cluster/nodes
+  url: k8s/cluster/core~v1~Node
 goto_one_node_page:
   url: k8s/cluster/nodes/<node_name>
   action: wait_page_body_loaded
