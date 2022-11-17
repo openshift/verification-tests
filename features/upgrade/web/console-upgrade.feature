@@ -13,6 +13,7 @@ Feature: web console related upgrade check
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: check console accessibility - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -65,6 +66,7 @@ Feature: web console related upgrade check
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

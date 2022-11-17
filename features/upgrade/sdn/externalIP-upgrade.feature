@@ -9,6 +9,7 @@ Feature: SDN externalIP compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
   Scenario: Check the externalIP works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
@@ -58,6 +59,7 @@ Feature: SDN externalIP compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
   Scenario: Check the externalIP works well after upgrade
     Given I switch to cluster admin pseudo user
     # Get the external ip from  service

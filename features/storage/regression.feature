@@ -10,6 +10,7 @@ Feature: Regression testing cases
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-16485:Storage RWO volumes are exclusively mounted on different nodes
     Given I have a project
     Given I store the schedulable workers in the :workers clipboard

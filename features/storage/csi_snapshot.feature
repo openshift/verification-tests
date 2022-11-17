@@ -73,6 +73,7 @@ Feature: Volume snapshot test
 
     @openstack-ipi
     @openstack-upi
+    @hypershift-hosted
     Examples:
       | case_id           | csi-sc       | csi-vsc      |
       | OCP-37568:Storage | standard-csi | standard-csi | # @case_id OCP-37568
@@ -146,6 +147,7 @@ Feature: Volume snapshot test
 
     @openstack-ipi
     @openstack-upi
+    @hypershift-hosted
     Examples:
       | case_id           | csi-sc       | csi-vsc      |
       | OCP-37569:Storage | standard-csi | standard-csi | # @case_id OCP-37569

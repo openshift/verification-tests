@@ -17,6 +17,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-27615:Storage Clone a PVC and verify data consistency
     # Step 1
     Given the master version >= "4.7"
@@ -64,6 +65,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-27689:Storage Cinder CSI Clone Clone a pvc with capacity greater than original pvc
     Given I have a project
     # Create mypvc-ori with 1Gi size
@@ -119,6 +121,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-27690:Storage Cinder CSI Clone Clone a pvc with capacity less than original pvc will fail
     Given I have a project
     # Create mypvc-ori with 2Gi size
@@ -173,6 +176,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-30315:Storage Cinder CSI clone Clone a pvc with block VolumeMode successfully
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -232,6 +236,7 @@ Feature: CSI clone testing related feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-27617:Storage Cinder CSI Clone Clone a pvc with default storageclass
     Given default storage class is patched to non-default
     And admin clones storage class "my-csi-default" from "standard-csi" with:

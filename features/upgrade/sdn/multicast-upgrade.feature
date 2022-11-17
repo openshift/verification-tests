@@ -9,6 +9,7 @@
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
   Scenario: Check the multicast works well after upgrade - prepare
     # create some multicast testing pods
     Given I switch to cluster admin pseudo user
@@ -101,6 +102,7 @@
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
   Scenario: Check the multicast works well after upgrade
     Given the cluster is not migration from sdn plugin
     Given I switch to cluster admin pseudo user

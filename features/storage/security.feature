@@ -125,6 +125,7 @@ Feature: storage security check
 
     @openstack-ipi
     @openstack-upi
+    @hypershift-hosted
     Examples:
       | case_id          | storage_type | volume_name | type   |
       | OCP-9721:Storage | cinder       | volumeID    | cinder | # @case_id OCP-9721
@@ -140,6 +141,7 @@ Feature: storage security check
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-9709:Storage secret volume security check
     Given I have a project with proper privilege
     Given I obtain test data file "storage/secret/secret.yaml"

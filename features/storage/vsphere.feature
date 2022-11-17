@@ -61,6 +61,7 @@ Feature: vSphere test scenarios
 
     @vsphere-ipi
     @vsphere-upi
+    @hypershift-hosted
     Examples:
       | case_id           | disk_format      |
       | OCP-13386:Storage | thin             | # @case_id OCP-13386
@@ -77,6 +78,7 @@ Feature: vSphere test scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-13389:Storage Dynamically provision a vSphere volume with invalid disk format
     Given I have a project
     Given I obtain test data file "storage/vsphere/storageclass.yml"

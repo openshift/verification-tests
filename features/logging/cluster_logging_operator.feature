@@ -14,6 +14,7 @@ Feature: cluster-logging-operator related test
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-21333:Logging ServiceMonitor Object for collector is deployed along with cluster logging
     # start from logging 5.5, the ds/collector is recreated several times when deploy clusterlogging
     # here add a step to wait for index infra to appear in ES before checking servicemonitor to appear
@@ -166,6 +167,7 @@ Feature: cluster-logging-operator related test
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-33721:Logging OpenShift Logging dashboard
     Given I switch to the first user
     And the first user is cluster-admin

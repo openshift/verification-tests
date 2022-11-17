@@ -48,6 +48,7 @@ Feature: SDN related networking scenarios
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-11286:SDN iptables rules will be repaired automatically once it gets destroyed
     # we do not detect incomplete rule removal since ~4.3, BZ-1810316
     # so only test on >= 4.3
@@ -90,6 +91,7 @@ Feature: SDN related networking scenarios
   @proxy @noproxy @connected
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-13847:SDN an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
     Given the master version >= "3.6"
     Given the env is using "OpenShiftSDN" networkType
@@ -200,6 +202,7 @@ Feature: SDN related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-18535:SDN should not show "No such device" message when run "ovs-vsctl show" command
     Given I have a project
     And I have a pod-for-ping in the project
@@ -223,6 +226,7 @@ Feature: SDN related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-23543:SDN The iptables binary on sdn containers should be the same as host
     Given I select a random node's host
     When I run commands on the host:
@@ -419,6 +423,7 @@ Feature: SDN related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-25933:SDN NetworkManager should consider OVS interfaces as unmanaged
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
@@ -488,6 +493,7 @@ Feature: SDN related networking scenarios
   @proxy @noproxy @disconnected @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-36287:SDN Netnamespace should be recreated after deleting it before the project is deleted
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -508,6 +514,7 @@ Feature: SDN related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-41132:SDN UDP offloads were disabled on vsphere platform
     Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host
@@ -528,6 +535,7 @@ Feature: SDN related networking scenarios
   @proxy @noproxy @disconnected @connected
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-43146:SDN Disable conntrack for vxlan traffic
     Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host

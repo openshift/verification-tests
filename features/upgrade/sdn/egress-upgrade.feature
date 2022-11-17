@@ -10,6 +10,7 @@ Feature: Egress compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn
   @upgrade
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check egressfirewall is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
@@ -50,6 +51,7 @@ Feature: Egress compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check egressfirewall is functional post upgrade
     Given the cluster is not migration from sdn plugin
     Given I switch to cluster admin pseudo user
@@ -81,6 +83,7 @@ Feature: Egress compoment upgrade testing
   @upgrade
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check ovn egressip is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I save ipecho url to the clipboard
@@ -140,6 +143,7 @@ Feature: Egress compoment upgrade testing
   @upgrade
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
@@ -184,6 +188,7 @@ Feature: Egress compoment upgrade testing
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check sdn egressip is functional post upgrade - prepare
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -257,6 +262,7 @@ Feature: Egress compoment upgrade testing
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check sdn egressip is functional post upgrade
     Given the cluster is not migration from sdn plugin		
     Given the env is using "OpenShiftSDN" networkType

@@ -8,6 +8,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-26360:SDN Ensure Pods and Service communication across window and linux nodes
     Given the env is using windows nodes
     Given I have a project
@@ -64,6 +65,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-37519:SDN Create Loadbalancer service for a window container
     Given the env is using windows nodes
     Given I have a project

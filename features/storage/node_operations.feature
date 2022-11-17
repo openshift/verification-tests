@@ -62,6 +62,7 @@ Feature: Node operations test scenarios
       | case_id           | cloud_provider |
       | OCP-15276:Storage | cinder         | # @case_id OCP-15276
 
+    @hypershift-hosted
     Examples:
       | case_id           | cloud_provider |
       | OCP-15283:Storage | aws-ebs        | # @case_id OCP-15283

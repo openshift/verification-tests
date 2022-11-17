@@ -31,6 +31,7 @@ Feature: Node proxy configuration tests
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
+    @hypershift-hosted
     Examples:
       | case_id        | file                                                      |
       | OCP-24429:Node | /etc/systemd/system/kubelet.service.d/10-default-env.conf | # @case_id OCP-24429

@@ -10,6 +10,7 @@ Feature: service upgrade scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check the idle service works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -43,6 +44,7 @@ Feature: service upgrade scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check the idle service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "idle-upgrade" project
@@ -74,6 +76,7 @@ Feature: service upgrade scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check the nodeport service works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -116,6 +119,7 @@ Feature: service upgrade scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check the nodeport service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "nodeport-upgrade" project

@@ -280,6 +280,7 @@ Feature: Testing abrouting
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-15910:NetworkEdge Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -368,6 +369,7 @@ Feature: Testing abrouting
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-15994:NetworkEdge Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
     Given I switch to cluster admin pseudo user
     And I use the router project

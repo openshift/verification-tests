@@ -10,6 +10,7 @@ Feature: oc idle
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-11633:Node CLI - Idle all the service in the same project
     Given I have a project
     Given I obtain test data file "rc/idle-rc-1.yaml"
@@ -61,6 +62,7 @@ Feature: oc idle
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-11980:Node CLI - Idle service by label
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -105,6 +107,7 @@ Feature: oc idle
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-12085:Node CLI - Idle service from file
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -154,6 +157,7 @@ Feature: oc idle
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-12169:Node CLI - Idle service with dry-run
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"

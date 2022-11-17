@@ -62,6 +62,7 @@ Feature: permission related test
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-30356:Logging Normal User can only view project owned by himself
     Given I switch to the first user
     And evaluation of `user.cached_tokens.first` is stored in the :user_token clipboard
@@ -113,6 +114,7 @@ Feature: permission related test
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-30359:Logging cluster-admin view all projects
     Given I switch to the first user
     Given I create a project with non-leading digit name

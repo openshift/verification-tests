@@ -13,6 +13,7 @@ Feature: creating 'apps' with CLI
   @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-11761:Authentication Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/pod_with_special_fsGroup.json"

@@ -58,6 +58,7 @@ Feature: CSI Resizing related feature
 
     @openstack-ipi
     @openstack-upi
+    @hypershift-hosted
     Examples:
       | case_id           | sc_name      |
       | OCP-37559:Storage | standard-csi | # @case_id OCP-37559
@@ -96,6 +97,7 @@ Feature: CSI Resizing related feature
 
     @aws-ipi
     @aws-upi
+    @hypershift-hosted
     Examples:
       | case_id           | sc_name |
       | OCP-25809:Storage | gp2-csi | # @case_id OCP-25809

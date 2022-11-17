@@ -11,6 +11,7 @@ Feature: oc patch/apply related scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-10696:Workloads oc patch can update one or more fields of rescource
     Given I have a project
     And I run the :create_deploymentconfig client command with:

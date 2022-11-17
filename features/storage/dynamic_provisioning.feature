@@ -81,6 +81,7 @@ Feature: Dynamic provisioning
 
     @openstack-ipi
     @openstack-upi
+    @hypershift-hosted
     Examples:
       | case_id          | cloud_provider |
       | OCP-9656:Storage | cinder         | # @case_id OCP-9656

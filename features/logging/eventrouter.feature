@@ -44,6 +44,7 @@ Feature: eventrouter related test
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
+    @hypershift-hosted
     Examples:
     | case_id           | index_name  |
     | OCP-25899:Logging | .operations | # @case_id OCP-25899

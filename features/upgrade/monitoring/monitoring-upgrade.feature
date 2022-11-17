@@ -11,6 +11,7 @@ Feature: cluster monitoring related upgrade check
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: upgrade cluster monitoring along with OCP - prepare
     Given I switch to cluster admin pseudo user
     Given I obtain test data file "monitoring/upgrade/cm-monitoring-retention.yaml"
@@ -30,6 +31,7 @@ Feature: cluster monitoring related upgrade check
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
