@@ -71,11 +71,15 @@ check_memory_data_for_one_project_in_table:
   params:
     resource_name: <project_name>
     data: MiB
+    filter_text: <project_name>
+  action: filter_by_name
   action: check_resource_data_in_table
 check_cpu_data_for_one_project_in_table:
   params:
     resource_name: <project_name>
     data: cores
+    filter_text: <project_name>
+  action: filter_by_name
   action: check_resource_data_in_table
 set_strings_in_project_dropdown_filter_box:
   elements:

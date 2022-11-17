@@ -687,7 +687,7 @@ click_filesystem_chart:
     selector:
       <<: *filesystem_chart
     op: click
-check_charts_on_deployment_page: {}
+check_charts_on_daemonset_page: {}
 check_charts_on_pod_page:
   action: click_metrics_tab
   elements:
@@ -729,11 +729,11 @@ check_monitoring_dashboard_card:
     selector:
       xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='<card_name>']
     timeout: 60
-check_metrics_under_deployment_observe_tab:
+check_charts_on_workload_observe:
   action: goto_project_topology_page
-  action: open_deployment_sidebar
+  action: open_workload_sidebar
   action: check_metrics_on_observe_tab
-open_deployment_sidebar:
+open_workload_sidebar:
   element:
     selector:
       xpath: //div[contains(text(), '<deployment_name>')]
