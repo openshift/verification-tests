@@ -78,10 +78,6 @@ click_dashboard_dropdown_item:
     selector:
       <<: *dashboard_dropdown_item
     op: click
-check_dashboard_etcd:
-  params:
-    dropdown_menu_item: etcd
-  action: check_dashboard_dropdown_item
 check_dashboard_kubernetes_compute_resources_cluster:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Cluster
@@ -146,7 +142,6 @@ change_workload:
   action: click_button_text
 check_dashboard_dropdown_items:
   action: click_dashboard_dropdown
-  action: check_dashboard_etcd
   action: check_dashboard_kubernetes_compute_resources_cluster
   action: check_dashboard_kubernetes_compute_resources_namespace_pods
   action: check_dashboard_kubernetes_compute_resources_namespace_workloads
