@@ -14,6 +14,7 @@ Feature: Logging upgrading related features
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @amd64
+  @hypershift-hosted
   Scenario: Cluster logging checking during cluster upgrade - prepare
     Given logging service is removed successfully
     And I check if the remaining_resources in woker nodes meet the requirements for logging stack
@@ -59,6 +60,7 @@ Feature: Logging upgrading related features
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @amd64
+  @hypershift-hosted
   Scenario: Cluster logging checking during cluster upgrade
     Given I switch to the first user
     Given I create a project with non-leading digit name

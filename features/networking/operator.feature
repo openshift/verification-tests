@@ -10,6 +10,7 @@ Feature: Operator related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-22704:SDN The clusteroperator should be able to reflect the network operator version corresponding to the OCP version
 
     Given the master version > "3.11"
@@ -31,6 +32,7 @@ Feature: Operator related networking scenarios
   @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @hypershift-hosted
   Scenario: OCP-22706:SDN The clusteroperator should be able to reflect the correct version field post bad network operator config
 
     Given the master version >= "4.1"
@@ -79,6 +81,7 @@ Feature: Operator related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-22201:SDN Should have a clusteroperator object created under config.openshift.io api group for network-operator
     Given the master version >= "4.1"
     # Check the operator object has version
@@ -185,6 +188,7 @@ Feature: Operator related networking scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-24918:SDN Service should not get unidle when config flag is disabled under CNO
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -272,6 +276,7 @@ Feature: Operator related networking scenarios
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-21574:SDN Should not allow to change the openshift-sdn config
     #Trying to change network mode to Subnet or any other
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
@@ -308,6 +313,7 @@ Feature: Operator related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-25856:SDN CNO should delete non-relevant resources
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
@@ -392,6 +398,7 @@ Feature: Operator related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-27333:SDN Changing mtu in CNO should not be allowed
     Given the mtu value "1750" is patched in CNO config according to the networkType
     And admin uses the "openshift-network-operator" project

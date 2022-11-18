@@ -10,6 +10,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-9747:SDN Pod cannot claim UDP port 4789 on the node as part of a port mapping
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -37,6 +38,7 @@ Feature: Pod related networking scenarios
   @admin
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-10031:SDN Container could reach the dns server
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -62,6 +64,7 @@ Feature: Pod related networking scenarios
   @proxy @noproxy @connected
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-14986:SDN The openflow list will be cleaned after delete the pods
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -163,6 +166,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-23890:SDN A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -226,6 +230,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-23893:SDN A pod in a namespace with an egress IP cannot access the MCS
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -295,6 +300,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-21846:SDN ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
@@ -347,6 +353,7 @@ Feature: Pod related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-26822:SDN 4.x Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given I store the workers in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
@@ -437,6 +444,7 @@ Feature: Pod related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @hypershift-hosted
   Scenario: OCP-25294:SDN Pod should be accesible via node ip and host port
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
@@ -506,6 +514,7 @@ Feature: Pod related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-26014:SDN Pod readiness check for OVN
     Given the env is using "OVNKubernetes" networkType
     And OVN is functional on the cluster
@@ -607,6 +616,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-22034:SDN Check the unused ip are released after node reboot
     Given the env is using "OpenShiftSDN" networkType
     Given I store the workers in the :workers clipboard

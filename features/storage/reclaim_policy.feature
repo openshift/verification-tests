@@ -57,6 +57,7 @@ Feature: Persistent Volume reclaim policy tests
 
     @openstack-ipi
     @openstack-upi
+    @hypershift-hosted
     Examples:
       | case_id          | storage_type | volume_name | path   | file                |
       | OCP-9944:Storage | cinder       | volumeID    | cinder | pv-rwx-default.json | # @case_id OCP-9944

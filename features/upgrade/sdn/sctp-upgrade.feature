@@ -9,6 +9,7 @@ Feature: SDN sctp compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
   Scenario: Check the sctp works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     And the cluster has workers for sctp
@@ -78,6 +79,7 @@ Feature: SDN sctp compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
   Scenario: Check the sctp works well after upgrade
     Given I switch to cluster admin pseudo user
     And the cluster has workers for sctp

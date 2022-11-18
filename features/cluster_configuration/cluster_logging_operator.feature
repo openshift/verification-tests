@@ -12,6 +12,7 @@ Feature: cluster logging related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-21311:Logging Deploy Logging Via Community Operators
     Given logging service has been installed successfully
 

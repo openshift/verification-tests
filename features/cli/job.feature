@@ -9,6 +9,7 @@ Feature: job.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-11206:Workloads Create job with multiple completions
     Given I have a project
     Given I obtain test data file "templates/ocp11206/job.yaml"
@@ -60,6 +61,7 @@ Feature: job.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-11539:Workloads Create job with pod parallelism
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -184,6 +186,7 @@ Feature: job.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-9952:Workloads Specifying your own pod selector for job
     Given I have a project
     Given I obtain test data file "job/job-manualselector.yaml"
@@ -318,6 +321,7 @@ Feature: job.feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-10781:Workloads Create job with specific deadline
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -378,6 +382,7 @@ Feature: job.feature
   @singlenode
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-17515:Workloads User can schedule a Cronjob execution with cron format time
     Given I have a project
     When I run the :create_cronjob client command with:

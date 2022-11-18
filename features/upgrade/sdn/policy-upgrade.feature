@@ -10,6 +10,7 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: network operator should be available after upgrade - prepare
   # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
   # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -27,6 +28,7 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-network-operator" project
@@ -51,6 +53,7 @@ Feature: SDN compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check the networkpolicy works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -95,6 +98,7 @@ Feature: SDN compoment upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check the networkpolicy works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade" project
@@ -118,6 +122,7 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check the namespace networkpolicy for an application works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -210,6 +215,7 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project
@@ -286,6 +292,7 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -378,6 +385,7 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade3" project
@@ -414,6 +422,7 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I store the workers in the :nodes clipboard
@@ -450,6 +459,7 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "conntrack-upgrade" project
@@ -531,6 +541,7 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-networkpolicy
   @upgrade
   @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
   Scenario: Check network policy ACL logging works post upgrade -prepare
     Given I switch to cluster admin pseudo user
     Given the env is using "OVNKubernetes" networkType
@@ -644,6 +655,7 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-networkpolicy
   @upgrade
   @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
   Scenario: Check network policy ACL logging works post upgrade 
     Given I switch to cluster admin pseudo user
     Given the env is using "OVNKubernetes" networkType

@@ -156,6 +156,7 @@ Feature: oc_set_probe.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-31241:Workloads Set a probe to open a TCP socket test
     Given I have a project
     When I run the :create_deployment client command with:
@@ -222,6 +223,7 @@ Feature: oc_set_probe.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-31245:Workloads Set a probe over HTTPS/HTTP test
     Given I have a project
     When I run the :create_deployment client command with:
@@ -277,6 +279,7 @@ Feature: oc_set_probe.feature
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-31246:Workloads Set an exec action probe test
     Given I have a project
     When I run the :create_deployment client command with:

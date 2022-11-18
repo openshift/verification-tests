@@ -10,6 +10,7 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: ensure ingress works well before and after upgrade - prepare
     # Check console route
     Given I switch to cluster admin pseudo user
@@ -32,6 +33,7 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -52,6 +54,7 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: ensure DNS works well before and after upgrade - prepare
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -77,6 +80,7 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -99,6 +103,7 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: upgrade with running router pods on all worker nodes - prepare
     # Get the number of worker nodes and scale up router pods
     Given I switch to cluster admin pseudo user
@@ -129,6 +134,7 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
     And I store the number of linux worker nodes to the :num_workers clipboard
@@ -150,6 +156,7 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: upgrade with route shards - prepare
     # Ensure cluster operator ingress is in normal status
     Given I switch to cluster admin pseudo user
@@ -225,6 +232,7 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: upgrade with route shards
     # Ensure cluster operator ingress is in normal status after upgrade
     Given I switch to cluster admin pseudo user
@@ -260,6 +268,7 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
   Scenario: Unidling a route work without user intervention - prepare
     Given I switch to first user
     And I run the :new_project client command with:
@@ -300,6 +309,7 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
   Scenario: Unidling a route work without user intervention
     # Check the servcie service-unsecure to see the idle annotation is still intact
     Given I switch to first user

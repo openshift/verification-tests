@@ -49,6 +49,7 @@ Feature: storageClass related feature
 
     @azure-ipi
     @azure-upi
+    @hypershift-hosted
     Examples:
       | case_id           | storage-class-name |
       | OCP-13488:Storage | managed-premium    | # @case_id OCP-13488
@@ -106,6 +107,7 @@ Feature: storageClass related feature
 
     @aws-ipi
     @aws-upi
+    @hypershift-hosted
     Examples:
       | case_id           | provisioner | type | zone       | is-default | size  |
       | OCP-10160:Storage | aws-ebs     | gp2  | us-east-1d | false      | 1Gi   | # @case_id OCP-10160
@@ -181,6 +183,7 @@ Feature: storageClass related feature
 
     @vsphere-ipi
     @vsphere-upi
+    @hypershift-hosted
     Examples:
       | case_id           | provisioner    |
       | OCP-24259:Storage | vsphere-volume | # @case_id OCP-24259
@@ -248,6 +251,7 @@ Feature: storageClass related feature
 
     @aws-ipi
     @aws-upi
+    @hypershift-hosted
     Examples:
       | case_id           | size  |
       | OCP-10158:Storage | 4Gi   | # @case_id OCP-10158
@@ -287,6 +291,7 @@ Feature: storageClass related feature
 
     @aws-ipi
     @aws-upi
+    @hypershift-hosted
     Examples:
       | case_id           | type | size | errorMessage                  |
       | OCP-10164:Storage | sc1  | 5Gi  | at least 125 GiB              | # @case_id OCP-10164
@@ -301,6 +306,7 @@ Feature: storageClass related feature
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-10159:Storage PVC with storage class won't provisioned pv if no storage class or wrong storage class object
     Given I have a project
     # No sc exists
@@ -330,6 +336,7 @@ Feature: storageClass related feature
   @singlenode
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-10228:Storage AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
     Given I obtain test data file "storage/ebs/pvc-retain.json"

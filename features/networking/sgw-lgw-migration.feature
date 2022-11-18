@@ -11,6 +11,7 @@ Feature: SGW<->LGW migration related scenarios
   @noproxy @connected
   @vsphere-upi
   @amd64
+  @hypershift-hosted
   Scenario: OCP-47561:SDN SGW <-> LGW migration scenario for vsphere platform
     Given the env is using "OVNKubernetes" networkType
 
@@ -136,6 +137,7 @@ Feature: SGW<->LGW migration related scenarios
   @baremetal-upi
   @proxy @noproxy @disconnected @connected
   @amd64
+  @hypershift-hosted
   Scenario: OCP-47641:SDN SGW <-> LGW migration scenario for BM platform
     Given the env is using "OVNKubernetes" networkType
 
@@ -207,6 +209,7 @@ Feature: SGW<->LGW migration related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @amd64
+  @hypershift-hosted
   Scenario: OCP-48066:SDN SGW <-> LGW migration scenarios for externalIP
     Given the env is using "OVNKubernetes" networkType
     ######## Prepare Data Pre Migration ############

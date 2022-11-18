@@ -54,6 +54,7 @@ Feature: testing for parameter fsType
 
     @openstack-ipi
     @openstack-upi
+    @hypershift-hosted
     Examples:
       | case_id           | fsType | type   |
       | OCP-10097:Storage | ext3   | cinder | # @case_id OCP-10097

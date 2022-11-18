@@ -11,6 +11,7 @@ Feature: Storage upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     # Check cluster operator storage should be in correct status
@@ -85,6 +86,7 @@ Feature: Storage upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded
@@ -172,6 +174,7 @@ Feature: Storage upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Cluster operator storage should be in correct status after upgrade - prepare
     Given I switch to cluster admin pseudo user
     # Check cluster operator storage should be in correct status
@@ -192,6 +195,7 @@ Feature: Storage upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Cluster operator storage should be in correct status after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded
@@ -397,6 +401,7 @@ Feature: Storage upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @hypershift-hosted
   Scenario: AWS-EBS-CSI Snapshot operator should work well before and after upgrade of a cluster - prepare
     Given I switch to cluster admin pseudo user
     Given the master version >= "4.7"
@@ -496,6 +501,7 @@ Feature: Storage upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @hypershift-hosted
   Scenario: AWS-EBS-CSI Snapshot operator should work well before and after upgrade of a cluster
     Given I switch to cluster admin pseudo user
     Given the master version >= "4.7"

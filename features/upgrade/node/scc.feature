@@ -11,6 +11,7 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Seccomp part of SCC policy should be kept and working after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I obtain test data file "node/scc.yaml"
@@ -30,6 +31,7 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: Seccomp part of SCC policy should be kept and working after upgrade
     Given I switch to cluster admin pseudo user
     Given admin checks that the "seccomp" scc exists

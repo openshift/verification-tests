@@ -86,6 +86,7 @@ Feature: CSI testing related feature
 
     @openstack-ipi
     @openstack-upi
+    @hypershift-hosted
     Examples:
       | case_id           | sc_name      |
       | OCP-37572:Storage | standard-csi | # @case_id OCP-37572
@@ -171,6 +172,7 @@ Feature: CSI testing related feature
 
     @openstack-ipi
     @openstack-upi
+    @hypershift-hosted
     Examples:
       | case_id           | sc_name      |
       | OCP-37562:Storage | standard-csi | # @case_id OCP-37562
@@ -227,6 +229,7 @@ Feature: CSI testing related feature
 
     @openstack-ipi
     @openstack-upi
+    @hypershift-hosted
     Examples:
       | case_id           | sc_name      | fstype |
       | OCP-37560:Storage | standard-csi | xfs    | # @case_id OCP-37560
@@ -280,6 +283,7 @@ Feature: CSI testing related feature
       | case_id           | sc_name      |
       | OCP-37564:Storage | standard-csi | # @case_id OCP-37564
 
+    @hypershift-hosted
     Examples:
       | case_id           | sc_name      |
       | OCP-37511:Storage | standard-csi | # @case_id OCP-37511
@@ -333,6 +337,7 @@ Feature: CSI testing related feature
       | OCP-24546:Storage | gp2-csi | sc1  | 125Gi | # @case_id OCP-24546
       | OCP-24572:Storage | gp2-csi | st1  | 125Gi | # @case_id OCP-24572
 
+    @hypershift-hosted
     Examples:
       | case_id           | sc_name      | type   | size |
       | OCP-37478:Storage | standard-csi | pd-ssd | 1Gi  | # @case_id OCP-37478
@@ -388,6 +393,7 @@ Feature: CSI testing related feature
       | case_id           | provisioner     | sc_name | deployment_operator         | deployment_controller         | daemonset_node          |
       | OCP-34144:Storage | ebs.csi.aws.com | gp2-csi | aws-ebs-csi-driver-operator | aws-ebs-csi-driver-controller | aws-ebs-csi-driver-node | # @case_id OCP-34144
 
+    @hypershift-hosted
     Examples:
       | case_id           | provisioner           | sc_name      | deployment_operator        | deployment_controller        | daemonset_node         |
       | OCP-37474:Storage | pd.csi.storage.gke.io | standard-csi | gcp-pd-csi-driver-operator | gcp-pd-csi-driver-controller | gcp-pd-csi-driver-node | # @case_id OCP-37474

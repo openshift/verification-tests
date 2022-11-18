@@ -11,6 +11,7 @@ Feature: ServiceAccount and Policy Managerment
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
+  @hypershift-hosted
   Scenario: OCP-10642:Authentication Could grant admin permission for the service account username to access to its own project
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -48,6 +49,7 @@ Feature: ServiceAccount and Policy Managerment
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
+  @hypershift-hosted
   Scenario: OCP-11494:Authentication Could grant admin permission for the service account group to access to its own project
     Given I have a project
     When I run the :new_app client command with:
@@ -93,6 +95,7 @@ Feature: ServiceAccount and Policy Managerment
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
+  @hypershift-hosted
   Scenario: OCP-11249:Authentication User can get the serviceaccount token via client
     Given I have a project
     When I run the :create_token client command with:

@@ -71,6 +71,7 @@ Feature: Kibana related features
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-30362:Logging Normal User can only view logs out of the projects owned by himself --kibana
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -129,6 +130,7 @@ Feature: Kibana related features
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-30361:Logging User with cluster-admin role can show logs out of all projects -- kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -242,6 +244,7 @@ Feature: Kibana related features
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-30343:Logging Logs can be redirected from Webconsole to kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name

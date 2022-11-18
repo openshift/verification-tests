@@ -701,6 +701,7 @@ Feature: Sriov related scenarios
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-25321:SDN dpdk for intel card works well
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-dpdk.yaml"

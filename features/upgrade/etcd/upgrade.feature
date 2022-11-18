@@ -10,6 +10,7 @@ Feature: basic verification for upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: etcd-operator and cluster works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I store the masters in the :masters clipboard
@@ -61,6 +62,7 @@ Feature: basic verification for upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     Given I store the masters in the :masters clipboard

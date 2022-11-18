@@ -9,6 +9,7 @@ Feature: Cinder Persistent Volume
   @heterogeneous @arm64 @amd64
   @openstack-ipi
   @openstack-upi
+  @hypershift-hosted
   Scenario: OCP-9643:Storage Persistent Volume with cinder volume plugin
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard
