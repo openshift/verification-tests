@@ -44,6 +44,10 @@ set_filter_strings_on_explore_page:
   - selector:
       <<: *filter_text_for_explore
     op: send_keys <filter_text>
+filter_by_name:
+  params:
+    test_id_value: item-filter
+  action: set_strings_in_filter_box
 filter_event_by_name_or_message:
   params:
     test_id_value: item-filter
