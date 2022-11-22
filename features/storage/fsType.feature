@@ -10,8 +10,9 @@ Feature: testing for parameter fsType
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: persistent volume formated with fsType
     Given I have a project
-    And admin clones storage class "sc-<%= project.name %>" from ":default" with:
-      | ["parameters"]["fsType"] | <fsType> |
+    And admin creates new in-tree storageclass with:
+      | ["metadata"]["name"]     | sc-<%= project.name %> |
+      | ["parameters"]["fsType"] | <fsType>               |
     Given I obtain test data file "storage/misc/pvc-with-storageClassName.json"
     When I run oc create over "pvc-with-storageClassName.json" replacing paths:
       | ["metadata"]["name"]         | mypvc                  |
