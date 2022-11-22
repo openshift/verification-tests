@@ -255,6 +255,7 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
   sc_hash = YAML.load_file file
 
   # replace paths from table
+  sc_hash["parameters"] ||= {}
   table.raw.each do |path, value|
       eval "sc_hash#{path} = YAML.load value" unless path == ''
   end
