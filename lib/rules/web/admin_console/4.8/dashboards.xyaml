@@ -234,6 +234,10 @@ check_has_5_top_consumers:
   scripts:
     - command: return document.querySelectorAll("li.co-utilization-card-popover__consumer-item").length == 5
       expect_result: true
+check_has_top_consumers:
+  scripts:
+    - command: return document.querySelectorAll("li.co-utilization-card-popover__consumer-item").length >= 1
+      expect_result: true
 check_consumer_link_to_node:
   element:
     selector:
@@ -380,7 +384,7 @@ check_cpu_breakdown_info_when_filter_by_node:
     dropdown_menu_item: By Node
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers
+  action: check_has_top_consumers
   action: check_consumer_link_to_node
   action: check_view_more_link
   action: check_metrics_query_cpu_by_node
@@ -409,7 +413,7 @@ check_memory_breakdown_info_when_filter_by_node:
     dropdown_menu_item: By Node
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers
+  action: check_has_top_consumers
   action: check_consumer_link_to_node
   action: check_view_more_link
   action: check_metrics_query_memory_by_node
@@ -438,7 +442,7 @@ check_filesystem_breakdown_info_when_filter_by_node:
     dropdown_menu_item: By Node
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers
+  action: check_has_top_consumers
   action: check_consumer_link_to_node
   action: check_view_more_link
   action: check_metrics_query_filesystem_by_node
@@ -458,7 +462,7 @@ check_pod_count_breakdown_info_when_filter_by_node:
     dropdown_menu_item: By Node
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers
+  action: check_has_top_consumers
   action: check_consumer_link_to_node
   action: check_view_more_link
   action: check_metrics_query_pod_count_by_node
@@ -489,7 +493,7 @@ check_network_in_breakdown_info_when_filter_by_node:
     dropdown_menu_item: By Node
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers
+  action: check_has_top_consumers
   action: check_consumer_link_to_node
   action: check_view_more_link
   action: check_metrics_query_network_in_by_node
@@ -518,7 +522,7 @@ check_network_out_breakdown_info_when_filter_by_node:
     dropdown_menu_item: By Node
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers
+  action: check_has_top_consumers
   action: check_consumer_link_to_node
   action: check_view_more_link
   action: check_metrics_query_network_out_by_node
