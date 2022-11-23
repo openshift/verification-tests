@@ -251,7 +251,7 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
   end
 
   # load file 
-  file = "#{BushSlicer::HOME}/testdata/storage/misc/storageClass-with-stable-annotations.yaml"
+  file = "#{BushSlicer::HOME}/testdata/storage/misc/in-tree-storageClass-template.yaml"
   sc_hash = YAML.load_file file
 
   # replace paths from table
