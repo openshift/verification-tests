@@ -15,25 +15,23 @@ Feature: route related features via cli
   Scenario: OCP-10629:Workloads Expose routes from services
     Given I have a project
     When I run the :new_app client command with:
-      | code | https://github.com/sclorg/s2i-perl-container |
-      | l | app=test-perl|
-      | context_dir | 5.20/test/sample-test-app/ |
-      | name | myapp |
+      | image | quay.io/openshifttest/hello-openshift@sha256:4200f438cf2e9446f6bcff9d67ceea1f69ed07a2f83363b7fb52529f7ddd8a83 |
     Then the step should succeed
-    And the "myapp-1" build completed
-    Given I wait for the "myapp" service to become ready up to 300 seconds
-    When I expose the "myapp" service
+    Given number of replicas of "hello-openshift" deployment becomes:
+      | current | 1 |
+    Given I wait for the "hello-openshift" service to become ready up to 300 seconds
+    When I expose the "hello-openshift" service
     Then the step should succeed
     Given I get project routes
     And the output should match:
-      | myapp .* 8080    |
+      | hello-openshift .* 8080    |
     When I run the :describe client command with:
-      | resource | route |
-      | name     | myapp |
+      | resource | route           |
+      | name     | hello-openshift |
     Then the step should succeed
-    And the output should match "Labels:\s+app=test-perl"
-    When I wait for a web server to become available via the "myapp" route
-    Then the output should contain "Everything is fine"
+    And the output should match "Labels:\s+app=hello-openshift"
+    When I wait for a web server to become available via the "hello-openshift" route
+    Then the output should contain "Hello OpenShift"
 
   # @author cryan@redhat.com
   # @case_id OCP-12022
