@@ -47,5 +47,4 @@ Feature: eventrouter related test
     @hypershift-hosted
     Examples:
     | case_id           | index_name  |
-    | OCP-25899:Logging | .operations | # @case_id OCP-25899
     | OCP-29738:Logging | infra       | # @case_id OCP-29738
