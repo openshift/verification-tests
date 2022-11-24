@@ -95,7 +95,10 @@ Feature: OVNKubernetes Windows Container related networking scenarios
     And evaluation of `@result[:response].match(/:(.*)]/)[1]` is stored in the :service_external_ip clipboard
 
     # check the external:ip of loadbalancer can be accessed
+    And I wait up to 150 seconds for the steps to pass:
+    """
     When I execute on the "hello-pod" pod:
       | curl | -s | --connect-timeout | 10 | <%= cb.service_external_ip %> |
     Then the step should succeed
     And the output should contain "Windows Container Web Server"
+    """
