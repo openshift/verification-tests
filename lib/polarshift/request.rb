@@ -176,14 +176,19 @@ module BushSlicer
       end
 
       def create_run_smart(timeout: 360, **opts)
-        res = create_run(**opts)
-        if res[:exitstatus] == 202
-          op_url = JSON.load(res[:response])["operation_result_url"]
-          logger.info "to check operation status manually, you can: " \
-            "curl '#{op_url}' -u user:thepassword"
-          pr = wait_op(url: op_url, timeout: timeout)
-        else
-          raise %Q{got status "#{res[:exitstatus]}" creating a new test run:\n#{res[:response]}}
+        for retries in 1..5 do
+          res = create_run(**opts)
+          if res[:exitstatus] == 202
+            op_url = JSON.load(res[:response])["operation_result_url"]
+            logger.info "to check operation status manually, you can: " \
+              "curl '#{op_url}' -u user:thepassword"
+            pr = wait_op(url: op_url, timeout: timeout)
+          else
+            raise %Q{got status "#{res[:exitstatus]}" creating a new test run:\n#{res[:response]}}
+          end
+          unless pr["status"] == "failed"
+            break
+          end
         end
 
         unless pr.dig("properties", "run_id")
@@ -374,7 +379,8 @@ module BushSlicer
           when "queued", "running"
             next
           when "failed"
-            raise "PolarShift operation failed:\n#{res["error"]}"
+            logger.warn "PolarShift operation failed:\n#{res["error"]}"
+            return res
           else
             raise "unknown operation status #{res["status"]}"
           end
