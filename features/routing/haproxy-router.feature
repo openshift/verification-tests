@@ -291,6 +291,7 @@ Feature: Testing haproxy router
 
   # @author bmeng@redhat.com
   # @case_id OCP-10043
+  @admin
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
@@ -302,48 +303,43 @@ Feature: Testing haproxy router
   @rosa @osd_ccs @aro
   @hypershift-hosted
   Scenario: OCP-10043:NetworkEdge Set balance leastconn for passthrough routes
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    Given all default router pods become ready
+    Then evaluation of `pod.name` is stored in the :router_pod clipboard
+
+    Given I switch to the first user
     Given I have a project
-    Given I obtain test data file "routing/web-server-1.yaml"
+    And evaluation of `project.name` is stored in the :proj_name clipboard
+    Given I obtain test data file "routing/web-server-rc.yaml"
     When I run the :create client command with:
-      | f | web-server-1.yaml |
+      | f | web-server-rc.yaml |
     Then the step should succeed
-    When I run oc create over "web-server-1.yaml" replacing paths:
-      | ["metadata"]["name"] | web-server-2 |
-    Then the step should succeed
-    And all pods in the project are ready
-    Given I obtain test data file "routing/service_secure.yaml"
-    When I run the :create client command with:
-      | f | service_secure.yaml |
-    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=web-server-rc |
+
     When I run the :create_route_passthrough client command with:
       | name    | route-pass     |
       | service | service-secure |
     Then the step should succeed
 
     When I run the :annotate client command with:
-      | resource | route |
-      | resourcename | route-pass |
-      | keyval | haproxy.router.openshift.io/balance=leastconn |
-      | overwrite | true |
+      | resource     | route                                         |
+      | resourcename | route-pass                                    |
+      | keyval       | haproxy.router.openshift.io/balance=leastconn |
+      | overwrite    | true                                          |
     Then the step should succeed
 
-    Given I have a test-client-pod in the project
-    And I use the "service-secure" service
-    Given I wait for the steps to pass:
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    And I wait up to 30 seconds for the steps to pass:
     """
-    When I execute on the pod:
-      | curl                                                   |
-      | -ksS                                                   |
-      | https://<%= route("route-pass").dns(by: user) %> |
+    When I execute on the "<%= cb.router_pod %>" pod:
+      | grep | backend be_tcp:<%= cb.proj_name %>:route-pass | /var/lib/haproxy/conf/haproxy.config | -A 5 |
     Then the step should succeed
-    And the output should contain "Hello-OpenShift web-server-2"
+    And the output should contain:
+      | balance leastconn |
     """
-    When I execute on the pod:
-      | curl                                                   |
-      | -ksS                                                   |
-      | https://<%= route("route-pass").dns(by: user) %> |
-    Then the step should succeed
-    And the output should contain "Hello-OpenShift web-server-1"
 
   # @author yadu@redhat.com
   # @case_id OCP-11679
