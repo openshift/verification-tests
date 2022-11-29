@@ -79,10 +79,8 @@ require_relative 'chrome_extension'
       chrome_switches = []
       if ENV.has_key?("http_proxy") || @http_proxy
         # get rid of the heading "http://" that breaks the profile
-        proxy_raw = @http_proxy || ENV["http_proxy"]
-        logger.warn "For UI team to debug proxy_raw value: #{proxy_raw}"
+        proxy_raw = (@http_proxy || ENV["http_proxy"]).sub(/(\/)+$/, '')
         proxy = proxy_raw.sub(%r{^.+?://}, "")
-        logger.warn "For UI team to debug proxy value: #{proxy}"
         proxy_bypass = "localhost,127.0.0.1"
         firefox_profile.proxy = chrome_caps.proxy = safari_caps.proxy = Selenium::WebDriver::Proxy.new({:http => proxy.sub(%r{^.+?@}, ""), :ssl => proxy.sub(%r{^.+?@}, "")})
         firefox_profile['network.proxy.no_proxies_on'] = proxy_bypass
