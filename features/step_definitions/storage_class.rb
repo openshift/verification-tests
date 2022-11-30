@@ -235,7 +235,7 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
   ensure_admin_tagged
   project_name = project.name
 
-  iaas_type = env.iaas[:type] rescue nil 
+  iaas_type = env.iaas[:type].downcase rescue nil 
   if iaas_type == "aws"   
     provisioner = 'aws-ebs'
   elsif iaas_type == "gcp"
@@ -244,7 +244,7 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
     provisioner = 'azure-disk'
   elsif iaas_type == "vsphere"
     provisioner = 'vsphere-volume'
-  elsif iaas_type == "cinder"
+  elsif iaas_type == "openstack"
     provisioner = 'cinder'
   else
     raise "Unsupported iass_type `#{iaas_type}`"
