@@ -176,7 +176,7 @@ module BushSlicer
       end
 
       def create_run_smart(timeout: 360, **opts)
-        for retries in 1..5 do
+        for retries in 1..10 do
           res = create_run(**opts)
           if res[:exitstatus] == 202
             op_url = JSON.load(res[:response])["operation_result_url"]
@@ -189,6 +189,7 @@ module BushSlicer
           unless pr["status"] == "failed"
             break
           end
+          sleep 60
         end
 
         unless pr.dig("properties", "run_id")
