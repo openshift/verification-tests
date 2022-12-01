@@ -498,7 +498,6 @@ check_default_view_is_form_view:
   element:
     selector:
       xpath: //input[@type='radio' and @value='form' and @checked]
-open_edit_form_view: {}
 switch_to_yaml_view:
   params:
     radio_text: yaml
