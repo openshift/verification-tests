@@ -31,7 +31,10 @@ Given /^logging operators are installed successfully$/ do
   step %Q/I switch to cluster admin pseudo user/
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
 
-  unless project('openshift-operators-redhat').exists?
+  if project('openshift-operators-redhat').exists?
+    @result = admin.cli_exec(:label, resource: "namespace", name: "openshift-operators-redhat", key_val: 'openshift.io/cluster-monitoring=true', overwrite: true)
+    raise "Can't add label openshift.io/cluster-monitoring=true to namespace openshift-operators-redhat" unless @result[:success]
+  else
     eo_namespace_yaml = "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/01_eo-project.yaml"
     @result = admin.cli_exec(:create, f: eo_namespace_yaml)
     raise "Error creating namespace" unless @result[:success]
@@ -96,7 +99,10 @@ Given /^logging operators are installed successfully$/ do
   step %Q/elasticsearch operator is ready/
 
   # Create namespace
-  unless project('openshift-logging').exists?
+  if project('openshift-logging').exists?
+    @result = admin.cli_exec(:label, resource: "namespace", name: "openshift-logging", key_val: 'openshift.io/cluster-monitoring=true', overwrite: true)
+    raise "Can't add label openshift.io/cluster-monitoring=true to namespace openshift-logging" unless @result[:success]
+  else
     namespace_yaml = "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/01_clo_ns.yaml"
     @result = admin.cli_exec(:create, f: namespace_yaml)
     raise "Error creating namespace" unless @result[:success]
