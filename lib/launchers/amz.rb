@@ -160,7 +160,7 @@ module BushSlicer
     # 2021/09/04/12:11:12 and 2021/09/04/23:11:12 as differnt directories
     def s3_upload_file(bucket:, file:, target: nil, content_type: 'text/html')
       target ||= File.basename file
-      begin 
+      begin
         res = s3.bucket(bucket).object(target).upload_file(file, content_type: content_type)
         logger.info("S3 upload file status: #{res}")
       rescue
@@ -543,6 +543,11 @@ module BushSlicer
       rescue Aws::EC2::Errors::InvalidVolumeNotFound
         return nil
       end
+    end
+
+    def get_vpcs
+      res = client_ec2.describe_vpcs.to_a[0]
+      return res.vpcs
     end
 
     def get_volume_state(volume)
