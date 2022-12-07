@@ -20,6 +20,7 @@ Feature: Multus-CNI related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
     When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                    |
@@ -89,6 +90,7 @@ Feature: Multus-CNI related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-private.yaml"
     When I run oc create as admin over "macvlan-private.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                     |
@@ -156,6 +158,7 @@ Feature: Multus-CNI related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-vepa.yaml"
     When I run oc create as admin over "macvlan-vepa.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                  |
@@ -237,6 +240,7 @@ Feature: Multus-CNI related scenarios
 
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml"
     When I run oc create as admin over "host-device.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                              |
@@ -302,6 +306,7 @@ Feature: Multus-CNI related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
     When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                    |
@@ -356,6 +361,7 @@ Feature: Multus-CNI related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
     When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                    |
@@ -431,6 +437,7 @@ Feature: Multus-CNI related scenarios
 
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml"
     When I run oc create as admin over "host-device.yaml" replacing paths:
       | ["metadata"]["name"]      | host-device                                                                      |
@@ -505,6 +512,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-novlan.yaml"
     When I run the :create admin command with:
       | f | bridge-host-local-novlan.yaml |
@@ -562,6 +570,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml"
     When I run the :create admin command with:
       | f | bridge-host-local-vlan-200.yaml |
@@ -612,6 +621,7 @@ Feature: Multus-CNI related scenarios
     Given the default interface on nodes is stored in the :default_interface clipboard
     #Patching simplemacvlan config in network operator config CRD
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks":[{"name":"test-macvlan-case3","namespace":"<%= project.name %>","simpleMacvlanConfig":{"ipamConfig":{"staticIPAMConfig":{"addresses": [{"address":"10.128.2.100/23","gateway":"10.128.2.1"}]},"type":"static"},"master":"<%= cb.default_interface %>","mode":"bridge"},"type":"SimpleMacvlan"}]}} |
     #Cleanup for bringing CRD to original
@@ -652,6 +662,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin and simulating syntax errors
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
 
     Given I switch to cluster admin pseudo user
@@ -680,6 +691,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
     When I run oc create as admin over "macvlan-bridge.yaml"" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge-21456 |
@@ -708,6 +720,7 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     And evaluation of `project.name` is stored in the :project1 clipboard
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
     When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
@@ -847,6 +860,7 @@ Feature: Multus-CNI related scenarios
     And I store all worker nodes to the :nodes clipboard
     # Create the net-attach-def with vlan 100 via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml"
     When I run the :create admin command with:
       | f | bridge-host-local-vlan.yaml |
@@ -955,6 +969,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def without master pmtr via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-conf-without-master.yaml"
     When I run the :create admin command with:
       | f | macvlan-conf-without-master.yaml |
@@ -990,6 +1005,7 @@ Feature: Multus-CNI related scenarios
 
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-ipandmac.yaml"
     When I run the :create admin command with:
       | f | runtimeconfig-def-ipandmac.yaml |
@@ -1060,6 +1076,7 @@ Feature: Multus-CNI related scenarios
     """
     #Creating ipam type net-attach-def
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/ipam-dhcp.yaml"
     When I run oc create as admin over "ipam-dhcp.yaml" replacing paths:
       | ["metadata"]["name"]      | bridge-dhcp                                                                                                                                               |
@@ -1138,6 +1155,7 @@ Feature: Multus-CNI related scenarios
     a DHCP service is deconfigured on the "<%= cb.master[0].name %>" node
     """
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     #Patching simplemacvlan config in network operator config CRD
     And as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec": {"additionalNetworks": [{"name": "testmacvlan","namespace": "<%= project.name %>","simpleMacvlanConfig": {"ipamConfig": {"type": "dhcp"},"master": "mvlanp0"},"type": "SimpleMacvlan"}]}} |
@@ -1177,6 +1195,7 @@ Feature: Multus-CNI related scenarios
 
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-ip.yaml"
     When I run the :create admin command with:
       | f | runtimeconfig-def-ip.yaml |
@@ -1219,6 +1238,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-mac.yaml"
     When I run the :create admin command with:
       | f | runtimeconfig-def-mac.yaml |
@@ -1260,6 +1280,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/ipam-static.yaml"
     When I run oc create as admin over "ipam-static.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                      |
@@ -1311,6 +1332,7 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I switch to the first user
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     And evaluation of `project.name` is stored in the :usr_project clipboard
 
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-mac.yaml"
@@ -1408,6 +1430,7 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :default_interface_mac clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/ipvlan-host-local.yaml"
     When I run oc create as admin over "ipvlan-host-local.yaml" replacing paths:
       | ["metadata"]["name"]      | myipvlan76                                                                                                                                                              |
@@ -1464,6 +1487,7 @@ Feature: Multus-CNI related scenarios
     Given the default interface on nodes is stored in the :default_interface clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
     When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                      |
@@ -1528,6 +1552,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/route-override.yaml"
     When I run oc create as admin over "route-override.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                 |
@@ -1576,6 +1601,7 @@ Feature: Multus-CNI related scenarios
 
     # Create a pod absorbing above net-attach-def defined in default namespace
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
     When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod1    |
@@ -1600,6 +1626,7 @@ Feature: Multus-CNI related scenarios
     And I store all worker nodes to the :nodes clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
     When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                             |
@@ -1654,6 +1681,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-excludeIP.yaml"
     When I run oc create as admin over "whereabouts-excludeIP.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
@@ -1717,6 +1745,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def with whereabouts-shortrange
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-overlapping.yaml"
     When I run oc create as admin over "whereabouts-overlapping.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>    |
@@ -1798,6 +1827,7 @@ Feature: Multus-CNI related scenarios
     And I store all worker nodes to the :nodes clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/Bug-1944678.yaml"
     When I run oc create as admin over "Bug-1944678.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
@@ -1861,6 +1891,7 @@ Feature: Multus-CNI related scenarios
     Given the default interface on nodes is stored in the :default_interface clipboard
     #Patching rawCNIConfig config in network operator config CRD
     Given I have a project
+    And the appropriate pod security labels are applied to the namespace
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:    
       | {"spec": {"additionalNetworks": [{"name": "macvlan-bridge-ipam-dhcp","namespace": "<%= project.name %>","rawCNIConfig": "{ \"cniVersion\": \"0.3.1\", \"name\": \"test-network-1\", \"type\": \"bridge\", \"ipam\": { \"type\": \"static\", \"addresses\": [ { \"address\": \"191.168.1.23\" } ] } }","type":"Raw"}]}} |
 
