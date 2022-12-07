@@ -1528,11 +1528,13 @@ end
 Given /^the cluster is not migration from sdn plugin$/ do
   ensure_admin_tagged
   _admin = admin
-  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration}")
-  if @result[:stdout]["networkType"]
-    logger.warn "the cluster is migration from sdn plugin"
-    logger.warn "We will skip this scenario"
-    skip_this_scenario
+  if env.version_le("4.11", user: user)
+    @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration}")
+    if @result[:stdout]["networkType"]
+      logger.warn "the cluster is migration from sdn plugin"
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
+    end
   end
 end
 

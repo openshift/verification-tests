@@ -53,6 +53,7 @@ Feature: Egress compoment upgrade testing
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check egressfirewall is functional post upgrade
+    Given the cluster is not migration from sdn plugin
     Given I switch to cluster admin pseudo user
     And I save egress type to the clipboard
     When I run the :get admin command with:
@@ -263,6 +264,7 @@ Feature: Egress compoment upgrade testing
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check sdn egressip is functional post upgrade
+    Given the cluster is not migration from sdn plugin
     Given the env is using "OpenShiftSDN" networkType
     Given I run the :get admin command with:
       | resource      | hostsubnet                                  |
