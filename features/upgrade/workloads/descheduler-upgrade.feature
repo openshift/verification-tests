@@ -63,8 +63,11 @@ Feature: Descheduler major upgrade should work fine
       | app=descheduler |
     Given I make sure the descheduler operator gets updated successfully if needed
     And I use the "openshift-kube-descheduler-operator" project
+    Given I wait up to 180 seconds for the steps to pass:
+    """
     And status becomes :running of exactly 1 pods labeled:
       | name=descheduler-operator |
+    """
     Given I wait up to 180 seconds for the steps to pass:
     """
     And status becomes :running of exactly 1 pods labeled:
