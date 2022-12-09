@@ -76,3 +76,16 @@ Feature: cluster monitoring related upgrade check
     When I run the :oadm_top_node admin command
     Then the output should contain:
       | CPU(cores) |
+
+    # curl -k -H "Authorization: Bearer $token" 'https://thanos-querier.openshift-monitoring.svc:9091/api/v1/query?query=cluster_installer'
+    When I run the :exec admin command with:
+      | n                | openshift-monitoring |
+      | pod              | prometheus-k8s-0     |
+      | c                | prometheus           |
+      | oc_opts_end      |                      |
+      | exec_command     | sh                   |
+      | exec_command_arg | -c                   |
+      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://thanos-querier.openshift-monitoring.svc:9091/api/v1/query?query=cluster_installer |
+    Then the step should succeed
+    And the output should contain:
+      | "__name__":"cluster_installer" |
