@@ -14,9 +14,9 @@ Feature: Testing timeout route
   @hypershift-hosted
   Scenario: OCP-11635:NetworkEdge Set timeout server for passthough route
     Given I have a project
-    Given I obtain test data file "routing/routetimeout/httpbin-pod-2.json"
+    Given I obtain test data file "routing/routetimeout/httpbin-pod.json"
     When I run the :create client command with:
-      | f  | httpbin-pod-2.json |
+      | f  | httpbin-pod.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=httpbin-pod |
