@@ -6,7 +6,7 @@ Feature: Logging upgrading related features
   @destructive
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
@@ -52,7 +52,7 @@ Feature: Logging upgrading related features
   @destructive
   @upgrade-check
   @users=upuser1,upuser2
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.12 @4.11 @4.10 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
