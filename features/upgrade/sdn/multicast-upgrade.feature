@@ -104,8 +104,8 @@
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
   Scenario: Check the multicast works well after upgrade
-    Given the cluster is not migration from sdn plugin
     Given I switch to cluster admin pseudo user
+    Given the cluster is not migration from sdn plugin
     When I use the "multicast-upgrade" project
     Given 3 pods become ready with labels:
       | name=mcast-pods |
