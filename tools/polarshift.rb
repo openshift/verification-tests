@@ -193,6 +193,22 @@ module BushSlicer
         end
       end
 
+      command :"sync-run" do |c|
+        c.syntax = "#{$0} sync-run [options]"
+        c.description = "sync a test run from Polarion into existing Polashift \n\t" \
+          'e.g. tools/polarshift.rb sync-run polarion_run_id'
+        c.action do |args, options|
+          setup_global_opts(options)
+
+          raise 'command expects exactly one parameter being the test run id' if args.size != 1
+
+          test_run_id = args.first
+          query_result = polarshift.sync_run(project, test_run_id)
+          result = query_result
+          pp(result)
+        end
+      end
+
       command :"clone-run" do |c|
         c.syntax = "#{$0} clone-run [options]"
         c.description = "clone a test run from Polarion\n\t" \

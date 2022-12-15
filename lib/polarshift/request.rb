@@ -115,6 +115,18 @@ module BushSlicer
         }
       end
 
+      def sync_run(project_id, run_id, with_cases: "full")
+        params = with_cases ? {test_cases: with_cases} : {}
+        Http.request_with_retry(
+          method: :put,
+          url: "#{base_url}project/#{project_id}/run/#{run_id}/replace",
+          params: params,
+          raise_on_error: false,
+          read_timeout: 120,
+          **common_opts
+        )
+      end
+
       def get_run(project_id, run_id, with_cases: "automation")
         params = with_cases ? {test_cases: with_cases} : {}
         Http.request_with_retry(
