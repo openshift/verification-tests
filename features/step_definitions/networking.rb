@@ -1639,3 +1639,28 @@ Given /^the OVN joint network CIDR is patched in the node$/ do
   end
 end
 
+Given /^the cluster is migrated from sdn$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration.networkType}")
+  unless @result[:stdout]["OVNKubernetes"]
+    logger.warn "the cluster is not migration from sdn plugin"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
+  end
+end
+
+Given /^the joint network CIDR is updateded in the node "([^"]*)"$/ do | node_name |
+  ensure_admin_tagged
+  @result1 = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.metadata.annotations.alpha.kubernetes.io/provided-node-ip}")
+  def_inf1 = @result1[:response]
+  logger.info "The node's default interface is #{def_inf1}"
+  @result = admin.cli_exec(:get, resource: "node/#{node_name}", output: "jsonpath={.metadata.annotations.k8s\.ovn\.org/node-gateway-router-lrp-ifaddr}")
+  def_inf = @result[:response]
+  logger.info "The node's default interface is #{def_inf}"
+  raise "Failed to install load-sctp-module" unless @result[:success]
+  unless @result[:response].include? ("100.66.0")
+    logger.warn "JointNetworkCIDR is not updated on the cluster"
+    skip_this_scenario
+  end
+end

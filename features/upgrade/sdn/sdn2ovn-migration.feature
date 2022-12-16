@@ -28,8 +28,10 @@ Feature: sdn2ovn migration testing
   @upgrade
   @proxy @noproxy @disconnected @connected
   Scenario: sdn2ovn migration support custom OVNKube joint network CIDR - check after migration
+  Given the cluster is migrated from sdn
   Given I store the masters in the :masters clipboard
   And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
+  Given the joint network CIDR is updateded in the node "<%= cb.masters[0].name %>"
   When I run the :get admin command with:
     | resource      | node                                                                          |
     | resource_name | <%= cb.masters[0].name %>                                                     |
