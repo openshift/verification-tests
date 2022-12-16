@@ -206,6 +206,6 @@ Feature: Cases to test forward logs to external elasticsearch
     @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | case_id           | version | scheme | client_auth | username | password | secret_name |
-      | OCP-41807:Logging | 7.16    | https  | true        | test1    | redhat   | test1       | # @case_id OCP-41807
+      | OCP-41807:Logging | 7.17    | https  | true        | test1    | redhat   | test1       | # @case_id OCP-41807
       | OCP-41805:Logging | 6.8     | http   | false       | test2    | redhat   | test2       | # @case_id OCP-41805
       | OCP-41806:Logging | 6.8     | https  | false       | test4    | redhat   | test4       | # @case_id OCP-41806
