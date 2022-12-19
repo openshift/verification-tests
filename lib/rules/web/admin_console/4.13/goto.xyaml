@@ -37,6 +37,8 @@ goto_api_explore_page:
   url: api-explorer
 goto_one_api_explore_page:
   url: api-resource/ns/<project_name>/<api_explore_name>
+goto_cluster_buildconfig_api_explore_page:
+  url: /api-resource/cluster/config.openshift.io~v1~Build
 
 # builds
 goto_buildconfigs_page:
