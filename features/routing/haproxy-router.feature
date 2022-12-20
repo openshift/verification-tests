@@ -175,7 +175,7 @@ Feature: Testing haproxy router
       | resource | route |
       | resourcename | route-pass |
       | keyval | haproxy.router.openshift.io/rate-limit-connections=true |
-      | keyval | haproxy.router.openshift.io/rate-limit-connections.rate-tcp=5 |
+      | keyval | haproxy.router.openshift.io/rate-limit-connections.rate-tcp=3 |
     Then the step should succeed
 
     Given 10 seconds have passed
