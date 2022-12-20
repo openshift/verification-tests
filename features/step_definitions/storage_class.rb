@@ -235,19 +235,20 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
   ensure_admin_tagged
   project_name = project.name
 
-  iaas_type = env.iaas[:type].downcase rescue nil 
-  if iaas_type == "aws"   
+  platform = infrastructure('cluster').platform.downcase 
+  case platform
+  when 'aws'
     provisioner = 'aws-ebs'
-  elsif iaas_type == "gcp"
+  when 'gcp' 
     provisioner = 'gce-pd'
-  elsif iaas_type == "azure"
+  when 'azure'
     provisioner = 'azure-disk'
-  elsif iaas_type == "vsphere"
+  when 'vsphere'
     provisioner = 'vsphere-volume'
-  elsif iaas_type == "openstack"
+  when 'openstack'
     provisioner = 'cinder'
   else
-    raise "Unsupported iass_type `#{iaas_type}`"
+    raise "Unsupported platform `#{platform}`"
   end
 
   # load file 
