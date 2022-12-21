@@ -185,7 +185,7 @@ Feature: OVN related networking scenarios
   @hypershift-hosted
   Scenario: OCP-32205:SDN Thrashing ovnkube master IPAM allocator by creating and deleting various pods on a specific node
     Given the env is using "OVNKubernetes" networkType
-    And I store all worker nodes to the :nodes clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     And I have a project
     Given I obtain test data file "networking/generic_test_pod_with_replica.yaml"
     When I run the steps 10 times:
