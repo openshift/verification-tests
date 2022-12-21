@@ -608,7 +608,7 @@ Feature: Multus-CNI related scenarios
   @hypershift-hosted
   Scenario: OCP-24467:SDN CNO manager mavlan configured manually with static
     Given the multus is enabled on the cluster
-    And I store all worker nodes to the :nodes clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
     #Patching simplemacvlan config in network operator config CRD
     Given I have a project with proper privilege
@@ -750,7 +750,7 @@ Feature: Multus-CNI related scenarios
   Scenario: OCP-24490:SDN Pods can communicate each other with same vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
-    And I store all worker nodes to the :nodes clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     Given I have a project with proper privilege
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml"
     When I run the :create admin command with:
@@ -843,7 +843,7 @@ Feature: Multus-CNI related scenarios
   Scenario: OCP-24491:SDN Pods cannot communicate each other with different vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
-    And I store all worker nodes to the :nodes clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     # Create the net-attach-def with vlan 100 via cluster admin
     Given I have a project with proper privilege
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml"
@@ -1032,7 +1032,7 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
-    And I store all worker nodes to the :nodes clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     #Patching config in network operator config CRD
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks": [{"name":"bridge-ipam-dhcp","namespace":"openshift-multus","rawCNIConfig":"{\"name\":\"bridge-ipam-dhcp\",\"cniVersion\":\"0.3.1\",\"type\":\"bridge\",\"master\":\"<%= cb.default_interface %>\",\"ipam\":{\"type\": \"dhcp\"}}","type":"Raw"}]}} |
@@ -1090,7 +1090,7 @@ Feature: Multus-CNI related scenarios
   Scenario: OCP-24466:SDN CNO manager macvlan configured manually with DHCP
     Given the multus is enabled on the cluster
     And I store the masters in the :master clipboard
-    And I store all worker nodes to the :worker clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     #Obtaining master's tunnel interface name, address and worker's interface name,address
     Given the vxlan tunnel name of node "<%= cb.master[0].name %>" is stored in the :mastr_inf_name clipboard
     And the vxlan tunnel address of node "<%= cb.master[0].name %>" is stored in the :mastr_inf_address clipboard
@@ -1596,7 +1596,7 @@ Feature: Multus-CNI related scenarios
   @hypershift-hosted
   Scenario: OCP-29742:SDN Log pod IP and pod UUID when pod start
     Given the multus is enabled on the cluster
-    And I store all worker nodes to the :nodes clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project with proper privilege
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
@@ -1794,7 +1794,7 @@ Feature: Multus-CNI related scenarios
   @hypershift-hosted
   Scenario: OCP-41789:SDN BZ1944678 Whereabouts IPAM CNI duplicate IP addresses assigned to pods
     Given the multus is enabled on the cluster
-    And I store all worker nodes to the :nodes clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project with proper privilege
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/Bug-1944678.yaml"
@@ -1856,7 +1856,7 @@ Feature: Multus-CNI related scenarios
   @hypershift-hosted
   Scenario: OCP-46116:SDN BZ1897431 CIDR support for additional network attachment with the bridge CNI plug-in
     Given the multus is enabled on the cluster
-    And I store all worker nodes to the :nodes clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
     #Patching rawCNIConfig config in network operator config CRD
     Given I have a project with proper privilege

@@ -303,7 +303,7 @@ Feature: Pod related networking scenarios
   @hypershift-hosted
   Scenario: OCP-21846:SDN ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
-    And I store all worker nodes to the :nodes clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     #Tainting all worker nodes to NoSchedule
     When I run the :oadm_taint_nodes admin command with:
       | l         | node-role.kubernetes.io/worker |
