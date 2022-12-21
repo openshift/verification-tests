@@ -543,7 +543,7 @@ Feature: Machine features testing
       | resource_name | <%= pod.name %> |
       | c             | #{cb.id}        |
     Then the output should match:
-      | attempting to acquire leader lease (.*)openshift-machine-api/cluster-api-provider |
+      | attempting to acquire leader lease (.*)openshift-machine-api |
     """
 
   # @author miyadav@redhat.com
