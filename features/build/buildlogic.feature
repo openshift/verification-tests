@@ -366,7 +366,7 @@ Feature: buildlogic.feature
     When I run the :cancel_build client command with:
       | build_name | rails-postgresql-example-1 |
     Then the step should succeed
-    Given I run the steps 3 times:
+    Given I run the steps 2 times:
     """
     When I run the :start_build client command with:
       | buildconfig | rails-postgresql-example |
@@ -445,7 +445,7 @@ Feature: buildlogic.feature
     When I run the :cancel_build client command with:
       | build_name | ruby-hello-world-1 |
     Then the step should succeed
-    Given I run the steps 6 times:
+    Given I run the steps 5 times:
     """
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
