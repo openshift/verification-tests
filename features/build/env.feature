@@ -18,7 +18,7 @@ Feature: env.feature
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
-      |deployment=ruby-hello-world-1|
+      |deployment=ruby-hello-world|
     When I run the :set_env client command with:
       | resource | pods |
       | list     | true |
@@ -32,7 +32,7 @@ Feature: env.feature
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
-      |deployment=ruby-hello-world-1|
+      |deployment=ruby-hello-world|
     When I run the :set_env client command with:
       | resource | pods |
       | list     | true |
@@ -50,7 +50,7 @@ Feature: env.feature
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
-      |deployment=ruby-hello-world-1|
+      |deployment=ruby-hello-world|
     When I run the :set_env client command with:
       | resource | pods |
       | list     | true |
@@ -68,7 +68,7 @@ Feature: env.feature
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
-      |deployment=ruby-hello-world-1|
+      |deployment=ruby-hello-world|
     When I run the :set_env client command with:
       | resource | pods |
       | list     | true |
