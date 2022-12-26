@@ -4,7 +4,7 @@ metadata:
   name: cluster
   namespace: openshift-kube-descheduler-operator
 spec:
-  image: registry.redhat.io/openshift4/ose-descheduler:v4.11
+  image: registry.redhat.io/openshift4/ose-descheduler:v4.12
   logLevel: Normal
   mode: Automatic
   operatorLogLevel: Normal
