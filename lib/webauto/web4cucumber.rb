@@ -112,8 +112,8 @@ require_relative 'chrome_extension'
       client.open_timeout = 180
       client.read_timeout = 600
       headless
-      #Selenium::WebDriver.logger.level = :debug
-      #Watir.logger.level = :debug
+      Selenium::WebDriver.logger.level = :debug
+      Watir.logger.level = :debug
       if @browser_type == :firefox
         logger.info "Launching Firefox Marionette/Geckodriver"
         raise "auth proxy not implemented for Firefox" if proxy_pass
@@ -143,9 +143,10 @@ require_relative 'chrome_extension'
         logger.info "Launching Chrome"
 
 	      #https://bugs.chromium.org/p/chromium/issues/detail?id=1056073
-	      chrome_caps[:acceptInsecureCerts] = true
+	      chrome_caps[:accept_insecure_certs] = true
+        chrome_caps[:opts] = {}
         if Integer === @scroll_strategy
-          chrome_caps[:element_scroll_behavior] = @scroll_strategy
+          chrome_caps[:opts][:element_scroll_behavior] = @scroll_strategy
         end
         if self.class.container?
           chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage]
@@ -160,9 +161,14 @@ require_relative 'chrome_extension'
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
         if @selenium_url
+          logger.warn "@selenium_url is true logic"
+          logger.warn "chrome_caps is #{chrome_caps.to_json}"
           @browser = Watir::Browser.new :chrome, :http_client=>client, options: options, url: @selenium_url
         else
+          logger.warn "@selenium_url is false logic"
+          logger.warn "chrome_caps is #{chrome_caps.to_json}"
           options[:args] = chrome_switches
+          logger.info "options are: #{options}"
           @browser = Watir::Browser.new :chrome, :http_client=>client, options: options
         end
         logger.info "#{browser.driver.capabilities[:browser_name]} version is #{browser.driver.capabilities[:browser_version]}"
@@ -780,6 +786,8 @@ require_relative 'chrome_extension'
     # @param [Hash] opts hash options to use for replacement
     # @return [String] the value match in the opts[key]
     private def replace_angle_brackets(str, opts)
+      logger.info "str is #{str}"
+      logger.info "opts is #{opts}"
       return str.gsub(/<([a-z0-9_]+)>/) { |m|
         opts[m[1..-2].to_sym] || m
       }

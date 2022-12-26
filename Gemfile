@@ -40,7 +40,7 @@ gem 'term-ansicolor'
 ## Webauto
 gem 'watir'
 gem 'headless'
-gem 'selenium-webdriver'
+gem 'selenium-webdriver', '~>4.6.0'
 gem 'protobuf'
 gem 'reportportal'
 ## Docs
