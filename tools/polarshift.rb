@@ -192,6 +192,27 @@ module BushSlicer
           end
         end
       end
+      command :"reset-run" do |c|
+        c.syntax = "#{$0} reset-run [options]"
+        c.description = "reset a test run from Polarion run status\n\t" \
+          'e.g. tools/polarshift.rb reset-run <POLARION_RUN_ID> <OPTIONS>'
+        c.option('-s', "--status CASE_STATUS", "testcase status to be set, Passed/Failed/Waiting, default to Waiting")
+        c.option('-f', "--testcase_file CASE_STATUS_MAP", "yaml of testcase status to be set, Passed/Failed/Waiting, default to Waiting")
+        c.action do |args, options|
+          setup_global_opts(options)
+
+          raise 'command expects exactly one parameter being the test run id' if args.size != 1
+          test_run_id = args.first
+
+          if options.testcase_file
+            new_status = YAML.load_file(File.expand_path(options.testcase_file))
+          else
+            new_status = options.status
+            new_status ||= 'Waiting'
+          end
+          query_result = polarshift.reset_run(project, test_run_id, new_status: new_status)
+        end
+      end
 
       command :"sync-run" do |c|
         c.syntax = "#{$0} sync-run [options]"
@@ -213,7 +234,7 @@ module BushSlicer
         c.syntax = "#{$0} clone-run [options]"
         c.description = "clone a test run from Polarion\n\t" \
           "e.g. tools/polarshift.rb clone-run my_run_id"
-        c.option('-s', "--status CASE_STAUTS", "testcase status to be cloned, passed, failed, default to all")
+        c.option('-s', "--status CASE_STATUS", "testcase status to be cloned, passed, failed, default to all")
         c.option('-t', "--title RUN_TITLE", "Title of the clone run you wish to be")
         c.option('-e', "--subteam SUBTEAM_NAME", "the subteam to filter on")
         c.action do |args, options|
