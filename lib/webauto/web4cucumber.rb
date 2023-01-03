@@ -141,9 +141,8 @@ require_relative 'chrome_extension'
         end
       elsif @browser_type == :chrome
         logger.info "Launching Chrome"
-
-	      #https://bugs.chromium.org/p/chromium/issues/detail?id=1056073
-	      chrome_caps[:acceptInsecureCerts] = true
+        #https://bugs.chromium.org/p/chromium/issues/detail?id=1056073
+        chrome_caps[:acceptInsecureCerts] = true
         if Integer === @scroll_strategy
           chrome_caps[:element_scroll_behavior] = @scroll_strategy
         end
@@ -154,8 +153,8 @@ require_relative 'chrome_extension'
           browser_name: 'chrome',
           accept_insecure_certs: true
         }
-        options["goog:chromeOptions"] = {}
-        options["goog:chromeOptions"][:element_scroll_behavior] = @scroll_strategy if Integer === @scroll_strategy
+        #options["goog:chromeOptions"] = {}
+        #options["goog:chromeOptions"][:element_scroll_behavior] = @scroll_strategy if Integer === @scroll_strategy
         # options = Selenium::WebDriver::Chrome::Options.new
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
