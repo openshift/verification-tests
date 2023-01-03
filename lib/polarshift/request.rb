@@ -127,6 +127,43 @@ module BushSlicer
         )
       end
 
+      # @input new_status can be a string or Hash.  The valid value for string
+      # are Waiting, Running, Rerun, Passed, Failed, Blocked.  For more info:
+      # https://gitlab.cee.redhat.com/aosqe/polarshift/-/blob/master/doc/API.adoc
+      def reset_run(project_id, run_id, new_status: 'Waiting')
+        # 1. get current run information from Polarshift
+        current_run_res = get_run_smart(project_id, run_id)['records']['TestRecord']
+        case_records = []
+        # 2. need to create the req.json that contains each testcase that will be needed to be reset
+        #    initially only support reset the entire run.  We can think about getting a selective reset
+        #    after we have  proven it to work.
+        current_run_res.each do |cr|
+          test_result = {}
+          case_id = cr.dig('test_case', 'id')
+          test_result['id'] = case_id
+          if new_status.is_a? Hash
+            new_case_status = new_status.dig(case_id)
+          else
+            new_case_status = new_status
+          end
+
+          if new_case_status
+            # we only add to the case_records if the user specify it in the status yaml
+            test_result['new'] = {'comment':  cr['comment']['content'], 'result': new_case_status,
+              'duration': 0.0, 'executed': Date.today.to_s }
+            test_result['current'] = {'comment':  cr['comment']['content'], 'result': cr['result'] }
+            case_records.append(test_result)
+          end
+        end
+        # 3. make API call to polarshift to update the run status for the cases
+        res = update_caseruns(project_id, run_id, case_records)
+        if res[:success]
+          logger.info("Run #{run_id} has been updated to '#{new_status}'")
+        else
+          logger.error("Failed to update #{run_id} to #{new_status} due to #{res[:response].to_s}")
+        end
+      end
+
       def get_run(project_id, run_id, with_cases: "automation")
         params = with_cases ? {test_cases: with_cases} : {}
         Http.request_with_retry(
