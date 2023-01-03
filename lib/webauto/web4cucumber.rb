@@ -119,13 +119,12 @@ require_relative 'chrome_extension'
         raise "auth proxy not implemented for Firefox" if proxy_pass
         browser_opts = {
           browser_name: 'firefox',
-          accept_insecure_certs: true,
-          "moz:webdriverClick": true
+          accept_insecure_certs: true
         }
-        browser_opts["moz:firefoxOptions"] = {}
-        if Integer === @scroll_strategy
-          browser_opts["moz:firefoxOptions"][:element_scroll_behavior] = @scroll_strategy
-        end
+        #browser_opts["moz:firefoxOptions"] ||= {}
+        #if Integer === @scroll_strategy
+          #browser_opts["moz:firefoxOptions"][:element_scroll_behavior] = @scroll_strategy
+        #end
         # This is actually a shortcut for trace logging
         # this also needs debug webdriver logging enabled above to work
         # options.log_level = 'trace'
