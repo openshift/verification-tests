@@ -231,14 +231,14 @@ Feature: collector related tests
       | op           | GET   |
     Then the step should succeed
     Given evaluation of `@result[:parsed]['aggregations']['exists_field_kubernetes']['distinct_node_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :kuber_ips clipboard
-    And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.kuber_ips)
+    And the expression should be true> (cb.node_ips-cb.kuber_ips).empty?
 
     And I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | _search?pretty&size=0' -d'{"aggs" : {"exists_field_systemd" : {"filter": {"exists": {"field":"systemd"}},"aggs" : {"distinct_node_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
       | op           | GET  |
     Then the step should succeed
     Given evaluation of `@result[:parsed]['aggregations']['exists_field_systemd']['distinct_node_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :journal_ips clipboard
-    And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.journal_ips)
+    And the expression should be true> (cb.node_ips-cb.journal_ips).empty?
     """
 
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard

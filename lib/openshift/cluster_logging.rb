@@ -141,7 +141,7 @@ module BushSlicer
     end
 
     def collection_type(user: nil, quiet: false, cached: true)
-      return collection_spec(user: user, cached: cached, quiet: quiet).dig('logs', 'type')
+      return collection_spec(user: user, cached: cached, quiet: quiet).dig('logs', 'type') || collection_spec(user: user, cached: cached, quiet: quiet).dig('type')
     end
 
     def management_state(user: nil, quiet: false, cached: false)
