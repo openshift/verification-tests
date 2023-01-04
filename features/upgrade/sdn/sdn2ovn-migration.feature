@@ -13,8 +13,6 @@ Feature: sdn2ovn migration testing
     Given the plugin is openshift-ovs-networkpolicy on the cluster
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"v4InternalSubnet":"100.66.0.0/16" }}}} |
-    Given I store the masters in the :masters clipboard
-    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
     Given the OVN joint network CIDR is patched in the node
     
   # @author weliang@redhat.com
