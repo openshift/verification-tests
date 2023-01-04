@@ -19,6 +19,7 @@ objects:
       xpack.monitoring.enabled : false
       xpack.license.self_generated.type: basic
       xpack.security.http.ssl.enabled: false
+      xpack.ml.enabled: ${MACHINE_LEARNING}
   kind: ConfigMap
   metadata:
     name: ${NAME}
@@ -28,3 +29,5 @@ parameters:
   value: elasticsearch-server
 - name: NAMESPACE
   value: openshift-logging
+- name: MACHINE_LEARNING
+  value: "true"

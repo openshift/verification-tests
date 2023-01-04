@@ -986,7 +986,7 @@ Given /^I get(?: (\d+))? logs from the #{QUOTED} kafka consumer job in the #{QUO
 end
 
 # deploy external elasticsearch server
-# version: 6.8 or 7.16
+# version: 6.8 or 7.17
 # project_name: where the external ES deployed
 # scheme: http or https
 # client_auth: true or false, if `true`, must provide client crendentials
@@ -994,7 +994,7 @@ end
 # secret_name: the name of the pipeline secret for the fluentd to use
 Given /^external elasticsearch server is deployed with:$/ do | table |
   opts = opts_array_to_hash(table.raw)
-  version = opts[:version] # 6.8 or 7.16
+  version = opts[:version] # 6.8 or 7.17
   project_name = opts[:project_name]
   scheme = opts[:scheme]
   client_auth = opts[:client_auth]
@@ -1004,8 +1004,8 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
   secret_name = opts[:secret_name]
   step %Q/I use the "#{project_name}" project/
 
-  unless ["6.8", "7.16"].include? version
-    raise "Unsupported ES version: #{version}, we only support ES 6.8 and 7.16!"
+  unless ["6.8", "7.17"].include? version
+    raise "Unsupported ES version: #{version}, we only support ES 6.8 and 7.17!"
   end
 
   if scheme == "https"
@@ -1078,13 +1078,11 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
     cm_patch << ["p", "USERNAME=#{username}"] << ["p", "PASSWORD=#{password}"]
   end
 
-  if version == "6.8"
-    # get the arch of node
-    @result = admin.cli_exec(:get, resource: "nodes", l: "kubernetes.io/os=linux", output: "jsonpath={.items[0].status.nodeInfo.architecture}")
-    # set xpack.ml.enable to false when testing ES 6.8 on arm64 cluster
-    if @result[:response] == "arm64"
-      cm_patch << ["p", "MACHINE_LEARNING=false"]
-    end
+  # get the arch of node
+  @result = admin.cli_exec(:get, resource: "nodes", l: "kubernetes.io/os=linux", output: "jsonpath={.items[0].status.nodeInfo.architecture}")
+  # set xpack.ml.enable to false when the architecture is not amd64
+  if @result[:response] != "amd64"
+    cm_patch << ["p", "MACHINE_LEARNING=false"]
   end
 
   @result = admin.cli_exec(:process, opts_array_process(cm_patch.uniq))

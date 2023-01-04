@@ -32,6 +32,7 @@ objects:
       xpack.monitoring.enabled : false
       xpack.license.self_generated.type: basic
       xpack.security.http.ssl.enabled: false
+      xpack.ml.enabled: ${MACHINE_LEARNING}
   kind: ConfigMap
   metadata:
     name: ${NAME}
@@ -45,3 +46,5 @@ parameters:
   value: "fluentd"
 - name: PASSWORD
   value: "redhat"
+- name: MACHINE_LEARNING
+  value: "true"
