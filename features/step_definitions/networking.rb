@@ -1620,3 +1620,32 @@ Given /^I store kubernetes elected leader pod for ovnkube-master in the#{OPT_SYM
   target_pod = pods.select {|p| p.props[:node_name] == holder_id }.first
   cb[cb_leader_name ] = target_pod
 end
+
+Given /^the plugin is openshift-ovs-networkpolicy on the cluster$/ do
+  ensure_admin_tagged
+  @result = admin.cli_exec(:get, resource: "clusternetwork", output: "jsonpath={.items[*].pluginName}")
+  if @result[:response] != "redhat/openshift-ovs-networkpolicy"
+    raise "The openshift-ovs-networkpolicy plugin is not used in the cluster" 
+    skip_this_scenario
+  end
+end
+
+Given /^the OVN joint network CIDR is patched in the node$/ do 
+  ensure_admin_tagged
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig.v4InternalSubnet}")
+  unless @result[:response].include? "100.66.0"
+    logger.warn "JointNetworkCIDR is not patched"
+    skip_this_scenario
+  end
+end
+
+Given /^the cluster is migrated from sdn$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration.networkType}")
+  unless @result[:stdout]["OVNKubernetes"]
+    logger.warn "the cluster is not migration from sdn plugin"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
+  end
+end
