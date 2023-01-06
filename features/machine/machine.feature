@@ -386,19 +386,21 @@ Feature: Machine features testing
     And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_availability_zone` is stored in the :default_availability_zone clipboard
     And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_iamInstanceProfile` is stored in the :default_iamInstanceProfile clipboard
     And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_subnet` is stored in the :default_subnet clipboard
+    And evaluation of `machine_set_machine_openshift_io(cb.machineset).aws_machineset_secgrp` is stored in the :default_secgrp clipboard
     Then admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-aws/<file_name>"
     When I run oc create over "<file_name>" replacing paths:
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["iamInstanceProfile"]["id"]         | <%= cb.default_iamInstanceProfile %>        |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["ami"]["id"]                        | <%= cb.default_ami_id %>                    |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["placement"]["availabilityZone"]    | <%= cb.default_availability_zone %>         |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["subnet"]["filters"][0]["values"]   |  <%= cb.default_subnet[0].values[1] %>      |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
-      | ["metadata"]["name"]                                                                      | <name>                                      |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]                    | <%= infrastructure("cluster").infra_name %>                    |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["iamInstanceProfile"]["id"]                  | <%= cb.default_iamInstanceProfile %>                           |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]                 | <name>                                                         |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]             | <%= infrastructure("cluster").infra_name %>                    |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["ami"]["id"]                                 | <%= cb.default_ami_id %>                                       |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["securityGroups"][0]["filters"][0]["values"] | <%= cb.default_secgrp[0].values[0].to_s.split(",")[1][11..-1]%>|
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["placement"]["availabilityZone"]             | <%= cb.default_availability_zone %>                            |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["subnet"]["filters"][0]["values"]            | <%= cb.default_subnet[0].values[1] %>                          |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"]          | <name>                                                         |
+      | ["metadata"]["name"]                                                                               | <name>                                                         |
     Then the step should succeed
 
     Then I store the last provisioned machine in the :machine_latest clipboard
@@ -412,7 +414,7 @@ Feature: Machine features testing
       | name     | <%= cb.machine_latest %>      |
     Then the step should succeed
     And the output should contain:
-      | <Validation> |
+      | <Validation>   |
 
     @aws-ipi
     @noproxy @disconnected @connected

@@ -30,6 +30,10 @@ spec:
           apiVersion: awsproviderconfig.openshift.io/v1beta1
           placement:
             availabilityZone: 
+          securityGroups:
+          - filters:
+            - name: tag:Name
+              values:
           subnet:
             filters:
             - name: tag:Name
