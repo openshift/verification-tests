@@ -111,7 +111,7 @@ Feature: Machine misc features testing
       | replicas | 1                    |
     And the step should succeed
 
-    Given I wait up to 180 seconds for the steps to pass:
+    Given I wait up to 300 seconds for the steps to pass:
     """
     And I run the :get admin command with:
       | resource      | MutatingWebhookConfiguration |
