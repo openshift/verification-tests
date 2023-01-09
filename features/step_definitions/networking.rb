@@ -1649,15 +1649,3 @@ Given /^the cluster is migrated from sdn$/ do
     skip_this_scenario
   end
 end
-
-Given /^the cluster is migrated from sdn$/ do
-  ensure_admin_tagged
-  _admin = admin
-  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration.networkType}")
-  unless @result[:stdout]["OVNKubernetes"]
-    logger.warn "the cluster is not migration from sdn plugin"
-    logger.warn "We will skip this scenario"
-    skip_this_scenario
-  end
-end
-
