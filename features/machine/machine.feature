@@ -414,7 +414,7 @@ Feature: Machine features testing
       | name     | <%= cb.machine_latest %>      |
     Then the step should succeed
     And the output should contain:
-      | <Validation>   |
+      | <Validation> |
 
     @aws-ipi
     @noproxy @disconnected @connected
