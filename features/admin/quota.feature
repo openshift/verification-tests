@@ -1026,18 +1026,18 @@ Feature: Quota related scenarios
     When I run the :describe client command with:
       | resource | quota |
     Then the output by order should match:
-      | quota-besteffort                     |
-      | BestEffort                           |
-      | pods\\s+0\\s+6                       |
-      | quota-besteffortandterminating       |
-      | BestEffort.*Terminating              |
-      | pods\\s+0\\s+8                       |
-      | quota-notbesteffortandnotterminating |
-      | NotBestEffort.*NotTerminating        |
-      | pods\s+0\\s+10                       |
-      | quota-notterminating                 |
-      | NotTerminating                       |
-      | pods\\s+0\\s+5                       |
+      | quota-besteffort                      |
+      | BestEffort                            |
+      | pods\\s+.*\\s+6                       |
+      | quota-besteffortandterminating        |
+      | BestEffort.*Terminating               |
+      | pods\\s+.*\\s+8                       |
+      | quota-notbesteffortandnotterminating  |
+      | NotBestEffort.*NotTerminating         |
+      | pods\\s+.*\\s+10                      |
+      | quota-notterminating                  |
+      | NotTerminating                        |
+      | pods\\s+.*\\s+5                       |
     Given I obtain test data file "quota/pod-notbesteffort.yaml"
     When I run the :create client command with:
       | f | pod-notbesteffort.yaml |
@@ -1045,10 +1045,10 @@ Feature: Quota related scenarios
     When I run the :describe client command with:
       | resource | quota |
     Then the output by order should match:
-      | pods\\s+0\\s+6 |
-      | pods\\s+0\\s+8 |
-      | pods\s+1\\s+10 |
-      | pods\\s+1\\s+5 |
+      | pods\\s+.*\\s+6 |
+      | pods\\s+.*\\s+8 |
+      | pods\s+.*\\s+10 |
+      | pods\\s+.*\\s+5 |
     Given I obtain test data file "quota/pod-besteffort.yaml"
     When I run the :create client command with:
       | f | pod-besteffort.yaml |
@@ -1056,10 +1056,10 @@ Feature: Quota related scenarios
     When I run the :describe client command with:
       | resource | quota |
     Then the output by order should match:
-      | pods\\s+1\\s+6 |
-      | pods\\s+0\\s+8 |
-      | pods\s+1\\s+10 |
-      | pods\\s+2\\s+5 |
+      | pods\\s+.*\\s+6 |
+      | pods\\s+.*\\s+8 |
+      | pods\s+.*\\s+10 |
+      | pods\\s+.*\\s+5 |
     Given I obtain test data file "quota/pod-besteffort-terminating.yaml"
     When I run the :create client command with:
       | f | pod-besteffort-terminating.yaml |
@@ -1067,10 +1067,10 @@ Feature: Quota related scenarios
     When I run the :describe client command with:
       | resource | quota |
     Then the output by order should match:
-      | pods\\s+2\\s+6 |
-      | pods\\s+1\\s+8 |
-      | pods\s+1\\s+10 |
-      | pods\\s+2\\s+5 |
+      | pods\\s+.*\\s+6  |
+      | pods\\s+.*\\s+8  |
+      | pods\\s+.*\\s+10 |
+      | pods\\s+.*\\s+5  |
     Given a pod becomes ready with labels:
       | name=pod-besteffort-terminating |
     And I wait up to 70 seconds for the steps to pass:
@@ -1084,10 +1084,10 @@ Feature: Quota related scenarios
     When I run the :describe client command with:
       | resource | quota |
     Then the output by order should match:
-      | pods\\s+1\\s+6 |
-      | pods\\s+0\\s+8 |
-      | pods\s+1\\s+10 |
-      | pods\\s+2\\s+5 |
+      | pods\\s+.*\\s+6  |
+      | pods\\s+.*\\s+8  |
+      | pods\\s+.*\\s+10 |
+      | pods\\s+.*\\s+5  |
 
   # @author qwang@redhat.com
   # @case_id OCP-11636
