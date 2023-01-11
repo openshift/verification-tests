@@ -12,7 +12,6 @@ Feature: Machine features testing
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  
   Scenario: OCP-21196:ClusterInfrastructure Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
