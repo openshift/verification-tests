@@ -47,12 +47,13 @@ end
 Given /^authentication successfully rolls out after config changes$/ do
   ensure_admin_tagged
   interval_time = 5
-  timeout = 400 # set 400 seconds here due to https://bugzilla.redhat.com/show_bug.cgi?id=1958198, after the bug fixed, the seconds should be reduced accordingly
+  oauthprocessingtimeout = 200 # set 200 seconds here due to https://bugzilla.redhat.com/show_bug.cgi?id=1958198, after the bug fixed, the seconds should be reduced accordingly
+  oauthsucceedtimeout = 900 
   stats = {}
   error = nil
-  step %Q/operator "authentication" becomes progressing within #{timeout} seconds/
-  step %Q|operator "authentication" becomes available/non-progressing/non-degraded within #{timeout} seconds|
-  success = wait_for(timeout, interval: interval_time, stats: stats){
+  step %Q/operator "authentication" becomes progressing within #{oauthprocessingtimeout} seconds/
+  step %Q|operator "authentication" becomes available/non-progressing/non-degraded within #{oauthsucceedtimeout} seconds|
+  success = wait_for(oauthsucceedtimeout, interval: interval_time, stats: stats){
     begin
       step %Q/I run the :get admin command with:/, table(%{
           | resource | pod                      |
