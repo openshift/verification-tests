@@ -85,7 +85,7 @@ Feature: networking isolation related scenarios
     Then the output should contain "Hello OpenShift!"
 
   # @author jechen@redhat.com
-  # @case_id OCP-9564 & OCP-45077
+  # @case_id OCP-45077
   @admin
   @network-multitenant
   Scenario: Only the pods nested in a same namespace can communicate with each other
