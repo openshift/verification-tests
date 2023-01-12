@@ -197,6 +197,7 @@ Feature: Machine-api components upgrade tests
       | aws       | machineset-clone-41175 | "spotMarketOptions": {} |
 
     @gcp-ipi
+    @flaky
     Examples:
       | iaas_type | machineset_name        | value                   |
       | gcp       | machineset-clone-41803 | "preemptible": true     |
@@ -237,6 +238,7 @@ Feature: Machine-api components upgrade tests
 
     @gcp-ipi
     @hypershift-hosted
+    @flaky
     Examples:
       | case_id                         | iaas_type | machineset_name        | value               |
       | OCP-41803:ClusterInfrastructure | gcp       | machineset-clone-41803 | "preemptible": true | # @case_id OCP-41803
