@@ -79,7 +79,7 @@ module BushSlicer
           if id_found
             # valid scenario or examples table should be located at first
             #   non-comment/tag line
-            if line =~ COMMENT_OR_TAG
+            if line =~ COMMENT_OR_TAG || line =~ /^\s*$/
               # skip this line as it is a comment or cucumber scenario tags
               next
             elsif line =~ /^\s*(Scenario|Examples:)/
