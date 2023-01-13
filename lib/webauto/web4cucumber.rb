@@ -121,10 +121,6 @@ require_relative 'chrome_extension'
           browser_name: 'firefox',
           accept_insecure_certs: true
         }
-        #browser_opts["moz:firefoxOptions"] ||= {}
-        #if Integer === @scroll_strategy
-          #browser_opts["moz:firefoxOptions"][:element_scroll_behavior] = @scroll_strategy
-        #end
         # This is actually a shortcut for trace logging
         # this also needs debug webdriver logging enabled above to work
         # options.log_level = 'trace'
@@ -152,8 +148,6 @@ require_relative 'chrome_extension'
           browser_name: 'chrome',
           accept_insecure_certs: true
         }
-        #options["goog:chromeOptions"] = {}
-        #options["goog:chromeOptions"][:element_scroll_behavior] = @scroll_strategy if Integer === @scroll_strategy
         # options = Selenium::WebDriver::Chrome::Options.new
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
