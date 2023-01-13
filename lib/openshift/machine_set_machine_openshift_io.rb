@@ -78,5 +78,10 @@ module BushSlicer
          dig('spec', 'template', 'spec', 'providerSpec', 'value', 'iamInstanceProfile', 'id')
     end
 
+    def aws_machineset_secgrp(user: nil, cached: true, quiet: true)
+      raw_resource(user: user, cached: cached ,quiet: quiet).
+      dig('spec', 'template', 'spec', 'providerSpec', 'value', 'securityGroups')
+    end
+
   end
 end
