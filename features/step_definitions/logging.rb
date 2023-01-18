@@ -1392,19 +1392,22 @@ end
 
 Given /^I get storageclass from cluster and store it in the#{OPT_SYM} clipboard$/ do | sc |
   sc = 'sc' unless sc
-
-  def get_storage_class()
-    storage_classes = BushSlicer::StorageClass.list(user: user)
-    raise "Unable to get storage class " unless storage_classes.count > 0
-    storage_classes.each do | storage_class |
-      if storage_class.default?
-        return storage_class
-      end
+  has_default_sc = false
+  _sc = ''
+  storage_classes = BushSlicer::StorageClass.list(user: user)
+  raise "Unable to get storage class " unless storage_classes.count > 0
+  storage_classes.each do | storage_class |
+    if storage_class.default?
+      has_default_sc = true
+      _sc = storage_class
+      break
     end
-    return storage_classes.first
   end
 
-  _sc = get_storage_class()
+  if !has_default_sc
+    _sc = storage_classes.first
+  end
+
   cb[sc] = _sc
   cache_resources _sc
 end
