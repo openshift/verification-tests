@@ -276,7 +276,7 @@ Feature: Routing and DNS related scenarios
     Then the step should succeed
     When I use the "ocp45955" project
     Given I obtain test data file "routing/web-server-rc.yaml"
-    Given I wait up to 180 seconds for the steps to pass:
+    Given I wait up to 30 seconds for the steps to pass:
     """
     When I run the :create client command with:
       | f | web-server-rc.yaml|
@@ -296,7 +296,7 @@ Feature: Routing and DNS related scenarios
     When I run the :idle client command with:
       | svc_name | service-unsecure |
     Then the step should succeed
-    Given I wait for the resource "pod" named "<%= cb.pod_name %>" to disappear within 120 seconds
+    Given I wait for the resource "pod" named "<%= cb.pod_name %>" to disappear within 180 seconds
 
     # Check the servcie service-unsecure to see the idle annotation
     And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
