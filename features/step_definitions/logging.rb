@@ -1284,7 +1284,7 @@ Given /^I have clusterlogging with(?: (\d+))? persistent storage ES$/ do |es_num
       if(es_num==1)
         redundancy_policy="ZeroRedundancy"
       end
-      step %Q/default storageclass is stored in the :default_sc clipboard/
+      step %Q/I get storageclass from cluster and store it in the :default_sc clipboard/
       step %Q|I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"|
       step %Q/I create clusterlogging instance with:/, table(%{
         | crd_yaml          | clusterlogging-storage-template.yaml |
@@ -1373,10 +1373,10 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
       end
       if action == "check"
         # read logs line by line
-        # ignore errors in https://issues.redhat.com/browse/LOG-2674 and https://issues.redhat.com/browse/LOG-2702
+        # ignore errors in https://issues.redhat.com/browse/LOG-2702
         case container.name
-        when "logfilesmetricexporter"
-          log = check_log(@result[:response], error_strings, ["can't remove non-existent inotify watch for"])
+        when "cluster-logging-operator"
+          log = check_log(@result[:response], error_strings, ["the object has been modified"])
         when "kibana"
           log = check_log(@result[:response], error_strings, ["java.lang.UnsupportedOperationException"])
         when "collector"
@@ -1388,4 +1388,26 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
       end
     end
   end
+end
+
+Given /^I get storageclass from cluster and store it in the#{OPT_SYM} clipboard$/ do | sc |
+  sc = 'sc' unless sc
+  has_default_sc = false
+  _sc = ''
+  storage_classes = BushSlicer::StorageClass.list(user: user)
+  raise "Unable to get storage class " unless storage_classes.count > 0
+  storage_classes.each do | storage_class |
+    if storage_class.default?
+      has_default_sc = true
+      _sc = storage_class
+      break
+    end
+  end
+
+  if !has_default_sc
+    _sc = storage_classes.first
+  end
+
+  cb[sc] = _sc
+  cache_resources _sc
 end

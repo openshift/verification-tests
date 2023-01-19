@@ -40,7 +40,7 @@ Feature: Logging smoke test case
       | f | clf-forward-with-different-tags.yaml |
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
-    And default storageclass is stored in the :default_sc clipboard
+    And I get storageclass from cluster and store it in the :default_sc clipboard
 
     Given I obtain test data file "logging/clusterlogging/cl-storage-with-im-template.yaml"
     When I create clusterlogging instance with:
