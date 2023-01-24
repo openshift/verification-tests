@@ -7,6 +7,7 @@ Feature: cluster-logging-operator related test
   @destructive
   @commonlogging
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @logging5.6 @logging5.7
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -161,6 +162,7 @@ Feature: cluster-logging-operator related test
   @destructive
   @commonlogging
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @logging5.6 @logging5.7
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
@@ -195,6 +197,7 @@ Feature: cluster-logging-operator related test
   @singlenode
   @proxy @noproxy @disconnected @connected
   @4.7 @4.6
+  @logging5.6 @logging5.7
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
@@ -243,6 +246,7 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @logging5.6 @logging5.7
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode

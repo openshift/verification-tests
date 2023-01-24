@@ -92,6 +92,7 @@ Feature: Cases to test forward logs to external elasticsearch
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
     @arm64 @amd64 @heterogeneous
+    @logging5.6 @logging5.7
     Examples:
       | case_id           | scheme | client_auth | file                 |
       | OCP-29845:Logging | https  | true        | clf-with-secret.yaml | # @case_id OCP-29845
@@ -204,6 +205,7 @@ Feature: Cases to test forward logs to external elasticsearch
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
+    @logging5.6 @logging5.7
     Examples:
       | case_id           | version | scheme | client_auth | username | password | secret_name |
       | OCP-41807:Logging | 7.17    | https  | true        | test1    | redhat   | test1       | # @case_id OCP-41807

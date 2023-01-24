@@ -139,6 +139,7 @@ Feature: cluster log forwarder features
   @destructive
   @singlenode
   @4.7 @4.6
+  @logging5.6 @logging5.7
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
@@ -230,6 +231,7 @@ Feature: cluster log forwarder features
       | infra-container.log |
     """
     @upgrade-sanity
+    @logging5.6 @logging5.7
     @singlenode
     @proxy @noproxy @connected
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
@@ -298,6 +300,7 @@ Feature: cluster log forwarder features
 
     @singlenode
     @proxy @noproxy @disconnected @connected
+    @logging5.6 @logging5.7
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
@@ -313,6 +316,7 @@ Feature: cluster log forwarder features
   @singlenode
   @proxy @noproxy @disconnected @connected
   @4.7 @4.6
+  @logging5.6 @logging5.7
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
@@ -379,6 +383,7 @@ Feature: cluster log forwarder features
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
+    @logging5.6 @logging5.7
     Examples:
       | case_id           | file                  | protocol |
       | OCP-32643:Logging | rsys_clf_RFC3164.yaml | tls      | # @case_id OCP-32643
@@ -390,6 +395,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @4.10 @4.9 @4.8 @4.7 @4.6
+  @logging5.6 @logging5.7
   @singlenode
   @proxy @noproxy @connected
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
@@ -441,6 +447,7 @@ Feature: cluster log forwarder features
   @singlenode
   @proxy @noproxy @connected
   @4.7 @4.6
+  @logging5.6 @logging5.7
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
