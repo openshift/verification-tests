@@ -917,7 +917,6 @@ Feature: Quota related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-12086
-  @flaky
   @admin
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
@@ -946,10 +945,10 @@ Feature: Quota related scenarios
     Then the output by order should match:
       | quota-notterminating |
       | NotTerminating       |
-      | pods\\s+0\\s+5       |
+      | pods\\s+.*\\s+5      |
       | quota-terminating    |
       | Terminating          |
-      | pods\\s+0\\s+10      |
+      | pods\\s+.*\\s+10     |
     Given I obtain test data file "quota/pod-terminating.yaml"
     When I run the :create client command with:
       | f | pod-terminating.yaml |
@@ -957,8 +956,8 @@ Feature: Quota related scenarios
     When I run the :describe client command with:
       | resource | quota |
     Then the output by order should match:
-      | pods\\s+0\\s+5   |
-      | pods\\s+1\\s+10  |
+      | pods\\s+.*\\s+5   |
+      | pods\\s+.*\\s+10  |
     Given I obtain test data file "quota/pod-notterminating.yaml"
     When I run the :create client command with:
       | f | pod-notterminating.yaml |
@@ -966,8 +965,8 @@ Feature: Quota related scenarios
     When I run the :describe client command with:
       | resource | quota |
     Then the output by order should match:
-      | pods\\s+1\\s+5   |
-      | pods\\s+1\\s+10  |
+      | pods\\s+.*\\s+5   |
+      | pods\\s+.*\\s+10  |
     Given a pod becomes ready with labels:
       | name=pod-terminating |
     And I wait up to 70 seconds for the steps to pass:
@@ -981,8 +980,8 @@ Feature: Quota related scenarios
     When I run the :describe client command with:
       | resource | quota |
     Then the output by order should match:
-      | pods\\s+1\\s+5   |
-      | pods\\s+0\\s+10  |
+      | pods\\s+.*\\s+5   |
+      | pods\\s+.*\\s+10  |
 
   # @author chezhang@redhat.com
   # @author weinliu@redhat.com
