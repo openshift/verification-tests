@@ -101,7 +101,7 @@ Feature: service upgrade scenarios
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=test-pods |
-    And evaluation of `pod.node_ip` is stored in the :hostip clipboard
+    And evaluation of `pod.node_name` is stored in the :hostip clipboard
     When I execute on the pod:
       | curl | <%= cb.hostip %>:<%= cb.port %> |
     Then the step should succeed
@@ -126,7 +126,7 @@ Feature: service upgrade scenarios
     Given I use the "hello-pod" service
     And a pod becomes ready with labels:
       | name=test-pods |
-    And evaluation of `pod.node_ip` is stored in the :hostip clipboard
+    And evaluation of `pod.node_name` is stored in the :hostip clipboard
     When I execute on the pod:
       | curl | <%= cb.hostip %>:<%= service.ports[0]["nodePort"] %> |
     Then the step should succeed
