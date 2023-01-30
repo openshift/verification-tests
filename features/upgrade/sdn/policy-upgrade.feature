@@ -66,7 +66,7 @@ Feature: SDN compoment upgrade testing
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
-    And evaluation of `pod(1).ip` is stored in the :pod2ip clipboard
+    And evaluation of `pod(1).ip_url` is stored in the :pod2ip clipboard
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
 
     When I execute on the "<%= cb.pod1 %>" pod:
@@ -104,7 +104,7 @@ Feature: SDN compoment upgrade testing
     When I use the "policy-upgrade" project
     Given status becomes :running of 2 pods labeled:
       | name=test-pods |
-    And evaluation of `pod(1).ip` is stored in the :pod2ip clipboard
+    And evaluation of `pod(1).ip_url` is stored in the :pod2ip clipboard
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
