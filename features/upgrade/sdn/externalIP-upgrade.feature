@@ -44,10 +44,14 @@ Feature: SDN externalIP compoment upgrade testing
     And evaluation of `pod.name` is stored in the :pod1name clipboard
 
     # Curl externalIP:portnumber should pass
+    And evaluation of `cb.hostip.include?(":") ? "[#{cb.hostip}]" : cb.hostip` is stored in the :hostip_url clipboard
+    And I wait up to 60 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.pod1name %>" pod:
-      | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
+      | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip_url %>:27017 |
     Then the output should contain:
       | Hello OpenShift! |
+    """
 
   # @author weliang@redhat.com
   # @case_id OCP-44790
@@ -70,8 +74,9 @@ Feature: SDN externalIP compoment upgrade testing
     And evaluation of `pod.name` is stored in the :pod1name clipboard
 
     # Curl externalIP:portnumber should pass
+    And evaluation of `cb.hostip.include?(":") ? "[#{cb.hostip}]" : cb.hostip` is stored in the :hostip_url clipboard
     When I execute on the "<%= cb.pod1name %>" pod:
-      | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
+      | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip_url %>:27017 |
     Then the output should contain:
       | Hello OpenShift! |
 
