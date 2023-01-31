@@ -37,12 +37,14 @@ gem 'azure_mgmt_network', '~>0.17.0'
 # gem 'timers'
 ## Logging
 gem 'term-ansicolor'
+
 ## Webauto
 gem 'watir'
 gem 'headless'
-gem 'selenium-webdriver'
+gem 'selenium-webdriver', '4.8.0'
 gem 'protobuf'
 gem 'reportportal'
+
 ## Docs
 # beware https://github.com/pry/pry/issues/1465
 #        https://bugzilla.redhat.com/show_bug.cgi?id=1257578
