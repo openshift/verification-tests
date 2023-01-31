@@ -203,10 +203,14 @@ Feature: Service related networking scenarios
     And the pod named "externalip-pod" becomes ready
  
     # Curl externalIP:portnumber should pass
+    And evaluation of `cb.hostip.include?(":") ? "[#{cb.hostip}]" : cb.hostip` is stored in the :hostip_url clipboard
+    And I wait up to 60 seconds for the steps to pass:
+    """
     When I execute on the pod:
-      | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
+      | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip_url %>:27017 |
     Then the output should contain:
       | Hello OpenShift! |
+    """
 
   # @author weliang@redhat.com
   # @case_id OCP-24692
@@ -393,10 +397,14 @@ Feature: Service related networking scenarios
     And the pod named "externalip-pod" becomes ready
 
     # Curl externalIP:portnumber from pod
+    And evaluation of `cb.host1ip.include?(":") ? "[#{cb.host1ip}]" : cb.host1ip` is stored in the :host1ip_url clipboard
+    And I wait up to 60 seconds for the steps to pass:
+    """
     When I execute on the pod:
-      | /usr/bin/curl | --connect-timeout | 10 | <%= cb.host1ip %>:27017 |
+      | /usr/bin/curl | --connect-timeout | 10 | <%= cb.host1ip_url %>:27017 |
     Then the output should contain:
       | Hello OpenShift! |
+    """
 
     # Delete created pod and svc
     When I run the :delete client command with:
@@ -421,10 +429,14 @@ Feature: Service related networking scenarios
     And the pod named "externalip-pod" becomes ready
 
     # Curl externalIP:portnumber on new pod
+    And evaluation of `cb.host2ip.include?(":") ? "[#{cb.host2ip}]" : cb.host2ip` is stored in the :host2ip_url clipboard
+    And I wait up to 60 seconds for the steps to pass:
+    """
     When I execute on the pod:
-      | /usr/bin/curl | --connect-timeout | 10 | <%= cb.host2ip %>:27017 |
+      | /usr/bin/curl | --connect-timeout | 10 | <%= cb.host2ip_url %>:27017 |
     Then the output should contain:
       | Hello OpenShift! |
+    """
 
   # @author anusaxen@redhat.com
   # @case_id OCP-26035
