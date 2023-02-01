@@ -77,7 +77,7 @@
       | netstat | -ng |
     Then the step should succeed
     And the output should match:
-      | eth0\s+1\s+232.43.211.234 |
+      | eth0\s+1\s+(232.43.211.234\|ff3e::4321:1234) |
     """
     And I wait up to 20 seconds for the steps to pass:
     """
@@ -85,8 +85,8 @@
       | cat | /tmp/p3.log |
     Then the step should succeed
     And the output should match:
-      | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, 232.43.211.234\), pinging |
-      | <%= cb.pod2ip %>.*joined \(S,G\) = \(\*, 232.43.211.234\), pinging |
+      | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
+      | <%= cb.pod2ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
     And the output should not match:
       | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
       | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
@@ -159,7 +159,7 @@
       | netstat | -ng |
     Then the step should succeed
     And the output should match:
-      | eth0\s+1\s+232.43.211.234 |
+      | eth0\s+1\s+(232.43.211.234\|ff3e::4321:1234) |
     """
     And I wait up to 20 seconds for the steps to pass:
     """
@@ -167,8 +167,8 @@
       | cat | /tmp/p3.log |
     Then the step should succeed
     And the output should match:
-      | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, 232.43.211.234\), pinging |
-      | <%= cb.pod2ip %>.*joined \(S,G\) = \(\*, 232.43.211.234\), pinging |
+      | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
+      | <%= cb.pod2ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
     And the output should not match:
       | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
       | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
