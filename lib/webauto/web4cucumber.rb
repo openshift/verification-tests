@@ -3,6 +3,7 @@ require 'psych'
 require 'uri'
 require 'watir'
 require "base64"
+require 'webdrivers'
 
 require_relative 'chrome_extension'
 
@@ -124,6 +125,7 @@ require_relative 'chrome_extension'
         # This is actually a shortcut for trace logging
         # this also needs debug webdriver logging enabled above to work
         # options.log_level = 'trace'
+        @driver = Selenium::WebDriver.for :firefox
         if @selenium_url
           @browser = Watir::Browser.new :firefox, :http_client=>client, options: browser_opts, url: @selenium_url
         else
@@ -151,6 +153,7 @@ require_relative 'chrome_extension'
         # options = Selenium::WebDriver::Chrome::Options.new
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
+        @driver = Selenium::WebDriver.for :chrome
         if @selenium_url
           @browser = Watir::Browser.new :chrome, :http_client=>client, options: options, url: @selenium_url
         else
