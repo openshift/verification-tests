@@ -28,6 +28,10 @@ elif [ "$(os_type)" == "rhel8" ] || [ "$(os_type)" == "centos8" ]; then
     cmd="dnf install -y --setopt=skip_missing_names_on_install=False --allowerasing --skip-broken"
     file="deps.yum.RHEL8"
     additional_deps=install_rvm_if_ruby_is_outdated
+elif [ "$(os_type)" == "rhel9" ] || [ "$(os_type)" == "centos9" ]; then
+    cmd="dnf install -y"
+    file="deps.yum.RHEL9"
+    additional_deps=install_rvm_if_ruby_is_outdated
 elif [ "$(os_type)" == "Mac OS X" ]; then
     cmd="brew install"
     file="deps.macos"
