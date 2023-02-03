@@ -49,6 +49,7 @@ function os_type()
         grep -i -q "Red Hat .* 6" "${fileName}" && { echo "rhel6"; return 0; }
         grep -i -q "Red Hat .* 7" "${fileName}" && { echo "rhel7"; return 0; }
         grep -i -q "Red Hat .* 8" "${fileName}" && { echo "rhel8"; return 0; }
+        grep -i -q "Red Hat .* 9" "${fileName}" && { echo "rhel9"; return 0; }
         grep -i -q 'ubuntu'       "${fileName}" && { echo "ubuntu"; return 0; }
     elif [ -f /usr/bin/sw_vers ]; then
         sw_vers | grep 'ProductName:' | awk '{ print substr($0, index($0,$2)) }'
