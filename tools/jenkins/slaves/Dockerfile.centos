@@ -19,6 +19,12 @@ RUN set -x && \
     yum install -y --enablerepo=centosplus --setopt=skip_missing_names_on_install=False $SCL_BASE_PKGS && \
     yum install -y --enablerepo=centosplus --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
     yum install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
+    CHROMEDRIVER_VERSION=$(curl -sSL "$CHROMEDRIVER_URL/LATEST_RELEASE") && \
+    curl -sSL "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" | bsdtar --no-same-owner --no-same-permissions -xvf - -C /usr/local/bin && \
+    GECKODRIVER_DOWNLOAD_URL="$(curl -sSL $GITHUB_API_CURL_OPTS https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -Eo 'http.*linux64.tar.gz' | head -1)" && \
+    curl -sSL "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
+    chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     mkdir -p $HOME/bin
 

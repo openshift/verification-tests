@@ -39,7 +39,6 @@ gem 'azure_mgmt_network', '~>0.17.0'
 gem 'term-ansicolor'
 
 ## Webauto
-gem 'webdrivers', '~>5.0'
 gem 'watir'
 gem 'headless'
 gem 'selenium-webdriver', '4.8.0'
