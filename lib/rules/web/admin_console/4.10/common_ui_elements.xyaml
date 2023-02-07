@@ -476,7 +476,7 @@ click_kebab_item:
   element:
     selector:
       xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and not(contains(@class,'pf-m-disabled')) and text()='<kebab_item>']
-    timeout: 20
+    timeout: 60
     op: click
 click_kebab_of_one_resource:
   elements:
