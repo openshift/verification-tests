@@ -20,7 +20,7 @@ The following commands will retrieve all test case ids and add the tag `@aws-ipi
 
 ```bash
 cd verficiation-tests
-bash tools/cucushift-add-tags.sh doc/prow/query_aws-ipi.json doc/prow/query_4.9.json
+tools/cucushift-add-tags.sh doc/prow/query_aws-ipi.json doc/prow/query_4.9.json
 ```
 
 Upon completion of the steps, create a pull request in `verfication-tests` and `cucushift` respectively. Add clear and consistent summary to your PR and ask qe-productivity for review.
