@@ -1649,3 +1649,15 @@ Given /^the cluster is migrated from sdn$/ do
     skip_this_scenario
   end
 end
+
+Given /^make sure no coredump on the master hosts$/ do
+  ensure_admin_tagged
+
+  env.nodes.select { |n| n.schedulable? && n.is_master? }.each do |n|
+    @result = n.host.exec("coredumpctl list")
+    unless @result[:stdout].include? "No coredumps found"
+      logger.info "the cluster master already including coredumps package"
+      skip_this_scenario
+    end
+  end
+end
