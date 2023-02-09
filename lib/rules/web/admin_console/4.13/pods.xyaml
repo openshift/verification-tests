@@ -36,6 +36,9 @@ check_memory_descending_order_result:
 check_status_popover:
   elements:
   - selector:
+      xpath: //header
+    op: click
+  - selector:
       xpath: //span[contains(.,'<status>')]
     op: click
   - selector:
