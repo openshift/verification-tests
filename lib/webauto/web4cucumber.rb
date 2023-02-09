@@ -74,7 +74,7 @@ require_relative 'chrome_extension'
     def browser
       return @browser if @browser && @browser.exists?
       firefox_profile = Selenium::WebDriver::Firefox::Profile.new
-      chrome_caps = Selenium::WebDriver::Remote::Capabilities.chrome()
+      chrome_opts = Selenium::WebDriver::Options.chrome
       safari_caps = Selenium::WebDriver::Remote::Capabilities.safari()
       chrome_switches = []
       if ENV.has_key?("http_proxy") || @http_proxy
@@ -82,7 +82,7 @@ require_relative 'chrome_extension'
         proxy_raw = (@http_proxy || ENV["http_proxy"]).sub(/(\/)+$/, '')
         proxy = proxy_raw.sub(%r{^.+?://}, "")
         proxy_bypass = "localhost,127.0.0.1"
-        firefox_profile.proxy = chrome_caps.proxy = safari_caps.proxy = Selenium::WebDriver::Proxy.new({:http => proxy.sub(%r{^.+?@}, ""), :ssl => proxy.sub(%r{^.+?@}, "")})
+        firefox_profile.proxy = chrome_opts.proxy = safari_caps.proxy = Selenium::WebDriver::Proxy.new({:http => proxy.sub(%r{^.+?@}, ""), :ssl => proxy.sub(%r{^.+?@}, "")})
         firefox_profile['network.proxy.no_proxies_on'] = proxy_bypass
         chrome_switches << "--proxy-bypass-list=#{proxy_bypass}"
         if proxy.include? "@"
@@ -136,11 +136,6 @@ require_relative 'chrome_extension'
         end
       elsif @browser_type == :chrome
         logger.info "Launching Chrome"
-        #https://bugs.chromium.org/p/chromium/issues/detail?id=1056073
-        chrome_caps[:acceptInsecureCerts] = true
-        if Integer === @scroll_strategy
-          chrome_caps[:element_scroll_behavior] = @scroll_strategy
-        end
         if self.class.container?
           chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage]
         end
@@ -148,8 +143,6 @@ require_relative 'chrome_extension'
           browser_name: 'chrome',
           accept_insecure_certs: true
         }
-        # options = Selenium::WebDriver::Chrome::Options.new
-        # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
         if @selenium_url
           @browser = Watir::Browser.new :chrome, :http_client=>client, options: options, url: @selenium_url
