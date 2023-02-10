@@ -161,17 +161,7 @@ Given /^I have LDAP service in my project$/ do
     # So take the second one since this one can be implemented currently
     ###
     stats = {}
-    if env.version_ge("4.12", user: user)
-      step %Q/I run the :label admin command with:/, table(%{
-        | resource  | namespace/<%= project.name %>                        |
-        | overwrite | true                                                 |
-        | key_val   | security.openshift.io/scc.podSecurityLabelSync=false |
-        | key_val   | pod-security.kubernetes.io/enforce=privileged        |
-        | key_val   | pod-security.kubernetes.io/audit=privileged          |
-        | key_val   | pod-security.kubernetes.io/warn=privileged           |
-        })
-      step %Q/the step should succeed/
-    end
+    step %Q/the appropriate pod security labels are applied to the namespace/
     step 'I obtain test data file "pods/ldapserver.yaml"'
     step %Q/I run the :create admin command with:/, table(%{
       | f | ldapserver.yaml      |
@@ -515,10 +505,7 @@ Given /^I have a iSCSI setup in the environment$/ do
   if !_project.exists?(user:admin, quiet: true)
     @result = admin.cli_exec(:create_namespace, name: 'iscsi-target')
     raise 'failed to create "iscsi-target" project' unless @result[:success]
-    if env.version_ge("4.12", user: user)
-      @result = admin.cli_exec(:label, [[:resource, "ns/iscsi-target"], [:overwrite, "true"], [:key_val, "security.openshift.io/scc.podSecurityLabelSync=false"], [:key_val, "pod-security.kubernetes.io/enforce=privileged"], [:key_val, "pod-security.kubernetes.io/audit=privileged"], [:key_val, "pod-security.kubernetes.io/warn=privileged"]])
-      raise 'failed to add pod security labels to "iscsi-target" namespace' unless @result[:success]
-    end
+    step %Q/the appropriate pod security labels are applied to the "iscsi-target" namespace/
   end
 
   _pod = cb.iscsi_pod = pod("iscsi-target", _project)
