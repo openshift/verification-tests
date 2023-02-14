@@ -3,7 +3,7 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15465
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @upgrade-sanity
@@ -26,7 +26,7 @@ Feature: Egress IP related features
 
   # @author bmeng@redhat.com
   # @case_id OCP-15466
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @aws-ipi
   @admin
   @vsphere-upi @aws-upi
@@ -50,7 +50,7 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15471
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -114,7 +114,7 @@ Feature: Egress IP related features
   # @author huirwang@redhat.com
   # @case_id OCP-15472
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @proxy @noproxy @connected
@@ -156,7 +156,7 @@ Feature: Egress IP related features
   # @bug_id  1609112
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @network-openshiftsdn @network-networkpolicy
@@ -210,7 +210,7 @@ Feature: Egress IP related features
   # @case_id OCP-15992
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -260,7 +260,7 @@ Feature: Egress IP related features
   # @case_id OCP-15473
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @network-openshiftsdn @network-networkpolicy
@@ -313,7 +313,7 @@ Feature: Egress IP related features
   # @case_id OCP-19973
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -357,7 +357,7 @@ Feature: Egress IP related features
   # @author huirwang@redhat.com
   # @case_id OCP-15998
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
@@ -383,7 +383,7 @@ Feature: Egress IP related features
   # @case_id OCP-25694
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -422,7 +422,7 @@ Feature: Egress IP related features
   # @case_id OCP-25640
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -483,7 +483,7 @@ Feature: Egress IP related features
   # @case_id OCP-18316
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -521,7 +521,7 @@ Feature: Egress IP related features
   # @case_id OCP-18315
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -565,7 +565,7 @@ Feature: Egress IP related features
   # @case_id OCP-19785
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -617,7 +617,7 @@ Feature: Egress IP related features
   # @case_id OCP-15989
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -690,7 +690,7 @@ Feature: Egress IP related features
   # @case_id OCP-18586
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -737,7 +737,7 @@ Feature: Egress IP related features
   # @case_id OCP-40928
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
+  @4.9 @4.8
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -789,7 +789,7 @@ Feature: Egress IP related features
   # @case_id OCP-40933
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
+  @4.9 @4.8
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -842,7 +842,7 @@ Feature: Egress IP related features
   # @case_id OCP-40957
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
+  @4.9 @4.8
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -896,7 +896,7 @@ Feature: Egress IP related features
   # @case_id OCP-40956
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
+  @4.9 @4.8
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -957,7 +957,7 @@ Feature: Egress IP related features
   # @case_id OCP-46244
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -1004,7 +1004,7 @@ Feature: Egress IP related features
   # @case_id OCP-46637
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci

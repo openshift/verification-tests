@@ -76,7 +76,7 @@ Feature: Egress compoment upgrade testing
   @admin
   @upgrade-prepare
   @network-ovnkubernetes
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -136,7 +136,7 @@ Feature: Egress compoment upgrade testing
   @admin
   @upgrade-check
   @network-ovnkubernetes
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -180,7 +180,7 @@ Feature: Egress compoment upgrade testing
   @admin
   @flaky
   @upgrade-prepare
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -254,7 +254,7 @@ Feature: Egress compoment upgrade testing
   @admin
   @flaky
   @upgrade-check
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @qeci
