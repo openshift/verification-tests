@@ -4,7 +4,7 @@ Feature: SCTP related scenarios
   # @case_id OCP-28757
   @admin
   @destructive
-  @4.10 @4.9
+  @4.9
   Scenario: OCP-28757:SDN Establish pod to pod SCTP connections
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
@@ -57,7 +57,7 @@ Feature: SCTP related scenarios
   # @case_id OCP-28758
   @admin
   @destructive
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
