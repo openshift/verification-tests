@@ -109,6 +109,7 @@ Feature: buildconfig.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
+  @critical
   Scenario: OCP-12057:BuildAPI Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:

@@ -29,6 +29,7 @@ Feature: SDN compoment upgrade testing
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-network-operator" project
@@ -216,6 +217,7 @@ Feature: SDN compoment upgrade testing
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project

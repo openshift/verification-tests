@@ -54,6 +54,7 @@ Feature: Storage of Hostpath plugin testing
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @hypershift-hosted
+    @critical
     Examples:
       | case_id          | access_mode   | reclaim_policy | pv_status | step_status |
       | OCP-9639:Storage | ReadWriteOnce | Retain         | released  | succeed     | # @case_id OCP-9639

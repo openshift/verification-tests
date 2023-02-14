@@ -17,6 +17,7 @@ Feature: Logging smoke test case
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-37508:Logging One logging acceptance case for all cluster
     Given logging operators are installed successfully
     # create a pod to generate some logs

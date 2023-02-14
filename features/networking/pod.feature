@@ -11,6 +11,7 @@ Feature: Pod related networking scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-9747:SDN Pod cannot claim UDP port 4789 on the node as part of a port mapping
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -39,6 +40,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-10031:SDN Container could reach the dns server
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -65,6 +67,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-14986:SDN The openflow list will be cleaned after delete the pods
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -101,6 +104,7 @@ Feature: Pod related networking scenarios
   @proxy @noproxy @connected
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @critical
   Scenario: OCP-10817:SDN Check QoS after creating pod
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -268,6 +272,7 @@ Feature: Pod related networking scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @critical
   Scenario: OCP-23894:SDN User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -445,6 +450,7 @@ Feature: Pod related networking scenarios
   @proxy @noproxy @disconnected @connected
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @hypershift-hosted
+  @critical
   Scenario: OCP-25294:SDN Pod should be accesible via node ip and host port
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard

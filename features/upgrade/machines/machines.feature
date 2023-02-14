@@ -40,6 +40,7 @@ Feature: Machine-api components upgrade tests
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     @hypershift-hosted
+    @critical
   Examples:
     | case_id                         | cluster_operator     |
     | OCP-22712:ClusterInfrastructure | "machine-api"        | # @case_id OCP-22712
@@ -137,6 +138,7 @@ Feature: Machine-api components upgrade tests
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -277,6 +279,7 @@ Feature: Machine-api components upgrade tests
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

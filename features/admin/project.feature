@@ -12,6 +12,7 @@ Feature: project permissions
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-11717:Node Pod creation should fail when pod's node selector conflicts with project node selector
     Given a 5 characters random string of type :dns is stored into the :proj_name clipboard
     When I run the :oadm_new_project admin command with:

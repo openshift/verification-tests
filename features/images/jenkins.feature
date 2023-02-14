@@ -76,6 +76,7 @@ Feature: jenkins.feature
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy
     @flaky
+    @critical
     Examples:
       | case_id                    | ver |
       | OCP-11369:OpenshiftJenkins | 2   | # @case_id OCP-11369
@@ -123,6 +124,7 @@ Feature: jenkins.feature
   @heterogeneous @arm64 @amd64
   @inactive
   @flaky
+  @critical
   Scenario: OCP-12773:BuildAPI new-app/new-build support for pipeline buildconfigs
     Given I have a project
     When I run the :new_app client command with:
@@ -316,6 +318,7 @@ Feature: jenkins.feature
     @network-ovnkubernetes @network-openshiftsdn
     @amd64
     @flaky
+    @critical
     Examples:
       | version |
       | 1       |
@@ -332,6 +335,7 @@ Feature: jenkins.feature
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @amd64
+  @critical
   Scenario: OCP-15384:OpenshiftJenkins Jenkins pipeline build with OpenShift Client Plugin Example
     And I have a project
     When I run the :create client command with:

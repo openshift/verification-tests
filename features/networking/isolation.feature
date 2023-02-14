@@ -153,6 +153,7 @@ Feature: networking isolation related scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy
   @hypershift-hosted
+  @critical
   Scenario: OCP-9641:SDN Make the network of given project be accessible to other projects
     # Create 3 projects and each contains 1 pod and 1 service
     Given the env is using multitenant network
@@ -317,6 +318,7 @@ Feature: networking isolation related scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-12659:SDN Make the network of given projects be accessible globally
     # Create 3 projects and each contains 1 pod and 1 service
     Given the env is using multitenant network

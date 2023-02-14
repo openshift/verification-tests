@@ -91,6 +91,7 @@ Feature: Elasticsearch related tests
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @critical
   Scenario: OCP-28140:Logging Elasticsearch retention policy testing
     Given I switch to the first user
     And I create a project with non-leading digit name

@@ -11,6 +11,7 @@ Feature: resouces related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-11882:Workloads Return description of resources with cli describe
     Given I have a project
     And I create a new application with:

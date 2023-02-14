@@ -47,6 +47,7 @@ Feature: Testing the isolation during build scenarios
     @upgrade-sanity
     @noproxy
     @heterogeneous @arm64 @amd64
+    @critical
     Examples:
       | case_id       | type   | repo                                                           | strategy       |
       | OCP-15741:SDN | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15741
