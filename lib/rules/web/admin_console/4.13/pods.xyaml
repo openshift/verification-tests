@@ -40,3 +40,4 @@ check_status_popover:
     op: click
   - selector:
       xpath: //div[contains(@class,'pf-c-popover__body') and contains(.,'<message>')]
+  action: click_close_icon
