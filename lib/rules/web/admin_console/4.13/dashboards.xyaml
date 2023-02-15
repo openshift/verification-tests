@@ -574,7 +574,14 @@ check_worker_info_when_filter_by_node_type:
 check_master_info_when_filter_by_node_type:
   params:
     node_type: master
-  action: choose_node_type
+    node_type_name: control plane
+    button_text: Node type
+  action: click_button
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'pf-c-check__label') and contains(text(),'<node_type_name>')]
+    op: click
+  action: click_button
   action: check_metrics_query_cpu_filter_by_node_type
   action: check_metrics_query_memory_filter_by_node_type
   action: check_metrics_query_filesystem_filter_by_node_type
