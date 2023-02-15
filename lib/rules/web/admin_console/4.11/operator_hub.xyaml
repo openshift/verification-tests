@@ -926,7 +926,7 @@ enable_plugin_from_install_page:
     op: click
 uninstall_operator_and_check_pluginremoval_msg:
   params:
-    check_msg: console plugins provided by this operator will be disabled and removed
+    check_msg: disabled and removed
   action: uninstall_operator_with_msg_check
 uninstall_operator_and_check_operandremoval_msg:
   params:
@@ -943,7 +943,7 @@ uninstall_operator_with_msg_check:
 check_no_plugin_message_on_uninstall_modal:
   params:
     item: Remove Subscription
-    content: console plugins provided by this operator will be disabled and removed
+    content: disabled and removed
   action: click_one_dropdown_action
   action: check_page_not_match
 toggle_plugin_status:
