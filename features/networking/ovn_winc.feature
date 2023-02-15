@@ -66,6 +66,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-37519:SDN Create Loadbalancer service for a window container
     Given the env is using windows nodes
     Given I have a project

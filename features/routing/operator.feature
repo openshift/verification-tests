@@ -12,6 +12,7 @@ Feature: Testing Ingress Operator related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-27594:NetworkEdge set namespaceOwnership of routeAdmission to InterNamespaceAllowed
     Given the master version >= "4.4"
     And I have a project

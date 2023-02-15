@@ -238,6 +238,7 @@ Feature: cluster log forwarder features
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
     @arm64 @amd64 @heterogeneous
+    @critical
     Examples:
       | case_id           | auth_type         |
       | OCP-29844:Logging | mTLS_share        | # @case_id OCP-29844
@@ -384,6 +385,7 @@ Feature: cluster log forwarder features
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
     @logging5.6 @logging5.7
+    @critical
     Examples:
       | case_id           | file                  | protocol |
       | OCP-32643:Logging | rsys_clf_RFC3164.yaml | tls      | # @case_id OCP-32643
@@ -401,6 +403,7 @@ Feature: cluster log forwarder features
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @critical
   Scenario: OCP-32697:Logging Forward logs to different kafka topics
     Given I switch to the first user
     And I create a project with non-leading digit name

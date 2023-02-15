@@ -83,6 +83,7 @@ Feature: IPsec upgrade scenarios
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade
     Given the IPsec is enabled on the cluster
     Given evaluation of `50` is stored in the :protocol clipboard

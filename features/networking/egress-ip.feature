@@ -11,6 +11,7 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-15465:SDN Only cluster admin can add/remove egressIPs on hostsubnet
     Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host
@@ -35,6 +36,7 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-15466:SDN Only cluster admin can add/remove egressIPs on netnamespaces
     Given the env is using "OpenShiftSDN" networkType
     # Try to add the egress ip to the netnamespace with normal user
@@ -59,6 +61,7 @@ Feature: Egress IP related features
   @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-15471:SDN All the pods egress connection will get out through the egress IP if the egress IP is set to netns and egress node can host the IP
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard

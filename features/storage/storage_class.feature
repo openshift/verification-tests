@@ -108,6 +108,7 @@ Feature: storageClass related feature
     @aws-ipi
     @aws-upi
     @hypershift-hosted
+    @critical
     Examples:
       | case_id           | provisioner | type | zone       | is-default | size  |
       | OCP-10160:Storage | aws-ebs     | gp2  | us-east-1d | false      | 1Gi   | # @case_id OCP-10160
@@ -184,6 +185,7 @@ Feature: storageClass related feature
     @vsphere-ipi
     @vsphere-upi
     @hypershift-hosted
+    @critical
     Examples:
       | case_id           | provisioner    |
       | OCP-24259:Storage | vsphere-volume | # @case_id OCP-24259
@@ -337,6 +339,7 @@ Feature: storageClass related feature
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-10228:Storage AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
     Given I obtain test data file "storage/ebs/pvc-retain.json"

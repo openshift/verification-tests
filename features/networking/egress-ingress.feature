@@ -12,6 +12,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-11639:SDN EgressNetworkPolicy will not take effect after delete it
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -58,6 +59,7 @@ Feature: Egress-ingress related networking scenarios
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-13502:SDN Apply different egress network policy in different projects
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -129,6 +131,7 @@ Feature: Egress-ingress related networking scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-13507:SDN The rules of egress network policy are added in openflow
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -176,6 +179,7 @@ Feature: Egress-ingress related networking scenarios
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-13509:SDN Egress network policy use dnsname with multiple ipv4 addresses
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -213,6 +217,7 @@ Feature: Egress-ingress related networking scenarios
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-15005:SDN Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -276,6 +281,7 @@ Feature: Egress-ingress related networking scenarios
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-15017:SDN Add nodes local IP address to OVS rules for egressnetworkpolicy
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -430,6 +436,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-33530:SDN EgressFirewall allows traffic to destination ports
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
@@ -473,6 +480,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-33531:SDN EgressFirewall rules take effect in order
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
@@ -604,6 +612,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-37491:SDN EgressFirewall allows traffic to destination dnsName
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
@@ -642,6 +651,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-37495:SDN EgressFirewall denys traffic to destination dnsName
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
@@ -720,6 +730,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-41179:SDN bug1947917 Egress Firewall should reliably apply firewall rules
     Given the env is using "OVNKubernetes" networkType
     Given I have a project

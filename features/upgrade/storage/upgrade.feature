@@ -87,6 +87,7 @@ Feature: Storage upgrade tests
   @upgrade
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded
@@ -196,6 +197,7 @@ Feature: Storage upgrade tests
   @upgrade
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: Cluster operator storage should be in correct status after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded

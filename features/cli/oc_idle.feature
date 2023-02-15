@@ -11,6 +11,7 @@ Feature: oc idle
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-11633:Node CLI - Idle all the service in the same project
     Given I have a project
     Given I obtain test data file "rc/idle-rc-1.yaml"
@@ -63,6 +64,7 @@ Feature: oc idle
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-11980:Node CLI - Idle service by label
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -108,6 +110,7 @@ Feature: oc idle
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-12085:Node CLI - Idle service from file
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -158,6 +161,7 @@ Feature: oc idle
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-12169:Node CLI - Idle service with dry-run
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -194,6 +198,7 @@ Feature: oc idle
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @critical
   Scenario: OCP-10941:Node Idling service with dc
     Given I have a project
     Given I obtain test data file "rc/idling-echo-server.yaml"
@@ -264,6 +269,7 @@ Feature: oc idle
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @critical
   Scenario: OCP-11345:Node Idling service with rc
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"

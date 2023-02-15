@@ -29,6 +29,7 @@ Feature: pods related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-11527:Node kubectl describe pod should show qos tier info
     Given I have a project
     Given I obtain test data file "quota/pod-notbesteffort.yaml"
@@ -177,6 +178,7 @@ Feature: pods related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-11055:Node /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project
     Given I obtain test data file "pods/pod_with_two_containers.json"
@@ -238,6 +240,7 @@ Feature: pods related scenarios
   @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
+  @critical
   Scenario: OCP-22283:Authentication 4.0 Oauth provider info should be consumed in a pod
     Given I have a project
     When I run the :new_app client command with:

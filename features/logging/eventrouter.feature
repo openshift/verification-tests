@@ -46,6 +46,7 @@ Feature: eventrouter related test
     @network-ovnkubernetes @network-openshiftsdn
     @hypershift-hosted
     @logging5.6 @logging5.7
+    @critical
     Examples:
     | case_id           | index_name  |
     | OCP-29738:Logging | infra       | # @case_id OCP-29738

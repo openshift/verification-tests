@@ -170,6 +170,7 @@ Feature: cluster-logging-operator related test
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-33721:Logging OpenShift Logging dashboard
     Given I switch to the first user
     And the first user is cluster-admin

@@ -142,6 +142,7 @@ Feature: storage security check
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-9709:Storage secret volume security check
     Given I have a project with proper privilege
     Given I obtain test data file "storage/secret/secret.yaml"

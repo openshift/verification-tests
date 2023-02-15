@@ -591,6 +591,7 @@ Feature: Service related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-33848:SDN User can expand the nodePort range by patch the serviceNodePortRange in network
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard

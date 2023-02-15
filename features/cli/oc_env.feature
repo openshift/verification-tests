@@ -12,6 +12,7 @@ Feature: oc_env.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
+  @critical
   Scenario: OCP-11032:BuildAPI Set environment variables when creating application using non-DeploymentConfig template
     Given I have a project
     When I run the :new_app client command with:

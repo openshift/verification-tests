@@ -10,6 +10,7 @@ Feature: ipv6 dual stack cluster test scenarios
   @proxy @noproxy @disconnected @connected
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @heterogeneous @arm64 @amd64
+  @critical
   Scenario: OCP-40581:SDN Project should be in isolation when using multitenant policy for ipv6 dual stack
     # create project and pods
     Given the cluster is dual stack network type
@@ -94,6 +95,7 @@ Feature: ipv6 dual stack cluster test scenarios
   @proxy @noproxy @disconnected @connected
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @heterogeneous @arm64 @amd64
+  @critical
   Scenario: OCP-46816:SDN ipv6 for nodeport service
     Given the cluster is dual stack network type
     Given I store the workers in the :workers clipboard

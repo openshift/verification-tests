@@ -18,6 +18,7 @@ Feature: CSI clone testing related feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-27615:Storage Clone a PVC and verify data consistency
     # Step 1
     Given the master version >= "4.7"
@@ -177,6 +178,7 @@ Feature: CSI clone testing related feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-30315:Storage Cinder CSI clone Clone a pvc with block VolumeMode successfully
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"

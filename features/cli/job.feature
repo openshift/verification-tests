@@ -322,6 +322,7 @@ Feature: job.feature
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-10781:Workloads Create job with specific deadline
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -383,6 +384,7 @@ Feature: job.feature
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-17515:Workloads User can schedule a Cronjob execution with cron format time
     Given I have a project
     When I run the :create_cronjob client command with:

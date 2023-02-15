@@ -11,6 +11,7 @@ Feature: Operator related networking scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-22704:SDN The clusteroperator should be able to reflect the network operator version corresponding to the OCP version
 
     Given the master version > "3.11"
@@ -82,6 +83,7 @@ Feature: Operator related networking scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-22201:SDN Should have a clusteroperator object created under config.openshift.io api group for network-operator
     Given the master version >= "4.1"
     # Check the operator object has version
@@ -277,6 +279,7 @@ Feature: Operator related networking scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-21574:SDN Should not allow to change the openshift-sdn config
     #Trying to change network mode to Subnet or any other
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:

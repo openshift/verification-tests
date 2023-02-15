@@ -13,6 +13,7 @@ Feature: oc_expose.feature
   @rosa @aro @osd_ccs
   @admin
   @hypershift-hosted
+  @critical
   Scenario: OCP-10873:APIServer Access app througth secure service and regenerate service serving certs if it about to expire
     Given the master version >= "3.3"
     Given I have a project

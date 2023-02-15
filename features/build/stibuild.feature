@@ -42,6 +42,7 @@ Feature: stibuild.feature
     @network-ovnkubernetes @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     @inactive
+    @critical
     Examples:
       | case_id            | template          |
       | OCP-12041:BuildAPI | ocp12041-s2i.json | # @case_id OCP-12041
@@ -100,6 +101,7 @@ Feature: stibuild.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
+  @critical
   Scenario: OCP-28891:BuildAPI Test s2i build in disconnect cluster
     Given I have a project
     When I have an http-git service in the project
@@ -134,6 +136,7 @@ Feature: stibuild.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
+  @critical
   Scenario: OCP-42159:BuildAPI Mount source secret and configmap to builder container- sourcestrategy
     Given I have a project
     When I run the :create_secret client command with:

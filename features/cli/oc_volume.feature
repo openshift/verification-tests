@@ -13,6 +13,7 @@ Feature: oc_volume.feature
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-12194:Node Create a pod that consumes the secret in a volume
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/secret.yaml"
@@ -62,6 +63,7 @@ Feature: oc_volume.feature
   @proxy @noproxy @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-11906:Storage Add secret volume to dc and rc
     Given I have a project
     When I run the :new_app_as_dc client command with:

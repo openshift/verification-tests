@@ -10,6 +10,7 @@ Feature: collector related tests
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @critical
   Scenario: OCP-25767:Logging All nodes logs are sent to Elasticsearch
     Given the master version == "4.1"
     Given evaluation of `cluster_logging('instance').fluentd_ready_pods.map(&:ip)` is stored in the :collector_pod_ips clipboard
@@ -54,6 +55,7 @@ Feature: collector related tests
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @critical
   Scenario: OCP-24837:Logging All nodes logs had sent logs to Elasticsearch
     Given the master version >= "4.2"
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
@@ -215,6 +217,7 @@ Feature: collector related tests
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @critical
   Scenario: OCP-30084:Logging All nodes logs are collected
     Given the master version >= "4.5"
     Given logging collector name is stored in the :collector_name clipboard

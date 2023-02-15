@@ -55,6 +55,7 @@ Feature: Descheduler major upgrade should work fine
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: upgrade - upgrade descheduler from 4.x to 4.y
     Given I switch to cluster admin pseudo user
     And I use the "openshift-kube-descheduler-operator" project

@@ -12,6 +12,7 @@ Feature: testing multicast scenarios
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-12926:SDN pods should be able to subscribe send and receive multicast traffic
     # create some multicast testing pods
     Given I store the schedulable workers in the :nodes clipboard
@@ -112,6 +113,7 @@ Feature: testing multicast scenarios
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-12977:SDN multicast is disabled by default if not annotate the namespace
     # create multicast testing pods in the project and without multicast enable
     Given I have a project

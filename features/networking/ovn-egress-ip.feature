@@ -13,6 +13,7 @@ Feature: OVN Egress IP related features
   @noproxy @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-33618:SDN EgressIP works for all pods in the matched namespace when only configure namespaceSelector
     Given the env is using "OVNKubernetes" networkType
     Given I save ipecho url to the clipboard
@@ -86,6 +87,7 @@ Feature: OVN Egress IP related features
   @noproxy @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-33723:SDN Multiple EgressIP objects can have multiple Egress IPs
     Given the env is using "OVNKubernetes" networkType		
     Given I save ipecho url to the clipboard
@@ -162,6 +164,7 @@ Feature: OVN Egress IP related features
   @noproxy @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-33641:SDN Multi-project can share same EgressIP
     Given the env is using "OVNKubernetes" networkType
     Given I save ipecho url to the clipboard
@@ -365,6 +368,7 @@ Feature: OVN Egress IP related features
   @noproxy @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-33631:SDN EgressIP was removed after delete egressIP object
     Given the env is using "OVNKubernetes" networkType
     Given I save ipecho url to the clipboard
