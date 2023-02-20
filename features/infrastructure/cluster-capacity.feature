@@ -4,7 +4,7 @@ Feature: cluster-capacity related features
   # @author weinliu@redhat.com
   # @case_id OCP-14799
   @admin
-  @flaky
+  @inactive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
