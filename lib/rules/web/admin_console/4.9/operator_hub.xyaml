@@ -535,10 +535,9 @@ switch_to_yaml_view:
       xpath: //div[contains(@class,'monaco-editor')]
     timeout: 40
 switch_to_form_view:
-  element:
-    selector:
-      id: form
-    op: click
+  params:
+    radio_text: form
+  action: click_radio_input
 select_installed_namespace:
   action: click_project_list_dropdown
   action: choose_project_from_dropdown_list
