@@ -598,8 +598,8 @@ Feature: Machine features testing
     @heterogeneous @arm64 @amd64
     
     Examples:
-      | case_id   | name                         | template                           | diskGiB           |
-      | OCP-35421:ClusterInfrastructure | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
+      | case_id                         | name                         | template                                  | diskGiB           |
+      | OCP-35421:ClusterInfrastructure | default-valued-windows-35421 | openshift-qe-winserver-2022-no-containers| 135               | # @case_id OCP-35421
 
   # @author miyadav@redhat.com
   # @case_id OCP-47658
