@@ -1387,16 +1387,17 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     Given I use the "<%= project(-2).name %>" project
     # Create a pod in new project consuming net-attach-def from 1st project
-    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
-    When I run oc create over "1interface-macvlan-bridge.yaml" replacing paths:
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-25657 |
-    And evaluation of `@result[:response].match(/pod\/(.*) created/)[1]` is stored in the :pod_name clipboard
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | multus-pod              |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-25657    |
+      | ["spec"]["containers"][0]["name"]                          | multus-pod              |
     #making sure the created pod complains about net-attach-def and hence stuck in ContainerCreating state
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-      | resource | pods               |
-      | name     | <%= cb.pod_name %> |
+      | resource | pods       |
+      | name     | multus-pod |
     Then the step should succeed
     And the output should contain:
       | cannot find a network-attachment-definition |
