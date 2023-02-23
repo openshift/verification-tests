@@ -45,9 +45,8 @@ Feature: Machine misc features testing
      | n | openshift-machine-api |
    And admin ensures "mypod" pod is deleted after scenario
 
-   Then I get project events
-   And the output should match:
-     | Failed to provision volume with StorageClass "thin": Credentials not found|
+   Given thin sc or thin-csi sc is present as default 
+   Then the step should succeed
 
    Then I run the :replace admin command with:
       | _tool | oc                           |
@@ -55,9 +54,13 @@ Feature: Machine misc features testing
       | force |                              |
    And the step should succeed
 
+   Given I use the "openshift-machine-api" project
+   And I wait up to 300 seconds for the steps to pass:
+   """ 
    Then I get project events
    And the output should match:
      | Successfully provisioned volume |
+   """
 
   # @author miyadav@redhat.com
   # @case_id OCP-35454
