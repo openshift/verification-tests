@@ -371,11 +371,15 @@ check_items_on_downloads_route_page:
   - selector:
       xpath: //li/a[@href="amd64/mac/oc" and contains(text(), "amd64 mac")]
   - selector:
-      xpath: //li/a[@href="amd64/mac/oc.zip" and contains(text(), "zip")]
-  - selector:
       xpath: //li/a[@href="amd64/windows/oc.exe" and contains(text(), "amd64 windows")]
   - selector:
-      xpath: //li/a[@href="amd64/windows/oc.exe.tar" and contains(text(), "tar")]
+      xpath: //li/a[@href="arm64/linux/oc" and contains(text(), "arm64 linux")]
+  - selector:
+      xpath: //li/a[@href="arm64/mac/oc" and contains(text(), "arm64 mac")]
+  - selector:
+      xpath: //li/a[@href="ppc64le/linux/oc" and contains(text(), "ppc64le linux")]
+  - selector:
+      xpath: //li/a[@href="s390x/linux/oc" and contains(text(), "s390x linux")]
 check_refresh_notification:
   elements:
   - selector:
