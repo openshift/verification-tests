@@ -1501,8 +1501,8 @@ Given /^the cluster is not migration from sdn plugin$/ do
   ensure_admin_tagged
   _admin = admin
   if env.version_le("4.11", user: user)
-    @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration}")
-    if @result[:stdout]["networkType"]
+    @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration.networkType}")
+    if @result[:stdout]["OVNKubernetes"]
       logger.warn "the cluster is migration from sdn plugin"
       logger.warn "We will skip this scenario"
       skip_this_scenario
@@ -1633,3 +1633,17 @@ Given /^make sure no coredump on the master hosts$/ do
     end
   end
 end
+
+Given /^the cluster is not migration from ovn plugin$/ do
+  ensure_admin_tagged
+  _admin = admin
+  if env.version_le("4.21", user: user)
+    @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration.networkType}")
+    if @result[:stdout]["OpenShiftSDN"]
+      logger.warn "the cluster is migration from sdn plugin"
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
+    end
+  end
+end
+

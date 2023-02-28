@@ -54,7 +54,6 @@ Feature: Egress compoment upgrade testing
   @hypershift-hosted
   Scenario: Check egressfirewall is functional post upgrade
     Given I switch to cluster admin pseudo user
-    Given the cluster is not migration from sdn plugin
     And I save egress type to the clipboard
     When I run the :get admin command with:
       | resource | <%= cb.cb_egress_type %>  |
@@ -147,6 +146,7 @@ Feature: Egress compoment upgrade testing
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
+    Given the cluster is not migration from sdn plugin
     When I use the "egressip-upgrade1" project
     Given status becomes :running of 1 pod labeled:
       | name=test-pods |
@@ -265,7 +265,7 @@ Feature: Egress compoment upgrade testing
   @hypershift-hosted
   Scenario: Check sdn egressip is functional post upgrade
     Given I switch to cluster admin pseudo user
-    Given the cluster is not migration from sdn plugin
+    Given the cluster is not migration from ovn plugin
     Given the env is using "OpenShiftSDN" networkType
     Given I run the :get admin command with:
       | resource      | hostsubnet                                  |
