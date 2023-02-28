@@ -689,6 +689,10 @@ require_relative 'chrome_extension'
           logger.info("Looks like we caught stale element, let's try again")
           # https://github.com/watir/watir/issues/571
           res = []
+        rescue Watir::Exception::LocatorException
+          logger.warn("hard wait 15 seconds and try again")
+          sleep(15)
+          res = []
         end
       else
         # some element types/methods return a single element
