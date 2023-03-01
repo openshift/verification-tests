@@ -1637,7 +1637,7 @@ end
 Given /^the cluster is not migration from ovn plugin$/ do
   ensure_admin_tagged
   _admin = admin
-  if env.version_le("4.21", user: user)
+  if env.version_le("4.12", user: user)
     @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.migration.networkType}")
     if @result[:stdout]["OpenShiftSDN"]
       logger.warn "the cluster is migration from sdn plugin"
