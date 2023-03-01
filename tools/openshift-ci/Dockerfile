@@ -16,6 +16,10 @@ RUN set -x && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
     curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s#$GECKODRIVER_RE#\1#p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
+    JQ_SPEC="https://api.github.com/repos/stedolan/jq/releases/latest" && \
+    JQ_RE='^.*"browser_download_url": ?"(http[^"]*jq-linux64)".*$' && \
+    curl -sSL $GITHUB_API_CURL_OPTS "$JQ_SPEC" | sed -En "s#$JQ_RE#\1#p" | xargs -d '\n' curl -sSL -o /usr/local/bin/jq && \
+    chmod +x /usr/local/bin/jq && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm  && \
     yum module reset ruby && \
     yum module -y enable ruby:2.7 && \
