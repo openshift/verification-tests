@@ -1,0 +1,22 @@
+apiVersion: operator.openshift.io/v1
+kind: KubeDescheduler
+metadata:
+  name: cluster
+  namespace: openshift-kube-descheduler-operator
+spec:
+  image: registry.redhat.io/openshift4/ose-descheduler:v4.13
+  logLevel: Normal
+  mode: Automatic
+  operatorLogLevel: Normal
+  profileCustomizations:
+    devLowNodeUtilizationThresholds: Medium
+    podLifetime: 12h
+  deschedulingIntervalSeconds: 3600
+  profiles:
+    - AffinityAndTaints
+    - TopologyAndDuplicates
+    - LifecycleAndUtilization
+    - EvictPodsWithLocalStorage
+    - EvictPodsWithPVC
+  managementState: Managed
+
