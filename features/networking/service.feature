@@ -824,7 +824,7 @@ Feature: Service related networking scenarios
       | Connection refused |
     #It should work like ETP=cluster because its not external traffic, its within the node (ETP=local shouldn't be respected and its like ETP=cluster behaviour) 
     When I run commands on the host:
-      | curl --connect-timeout 5 [<%= cb.worker_ip %>]:<%= cb.port %> |
+      | curl --connect-timeout 5 [<%= cb.worker1_ip %>]:<%= cb.port %> |
     And the output should contain:
       | Hello OpenShift! |
     Given I ensure "hello-pod" service is deleted
