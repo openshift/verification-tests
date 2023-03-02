@@ -1,7 +1,7 @@
 Given(/^I pick a random( windows)? machineset to scale$/) do | windows |
   ensure_admin_tagged
   machine_sets = BushSlicer::MachineSetMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api")).
-    select { |ms| ms.available_replicas >= 1 && (windows ? ms.is_windows_machinesets? : !ms.is_windows_machinesets?) }
+    select { |ms| ms.available_replicas >= 0 && (windows ? ms.is_windows_machinesets? : !ms.is_windows_machinesets?) }
   cache_resources *machine_sets.shuffle
 end
 
