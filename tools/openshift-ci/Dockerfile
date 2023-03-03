@@ -4,6 +4,16 @@ LABEL vendor="Red Hat inc."
 LABEL maintainer="OCP QE Team"
 USER root
 
+ARG YQ_VERSION="v4.30.8"
+RUN set -x && \
+    declare -A YQ_HASH=([amd64]='6c911103e0dcc54e2ba07e767d2d62bcfc77452b39ebaee45b1c46f062f4fd26' \
+                        [arm64]='95092e8b5332890c46689679b5e4360d96873c025ad8bafd961688f28ea434c7') && \
+    arch="$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')" && \
+    YQ_URI="https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_${arch}" && \
+    curl -sSL "${YQ_URI}" -o /usr/local/bin/yq && \
+    echo "${YQ_HASH[$arch]} */usr/local/bin/yq" | sha256sum --strict --status --check && \
+    chmod +x /usr/local/bin/yq
+
 RUN set -x && \
     yum -y update && \
     INSTALL_PKGS="bsdtar git openssh-clients httpd-tools rsync" && \
