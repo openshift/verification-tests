@@ -25,8 +25,10 @@ Feature: Logging upgrading related features
       | group_name | project-group-share                |
       | user_name  | <%= user(1, switch: false).name %> |
     Given logging operators are installed successfully
-    Given I have clusterlogging with persistent storage ES
-    Then I wait for the project "logging-upg-prep-1" logs to appear in the ES pod
+    And I have clusterlogging with persistent storage ES
+    Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
+    And I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
+    And I wait for the project "logging-upg-prep-1" logs to appear in the ES pod
     When I check the cronjob status
     Then the step should succeed
 

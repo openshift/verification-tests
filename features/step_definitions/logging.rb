@@ -1204,6 +1204,9 @@ Given /^I have(?: "(\w+)")? log pod in project #{QUOTED}$/ do | log_type, projec
       step %Q/I run the :new_app client command with:/,table(%{
         | file | #{template_file} |
       })
+      step %Q/a pod becomes ready with labels:/, table(%{
+        | run=centos-logtest|
+      })
     end
 end
 
