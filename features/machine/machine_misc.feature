@@ -134,6 +134,9 @@ Feature: Machine misc features testing
   Scenario: OCP-37744:ClusterInfrastructure kube-rbac-proxy should not expose tokens, have excessive verbosity
     Given I switch to cluster admin pseudo user
 
+    Then I check the cluster platform is not None
+    And the step should succeed
+
     Given I use the "openshift-machine-api" project
     Given a pod becomes ready with labels:
       | api=clusterapi | k8s-app=controller |

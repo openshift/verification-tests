@@ -18,3 +18,12 @@ Given(/^thin sc or thin-csi sc is present as default$/) do
   end
 end
 
+Given(/I check the cluster platform is not None$/) do
+  ensure_admin_tagged
+
+  if infrastructure("cluster").platform == "None"
+     logger.warn "When platform is None,machine-api-controllers are not present"
+     logger.warn "We will skip this scenario"
+     skip_this_scenario
+  end
+end 
