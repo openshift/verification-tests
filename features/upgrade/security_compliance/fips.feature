@@ -15,12 +15,14 @@ Feature: fips enabled verification for upgrade
   @hypershift-hosted
   Scenario: FIPS mode checking command works for a cluster with fip mode on - prepare
     Given fips is enabled
+    And I have a project
 
     #check whether fips enabled for master node
     When I store the masters in the :masters clipboard
     And I use the "<%= cb.masters[0].name %>" node
     When I run commands on the host:
       | update-crypto-policies --show |
+      | n | %= project.name %> |
     Then the step should succeed
     And the output should match:
       | FIPS |
@@ -71,6 +73,7 @@ Feature: fips enabled verification for upgrade
     And I use the "<%= cb.masters[0].name %>" node
     When I run commands on the host:
       | update-crypto-policies --show |
+      | n | %= project.name %> |
     Then the step should succeed
     And the output should match:
       | FIPS |
