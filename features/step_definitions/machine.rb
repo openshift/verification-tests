@@ -20,12 +20,16 @@ Given(/^I have an UPI deployment and machinesets are enabled$/) do
   # In an UPI deployment, if enabled machinesets, machines should be linked to nodes
   machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
   if machines.length == 0
-    raise "Machinesets are not enabled, there are no machines"
+    logger.warn "Machinesets are not enabled, there are no machines"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
   end
 
   machines.each do | machine |
     if machine.node_name.nil?
-      raise "machine #{machine.name} does not have nodeRef."
+      logger.warn "machine #{machine.name} has no node ref."
+      logger.warn "We will skip this scenario"
+      skip_this_scenario
     end
   end
 end
