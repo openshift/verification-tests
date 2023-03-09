@@ -559,6 +559,7 @@ Feature: cluster log forwarder features
     """
   # @author kbharti@redhat.com
   # @case_id OCP-39786
+  @flaky
   @admin
   @destructive
   @4.11 @4.10 @4.9 @4.8 @4.7
