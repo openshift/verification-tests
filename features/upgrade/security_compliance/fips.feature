@@ -22,7 +22,7 @@ Feature: fips enabled verification for upgrade
     And I use the "<%= cb.masters[0].name %>" node
     When I run commands on the host:
       | update-crypto-policies --show |
-      | n | %= project.name %> |
+      | n | %= project.name %>        |
     Then the step should succeed
     And the output should match:
       | FIPS |
@@ -73,7 +73,7 @@ Feature: fips enabled verification for upgrade
     And I use the "<%= cb.masters[0].name %>" node
     When I run commands on the host:
       | update-crypto-policies --show |
-      | n | %= project.name %> |
+      | n | %= project.name %>        |
     Then the step should succeed
     And the output should match:
       | FIPS |
