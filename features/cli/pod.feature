@@ -243,12 +243,12 @@ Feature: pods related scenarios
   @critical
   Scenario: OCP-22283:Authentication 4.0 Oauth provider info should be consumed in a pod
     Given I have a project
-    When I run the :new_app client command with:
-      | docker_image | aosqe/ruby-ex |
-      | l            | app=ruby-ex   |
+    When I create a new application with:
+      | docker_image | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
+      | labels       | name=ruby-ex                                                                                                  |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | app=ruby-ex |
+      | name=ruby-ex |
     When I run the :rsh client command with:
       | pod    | <%= pod.name %>                                                               |
       | _stdin | curl https://kubernetes.default.svc/.well-known/oauth-authorization-server -k |
