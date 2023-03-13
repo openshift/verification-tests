@@ -2,7 +2,6 @@ Feature: UPI GCP Tests
 
   # @author zhsun@redhat.com
   # @case_id OCP-34697
-  @flaky
   @admin
   @destructive
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -15,7 +14,6 @@ Feature: UPI GCP Tests
 
   # @author zhsun@redhat.com
   # @case_id OCP-25034
-  @flaky
   @admin
   @destructive
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
