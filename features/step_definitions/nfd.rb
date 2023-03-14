@@ -13,8 +13,8 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   cb.channel = (ver_major.to_s + "." + ver_minor.to_s)
   install_method ||= 'CLI'
   step %Q/the first user is cluster-admin/
-  step %Q/admin ensure "#{nfd_ns}" project is deleted after scenario/
   step %Q/admin ensure "nfd-master-server" node_feature_discovery is deleted from the "#{nfd_ns}" project after scenario/
+  step %Q/admin ensure "#{nfd_ns}" project is deleted after scenario/
   pod_label = "name=nfd-operator"
   pod_label = "control-plane=controller-manager" if env.version_gt("4.7", user: user)
   if install_method == 'GUI'
@@ -84,7 +84,14 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   step %Q/all the pods in the project reach a successful state/
   step %Q/I store all worker nodes to the :worker_nodes clipboard/
   step %Q/I store the masters in the :master_nodes clipboard/
-  step %Q/<%= cb.master_nodes.count %> pods become ready with labels:/, table(%{
+
+  # for OCP >= 4.12, the number of master nodes with the label 'nfd-master' is
+  # 1
+  cb.expected_master_nodes_with_label = cb.master_nodes.count
+  if env.version_gt("4.11", user: user)
+    cb.expected_master_nodes_with_label = 1
+  end
+  step %Q/<%= cb.expected_master_nodes_with_label %> pods become ready with labels:/, table(%{
     | app=nfd-master |
   })
   step %Q/<%= cb.master_nodes.count %> pods become ready with labels:/, table(%{
@@ -97,6 +104,12 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   raise "Node labled check failed" unless node_labels.count > 0
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "#{nfd_ns}" project/
+  # save the operatorgroup object so we can call delete later
+  cb.operator_group = BushSlicer::OperatorGroup.list(user: user)[0]
+  cb.operator_sub = BushSlicer::Subscription.list(user: user, project: project)[0]
+  # register deleteion
+  step %Q/admin ensure "#{cb.operator_sub.name}" subscription is deleted from the "#{nfd_ns}" project after scenario/
+  step %Q/admin ensure "#{cb.operator_group.name}" operator_group is deleted from the "#{nfd_ns}" project after scenario/
 
   logger.info("Check nfd resource exists...")
   raise "NodeFeatureDiscovery resource does not exists" unless node_feature_discovery('nfd-master-server').exists?
