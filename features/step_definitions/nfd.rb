@@ -87,7 +87,7 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   # for OCP >= 4.12, the number of master nodes with the label 'nfd-master' is
   # 1
   cb.expected_master_nodes_with_label = cb.master_nodes.count
-  if env.version_gt("4.11", user: user)
+  if env.version_ge("4.12", user: user)
     cb.expected_master_nodes_with_label = 1
   end
   step %Q/<%= cb.expected_master_nodes_with_label %> pods become ready with labels:/, table(%{
