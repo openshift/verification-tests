@@ -135,7 +135,6 @@ Feature: Machine misc features testing
     Given I switch to cluster admin pseudo user
 
     Then I check the cluster platform is not None
-    And the step should succeed
 
     Given I use the "openshift-machine-api" project
     Given a pod becomes ready with labels:
