@@ -13,6 +13,13 @@ Given(/^I have an IPI deployment$/) do
       logger.warn "We will skip this scenario"
       skip_this_scenario
     end
+
+  machine_sets = BushSlicer::MachineSetMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
+    if machine_sets.length == 0
+      logger.warn "machineset does not exist, tests running by copying existing machinesets will fail."
+      logger.warn "We will skip this scenario, even though it is IPI deployment"
+      skip_this_scenario
+    end   
   end
 end
 
