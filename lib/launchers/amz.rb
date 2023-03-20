@@ -640,6 +640,7 @@ module BushSlicer
         {value: ip}
       }
       change_resource_record_sets(zone_id: zone_id, changes: [record])
+      return name.sub(/[.]$/,"")
     end
 
     def instance_uptime(instance)
@@ -871,3 +872,4 @@ if __FILE__ == $0
   res = dhub.s3_list_bucket_contents(bucket: bucket_name)
   require 'pry'; binding.pry
 end
+
