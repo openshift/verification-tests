@@ -266,8 +266,12 @@ module BushSlicer
         Collections.deep_merge(common_launch_opts, overrides_launch_opts)
     end
 
+    def gen_ose3_timed_random_component
+      return Time.now.strftime("%m%dos3") << "-" << rand_str(3, :dns)
+    end
+
     def dns_component
-      @dns_component ||= BushSlicer::Dynect.gen_timed_random_component
+      @dns_component ||= gen_ose3_timed_random_component
     end
 
     def dns_component=(value)
@@ -521,22 +525,15 @@ module BushSlicer
         self.dns_component = task[:name]
       when "dns_hostnames"
         begin
-          dyn = nil
-          changed = false
           erb_binding.local_variable_get(:hosts).each do |host|
             if !host.has_hostname?
-              dyn ||= get_dyn
-              changed = true
               dns_record = host[:cloud_instance_name] || rand_str(5, :dns)
               dns_record = dns_record.gsub("_","-")
               dns_record = "#{dns_record}.#{dns_component}"
-              host.update_hostname dyn.dyn_replace_a_records(dns_record, host.ip)
+              host.update_hostname iaas_by_service("AWS-CI").create_a_records(dns_record, [host.ip])
               host[:fix_hostnames] = true
             end
           end
-          dyn.publish if changed
-        ensure
-          dyn.close if dyn
         end
       when "dns_internal_ips"
         if erb_binding.local_variable_defined?(:internal_subdomain)
@@ -546,23 +543,21 @@ module BushSlicer
           int_subdomain += ".#{dns_component}"
         end
         begin
-          dyn = get_dyn
-          erb_binding.local_variable_set(:internal_subdomain, dyn.fqdn(int_subdomain))
+          aws_iaas = iaas_by_service("AWS-CI")
+          base_domain = aws_iaas.default_zone.sub(/[.]$/,"")
+          int_subdomain_fqdn = int_subdomain.end_with?('.') ? int_subdomain[0..-2] : "#{int_subdomain}.#{base_domain}"
+          erb_binding.local_variable_set(:internal_subdomain, int_subdomain_fqdn)
           erb_binding.local_variable_get(:hosts).each do |host|
             dns_record = host[:cloud_instance_name] || rand_str(5, :dns)
             dns_record = dns_record.gsub("_","-")
             dns_record = "#{dns_record}.#{int_subdomain}"
-            host[:internal_fqdn] = dyn.dyn_replace_a_records(dns_record, host.local_ip)
+            host[:internal_fqdn] = aws_iaas.create_a_records(dns_record, [host.local_ip])
             logger.info "Creating '#{dns_record}' record for: internal IP " \
               "#{host.local_ip} of host #{host.hostname}"
           end
-          dyn.publish
-        ensure
-          dyn&.close
         end
       when "a_dns"
         begin
-          dyn = get_dyn
           ips = task[:ips]
 
           unless ips && !ips.empty?
@@ -571,13 +566,10 @@ module BushSlicer
 
           dns_record = "#{task[:prefix]}.#{dns_component}"
           logger.info "Creating '#{dns_record}' record for: #{ips.join(?,)}"
-          fqdn = dyn.dyn_replace_a_records(dns_record, ips)
+          fqdn = iaas_by_service("AWS-CI").create_a_records(dns_record, ips)
           if task[:store_in]
             erb_binding.local_variable_set task[:store_in].to_sym, fqdn
           end
-          dyn.publish
-        ensure
-          dyn.close if dyn
         end
       when "wildcard_dns"
         ips = []
@@ -802,7 +794,12 @@ module BushSlicer
             ]
           }.
           to_h
-          terminate_spec.merge! vminfo
+        terminate_spec.merge! vminfo
+        if defined?(dns_component) and (not dns_component.empty?)
+          terminate_spec.merge!({
+            dns_component:  dns_component
+          })
+        end
         begin
           File.write(terminate_out, terminate_spec.to_yaml)
         rescue => e
@@ -885,6 +882,26 @@ module BushSlicer
             config: vars_file.path,
             launched_instances_name_prefix: spec[:name_prefix]
           )
+        when /^dns_component/
+          # remove route53, which should at the end of the yaml
+          if (not spec.nil?) and (not spec.empty?)
+            begin
+              # try to find a matching DNS records first before calling deletion
+              logger.info("Searching for DNS records matching #{spec}")
+              aws_iaas = iaas_by_service("AWS-CI")
+              records = iaas_by_service('AWS-CI').list_resource_record_sets
+              name_records = records.select { |r| r[:name] =~ /#{spec}/ }
+              if name_records.count > 0
+                logger.info "Deleting DNS records in AWS Route53..."
+                dns_record_regexp = Regexp.new(/#{spec}/)
+                aws_iaas.delete_resource_records_re(dns_record_regexp)
+              else
+                logger.info("No DNS records found matching #{spec}")
+              end
+            rescue
+              logger.info("Unable to delete DNS records matching #{spec}")
+            end
+          end
         else
           # target assumed to be a service name
           iaas = iaas_by_service(target)
