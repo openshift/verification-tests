@@ -132,7 +132,7 @@ click_alert_link_with_text:
 click_actions_button:
   element:
     selector:
-      xpath: //button[@aria-label='Actions'][@class='pf-c-dropdown__toggle']
+      xpath: //button[@class='pf-c-dropdown__toggle']
     op: click
 
 expire_alert_from_detail:
