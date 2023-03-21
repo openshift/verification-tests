@@ -40,6 +40,16 @@ create_operand:
   action: click_create_operand_button
   action: wait_box_loaded
   action: submit_changes
+create_operand_anzo:
+  params:
+    tab_name: Anzo Operator
+    button_text: Create
+  action: goto_csv_detail_page
+  action: click_tab
+  action: click_button
+  action: wait_box_loaded
+  action: switch_to_form_view
+  action: submit_changes
 set_operand_name:
   params:
     label_text: Name
@@ -184,6 +194,7 @@ check_operand_des_during_creating_operand:
   action: goto_csv_detail_page
   action: click_tab
   action: click_create_operand_button
+  action: switch_to_form_view
   action: check_complete_description
   action: submit_changes
 create_catalog_source:
@@ -828,14 +839,14 @@ check_resource_requirement_values:
 check_truncated_description:
   params:
     operand_kind: Application
-    operand_description: longlonglongveryveryverylong…
-  action: check_operand_description
+    operand_description: An Application
+  action: check_operand_description_not_contains
 check_complete_description:
   params:
     operand_kind: Application
-    operand_description: veryverylongAn Application is a group of Kubernetes resources as defined by a manifest
-  action: check_operand_description
-check_operand_description:
+    operand_description: veryAn Application is a group
+  action: check_operand_description_contains
+check_operand_description_contains:
   element:
     selector:
       xpath: //span[text()='<operand_kind>']/ancestor::article//iframe | //h1[text()='<operand_kind>']/ancestor::div//iframe
@@ -846,6 +857,20 @@ check_operand_description:
       var contains = false
       for (var i = 0; i < all_operands_iframs.length; i++) {
         contains = contains || all_operands_iframs[i].getAttribute('srcDoc').indexOf('<operand_description>') != -1 ? true : false
+      }
+      return contains
+    expect_result: true
+check_operand_description_not_contains:
+  element:
+    selector:
+      xpath: //span[text()='<operand_kind>']/ancestor::article//iframe | //h1[text()='<operand_kind>']/ancestor::div//iframe
+    timeout: 20
+  scripts:
+  - command: |
+      var all_operands_iframs = document.querySelectorAll('iframe')
+      var contains = false
+      for (var i = 0; i < all_operands_iframs.length; i++) {
+        contains = contains || all_operands_iframs[i].getAttribute('srcDoc').indexOf('<operand_description>') == -1 ? true : false
       }
       return contains
     expect_result: true
