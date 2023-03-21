@@ -461,7 +461,6 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "conntrack-upgrade" project
@@ -543,7 +542,6 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-networkpolicy
   @upgrade
   @proxy @noproxy @disconnected @connected
-  @hypershift-hosted
   Scenario: Check network policy ACL logging works post upgrade -prepare
     Given I switch to cluster admin pseudo user
     Given the env is using "OVNKubernetes" networkType
