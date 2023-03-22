@@ -140,7 +140,7 @@ check_text_not_a_link:
 click_tab:
   elements:
   - selector: &tab
-      xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), '<tab_name>')]
+      xpath: //ul[contains(@class,'nav__menu')]//a[text()='<tab_name>']
     op: click
     timeout: 30
 check_tab:
