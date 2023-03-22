@@ -55,7 +55,6 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: ensure DNS works well before and after upgrade - prepare
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -81,7 +80,6 @@ Feature: Routing and DNS related scenarios
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   @critical
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
