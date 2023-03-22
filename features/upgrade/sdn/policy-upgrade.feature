@@ -424,7 +424,6 @@ Feature: SDN compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I store the workers in the :nodes clipboard
