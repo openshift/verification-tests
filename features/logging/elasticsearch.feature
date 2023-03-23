@@ -17,7 +17,8 @@ Feature: Elasticsearch related tests
   @hypershift-hosted
   Scenario: OCP-22050:Logging Elasticsearch using dynamic volumes
     Given I get storageclass from cluster and store it in the :default_sc clipboard
-    Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/clusterlogging-storage-template.yaml"
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                                 |
       | crd_yaml            | clusterlogging-storage-template.yaml |
@@ -104,7 +105,8 @@ Feature: Elasticsearch related tests
       | run=centos-logtest,test=centos-logtest |
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
-    Given I obtain test data file "logging/clusterlogging/index_management_test.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/index_management_test.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true                       |
       | crd_yaml            | index_management_test.yaml |

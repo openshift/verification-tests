@@ -1,22 +1,22 @@
-apiVersion: logging.openshift.io/v1      
-kind: ClusterLogForwarder      
-metadata:      
-  name: instance      
-  namespace: openshift-logging      
-spec:      
-  outputs:      
+apiVersion: logging.openshift.io/v1
+kind: ClusterLogForwarder
+metadata:
+  name: instance
+  namespace: openshift-logging
+spec:
+  outputs:
     - name: rsyslog-created-by-user
-      type: syslog      
-      syslog:      
-        facility: local0 
-        rfc: abc    
-        severity: informational     
-      url: 'tcp://rsyslogserver.openshift-logging.svc:514'      
-  pipelines:      
-    - name: forward-to-external-syslog      
-      inputRefs:      
-        - infrastructure      
-        - application      
-        - audit      
-      outputRefs:      
+      type: syslog
+      syslog:
+        facility: local0
+        rfc: abc
+        severity: informational
+      url: 'tcp://rsyslogserver.openshift-logging.svc:514'
+  pipelines:
+    - name: forward-to-external-syslog
+      inputRefs:
+        - infrastructure
+        - application
+        - audit
+      outputRefs:
         - rsyslog-created-by-user

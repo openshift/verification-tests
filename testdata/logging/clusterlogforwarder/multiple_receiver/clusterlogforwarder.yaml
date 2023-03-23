@@ -1,10 +1,10 @@
 apiVersion: logging.openshift.io/v1
 kind: ClusterLogForwarder
-metadata:   
+metadata:
   name: instance
   namespace: openshift-logging
-spec:   
-  outputs:     
+spec:
+  outputs:
   - name: fluentd-created-by-user
     type: fluentdForward
     url: 'tls://fluentdserver.openshift-logging.svc:24224'

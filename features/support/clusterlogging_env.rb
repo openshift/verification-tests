@@ -14,7 +14,8 @@ Before('@commonlogging') do
     if env.version_cmp('4.5', user: user) < 0
       example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml"
     else
-      example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example_indexmanagement.yaml"
+      step %Q/the correct directory name of clusterlogging file is stored in the :cl_dir clipboard/
+      example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/<%= cb.cl_dir %>/example_indexmanagement.yaml"
     end
     step %Q/I create clusterlogging instance with:/, table(%{
       | remove_logging_pods | false         |

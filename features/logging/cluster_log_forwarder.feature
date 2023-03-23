@@ -160,6 +160,14 @@ Feature: cluster log forwarder features
 
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/fluentd_only.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true              |
+      | crd_yaml            | fluentd_only.yaml |
+      | check_status        | false             |
+    Then the step should succeed
+
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     And I obtain test data file "logging/clusterlogforwarder/fluentd/insecure/clusterlogforwarder.yaml"
     When I process and create:
@@ -167,12 +175,7 @@ Feature: cluster log forwarder features
       | p | URL=udp://fluentdserver.<%= cb.fluentd_proj.name %>.svc:24224 |
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
-
-    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
-    When I create clusterlogging instance with:
-      | remove_logging_pods | true              |
-      | crd_yaml            | fluentd_only.yaml |
-    Then the step should succeed
+    And I wait until fluentd is ready
 
     Given I use the "<%= cb.fluentd_proj.name %>" project
     And I wait up to 300 seconds for the steps to pass:
@@ -205,6 +208,14 @@ Feature: cluster log forwarder features
 
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/fluentd_only.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true              |
+      | crd_yaml            | fluentd_only.yaml |
+      | check_status        | false             |
+    Then the step should succeed
+
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     And I obtain test data file "logging/clusterlogforwarder/fluentd/secure/clusterlogforwarder.yaml"
     When I process and create:
@@ -212,12 +223,7 @@ Feature: cluster log forwarder features
       | p | URL=tls://fluentdserver.<%= cb.fluentd_proj.name %>.svc:24224 |
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
-
-    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
-    When I create clusterlogging instance with:
-      | remove_logging_pods | true              |
-      | crd_yaml            | fluentd_only.yaml |
-    Then the step should succeed
+    And I wait until fluentd is ready
 
     Given I use the "<%= cb.fluentd_proj.name %>" project
     And I wait up to 300 seconds for the steps to pass:
@@ -267,7 +273,8 @@ Feature: cluster log forwarder features
       | f | <file> |
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
-    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/example_indexmanagement.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true                         |
       | crd_yaml            | example_indexmanagement.yaml |
@@ -353,6 +360,14 @@ Feature: cluster log forwarder features
 
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/fluentd_only.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true              |
+      | crd_yaml            | fluentd_only.yaml |
+      | check_status        | false             |
+    Then the step should succeed
+
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     Given I obtain test data file "logging/clusterlogforwarder/rsyslog/<file>"
     When I process and create:
@@ -360,12 +375,8 @@ Feature: cluster log forwarder features
       | p | URL=<protocol>://rsyslogserver.<%= cb.syslog_proj.name %>.svc:514 |
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
+    And I wait until fluentd is ready
 
-    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
-    When I create clusterlogging instance with:
-      | remove_logging_pods | true              |
-      | crd_yaml            | fluentd_only.yaml |
-    Then the step should succeed
     Given I use the "<%= cb.syslog_proj.name %>" project
     And I wait up to 300 seconds for the steps to pass:
     """
@@ -422,7 +433,8 @@ Feature: cluster log forwarder features
       | from_file   | ca-bundle.crt=ca.crt |
     Then the step should succeed
     Given I obtain test data file "logging/clusterlogforwarder/kafka/amq/13_ClusterLogForwarder_to_kafka_template.yaml"
-    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/fluentd_only.yaml"
     # The following step will send logs to topic-logging-infra,topic-logging-app,topic-logging-audit
     When I process and create:
       | f | 13_ClusterLogForwarder_to_kafka_template.yaml |
@@ -480,7 +492,8 @@ Feature: cluster log forwarder features
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
     # create clusterlogging instance
-    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/fluentd_only.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true              |
       | crd_yaml            | fluentd_only.yaml |
@@ -557,6 +570,7 @@ Feature: cluster log forwarder features
     And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :app_log_count_2 clipboard
     And the expression should be true> cb.app_log_count_2 > 0
     """
+
   # @author kbharti@redhat.com
   # @case_id OCP-39786
   @flaky
@@ -597,7 +611,8 @@ Feature: cluster log forwarder features
     Then the step should succeed
     And I wait for the "secure-forward" config_map to appear
     # Creating Cluster Logging Instance
-    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    Given I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/example_indexmanagement.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true                         |
       | crd_yaml            | example_indexmanagement.yaml |
