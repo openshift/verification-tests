@@ -112,8 +112,8 @@ require_relative 'chrome_extension'
       client.open_timeout = 180
       client.read_timeout = 600
       headless
-      #Selenium::WebDriver.logger.level = :debug
-      #Watir.logger.level = :debug
+      Selenium::WebDriver.logger.level = :debug
+      Watir.logger.level = :debug
       if @browser_type == :firefox
         logger.info "Launching Firefox Marionette/Geckodriver"
         raise "auth proxy not implemented for Firefox" if proxy_pass
@@ -137,7 +137,7 @@ require_relative 'chrome_extension'
       elsif @browser_type == :chrome
         logger.info "Launching Chrome"
         if self.class.container?
-          chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage --disable-extensions]
+          chrome_switches.concat %w[--no-sandbox --headless --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage --disable-extensions]
         end
         options = {
           browser_name: 'chrome',
@@ -145,9 +145,11 @@ require_relative 'chrome_extension'
         }
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
         if @selenium_url
+          logger.warn "@seleinum_url true, options are: #{options}"
           @browser = Watir::Browser.new :chrome, :http_client=>client, options: options, url: @selenium_url
         else
           options[:args] = chrome_switches
+          logger.warn "@selenium_url false, options are: #{options}"
           @browser = Watir::Browser.new :chrome, :http_client=>client, options: options
         end
         logger.info "#{browser.driver.capabilities[:browser_name]} version is #{browser.driver.capabilities[:browser_version]}"
