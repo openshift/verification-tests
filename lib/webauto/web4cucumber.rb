@@ -112,8 +112,8 @@ require_relative 'chrome_extension'
       client.open_timeout = 180
       client.read_timeout = 600
       headless
-      Selenium::WebDriver.logger.level = :debug
-      Watir.logger.level = :debug
+      #Selenium::WebDriver.logger.level = :debug
+      #Watir.logger.level = :debug
       if @browser_type == :firefox
         logger.info "Launching Firefox Marionette/Geckodriver"
         raise "auth proxy not implemented for Firefox" if proxy_pass
@@ -965,16 +965,7 @@ require_relative 'chrome_extension'
     end
 
     def self.container?
-      return @@container if defined?(@@container)
-
-      if File.exists? '/proc/1/cgroup'
-        cgroups = File.read '/proc/1/cgroup'
-        @@container = %w[kube docker lxc].any? { |pattern|
-          cgroups.include? pattern
-        }
-      else
-        @@container = false
-      end
+      !!ENV['KUBERNETES_SERVICE_HOST'] || !!ENV['DOCKER_CONTAINER_NAME'] || !!ENV['container']
     end
 
     class SimpleLogger
