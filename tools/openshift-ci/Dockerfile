@@ -31,6 +31,7 @@ RUN set -x && \
     curl -sSL $GITHUB_API_CURL_OPTS "$JQ_SPEC" | sed -En "s#$JQ_RE#\1#p" | xargs -d '\n' curl -sSL -o /usr/local/bin/jq && \
     chmod +x /usr/local/bin/jq && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm  && \
+    yum install -y 'ansible-core < 2.14'  && \
     yum module reset ruby && \
     yum module -y enable ruby:2.7 && \
     yum module -y install ruby:2.7 && \
@@ -47,6 +48,10 @@ RUN set -x && \
     /verification-tests/tools/hack_bundle.rb && \
     yum clean all -y && \
     rm -rf /var/cache/yum /var/tmp/* /tmp/* /verification-tests/Gemfile.lock
+
+# Add ansible playbooks
+RUN mkdir -p /usr/share/ansible/ && cd /usr/share/ansible/  && \
+    git clone https://github.com/openshift/openshift-ansible.git  
 
 # Fixing OCPQE-11756
 RUN set -x && \
