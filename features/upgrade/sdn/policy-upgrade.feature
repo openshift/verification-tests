@@ -295,7 +295,9 @@ Feature: SDN compoment upgrade testing
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade - prepare
+    Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade - prepare
+    # Get the worker nodes for scheduling the pod
+    Given I store the ready and schedulable nodes in the :nodes clipboard
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
       | project_name | policy-upgrade3 |
@@ -343,13 +345,14 @@ Feature: SDN compoment upgrade testing
     When I use the "policy-upgrade5" project
     Given I obtain test data file "networking/list_for_pods.json"
     When I run oc create over "list_for_pods.json" replacing paths:
-      | ["items"][0]["spec"]["replicas"]  | 1    |
+      | ["items"][0]["spec"]["replicas"]                      | 1                       |
+      | ["items"][0]["spec"]["template"]["spec"]["nodeName"]  | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=test-pods |
     Then the step should succeed
     And evaluation of `pod(2).ip_url` is stored in the :p5pod1ip clipboard
-    Given I save multus pod on master node to the :multuspod clipboard
+    Given I save multus pod on node "<%= cb.nodes[1].name %>" to the :multuspod clipboard
     Given the DefaultDeny policy is applied to the "policy-upgrade5" namespace
     Then the step should succeed
     Given I obtain test data file "networking/networkpolicy/allow-from-hostnetwork.yaml"
@@ -389,6 +392,8 @@ Feature: SDN compoment upgrade testing
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
+    # Get the worker nodes for scheduling the pod
+    Given I store the ready and schedulable nodes in the :nodes clipboard
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade3" project
     Given a pod becomes ready with labels:
@@ -404,7 +409,7 @@ Feature: SDN compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=test-pods |
     And evaluation of `pod(2).ip_url` is stored in the :p5pod1ip clipboard
-    Given I save multus pod on master node to the :multuspod clipboard
+    Given I save multus pod on node "<%= cb.nodes[1].name %>" to the :multuspod clipboard
     Given I switch to cluster admin pseudo user
     Given I use the "openshift-multus" project
     And I wait up to 30 seconds for the steps to pass:
