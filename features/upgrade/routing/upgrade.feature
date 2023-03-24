@@ -98,7 +98,7 @@ Feature: Routing and DNS related scenarios
   @admin
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @baremetal-ipi
-  @vsphere-upi @openstack-upi @baremetal-upi
+  @vsphere-upi @openstack-upi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
@@ -129,7 +129,7 @@ Feature: Routing and DNS related scenarios
   @admin
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @baremetal-ipi
-  @vsphere-upi @openstack-upi @baremetal-upi
+  @vsphere-upi @openstack-upi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
