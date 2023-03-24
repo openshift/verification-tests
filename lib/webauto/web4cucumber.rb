@@ -137,7 +137,7 @@ require_relative 'chrome_extension'
       elsif @browser_type == :chrome
         logger.info "Launching Chrome"
         if self.class.container?
-          chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage]
+          chrome_switches.concat %w[--no-sandbox --headless --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage --disable-extensions]
         end
         options = {
           browser_name: 'chrome',
@@ -963,16 +963,7 @@ require_relative 'chrome_extension'
     end
 
     def self.container?
-      return @@container if defined?(@@container)
-
-      if File.exists? '/proc/1/cgroup'
-        cgroups = File.read '/proc/1/cgroup'
-        @@container = %w[kube docker lxc].any? { |pattern|
-          cgroups.include? pattern
-        }
-      else
-        @@container = false
-      end
+      !!ENV['KUBERNETES_SERVICE_HOST'] || !!ENV['DOCKER_CONTAINER_NAME'] || !!ENV['container']
     end
 
     class SimpleLogger
