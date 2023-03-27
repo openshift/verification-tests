@@ -43,7 +43,8 @@ Feature: Logging smoke test case
     And I wait for the "instance" cluster_log_forwarder to appear
     And I get storageclass from cluster and store it in the :default_sc clipboard
 
-    Given I obtain test data file "logging/clusterlogging/cl-storage-with-im-template.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/cl-storage-with-im-template.yaml"
     When I create clusterlogging instance with:
       | crd_yaml            | cl-storage-with-im-template.yaml |
       | storage_class       | <%= cb.default_sc.name %>        |

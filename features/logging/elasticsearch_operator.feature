@@ -38,10 +38,11 @@ Feature: elasticsearch-operator related tests
   @destructive
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
-    Given I obtain test data file "logging/clusterlogging/example.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/example_indexmanagement.yaml"
     Given I create clusterlogging instance with:
-      | remove_logging_pods | true         |
-      | crd_yaml            | example.yaml |
+      | remove_logging_pods | true                         |
+      | crd_yaml            | example_indexmanagement.yaml |
     Then the step should succeed
     Given I wait for the "elasticsearch-prometheus-rules" prometheus_rule to appear
     And I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
