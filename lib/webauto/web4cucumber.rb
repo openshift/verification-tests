@@ -137,7 +137,7 @@ require_relative 'chrome_extension'
       elsif @browser_type == :chrome
         logger.info "Launching Chrome"
         if self.class.container?
-          chrome_switches.concat %w[--no-sandbox --headless --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage --disable-extensions]
+          chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage]
         end
         options = {
           browser_name: 'chrome',
