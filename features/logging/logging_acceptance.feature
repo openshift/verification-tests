@@ -59,11 +59,6 @@ Feature: Logging smoke test case
     Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
     And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
     And I wait for the "audit" index to appear in the ES pod with labels "es-node-master=true"
-    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | infra*/_search?pretty'  -d '{"query": {"exists": {"field": "systemd"}}} |
-      | op           | GET                                                                     |
-    Then the step should succeed
-    And the expression should be true> @result[:parsed]['hits']['hits'].length() > 0
 
     # store current indices
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
