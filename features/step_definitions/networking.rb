@@ -509,7 +509,7 @@ Given /^the node's default gateway is stored in the#{OPT_SYM} clipboard$/ do |cb
   ensure_admin_tagged
   step "I select a random node's host"
   cb_name = "gateway" unless cb_name
-  @result = host.exec_admin("ip route show default | awk '/default/ {print $3}'")
+  @result = host.exec_admin("ip route show default | cat | awk '/default/ {print $3}'")
 
   cb[cb_name] = @result[:response].chomp
   unless IPAddr.new(cb[cb_name])
@@ -961,10 +961,10 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   case network_type
   when "OVNKubernetes"
     inf_name="ovn-k8s-mp0"
-    @result = host.exec_admin("ifconfig #{inf_name.split("\n")[0]}")
+    @result = host.exec_admin("ifconfig #{inf_name.split("\n")[0]} | cat")
     cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   when "OpenShiftSDN"
-    @result = host.exec_admin("ifconfig tun0")
+    @result = host.exec_admin("ifconfig tun0 | cat")
     cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   else
     raise "unable to find interface address or networkType"
@@ -1273,7 +1273,7 @@ Given /^the node's MTU value is stored in the#{OPT_SYM} clipboard$/ do |cb_node_
   end
   # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
   inf_name = @result[:response].split("\n").first.split[4]
-  @result = host.exec_admin("ip a show #{inf_name}")
+  @result = host.exec_admin("ip a show #{inf_name}| cat")
   cb[cb_node_mtu] = @result[:response].split(/mtu /)[1][0,4]
   logger.info "Node's MTU value is stored in the #{cb_node_mtu} clipboard as #{cb[cb_node_mtu]}."
 end

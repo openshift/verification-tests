@@ -504,7 +504,7 @@ Feature: Pod related networking scenarios
   And the output should contain "k8s.ovn.org/hybrid-overlay-node-subnet:"
   And evaluation of `@result[:response].match(/k8s.ovn.org\/hybrid-overlay-node-subnet: \d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}\/\d{2}/)[0].split(": ")[1]` is stored in the :pod_cidr clipboard
   And I run commands on the host:
-    | ip route |
+    | ip route \| cat |
   Then the output should contain:
     | <%= cb.pod_cidr %> dev <%= cb.tunnel_inf_name %> |
 
