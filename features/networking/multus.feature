@@ -1422,7 +1422,7 @@ Feature: Multus-CNI related scenarios
     And the default interface on nodes is stored in the :default_interface clipboard
     #Storing default interface mac address for comparison later with pods macs
     Given I run commands on the host:
-      | ip addr show <%= cb.default_interface %> |
+      | ip addr show <%= cb.default_interface %> \| cat |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :default_interface_mac clipboard
     # Create the net-attach-def via cluster admin
