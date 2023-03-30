@@ -617,9 +617,13 @@ module BushSlicer
       logger.warn("Removing Route53 records matching #{re.inspect}")
       records = list_resource_record_sets(zone_id: zone_id)
       to_delete = records.select { |r| r[:name] =~ re }
-      logger.debug("Removing records: #{to_delete.map {|r| r[:name]}}")
-      list = to_delete.map { |r| { action: "DELETE", resource_record_set: r } }
-      change_resource_record_sets(zone_id: zone_id, changes: list)
+      if to_delete.count > 0
+        logger.debug("Removing records: #{to_delete.map {|r| r[:name]}}")
+        list = to_delete.map { |r| { action: "DELETE", resource_record_set: r } }
+        change_resource_record_sets(zone_id: zone_id, changes: list)
+      else
+        logger.info("No records found matching #{re.inspect}")
+      end
     end
 
     def create_a_records(name, ips, zone_id: nil, ttl: 180)
@@ -640,6 +644,7 @@ module BushSlicer
         {value: ip}
       }
       change_resource_record_sets(zone_id: zone_id, changes: [record])
+      return name.sub(/[.]$/,"")
     end
 
     def instance_uptime(instance)
