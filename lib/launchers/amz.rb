@@ -640,6 +640,7 @@ module BushSlicer
         {value: ip}
       }
       change_resource_record_sets(zone_id: zone_id, changes: [record])
+      return name.sub(/[.]$/,"")
     end
 
     def instance_uptime(instance)
