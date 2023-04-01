@@ -886,18 +886,9 @@ module BushSlicer
           # remove route53, which should at the end of the yaml
           if (not spec.nil?) and (not spec.empty?)
             begin
-              # try to find a matching DNS records first before calling deletion
-              logger.info("Searching for DNS records matching #{spec}")
               aws_iaas = iaas_by_service("AWS-CI")
-              records = iaas_by_service('AWS-CI').list_resource_record_sets
-              name_records = records.select { |r| r[:name] =~ /#{spec}/ }
-              if name_records.count > 0
-                logger.info "Deleting DNS records in AWS Route53..."
-                dns_record_regexp = Regexp.new(/#{spec}/)
-                aws_iaas.delete_resource_records_re(dns_record_regexp)
-              else
-                logger.info("No DNS records found matching #{spec}")
-              end
+              dns_record_regexp = Regexp.new(/#{spec}/)
+              aws_iaas.delete_resource_records_re(dns_record_regexp)
             rescue
               logger.info("Unable to delete DNS records matching #{spec}")
             end
