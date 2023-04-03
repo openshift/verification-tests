@@ -27,7 +27,7 @@ check_help_info:
 check_doc_link_for_upgrade:
   params:
     text: Learn more about OpenShift update channels
-    link_url: https://docs.openshift.com/container-platform/<product_version>/updating/updating-cluster-between-minor.html
+    link_url: https://docs.openshift.com/container-platform/<product_version>/updating/understanding-upgrade-channels-release.html#understanding-upgrade-channels_understanding-upgrade-channels-releases
   action: check_link_and_text
 click_update_channel_button:
   elements:
