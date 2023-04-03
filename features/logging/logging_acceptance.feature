@@ -67,50 +67,6 @@ Feature: Logging smoke test case
     Then the step should succeed
     And the expression should be true> @result[:parsed]['hits']['hits'].length() > 0
 
-    # store current indices
-    #When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-    #  | relative_url | _cat/indices?format=JSON |
-    #  | op           | GET                      |
-    #Then the step should succeed
-    #And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "app"}.map {|x| x["index"]}` is stored in the :app_indices clipboard
-    #And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "infra"}.map {|x| x["index"]}` is stored in the :infra_indices clipboard
-    #And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "audit"}.map {|x| x["index"]}` is stored in the :audit_indices clipboard
-
-    # revert the changes
-    #Given I register clean-up steps:
-    #"""
-    #Given I use the "openshift-logging" project
-    #And I successfully merge patch resource "clusterlogging/instance" with:
-    #  | {"spec": {"logStore": {"retentionPolicy": {"application": {"maxAge": "60h"}, "audit": {"maxAge": "3h"}, "infra": {"maxAge": "1d"}}}}} |
-    #"""
-    # for testing purpose, update the schedule of cronjobs and maxAge of each log types
-    #Given I successfully merge patch resource "clusterlogging/instance" with:
-    #  | {"spec": {"logStore": {"retentionPolicy": {"application": {"maxAge": "6m"}, "audit": {"maxAge": "6m"}, "infra": {"maxAge": "6m"}}}}} |
-    #And I wait up to 60 seconds for the steps to pass:
-    #"""
-    #Given the expression should be true> elasticsearch("elasticsearch").delete_min_age(cached: false, name: "app-policy") == "6m"
-    #And the expression should be true> elasticsearch("elasticsearch").delete_min_age(name: "infra-policy") == "6m"
-    #And the expression should be true> elasticsearch("elasticsearch").delete_min_age(name: "audit-policy") == "6m"
-    #"""
-    # revert the changes
-    #Given I register clean-up steps:
-    #"""
-    #Given I use the "openshift-logging" project
-    #And I successfully merge patch resource "elasticsearch/elasticsearch" with:
-    #  | {"spec": {"managementState": "Managed"}} |
-    #"""
-    #Given I successfully merge patch resource "elasticsearch/elasticsearch" with:
-    #  | {"spec": {"managementState": "Unmanaged"}} |
-    #And the expression should be true> elasticsearch("elasticsearch").management_state == "Unmanaged"
-
-    #Given evaluation of `["elasticsearch-im-app", "elasticsearch-im-audit", "elasticsearch-im-infra"]` is stored in the :cj_names clipboard
-    #And I repeat the following steps for each :cj_name in cb.cj_names:
-    #"""
-    #Given I successfully merge patch resource "cronjob/#{cb.cj_name}" with:
-    #  | {"spec": {"schedule": "*/5 * * * *"}} |
-    #And the expression should be true> cron_job('#{cb.cj_name}').schedule(cached: false) == "*/5 * * * *"
-    #"""
-
     # ES Metrics
     Given I use the "openshift-logging" project
     And I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
@@ -172,46 +128,6 @@ Feature: Logging smoke test case
     When I login to kibana logging web console
     Then the step should succeed
     And I close the current browser
-
-    # Console Dashboard
-    #Given I switch to the first user
-    #And I open admin console in a browser
-    #When I run the :goto_monitoring_db_cluster_logging web action
-    #Then the step should succeed
-    #Given evaluation of `["Elastic Nodes", "Elastic Shards", "Elastic Documents", "Total Index Size on Disk"]` is stored in the :cards clipboard
-    #Given I wait up to 360 seconds for the steps to pass:
-    #"""
-    #When I perform the :check_monitoring_dashboard_card web action with:
-    #  | card_name | Elastic Cluster Status |
-    #Then the step should succeed
-    #"""
-    #And I repeat the following steps for each :card in cb.cards:
-    #"""
-    #When I perform the :check_monitoring_dashboard_card web action with:
-    #  | card_name | #{cb.card} |
-    #Then the step should succeed
-    #"""
-    #And I close the current browser
-
-    # check if there has new index created and check if the old index could be deleted or not
-    # !(cb.new_app_indices - cb.app_indices).empty? ensures there has new index
-    # !(cb.app_indices - cb.new_app_indices).empty? ensures some old indices can be deleted
-    #Given I use the "openshift-logging" project
-    #And I check the cronjob status
-    #Then the step should succeed
-    #Given I wait up to 360 seconds for the steps to pass:
-    #"""
-    #When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-    #  | relative_url | _cat/indices?format=JSON |
-    #  | op           | GET                      |
-    #Then the step should succeed
-    #Given evaluation of `@result[:parsed].select {|e| e['index'].start_with? "app"}.map {|x| x["index"]}` is stored in the :new_app_indices clipboard
-    #And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "infra"}.map {|x| x["index"]}` is stored in the :new_infra_indices clipboard
-    #And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "audit"}.map {|x| x["index"]}` is stored in the :new_audit_indices clipboard
-    #Then the expression should be true> !(cb.new_app_indices - cb.app_indices).empty? && !(cb.app_indices - cb.new_app_indices).empty?
-    #And the expression should be true> !(cb.new_infra_indices - cb.infra_indices).empty? && !(cb.infra_indices - cb.new_infra_indices).empty?
-    #And the expression should be true> !(cb.new_audit_indices - cb.audit_indices).empty? && !(cb.audit_indices - cb.new_audit_indices).empty?
-    #"""
 
     # pod logs in last 2 minutes
     Given I check all pods logs in the "openshift-operators-redhat" project in last 120 seconds
