@@ -42,7 +42,8 @@ Feature: Upgrade Logging with ClusterLogForwarder
       | p | SYSLOG_URL=tcp://rsyslogserver.logging-receivers.svc:514                 |
       | p | ELASTICSEARCH_URL=http://elasticsearch-server.logging-receivers.svc:9200 |
     Then the step should succeed
-    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    Given I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/fluentd_only.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | false             |
       | crd_yaml            | fluentd_only.yaml |

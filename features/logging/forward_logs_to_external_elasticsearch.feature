@@ -33,7 +33,8 @@ Feature: Cases to test forward logs to external elasticsearch
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
 
-    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/fluentd_only.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true              |
       | crd_yaml            | fluentd_only.yaml |
@@ -132,7 +133,8 @@ Feature: Cases to test forward logs to external elasticsearch
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
 
-    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/fluentd_only.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true              |
       | crd_yaml            | fluentd_only.yaml |

@@ -210,7 +210,8 @@ Feature: cluster-logging-operator related test
     Given I delete the clusterlogging instance
     Then the step should succeed
     """
-    Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_Invalid.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>//cl_fluentd-buffer_Invalid.yaml"
     When I run the :create client command with:
       | f | cl_fluentd-buffer_Invalid.yaml |
     Then the step should fail
@@ -258,7 +259,8 @@ Feature: cluster-logging-operator related test
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   Scenario: OCP-33894:Logging Fluentd optimizing variable changes trigger new deployment
-    Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_default.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/cl_fluentd-buffer_default.yaml"
     And I create clusterlogging instance with:
       | remove_logging_pods | true                           |
       | crd_yaml            | cl_fluentd-buffer_default.yaml |
@@ -271,10 +273,10 @@ Feature: cluster-logging-operator related test
     And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
     And the expression should be true> (cb.fluent_conf).include? "flush_mode interval"
     When I run the :patch client command with:
-      | resource      | clusterlogging                                                         |
-      | resource_name | instance                                                               |
-      | p             | {"spec": {"forwarder": {"fluentd": {"buffer": {"flushMode":"lazy"}}}}} |
-      | type          | merge                                                                  |
+      | resource      | clusterlogging                                                          |
+      | resource_name | instance                                                                |
+      | p             | {"spec": {"collection": {"fluentd": {"buffer": {"flushMode":"lazy"}}}}} |
+      | type          | merge                                                                   |
     Then the step should succeed
     Given I wait up to 120 seconds for the steps to pass:
     """

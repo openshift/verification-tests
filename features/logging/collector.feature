@@ -265,10 +265,11 @@ Feature: collector related tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   Scenario: OCP-32197:Logging Fluentd should write it's own logs to stdout and exclude them from collection
-    Given I obtain test data file "logging/clusterlogging/example.yaml"
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/example_indexmanagement.yaml"
     When I create clusterlogging instance with:
-      | remove_logging_pods | true         |
-      | crd_yaml            | example.yaml |
+      | remove_logging_pods | true                         |
+      | crd_yaml            | example_indexmanagement.yaml |
     Then the step should succeed
     # delete ES pod to make fluentd pod generate logs
     When I run the :delete client command with:

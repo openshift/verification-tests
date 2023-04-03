@@ -1,0 +1,41 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: clusterlogging-template
+  annotations:
+    description: "Deploy clusterlogging with PVC"
+    tags: "cluster-logging"
+objects:
+  - kind: "ClusterLogging"
+    apiVersion: "logging.openshift.io/v1"
+    metadata:
+        name: "instance"
+        namespace: openshift-logging
+    spec:
+        managementState: "Managed"
+        logStore:
+          type: "elasticsearch"
+          elasticsearch:
+            nodeCount: ${{ES_NODE_COUNT}}
+            resources:
+              requests:
+                memory: 2Gi
+            storage:
+              storageClassName: "${STORAGE_CLASS}"
+              size: "${PVC_SIZE}"
+            redundancyPolicy: "${REDUNDANCY_POLICY}"
+        visualization:
+          type: "kibana"
+          kibana:
+            replicas: 1
+        collection:
+          type: "fluentd"
+parameters:
+  - name: STORAGE_CLASS
+    value: "gp2"
+  - name: PVC_SIZE
+    value: "20Gi"
+  - name: ES_NODE_COUNT
+    value: "1"
+  - name: REDUNDANCY_POLICY
+    value: "ZeroRedundancy"

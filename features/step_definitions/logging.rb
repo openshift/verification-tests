@@ -7,7 +7,8 @@ Given /^logging service has been installed successfully$/ do
   if env.version_cmp('4.5', user: user) < 0
     example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml"
   else
-    example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example_indexmanagement.yaml"
+    step %Q/the correct directory name of clusterlogging file is stored in the :cl_dir clipboard/
+    example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/<%= cb.cl_dir %>/example_indexmanagement.yaml"
   end
   step %Q/logging operators are installed successfully/
   step %Q/I create clusterlogging instance with:/, table(%{
@@ -512,7 +513,7 @@ Given /^logging eventrouter is installed in the cluster$/ do
 
   image_version = ""
   # for logging 5.2 and later, use image tag v0.3.0/v0.4.0
-  if (clo_version.include? "5.6") || (clo_version.include? "5.5") || (clo_version.include? "5.4")
+  if (clo_version.include? "5.7") || (clo_version.include? "5.6") || (clo_version.include? "5.5") || (clo_version.include? "5.4")
     image_version = "0.4.0"
   elsif (clo_version.include? "5.3") || (clo_version.include? "5.2")
     image_version = "0.3.0"
@@ -928,7 +929,7 @@ Given /^I get(?: (\d+))? records from the #{QUOTED} kafka topic in the #{QUOTED}
   record_num = record_num ? record_num.to_str : "10"
   job_name=rand_str(8, :dns)
   step %Q/I use the "#{project_name}" project/
-  kafka_image=stateful_set('my-cluster-kafka').containers_spec(user: user)[0].image
+  kafka_image=pod('my-cluster-kafka-0').container_specs(user: user)[0].image
   teardown_add {
     admin.cli_exec(:delete, object_type: 'job', object_name_or_id: job_name, n: project_name)
   }
@@ -1290,13 +1291,14 @@ Given /^I have clusterlogging with(?: (\d+))? persistent storage ES$/ do |es_num
         redundancy_policy="ZeroRedundancy"
       end
       step %Q/I get storageclass from cluster and store it in the :default_sc clipboard/
-      step %Q|I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"|
+      step %Q/the correct directory name of clusterlogging file is stored in the :cl_dir clipboard/
+      cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/<%= cb.cl_dir %>/clusterlogging-storage-template.yaml"
       step %Q/I create clusterlogging instance with:/, table(%{
-        | crd_yaml          | clusterlogging-storage-template.yaml |
-        | storage_class     | <%= cb.default_sc.name %>            |
-        | storage_size      | 20Gi                                 |
-        | es_node_count     | #{ es_num }                          |
-        | redundancy_policy | #{ redundancy_policy }               |
+        | crd_yaml          | #{cr}                     |
+        | storage_class     | <%= cb.default_sc.name %> |
+        | storage_size      | 20Gi                      |
+        | es_node_count     | #{ es_num }               |
+        | redundancy_policy | #{ redundancy_policy }    |
       })
     end
 end
@@ -1415,4 +1417,19 @@ Given /^I get storageclass from cluster and store it in the#{OPT_SYM} clipboard$
 
   cb[sc] = _sc
   cache_resources _sc
+end
+
+Given /^the correct directory name of clusterlogging file is stored in the#{OPT_SYM} clipboard$/ do | directory |
+  ensure_admin_tagged
+  step %Q/I switch to cluster admin pseudo user/
+  step %Q/I use the "openshift-logging" project/
+  directory ||= "directory"
+  clo_csv_version = subscription("cluster-logging").current_csv(cached: false).split(".", 2).last.split(/[A-Za-z]/).last
+
+  directory_name=""
+  if Integer(clo_csv_version.split('.')[0]) >= 5 && Integer(clo_csv_version.split('.')[1]) >= 7
+    directory_name="5.7"
+  end
+
+  cb[directory] = directory_name
 end
