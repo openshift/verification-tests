@@ -1385,16 +1385,7 @@ Feature: Multus-CNI related scenarios
       | ["metadata"]["name"]      | macvlan-bridge-25657    |
       | ["metadata"]["namespace"] | <%= project(-1).name %> |
     Then the step should succeed
-    # Check NAD is configured under project namespace
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource | net-attach-def          |
-      | n        | <%= project(-1).name %> |
-    Then the step should succeed
-    And the output should contain:
-      | macvlan-bridge-25657 |
-    """   
+    And admin checks that the "macvlan-bridge-25657" network_attachment_definition exists in the "<%= project(-1).name %>" project  
     Given I use the "<%= project(-2).name %>" project
     # Create a pod in new project consuming net-attach-def from 1st project
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
