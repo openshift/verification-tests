@@ -26,4 +26,14 @@ Given(/I check the cluster platform is not None$/) do
      logger.warn "We will skip this scenario"
      skip_this_scenario
   end
-end 
+end
+
+Given(/^the last provisioned machine is worker$/) do
+  machines = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
+  cache_resources *machines
+  puts machines.max_by(&:created_at).name.include? 'worker'
+  unless (machines.max_by(&:created_at).name.include? 'worker')
+     logger.warn "Skipping this scenario because the last provisioned machine is not worker."	  
+     skip_this_scenario
+ end
+end
