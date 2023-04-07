@@ -1385,6 +1385,7 @@ Feature: Multus-CNI related scenarios
       | ["metadata"]["name"]      | macvlan-bridge-25657    |
       | ["metadata"]["namespace"] | <%= project(-1).name %> |
     Then the step should succeed
+    And admin checks that the "macvlan-bridge-25657" network_attachment_definition exists in the "<%= project(-1).name %>" project  
     Given I use the "<%= project(-2).name %>" project
     # Create a pod in new project consuming net-attach-def from 1st project
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
