@@ -59,6 +59,7 @@ gem 'nokogiri' # needed here to make tools/hack_bundle.rb work correctly
 # oga is a replacemen for nokogiri without system deps; we wrongly thought
 #  that we can live without nokogiry but couldn't because of other gem deps
 gem 'oga' # replacemen for nokogiri when we thought we can workaround it
+gem 'thwait'
 # gem 'gherkin', '>=4.0.0'
 # gem 'lolsoap'
 # gem 'mongo'
@@ -70,3 +71,4 @@ gem 'oga' # replacemen for nokogiri when we thought we can workaround it
 # gem 'mongoid'
 # gem 'text-table'
 # gem 'terminal-table'
+
