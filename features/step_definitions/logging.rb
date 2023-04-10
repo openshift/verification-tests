@@ -1388,6 +1388,8 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
           log = check_log(@result[:response], error_strings, ["java.lang.UnsupportedOperationException"])
         when "collector"
           log = check_log(@result[:response], error_strings, ["Timeout flush: kubernetes.var.log"])
+        when "elasticsearch-operator"
+          log = check_log(@result[:response], error_strings, ["failed decoding raw response body into `map[string]estypes.GetIndexTemplate`", "failed to get list of index templates"])
         else
           log = check_log(@result[:response], error_strings, nil)
         end
