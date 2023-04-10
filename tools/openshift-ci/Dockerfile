@@ -55,5 +55,5 @@ RUN mkdir -p /usr/share/ansible/ && cd /usr/share/ansible/  && \
 
 # Fixing OCPQE-11756
 RUN set -x && \
-    mkdir /.local && \
-    chmod -R 777 /.local
+    mkdir /.ansible /.local && \
+    chmod -R 777 /.ansible /.local
