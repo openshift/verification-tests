@@ -16,6 +16,8 @@ Feature: eventrouter related test
     Given logging eventrouter is installed in the cluster
     Given a pod becomes ready with labels:
       | component=eventrouter |
+    And I wait up to 180 seconds for the steps to pass:
+    """
     When I run the :logs admin command with:
       | resource_name | <%= pod.name %>   |
       | namespace     | openshift-logging |
@@ -25,6 +27,7 @@ Feature: eventrouter related test
       | "verb":  |
       | "event": |
       | "reason" |
+    """
     Given I wait for the "<index_name>" index to appear in the ES pod with labels "es-node-master=true"
     And I wait up to 300 seconds for the steps to pass:
     """
