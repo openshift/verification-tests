@@ -1,0 +1,31 @@
+check_baremetalhost_status_popup:
+  elements:
+  - selector:
+      xpath: (//span[@data-test='status-text'] and text()='Externally provisioned'])[1]
+    op: click
+  - selector:
+      xpath: //div[contains(., 'host was provisioned outside of this cluster and added manually')]
+check_machine_node_ref_links:
+  elements:
+  - selector:
+      xpath: //span[text()='M']/following-sibling::a[contains(@href, 'machine.openshift.io~v1beta1~Machine/<ref_machine>')]
+  - selector:
+      xpath: //span[text()='N']/following-sibling::a[contains(@href, 'nodes/<ref_node>')]
+check_charts_in_baremetalhost_utilization:
+  action: check_no_errors_in_charts
+  elements:
+  - selector:
+      xpath: //h4[text()='CPU']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
+    timeout: 40
+  - selector:
+      xpath: //h4[text()='Memory']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
+    timeout: 40
+  - selector: &filesystem_chart
+      xpath: //h4[text()='Filesystem']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
+    timeout: 40
+  - selector:
+      xpath: //h4[text()='Network Transfer']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
+    timeout: 40
+  - selector:
+      xpath: //h4[text()='Pod count']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
+    timeout: 40

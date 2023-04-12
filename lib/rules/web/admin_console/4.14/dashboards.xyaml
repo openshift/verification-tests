@@ -708,6 +708,11 @@ check_matched_number_of_storageclasses:
     resource_type: storageclass
     number_of_resource: <number_of_storageclasses>
   action: check_matched_number_of_resource
+check_matched_number_of_baremetalhosts:
+  params:
+    resource_type: host
+    number_of_resource: <number_of_baremetalhosts>
+  action: check_matched_number_of_resource
 check_matched_number_of_resource:
   element:
     selector:
