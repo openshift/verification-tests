@@ -5,7 +5,7 @@ Feature: Node operations test scenarios
   @destructive
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Drain a node that has cloud vendor volumes
     Given environment has at least 2 schedulable nodes

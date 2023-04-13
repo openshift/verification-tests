@@ -81,7 +81,7 @@ Feature: rhel8images.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   Scenario: OCP-22595:ImageRegistry mysql persistent template
     Given I have a project
     When I run the :tag admin command with:

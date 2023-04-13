@@ -9,7 +9,7 @@ Feature: oc_delete.feature
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-11184:Node Gracefully delete a pod with '--grace-period' option
@@ -130,7 +130,7 @@ Feature: oc_delete.feature
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-12144:Node Verify pod is gracefully deleted when DeletionGracePeriodSeconds is specified.
@@ -165,7 +165,7 @@ Feature: oc_delete.feature
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-11526:Node Pod should be immediately deleted if TerminationGracePeriodSeconds is 0

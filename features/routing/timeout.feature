@@ -9,7 +9,7 @@ Feature: Testing timeout route
   @singlenode
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical

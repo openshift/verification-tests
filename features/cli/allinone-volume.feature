@@ -9,7 +9,7 @@ Feature: All in one volume
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-11683:Node Project secrets, configmap and downward API into the same volume with normal keys and path

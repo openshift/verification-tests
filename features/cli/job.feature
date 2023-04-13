@@ -8,7 +8,7 @@ Feature: job.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-11206:Workloads Create job with multiple completions
     Given I have a project
@@ -60,7 +60,7 @@ Feature: job.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-11539:Workloads Create job with pod parallelism
     Given I have a project
@@ -185,7 +185,7 @@ Feature: job.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-9952:Workloads Specifying your own pod selector for job
     Given I have a project
@@ -320,7 +320,7 @@ Feature: job.feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-10781:Workloads Create job with specific deadline
@@ -382,7 +382,7 @@ Feature: job.feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-17515:Workloads User can schedule a Cronjob execution with cron format time

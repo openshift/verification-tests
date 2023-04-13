@@ -26,7 +26,7 @@ Feature: limit range related scenarios:
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
+    @heterogeneous @arm64 @amd64 @ppc64le
     @hypershift-hosted
     @critical
     Examples:
@@ -59,7 +59,7 @@ Feature: limit range related scenarios:
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
+    @heterogeneous @arm64 @amd64 @ppc64le
     @hypershift-hosted
     @critical
     Examples:
@@ -89,7 +89,7 @@ Feature: limit range related scenarios:
     @singlenode
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
+    @heterogeneous @arm64 @amd64 @ppc64le
     @hypershift-hosted
     @critical
     Examples:
@@ -107,7 +107,7 @@ Feature: limit range related scenarios:
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-12250:Node Limit range does not allow min > defaultRequest
@@ -132,7 +132,7 @@ Feature: limit range related scenarios:
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-11918:Node Limit range does not allow defaultRequest > default
@@ -157,7 +157,7 @@ Feature: limit range related scenarios:
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-12043:Node Limit range does not allow defaultRequest > max
@@ -182,7 +182,7 @@ Feature: limit range related scenarios:
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-12139:Node Limit range does not allow maxLimitRequestRatio > Limit/Request
@@ -216,7 +216,7 @@ Feature: limit range related scenarios:
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-12315:Node Limit range with all values set with proper values

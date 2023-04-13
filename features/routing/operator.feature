@@ -10,7 +10,7 @@ Feature: Testing Ingress Operator related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-27594:NetworkEdge set namespaceOwnership of routeAdmission to InterNamespaceAllowed

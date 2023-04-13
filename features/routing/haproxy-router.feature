@@ -10,7 +10,7 @@ Feature: Testing haproxy router
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -76,7 +76,7 @@ Feature: Testing haproxy router
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -147,7 +147,7 @@ Feature: Testing haproxy router
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -205,7 +205,7 @@ Feature: Testing haproxy router
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-15044:NetworkEdge The backend health check interval of unsecure route can be set by annotation
@@ -254,7 +254,7 @@ Feature: Testing haproxy router
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-15049:NetworkEdge The backend health check interval of edge route can be set by annotation
@@ -304,7 +304,7 @@ Feature: Testing haproxy router
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -356,7 +356,7 @@ Feature: Testing haproxy router
   @singlenode
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -408,7 +408,7 @@ Feature: Testing haproxy router
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -462,7 +462,7 @@ Feature: Testing haproxy router
   @singlenode
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical

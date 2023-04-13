@@ -9,7 +9,7 @@ Feature: pod related features
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @critical
   Scenario: OCP-15808:Node Endpoints should update in time and no delay
     Given I have a project
@@ -148,7 +148,7 @@ Feature: pod related features
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @critical
   Scenario: OCP-11925:Node Pods will still be created by DaemonSet when nodes are SchedulingDisabled
     Given I have a project
@@ -185,7 +185,7 @@ Feature: pod related features
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @critical
   Scenario: OCP-12047:Node When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
     Given I have a project

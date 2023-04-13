@@ -9,7 +9,7 @@ Feature: Egress IP related features
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-15465:SDN Only cluster admin can add/remove egressIPs on hostsubnet
@@ -34,7 +34,7 @@ Feature: Egress IP related features
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-15466:SDN Only cluster admin can add/remove egressIPs on netnamespaces
@@ -122,7 +122,7 @@ Feature: Egress IP related features
   @vsphere-upi @aws-upi
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-15472:SDN The egressIPs will be added to the node's primary NIC when it gets set on hostsubnet and will be removed after gets unset
     Given the env is using "OpenShiftSDN" networkType
@@ -164,7 +164,7 @@ Feature: Egress IP related features
   @vsphere-upi
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-21812:SDN Should remove the egressIP from the array if it was not being used
     Given the env is using "OpenShiftSDN" networkType
@@ -268,7 +268,7 @@ Feature: Egress IP related features
   @vsphere-upi @aws-upi
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-15473:SDN The related iptables/openflow rules will be removed once the egressIP gets removed from netnamespace
     Given the env is using "OpenShiftSDN" networkType
@@ -363,7 +363,7 @@ Feature: Egress IP related features
   @4.9 @4.8 @4.7 @4.6
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -392,7 +392,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-25694:SDN Random outages with egressIP
     Given the env is using "OpenShiftSDN" networkType
@@ -699,7 +699,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-18586:SDN The same egressIP will not be assigned to different netnamespace
     Given the env is using "OpenShiftSDN" networkType
@@ -966,7 +966,7 @@ Feature: Egress IP related features
   @qeci
   @noproxy @disconnected @connected
   @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-46244:SDN Bug1926662 NodePort works when configuring an EgressIP address
     Given the env is using "OpenShiftSDN" networkType

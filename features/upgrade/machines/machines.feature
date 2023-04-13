@@ -38,7 +38,7 @@ Feature: Machine-api components upgrade tests
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
+    @heterogeneous @arm64 @amd64 @ppc64le
     @hypershift-hosted
     @critical
   Examples:
@@ -63,7 +63,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: Cloud-controller-manager cluster operator should be available after upgrade
     Given evaluation of `cluster_operator('cloud-controller-manager').condition(type: 'Available')` is stored in the :co_available clipboard
@@ -86,7 +86,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   Scenario: There should be no pending or firing alerts for machine-api operators - prepare
     Given the expression should be true> "True" == "True"
 
@@ -100,7 +100,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   Scenario: There should be no pending or firing alerts for machine-api operators
     Given I switch to cluster admin pseudo user
 
@@ -121,7 +121,7 @@ Feature: Machine-api components upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: Scale up and scale down a machineSet after upgrade - prepare
     Given the expression should be true> "True" == "True"
@@ -137,7 +137,7 @@ Feature: Machine-api components upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: Scale up and scale down a machineSet after upgrade
@@ -160,7 +160,7 @@ Feature: Machine-api components upgrade tests
   @admin
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @arm64 @amd64 @heterogeneous
+  @arm64 @amd64 @ppc64le @heterogeneous
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario Outline: Spot/preemptible instances should not block upgrade - prepare
@@ -210,7 +210,7 @@ Feature: Machine-api components upgrade tests
   @admin
   @destructive
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @arm64 @amd64 @heterogeneous
+  @arm64 @amd64 @heterogeneous @ppc64le
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario Outline: Spot/preemptible instances should not block upgrade
@@ -254,7 +254,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
@@ -278,7 +278,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
@@ -332,7 +332,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: Registering Components delays should not be more than liveliness probe - prepare
     Given the expression should be true> "True" == "True"
@@ -346,7 +346,7 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: Registering Components delays should not be more than liveliness probe
     Given I have an IPI deployment
