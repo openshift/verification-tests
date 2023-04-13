@@ -377,6 +377,8 @@ Feature: Machine features testing
   Scenario: OCP-33056:ClusterInfrastructure Implement defaulting machineset values for GCP
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
+    Then admin check that cluster does not have empty public zone 
+
     And I use the "openshift-machine-api" project
     Then admin ensures machine number is restored after scenario
 
