@@ -10,7 +10,7 @@ Feature: Testing haproxy rate limit related features
   @singlenode
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-18482:NetworkEdge limits backend pod max concurrent connections for unsecure, edge, reen route

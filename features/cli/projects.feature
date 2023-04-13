@@ -10,7 +10,7 @@ Feature: projects related features via cli
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @aro @osd_ccs
   @hypershift-hosted
   @critical
@@ -85,7 +85,7 @@ Feature: projects related features via cli
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @aro @osd_ccs
   @hypershift-hosted
   Scenario: OCP-12193:APIServer User can get node selector from a project
@@ -167,7 +167,7 @@ Feature: projects related features via cli
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @osd_ccs @aro @rosa
   @hypershift-hosted
   @critical

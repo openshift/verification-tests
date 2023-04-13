@@ -10,7 +10,7 @@ Feature: testing multicast scenarios
   @proxy @noproxy @connected
   @network-multitenant
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-12926:SDN pods should be able to subscribe send and receive multicast traffic
@@ -111,7 +111,7 @@ Feature: testing multicast scenarios
   @network-multitenant
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-12977:SDN multicast is disabled by default if not annotate the namespace
@@ -183,7 +183,7 @@ Feature: testing multicast scenarios
   @network-multitenant
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-12930:SDN Same multicast groups can be created in multiple namespace
     Given I have a project
@@ -329,7 +329,7 @@ Feature: testing multicast scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-12931:SDN pods in default project should not be able to receive multicast traffic from other namespace
     # create multicast testing pod in one project
@@ -413,7 +413,7 @@ Feature: testing multicast scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-12928:SDN pods should be able to join multiple multicast groups at same time  
     # create some multicast testing pods in the project
@@ -516,7 +516,7 @@ Feature: testing multicast scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-12929:SDN pods should not be able to receive multicast traffic from other pods in different namespace
     # create some multicast testing pods in one project
@@ -599,7 +599,7 @@ Feature: testing multicast scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-12966:SDN pods in default project should be able to receive multicast traffic from other default project pods
     # enable multicast and create testing pods

@@ -10,7 +10,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -47,7 +47,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -103,7 +103,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -136,7 +136,7 @@ Feature: Testing route
   @singlenode
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -222,7 +222,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -273,7 +273,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -328,7 +328,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   Scenario: OCP-9650:NetworkEdge Config insecureEdgeTerminationPolicy to Allow for route
     Given I have a project
@@ -400,7 +400,7 @@ Feature: Testing route
   @singlenode
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -426,7 +426,7 @@ Feature: Testing route
   @singlenode
   @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -485,7 +485,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -555,7 +555,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -604,7 +604,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -695,7 +695,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @amd64
+  @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-14059:NetworkEdge Use the default destination CA of router if the route does not specify one for reencrypt route
@@ -722,7 +722,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -767,7 +767,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -834,7 +834,7 @@ Feature: Testing route
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical

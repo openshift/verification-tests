@@ -9,7 +9,7 @@ Feature: SCC policy related scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-11762:Workloads deployment hook volume inheritance with hostPath volume
@@ -46,7 +46,7 @@ Feature: SCC policy related scenarios
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-11775:Authentication Create or update scc with illegal capability name should fail with prompt message
     Given I have a project

@@ -27,7 +27,7 @@ Feature: pods related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-11527:Node kubectl describe pod should show qos tier info
@@ -114,7 +114,7 @@ Feature: pods related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -176,7 +176,7 @@ Feature: pods related scenarios
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-11055:Node /dev/shm can be automatically shared among all of a pod's containers

@@ -48,7 +48,7 @@ Feature: oc import-image related feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-11089:ImageRegistry Tags should be added to ImageStream if image repository is from an external docker registry
@@ -78,7 +78,7 @@ Feature: oc import-image related feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-12765:ImageRegistry Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project

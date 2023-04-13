@@ -9,7 +9,7 @@ Feature: ServiceAccount and Policy Managerment
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @osd_ccs @aro @rosa
   @hypershift-hosted
   @critical
@@ -95,7 +95,7 @@ Feature: ServiceAccount and Policy Managerment
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @osd_ccs @aro @rosa
   @hypershift-hosted
   @critical

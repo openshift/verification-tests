@@ -9,7 +9,7 @@ Feature: oc_portforward.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: OCP-11195:Workloads Forward multi local ports to a pod
     Given I have a project

@@ -10,7 +10,7 @@ Feature: set deployment-hook/build-hook with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   @critical
   Scenario: OCP-11805:Workloads Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook

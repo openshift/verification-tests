@@ -9,7 +9,7 @@ Feature: basic verification for upgrade testing
   @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: etcd-operator and cluster works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
@@ -61,7 +61,7 @@ Feature: basic verification for upgrade testing
   @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @heterogeneous @arm64 @amd64 @ppc64le
   @hypershift-hosted
   Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
