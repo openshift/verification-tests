@@ -50,8 +50,8 @@ RUN set -x && \
     rm -rf /var/cache/yum /var/tmp/* /tmp/* /verification-tests/Gemfile.lock
 
 # Add ansible playbooks
-RUN mkdir -p /usr/share/ansible/ && cd /usr/share/ansible/  && \
-    git clone https://github.com/openshift/openshift-ansible.git  
+RUN git clone --depth 1 https://github.com/openshift/openshift-ansible.git /usr/share/ansible/openshift-ansible && \
+    chmod -R 777 /usr/share/ansible/openshift-ansible
 
 # Fixing OCPQE-11756
 RUN set -x && \
