@@ -51,7 +51,7 @@ RUN set -x && \
 
 # Add ansible playbooks
 RUN git clone https://github.com/openshift/openshift-ansible.git /usr/share/ansible/openshift-ansible && \
-    chmod -R 777 /usr/share/ansible/openshift-ansible
+    chmod -R g=rwx /usr/share/ansible/openshift-ansible
 
 # Fixing OCPQE-11756
 RUN set -x && \
