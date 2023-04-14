@@ -31,10 +31,43 @@ Feature: Logging smoke test case
     Then the step should succeed
     Given a pod becomes ready with labels:
       | run=centos-logtest,test=centos-logtest |
+    And evaluation of `pod.node_name` is stored in the :node clipboard
 
     Given I switch to the first user
     Given the first user is cluster-admin
     And evaluation of `user.cached_tokens.first` is stored in the :user_token_1 clipboard
+
+    Given I register clean-up steps:
+    """
+    When I run the :debug admin command with:
+      | resource     | node/<%= cb.node %> |
+      | oc_opts_end  |                     |
+      | exec_command | chroot              |
+      | exec_command | /host               |
+      | exec_command | auditctl            |
+      | exec_command | -W                  |
+      | exec_command | /var/log/pods/      |
+      | exec_command | -p                  |
+      | exec_command | rwa                 |
+      | exec_command | -k                  |
+      | exec_command | read-write-pod-logs |
+    Then the step should succeed
+    """
+
+    When I run the :debug admin command with:
+      | resource     | node/<%= cb.node %> |
+      | oc_opts_end  |                     |
+      | exec_command | chroot              |
+      | exec_command | /host               |
+      | exec_command | auditctl            |
+      | exec_command | -w                  |
+      | exec_command | /var/log/pods/      |
+      | exec_command | -p                  |
+      | exec_command | rwa                 |
+      | exec_command | -k                  |
+      | exec_command | read-write-pod-logs |
+    Then the step should succeed
+
     And I use the "openshift-logging" project
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     And I obtain test data file "logging/clusterlogforwarder/clf-forward-with-different-tags.yaml"
