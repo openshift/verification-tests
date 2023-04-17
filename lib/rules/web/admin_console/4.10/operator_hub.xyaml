@@ -551,7 +551,7 @@ switch_to_yaml_view:
 switch_to_form_view:
   element:
     selector:
-      id: form
+      xpath: //input[@value='form']
     op: click
 select_installed_namespace:
   action: click_project_list_dropdown
