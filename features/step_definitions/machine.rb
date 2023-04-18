@@ -84,6 +84,15 @@ Given(/^I wait for the node of machine_machine_openshift_io(?: named "(.+)")? to
   cb["new_node"] = node_name
 end
 
+Then(/admin check that cluster does not have empty public zone$/) do
+  ensure_admin_tagged
+
+  if dns("cluster").public_zone == nil
+     logger.warn "The scenario will be skipped because publicZone is empty, default values won't work"
+     skip_this_scenario
+   end
+end
+
 Then(/^admin ensures machine number is restored after scenario$/) do
   ensure_admin_tagged
   machine_names_orig = BushSlicer::MachineMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api")).map(&:name)
