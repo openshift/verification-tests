@@ -77,7 +77,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11133:BuildAPI Create a build config based on the source code in the current git repository
@@ -148,7 +148,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11139:BuildAPI Create applications only with multiple db images
@@ -194,7 +194,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11227:BuildAPI Add multiple source inputs
@@ -229,7 +229,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-10771:BuildAPI Add a image with multiple paths as source input
@@ -257,7 +257,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11943:BuildAPI Using a docker image as source input using new-build cmd
@@ -328,7 +328,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11776:BuildAPI Cannot create secret from local file and with same name via oc new-build
@@ -365,7 +365,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11552:BuildAPI Using a docker image as source input for docker build
@@ -432,7 +432,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11582:BuildAPI Change runpolicy to SerialLatestOnly build
@@ -656,7 +656,7 @@ Feature: build 'apps' with CLI
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     @critical
     Examples:
@@ -730,7 +730,7 @@ Feature: build 'apps' with CLI
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     @critical
     Examples:
@@ -776,7 +776,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11023:BuildAPI Handle build naming collisions
@@ -810,7 +810,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-17523:BuildAPI io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
@@ -836,7 +836,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-19631:BuildAPI Insert configmap when create a buildconfig
@@ -977,7 +977,7 @@ Feature: build 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-18962:BuildAPI Allow using a configmap as an input to a docker build

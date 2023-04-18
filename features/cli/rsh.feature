@@ -9,7 +9,7 @@ Feature: rsh.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-10658:Workloads Check oc rsh for simpler access to a remote shell

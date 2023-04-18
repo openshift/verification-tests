@@ -11,7 +11,7 @@ Feature: Machine features testing
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   Scenario: OCP-21196:ClusterInfrastructure Machines should be linked to nodes
     Given I have an IPI deployment
@@ -27,7 +27,7 @@ Feature: Machine features testing
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-22115:ClusterInfrastructure machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -51,7 +51,7 @@ Feature: Machine features testing
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-37706:ClusterInfrastructure Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
@@ -66,7 +66,7 @@ Feature: Machine features testing
   @upgrade-sanity
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   Scenario: OCP-25436:ClusterInfrastructure Scale up and scale down a machineSet
     Given I have an IPI deployment
@@ -106,7 +106,7 @@ Feature: Machine features testing
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     
     Examples:
       | case_id                         | url                                                                          |
@@ -123,7 +123,7 @@ Feature: Machine features testing
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-25608:ClusterInfrastructure Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
@@ -168,7 +168,7 @@ Feature: Machine features testing
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   Scenario: OCP-27627:ClusterInfrastructure Verify all machine instance-state should be consistent with their providerStats.instanceState
     Given I have an IPI deployment
@@ -183,7 +183,7 @@ Feature: Machine features testing
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @aws-ipi @alicloud-ipi
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-27609:ClusterInfrastructure Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -205,7 +205,7 @@ Feature: Machine features testing
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-24363:ClusterInfrastructure Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -323,7 +323,7 @@ Feature: Machine features testing
       | OCP-29199:ClusterInfrastructure | aws       | machineset-clone-29199 | # @case_id OCP-29199
 
     @gcp-ipi
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     @proxy @noproxy @disconnected @connected
     @network-ovnkubernetes @network-openshiftsdn
     
@@ -340,7 +340,7 @@ Feature: Machine features testing
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-32620:ClusterInfrastructure Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -373,7 +373,7 @@ Feature: Machine features testing
   @gcp-ipi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-33056:ClusterInfrastructure Implement defaulting machineset values for GCP
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -446,7 +446,7 @@ Feature: Machine features testing
     @azure-ipi
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     
     Examples:
       | case_id                         | name                  | file_name               | Validation                |
@@ -459,7 +459,7 @@ Feature: Machine features testing
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   Scenario: OCP-33455:ClusterInfrastructure Run machine api Controllers using leader election
     Given I have an IPI deployment
@@ -538,7 +538,7 @@ Feature: Machine features testing
 
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     
     Examples:
       | case_id                         | name                         | template                                  | diskGiB           |

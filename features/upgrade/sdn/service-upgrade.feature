@@ -43,7 +43,7 @@ Feature: service upgrade scenarios
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check the idle service works well after upgrade
     Given I switch to cluster admin pseudo user
@@ -118,7 +118,7 @@ Feature: service upgrade scenarios
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check the nodeport service works well after upgrade
     Given I switch to cluster admin pseudo user

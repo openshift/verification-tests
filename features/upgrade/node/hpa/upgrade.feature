@@ -62,7 +62,7 @@ Feature: basic verification for upgrade testing
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: Upgrade - Make sure multiple resources work well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "node-upgrade" project

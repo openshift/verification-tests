@@ -9,7 +9,7 @@ Feature: SDN/OVN metrics related networking scenarios
   @singlenode
   @proxy @noproxy @connected
   @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-28519:SDN Prometheus should be able to monitor kubeproxy metrics
     Given I switch to cluster admin pseudo user
@@ -49,7 +49,7 @@ Feature: SDN/OVN metrics related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
   @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-16016:SDN Should be able to monitor the openshift-sdn related metrics by prometheus
     Given I switch to cluster admin pseudo user
@@ -92,7 +92,7 @@ Feature: SDN/OVN metrics related networking scenarios
   @singlenode
   @network-ovnkubernetes
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-37704:SDN Should be able to monitor various ovnkube-master and ovnkube-node metrics via prometheus
     Given I store kubernetes elected leader pod for ovnkube-master in the :leader_pod clipboard
     And evaluation of `cb.leader_pod.ip` is stored in the :leader_pod_ip clipboard

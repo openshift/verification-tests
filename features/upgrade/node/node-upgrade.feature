@@ -63,7 +63,7 @@ Feature: Node components upgrade tests
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Make sure nodeConfig is not changed after upgrade
     Given I switch to cluster admin pseudo user

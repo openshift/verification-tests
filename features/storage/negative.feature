@@ -5,7 +5,7 @@ Feature: negative testing
   @admin
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.8 @4.7 @4.6
   Scenario Outline: PV with invalid volume id should be prevented from creating
     Given admin ensures "mypv" pv is deleted after scenario

@@ -9,7 +9,7 @@ Feature: oc idle
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-11633:Node CLI - Idle all the service in the same project
@@ -62,7 +62,7 @@ Feature: oc idle
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-11980:Node CLI - Idle service by label
@@ -108,7 +108,7 @@ Feature: oc idle
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-12085:Node CLI - Idle service from file
@@ -159,7 +159,7 @@ Feature: oc idle
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-12169:Node CLI - Idle service with dry-run

@@ -91,7 +91,7 @@ Feature: buildconfig.feature
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     Examples:
       | case_id            | template                  |
@@ -107,7 +107,7 @@ Feature: buildconfig.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-12057:BuildAPI Using secret to pull a docker image which be used as source input

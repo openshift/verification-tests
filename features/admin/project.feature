@@ -10,7 +10,7 @@ Feature: project permissions
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-11717:Node Pod creation should fail when pod's node selector conflicts with project node selector
@@ -36,7 +36,7 @@ Feature: project permissions
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-10736:Workloads The job and HPA should be deleted when project has been deleted
     Given I have a project

@@ -9,7 +9,7 @@ Feature: oc_expose.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @aro @osd_ccs
   @admin
   @hypershift-hosted

@@ -121,7 +121,7 @@ Feature: Testing the isolation during build scenarios
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-openshiftsdn @network-networkpolicy
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     Examples:
       | case_id       | type   | repo                                                           | strategy       |
       | OCP-15731:SDN | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15731

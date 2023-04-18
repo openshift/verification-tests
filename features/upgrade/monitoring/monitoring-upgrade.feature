@@ -10,7 +10,7 @@ Feature: cluster monitoring related upgrade check
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: upgrade cluster monitoring along with OCP - prepare
     Given I switch to cluster admin pseudo user
@@ -30,7 +30,7 @@ Feature: cluster monitoring related upgrade check
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le 
+  @s390x @ppc64le @heterogeneous @arm64 @amd64 
   @hypershift-hosted
   @critical
   Scenario: upgrade cluster monitoring along with OCP

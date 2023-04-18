@@ -9,7 +9,7 @@ Feature: buildlogic.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11545:BuildAPI Build with specified Dockerfile via new-build -D
@@ -71,7 +71,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-10799:BuildAPI Create new build config use dockerfile with source repo
@@ -121,7 +121,7 @@ Feature: buildlogic.feature
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     @critical
     Examples:
@@ -137,7 +137,7 @@ Feature: buildlogic.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-10745:BuildAPI Build with specified Dockerfile to image with same image name via new-build
@@ -182,7 +182,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11720:BuildAPI Build from private git repo with/without ssh key
@@ -235,7 +235,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11896:BuildAPI Create new-app from private git repo with ssh key
@@ -280,7 +280,7 @@ Feature: buildlogic.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-13683:BuildAPI Check s2i build substatus and times
@@ -310,7 +310,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-13684:BuildAPI Check docker build substatus and times
@@ -513,7 +513,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   Scenario: OCP-19133:BuildAPI Pipeline build can be pruned automatically
     Given I have a project
@@ -572,7 +572,7 @@ Feature: buildlogic.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-40366:BuildAPI Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's

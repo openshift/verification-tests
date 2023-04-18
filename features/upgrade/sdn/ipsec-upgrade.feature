@@ -81,7 +81,7 @@ Feature: IPsec upgrade scenarios
   @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade

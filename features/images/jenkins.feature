@@ -121,7 +121,7 @@ Feature: jenkins.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @flaky
   @critical
@@ -386,7 +386,7 @@ Feature: jenkins.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   Scenario: OCP-35068:BuildAPI Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project

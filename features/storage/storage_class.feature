@@ -4,7 +4,7 @@ Feature: storageClass related feature
   @admin
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: PVC modification after creating storage class
     Given I have a project
@@ -61,7 +61,7 @@ Feature: storageClass related feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: storage class provisioner
     Given I have a project
@@ -121,7 +121,7 @@ Feature: storageClass related feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: New creation PVC failed when multiple classes are set as default
     Given I have a project
@@ -212,7 +212,7 @@ Feature: storageClass related feature
   @admin
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: PVC with storage class will provision pv with io1 type and 100/20000 iops ebs volume
     Given I have a project
@@ -263,7 +263,7 @@ Feature: storageClass related feature
   @admin
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: PVC with storage class will not provision pv with st1/sc1 type ebs volume if request size is wrong
     Given I have a project
@@ -307,7 +307,7 @@ Feature: storageClass related feature
   @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-10159:Storage PVC with storage class won't provisioned pv if no storage class or wrong storage class object
     Given I have a project
@@ -337,7 +337,7 @@ Feature: storageClass related feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-10228:Storage AWS ebs volume is dynamic provisioned with default storageclass

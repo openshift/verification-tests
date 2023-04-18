@@ -10,7 +10,7 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Seccomp part of SCC policy should be kept and working after upgrade - prepare
     Given I switch to cluster admin pseudo user
@@ -30,7 +30,7 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Seccomp part of SCC policy should be kept and working after upgrade
     Given I switch to cluster admin pseudo user

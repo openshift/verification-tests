@@ -8,7 +8,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -49,7 +49,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -97,7 +97,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -191,7 +191,7 @@ Feature: deployment related features
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @connected
-    @heterogeneous @arm64 @amd64 @ppc64le
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     @hypershift-hosted
     @critical
     Examples:
@@ -208,7 +208,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -264,7 +264,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -308,7 +308,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -342,7 +342,7 @@ Feature: deployment related features
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -495,7 +495,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -609,7 +609,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-11939:Workloads start deployment when the latest deployment is completed
@@ -679,7 +679,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -709,7 +709,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-12151:Workloads When the latest deployment failed auto rollback to the active deployment
@@ -768,7 +768,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-10617:Workloads DeploymentConfig should allow valid value of resource requirements
@@ -813,7 +813,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
@@ -989,7 +989,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-16443:Workloads Trigger info is retained for deployment caused by image changes 37 new feature
@@ -1014,7 +1014,7 @@ Feature: deployment related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-31200:Workloads A/B Deployment for OCP 4.5 or greater

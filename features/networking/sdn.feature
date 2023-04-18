@@ -48,7 +48,7 @@ Feature: SDN related networking scenarios
   @upgrade-sanity
   @network-openshiftsdn @network-networkpolicy
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-11286:SDN iptables rules will be repaired automatically once it gets destroyed
@@ -92,7 +92,7 @@ Feature: SDN related networking scenarios
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-13847:SDN an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
@@ -204,7 +204,7 @@ Feature: SDN related networking scenarios
   @upgrade-sanity
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-18535:SDN should not show "No such device" message when run "ovs-vsctl show" command
@@ -229,7 +229,7 @@ Feature: SDN related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-23543:SDN The iptables binary on sdn containers should be the same as host
     Given I select a random node's host
@@ -371,7 +371,7 @@ Feature: SDN related networking scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-25787:SDN Don't write CNI configuration file until ovn-controller has done at least one iteration
     Given the env is using "OVNKubernetes" networkType
     And I store the masters in the :master clipboard
@@ -426,7 +426,7 @@ Feature: SDN related networking scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-25933:SDN NetworkManager should consider OVS interfaces as unmanaged
   Given the env is using "OVNKubernetes" networkType
@@ -496,7 +496,7 @@ Feature: SDN related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-36287:SDN Netnamespace should be recreated after deleting it before the project is deleted
     Given the env is using "OpenShiftSDN" networkType
@@ -517,7 +517,7 @@ Feature: SDN related networking scenarios
   @vsphere-upi
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-41132:SDN UDP offloads were disabled on vsphere platform
     Given the env is using "OpenShiftSDN" networkType
@@ -538,7 +538,7 @@ Feature: SDN related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-43146:SDN Disable conntrack for vxlan traffic
     Given the env is using "OpenShiftSDN" networkType

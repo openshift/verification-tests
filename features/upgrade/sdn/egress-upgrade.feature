@@ -50,7 +50,7 @@ Feature: Egress compoment upgrade testing
   @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check egressfirewall is functional post upgrade
     Given I switch to cluster admin pseudo user
@@ -141,7 +141,7 @@ Feature: Egress compoment upgrade testing
   @qeci
   @upgrade
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
@@ -261,7 +261,7 @@ Feature: Egress compoment upgrade testing
   @upgrade
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check sdn egressip is functional post upgrade
     Given I switch to cluster admin pseudo user

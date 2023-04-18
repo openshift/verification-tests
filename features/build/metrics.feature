@@ -10,7 +10,7 @@ Feature: Builds and samples related metrics test
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   Scenario: OCP-33220:BuildAPI Alerts on imagestream import retries
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
@@ -73,7 +73,7 @@ Feature: Builds and samples related metrics test
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   Scenario: OCP-33722:BuildAPI Check build metrics
     Given I have a project
@@ -206,7 +206,7 @@ Feature: Builds and samples related metrics test
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-25598:BuildAPI Monitoring, Alerting, and Degraded Status Reporting-Samples-operator

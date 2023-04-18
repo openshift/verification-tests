@@ -92,7 +92,7 @@ Feature: Cases to test forward logs to external elasticsearch
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
-    @arm64 @amd64 @heterogeneous
+    @heterogeneous @arm64 @amd64
     @logging5.6 @logging5.7 @logging5. @logging5.5
     Examples:
       | case_id           | scheme | client_auth | file                 |

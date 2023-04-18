@@ -280,7 +280,7 @@ Feature: Testing abrouting
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-15910:NetworkEdge Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
@@ -370,7 +370,7 @@ Feature: Testing abrouting
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-15994:NetworkEdge Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route

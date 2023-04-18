@@ -96,7 +96,7 @@ Feature: basic verification for upgrade oc client testing
   @proxy @noproxy @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check some container related oc commands still work for ocp45 after upgrade
     Given I switch to the first user

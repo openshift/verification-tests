@@ -11,7 +11,7 @@ Feature: Testing registry
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-12400:ImageRegistry Prune images by command oadm_prune_images

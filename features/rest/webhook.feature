@@ -50,7 +50,7 @@ Feature: Webhook REST Related Tests
     @singlenode
     @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     Examples:
       | case_id            | type    | negative1 | negative2   | negative3 | path              | file              | header1        | header2 |

@@ -11,7 +11,7 @@ Feature: oc_set_build_hook
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11602:BuildAPI Set post-build-commit on buildconfig via oc set build-hook

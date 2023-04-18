@@ -32,7 +32,7 @@ Feature: Routing and DNS related scenarios
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: ensure ingress works well before and after upgrade
@@ -79,7 +79,7 @@ Feature: Routing and DNS related scenarios
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
@@ -133,7 +133,7 @@ Feature: Routing and DNS related scenarios
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
@@ -231,7 +231,7 @@ Feature: Routing and DNS related scenarios
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: upgrade with route shards
     # Ensure cluster operator ingress is in normal status after upgrade

@@ -6,7 +6,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -36,7 +36,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -65,7 +65,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -94,7 +94,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -122,7 +122,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -150,7 +150,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -181,7 +181,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -209,7 +209,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @admin
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Prebound pv/pvc is availabe/pending due to requested pvc/pv prebound to other pv/pvc
     Given I create a project with non-leading digit name

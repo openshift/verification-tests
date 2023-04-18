@@ -6,7 +6,7 @@ Feature: Cinder Persistent Volume
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @openstack-ipi
   @openstack-upi
   @hypershift-hosted

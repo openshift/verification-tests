@@ -10,7 +10,7 @@ Feature: NFS Persistent Volume
   @upgrade-sanity
   @singlenode
   @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-9572:Storage Share NFS with multiple pods with ReadWriteMany mode
@@ -65,7 +65,7 @@ Feature: NFS Persistent Volume
   @upgrade-sanity
   @singlenode
   @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-10281:Storage Permission denied when nfs pv annotaion is not right
