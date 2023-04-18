@@ -10,7 +10,7 @@ Feature: oc_env.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11032:BuildAPI Set environment variables when creating application using non-DeploymentConfig template

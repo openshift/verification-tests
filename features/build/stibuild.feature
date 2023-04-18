@@ -40,7 +40,7 @@ Feature: stibuild.feature
     @singlenode
     @proxy @noproxy @connected
     @network-ovnkubernetes @network-openshiftsdn
-    @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     @critical
     Examples:
@@ -56,7 +56,7 @@ Feature: stibuild.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   Scenario: OCP-30858:BuildAPI STI build with dockerImage with specified tag
     Given I have a project
@@ -99,7 +99,7 @@ Feature: stibuild.feature
   @upgrade-sanity
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-28891:BuildAPI Test s2i build in disconnect cluster
@@ -134,7 +134,7 @@ Feature: stibuild.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-42159:BuildAPI Mount source secret and configmap to builder container- sourcestrategy

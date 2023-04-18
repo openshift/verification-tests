@@ -85,7 +85,7 @@ Feature: Storage upgrade tests
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
@@ -195,7 +195,7 @@ Feature: Storage upgrade tests
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: Cluster operator storage should be in correct status after upgrade

@@ -10,7 +10,7 @@ Feature: CloudCredentialOperator components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Cluster operator cloud-credential should be available after upgrade - prepare
     Given I switch to cluster admin pseudo user
@@ -40,7 +40,7 @@ Feature: CloudCredentialOperator components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: Cluster operator cloud-credential should be available after upgrade

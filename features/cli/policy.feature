@@ -9,7 +9,7 @@ Feature: change the policy of user/service account
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
   @critical
@@ -67,7 +67,7 @@ Feature: change the policy of user/service account
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
   @critical
@@ -94,7 +94,7 @@ Feature: change the policy of user/service account
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
   @critical
@@ -155,7 +155,7 @@ Feature: change the policy of user/service account
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le 
+  @s390x @ppc64le @heterogeneous @arm64 @amd64 
   @hypershift-hosted
   @critical
   Scenario: OCP-10211:Node DaemonSet only support Always restartPolicy
@@ -188,7 +188,7 @@ Feature: change the policy of user/service account
   @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-10447:Storage Basic user could not get deeper storageclass object info
     Given I have a project
@@ -239,7 +239,7 @@ Feature: change the policy of user/service account
   @aws-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-10448:Storage User with role storage-admin can check deeper storageclass object info
     Given I have a project
@@ -303,7 +303,7 @@ Feature: change the policy of user/service account
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-10466:Storage User with role storage-admin can check deeper pv object info
@@ -369,7 +369,7 @@ Feature: change the policy of user/service account
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-10467:Storage User with role storage-admin can get pvc object info
@@ -419,7 +419,7 @@ Feature: change the policy of user/service account
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-10465:Storage Basic user could not get pv object info
     Given I have a project
@@ -447,7 +447,7 @@ Feature: change the policy of user/service account
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
   @critical
@@ -488,7 +488,7 @@ Feature: change the policy of user/service account
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
   Scenario: OCP-9552:Authentication User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
@@ -537,7 +537,7 @@ Feature: change the policy of user/service account
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
   @critical

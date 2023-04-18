@@ -128,7 +128,7 @@ Feature: SCTP related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-28759:SDN Expose SCTP NodePort Services
     Given I store the ready and schedulable workers in the :workers clipboard
@@ -197,7 +197,7 @@ Feature: SCTP related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-29645:SDN Networkpolicy allow SCTP Client
     Given I store the ready and schedulable workers in the :workers clipboard

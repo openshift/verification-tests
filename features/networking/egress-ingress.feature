@@ -10,7 +10,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-11639:SDN EgressNetworkPolicy will not take effect after delete it
@@ -57,7 +57,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-13502:SDN Apply different egress network policy in different projects
@@ -129,7 +129,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-13507:SDN The rules of egress network policy are added in openflow
@@ -177,7 +177,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-13509:SDN Egress network policy use dnsname with multiple ipv4 addresses
@@ -215,7 +215,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-15005:SDN Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
@@ -279,7 +279,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-15017:SDN Add nodes local IP address to OVS rules for egressnetworkpolicy
@@ -335,7 +335,7 @@ Feature: Egress-ingress related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy @network-multitenant
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-13506:SDN Update different dnsname in same egress network policy
     Given I have a project
@@ -376,7 +376,7 @@ Feature: Egress-ingress related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-19615:SDN Iptables should be updated with correct endpoints when egress DNS policy was used
     Given the env is using "OpenShiftSDN" networkType	
@@ -434,7 +434,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33530:SDN EgressFirewall allows traffic to destination ports
     Given the env is using "OVNKubernetes" networkType
@@ -477,7 +477,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-33531:SDN EgressFirewall rules take effect in order
@@ -505,7 +505,7 @@ Feature: Egress-ingress related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @noproxy @connected
   @network-ovnkubernetes
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33539:SDN EgressFirewall policy should not take effect for traffic between pods and pods to service
     Given the env is using "OVNKubernetes" networkType
@@ -546,7 +546,7 @@ Feature: Egress-ingress related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @noproxy @connected
   @network-ovnkubernetes
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33565:SDN EgressFirewall policy take effect for multiple port
     Given the env is using "OVNKubernetes" networkType
@@ -579,7 +579,7 @@ Feature: Egress-ingress related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-35341:SDN EgressNetworkPolicy maxItems is 1000
     Given the env is using "OpenShiftSDN" networkType
@@ -609,7 +609,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-37491:SDN EgressFirewall allows traffic to destination dnsName
@@ -648,7 +648,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-37495:SDN EgressFirewall denys traffic to destination dnsName
@@ -687,7 +687,7 @@ Feature: Egress-ingress related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @noproxy @connected
   @network-ovnkubernetes
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-37496:SDN Edit EgressFirewall should take effect
     Given the env is using "OVNKubernetes" networkType
@@ -727,7 +727,7 @@ Feature: Egress-ingress related networking scenarios
   @upgrade-sanity
   @noproxy @connected
   @network-ovnkubernetes
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-41179:SDN bug1947917 Egress Firewall should reliably apply firewall rules

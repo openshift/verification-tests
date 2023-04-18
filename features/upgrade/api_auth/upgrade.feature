@@ -238,7 +238,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check the default SCCs should not be stomped by CVO
     Given I run the :get admin command with:
@@ -310,7 +310,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
     Given the master version >= "4.8"
@@ -363,7 +363,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @aro @osd_ccs
   @hypershift-hosted
   Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade

@@ -85,7 +85,7 @@ Feature: env.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-31247:BuildAPI Can set env vars on buildconfig with new-app --env and --env-file test

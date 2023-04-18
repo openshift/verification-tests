@@ -9,7 +9,7 @@ Feature: hpa scale
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-10931:Node HPA shouldn't scale up target if the replicas of dc is 0
@@ -55,7 +55,7 @@ Feature: hpa scale
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-11338:Node HPA shouldn't scale up target if the replicas of rc is 0
@@ -99,7 +99,7 @@ Feature: hpa scale
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-11259:Node Creates autoscaler for replication controller by oc autoscale

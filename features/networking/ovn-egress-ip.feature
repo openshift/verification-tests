@@ -11,7 +11,7 @@ Feature: OVN Egress IP related features
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-33618:SDN EgressIP works for all pods in the matched namespace when only configure namespaceSelector
@@ -85,7 +85,7 @@ Feature: OVN Egress IP related features
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-33723:SDN Multiple EgressIP objects can have multiple Egress IPs
@@ -162,7 +162,7 @@ Feature: OVN Egress IP related features
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-33641:SDN Multi-project can share same EgressIP
@@ -240,7 +240,7 @@ Feature: OVN Egress IP related features
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33699:SDN Removed matched labels from project will not use EgressIP
     Given the env is using "OVNKubernetes" networkType
@@ -299,7 +299,7 @@ Feature: OVN Egress IP related features
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33700:SDN Removed matched labels from pods will not use EgressIP
     Given the env is using "OVNKubernetes" networkType
@@ -366,7 +366,7 @@ Feature: OVN Egress IP related features
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-33631:SDN EgressIP was removed after delete egressIP object
@@ -422,7 +422,7 @@ Feature: OVN Egress IP related features
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33704:SDN After reboot node or reboot OVN services EgressIP still work
     Given the env is using "OVNKubernetes" networkType
@@ -487,7 +487,7 @@ Feature: OVN Egress IP related features
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-34938:SDN Warning event will be triggered if apply EgressIP object but no EgressIP nodes
     #Get unused IP as egress ip
@@ -525,7 +525,7 @@ Feature: OVN Egress IP related features
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33706:SDN The pod located on different node than EgressIP nodes
     Given the env is using "OVNKubernetes" networkType
@@ -581,7 +581,7 @@ Feature: OVN Egress IP related features
   @network-ovnkubernetes
   @qeci
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33718:SDN Deleting EgressIP object and recreating it will work
     Given the env is using "OVNKubernetes" networkType
@@ -648,7 +648,7 @@ Feature: OVN Egress IP related features
   @vsphere-upi @baremetal-upi
   @network-ovnkubernetes
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33710:SDN An EgressIP object can not have multiple egress IP assignments on the same node
     Given the env is using "OVNKubernetes" networkType
@@ -684,7 +684,7 @@ Feature: OVN Egress IP related features
   @aws-upi
   @network-ovnkubernetes
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33617:SDN Common user cannot tag the nodes by labelling them as egressIP nodes
     Given the env is using "OVNKubernetes" networkType
@@ -709,7 +709,7 @@ Feature: OVN Egress IP related features
   @aws-ipi
   @aws-upi
   @noproxy @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33719:SDN Any egress IP can only be assigned to one node only
     Given the env is using "OVNKubernetes" networkType
@@ -761,7 +761,7 @@ Feature: OVN Egress IP related features
   @vsphere-upi
   @network-ovnkubernetes
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-44250:SDN lr-policy-list and snat should be updated correctly after remove pods
     Given the env is using "OVNKubernetes" networkType
@@ -876,7 +876,7 @@ Feature: OVN Egress IP related features
   @vsphere-upi
   @network-ovnkubernetes
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-44251:SDN lr-policy-list and snat should be updated correctly after remove egressip objects 
     Given the env is using "OVNKubernetes" networkType	
@@ -973,7 +973,7 @@ Feature: OVN Egress IP related features
   @vsphere-upi
   @qeci
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-42925:SDN Traffic is load balanced between egress nodes in OVN cluster
     Given the env is using "OVNKubernetes" networkType

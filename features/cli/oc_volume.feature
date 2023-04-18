@@ -11,7 +11,7 @@ Feature: oc_volume.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-12194:Node Create a pod that consumes the secret in a volume
@@ -61,7 +61,7 @@ Feature: oc_volume.feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-11906:Storage Add secret volume to dc and rc

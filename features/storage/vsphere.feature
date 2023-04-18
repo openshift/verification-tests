@@ -6,7 +6,7 @@ Feature: vSphere test scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Dynamically provision a vSphere volume with different disk formats
     Given I have a project
@@ -78,7 +78,7 @@ Feature: vSphere test scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-13389:Storage Dynamically provision a vSphere volume with invalid disk format

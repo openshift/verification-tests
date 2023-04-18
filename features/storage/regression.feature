@@ -9,7 +9,7 @@ Feature: Regression testing cases
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-16485:Storage RWO volumes are exclusively mounted on different nodes

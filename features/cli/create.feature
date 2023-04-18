@@ -12,7 +12,7 @@ Feature: creating 'apps' with CLI
   @singlenode
   @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
   Scenario: OCP-11761:Authentication Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
@@ -206,7 +206,7 @@ Feature: creating 'apps' with CLI
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-31250:BuildAPI Create an application from source code test

@@ -81,7 +81,7 @@ Feature: rhel8images.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-22595:ImageRegistry mysql persistent template
     Given I have a project
     When I run the :tag admin command with:
@@ -140,7 +140,7 @@ Feature: rhel8images.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   Scenario: OCP-22958:BuildAPI Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project

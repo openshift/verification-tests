@@ -10,7 +10,7 @@ Feature: dockerbuild.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-12115:BuildAPI Docker build with both SourceURI and context dir
@@ -40,7 +40,7 @@ Feature: dockerbuild.feature
   @singlenode
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   Scenario: OCP-30854:BuildAPI Docker build with dockerImage with specified tag
     Given I have a project
@@ -107,7 +107,7 @@ Feature: dockerbuild.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-12855:BuildAPI Add ARGs in docker build
@@ -173,7 +173,7 @@ Feature: dockerbuild.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-42157:BuildAPI Mount source secret to builder container- dockerstrategy
@@ -217,7 +217,7 @@ Feature: dockerbuild.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-42158:BuildAPI Mount source configmap to builder container- dockerstrategy
@@ -260,7 +260,7 @@ Feature: dockerbuild.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-42184:BuildAPI Mount multi paths to builder container
@@ -305,7 +305,7 @@ Feature: dockerbuild.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-42185:BuildAPI Can't add relative path for mount path
@@ -346,7 +346,7 @@ Feature: dockerbuild.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-42529:BuildAPI Mount source name must be unique

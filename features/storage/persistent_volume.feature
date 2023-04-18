@@ -7,7 +7,7 @@ Feature: Persistent Volume Claim binding policies
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: PVC with one accessMode can bind PV with all accessMode
     Given I have a project
@@ -81,7 +81,7 @@ Feature: Persistent Volume Claim binding policies
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: PV can not bind PVC which request more storage
     Given I have a project
@@ -119,7 +119,7 @@ Feature: Persistent Volume Claim binding policies
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: PV can not bind PVC with mismatched accessMode
     Given I have a project

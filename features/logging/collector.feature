@@ -173,6 +173,7 @@ Feature: collector related tests
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @s390x @ppc64le
   Scenario: OCP-25768:Logging The container logs metadata check
     Given the master version >= "4.2"
     Given I switch to the first user

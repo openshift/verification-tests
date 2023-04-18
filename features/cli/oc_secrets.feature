@@ -63,7 +63,7 @@ Feature: oc_secrets.feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64 @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
   @critical

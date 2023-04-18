@@ -9,7 +9,7 @@ Feature: oc_set_env.feature
   @singlenode
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-11248:BuildAPI Set environment variables for resources using oc set env
@@ -73,7 +73,7 @@ Feature: oc_set_env.feature
   @singlenode
   @proxy @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
   Scenario: OCP-10798:BuildAPI Remove environment variables for resources using oc set env
