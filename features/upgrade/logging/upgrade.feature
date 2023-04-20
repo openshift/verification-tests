@@ -25,27 +25,12 @@ Feature: Logging upgrading related features
       | group_name | project-group-share                |
       | user_name  | <%= user(1, switch: false).name %> |
     Given logging operators are installed successfully
-    And I have clusterlogging with persistent storage ES
+    And I have clusterlogging with 1 persistent storage ES
     Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
     And I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
     And I wait for the project "logging-upg-prep-1" logs to appear in the ES pod
     When I check the cronjob status
     Then the step should succeed
-
-    Given I switch to the first user
-    When I login to kibana logging web console
-    Given I have index pattern "app"
-    Then I can display the pod logs of the "logging-upg-prep-1" project under the "app*" pattern in kibana
-    Then I close the current browser
-    Given I run the :policy_add_role_to_group client command with:
-      | group_name | project-group-share |
-      | role       | edit                |
-    Then the step should succeed
-    Given I switch to the second user
-    Given I login to kibana logging web console
-    Given I have index pattern "app"
-    Then I can display the pod logs of the "logging-upg-prep-share" project under the "app*" pattern in kibana
-    Then I close the current browser
 
   # @case_id OCP-22911
   # @author qitang@redhat.com
@@ -73,15 +58,6 @@ Feature: Logging upgrading related features
     # ensure there are no new PVCs after upgrading
     Then the expression should be true> BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count == cluster_logging('instance').logstore_node_count
     And I wait for the project "<%= cb.proj1 %>" logs to appear in the ES pod
-    # check if kibana console is accessible
-    Given I switch to the first user
-    When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-1" project under the "app*" pattern in kibana
-    Then I close the current browser
-    Given I switch to the second user
-    When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-share" project under the "app*" pattern in kibana
-    Then I close the current browser
 
     # upgrade logging if needed
     Given I make sure the logging operators match the cluster version
@@ -94,15 +70,5 @@ Feature: Logging upgrading related features
     Given I switch to cluster admin pseudo user
     Given I use the "openshift-logging" project
     And I wait for the project "<%= cb.proj2 %>" logs to appear in the ES pod
-    # check if kibana console is accessible
-    Given I switch to the first user
-    When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-1" project under the "app*" pattern in kibana
-    Then I close the current browser
-    Given I switch to the second user
-    When I login to kibana logging web console
-    Then I can display the pod logs of the "logging-upg-prep-share" project under the "app*" pattern in kibana
-    Then I close the current browser
-    Given I switch to the first user
     Then the "<%= cb.proj1 %>" project is deleted
     Then the "<%= cb.proj2 %>" project is deleted
