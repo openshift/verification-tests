@@ -1163,6 +1163,29 @@ check_resource_details:
   action:
     if_param: instance_type
     ref: check_instance_type
+  action:
+    if_param: host_boot_mac
+    ref: check_host_boot_mac
+  action:
+    if_param: ref_machine
+    ref: check_ref_machine
+  action:
+    if_param: ref_node
+    ref: check_ref_node
+check_ref_machine:
+  params:
+    key: Machine
+    value: <ref_machine>
+  action: check_resource_details_key_and_value
+check_ref_node:
+  params:
+    key: Node
+    value: <ref_node>
+  action: check_resource_details_key_and_value
+check_host_boot_mac:
+  element:
+    selector:
+      xpath: //dt[(text()='Host Addresses')]/following-sibling::dd[1]//li[contains(., '<host_boot_mac>')]/span[contains(., 'Boot Interface MAC')]
 check_resource_details_key_and_value:
   element: &key_value
     selector:

@@ -1,3 +1,18 @@
+check_default_columns_in_baremetalhosts_list_table:
+  action: goto_baremetalhosts_page
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Node']
+  - selector:
+      xpath: //thead//th[.='Role']
+  - selector:
+      xpath: //thead//th[.='Management Address']
+  - selector:
+      xpath: //thead//th[.='Serial Number']
 check_default_columns_in_one_project_pods_list_table:
   action: goto_project_pods_list_page
   elements:

@@ -436,6 +436,15 @@ goto_cluster_settings_details_page:
   url: settings/cluster
   action: wait_box_loaded
 
+#barematealhost
+goto_baremetalhosts_page:
+  url: k8s/all-namespaces/metal3.io~v1alpha1~BareMetalHost
+  action: wait_box_loaded
+goto_baremetalhost_details_page:
+  url: k8s/ns/openshift-machine-api/metal3.io~v1alpha1~BareMetalHost/<baremetalhost_name>/details
+goto_baremetalhost_overview_page:
+  url: k8s/ns/openshift-machine-api/metal3.io~v1alpha1~BareMetalHost/<baremetalhost_name>
+
 goto_command_line_tools:
   url: command-line-tools
   element:
