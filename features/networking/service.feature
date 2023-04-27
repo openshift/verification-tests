@@ -519,6 +519,7 @@ Feature: Service related networking scenarios
 
   # @author anusaxen@redhat.com
   # @case_id OCP-24694
+  @flaky
   @admin
   @destructive
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6

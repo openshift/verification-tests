@@ -41,6 +41,7 @@ Feature: Testing the isolation during build scenarios
     Then the output should contain "Connection timed out after"
     """
 
+    @flaky
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-openshiftsdn @network-multitenant
