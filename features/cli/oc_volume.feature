@@ -27,6 +27,7 @@ Feature: oc_volume.feature
     When I run the :new_app_as_dc client command with:
       | docker_image | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | name         | mydc                                                                                                  |
+      | import-mode  | PreserveOriginal                                                                                      |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | deployment=mydc-1 |
@@ -69,6 +70,7 @@ Feature: oc_volume.feature
     When I run the :new_app_as_dc client command with:
       | docker_image | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | name         | mydc                                                                                                  |
+      | import-mode  | PreserveOriginal                                                                                      |
     Then the step should succeed
     When I run the :create_secret client command with:
       | secret_type | generic    |

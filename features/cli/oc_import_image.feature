@@ -86,10 +86,12 @@ Feature: oc import-image related feature
       | source_type | docker                                                |
       | source      | quay.io/openshifttest/deployment-example:v1-1.2.0 |
       | dest        | deployment-example:latest                             |
+      | import-mode | PreserveOriginal                                      |
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
     When I run the :new_app_as_dc client command with:
       | image_stream | deployment-example:latest   |
+      | import-mode  | PreserveOriginal            |
     Then the output should match:
       | .*[Ss]uccess.*|
     And a pod becomes ready with labels:
@@ -121,10 +123,12 @@ Feature: oc import-image related feature
       | source           | quay.io/openshifttest/deployment-example:v1-1.2.0 |
       | dest             | deployment-example:latest                             |
       | reference_policy | local                                                 |
+      | import-mode      | PreserveOriginal                                      |
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
     When I run the :new_app_as_dc client command with:
       | image_stream | deployment-example:latest   |
+      | import-mode  | PreserveOriginal            |
     Then the output should match:
       | .*[Ss]uccess.* |
     And a pod becomes ready with labels:

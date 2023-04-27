@@ -246,6 +246,7 @@ Feature: pods related scenarios
     When I create a new application with:
       | docker_image | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | labels       | name=ruby-ex                                                                                                  |
+      | import-mode  | PreserveOriginal                                                                                              |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=ruby-ex |
