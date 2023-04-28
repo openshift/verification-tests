@@ -1386,6 +1386,8 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
           log = check_log(@result[:response], error_strings, ["the object has been modified"])
         when "kibana"
           log = check_log(@result[:response], error_strings, ["java.lang.UnsupportedOperationException"])
+        when "elasticsearch"
+          log = check_log(@result[:response], error_strings, ["INFO", "WARN"])
         when "collector"
           log = check_log(@result[:response], error_strings, ["Timeout flush: kubernetes.var.log"])
         when "elasticsearch-operator"
