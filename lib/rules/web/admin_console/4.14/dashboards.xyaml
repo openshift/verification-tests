@@ -609,7 +609,7 @@ choose_node_type:
 click_operator_status:
   elements:
   - selector:
-      xpath: //div[@class='co-status-card__health-item']//button[contains(.,'Operators')] 
+      xpath: //div[@class='co-status-card__health-item']//button[contains(.,'Operators')]
     op: click
     timeout: 60
 check_operator_status:
@@ -675,8 +675,8 @@ check_insights_status_when_unavailable:
   params:
     status: Error
     status_text: Not available
-  action: click_insights_status
   action: check_status_card_health_item_text
+  action: click_insights_status
   action: check_insights_popover_info_when_unavailable
   action: click_close_icon
 
