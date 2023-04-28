@@ -13,7 +13,7 @@ Feature: SCC policy related scenarios
   @hypershift-hosted
   @critical
   Scenario: OCP-11762:Workloads deployment hook volume inheritance with hostPath volume
-    Given I have a project
+    Given I have a project with proper privilege
     # Create hostdir pod again with new SCC
     Given I obtain test data file "authorization/scc/ocp11762/scc_hostdir.yaml"
     When I run the :create admin command with:
@@ -49,7 +49,7 @@ Feature: SCC policy related scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-11775:Authentication Create or update scc with illegal capability name should fail with prompt message
-    Given I have a project
+    Given I have a project with proper privilege
     Given cluster role "cluster-admin" is added to the "first" user
     Given admin ensures "scc-<%= project.name %>" scc is deleted after scenario
     Given I obtain test data file "authorization/scc/scc_capabilities.yaml"
