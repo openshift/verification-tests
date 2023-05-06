@@ -38,9 +38,6 @@ choose_k8s_type:
     resource_id: select-option-resources-kubernetes
   action: choose_resource_type
 choose_resource_type:
-  params:
-    button_text: Resource type
-  action: click_button
   elements:
   - selector:
       xpath: //button[@id='form-select-input-resources-field']
