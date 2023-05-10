@@ -904,6 +904,23 @@ Given /^I deploy kafka in the #{QUOTED} project via amqstream operator$/ do | pr
   })
   raise "Error subscript amqstreams" unless @result[:success]
 
+  workers = BushSlicer::Node.get_labeled("kubernetes.io/os=linux,node-role.kubernetes.io/worker=", user: admin)
+  step %Q/I run the :debug admin command with:/, table(%{
+    | resource     | node/#{workers.first.name} |
+    | oc_opts_end  |                            |
+    | exec_command | chroot                     |
+    | exec_command | /host                      |
+    | exec_command | fips-mode-setup            |
+    | exec_command | --check                    |
+  })
+  # disable fips_mode for amq-streams-cluster-operator when FIPS is enabled in the cluster
+  if @result[:response].include? "FIPS mode is enabled."
+    patch_json = {"spec": {"config": {"env": [{"name": "FIPS_MODE", "value": "disabled"}]}}}
+    patch_opts = {resource: "subscription", resource_name: "amq-streams", p: patch_json.to_json, n: project_name, type: "merge"}
+    @result = admin.cli_exec(:patch, **patch_opts)
+    raise "Patch failed with #{@result[:response]}" unless @result[:success]
+  end
+
   step %Q/a pod becomes ready with labels:/, table(%{
     | name=amq-streams-cluster-operator |
   })
@@ -1381,20 +1398,24 @@ Given /^I (check|record) all pods logs in the#{OPT_QUOTED} project(?: in last (\
       if action == "check"
         # read logs line by line
         # ignore errors in https://issues.redhat.com/browse/LOG-2702
+        ignored_messages = []
         case container.name
         when "cluster-logging-operator"
-          log = check_log(@result[:response], error_strings, ["the object has been modified"])
+          ignored_messages = ["the object has been modified"]
         when "kibana"
-          log = check_log(@result[:response], error_strings, ["java.lang.UnsupportedOperationException"])
+          ignored_messages = ["java.lang.UnsupportedOperationException"]
         when "elasticsearch"
-          log = check_log(@result[:response], error_strings, ["INFO", "WARN"])
+          ignored_messages = ["INFO", "WARN", "DEBUG"]
+        when "proxy"
+          ignored_messages = ["proxy error"]
         when "collector"
-          log = check_log(@result[:response], error_strings, ["Timeout flush: kubernetes.var.log"])
+          ignored_messages = ["Timeout flush: kubernetes.var.log"]
+        when "logfilesmetricexporter"
+          ignored_messages = ["unsupported cipher suite"]
         when "elasticsearch-operator"
-          log = check_log(@result[:response], error_strings, ["failed decoding raw response body into `map[string]estypes.GetIndexTemplate`", "failed to get list of index templates"])
-        else
-          log = check_log(@result[:response], error_strings, nil)
+          ignored_messages = ["failed decoding raw response body into `map[string]estypes.GetIndexTemplate`", "failed to get list of index templates"]
         end
+        log = check_log(@result[:response], error_strings, ignored_messages)
         raise "find error/failure log in #{pod.name}/#{container.name}: #{log}" unless log.empty?
       end
     end
