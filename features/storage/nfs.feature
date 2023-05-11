@@ -14,7 +14,7 @@ Feature: NFS Persistent Volume
   @hypershift-hosted
   @critical
   Scenario: OCP-9572:Storage Share NFS with multiple pods with ReadWriteMany mode
-    Given I have a project
+    Given I have a project with proper privilege
     And I have a NFS service in the project
 
     Given I obtain test data file "storage/nfs/auto/pv-retain.json"
@@ -69,7 +69,7 @@ Feature: NFS Persistent Volume
   @hypershift-hosted
   @critical
   Scenario: OCP-10281:Storage Permission denied when nfs pv annotaion is not right
-    Given I have a project
+    Given I have a project with proper privilege
     And I have a NFS service in the project
     When I execute on the pod:
       | chown | 1234:1234 | /mnt/data |

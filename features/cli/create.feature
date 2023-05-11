@@ -16,7 +16,7 @@ Feature: creating 'apps' with CLI
   @hypershift-hosted
   @critical
   Scenario: OCP-11761:Authentication Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
-    Given I have a project
+    Given I have a project with proper privilege
     Given I obtain test data file "pods/pod_with_special_fsGroup.json"
     When I run the :create client command with:
       | f | pod_with_special_fsGroup.json |
