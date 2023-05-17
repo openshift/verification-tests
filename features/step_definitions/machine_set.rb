@@ -5,6 +5,15 @@ Given(/^I pick a random( windows)? machineset to scale$/) do | windows |
   cache_resources *machine_sets.shuffle
 end
 
+Given(/^The cluster does not have ingress controller machineset$/) do
+  ensure_admin_tagged
+  machine_sets = BushSlicer::MachineSetMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))
+  if machine_sets.to_s.include? "ingress"
+    logger.warn "We will skip the scenario"
+      skip_this_scenario
+  end    
+end
+
 Given(/^I pick a earliest created machineset and store in#{OPT_SYM} clipboard$/) do | cb_name | 
   ensure_admin_tagged
   machine_sets = BushSlicer::MachineSetMachineOpenshiftIo.list(user: admin, project: project("openshift-machine-api"))

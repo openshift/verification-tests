@@ -414,6 +414,7 @@ Feature: Machine features testing
   Scenario Outline: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
+    And The cluster does not have ingress controller machineset
     And I use the "openshift-machine-api" project
     Then admin ensures machine number is restored after scenario
 
