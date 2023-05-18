@@ -904,17 +904,8 @@ Given /^I deploy kafka in the #{QUOTED} project via amqstream operator$/ do | pr
   })
   raise "Error subscript amqstreams" unless @result[:success]
 
-  workers = BushSlicer::Node.get_labeled("kubernetes.io/os=linux,node-role.kubernetes.io/worker=", user: admin)
-  step %Q/I run the :debug admin command with:/, table(%{
-    | resource     | node/#{workers.first.name} |
-    | oc_opts_end  |                            |
-    | exec_command | chroot                     |
-    | exec_command | /host                      |
-    | exec_command | fips-mode-setup            |
-    | exec_command | --check                    |
-  })
-  # disable fips_mode for amq-streams-cluster-operator when FIPS is enabled in the cluster
-  if @result[:response].include? "FIPS mode is enabled."
+  @result = admin.cli_exec(:get, resource: "machineconfig", resource_name: "99-worker-fips")
+  unless @result[:response].include? "NotFound"
     patch_json = {"spec": {"config": {"env": [{"name": "FIPS_MODE", "value": "disabled"}]}}}
     patch_opts = {resource: "subscription", resource_name: "amq-streams", p: patch_json.to_json, n: project_name, type: "merge"}
     @result = admin.cli_exec(:patch, **patch_opts)
