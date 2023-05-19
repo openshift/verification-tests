@@ -10,6 +10,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
+  @storage
   Scenario: OCP-10107:Storage Prebound pv is availabe due to requested pvc status is bound
     Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -40,6 +41,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
+  @storage
   Scenario: OCP-10109:Storage Prebound pv is availabe due to mismatched accessmode with requested pvc
     Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
@@ -69,6 +71,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
+  @storage
   Scenario: OCP-10111:Storage Prebound pvc is pending due to requested pv status is bound
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -98,6 +101,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
+  @storage
   Scenario: OCP-10113:Storage Prebound PVC is pending due to mismatched accessmode with requested PV
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -126,6 +130,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
+  @storage
   Scenario: OCP-10114:Storage Prebound PVC is pending due to mismatched volume size with requested PV
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -154,6 +159,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
+  @storage
   Scenario: OCP-9941:Storage PV and PVC bound successfully when pvc created prebound to pv
     Given I have a project
     Given I obtain test data file "storage/nfs/nfs.json"
@@ -185,6 +191,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
+  @storage
   Scenario: OCP-9940:Storage PV and PVC bound successfully when pv created prebound to pvc
     Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"
@@ -211,6 +218,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @proxy @noproxy @disconnected @connected
     @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @storage
   Scenario Outline: Prebound pv/pvc is availabe/pending due to requested pvc/pv prebound to other pv/pvc
     Given I create a project with non-leading digit name
     Given I obtain test data file "storage/nfs/preboundpv-rwo.yaml"

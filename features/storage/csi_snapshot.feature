@@ -9,6 +9,7 @@ Feature: Volume snapshot test
   @network-ovnkubernetes @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @storage
   Scenario Outline: Volume snapshot create and restore test
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -87,6 +88,7 @@ Feature: Volume snapshot test
   @proxy @noproxy @disconnected @connected
     @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @storage
   Scenario Outline: Volume snapshot create and restore test with block
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
