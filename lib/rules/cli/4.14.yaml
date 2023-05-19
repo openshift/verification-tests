@@ -334,7 +334,7 @@
      :output: --output=<value>
      :template: --template=<value>
 :debug:
-  :cmd: oc debug <global_options>
+  :cmd: oc debug <global_options> --loglevel=9
   :options:
      :c: -c <value>
      :dry_run: --dry-run
