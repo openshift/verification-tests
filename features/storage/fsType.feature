@@ -8,6 +8,7 @@ Feature: testing for parameter fsType
   @proxy @noproxy @disconnected @connected
     @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @storage
   Scenario Outline: persistent volume formated with fsType
     Given I have a project
     And admin creates new in-tree storageclass with:

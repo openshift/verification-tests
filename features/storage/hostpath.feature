@@ -8,6 +8,7 @@ Feature: Storage of Hostpath plugin testing
   @proxy @noproxy @disconnected @connected
     @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @storage
   Scenario Outline: Create hostpath pv with access mode and reclaim policy
     Given I have a project with proper privilege
     Given I obtain test data file "storage/hostpath/local.yaml"

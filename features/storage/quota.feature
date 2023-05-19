@@ -12,6 +12,7 @@ Feature: ResourceQuata for storage
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @storage
   Scenario: OCP-14173:Storage Requested storage can not exceed the namespace's storage quota
     Given I have a project with proper privilege
     And I switch to cluster admin pseudo user
@@ -91,6 +92,7 @@ Feature: ResourceQuata for storage
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @storage
   Scenario: OCP-14382:Storage Setting quota for a StorageClass
     Given I have a project
     Given admin clones storage class "sc-<%= project.name %>" from ":default" with:

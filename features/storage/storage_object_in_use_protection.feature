@@ -2,6 +2,7 @@ Feature: Storage object in use protection
 
   # @author lxia@redhat.com
   # @case_id OCP-17253
+  @storage
   Scenario: OCP-17253:Storage Delete pvc which is not in active use by pod should be deleted immediately
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -13,6 +14,7 @@ Feature: Storage object in use protection
 
   # @author lxia@redhat.com
   # @case_id OCP-17254
+  @storage
   Scenario: OCP-17254:Storage Delete pvc which is in active use by pod should postpone deletion
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -51,6 +53,7 @@ Feature: Storage object in use protection
   # @author lxia@redhat.com
   # @case_id OCP-18796
   @admin
+  @storage
   Scenario: OCP-18796:Storage Delete pv which is bind with pvc should postpone deletion
     Given I have a project
     Given I obtain test data file "storage/nfs/auto/pv-template.json"

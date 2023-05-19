@@ -7,6 +7,7 @@ Feature: negative testing
   @proxy @noproxy @disconnected @connected
     @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.8 @4.7 @4.6
+  @storage
   Scenario Outline: PV with invalid volume id should be prevented from creating
     Given admin ensures "mypv" pv is deleted after scenario
     Given I obtain test data file "storage/<dir>/<file>"

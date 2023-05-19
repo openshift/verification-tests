@@ -10,6 +10,7 @@ Feature: Cinder Persistent Volume
   @openstack-ipi
   @openstack-upi
   @hypershift-hosted
+  @storage
   Scenario: OCP-9643:Storage Persistent Volume with cinder volume plugin
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard

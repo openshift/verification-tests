@@ -12,6 +12,7 @@ Feature: Regression testing cases
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @storage
   Scenario: OCP-16485:Storage RWO volumes are exclusively mounted on different nodes
     Given I have a project
     Given I store the schedulable workers in the :workers clipboard
