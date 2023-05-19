@@ -1,4 +1,4 @@
-FROM quay.io/centos/centos:8
+FROM quay.io/centos/centos:stream8
 
 LABEL vendor="Red Hat inc."
 LABEL maintainer="OCP QE Team"
@@ -31,7 +31,18 @@ RUN set -x && \
     curl -sSL $GITHUB_API_CURL_OPTS "$JQ_SPEC" | sed -En "s#$JQ_RE#\1#p" | xargs -d '\n' curl -sSL -o /usr/local/bin/jq && \
     chmod +x /usr/local/bin/jq && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm  && \
-    yum install -y 'ansible-core < 2.14'  && \
+    yum install -y python38 python38-pip && \
+    mkdir --parents /opt/python-env && \
+    python3.8 -m venv /opt/python-env/ansible2.9 && \
+    source /opt/python-env/ansible2.9/bin/activate && \
+      pip install --upgrade pip setuptools && \
+      pip install 'ansible < 2.10' && \
+    deactivate && \
+    python3.8 -m venv /opt/python-env/ansible-core && \
+    source /opt/python-env/ansible-core/bin/activate && \
+      pip install --upgrade pip setuptools && \
+      pip install 'ansible-core < 2.14' && \
+    deactivate && \
     yum module reset ruby && \
     yum module -y enable ruby:2.7 && \
     yum module -y install ruby:2.7 && \
