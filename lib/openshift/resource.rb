@@ -163,7 +163,7 @@ module BushSlicer
     # deleted object if it exists but does not wait for completion
     # @note subclasses need to implement #delete method
     def delete_graceful(by:)
-      res = delete(by: by, wait: false)
+      res = delete(by: by, wait: true)
 
       # this will actually fail for mising project when run by a regular user;
       # we can override this method in project.rb but I'm thinking that
