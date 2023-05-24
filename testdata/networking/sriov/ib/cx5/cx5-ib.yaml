@@ -9,6 +9,7 @@ spec:
     deviceID: "1017"
     pfNames:
       - ib0
+      - ibp94s0
     rootDevices:
       - '0000:5e:00.0'
     vendor: '15b3'
