@@ -273,7 +273,7 @@ Feature: apiserver and auth related upgrade check
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
+  Scenario: OCP-41198:Authentication Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
       | project_name | service-ca-upgrade |
@@ -312,7 +312,7 @@ Feature: apiserver and auth related upgrade check
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
+  Scenario: OCP-41198:Authentication Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
     Given the master version >= "4.8"
     Given I switch to cluster admin pseudo user
     Given I use the "service-ca-upgrade" project
