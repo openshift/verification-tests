@@ -11,7 +11,7 @@
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
-  Scenario: Check the multus works well after upgrade - prepare
+  Scenario: OCP-44898:SDN Check the multus works well after upgrade - prepare
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     # Create the net-attach-def via cluster admin
@@ -56,7 +56,7 @@
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
-  Scenario: Check the multus works well after upgrade
+  Scenario: OCP-44898:SDN Check the multus works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "multus-upgrade" project
     Given a pod becomes ready with labels:
