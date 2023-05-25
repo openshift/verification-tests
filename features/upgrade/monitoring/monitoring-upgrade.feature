@@ -48,7 +48,7 @@ Feature: cluster monitoring related upgrade check
     Given I find a bearer token of the prometheus-k8s service account
     When evaluation of `service_account('prometheus-k8s').cached_tokens.first` is stored in the :sa_token clipboard
 
-    # curl -k -H "Authorization: Bearer $token" 'https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=cluster_installer'
+    # curl -k -H "Authorization: Bearer $token" 'https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=prometheus_build_info'
     When I run the :exec admin command with:
       | n                | openshift-monitoring |
       | pod              | prometheus-k8s-0     |
@@ -56,10 +56,10 @@ Feature: cluster monitoring related upgrade check
       | oc_opts_end      |                      |
       | exec_command     | sh                   |
       | exec_command_arg | -c                   |
-      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=cluster_installer |
+      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=prometheus_build_info |
     Then the step should succeed
     And the output should contain:
-      | "__name__":"cluster_installer" |
+      | "__name__":"prometheus_build_info" |
 
     # curl -k -H "Authorization: Bearer $token" 'https://alertmanager-main.openshift-monitoring.svc:9094/api/v1/alerts'
     When I run the :exec admin command with:
@@ -78,7 +78,7 @@ Feature: cluster monitoring related upgrade check
     Then the output should contain:
       | CPU(cores) |
 
-    # curl -k -H "Authorization: Bearer $token" 'https://thanos-querier.openshift-monitoring.svc:9091/api/v1/query?query=cluster_installer'
+    # curl -k -H "Authorization: Bearer $token" 'https://thanos-querier.openshift-monitoring.svc:9091/api/v1/query?query=prometheus_build_info'
     When I run the :exec admin command with:
       | n                | openshift-monitoring |
       | pod              | prometheus-k8s-0     |
@@ -86,7 +86,7 @@ Feature: cluster monitoring related upgrade check
       | oc_opts_end      |                      |
       | exec_command     | sh                   |
       | exec_command_arg | -c                   |
-      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://thanos-querier.openshift-monitoring.svc:9091/api/v1/query?query=cluster_installer |
+      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://thanos-querier.openshift-monitoring.svc:9091/api/v1/query?query=prometheus_build_info |
     Then the step should succeed
     And the output should contain:
-      | "__name__":"cluster_installer" |
+      | "__name__":"prometheus_build_info" |
