@@ -3,7 +3,6 @@
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
-  @users=upuser1,upuser2
   @4.13 @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
@@ -12,10 +11,10 @@
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
   Scenario: OCP-44898:SDN Check the multus works well after upgrade - prepare
+    Given I switch to cluster admin pseudo user
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     # Create the net-attach-def via cluster admin
-    Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
       | project_name | multus-upgrade |
     Then the step should succeed
@@ -48,7 +47,6 @@
   # @case_id OCP-44898
   @admin
   @upgrade-check
-  @users=upuser1,upuser2
   @4.13 @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
