@@ -13,7 +13,6 @@ Feature: Node components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: OCP-13022:Node Make sure nodeConfig is not changed after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :label admin command with:
@@ -64,7 +63,6 @@ Feature: Node components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: OCP-13022:Node Make sure nodeConfig is not changed after upgrade
     Given I switch to cluster admin pseudo user
     When I run the :get admin command with:
