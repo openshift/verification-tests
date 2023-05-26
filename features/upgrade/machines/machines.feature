@@ -39,7 +39,6 @@ Feature: Machine-api components upgrade tests
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
-    @hypershift-hosted
     @critical
   Examples:
     | case_id                         | cluster_operator     |
@@ -64,7 +63,6 @@ Feature: Machine-api components upgrade tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: Cloud-controller-manager cluster operator should be available after upgrade
     Given evaluation of `cluster_operator('cloud-controller-manager').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -122,7 +120,6 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @ppc64le @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: Scale up and scale down a machineSet after upgrade - prepare
     Given the expression should be true> "True" == "True"
 
@@ -138,7 +135,6 @@ Feature: Machine-api components upgrade tests
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   @critical
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
@@ -240,7 +236,6 @@ Feature: Machine-api components upgrade tests
       | OCP-41175:ClusterInfrastructure | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
 
     @gcp-ipi
-    @hypershift-hosted
     @flaky
     Examples:
       | case_id                         | iaas_type | machineset_name        | value               |
@@ -255,7 +250,6 @@ Feature: Machine-api components upgrade tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @ppc64le @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -279,7 +273,6 @@ Feature: Machine-api components upgrade tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   @critical
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
@@ -333,7 +326,6 @@ Feature: Machine-api components upgrade tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @ppc64le @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: Registering Components delays should not be more than liveliness probe - prepare
     Given the expression should be true> "True" == "True"
 
@@ -347,7 +339,6 @@ Feature: Machine-api components upgrade tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: Registering Components delays should not be more than liveliness probe
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
