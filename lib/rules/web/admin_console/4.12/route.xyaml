@@ -70,7 +70,7 @@ set_service_name:
     dropdown_item: <service_name>
   elements:
   - selector:
-      xpath: //*[(.='Service')]/..//button[@data-test-id='dropdown-button']
+      xpath: //button[@id='service']
     op: click
   action: click_one_item
 set_alternative_service_name:
