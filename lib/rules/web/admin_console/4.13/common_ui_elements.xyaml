@@ -537,7 +537,7 @@ check_fixable_column_in_table:
 check_manifest_column_in_table:
   params:
     field: Manifest
-  action: check_column_in_table  
+  action: check_column_in_table
 check_instance_type_in_table:
   params:
     field: Instance type
@@ -685,7 +685,7 @@ check_page_contains:
 check_page_match:
   element:
     selector: &page_content
-      visible_text: !ruby/regexp /<content>/i
+      xpath: //h4[contains(.,'<content>')]
     timeout: 15
 check_page_not_match:
   element:
