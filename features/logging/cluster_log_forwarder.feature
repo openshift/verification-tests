@@ -139,7 +139,7 @@ Feature: cluster log forwarder features
   @destructive
   @singlenode
   @4.7 @4.6
-  @logging5.6 @logging5.7 @logging5.5
+  @logging5.6 @logging5.7 @logging5.8 @logging5.5
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
@@ -237,7 +237,7 @@ Feature: cluster log forwarder features
       | infra-container.log |
     """
     @upgrade-sanity
-    @logging5.6 @logging5.7 @logging5.5
+    @logging5.6 @logging5.7 @logging5.8 @logging5.5
     @singlenode
     @proxy @noproxy @connected
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
@@ -308,7 +308,7 @@ Feature: cluster log forwarder features
 
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @logging5.6 @logging5.7 @logging5.5
+    @logging5.6 @logging5.7 @logging5.8 @logging5.5
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
@@ -324,7 +324,7 @@ Feature: cluster log forwarder features
   @singlenode
   @proxy @noproxy @disconnected @connected
   @4.7 @4.6
-  @logging5.6 @logging5.7
+  @logging5.6 @logging5.7 @logging5.8
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
@@ -395,7 +395,7 @@ Feature: cluster log forwarder features
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @network-ovnkubernetes @network-openshiftsdn
-    @logging5.6 @logging5.7 @logging5.5
+    @logging5.6 @logging5.7 @logging5.8 @logging5.5
     @critical
     Examples:
       | case_id           | file                  | protocol |
@@ -408,7 +408,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @4.10 @4.9 @4.8 @4.7 @4.6
-  @logging5.6 @logging5.7
+  @logging5.6 @logging5.7 @logging5.8
   @singlenode
   @proxy @noproxy @connected
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
@@ -462,7 +462,7 @@ Feature: cluster log forwarder features
   @singlenode
   @proxy @noproxy @connected
   @4.7 @4.6
-  @logging5.6 @logging5.7
+  @logging5.6 @logging5.7 @logging5.8
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn

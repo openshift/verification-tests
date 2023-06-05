@@ -404,8 +404,10 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
   if (logging_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
-    when '4.13'
+    when '4.14'
       cb[cb_name] = "stable"
+    when '4.13'
+      cb[cb_name] = "stable-5.7"
     when '4.12'
       cb[cb_name] = "stable-5.6"
     when '4.11'
