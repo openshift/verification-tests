@@ -35,6 +35,7 @@ Feature: Multus-CNI related scenarios
     And a pod becomes ready with labels:
       | name=macvlan-bridge-pod |
     And evaluation of `pod.node_name` is stored in the :pod_node clipboard
+    And evaluation of `pod.ip_url` is stored in the :pod1_sdn_ip clipboard
 
     # Check that the macvlan with mode bridge is added to the pod
     When I execute on the pod:
@@ -45,10 +46,6 @@ Feature: Multus-CNI related scenarios
       | bash | -c | ip -f inet addr show net1 |
     Then the output should match "10.1.1.\d{1,3}"
     And evaluation of `@result[:stdout].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_multus_ip clipboard
-    When I execute on the pod:
-      | bash | -c | ip -f inet addr show eth0 |
-    Then the step should succeed
-    And evaluation of `@result[:stdout].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_sdn_ip clipboard
 
     # Create the second pod which consumes the macvlan cr
     Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
@@ -104,6 +101,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=macvlan-private-pod |
+    And evaluation of `pod.ip_url` is stored in the :pod1_sdn_ip clipboard
 
     # Check that the macvlan with mode private is added to the pod
     When I execute on the pod:
@@ -114,10 +112,6 @@ Feature: Multus-CNI related scenarios
       | bash | -c | ip -f inet addr show net1 |
     Then the output should match "10.1.1.\d{1,3}"
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_multus_ip clipboard
-    When I execute on the pod:
-      | bash | -c | ip -f inet addr show eth0 |
-    Then the step should succeed
-    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_sdn_ip clipboard
 
     # Create the second pod which consumes the macvlan cr
     Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-private.yaml"
@@ -172,6 +166,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=macvlan-vepa-pod |
+    And evaluation of `pod.ip_url` is stored in the :pod1_sdn_ip clipboard
 
     # Check that the macvlan with mode vepa is added to the pod
     When I execute on the pod:
@@ -182,10 +177,6 @@ Feature: Multus-CNI related scenarios
       | bash | -c | ip -f inet addr show net1 |
     Then the output should match "10.1.1.\d{1,3}"
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_multus_ip clipboard
-    When I execute on the pod:
-      | bash | -c | ip -f inet addr show eth0 |
-    Then the step should succeed
-    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_sdn_ip clipboard
 
     # Create the second pod which consumes the macvlan cr
     Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-vepa.yaml"
