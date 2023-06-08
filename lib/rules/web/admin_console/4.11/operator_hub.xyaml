@@ -203,6 +203,7 @@ create_catalog_source:
     button_text: Create CatalogSource
     button_id: catalog-source-namespace
     radio_text: 1
+    filter_text: <item>
   action: goto_catalog_source_page
   action: click_button
   action: input_catalog_source_name
@@ -213,7 +214,9 @@ create_catalog_source:
     if_param: item
     ref:
     - click_radio_input
-    - select_resource_item
+    - click_button_by_id
+    - set_strings_in_dropdown_filter_box
+    - click_on_resource_name
   action: submit_changes
 subscribe_operator_to_namespace:
   params:

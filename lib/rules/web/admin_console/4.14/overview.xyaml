@@ -149,8 +149,8 @@ check_update_strategy_popover_info:
   action: check_page_contains
 check_namespace_popover_info:
   params:
-    text: docs/user-guide/namespaces
-    link_url: docs/user-guide/namespaces
+    text: working-with-objects/namespaces
+    link_url: kubernetes.io/docs/concepts/overview/working-with-objects/namespaces
     popover_item: Namespace
   action: wait_resource_summary_loaded
   action: click_open_popover
