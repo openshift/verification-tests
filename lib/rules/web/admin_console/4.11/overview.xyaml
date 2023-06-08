@@ -99,9 +99,9 @@ check_deployment_availble_action_menus:
   - selector:
       <<: *edit_annotations
   - selector:
-      xpath: //li//button[@data-test-action='Edit Deployment']
+      xpath: //li[@data-test-action='Edit Deployment']
   - selector:
-      xpath: //li//button[@data-test-action='Delete Deployment']
+      xpath: //li[@data-test-action='Delete Deployment']
 check_error_icon_for_overview_item:
   action: wait_overview_items_loaded
   element:
