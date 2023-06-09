@@ -1142,6 +1142,9 @@ check_resource_details:
     if_param: size
     ref: check_size
   action:
+    if_param: requested_capacity
+    ref: check_requested_capacity
+  action:
     if_param: source
     ref: check_source
   action:
@@ -1498,6 +1501,11 @@ check_size:
   params:
     key: Size
     value: <size>
+  action: check_resource_details_key_and_value
+check_requested_capacity:
+  params:
+    key: Requested capacity
+    value: <requested_capacity>
   action: check_resource_details_key_and_value
 check_source:
   params:
