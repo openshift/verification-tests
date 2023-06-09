@@ -40,6 +40,16 @@ create_operand:
   action: click_create_operand_button
   action: wait_box_loaded
   action: submit_changes
+create_operand_anzo:
+  params:
+    tab_name: Anzo Operator
+    button_text: Create
+  action: goto_csv_detail_page
+  action: click_tab
+  action: click_button
+  action: wait_box_loaded
+  action: switch_to_form_view
+  action: submit_changes
 set_operand_name:
   params:
     label_text: Name
@@ -191,6 +201,7 @@ create_catalog_source:
     button_text: Create CatalogSource
     button_id: catalog-source-namespace
     radio_text: 1
+    filter_text: <item>
   action: goto_catalog_source_page
   action: click_button
   action: input_catalog_source_name
@@ -201,7 +212,9 @@ create_catalog_source:
     if_param: item
     ref:
     - click_radio_input
-    - select_resource_item
+    - click_button_by_id
+    - set_strings_in_dropdown_filter_box
+    - click_on_resource_name
   action: submit_changes
 subscribe_operator_to_namespace:
   params:
@@ -252,7 +265,7 @@ check_error_message_for_missing_required_name:
   action: check_page_contains
 check_catalogsource_removed_message:
   params:
-    content: CatalogSource removed
+    content: CatalogSource health unknown
   action: check_page_match
 check_quay_image_security_popup:
   elements:
