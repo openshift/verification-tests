@@ -261,7 +261,15 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
       eval "sc_hash#{path} = YAML.load value" unless path == ''
   end
 
-  # replace the provisioner value according to platform wise 
+  if !sc_hash.dig("volumeBindingMode")
+    if platform == "vsphere"  
+      volumeBindingMode = "Immediate" 
+    else 
+      volumeBindingMode = "WaitForFirstConsumer"
+    end
+  end
+
+  # replace the provisioner, volumeBindingMode value according to platform wise 
   sc_hash["provisioner"] = "kubernetes.io/#{provisioner}"
   
   logger.info("Creating StorageClass:\n#{sc_hash.to_yaml}")
