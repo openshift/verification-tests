@@ -239,6 +239,6 @@ Feature: Machine misc features testing
       | resource_name | <%= pod.name %>    |
       | c             | machine-controller |
     Then the output should contain:
-      | Detaching disks before vm destroy  |
+      | Checking attached disks before vm destroy |
 
 
