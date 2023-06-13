@@ -270,7 +270,7 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
     end
   end
 
-  # replace the provisioner, volumeBindingMode value according to platform wise 
+  # replace the provisioner value according to platform wise 
   sc_hash["provisioner"] = "kubernetes.io/#{provisioner}"
   
   logger.info("Creating StorageClass:\n#{sc_hash.to_yaml}")
