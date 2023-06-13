@@ -261,6 +261,7 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
       eval "sc_hash#{path} = YAML.load value" unless path == ''
   end
 
+  # if no volumeBindingMode exists in tc, we need to pass vSphere=Immediate, others=WaitForFirstConsumer
   if !sc_hash.dig("volumeBindingMode")
     if platform == "vsphere"  
       volumeBindingMode = "Immediate" 
