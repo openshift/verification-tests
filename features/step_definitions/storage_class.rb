@@ -264,9 +264,9 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
   # if no volumeBindingMode exists in tc, we need to pass vSphere=Immediate, others=WaitForFirstConsumer
   if !sc_hash.dig("volumeBindingMode")
     if platform == "vsphere"  
-      volumeBindingMode = "Immediate" 
+      sc_hash["volumeBindingMode"] = "Immediate" 
     else 
-      volumeBindingMode = "WaitForFirstConsumer"
+      sc_hash["volumeBindingMode"] = "WaitForFirstConsumer"
     end
   end
 
