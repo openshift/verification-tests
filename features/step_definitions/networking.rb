@@ -1575,18 +1575,19 @@ Given /^I store kubernetes elected leader pod for ovnkube-master in the#{OPT_SYM
   cb_leader_name ||= "leader_pod"
   step %/I switch to cluster admin pseudo user/
   step %/I use the "openshift-ovn-kubernetes" project/
-  cm_annotation = config_map('ovn-kubernetes-master').annotations(key: 'control-plane.alpha.kubernetes.io/leader')
-  # the annotation result is a string reprensation of a JSON, convert it to a
-  # yaml object for easier access
-  annotation_hash = YAML.load(cm_annotation)
-  holder_id =  annotation_hash['holderIdentity']
-  ### cli way
-  # @result= admin.cli_exec(:get, namespace: "openshift-ovn-kubernetes", resource: "pod",  o: 'yaml', fieldSelector: "spec.nodeName=#{holder_id}")
-  # cb[cb_leader_name] = pod(@result[:parsed]["items"][0]['metadata']['name'])
-  ###  oop way
-  pods = project.pods(by:user)
-  target_pod = pods.select {|p| p.props[:node_name] == holder_id }.first
-  cb[cb_leader_name ] = target_pod
+  if env.version_lt("4.13", user: user)
+    cm_annotation = config_map('ovn-kubernetes-master').annotations(key: 'control-plane.alpha.kubernetes.io/leader')
+    # the annotation result is a string reprensation of a JSON, convert it to a
+    # yaml object for easier access
+    annotation_hash = YAML.load(cm_annotation)
+    holder_id =  annotation_hash['holderIdentity']
+  else
+    @result = admin.cli_exec(:get, resource: 'lease', o: "jsonpath={.items[*].spec.holderIdentity}")
+    holder_id = @result[:response]
+  end
+    pods = project.pods(by:user)
+    target_pod = pods.select {|p| p.props[:node_name] == holder_id }.first
+    cb[cb_leader_name ] = target_pod
 end
 
 Given /^the plugin is openshift-ovs-networkpolicy on the cluster$/ do
