@@ -1585,9 +1585,9 @@ Given /^I store kubernetes elected leader pod for ovnkube-master in the#{OPT_SYM
     @result = admin.cli_exec(:get, resource: 'lease', o: "jsonpath={.items[*].spec.holderIdentity}")
     holder_id = @result[:response]
   end
-    pods = project.pods(by:user)
-    target_pod = pods.select {|p| p.props[:node_name] == holder_id }.first
-    cb[cb_leader_name ] = target_pod
+  pods = project.pods(by:user)
+  target_pod = pods.select {|p| p.props[:node_name] == holder_id }.first
+  cb[cb_leader_name ] = target_pod
 end
 
 Given /^the plugin is openshift-ovs-networkpolicy on the cluster$/ do
