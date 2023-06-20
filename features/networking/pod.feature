@@ -418,9 +418,6 @@ Feature: Pod related networking scenarios
 
     #Deleting the udp listener pod which will trigger a new udp listener pod with new IP
     Given I ensure "<%= cb.host_pod1.name %>" pod is deleted
-    And a pod becomes ready with labels:
-      | name=udp-pods |
-    And evaluation of `pod` is stored in the :host_pod2 clipboard
 
     # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
@@ -430,6 +427,13 @@ Feature: Pod related networking scenarios
       | exec_command_arg | -c                                                                                       |
       | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
     Then the step should succeed
+
+    #Storing new udp listener pod IP which was created as a result of deletion of old udp listener pod above
+    Given I use the "<%= project.name %>" project
+    And a pod is present with labels:
+      | name=udp-pods |
+    And evaluation of `pod` is stored in the :host_pod2 clipboard
+
     #Making sure that the conntrack table should not contain old deleted udp listener pod IP entries but new pod one's
     Given I wait up to 20 seconds for the steps to pass:
     """
