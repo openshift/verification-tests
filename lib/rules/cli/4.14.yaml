@@ -198,7 +198,10 @@
     :allow_missing_template_keys: --allow-missing-template-keys=<value>
     :dry_run: --dry-run=<value>
     :generator: --generator=<value>
+    :exec_command: <value>
+    :exec_command_arg: <value>
     :image: --image=<value>
+    :oc_opts_end: --
     :output: --output <value>
     :save_config: --save-config=<value>
     :template: --template=<value>
