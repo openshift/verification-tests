@@ -1,7 +1,7 @@
 check_baremetalhost_status_popup:
   elements:
   - selector:
-      xpath: (//span[@data-test='status-text'] and text()='Externally provisioned'])[1]
+      xpath: (//span[@data-test='status-text' and text()='Externally provisioned'])[1]
     op: click
   - selector:
       xpath: //div[contains(., 'host was provisioned outside of this cluster and added manually')]
