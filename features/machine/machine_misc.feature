@@ -186,7 +186,7 @@ Feature: Machine misc features testing
       | path  | /api/v1/query?                         |
       | query | cloudprovider_vsphere_vcenter_versions |
     Then the step should succeed
-    And the expression should be true> @result[:parsed]["data"]["result"][0]["metric"]["version"] =~ /7.0/
+    And the expression should be true> @result[:parsed]["data"]["result"][0]["metric"]["version"] =~ /7.0|8.0/
 
   # @author miyadav@redhat.com
   # @case_id OCP-40665
