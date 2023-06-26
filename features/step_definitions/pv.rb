@@ -42,19 +42,10 @@ Given /^I have a(?: (\d+) GB)? volume and save volume id in the#{OPT_SYM} clipbo
   end
 
   cb.dynamic_pvc_name = rand_str(8, :dns)
-  platform = infrastructure('cluster').platform.downcase 
-  if platform == "vsphere"  
-    step %Q{I create a dynamic pvc from "#{BushSlicer::HOME}/testdata/storage/misc/pvc.json" replacing paths:}, table(%{
-      | ["metadata"]["name"]                         | <%= project.name %>-<%= cb.dynamic_pvc_name %> |
-      | ["spec"]["resources"]["requests"]["storage"] | #{size}Gi                                      |
-      | ["spec"]["storageClassName"]                 |  thin                                          |
+  step %Q{I create a dynamic pvc from "#{BushSlicer::HOME}/testdata/storage/misc/pvc.json" replacing paths:}, table(%{
+    | ["metadata"]["name"]                         | <%= project.name %>-<%= cb.dynamic_pvc_name %> |
+    | ["spec"]["resources"]["requests"]["storage"] | #{size}Gi                                      |
     })
-  else  
-     step %Q{I create a dynamic pvc from "#{BushSlicer::HOME}/testdata/storage/misc/pvc.json" replacing paths:}, table(%{
-      | ["metadata"]["name"]                         | <%= project.name %>-<%= cb.dynamic_pvc_name %> |
-      | ["spec"]["resources"]["requests"]["storage"] | #{size}Gi                                      |
-    })
-  end 
   step %Q/the step should succeed/
   step %Q{I run oc create over "#{BushSlicer::HOME}/testdata/storage/misc/pod.yaml" replacing paths:}, table(%{
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | <%= project.name %>-<%= cb.dynamic_pvc_name %> |
