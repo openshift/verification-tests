@@ -703,9 +703,9 @@ check_no_deployment_found_text:
   params:
     content: No Deployments found
   action: check_page_contains
-check_no_alertmanager_found_text:
+check_no_resource_found_text:
   params:
-    content: No Alertmanagers found
+    content: No ConsoleCLIDownloads found
   action: check_page_contains
 check_no_resources_selected_text:
   params:
