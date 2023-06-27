@@ -419,6 +419,9 @@ Feature: Machine features testing
 
     Given I store the last provisioned machine in the :machine clipboard
     Then evaluation of `machine_machine_openshift_io(cb.machine).azure_location` is stored in the :default_location clipboard
+    Then evaluation of `machine_machine_openshift_io(cb.machine).azure_vnet` is stored in the :default_vnet clipboard
+    Then evaluation of `machine_machine_openshift_io(cb.machine).azure_subnet` is stored in the :default_subnet clipboard
+    Then evaluation of `machine_machine_openshift_io(cb.machine).azure_network_resource_group` is stored in the :default_network_resource_group clipboard
     And admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-azure/<file_name>"
@@ -428,6 +431,9 @@ Feature: Machine features testing
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["location"]                         | <%= cb.default_location %>                  |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["vnet"]                             | <%= cb.default_vnet %>                      |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["subnet"]                           | <%= cb.default_subnet %>                    |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["networkResourceGroup"]             | <%= cb.default_network_resource_group %>      |
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
       | ["metadata"]["name"]                                                                      | <name>                                      |
     Then the step should succeed

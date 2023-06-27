@@ -48,6 +48,21 @@ module BushSlicer
          dig('spec', 'providerSpec', 'value', 'location')
     end
 
+    def azure_vnet(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'vnet')
+    end
+
+    def azure_subnet(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'subnet')
+    end
+
+    def azure_network_resource_group(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'networkResourceGroup')
+    end
+
     def gcp_region(user: nil, cached: true, quiet: false)
        raw_resource(user: user, cached: cached ,quiet: quiet).
          dig('spec', 'providerSpec', 'value', 'region')
