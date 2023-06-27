@@ -345,14 +345,14 @@ Feature: SDN compoment upgrade testing
     When I use the "policy-upgrade5" project
     Given I obtain test data file "networking/list_for_pods.json"
     When I run oc create over "list_for_pods.json" replacing paths:
-      | ["items"][0]["spec"]["replicas"]                      | 1                       |
-      | ["items"][0]["spec"]["template"]["spec"]["nodeName"]  | <%= cb.nodes[0].name %> |
+      | ["items"][0]["spec"]["replicas"]                      | 1 |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=test-pods |
     Then the step should succeed
     And evaluation of `pod(2).ip_url` is stored in the :p5pod1ip clipboard
     Given I save multus pod on node "<%= cb.nodes[1].name %>" to the :multuspod clipboard
+    Given I save multus pod on node "<%= cb.nodes[0].name %>" to the :multuspod0 clipboard
     Given the DefaultDeny policy is applied to the "policy-upgrade5" namespace
     Then the step should succeed
     Given I obtain test data file "networking/networkpolicy/allow-from-hostnetwork.yaml"
@@ -374,6 +374,10 @@ Feature: SDN compoment upgrade testing
     Given I switch to cluster admin pseudo user
     Given I use the "openshift-multus" project
     When I execute on the "<%= cb.multuspod %>" pod:
+      | curl | -I | <%= cb.p5pod1ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "200 OK"
+    When I execute on the "<%= cb.multuspod0 %>" pod:
       | curl | -I | <%= cb.p5pod1ip %>:8080 |
     Then the step should succeed
     And the output should contain "200 OK"
@@ -410,6 +414,7 @@ Feature: SDN compoment upgrade testing
       | name=test-pods |
     And evaluation of `pod(2).ip_url` is stored in the :p5pod1ip clipboard
     Given I save multus pod on node "<%= cb.nodes[1].name %>" to the :multuspod clipboard
+    Given I save multus pod on node "<%= cb.nodes[0].name %>" to the :multuspod0 clipboard
     Given I switch to cluster admin pseudo user
     Given I use the "openshift-multus" project
     And I wait up to 30 seconds for the steps to pass:
@@ -417,6 +422,9 @@ Feature: SDN compoment upgrade testing
     When I execute on the "<%= cb.multuspod %>" pod:
       | curl | -I | <%= cb.p5pod1ip %>:8080 |
     Then the step should succeed
+    When I execute on the "<%= cb.multuspod0 %>" pod:
+      | curl | -I | <%= cb.p5pod1ip %>:8080 |
+    Then the step should succeed    
     """
 
   # @author anusaxen@redhat.com
