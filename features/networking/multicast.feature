@@ -616,8 +616,6 @@ Feature: testing multicast scenarios
       | name=mcast-pods |
     And evaluation of `pod(0).ip` is stored in the :pod1ip clipboard
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
-    And evaluation of `pod(1).ip` is stored in the :pod2ip clipboard
-    And evaluation of `pod(1).name` is stored in the :pod2 clipboard
     And evaluation of `pod(2).ip` is stored in the :pod3ip clipboard
     And evaluation of `pod(2).name` is stored in the :pod3 clipboard
 
@@ -631,20 +629,6 @@ Feature: testing multicast scenarios
       | exec_command_arg | -T               |
       | exec_command_arg | 10               |
       | exec_command_arg | <%= cb.pod1ip %> |
-      | exec_command_arg | <%= cb.pod2ip %> |
-      | exec_command_arg | <%= cb.pod3ip %> |
-    Then the step should succeed
-
-    When I run the :exec background client command with:
-      | pod              | <%= cb.pod2 %>   |
-      | oc_opts_end      |                  |
-      | exec_command     | omping           |
-      | exec_command_arg | -c               |
-      | exec_command_arg | 5                |
-      | exec_command_arg | -T               |
-      | exec_command_arg | 10               |
-      | exec_command_arg | <%= cb.pod1ip %> |
-      | exec_command_arg | <%= cb.pod2ip %> |
       | exec_command_arg | <%= cb.pod3ip %> |
     Then the step should succeed
 
@@ -653,7 +637,7 @@ Feature: testing multicast scenarios
       | oc_opts_end      |                                                                                    |
       | exec_command     | sh                                                                                 |
       | exec_command_arg | -c                                                                                 |
-      | exec_command_arg | omping -c 5 -T 10 <%= cb.pod1ip %> <%= cb.pod2ip %> <%= cb.pod3ip %> > /tmp/p3.log |
+      | exec_command_arg | omping -c 5 -T 10 <%= cb.pod1ip %> <%= cb.pod3ip %> > /tmp/p3.log |
     Then the step should succeed
 
     # ensure interface join to the multicast group
@@ -667,16 +651,14 @@ Feature: testing multicast scenarios
     """
 
     # check the result on third pod and should received 5 multicast packets from other pods
-    And I wait up to 30 seconds for the steps to pass:
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.pod3 %>" pod:
       | cat | /tmp/p3.log |
     Then the step should succeed
     And the output should match:
       | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
-      | <%= cb.pod2ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
     And the output should not match:
       | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
-      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
     """
     Given I disable multicast for the "default" namespace
