@@ -34,7 +34,7 @@ check_pipeline_resource_item:
   params:
     resource_type: Pipeline
     resource_name: <pipeline_name>
-    resource_link: /k8s/ns/<project_name>/tekton.dev~v1beta1~Pipeline/<pipeline_name>
+    resource_link: /k8s/ns/<project_name>/tekton.dev~v1~Pipeline/<pipeline_name>
   action: check_resource_item
 check_pipeline_resources_resource_item:
   params:
@@ -46,5 +46,5 @@ check_task_resource_item:
   params:
     resource_type: Task
     resource_name: <task_name>
-    resource_link: /k8s/ns/<project_name>/tekton.dev~v1beta1~Task/<task_name>
+    resource_link: /k8s/ns/<project_name>/tekton.dev~v1~Task/<task_name>
   action: check_resource_item
