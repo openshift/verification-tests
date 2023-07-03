@@ -78,10 +78,10 @@ Feature: Egress-ingress related networking scenarios
 
     # Check curl from pod
     When I execute on the pod:
-      | curl | --head | yahoo.com |
+      | curl | --head |  --connect-timeout | 5 | yahoo.com |
     Then the step should succeed
     When I execute on the pod:
-      | curl | --head | <%= cb.yahoo_ip %> |
+      | curl | --head | --connect-timeout | 5 | <%= cb.yahoo_ip %> |
     Then the step should succeed
 
     Given I create a new project
@@ -98,12 +98,15 @@ Feature: Egress-ingress related networking scenarios
     Then the step should succeed
 
     # Check curl from pod
+    Given I wait up to 20 seconds for the steps to pass:
+    """
     When I execute on the pod:
-      | curl | --head | yahoo.com |
+      | curl | --head | --connect-timeout | 5 | yahoo.com |
     Then the step should fail
     When I execute on the pod:
-      | curl | --head | <%= cb.yahoo_ip %> |
+      | curl | --head |  --connect-timeout | 5 | <%= cb.yahoo_ip %> |
     Then the step should fail
+    """
 
     # Check egress policy can be deleted in project1
     When I run the :delete admin command with:
@@ -113,12 +116,15 @@ Feature: Egress-ingress related networking scenarios
     Then the step should succeed
 
     # Check curl from pod after egress policy deleted
+    Given I wait up to 20 seconds for the steps to pass:
+    """
     When I execute on the pod:
-      | curl | --head | yahoo.com |
+      | curl | --head |  --connect-timeout | 5 | yahoo.com |
     Then the step should fail
     When I execute on the pod:
-      | curl | --head | <%= cb.yahoo_ip %> |
+      | curl | --head | --connect-timeout | 5 | <%= cb.yahoo_ip %> |
     Then the step should fail
+    """
 
   # @author weliang@redhat.com
   # @case_id OCP-13507
