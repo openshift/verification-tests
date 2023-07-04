@@ -1594,7 +1594,7 @@ Given /^the plugin is openshift-ovs-networkpolicy on the cluster$/ do
   ensure_admin_tagged
   @result = admin.cli_exec(:get, resource: "clusternetwork", output: "jsonpath={.items[*].pluginName}")
   if @result[:response] != "redhat/openshift-ovs-networkpolicy"
-    raise "The openshift-ovs-networkpolicy plugin is not used in the cluster" 
+    logger.warn "The openshift-ovs-networkpolicy plugin is not used in the cluster" 
     skip_this_scenario
   end
 end
