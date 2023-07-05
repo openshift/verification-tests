@@ -132,17 +132,26 @@ check_chart_loaded:
   - selector:
       xpath: //div[contains(@class,'pf-c-chart')]
     timeout: 90
+send_filter_options:
+  elements:
+  - selector:
+      xpath: //input[@type='search']
+    op: send_keys <options_text>
 change_namespace:
   params:
     label_text: namespace
     button_text: <namespace>
+    options_text: <namespace>
   action: click_label_filter_dropdown_button
+  action: send_filter_options
   action: click_button_text
 change_workload:
   params:
     label_text: workload
     button_text: <workload>
+    options_text: <workload>
   action: click_label_filter_dropdown_button
+  action: send_filter_options
   action: click_button_text
 check_dashboard_dropdown_items:
   action: click_dashboard_dropdown
