@@ -103,7 +103,7 @@ Feature: service upgrade scenarios
       | name=test-pods |
     And evaluation of `pod.node_name` is stored in the :hostip clipboard
     When I execute on the pod:
-      | curl | <%= cb.hostip %>:<%= cb.port %> |
+      | curl | --connect-timeout | 30 | <%= cb.hostip %>:<%= cb.port %> |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift! |
@@ -128,7 +128,7 @@ Feature: service upgrade scenarios
       | name=test-pods |
     And evaluation of `pod.node_name` is stored in the :hostip clipboard
     When I execute on the pod:
-      | curl | <%= cb.hostip %>:<%= service.ports[0]["nodePort"] %> |
+      | curl | --connect-timeout | 30 | <%= cb.hostip %>:<%= service.ports[0]["nodePort"] %> |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift! |
