@@ -117,10 +117,13 @@ Feature: job.feature
       | ["spec"]["completions"]           | 3    |
       | ["spec"]["activeDeadlineSeconds"] | null |
     Then the step should succeed
+    And I wait for the steps to pass:
+    """
     When I get project pods with labels:
       | app=pi |
     Then the output should contain 2 times:
       |  zero- |
+    """
     Given 3 pods become ready with labels:
       | app=pi |
     When I get project pods with labels:
@@ -144,10 +147,13 @@ Feature: job.feature
       | ["spec"]["completions"]           | 2    |
       | ["spec"]["activeDeadlineSeconds"] | null |
     Then the step should succeed
+    And I wait for the steps to pass:
+    """
     When I get project pods with labels:
       | app=pi |
     Then the output should contain 2 times:
       |  zero- |
+    """
     Given 2 pods become ready with labels:
       | app=pi |
     When I get project pods with labels:
