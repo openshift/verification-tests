@@ -714,7 +714,7 @@ open_k8sresource_dropdown:
   action:
     if_element:
       selector:
-        id: form
+        xpath: //input[@value='form']
     ref: switch_to_form_view
   element:
     selector:
