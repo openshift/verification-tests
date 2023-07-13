@@ -15,7 +15,7 @@ Feature: route related features via cli
   @critical
   Scenario: OCP-10629:Workloads Expose routes from services
     Given I have a project
-    When I run the :new_app client command with:
+    When I run the :new_app client command with importmode if supported with:
       | image | quay.io/openshifttest/hello-openshift@sha256:4200f438cf2e9446f6bcff9d67ceea1f69ed07a2f83363b7fb52529f7ddd8a83 |
     Then the step should succeed
     Given number of replicas of "hello-openshift" deployment becomes:
