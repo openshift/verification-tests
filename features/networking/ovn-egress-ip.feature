@@ -797,7 +797,6 @@ Feature: OVN Egress IP related features
     And I run the :create admin command with:
       | f | egressip1.yaml |
     Then the step should succeed
-
     #Scale down CNO to 0 and delete ovnkube-master pods
     Given I register clean-up steps:
     """
@@ -815,9 +814,7 @@ Feature: OVN Egress IP related features
       | replicas | 0                          |
       | n        | openshift-network-operator |
     Then the step should succeed
-    And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
-    And admin executes existing pods die with labels:
-      | app=ovnkube-master |
+    And the corresponding version ovn masterDB components ds is deleted
 
     # Now scale down test pods to 1
     Given I run the :scale admin command with:
@@ -830,6 +827,7 @@ Feature: OVN Egress IP related features
     Given status becomes :running of 1 pod labeled:
       | name=test-pods |
     And evaluation of `pod(-1).ip` is stored in the :pod0ip clipboard
+    And evaluation of `pod(-1).node_name` is stored in the :pod_node clipboard
 
     # Now scale up CNO pod to 1
     Given I run the :scale admin command with:
@@ -842,11 +840,11 @@ Feature: OVN Egress IP related features
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ovn-kubernetes" project
     And a pod becomes ready with labels:  
-      | app=ovnkube-master |
+      | app=ovnkube-node |
     And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 150 seconds
 
     # Checking lr-policy-list, no duplicate records, only 1 record left 
-    Given I store the ovnkube-master "north" leader pod in the clipboard
+    Given I store the ovnkube-master "north" leader pod in the clipboard for "pod" using node "<%= cb.pod_node %>"
     And admin executes on the pod "northd" container:
       | bash | -c | ovn-nbctl lr-policy-list ovn_cluster_router  \| grep "100 " \| grep -v inport |
     Then the step should succeed
@@ -930,9 +928,7 @@ Feature: OVN Egress IP related features
       | replicas | 0                          |
       | n        | openshift-network-operator |
     Then the step should succeed
-    And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
-    And admin executes existing pods die with labels:
-      | app=ovnkube-master |
+    And the corresponding version ovn masterDB components ds is deleted
 
     # Now delete egressip object 
     Given admin ensures "egressip" egress_ip is deleted
@@ -948,7 +944,7 @@ Feature: OVN Egress IP related features
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ovn-kubernetes" project
     And a pod becomes ready with labels:  
-      | app=ovnkube-master |
+      | app=ovnkube-node |
     And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 150 seconds
 
     # Checking lr-policy-list,no egressip list 
@@ -1011,3 +1007,4 @@ Feature: OVN Egress IP related features
     Then the step should succeed
     And the output should contain "<%= cb.valid_ips[1] %>"
     And the output should contain "<%= cb.valid_ips[0] %>"
+ 

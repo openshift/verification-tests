@@ -16,24 +16,24 @@ Feature: OVN related networking scenarios
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
     And I obtain test data file "networking/list_for_pods.json"
-    When I run the :create client command with:
-      | f | list_for_pods.json |
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
-    Given 2 pods become ready with labels:
+    Given a pod becomes ready with labels:
       | name=test-pods |
-    And evaluation of `pod(0).name` is stored in the :pod1_name clipboard
-    And evaluation of `pod(1).name` is stored in the :pod2_name clipboard
+    And evaluation of `pod.node_name` is stored in the :pod_node clipboard
+
     # Checking whether Kube API data is synced on OVN NB db which in this case are couple of pods
-    Given I store the ovnkube-master "north" leader pod in the clipboard
-    And evaluation of `pod.ip_url` is stored in the :ovn_nb_leader_ip clipboard
+    Given I store the ovnkube-master "north" leader pod in the clipboard for "pod" using node "<%= cb.pod_node %>"
     And evaluation of `pod.node_name` is stored in the :ovn_nb_leader_node clipboard
     # too much output, if we don't filter server-side this always fails
     And admin executes on the pod "northd" container:
-      | bash | -c | ovn-nbctl list logical_switch_port \| grep -e "<%= cb.pod1_name %>" -e "<%= cb.pod2_name %>" |
+      | bash | -c | ovn-nbctl list logical_switch_port \| grep -e "<%= cb.pod_name %>" |
     Then the step should succeed
     And the output should contain:
-      | <%= cb.pod1_name %> |
-      | <%= cb.pod2_name %> |
+      | <%= cb.pod_name %> |
+
     # Simulating a NB db crash
     Given I use the "<%= cb.ovn_nb_leader_node %>" node
     And I run commands on the host:
@@ -43,11 +43,10 @@ Feature: OVN related networking scenarios
     Given I store the ovnkube-master "north" leader pod in the clipboard
     # too much output, if we don't filter server-side this always fails
     And admin executes on the pod "northd" container:
-      | bash | -c | ovn-nbctl list logical_switch_port \| grep -e "<%= cb.pod1_name %>" -e "<%= cb.pod2_name %>" |
+      | bash | -c | ovn-nbctl list logical_switch_port \| grep -e "<%= cb.pod_name %>" |
     Then the step should succeed
     And the output should contain:
-      | <%= cb.pod1_name %> |
-      | <%= cb.pod2_name %> |
+      | <%= cb.pod_name %> |
 
 
   # @author anusaxen@redhat.com
@@ -79,14 +78,13 @@ Feature: OVN related networking scenarios
       | replicas | 0                          |
       | n        | openshift-network-operator |
     Then the step should succeed
-    And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
-    And admin executes existing pods die with labels:
-      | app=ovnkube-master |
+    And the corresponding version ovn masterDB components ds is deleted
     Given I have a project
     And I obtain test data file "networking/pod-for-ping.json"
     When I run the :create client command with:
       | f | pod-for-ping.json |
     Then the step should succeed
+    And evaluation of `pod.node_name` is stored in the :pod_node clipboard
     # Now scale up CNO pod to 1 and check whether hello-pod is synced to NB db
     Given I run the :scale admin command with:
       | resource | deployment                 |
@@ -99,7 +97,7 @@ Feature: OVN related networking scenarios
     # This used to be 60 seconds but around the time of 4.6 60 seconds is no longer sufficient
     And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 120 seconds
     # Checking whether Kube API data is synced on OVN NB db which in this case is a test-pod created in earlier steps
-    Given I store the ovnkube-master "north" leader pod in the clipboard
+    Given I store the ovnkube-master "north" leader pod in the clipboard for "pod" using node "<%= cb.pod_node %>"
     # too much output, if we don't filter server-side this always fails
     And admin executes on the pod "northd" container:
       | bash | -c | ovn-nbctl list logical_switch_port \| grep hello-pod |
@@ -123,8 +121,9 @@ Feature: OVN related networking scenarios
     Given I have a project
     And evaluation of `project.name` is stored in the :hello_pod_project clipboard
     And I have a pod-for-ping in the project
+    And evaluation of `pod.node_name` is stored in the :pod_node clipboard
     # Checking whether Kube API data is synced on OVN NB db which in this case is a hello-pod created in earlier steps
-    Given I store the ovnkube-master "north" leader pod in the clipboard
+    Given I store the ovnkube-master "north" leader pod in the clipboard for "pod" using node "<%= cb.pod_node %>"
     # too much output, if we don't filter server-side this always fails
     And admin executes on the pod "northd" container:
       | bash | -c | ovn-nbctl list logical_switch_port \| grep hello-pod |
@@ -147,9 +146,7 @@ Feature: OVN related networking scenarios
       | replicas | 0                          |
       | n        | openshift-network-operator |
     Then the step should succeed
-    And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
-    And admin executes existing pods die with labels:
-      | app=ovnkube-master |
+    And the corresponding version ovn masterDB components ds is deleted
     And I ensure "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
     # Now scale up CNO pod to 1 and check whether hello-pod status is synced to NB db means it should not present in the DB
     Given I run the :scale admin command with:
@@ -163,7 +160,7 @@ Feature: OVN related networking scenarios
     Given 30 seconds have passed
     # This used to be 60 seconds but around the time of 4.6 60 seconds is no longer sufficient
     And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 120 seconds
-    Given I store the ovnkube-master "north" leader pod in the clipboard
+    Given I store the ovnkube-master "north" leader pod in the clipboard for "pod" using node "<%= cb.pod_node %>"
     # too much output, if we don't filter server-side this always fails
     # making sure here that hello-pod absense is properly synced
     And admin executes on the pod "northd" container:
@@ -219,12 +216,13 @@ Feature: OVN related networking scenarios
     And I have a project
     Given I have a pod-for-ping in the project
     Then evaluation of `pod.ip` is stored in the :hello_pod_ip clipboard
+    And evaluation of `pod.node_name` is stored in the :pod_node clipboard
     When I execute on the pod:
       | bash | -c | ip a show eth0 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :hello_pod_mac clipboard
 
-    Given I store the ovnkube-master "north" leader pod in the clipboard
+    Given I store the ovnkube-master "north" leader pod in the clipboard for "pod" using node "<%= cb.pod_node %>"
     And admin executes on the pod:
       | bash | -c | ovn-nbctl list logical_switch_port \| grep "hello-pod" -C 10 |
     Then the step should succeed
@@ -497,9 +495,9 @@ Feature: OVN related networking scenarios
     And I wait up to 120 seconds for the steps to pass:
     # check the leader on the original leader to ensure it is still the leader and the split node doesn't become leader
     """
-    When I store the ovnkube-master "south" leader pod in the :original_south_leader clipboard using node "<%= cb.south_leader.node_name %>"
+    When I store the ovnkube-master "south" leader pod in the :original_south_leader clipboard for "raft" using node "<%= cb.south_leader.node_name %>"
     Then the step should succeed
-    When I store the ovnkube-master "south" leader pod in the :isolated_south_leader clipboard using node "<%= cb.nodes[0].name %>"
+    When I store the ovnkube-master "south" leader pod in the :isolated_south_leader clipboard for "raft" using node "<%= cb.nodes[0].name %>"
     Then the step should succeed
     """
     # try to get the isolated leader for debug, it might not work
@@ -510,9 +508,9 @@ Feature: OVN related networking scenarios
     And I wait up to 120 seconds for the steps to pass:
     # check the leader on the original leader to ensure it is still the leader and the split node doesn't become leader
     """
-    When I store the ovnkube-master "south" leader pod in the :after_south_leader clipboard using node "<%= cb.south_leader.node_name %>"
+    When I store the ovnkube-master "south" leader pod in the :after_south_leader clipboard for "raft" using node "<%= cb.south_leader.node_name %>"
     Then the step should succeed
-    When I store the ovnkube-master "south" leader pod in the :after_isolated_south_leader clipboard using node "<%= cb.nodes[0].name %>"
+    When I store the ovnkube-master "south" leader pod in the :after_isolated_south_leader clipboard for "raft" using node "<%= cb.nodes[0].name %>"
     Then the step should succeed
     """
     And admin waits for all pods in the project to become ready up to 120 seconds
