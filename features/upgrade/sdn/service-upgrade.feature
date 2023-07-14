@@ -90,6 +90,10 @@ Feature: service upgrade scenarios
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=hello-pod |
+    And evaluation of `pod.name` is stored in the :podname clipboard
+    And evaluation of `pod(cb.podname).node_ip(user:user)` is stored in the :hostip clipboard
+    # if IP format is v6 include square brackets
+    And evaluation of `"<%= cb.hostip %>" =~ /:/ ? "[<%= cb.hostip %>]" : "<%= cb.hostip %>"` is stored in the :hostip clipboard
     When I obtain test data file "networking/nodeport_test_service.yaml"
     When I run oc create over "nodeport_test_service.yaml" replacing paths:
       | ["spec"]["ports"][0]["nodePort"] | <%= cb.port %> |
@@ -101,7 +105,6 @@ Feature: service upgrade scenarios
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=test-pods |
-    And evaluation of `pod.node_name` is stored in the :hostip clipboard
     When I execute on the pod:
       | curl | <%= cb.hostip %>:<%= cb.port %> |
     Then the step should succeed
@@ -125,8 +128,13 @@ Feature: service upgrade scenarios
     When I use the "nodeport-upgrade" project
     Given I use the "hello-pod" service
     And a pod becomes ready with labels:
+      | name=hello-pod |
+    And evaluation of `pod.name` is stored in the :podname clipboard
+    And evaluation of `pod(cb.podname).node_ip(user:user)` is stored in the :hostip clipboard
+    # if IP format is v6 include square brackets
+    And evaluation of `"<%= cb.hostip %>" =~ /:/ ? "[<%= cb.hostip %>]" : "<%= cb.hostip %>"` is stored in the :hostip clipboard
+    And a pod becomes ready with labels:
       | name=test-pods |
-    And evaluation of `pod.node_name` is stored in the :hostip clipboard
     When I execute on the pod:
       | curl | <%= cb.hostip %>:<%= service.ports[0]["nodePort"] %> |
     Then the step should succeed
