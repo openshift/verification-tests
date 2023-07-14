@@ -82,13 +82,13 @@ Feature: oc import-image related feature
   @hypershift-hosted
   Scenario: OCP-12765:ImageRegistry Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
-    When I run the :tag client command with:
+    When I run the :tag client command with importmode if supported with:
       | source_type | docker                                                |
       | source      | quay.io/openshifttest/deployment-example:v1-1.2.0 |
       | dest        | deployment-example:latest                             |
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
-    When I run the :new_app_as_dc client command with:
+    When I run the :new_app_as_dc client command with importmode if supported with:
       | image_stream | deployment-example:latest   |
     Then the output should match:
       | .*[Ss]uccess.*|
@@ -116,14 +116,14 @@ Feature: oc import-image related feature
       | object_type | svc |
       | all         |     |
     Then the step should succeed
-    When I run the :tag client command with:
+    When I run the :tag client command with importmode if supported with:
       | source_type      | docker                                                |
       | source           | quay.io/openshifttest/deployment-example:v1-1.2.0 |
       | dest             | deployment-example:latest                             |
       | reference_policy | local                                                 |
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
-    When I run the :new_app_as_dc client command with:
+    When I run the :new_app_as_dc client command with importmode if supported with:
       | image_stream | deployment-example:latest   |
     Then the output should match:
       | .*[Ss]uccess.* |

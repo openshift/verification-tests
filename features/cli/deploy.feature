@@ -501,11 +501,11 @@ Feature: deployment related features
   @critical
   Scenario: OCP-9566:Workloads Blue-Green Deployment
     Given I have a project
-    When I run the :new_app client command with:
+    When I run the :new_app client command with importmode if supported with:
       | docker_image | quay.io/openshifttest/deployment-example:v1-1.2.0 |
       | name         | bluegreen-example-old                       |
     Then the step should succeed
-    When I run the :new_app client command with:
+    When I run the :new_app client command with importmode if supported with:
       | docker_image | quay.io/openshifttest/deployment-example:v2-1.2.0 |
       | name         | bluegreen-example-new                       |
     Then the step should succeed
@@ -1020,7 +1020,7 @@ Feature: deployment related features
   Scenario: OCP-31200:Workloads A/B Deployment for OCP 4.5 or greater
     Given the master version >= "4.5"
     Given I have a project
-    When I run the :new_app client command with:
+    When I run the :new_app client command with importmode if supported with:
       | app_repo             | quay.io/openshifttest/deployment-example:v1-1.2.0 |
       | name                 | ab-example-a                                          |
       | as_deployment_config | true                                                  |
@@ -1039,7 +1039,7 @@ Feature: deployment related features
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
     """
-    When I run the :new_app client command with:
+    When I run the :new_app client command with importmode if supported with:
       | app_repo             | quay.io/openshifttest/deployment-example:v1-1.2.0 |
       | name                 | ab-example-b                                          |
       | as_deployment_config | true                                                  |
