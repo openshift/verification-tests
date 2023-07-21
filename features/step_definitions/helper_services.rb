@@ -121,10 +121,10 @@ end
 Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_auth|
   if use_auth
     step %Q/I run the :create_deploymentconfig client command with:/, table(%{
-      | image | quay.io/openshifttest/squid-proxy:1.2.0 |
+      | image | quay.io/openshifttest/squid-proxy@sha256:38f2db3f4f99a3b6e5f00be9f063b821fdea1d4e16c90747def63ec42d2cd665 |
       | name  | squid-proxy                       |
       })
-    step %Q/I wait until the status of deployment "squid-proxy" becomes :running/
+    step %Q/I wait until the status of deployment "squid-proxy" becomes :complete/
     step %Q/I run the :set_env client command with:/, table(%{
       | resource | deploymentconfig/squid-proxy |
       | e        | USE_AUTH=1                   |
