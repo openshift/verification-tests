@@ -13,7 +13,9 @@ spec:
         resources:
           requests:
             memory: 500Mi
-            cpu: 1100m
+            cpu: 500m
+          limits:
+            cpu: 1500m      
       restartPolicy: Never
       tolerations:
       - key: mapi
