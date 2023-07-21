@@ -386,6 +386,7 @@ Feature: Machine features testing
     When evaluation of `machine_machine_openshift_io(cb.machine).gcp_region` is stored in the :default_region clipboard
     And evaluation of `machine_machine_openshift_io(cb.machine).gcp_zone` is stored in the :default_zone clipboard
     And evaluation of `machine_machine_openshift_io(cb.machine).gcp_service_account` is stored in the :default_service_account clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).gcp_network_interface` is stored in the :default_network_interface clipboard
     Then admin ensures "default-valued-33056" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-gcp/ms_default_values.yaml"
@@ -396,6 +397,8 @@ Feature: Machine features testing
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>          |
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["region"]                           | <%= cb.default_region %>                             |
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["serviceAccounts"][0]["email"]      | <%=  cb.default_service_account[0].fetch("email") %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["networkInterfaces"][0]["network"]      | <%=  cb.default_network_interface[0].fetch("network") %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["networkInterfaces"][0]["subnetwork"]      | <%=  cb.default_network_interface[0].fetch("subnetwork") %> |
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["zone"]                             | <%= cb.default_zone %>                               |
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33056                                 |
     Then the step should succeed

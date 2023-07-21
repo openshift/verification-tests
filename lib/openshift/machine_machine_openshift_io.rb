@@ -78,6 +78,11 @@ module BushSlicer
          dig('spec', 'providerSpec', 'value', 'serviceAccounts')
     end
 
+    def gcp_network_interface(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached ,quiet: quiet).
+        dig('spec', 'providerSpec', 'value', 'networkInterfaces')
+    end
+
     def aws_ami_id(user: nil, cached: true, quiet: false)
        raw_resource(user: user, cached: cached ,quiet: quiet).
          dig('spec', 'providerSpec', 'value', 'ami','id')
