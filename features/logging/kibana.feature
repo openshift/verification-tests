@@ -64,7 +64,6 @@ Feature: Kibana related features
   @admin
   @console
   @destructive
-  @commonlogging
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @logging5.6 @logging5.7 @logging5.8 @logging5.5
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
@@ -76,6 +75,12 @@ Feature: Kibana related features
   @hypershift-hosted
   @critical
   Scenario: OCP-30362:Logging Normal User can only view logs out of the projects owned by himself --kibana
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/example_indexmanagement.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true                         |
+      | crd_yaml            | example_indexmanagement.yaml |
+    Then the step should succeed
     Given I switch to the first user
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard
@@ -125,7 +130,6 @@ Feature: Kibana related features
   @admin
   @console
   @destructive
-  @commonlogging
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @logging5.6 @logging5.7 @logging5.8
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
@@ -136,6 +140,12 @@ Feature: Kibana related features
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-30361:Logging User with cluster-admin role can show logs out of all projects -- kibana
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/example_indexmanagement.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true                         |
+      | crd_yaml            | example_indexmanagement.yaml |
+    Then the step should succeed
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
@@ -240,7 +250,6 @@ Feature: Kibana related features
   @admin
   @destructive
   @console
-  @commonlogging
   @proxy @noproxy @disconnected @connected
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @logging5.6 @logging5.7 @logging5.8 @logging5.5
@@ -251,6 +260,12 @@ Feature: Kibana related features
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-30343:Logging Logs can be redirected from Webconsole to kibana
+    Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard
+    And I obtain test data file "logging/clusterlogging/<%= cb.cl_dir %>/example_indexmanagement.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true                         |
+      | crd_yaml            | example_indexmanagement.yaml |
+    Then the step should succeed
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project.name` is stored in the :proj_name clipboard
