@@ -102,7 +102,7 @@ login_page_loaded:
   element:
     selector:
       css: "#kc-form-login, #password, #inputPassword, .login-redhat, .idp, .navigation-container"
-    timeout: 30
+    timeout: 60
 
 verify_logged_in:
   element:
