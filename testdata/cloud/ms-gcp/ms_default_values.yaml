@@ -27,6 +27,9 @@ spec:
         value:
           region:
           zone:
+          networkInterfaces:
+          - network:
+            subnetwork:
           serviceAccounts:
           - email:
             scopes:
