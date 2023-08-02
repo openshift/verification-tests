@@ -22,4 +22,3 @@ spec:
       target:
         averageValue: 200Mi
         type: Utilization
-# test
