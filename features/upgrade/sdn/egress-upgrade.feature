@@ -12,6 +12,7 @@ Feature: Egress compoment upgrade testing
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check egressfirewall is functional post upgrade - prepare
+    Given the cluster is not proxy cluster 
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
       | project_name | egressfw-upgrade1 |
@@ -53,6 +54,7 @@ Feature: Egress compoment upgrade testing
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check egressfirewall is functional post upgrade
+    Given the cluster is not proxy cluster 
     Given I switch to cluster admin pseudo user
     And I save egress type to the clipboard
     When I run the :get admin command with:
