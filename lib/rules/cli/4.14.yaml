@@ -595,6 +595,7 @@
     :group: --group=<value>
     :image: --image=<value>
     :image_stream: --image-stream=<value>
+    :import_mode: --import-mode=<value>
     :insecure_registry: --insecure-registry=<value>
     :l: -l <value>
     :labels: --labels=<value>
@@ -617,6 +618,7 @@
     :docker_image: --docker-image=<value>
     :env: --env=<value>
     :image_stream: --image-stream=<value>
+    :import_mode: --import-mode=<value>
     :labels: --labels=<value>
     :name: --name=<value>
     :source_secret: --source-secret=<value>
@@ -641,6 +643,7 @@
     :env_file: --env-file=<value>
     :image: --image=<value>
     :image_stream: --image-stream=<value>
+    :import_mode: --import-mode=<value>
     :l: -l <value>
     :name: --name=<value>
     :no-output: --no-output=<value>
@@ -1144,6 +1147,7 @@
     :alias: --alias=<value>
     :d: --delete=<value>
     :dest: <value>
+    :import_mode: --import-mode=<value>
     :insecure: --insecure=<value>
     :reference: --reference=<value>
     :reference_policy: --reference-policy=<value>

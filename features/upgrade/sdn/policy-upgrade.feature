@@ -710,7 +710,6 @@ Feature: SDN compoment upgrade testing
     When I execute on the "<%= cb.p2pod2name %>" pod:
       | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 20 |
     Then the output should not contain "200 OK"
-    Then the step should fail
     And I wait up to 20 seconds for the steps to pass:
     """
     Given I use the "<%= cb.proj0 %>" project

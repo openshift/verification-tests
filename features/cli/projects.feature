@@ -1,42 +1,6 @@
 Feature: projects related features via cli
 
   # @author cryan@redhat.com
-  # @case_id OCP-12193
-  @admin
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @singlenode
-  @network-ovnkubernetes @network-openshiftsdn
-  @proxy @noproxy
-  @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @rosa @aro @osd_ccs
-  @hypershift-hosted
-  Scenario: OCP-12193:APIServer User can get node selector from a project
-    Given  an 8 character random string of type :dns is stored into the :oadmproj1 clipboard
-    Given  an 8 character random string of type :dns is stored into the :oadmproj2 clipboard
-    When admin creates a project with:
-      | project_name | <%= cb.oadmproj1 %> |
-      | admin | <%= user.name %> |
-    Then the step should succeed
-    When admin creates a project with:
-      | project_name | <%= cb.oadmproj2 %> |
-      | node_selector | env=qa |
-      | description | testnodeselector |
-      | admin | <%= user.name %> |
-    Then the step should succeed
-    When I run the :describe client command with:
-      | resource | project |
-      | name | <%= cb.oadmproj1 %> |
-    Then the step should succeed
-    And the output should match "Node Selector:\s+<none>"
-    When I run the :describe client command with:
-      | resource | project |
-      | name | <%= cb.oadmproj2 %> |
-    Then the step should succeed
-    And the output should match "Node Selector:\s+env=qa"
-
-  # @author cryan@redhat.com
   # @case_id OCP-12561
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi

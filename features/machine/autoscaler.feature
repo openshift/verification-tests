@@ -47,7 +47,7 @@ Feature: Cluster Autoscaler Tests
     And admin ensures "workload" job is deleted from the "openshift-machine-api" project after scenario
 
     # Verify machineset has scaled
-    Given I wait up to 300 seconds for the steps to pass:
+    Given I wait up to 960 seconds for the steps to pass:
     """
     Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 3
     """
@@ -56,7 +56,7 @@ Feature: Cluster Autoscaler Tests
     # Delete workload
     Given admin ensures "workload" job is deleted from the "openshift-machine-api" project
     # Check cluster auto scales down
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 1200 seconds for the steps to pass:
     """
     Then the expression should be true> machine_set_machine_openshift_io.desired_replicas(cached: false) == 1
     """

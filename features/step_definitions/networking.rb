@@ -1676,6 +1676,21 @@ Given /^the cluster is not migration from ovn plugin$/ do
   end
 end
 
+Given /^the cluster is not proxy cluster$/ do
+  ensure_admin_tagged
+  @result = admin.cli_exec(:get, resource: "proxy",resource_name: "cluster", output: "jsonpath={.status.httpProxy}")
+  unless @result[:stdout].empty?
+    logger.warn "the cluster has http proxy, will skip this scenario"
+    skip_this_scenario
+  end
+
+  @result = admin.cli_exec(:get, resource: "proxy",resource_name: "cluster", output: "jsonpath={.status.httpsProxy}")
+  unless @result[:stdout].empty?
+    logger.warn "the cluster has https proxy, will skip this scenario"
+    skip_this_scenario
+  end
+end
+
 Given /^the corresponding version ovn masterDB components ds is deleted$/ do
   ensure_admin_tagged
   if env.version_lt("4.14", user: user)
@@ -1690,5 +1705,3 @@ Given /^the corresponding version ovn masterDB components ds is deleted$/ do
     })
   end
 end 
-
-

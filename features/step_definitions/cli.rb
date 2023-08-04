@@ -23,6 +23,12 @@ When /^I run the :([a-z_]*?)( background)? client command with:$/ do |yaml_key, 
   end
 end
 
+When /^I run the :([a-z_]*?)( background)? client command with importmode if supported with:$/ do |yaml_key, background, table|
+  opts_array = env.version_ge("4.14", user: user) ? table.raw << [ "import_mode" , "PreserveOriginal" ] : table.raw
+  step "I run the :#{yaml_key}#{background} client command with:",
+    table(opts_array)
+end
+
 When /^I run the :([a-z_]*?)( background)? admin command$/ do |yaml_key, background|
   step "I run the :#{yaml_key}#{background} admin command with:",
     table([["dummy"]])
