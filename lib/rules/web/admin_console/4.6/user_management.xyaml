@@ -5,7 +5,7 @@ check_users_secondary_menu:
 check_users_secondary_menu_missing:
   params:
     secondary_menu: Users
-  action: check_secondary_menu_missing  
+  action: check_secondary_menu_missing
 check_user_in_users_page:
   action: goto_users_list_page
   action: check_link_and_text
@@ -23,6 +23,12 @@ check_rolebinding_of_user:
   action:
     if_param: rolebinding
     ref: check_link_and_text
+filter_user_from_user_list:
+  params:
+    test_id_value: item-filter
+    filter_text: <resource_name>
+  action: goto_users_list_page
+  action: set_strings_in_filter_box
 impersonate_one_user:
   params:
     kebab_item: Impersonate User "<resource_name>"
@@ -184,7 +190,7 @@ check_no_edit_links_on_detail_page:
   action: goto_one_dc_page
   action: check_no_button_with_link
 check_no_button_with_link:
-  elements: 
+  elements:
   - selector:
       xpath: //button[contains(@class, 'pf-m-link pf-m-inline')]
     missing: true
