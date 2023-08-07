@@ -612,7 +612,7 @@ check_page_contains:
 check_page_match:
   element:
     selector: &page_content
-      visible_text: !ruby/regexp /<content>/i
+      xpath: //*[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), translate('<content>','ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))]
     timeout: 15
 check_page_not_match:
   element:
