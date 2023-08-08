@@ -21,7 +21,7 @@ goto_project_topology_page:
   url: topology/ns/<project_name>?view=list
   action: wait_box_loaded
 # Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
-goto_one_project_page: 
+goto_one_project_page:
   url: k8s/cluster/projects/<project_name>
   action: wait_box_loaded
 goto_one_project_dashboard_page:
@@ -37,6 +37,8 @@ goto_api_explore_page:
   url: api-explorer
 goto_one_api_explore_page:
   url: api-resource/ns/<project_name>/<api_explore_name>
+goto_cluster_buildconfig_api_explore_page:
+  url: /api-resource/cluster/config.openshift.io~v1~Build
 
 # builds
 goto_buildconfigs_page:
@@ -64,7 +66,7 @@ goto_tasks_list_page:
 goto_cluster_tasks_list_page:
   url: tasks/ns/<project_name>/cluster-tasks
   action: wait_box_loaded
-  
+
 # command line tools page
 goto_cli_tools_page:
   url: command-line-tools
@@ -89,7 +91,7 @@ goto_jobs_page:
 goto_one_job_page:
   url: k8s/ns/<project_name>/jobs/<job_name>
   action: wait_box_loaded
-          
+
 # events
 goto_project_events:
   url: k8s/ns/<project_name>/events
@@ -387,9 +389,9 @@ goto_rolebinding_creation_page:
   url: k8s/cluster/rolebindings/~new
   action: wait_form_loaded
 
-goto_all_machines_page: 
+goto_all_machines_page:
   url: k8s/all-namespaces/machine.openshift.io~v1beta1~Machine
-goto_all_machine_sets_page: 
+goto_all_machine_sets_page:
   url: k8s/all-namespaces/machine.openshift.io~v1beta1~MachineSet
 
 #ImageManifestVuln
@@ -414,7 +416,7 @@ goto_co_relatedobjects_page:
   action: wait_box_loaded
 goto_global_configuration_page:
   url: settings/cluster/globalconfig
-  action: wait_box_loaded 
+  action: wait_box_loaded
 goto_cluster_settings_details_page:
   url: settings/cluster
   action: wait_box_loaded
@@ -425,4 +427,4 @@ goto_command_line_tools:
     selector:
       xpath: //div[contains(text(), "Command Line Tools")]
     timeout: 15
-    
+
