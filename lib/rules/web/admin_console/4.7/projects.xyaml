@@ -2,7 +2,7 @@
 create_project:
   action: click_create_project_button
   action: set_project_name
-  action: 
+  action:
     if_param: display_name
     ref: set_project_display_name
   action:
@@ -69,11 +69,15 @@ check_memory_data_for_one_project_in_table:
   params:
     resource_name: <project_name>
     data: MiB
+    filter_text: <project_name>
+  action: filter_by_name
   action: check_resource_data_in_table
 check_cpu_data_for_one_project_in_table:
   params:
     resource_name: <project_name>
     data: cores
+    filter_text: <project_name>
+  action: filter_by_name
   action: check_resource_data_in_table
 switch_to_project:
   params:
