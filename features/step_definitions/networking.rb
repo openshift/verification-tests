@@ -1616,7 +1616,7 @@ Given /^I store kubernetes elected leader pod for ovnkube-master in the#{OPT_SYM
     @result = admin.cli_exec(:get, resource: 'lease', o: "jsonpath={.items[*].spec.holderIdentity}")
     holder_id = @result[:response]
   else
-    @result = admin.cli_exec(:get, resource: 'lease', resource_name: "ovn-kubernetes-cluster-manager", o: "jsonpath={.spec.holderIdentity}")
+    @result = admin.cli_exec(:get, resource: 'lease', resource_name: "ovn-kubernetes-master", o: "jsonpath={.spec.holderIdentity}")
     holder_id = @result[:response]
   end
   pods = project.pods(by:user)
