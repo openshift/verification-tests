@@ -36,6 +36,10 @@ set_strings_in_filter_box:
   - selector:
       <<: *filter_string
     op: send_keys <filter_text>
+filter_by_name:
+  params:
+    test_id_value: item-filter
+  action: set_strings_in_filter_box
 set_filter_strings_on_explore_page:
   elements:
   - selector: &filter_text_for_explore
@@ -118,7 +122,7 @@ check_results_contain_correct_catagory:
           contain = catagory.className.includes('<catagory>'.toLowerCase()) || contain
         })
         return contain
-      expect_result: true 
+      expect_result: true
 check_item_in_table:
   elements:
   - selector:

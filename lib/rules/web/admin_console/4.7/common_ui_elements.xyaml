@@ -712,6 +712,11 @@ click_link_with_text_only:
     selector:
       xpath: //a[contains(text(),'<text>')]
     op: click
+click_link_text:
+  element:
+    selector:
+      xpath: //a[text()='<text>']
+    op: click
 click_primary_menu:
   action:
     if_element:
