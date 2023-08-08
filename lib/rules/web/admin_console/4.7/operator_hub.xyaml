@@ -39,6 +39,16 @@ create_operand:
   action: click_tab
   action: click_create_operand_button
   action: submit_changes
+create_operand_anzo:
+  params:
+    tab_name: Anzo Operator
+    button_text: Create
+  action: goto_csv_detail_page
+  action: click_tab
+  action: click_button
+  action: wait_box_loaded
+  action: switch_to_form_view
+  action: submit_changes
 set_operand_name:
   params:
     label_text: Name
@@ -609,7 +619,7 @@ check_column_header_for_one_namespace:
 check_column_header_for_all_namespace:
   action: check_managed_namespace_column_header
   action: check_namesapce_column_header
-  
+
 check_managed_namespace_column_header:
   params:
     column_name: Managed Namespaces
@@ -627,7 +637,7 @@ check_namesapce_column_header_missing:
 check_managed_namespace_column_installed_for_one_ns:
   params:
     col_index: 2
-  action: check_operator_column_one_namespace 
+  action: check_operator_column_one_namespace
 check_managed_namespace_column_installed_for_all_ns:
   params:
     col_index: 2
@@ -637,7 +647,7 @@ check_managed_namespace_column_installed_for_all_ns:
 check_namespace_column_installed_for_one_ns_under_all_projects:
   params:
     col_index: 2
-  action: check_operator_column_one_namespace 
+  action: check_operator_column_one_namespace
 check_namespace_column_installed_for_all_ns_under_all_projects:
   params:
     col_index: 2
@@ -647,7 +657,7 @@ check_namespace_column_installed_for_all_ns_under_all_projects:
 check_managed_namespace_column_installed_for_one_ns_under_all_projects:
   params:
     col_index: 3
-  action: check_operator_column_one_namespace 
+  action: check_operator_column_one_namespace
 check_managed_namespace_column_installed_for_all_ns_under_all_projects:
   params:
     col_index: 3
@@ -655,11 +665,11 @@ check_managed_namespace_column_installed_for_all_ns_under_all_projects:
 
 check_operator_column_one_namespace:
   elements:
-  - selector: 
+  - selector:
       xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>]//a[contains(text(),'<project_name>') and @href='/k8s/cluster/namespaces/<project_name>']
 check_operator_column_all_namespace:
   elements:
-  - selector: 
+  - selector:
       xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>][contains(text(),'All Namespaces')]
 check_logging_operator_filtered_out:
   elements:

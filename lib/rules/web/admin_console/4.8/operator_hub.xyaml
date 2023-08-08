@@ -39,6 +39,16 @@ create_operand:
   action: click_tab
   action: click_create_operand_button
   action: submit_changes
+create_operand_anzo:
+  params:
+    tab_name: Anzo Operator
+    button_text: Create
+  action: goto_csv_detail_page
+  action: click_tab
+  action: click_button
+  action: wait_box_loaded
+  action: switch_to_form_view
+  action: submit_changes
 set_operand_name:
   params:
     label_text: Name
