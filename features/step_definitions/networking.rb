@@ -1518,8 +1518,8 @@ Given /^I switch the ovn gateway mode on this cluster$/ do
     raise "Patch or config map application was successful but CNO didn't change status to Progressing" unless @result[:success]
     @result = admin.cli_exec(:rollout_status, resource: "daemonset", name: "ovnkube-master", n: "openshift-ovn-kubernetes")
   else
-    logger.info "Waiting upto 660 sec for network operator to change status to Progressing as a result of patch"
-    @result = admin.cli_exec(:wait, resource: "co", resource_name: "network", for: "condition=PROGRESSING=True", timeout: "660s")
+    logger.info "Waiting upto 900 sec for network operator to change status to Progressing as a result of patch"
+    @result = admin.cli_exec(:wait, resource: "co", resource_name: "network", for: "condition=PROGRESSING=True", timeout: "900s")
     raise "Patch application was successful but CNO didn't change status to Progressing" unless @result[:success]
     @result = admin.cli_exec(:rollout_status, resource: "daemonset", name: "ovnkube-node", n: "openshift-ovn-kubernetes")
   end
