@@ -696,17 +696,15 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   network_type = network_operator.network_type(user: admin)
   case network_type
   when "OVNKubernetes"
-    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
-    step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
+    cb[cb_name] = "br-ex"
   when "OpenShiftSDN"
     step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
+    cb[cb_name] = @result[:response].split("\n").first.split[4]
   else
     logger.warn "unknown network_type"
     logger.warn "We will skip this scenario"
     skip_this_scenario
   end
-  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
-  cb[cb_name] = @result[:response].split("\n").first.split[4]
   logger.info "The node's default interface is stored in the #{cb_name} clipboard as #{cb[cb_name]}."
 end
 
