@@ -23,10 +23,11 @@ RUN set -x && \
     CHROME_VERSION='116.0.5845.96' && \
     npx @puppeteer/browsers install chrome@${CHROME_VERSION} && \
     npx @puppeteer/browsers install chromedriver@${CHROME_VERSION} && \
+    find /chromedriver -type f -name chromedriver -exec ln {} /usr/local/bin/chromedriver \; && \
     GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
     curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s#$GECKODRIVER_RE#\1#p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
-    chmod +x /usr/local/bin/geckodriver && \
+    chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
     JQ_SPEC="https://api.github.com/repos/stedolan/jq/releases/latest" && \
     JQ_RE='^.*"browser_download_url": ?"(http[^"]*jq-linux64)".*$' && \
     curl -sSL $GITHUB_API_CURL_OPTS "$JQ_SPEC" | sed -En "s#$JQ_RE#\1#p" | xargs -d '\n' curl -sSL -o /usr/local/bin/jq && \
