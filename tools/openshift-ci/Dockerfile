@@ -18,14 +18,15 @@ RUN set -x && \
     yum -y update && \
     INSTALL_PKGS="bsdtar git openssh-clients httpd-tools rsync" && \
     yum install -y $INSTALL_PKGS && \
-    yum install -y --setopt=tsflags=nodocs https://dl.google.com/linux/direct/google-chrome-stable_current_$(uname -m).rpm && \
-    CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
-    CHROMEDRIVER_VERSION=$(curl -sSL "$CHROMEDRIVER_URL/LATEST_RELEASE") && \
-    curl -sSL "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" | bsdtar --no-same-owner --no-same-permissions -xvf - -C /usr/local/bin && \
+    curl --silent --location https://rpm.nodesource.com/setup_18.x | bash - && \
+    dnf -y install nodejs && \
+    CHROME_VERSION='116.0.5845.96' && \
+    npx @puppeteer/browsers install chrome@${CHROME_VERSION} && \
+    npx @puppeteer/browsers install chromedriver@${CHROME_VERSION} && \
     GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
     curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s#$GECKODRIVER_RE#\1#p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
-    chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
+    chmod +x /usr/local/bin/geckodriver && \
     JQ_SPEC="https://api.github.com/repos/stedolan/jq/releases/latest" && \
     JQ_RE='^.*"browser_download_url": ?"(http[^"]*jq-linux64)".*$' && \
     curl -sSL $GITHUB_API_CURL_OPTS "$JQ_SPEC" | sed -En "s#$JQ_RE#\1#p" | xargs -d '\n' curl -sSL -o /usr/local/bin/jq && \
