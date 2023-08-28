@@ -7,6 +7,7 @@ Feature: NoDiskConflict
   @singlenode
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   @aws-ipi
   @aws-upi
   @hypershift-hosted

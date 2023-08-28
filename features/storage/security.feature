@@ -112,12 +112,14 @@ Feature: storage security check
     And the output should contain "Hello OpenShift Storage"
 
     # keep the parameters for 3.11 cases can be run.
+    @rosa @osd_ccs @aro
     @gcp-ipi
     @gcp-upi
     Examples:
       | case_id          | storage_type      | volume_name | type |
       | OCP-9700:Storage | gcePersistentDisk | pdName      | gce  | # @case_id OCP-9700
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     Examples:
@@ -136,6 +138,7 @@ Feature: storage security check
   @admin
   @smoke
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @rosa @osd_ccs @aro
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity

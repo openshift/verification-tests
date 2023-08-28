@@ -62,18 +62,21 @@ Feature: Dynamic provisioning
       | <%= cb.volumeID %>     |
     # And I verify that the IAAS volume with id "<%= cb.volumeID %>" was deleted
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     Examples:
       | case_id          | cloud_provider |
       | OCP-9685:Storage | ebs            | # @case_id OCP-9685
 
+    @rosa @osd_ccs @aro
     @gcp-ipi
     @gcp-upi
     Examples:
       | case_id           | cloud_provider |
       | OCP-12665:Storage | gce            | # @case_id OCP-12665
 
+    @rosa @osd_ccs @aro
     @azure-ipi
     @azure-upi
     Examples:

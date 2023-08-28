@@ -7,6 +7,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -38,6 +39,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -68,6 +70,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -98,6 +101,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -127,6 +131,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -156,6 +161,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -188,6 +194,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @rosa @osd_ccs @aro
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
@@ -237,6 +244,7 @@ Feature: Testing for pv and pvc pre-bind feature
     And the "mypvc" PVC becomes :pending
     And the "pv-<%= project.name %>" PV status is :available
 
+    @rosa @osd_ccs @aro
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @hypershift-hosted

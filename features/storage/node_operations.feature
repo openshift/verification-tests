@@ -39,12 +39,14 @@ Feature: Node operations test scenarios
     And a pod becomes ready with labels:
       | name=jenkins |
 
+    @rosa @osd_ccs @aro
     @gcp-ipi
     @gcp-upi
     Examples:
       | case_id           | cloud_provider |
       | OCP-15287:Storage | gcp            | # @case_id OCP-15287
 
+    @rosa @osd_ccs @aro
     @azure-ipi
     @azure-upi
     Examples:
