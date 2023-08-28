@@ -22,6 +22,7 @@ RUN set -x && \
     dnf -y install nodejs && \
     CHROME_VERSION='116.0.5845.96' && \
     npx @puppeteer/browsers install chrome@${CHROME_VERSION} && \
+    find /chrome -type d -name chrome-linux64 -exec ln -s {} /chrome/chrome-linux64 \; && \
     npx @puppeteer/browsers install chromedriver@${CHROME_VERSION} && \
     find /chromedriver -type f -name chromedriver -exec ln {} /usr/local/bin/chromedriver \; && \
     GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
@@ -50,6 +51,8 @@ RUN set -x && \
     yum module -y install ruby:2.7 && \
     yum clean all -y && \
     rm -rf /var/cache/yum /var/tmp/* /tmp/*
+
+ENV PATH="${PATH}:/chrome/chrome-linux64"
 
 ADD . /verification-tests/
 
