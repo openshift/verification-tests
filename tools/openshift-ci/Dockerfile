@@ -18,12 +18,10 @@ RUN set -x && \
     yum -y update && \
     INSTALL_PKGS="bsdtar git openssh-clients httpd-tools rsync" && \
     yum install -y $INSTALL_PKGS && \
+    yum install -y --setopt=tsflags=nodocs https://dl.google.com/linux/direct/google-chrome-stable_current_$(uname -m).rpm && \
     curl --silent --location https://rpm.nodesource.com/setup_18.x | bash - && \
-    dnf -y install nodejs && \
-    CHROME_VERSION='116.0.5845.96' && \
-    npx @puppeteer/browsers install chrome@${CHROME_VERSION} && \
-    find /chrome -type d -name chrome-linux64 -exec ln -s {} /chrome/chrome-linux64 \; && \
-    npx @puppeteer/browsers install chromedriver@${CHROME_VERSION} && \
+    yum -y install nodejs && \
+    npx @puppeteer/browsers install chromedriver@stable && \
     find /chromedriver -type f -name chromedriver -exec ln {} /usr/local/bin/chromedriver \; && \
     GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
@@ -51,8 +49,6 @@ RUN set -x && \
     yum module -y install ruby:2.7 && \
     yum clean all -y && \
     rm -rf /var/cache/yum /var/tmp/* /tmp/*
-
-ENV PATH="${PATH}:/chrome/chrome-linux64"
 
 ADD . /verification-tests/
 
