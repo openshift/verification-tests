@@ -11,6 +11,8 @@ Feature: basic verification for upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
+  @4.14 @4.12 @4.11
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: Upgrade - Make sure multiple resources work well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I ensure "node-upgrade" project is deleted
@@ -55,7 +57,7 @@ Feature: basic verification for upgrade testing
   # @case_id OCP-13016
   @upgrade-check
   @admin
-  @4.12 @4.11
+  @4.14 @4.12 @4.11
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode

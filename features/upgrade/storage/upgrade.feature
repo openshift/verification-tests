@@ -13,6 +13,8 @@ Feature: Storage upgrade tests
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @storage
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
   Scenario: OCP-23501:Storage Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     # Check cluster operator storage should be in correct status
@@ -179,6 +181,8 @@ Feature: Storage upgrade tests
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @storage
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
   Scenario: OCP-31331:Storage Cluster operator storage should be in correct status after upgrade - prepare
     Given I switch to cluster admin pseudo user
     # Check cluster operator storage should be in correct status
