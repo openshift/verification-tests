@@ -147,7 +147,7 @@ check_external_log_link:
 browse_to_cli_tools_page:
   action: click_help_button
   params:
-    text: Command line tools
+    text: Command Line Tools
     link_url: "command-line-tools"
   action: click_link_with_text
 check_consolelink:

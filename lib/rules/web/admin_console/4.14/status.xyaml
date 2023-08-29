@@ -31,7 +31,7 @@ check_dim_resource_list:
 check_user_starter_guide_message_when_no_projects:
   elements:
   - selector:
-      visible_text: !ruby/regexp /Create a project/i
+      xpath: //button[contains(., 'Create a new project')]
 check_get_started_message_when_no_resources:
   elements:
   - selector:
