@@ -88,7 +88,7 @@ perform_silence:
 check_silence_detail:
   element:
     selector:
-      xpath: //h2[@class='co-section-heading' and text()='Silence details']
+      xpath: //h2[text()='Silence details']
 
 silence_alert_from_detail_if:     
   action:
