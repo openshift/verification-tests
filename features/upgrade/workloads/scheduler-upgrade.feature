@@ -13,6 +13,7 @@ Feature: scheduler with custom policy upgrade check
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-34164:Workloads Upgrading cluster when using a custom policy for kube-scheduler should work fine - prepare
     Given the "kube-scheduler" operator version matches the current cluster version
     Given the expression should be true> cluster_operator('kube-scheduler').condition(type: 'Progressing')['status'] == "False"

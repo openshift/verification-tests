@@ -38,7 +38,6 @@ Feature: sdn2ovn migration testing
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
-  @4.13 @4.12
   @vsphere-ipi
   @vsphere-upi
   @qeci
@@ -47,6 +46,7 @@ Feature: sdn2ovn migration testing
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @4.14 @4.13 @4.12
   Scenario: Check sdn2ovn egressip is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given the env is using "OpenShiftSDN" networkType
@@ -106,7 +106,7 @@ Feature: sdn2ovn migration testing
   # @case_id OCP-54552
   @admin
   @upgrade-check
-  @4.13 @4.12
+  @4.14 @4.13 @4.12
   @vsphere-ipi
   @vsphere-upi
   @qeci

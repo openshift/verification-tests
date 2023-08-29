@@ -2,15 +2,16 @@ Feature: Routing and DNS related scenarios
 
   @upgrade-prepare
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
   Scenario: ensure ingress works well before and after upgrade - prepare
     # Check console route
     Given I switch to cluster admin pseudo user
@@ -25,7 +26,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29746
   @upgrade-check
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
@@ -47,14 +48,15 @@ Feature: Routing and DNS related scenarios
 
   @upgrade-prepare
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
   Scenario: ensure DNS works well before and after upgrade - prepare
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -72,7 +74,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29747
   @upgrade-check
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
@@ -96,14 +98,14 @@ Feature: Routing and DNS related scenarios
 
   @upgrade-prepare
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @baremetal-ipi
   @vsphere-upi @openstack-upi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: upgrade with running router pods on all worker nodes - prepare
     # Get the number of worker nodes and scale up router pods
     Given I switch to cluster admin pseudo user
@@ -127,7 +129,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-30501
   @upgrade-check
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @baremetal-ipi
   @vsphere-upi @openstack-upi
   @proxy @noproxy @disconnected @connected
@@ -148,15 +150,15 @@ Feature: Routing and DNS related scenarios
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @gcp-ipi @azure-ipi
   @gcp-upi @azure-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: upgrade with route shards - prepare
     # Ensure cluster operator ingress is in normal status
     Given I switch to cluster admin pseudo user
@@ -224,7 +226,7 @@ Feature: Routing and DNS related scenarios
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @gcp-ipi @azure-ipi
   @gcp-upi @azure-upi
   @singlenode
@@ -261,7 +263,6 @@ Feature: Routing and DNS related scenarios
   # @author mjoseph@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
@@ -269,6 +270,7 @@ Feature: Routing and DNS related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
   Scenario: Unidling a route work without user intervention - prepare
     Given I switch to first user
     And I run the :new_project client command with:
@@ -305,7 +307,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-45955
   @upgrade-check
   @users=upuser1,upuser2
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode

@@ -3,13 +3,13 @@
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
-  @4.13 @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
   Scenario: OCP-44898:SDN Check the multus works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given the multus is enabled on the cluster
@@ -47,7 +47,7 @@
   # @case_id OCP-44898
   @admin
   @upgrade-check
-  @4.13 @4.12 @4.11 @4.10 @4.9
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade

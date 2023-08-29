@@ -3,14 +3,15 @@ Feature: CloudCredentialOperator components upgrade tests
   # @author lwan@redhat.com
   @upgrade-prepare
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @ppc64le @heterogeneous @arm64 @amd64
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
   Scenario: OCP-34260:ClusterOperator Cluster operator cloud-credential should be available after upgrade - prepare
     Given I switch to cluster admin pseudo user
     #Check cloud-credential version
@@ -32,7 +33,7 @@ Feature: CloudCredentialOperator components upgrade tests
   # @case_id OCP-34260
   @upgrade-check
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode

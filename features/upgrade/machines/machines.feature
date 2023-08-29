@@ -21,7 +21,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @proxy @noproxy @disconnected @connected
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -56,7 +56,7 @@ Feature: Machine-api components upgrade tests
   # @case_id OCP-43331
   @upgrade-check
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade
@@ -85,6 +85,7 @@ Feature: Machine-api components upgrade tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @ppc64le @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: There should be no pending or firing alerts for machine-api operators - prepare
     Given the expression should be true> "True" == "True"
 
@@ -114,12 +115,14 @@ Feature: Machine-api components upgrade tests
   @admin
   @destructive
   @disconnected @connected
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @proxy @noproxy @disconnected @connected
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
-  @ppc64le @heterogeneous @arm64 @amd64
+  @cloud
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
   Scenario: Scale up and scale down a machineSet after upgrade - prepare
     Given the expression should be true> "True" == "True"
 
@@ -129,7 +132,7 @@ Feature: Machine-api components upgrade tests
   @admin
   @destructive
   @cloud
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @proxy @noproxy @disconnected @connected
   @upgrade
@@ -205,7 +208,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
     @s390x @ppc64le @heterogeneous @arm64 @amd64
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
@@ -244,12 +247,13 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @destructive
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @ppc64le @heterogeneous @arm64 @amd64
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -267,7 +271,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
@@ -320,12 +324,12 @@ Feature: Machine-api components upgrade tests
 
   @upgrade-prepare
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @ppc64le @heterogeneous @arm64 @amd64
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: Registering Components delays should not be more than liveliness probe - prepare
     Given the expression should be true> "True" == "True"
 
@@ -333,7 +337,7 @@ Feature: Machine-api components upgrade tests
   # @case_id OCP-39845
   @upgrade-check
   @admin
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn

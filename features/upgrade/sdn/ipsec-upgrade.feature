@@ -3,14 +3,15 @@ Feature: IPsec upgrade scenarios
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @network-ovnkubernetes @network-networkpolicy @ipsec
   @upgrade
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade - prepare
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -76,7 +77,7 @@ Feature: IPsec upgrade scenarios
   @admin
   @upgrade-check
   @network-ovnkubernetes @network-networkpolicy @ipsec
-  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade

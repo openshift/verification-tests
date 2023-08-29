@@ -13,6 +13,7 @@ Feature: build related upgrade check
   @inactive
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: Check docker and sti build works well before and after upgrade - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
