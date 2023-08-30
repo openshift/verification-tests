@@ -265,7 +265,7 @@ silence_alert_from_create_button:
 check_use_regular:
   element:
     selector:
-      xpath: //span[text()='Alert labels']/ancestor::div[@class='co-m-pane__body-group']//label[text()='RegEx']/input[@type='checkbox']
+      xpath: //h2[text()='Alert labels']/ancestor::div[@class='co-m-pane__body-group']//label[text()='RegEx']/input[@type='checkbox']
     op: click
 check_info_of_silence_detail_reg:
   params:
