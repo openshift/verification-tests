@@ -209,7 +209,11 @@ module BushSlicer
           if content[i] =~ /^\s+(@4.)/
             insert_at_line_version = i
             next
-          elsif content[i] =~ /^\s+(@.*amd)/ || content[i] =~ /^\s+(@.*arm)/ || content[i] =~ /^\s+(@.*heterogeneous)/
+          elsif content[i] =~ /^\s+(@.*amd)/ \
+              || content[i] =~ /^\s+(@.*arm)/ \
+              || content[i] =~ /^\s+(@.*heterogeneous)/ \
+              || content[i] =~ /^\s+(@.*ppc64le)/ \
+              || content[i] =~ /^\s+(@.*s390x)/
             insert_at_line_arch = i
             next
           elsif content[i] =~ /^\s+(@.*ipi)/
@@ -247,7 +251,12 @@ module BushSlicer
           if tag =~ /@4[.][0-9]+/ && insert_at_line_version != 0
             content_to_add = "  #{tag} "
             content[insert_at_line_version].lstrip!.prepend(content_to_add)
-          elsif (tag =~ /@.*amd/ || tag =~ /@.*arm/ || tag =~ /@.*heterogeneous/) && insert_at_line_arch != 0
+          elsif (tag =~ /@.*amd/ \
+              || tag =~ /@.*arm/ \
+              || tag =~ /@.*heterogeneous/ \
+              || tag =~ /@.*ppc64le/ \
+              || tag =~ /@.*s390x/) \
+              && insert_at_line_arch != 0
             content_to_add = "#{indention}#{tag} "
             content[insert_at_line_arch].lstrip!.prepend(content_to_add)
           elsif tag =~ /@.*ipi/ && insert_at_line_ipi != 0
