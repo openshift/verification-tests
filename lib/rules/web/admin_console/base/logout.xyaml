@@ -4,5 +4,5 @@ click_logout:
       xpath: //*[@data-test='user-dropdown']
     op: click
   - selector:
-      visible_text: !ruby/regexp /Log.*out/
+      xpath: //button[contains(., 'Log out')]
     op: click
