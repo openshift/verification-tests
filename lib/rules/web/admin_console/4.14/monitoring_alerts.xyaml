@@ -68,7 +68,7 @@ click_silence_alert:
 uncheck_start_from_now:
   element:
     selector:
-      xpath: //span[text()='Duration']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
+      xpath: //h2[text()='Duration']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
     op: click
 ensure_start_from_now_checked:
   element:
