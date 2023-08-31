@@ -1492,9 +1492,9 @@ Feature: Multus-CNI related scenarios
       | journalctl -u crio \| grep verbose.*macvlan-bridge-whereabouts-pod1 |
     Then the step should succeed
     And the output should contain:
-      | <%= project.name %>:macvlan-bridge-whereabouts-pod1:<%= cb.pod_uid %> |
-      | <%= cb.pod_eth0_ip %>                                                 |
-      | <%= cb.pod_net1_ip %>                                                 |
+      | <%= <%= cb.pod_uid %> |
+      | <%= cb.pod_eth0_ip %> |
+      | <%= cb.pod_net1_ip %> |
 
   # @author weliang@redhat.com
   # @case_id OCP-31999
