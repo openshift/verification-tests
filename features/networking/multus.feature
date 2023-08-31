@@ -1467,12 +1467,12 @@ Feature: Multus-CNI related scenarios
     # Create a pod absorbing above net-attach-def
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
     When I run oc create over "generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod1 |
+      | ["metadata"]["name"]                                       | test-pod1 |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-whereabouts      |
       | ["spec"]["containers"][0]["name"]                          | macvlan-bridge-whereabouts      |
       | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %>         |
     Then the step should succeed
-    And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
+    And the pod named "test-pod1" becomes ready
     And evaluation of `pod.ip` is stored in the :pod_eth0_ip clipboard
 
     When I run the :get admin command with:
@@ -1482,14 +1482,14 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :pod_uid clipboard
 
-    And I execute on the "macvlan-bridge-whereabouts-pod1" pod:
+    And I execute on the "test-pod1" pod:
       | bash | -c | ip addr show net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod_net1_ip clipboard
 
     Given I use the "<%= cb.nodes[0].name %>" node
     And I run commands on the host:
-      | journalctl -u crio \| grep verbose.*macvlan-bridge-whereabouts-pod1 |
+      | journalctl -u crio \| grep verbose.*test-pod1 |
     Then the step should succeed
     And the output should contain:
       | <%= cb.pod_uid %>     |
