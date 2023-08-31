@@ -1493,8 +1493,11 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the output should contain:
       | <%= cb.pod_uid %>      |
+    And I run commands on the host:
+      | journalctl -u crio \| grep <%= cb.pod_eth0_ip %> |
+    Then the step should succeed
+    And the output should contain:
       | <%= cb.pod_eth0_ip %>  |
-      | <%= cb.pod_net1_ip %>  |
 
   # @author weliang@redhat.com
   # @case_id OCP-31999
