@@ -1489,7 +1489,7 @@ Feature: Multus-CNI related scenarios
 
     Given I use the "<%= cb.nodes[0].name %>" node
     And I run commands on the host:
-      | journalctl -u crio \| grep verbose.*test-pod1 |
+      | journalctl -u crio \| grep test-pod1 |
     Then the step should succeed
     And the output should contain:
       | <%= cb.pod_uid %>     |
