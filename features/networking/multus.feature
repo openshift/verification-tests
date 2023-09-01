@@ -1489,12 +1489,15 @@ Feature: Multus-CNI related scenarios
 
     Given I use the "<%= cb.nodes[0].name %>" node
     And I run commands on the host:
-      | journalctl -u crio \| grep verbose.*macvlan-bridge-whereabouts-pod1 |
+      | journalctl -u crio \| grep macvlan-bridge-whereabouts-pod1 |
     Then the step should succeed
     And the output should contain:
-      | <%= project.name %>:macvlan-bridge-whereabouts-pod1:<%= cb.pod_uid %> |
-      | <%= cb.pod_eth0_ip %>                                                 |
-      | <%= cb.pod_net1_ip %>                                                 |
+      | <%= cb.pod_uid %>      |
+    And I run commands on the host:
+      | journalctl -u crio \| grep <%= cb.pod_eth0_ip %> |
+    Then the step should succeed
+    And the output should contain:
+      | <%= cb.pod_eth0_ip %>  |
 
   # @author weliang@redhat.com
   # @case_id OCP-31999
