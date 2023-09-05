@@ -40,6 +40,7 @@ Feature: Persistent Volume Claim binding policies
     And the "mypvc" PVC becomes bound to the "pv1-<%= project.name %>" PV
     And the "pv2-<%= project.name %>" PV status is :available
 
+    @rosa @osd_ccs @aro
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @hypershift-hosted
@@ -105,6 +106,7 @@ Feature: Persistent Volume Claim binding policies
     And the "pv-<%= project.name %>" PV status is :available
     And the "mypvc" PVC becomes :pending
 
+    @rosa @osd_ccs @aro
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @hypershift-hosted
@@ -149,6 +151,7 @@ Feature: Persistent Volume Claim binding policies
     And the "mypvc1" PVC becomes :pending
     And the "mypvc2" PVC becomes :pending
 
+    @rosa @osd_ccs @aro
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @hypershift-hosted

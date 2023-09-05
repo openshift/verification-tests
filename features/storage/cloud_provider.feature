@@ -44,6 +44,7 @@ Feature: kubelet restart and node restart
     Then the step should succeed
     """
 
+    @rosa @osd_ccs @aro
     @azure-ipi
     @azure-upi
     Examples:
@@ -56,6 +57,7 @@ Feature: kubelet restart and node restart
       | case_id           | platform |
       | OCP-11317:Storage | cinder   | # @case_id OCP-11317
 
+    @rosa @osd_ccs @aro
     @gcp-ipi
     @gcp-upi
     Examples:

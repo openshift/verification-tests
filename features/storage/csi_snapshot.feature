@@ -60,12 +60,14 @@ Feature: Volume snapshot test
     Then the step should succeed
     And the output should contain "snapshot test"
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     Examples:
       | case_id           | csi-sc  | csi-vsc     |
       | OCP-27727:Storage | gp2-csi | csi-aws-vsc | # @case_id OCP-27727
 
+    @rosa @osd_ccs @aro
     @azure-ipi
     @azure-upi
     Examples:

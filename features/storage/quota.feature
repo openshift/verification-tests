@@ -4,6 +4,7 @@ Feature: ResourceQuata for storage
   # @case_id OCP-14173
   @admin
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @rosa @osd_ccs @aro
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -84,6 +85,7 @@ Feature: ResourceQuata for storage
   # @case_id OCP-14382
   @admin
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @rosa @osd_ccs @aro
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity

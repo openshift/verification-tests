@@ -30,12 +30,14 @@ Feature: storageClass related feature
       | p             | {"metadata":{"annotations":{"volume.beta.kubernetes.io/storage-class":"<storage-class-name>"}}} |
     Then the expression should be true> @result[:success] == env.version_le("3.5", user: user)
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     Examples:
       | case_id           | storage-class-name |
       | OCP-12269:Storage | gp2                | # @case_id OCP-12269
 
+    @rosa @osd_ccs @aro
     @gcp-ipi
     @gcp-upi
     Examples:
@@ -48,6 +50,7 @@ Feature: storageClass related feature
       | case_id           | storage-class-name |
       | OCP-12272:Storage | standard           | # @case_id OCP-12272
 
+    @rosa @osd_ccs @aro
     @azure-ipi
     @azure-upi
     @hypershift-hosted
@@ -100,6 +103,7 @@ Feature: storageClass related feature
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear
 
+    @rosa @osd_ccs @aro
     @gcp-ipi
     @gcp-upi
     Examples:
@@ -107,6 +111,7 @@ Feature: storageClass related feature
       | OCP-11359:Storage | gce-pd      | pd-ssd      | us-central1-a | false      | 1Gi  | # @case_id OCP-11359
       | OCP-11640:Storage | gce-pd      | pd-standard | us-central1-a | false      | 2Gi  | # @case_id OCP-11640
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     @hypershift-hosted
@@ -161,12 +166,14 @@ Feature: storageClass related feature
     And the "mypvc1" PVC becomes :bound within 120 seconds
     And the "mypvc2" PVC becomes :bound within 120 seconds
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     Examples:
       | case_id           | provisioner |
       | OCP-12226:Storage | aws-ebs     | # @case_id OCP-12226
 
+    @rosa @osd_ccs @aro
     @azure-ipi
     @azure-upi
     Examples:
@@ -179,6 +186,7 @@ Feature: storageClass related feature
       | case_id           | provisioner |
       | OCP-12227:Storage | cinder      | # @case_id OCP-12227
 
+    @rosa @osd_ccs @aro
     @gcp-ipi
     @gcp-upi
     Examples:
@@ -256,6 +264,7 @@ Feature: storageClass related feature
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear within 300 seconds
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     @hypershift-hosted
@@ -297,6 +306,7 @@ Feature: storageClass related feature
       | <errorMessage>        |
     """
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     @hypershift-hosted
@@ -309,6 +319,7 @@ Feature: storageClass related feature
   # @case_id OCP-10159
   @admin
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @rosa @osd_ccs @aro
   @aws-ipi
   @aws-upi
   @singlenode
@@ -339,6 +350,7 @@ Feature: storageClass related feature
   # @case_id OCP-10228
   @smoke
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @rosa @osd_ccs @aro
   @aws-ipi
   @aws-upi
   @upgrade-sanity

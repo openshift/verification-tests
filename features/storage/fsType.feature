@@ -38,6 +38,7 @@ Feature: testing for parameter fsType
       | ls | /mnt/testfile |
     Then the step should succeed
 
+    @rosa @osd_ccs @aro
     @gcp-ipi
     @gcp-upi
     Examples:
@@ -46,6 +47,7 @@ Feature: testing for parameter fsType
       | OCP-10094:Storage | ext4   | gce  | # @case_id OCP-10094
       | OCP-10096:Storage | xfs    | gce  | # @case_id OCP-10096
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     Examples:

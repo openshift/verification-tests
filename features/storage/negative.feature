@@ -17,6 +17,7 @@ Feature: negative testing
     And the output should contain:
       | <error> |
 
+    @rosa @osd_ccs @aro
     @gcp-ipi
     @gcp-upi
     Examples:

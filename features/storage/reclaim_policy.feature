@@ -44,12 +44,14 @@ Feature: Persistent Volume reclaim policy tests
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pv.name %>" to disappear within 1200 seconds
 
+    @rosa @osd_ccs @aro
     @gcp-ipi
     @gcp-upi
     Examples:
       | case_id          | storage_type      | volume_name | path | file                |
       | OCP-9949:Storage | gcePersistentDisk | pdName      | gce  | pv-default-rwo.json | # @case_id OCP-9949
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     Examples:

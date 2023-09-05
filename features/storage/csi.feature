@@ -82,6 +82,7 @@ Feature: CSI testing related feature
     Then the PV becomes :released
     And admin ensures "<%= pvc.volume_name %>" pv is deleted
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     Examples:
@@ -342,6 +343,7 @@ Feature: CSI testing related feature
     Then the step should succeed
     And the output should contain "Hello OpenShift Storage"
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     Examples:
@@ -400,6 +402,7 @@ Feature: CSI testing related feature
       | case_id           | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | OCP-37557:Storage | cinder.csi.openstack.org | standard-csi | openstack-cinder-csi-driver-operator | openstack-cinder-csi-driver-controller | openstack-cinder-csi-driver-node | # @case_id OCP-37557
 
+    @rosa @osd_ccs @aro
     @aws-ipi
     @aws-upi
     Examples:

@@ -52,6 +52,7 @@ Feature: Storage of Hostpath plugin testing
       | ls /etc/origin/hostpath/<%= project.name %>/test |
     Then the step should <step_status>
 
+    @rosa @osd_ccs @aro
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @hypershift-hosted
