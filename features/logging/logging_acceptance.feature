@@ -22,7 +22,6 @@ Feature: Logging smoke test case
     Given logging operators are installed successfully
     # create a pod to generate some logs
     Given I switch to the second user
-    And evaluation of `user.cached_tokens.first` is stored in the :user_token_2 clipboard
     And I have a project
     And evaluation of `project` is stored in the :proj clipboard
     And I obtain test data file "logging/loggen/container_json_log_template.json"
@@ -33,10 +32,7 @@ Feature: Logging smoke test case
       | run=centos-logtest,test=centos-logtest |
     And evaluation of `pod.node_name` is stored in the :node clipboard
 
-    Given I switch to the first user
-    Given the first user is cluster-admin
-    And evaluation of `user.cached_tokens.first` is stored in the :user_token_1 clipboard
-
+    Given I switch to cluster admin pseudo user
     Given I register clean-up steps:
     """
     When I run the :debug admin command with:
@@ -95,10 +91,10 @@ Feature: Logging smoke test case
     And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
     And I wait for the "audit" index to appear in the ES pod with labels "es-node-master=true"
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | infra*/_search?pretty'  -d '{"query": {"exists": {"field": "systemd"}}} |
+      | relative_url | infra*/_count?pretty'  -d '{"query": {"exists": {"field": "systemd"}}} |
       | op           | GET                                                                     |
     Then the step should succeed
-    And the expression should be true> @result[:parsed]['hits']['hits'].length() > 0
+    And the expression should be true> @result[:parsed]['count'] > 0
 
     # ES Metrics
     Given I use the "openshift-logging" project
@@ -125,6 +121,13 @@ Feature: Logging smoke test case
     Then the step should succeed
     And the expression should be true> @result[:parsed]['data']['result'][0]['value']
     """
+
+    Given I switch to the first user
+    Given the first user is cluster-admin
+    And evaluation of `user.cached_tokens.first` is stored in the :user_token_1 clipboard
+
+    Given I switch to the second user
+    And evaluation of `user.cached_tokens.first` is stored in the :user_token_2 clipboard
 
     # Authorization
     Given I switch to cluster admin pseudo user
