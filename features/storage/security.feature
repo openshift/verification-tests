@@ -12,13 +12,17 @@ Feature: storage security check
   @storage
   Scenario Outline: volume security testing
     Given I have a project with proper privilege
+    And admin creates new in-tree storageclass with:
+      | ["metadata"]["name"] | sc-<%= project.name %> |
     Given I obtain test data file "storage/misc/pvc.json"
     When I run oc create over "pvc.json" replacing paths:
-      | ["metadata"]["name"] | mypvc1 |
+      | ["metadata"]["name"]         | mypvc1                 |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
     Given I obtain test data file "storage/misc/pvc.json"
     When I run oc create over "pvc.json" replacing paths:
-      | ["metadata"]["name"] | mypvc2 |
+      | ["metadata"]["name"]         | mypvc2                 |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
 
     Given I switch to cluster admin pseudo user
