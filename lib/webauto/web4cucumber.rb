@@ -46,7 +46,7 @@ require_relative 'chrome_extension'
         base_url:,
         snippets_dir: "",
         logger: SimpleLogger.new,
-        browser_type: :firefox,
+        browser_type: :chrome,
         selenium_url: nil,
         browser: nil,
         scroll_strategy: nil,
