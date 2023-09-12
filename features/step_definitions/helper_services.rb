@@ -620,12 +620,14 @@ Given /^I have a registry in my project$/ do
   if BushSlicer::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
     raise "I refuse create registry in a system project: #{project.name}"
   end
-  @result = admin.cli_exec(:new_app, app_repo: "quay.io/openshifttest/registry:1.2.0", namespace: project.name)
+  @result = admin.cli_exec(:create_deployment, name: "registry", image: "quay.io/openshifttest/registry@sha256:1106aedc1b2e386520bc2fb797d9a7af47d651db31d8e7ab472f2352da37d1b3", namespace: project.name)
   step %Q/the step should succeed/
   @result = admin.cli_exec(:set_probe, resource: "deploy/registry", readiness: true, liveness: true, get_url: "http://:5000/v2",namespace: project.name)
   step %Q/the step should succeed/
+  @result = admin.cli_exec(:expose, resource: "deploy", resource_name: "registry", port: "5000", namespace: project.name)
+  step %Q/the step should succeed/
   step %Q/a pod becomes ready with labels:/, table(%{
-       | deployment=registry |
+       | app=registry |
   })
   cb.reg_svc_ip = "#{service("registry").ip(user: user)}"
   cb.reg_svc_port = "#{service("registry").ports(user: user)[0].dig("port")}"
