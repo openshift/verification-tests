@@ -261,6 +261,11 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
       eval "sc_hash#{path} = YAML.load value" unless path == ''
   end
 
+  # After CSI Migration the default volumeType change to 'gp3', but most aws local zones nodes don't support gp3 type volume
+  if platform == "aws"  
+    sc_hash["parameters"]["type"] = "gp2"
+  end
+
   # if no volumeBindingMode exists in tc, we need to pass vSphere=Immediate, others=WaitForFirstConsumer
   if !sc_hash.dig("volumeBindingMode")
     if platform == "vsphere"  
