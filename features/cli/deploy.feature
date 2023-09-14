@@ -346,6 +346,7 @@ Feature: deployment related features
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-10648:Workloads Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:
