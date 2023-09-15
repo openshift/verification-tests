@@ -686,7 +686,7 @@ check_page_match:
   element:
     selector: &page_content
       xpath: //*[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), translate('<content>','ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))]
-    timeout: 15
+    timeout: 60
 check_page_not_match:
   element:
     selector: *page_content

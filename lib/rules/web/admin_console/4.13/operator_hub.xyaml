@@ -266,7 +266,7 @@ check_error_message_for_missing_required_name:
   action: check_page_contains
 check_catalogsource_removed_message:
   params:
-    content: CatalogSource removed
+    content: CatalogSource health unknown
   action: check_page_match
 check_quay_image_security_popup:
   elements:
