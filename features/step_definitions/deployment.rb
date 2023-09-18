@@ -74,10 +74,7 @@ Given /^#{QUOTED} deployment becomes ready in the#{OPT_QUOTED} project$/ do | d_
     ready = deployment(d_name).ready_replicas(cached: false)
     ready == desired
   }
-  unless !@result[:success]
-    logger.error(user.cli_exec(:logs, resource_name: "deployment/#{d_name}"))
-    raise "Deployment did not become ready"
-  end
+  raise "Deployment did not become ready" unless success
 end
 
 Given /^admin ensures the deployment replicas is restored to "([^"]*)" in "([^"]*)" for "([^"]*)" after scenario$/ do | replicas , project , deployment |
