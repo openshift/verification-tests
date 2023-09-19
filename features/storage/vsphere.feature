@@ -7,7 +7,7 @@ Feature: vSphere test scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
     @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @storage
   Scenario Outline: Dynamically provision a vSphere volume with different disk formats
     Given I have a project
@@ -73,7 +73,7 @@ Feature: vSphere test scenarios
   # @author jhou@redhat.com
   # @case_id OCP-13389
   @admin
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity

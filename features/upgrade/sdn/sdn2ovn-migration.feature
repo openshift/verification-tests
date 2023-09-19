@@ -106,7 +106,7 @@ Feature: sdn2ovn migration testing
   # @case_id OCP-54552
   @admin
   @upgrade-check
-  @4.14 @4.13 @4.12
+  @4.15 @4.14 @4.13 @4.12
   @vsphere-ipi
   @vsphere-upi
   @qeci

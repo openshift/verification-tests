@@ -77,7 +77,7 @@ Feature: IPsec upgrade scenarios
   @admin
   @upgrade-check
   @network-ovnkubernetes @network-networkpolicy @ipsec
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade

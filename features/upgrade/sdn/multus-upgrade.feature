@@ -47,7 +47,7 @@
   # @case_id OCP-44898
   @admin
   @upgrade-check
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade

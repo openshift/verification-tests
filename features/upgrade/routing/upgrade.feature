@@ -26,7 +26,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29746
   @upgrade-check
   @admin
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
@@ -74,7 +74,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29747
   @upgrade-check
   @admin
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
@@ -129,7 +129,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-30501
   @upgrade-check
   @admin
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @baremetal-ipi
   @vsphere-upi @openstack-upi
   @proxy @noproxy @disconnected @connected
@@ -226,7 +226,7 @@ Feature: Routing and DNS related scenarios
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @gcp-ipi @azure-ipi
   @gcp-upi @azure-upi
   @singlenode
@@ -307,7 +307,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-45955
   @upgrade-check
   @users=upuser1,upuser2
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode

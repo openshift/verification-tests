@@ -5,7 +5,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   @flaky
   @admin
   @network-ovnkubernetes
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @azure-ipi @aws-ipi
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
