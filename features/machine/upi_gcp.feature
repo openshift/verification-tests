@@ -4,7 +4,7 @@ Feature: UPI GCP Tests
   # @case_id OCP-34697
   @admin
   @destructive
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @gcp-upi
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -16,7 +16,7 @@ Feature: UPI GCP Tests
   # @case_id OCP-25034
   @admin
   @destructive
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @gcp-upi
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn

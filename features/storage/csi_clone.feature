@@ -8,7 +8,7 @@ Feature: CSI clone testing related feature
   
   # @author jianl@redhat.com
   # @case_id OCP-27615
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi
   @openstack-upi
   @upgrade-sanity
@@ -59,7 +59,7 @@ Feature: CSI clone testing related feature
 
   # @author wduan@redhat.com
   # @case_id OCP-27689
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi
   @openstack-upi
   @qeci
@@ -116,7 +116,7 @@ Feature: CSI clone testing related feature
 
   # @author wduan@redhat.com
   # @case_id OCP-27690
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi
   @openstack-upi
   @qeci
@@ -171,7 +171,7 @@ Feature: CSI clone testing related feature
 
   # @author wduan@redhat.com
   # @case_id OCP-30315
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @openstack-ipi
   @openstack-upi
   @upgrade-sanity
@@ -234,7 +234,7 @@ Feature: CSI clone testing related feature
   # @case_id OCP-27617
   @admin
   @destructive
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @openstack-ipi
   @openstack-upi
   @qeci
