@@ -15,11 +15,11 @@ Feature: ServiceAccount and Policy Managerment
   @critical
   Scenario: OCP-10642:Authentication Could grant admin permission for the service account username to access to its own project
     Given I have a project
-    When I run the :create_deploymentconfig client command with:
+    When I run the :create_deployment client command with:
       | image | quay.io/openshifttest/hello-openshift@sha256:4200f438cf2e9446f6bcff9d67ceea1f69ed07a2f83363b7fb52529f7ddd8a83 |
       | name  | myapp                                                                                                         |
     Then the step should succeed
-    And I wait until the status of deployment "myapp" becomes :complete
+    Given "myapp" deployment becomes ready in the "<%= project.name %>" project
     Given I create the serviceaccount "demo"
     And I give project admin role to the demo service account
     When I run the :get client command with:
