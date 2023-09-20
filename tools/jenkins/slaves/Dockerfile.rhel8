@@ -13,12 +13,11 @@ RUN set -x && \
     dnf config-manager --save --setopt=\*.skip_if_unavailable=1 $NEW_REPOS && \
     yum repolist enabled && \
     yum -y update && \
+    dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    dnf config-manager --save --setopt=google-chrome.skip_if_unavailable=true && \
     curl --silent --location https://rpm.nodesource.com/setup_18.x | bash - && \
     dnf -y install nodejs && \
-    CFT_VERSION='117.0.5938.88' && \
-    npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
-    npx @puppeteer/browsers install chromedriver@${CFT_VERSION} && \
-    find /chrome -type f -name chrome -exec ln {} /usr/local/bin/chrome \; && \
+    npx @puppeteer/browsers install chromedriver@stable && \
     find /chromedriver -type f -name chromedriver -exec ln {} /usr/local/bin/chromedriver \; && \
     INSTALL_PKGS="bsdtar" && \
     dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
