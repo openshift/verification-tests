@@ -18,12 +18,10 @@ RUN set -x && \
     yum -y update && \
     INSTALL_PKGS="bsdtar git openssh-clients httpd-tools rsync" && \
     yum install -y $INSTALL_PKGS && \
+    yum install -y --setopt=tsflags=nodocs https://dl.google.com/linux/direct/google-chrome-stable_current_$(uname -m).rpm && \
     curl --silent --location https://rpm.nodesource.com/setup_18.x | bash - && \
     yum -y install nodejs && \
-    CFT_VERSION='117.0.5938.88' && \
-    npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
-    npx @puppeteer/browsers install chromedriver@${CFT_VERSION} && \
-    find /chrome -type f -name chrome -exec ln {} /usr/local/bin/chrome \; && \
+    npx @puppeteer/browsers install chromedriver@stable && \
     find /chromedriver -type f -name chromedriver -exec ln {} /usr/local/bin/chromedriver \; && \
     GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
