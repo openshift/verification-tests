@@ -13,14 +13,15 @@ RUN set -x && \
     dnf config-manager --save --setopt=\*.skip_if_unavailable=1 $NEW_REPOS && \
     yum repolist enabled && \
     yum -y update && \
-    dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
-    dnf config-manager --save --setopt=google-chrome.skip_if_unavailable=true && \
+    INSTALL_PKGS="bsdtar mesa-libgbm" && \
+    dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
     curl --silent --location https://rpm.nodesource.com/setup_18.x | bash - && \
     dnf -y install nodejs && \
-    npx @puppeteer/browsers install chromedriver@stable && \
+    CFT_VERSION='117.0.5938.88' && \
+    npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
+    find /chrome -type f -name chrome -exec ln -s {} /usr/local/bin/chrome \; && \
+    npx @puppeteer/browsers install chromedriver@${CFT_VERSION} && \
     find /chromedriver -type f -name chromedriver -exec ln {} /usr/local/bin/chromedriver \; && \
-    INSTALL_PKGS="bsdtar" && \
-    dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
     GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
     curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s#$GECKODRIVER_RE#\1#p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
