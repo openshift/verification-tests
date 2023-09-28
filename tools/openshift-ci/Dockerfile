@@ -18,8 +18,8 @@ RUN set -x && \
     yum -y update && \
     INSTALL_PKGS="bsdtar git openssh-clients httpd-tools mesa-libgbm rsync" && \
     yum install -y $INSTALL_PKGS && \
-    curl --silent --location https://rpm.nodesource.com/setup_18.x | bash - && \
-    yum -y install nodejs && \
+    yum -y install https://rpm.nodesource.com/pub_18.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm && \
+    yum -y install nodejs --setopt=nodesource-nodejs.module_hotfixes=1 && \
     CFT_VERSION='117.0.5938.88' && \
     npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
     find /chrome -type f -name chrome -exec ln -s {} /usr/local/bin/chrome \; && \
