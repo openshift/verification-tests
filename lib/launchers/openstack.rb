@@ -23,6 +23,7 @@ module BushSlicer
 
     attr_reader :os_domain, :os_tenant_id, :os_tenant_name, :os_service_catalog
     attr_reader :os_user, :os_passwd, :os_url, :opts
+    attr_reader :os_resource_limits, :os_tenant_usage
     attr_accessor :os_token, :os_image, :os_flavor
 
     def initialize(**options)
@@ -73,6 +74,7 @@ module BushSlicer
       raise if opts[:image].nil? || opts[:image].empty?
       opts[:flavor] = ENV.fetch('OPENSTACK_FLAVOR_NAME') { opts[:flavor] }
       opts[:key] = ENV.fetch('OPENSTACK_KEY_NAME') { opts[:key] }
+
 
       self.get_token()
     end
@@ -938,10 +940,68 @@ module BushSlicer
       get_networks.find { |n| n["id"] == id }
     end
 
-    def get_routers
-      res = self.rest_run(self.os_network_url + "/v2.0/routers", "GET", {}, self.os_token)
+    # generic method to get the openstack resource based on the general format
+    # self.rest_run(API_URL, "GET", {}, API_TOKEN)
+    def get_resource(name: nil, url: nil, extra_params: {})
+      res = self.rest_run(url, "GET", extra_params, self.os_token)
       raise res[:response] unless res[:success]
-      return res[:parsed]["routers"]
+      res[:parsed].dig(name)
+    end
+
+    def get_tenant_usage
+      resource_name = 'tenant_usage'
+      resource_url = self.os_compute_url + "/os-simple-tenant-usage/#{self.opts[:tenant_id_v4]}"
+      @os_tenant_usage ||= get_resource(name: resource_name, url: resource_url).dig('server_usages')
+    end
+
+    # @return Array of volume objects
+    def get_volumes
+      resource_name = "volumes"
+      resource_url = self.os_volumes_url + "/#{resource_name}"
+      get_resource(name: resource_name, url: resource_url)
+    end
+
+    def get_volume_usage
+      [get_volumes.count]
+    end
+
+    # @return Integer the number of vcpus currently in use
+    def get_vcpus_usage
+      res = get_tenant_usage
+      [res.map {|r| r['vcpus']}.sum, ]
+    end
+
+    def get_ram_usage
+      res = get_tenant_usage
+      ram_usage_in_mb = res.map {|r| r["memory_mb"]}.sum
+      [(ram_usage_in_mb / 1000000.0).round(2), 'TB']
+    end
+
+    def get_volume_storage_usage
+      res = get_tenant_usage
+      vsu = res.map {|r| r['local_gb']}.sum
+      [(vsu / 1000.0).round(2), "TB"]
+    end
+
+    def get_volume_snapshots
+      resource_name = "snapshots"
+      resource_url = self.os_volumes_url + "/#{resource_name}"
+      res = get_resource(name: resource_name, url: resource_url)
+    end
+
+    def get_volume_snapshots_usage
+      [get_volume_snapshots.count]
+    end
+
+    def get_instances_usage
+      res = get_tenant_usage
+      [res.count]
+    end
+
+    def get_routers
+      resource_name = "routers"
+      resource_url = self.os_network_url + "/v2.0/#{resource_name}"
+      [get_resource(name: resource_name, url: resource_url)]
     end
 
     def get_instances
@@ -1002,7 +1062,7 @@ module BushSlicer
       raise res[:response] unless res[:success]
       begin
         network = res[:parsed]['network_ip_availability']
-        return network['total_ips'].to_i - network['used_ips'].to_i 
+        return network['total_ips'].to_i - network['used_ips'].to_i
       rescue => e
         raise "Issue occurred during getting network free capacity: #{e}"
       end

@@ -20,8 +20,6 @@ require 'google/apis/compute_v1'
 require 'googleauth'
 require 'launchers/openstack'
 
-# require 'pry-byebug'
-
 # user libs
 require 'resource_monitor'
 
@@ -54,6 +52,17 @@ module BushSlicer
         c.description = 'display resource summary for AWS'
         c.action do |args, options|
           ps = AwsResources.new
+          options.config = conf
+          say 'Getting summary...'
+          ps.summarize_resources
+        end
+      end
+
+      command :openstack do |c|
+        c.syntax = "#{File.basename __FILE__}"
+        c.description = 'display resource summary for Openstack'
+        c.action do |args, options|
+          ps = OpenstackResources.new
           options.config = conf
           say 'Getting summary...'
           ps.summarize_resources

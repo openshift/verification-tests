@@ -35,12 +35,18 @@ module BushSlicer
       end
     end
 
+    def notify_limits(limits_msgs)
 
+      limits_msgs.each do |msg|
+        print(msg)
+        send_to_slack(summary_text: msg)
+      end
+    end
     # call Slack webhook to send text to a particular channel.
     # slack channel URL is defined in private/config/config.yaml
     ## TODO: research doing it via ruby-slack-client instead
     def send_to_slack(summary_text: text, options: nil)
-      @slack ||= BushSlicer::CoreosSlack.new(channel: '#team-qe')
+      @slack ||= BushSlicer::CoreosSlack.new(channel: '#ocpqe_cloud_usage')
       @slack.post_msg(msg: summary_text, as_blocks: true)
     end
   end
@@ -62,14 +68,6 @@ module BushSlicer
         table.rows << data
       end
       puts table
-    end
-
-    def notify_limits(limits_msgs)
-
-      limits_msgs.each do |msg|
-        print(msg)
-        send_to_slack(summary_text: msg)
-      end
     end
 
     def get_vpcs(global_region: :"AWS-CLOUD-USAGE")
@@ -188,14 +186,55 @@ module BushSlicer
 
 
   class OpenstackResources < ResourceMonitor
-    attr_accessor :os
+    attr_accessor :os, :tenant_usage
 
     def initialize()
       @os = OpenStack.new
+      ### these are limits for the resources in our Openstack.
+      @resource_limits = {
+        :instances => 800,
+        :rams => 4.4,  # unit is TB
+        :volumes => 1000,
+        :vcpus => 2400,
+        :volume_snapshots => 200,
+        :volume_storage => 14.6,
+        :security_group_rules => 3000
+      }
     end
 
-    def summarize_resources()
-      return summary
+    def summarize_resources(resources: [])
+      @tenant_usage = self.os.get_tenant_usage
+      usage = {}
+      ## compute resources
+      usage[:instances] = self.os.get_instances_usage
+      usage[:vcpus] = self.os.get_vcpus_usage
+      usage[:rams] = self.os.get_ram_usage
+      ## volume resources
+      usage[:volumes] = self.os.get_volume_usage
+      usage[:volume_snapshots] = self.os.get_volume_snapshots_usage
+      usage[:volume_storage] = self.os.get_volume_storage_usage
+      ## Network only Security Group Rules has a limit.
+      print("#" * 70 + "\n")
+      msg_header = "# Openstack usage summary\n"
+      print("#{msg_header}")
+      print("#" * 70 + "\n")
+      limits_msgs = []
+      usage.each do |k, v|
+        if v.size == 1
+          unit = ""
+        else
+          unit = v[1]
+        end
+        limits_msg = over_limit?(resource_type: "#{k}",
+                                 resource_value: v[0],
+                                 resource_limit: @resource_limits[k],
+                                 percentage: 95)
+        limits_msgs << limits_msg unless limits_msg.nil?
+        print("#{k}: #{v[0]}#{unit}/#{@resource_limits[k]}#{unit}\n")
+      end
+      # add the header so the limit message has more context
+      limits_msgs.unshift(msg_header) if limits_msgs.count > 0
+      notify_limits(limits_msgs)
     end
 
   end
