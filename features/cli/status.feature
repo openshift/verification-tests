@@ -10,6 +10,7 @@ Feature: Check status via oc status, wait etc
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
+  @workloads
   Scenario: OCP-11147:Workloads Show RC info and indicate bad secrets reference in 'oc status'
     Given I have a project
 

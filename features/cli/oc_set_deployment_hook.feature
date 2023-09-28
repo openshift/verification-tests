@@ -13,6 +13,7 @@ Feature: set deployment-hook/build-hook with CLI
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-11805:Workloads Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :create_deploymentconfig client command with:
