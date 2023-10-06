@@ -143,3 +143,16 @@ Given /^I checked #{QUOTED} csi driver is running$/ do |driver|
   step %Q/the step should succeed/
   step %Q/the "#{dynamic_pvc_name}" PVC becomes :bound within 120 seconds/
 end
+
+Given /^I check the env has clustercsidrivers$/ do
+  ensure_admin_tagged
+  
+  @result = admin.cli_exec(:get, resource: "clustercsidrivers")
+  if @result[:success]
+    clustercsidriverscheck = @result[:stderr]
+    if clustercsidriverscheck.include?("No resources found")
+      logger.warn "We will skip this scenario as no clustercsidrivers installed"
+      skip_this_scenario
+    end
+  end
+end
