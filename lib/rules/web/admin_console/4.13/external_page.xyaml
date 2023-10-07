@@ -3,7 +3,7 @@ login_if_need:
   action:
     if_element:
       selector:
-        xpath: //h1[contains(text(), 'Log in with')]
+        xpath: //h1[contains(text(), 'Log in')]
       timeout: 15
     ref: login_sequence
 browse_to_copy_login_command:
