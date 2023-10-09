@@ -580,6 +580,7 @@ Feature: Machine features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   Scenario: OCP-47989:ClusterInfrastructure Baremetal clusteroperator should be enabled in vsphere and osp
+    Given I check the cluster platform is not None	    
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="False"
 
