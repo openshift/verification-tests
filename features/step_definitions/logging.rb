@@ -81,7 +81,7 @@ Given /^logging operators are installed successfully$/ do
         raise "Error creating subscription for elasticsearch" unless @result[:success]
       else
         # create subscription in "openshift-operators-redhat" namespace:
-        sub_elasticsearch_yaml ||= "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/4.2/eo-sub-template.yaml"
+        sub_elasticsearch_yaml ||= "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/04_eo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
           | f | #{sub_elasticsearch_yaml} |
           | p | SOURCE=#{cb.eo_catsrc}    |
@@ -111,18 +111,25 @@ Given /^logging operators are installed successfully$/ do
 
   step %Q/I use the "openshift-logging" project/
   unless deployment('cluster-logging-operator').exists?
+    step %Q/I use the "openshift-marketplace" project/
+    # first check packagemanifest exists for cluster-logging
+    raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
+    step %Q/cluster-logging catalog source name is stored in the :clo_catsrc clipboard/
+    step %Q/cluster-logging channel name is stored in the :clo_channel clipboard/
+
+    step %Q/I use the "openshift-logging" project/
     unless operator_group('openshift-logging').exists?
-      clo_operator_group_yaml ||= "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/02_clo_og.yaml"
+      # start from logging 5.8, deploy CLO to watch all namespaces
+      if cb.clo_channel == "stable" || ((cb.clo_channel.include? "-") && (cb.clo_channel.split('-')[1].split('.')[0].to_i >= 5) && (cb.clo_channel.split('-')[1].split('.')[1].to_i >=8))
+        clo_operator_group_yaml = "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/02_clo_og_all_namespaces.yaml"
+      else
+        clo_operator_group_yaml = "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/02_clo_og.yaml"
+      end
       @result = admin.cli_exec(:create, f: clo_operator_group_yaml)
       raise "Error creating operatorgroup" unless @result[:success]
     end
 
     unless subscription('cluster-logging').exists?
-      step %Q/I use the "openshift-marketplace" project/
-      # first check packagemanifest exists for cluster-logging
-      raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
-      step %Q/cluster-logging catalog source name is stored in the :clo_catsrc clipboard/
-      step %Q/cluster-logging channel name is stored in the :clo_channel clipboard/
       step %Q/I use the "openshift-logging" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for cluster-logging-operator
@@ -134,7 +141,7 @@ Given /^logging operators are installed successfully$/ do
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       else
         # create subscription in `openshift-logging` namespace:
-        sub_logging_yaml ||= "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
+        sub_logging_yaml ||= "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/03_clo_sub.yaml"
         step %Q/I process and create:/, table(%{
           | f | #{sub_logging_yaml}       |
           | p | SOURCE=#{cb.clo_catsrc}   |
@@ -404,8 +411,10 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
   if (logging_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
-    when '4.14'
+    when '4.15'
       cb[cb_name] = "stable"
+    when '4.14'
+      cb[cb_name] = "stable-5.8"
     when '4.13'
       cb[cb_name] = "stable-5.7"
     when '4.12'
