@@ -89,7 +89,7 @@ Feature: networking isolation related scenarios
   @admin
   @network-multitenant
   @s390x @ppc64le
-  @4.15 @4.13 @4.14
+  @4.15 @4.14 @4.13
   Scenario: Only the pods nested in a same namespace can communicate with each other
     Given the env is using multitenant network
     Given I have a project
