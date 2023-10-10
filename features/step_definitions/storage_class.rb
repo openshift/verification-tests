@@ -248,7 +248,7 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
   when 'openstack'
     provisioner = 'cinder'
   else
-    logger.error "Unsupported platform `#{platform}`"
+    logger.warn "Unsupported platform `#{platform}`"
     skip_this_scenario
   end
 
