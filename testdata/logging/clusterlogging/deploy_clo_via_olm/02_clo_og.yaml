@@ -3,8 +3,6 @@ kind: OperatorGroup
 metadata:
   namespace: openshift-logging
   name: openshift-logging
-  labels:
-    og_label: openshift-logging
 spec:
   targetNamespaces:
   - openshift-logging
