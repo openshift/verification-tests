@@ -160,8 +160,8 @@ Feature: oc_set_probe.feature
   Scenario: OCP-31241:Workloads Set a probe to open a TCP socket test
     Given I have a project
     When I run the :create_deployment client command with:
-      | name          | mysql                                 |
-      | image         | quay.io/openshifttest/mysql:1.2.0 |
+      | name          | mysql                                                                                               |
+      | image         | quay.io/openshifttest/mysql@sha256:0c76fd1a2eb31b0a196c7c557e4e56a11a6a8b26d745289e75fc983602035ba5 |
     Then the step should succeed
     When I run the :set_env client command with:
       | resource | deploy/mysql               |
@@ -228,8 +228,8 @@ Feature: oc_set_probe.feature
   Scenario: OCP-31245:Workloads Set a probe over HTTPS/HTTP test
     Given I have a project
     When I run the :create_deployment client command with:
-      | name          | mysql                                 |
-      | image         | quay.io/openshifttest/mysql:1.2.0 |
+      | name          | mysql                                                                                               |
+      | image         | quay.io/openshifttest/mysql@sha256:0c76fd1a2eb31b0a196c7c557e4e56a11a6a8b26d745289e75fc983602035ba5 |
     Then the step should succeed
     When I run the :set_env client command with:
       | resource | deploy/mysql               |
