@@ -125,3 +125,82 @@ Feature: Testing CLI Scenarios
     And the output should contain:
       | http://myproxy:8888 |
 
+
+  Scenario: test times step change
+    Given I have a project
+    When I run the :new_build client command with:
+      | code         | https://github.com/openshift/ruby-hello-world |
+      | image_stream | openshift/ruby                                |
+    Then the step should succeed
+    And evaluation of `3` is stored in the :times clipboard
+    Given I run the steps 3 times:
+    """
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
+    Then the step should succeed
+    """
+    Given the "ruby-hello-world-1" build becomes :running
+    And I get project builds
+    Then the output should contain 1 times:
+      | Running |
+    And the output should contain <%= cb.times %> times:
+      | New     |
+    When I run the :patch client command with:
+      | resource      | buildconfig                                  |
+      | resource_name | ruby-hello-world                             |
+      | p             | {"spec": {"runPolicy" : "SerialLatestOnly"}} |
+    Then the step should succeed
+    Given I run the steps 2 times:
+    """
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
+    Then the step should succeed
+    """
+    Given the "ruby-hello-world-1" build completes
+    And the "ruby-hello-world-6" build becomes :running
+    And I get project builds
+    Then the output should contain 1 times:
+      | Complete  |
+    And the output should contain 1 times:
+      | Running   |
+    And evaluation of `4` is stored in the :times clipboard
+    And the output should match <%= cb.times %> times:
+      | Git.*Cancelled |
+    Given I run the steps 2 times:
+    """
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
+    Then the step should succeed
+    """
+    And the "ruby-hello-world-7" build becomes :cancelled
+    Given I get project builds
+    Then the output should contain 1 times:
+      | Complete  |
+    And the output should contain 1 times:
+      | Running   |
+    And evaluation of `5` is stored in the :times clipboard
+    And the output should match <%= cb.times %> times:
+      | Git.*Cancelled |
+    And the output should contain 1 times:
+      | New       |
+    When I run the :patch client command with:
+      | resource      | buildconfig                        |
+      | resource_name | ruby-hello-world                   |
+      | p             | {"spec": {"runPolicy" : "Serial"}} |
+    Then the step should succeed
+    Given I run the steps 2 times:
+    """
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
+    Then the step should succeed
+    """
+    Given I get project builds
+    Then the output should contain 1 times:
+      | Complete  |
+    And the output should contain 1 times:
+      | Running   |
+    And the output should match <%= cb.times %> times:
+      | Git.*Cancelled |
+    And the output should contain 3 times:
+      | New       |
+
