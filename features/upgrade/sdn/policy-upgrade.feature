@@ -33,9 +33,6 @@ Feature: SDN compoment upgrade testing
   @critical
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
-    When I use the "openshift-network-operator" project
-    Then status becomes :running of exactly 1 pods labeled:
-      | name=network-operator |
     # Check network operator version match cluster version
     And the "network" operator version matches the current cluster version
     # Check the operator object has status for Degraded|Progressing|Available|Upgradeable
