@@ -209,6 +209,16 @@ Feature: Routing and DNS related scenarios
     And a pod becomes ready with labels:
       | ingresscontroller.operator.openshift.io/deployment-ingresscontroller=shards |
 
+    # Ensure the external ip of the loadbalancer service is provisioned
+    And I wait up to 120 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+      | resource      | svc                                        |
+      | resource_name | router-shards                              |
+      | template      | {{(index .status.loadBalancer.ingress 0)}} |
+    Then the step should succeed
+    """
+
     # ensure the route in the matched namespace is loaded
     Given I wait up to 30 seconds for the steps to pass:
     """
