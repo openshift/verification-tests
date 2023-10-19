@@ -12,7 +12,7 @@ RUN set -x && \
     dnf config-manager --enable $NEW_REPOS && \
     dnf config-manager --save --setopt=\*.skip_if_unavailable=1 $NEW_REPOS && \
     yum repolist enabled && \
-    yum -y update && \
+    yum -y update --exclude java-1.8.0-openjdk-headless && \
     INSTALL_PKGS="bsdtar mesa-libgbm" && \
     dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
     dnf -y install https://rpm.nodesource.com/pub_18.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm && \
