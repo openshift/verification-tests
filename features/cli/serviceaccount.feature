@@ -54,7 +54,7 @@ Feature: ServiceAccount and Policy Managerment
   @critical
   Scenario: OCP-11494:Authentication Could grant admin permission for the service account group to access to its own project
     Given I have a project
-    When I run the :new_app client command with importmode if supported with:
+    When I run the :new_app client command with:
       | app_repo | quay.io/openshifttest/hello-openshift:1.2.0 |
     Then the step should succeed
     When I run the :policy_add_role_to_group client command with:
@@ -68,7 +68,7 @@ Feature: ServiceAccount and Policy Managerment
     Then the output should contain:
       | hello-openshift |
     # Verify the permission of various operations
-    When I run the :new_app client command with importmode if supported with:
+    When I run the :new_app client command with:
       | app_repo | quay.io/openshifttest/hello-openshift:1.2.0 |
       | name     | app2                                            |
     Then the step should succeed

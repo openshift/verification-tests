@@ -24,7 +24,7 @@ Feature: oc_volume.feature
       | secret_name | test-secret |
       | sa_name     | default     |
     Then the step should succeed
-    When I run the :new_app_as_dc client command with importmode if supported with:
+    When I run the :new_app_as_dc client command with:
       | docker_image | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | name         | mydc                                                                                                  |
     Then the step should succeed
@@ -66,7 +66,7 @@ Feature: oc_volume.feature
   @critical
   Scenario: OCP-11906:Storage Add secret volume to dc and rc
     Given I have a project
-    When I run the :new_app_as_dc client command with importmode if supported with:
+    When I run the :new_app_as_dc client command with:
       | docker_image | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | name         | mydc                                                                                                  |
     Then the step should succeed
