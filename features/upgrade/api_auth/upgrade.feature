@@ -270,9 +270,9 @@ Feature: apiserver and auth related upgrade check
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @hypershift-hosted
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-41198:Authentication Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -290,7 +290,7 @@ Feature: apiserver and auth related upgrade check
     Then the step should succeed
     And the output should contain "tls.crt"
 
-    When I store the ready and schedulable masters in the clipboard
+    When I store the ready and schedulable workers in the clipboard
     And I use the "<%= cb.nodes[0].name %>" node
     And I run commands on the host:
       | openssl x509 -noout -text -in <(echo '<%= File.read("tls.crt") %>') |
@@ -322,7 +322,7 @@ Feature: apiserver and auth related upgrade check
     Then the step should succeed
     And the output should contain "tls.crt"
 
-    When I store the ready and schedulable masters in the clipboard
+    When I store the ready and schedulable workers in the clipboard
     And I use the "<%= cb.nodes[0].name %>" node
     And I run commands on the host:
       | openssl x509 -noout -text -in <(echo '<%= File.read("tls.crt") %>') |
