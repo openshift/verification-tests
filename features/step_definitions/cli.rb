@@ -11,23 +11,23 @@ Given /^oc major.minor version is stored in the#{OPT_SYM} clipboard$/ do |cb_nam
 end
 
 When /^I run the :([a-z_]*?)( background)? client command with:$/ do |yaml_key, background, table|
+  opts_array = table.raw
+  if env.version_ge("4.14", user: user) && (yaml_key == 'new_app' || yaml_key == 'new_app_as_dc')
+    opts_array = table.raw << [ "import_mode" , "PreserveOriginal" ]
+  end
+
   if background
     @result = user.cli_exec(
       yaml_key.to_sym,
-      opts_array_process(table.raw) << [ :_background, true ]
+      opts_array_process(opts_array) << [ :_background, true ]
     )
     @bg_rulesresults << @result
     @bg_processes << @result[:process_object]
   else
-    @result = user.cli_exec(yaml_key.to_sym, opts_array_process(table.raw))
+    @result = user.cli_exec(yaml_key.to_sym, opts_array_process(opts_array))
   end
 end
 
-When /^I run the :([a-z_]*?)( background)? client command with importmode if supported with:$/ do |yaml_key, background, table|
-  opts_array = env.version_ge("4.14", user: user) ? table.raw << [ "import_mode" , "PreserveOriginal" ] : table.raw
-  step "I run the :#{yaml_key}#{background} client command with:",
-    table(opts_array)
-end
 
 When /^I run the :([a-z_]*?)( background)? admin command$/ do |yaml_key, background|
   step "I run the :#{yaml_key}#{background} admin command with:",
