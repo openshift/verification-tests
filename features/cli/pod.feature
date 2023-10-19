@@ -243,7 +243,7 @@ Feature: pods related scenarios
   @critical
   Scenario: OCP-22283:Authentication 4.0 Oauth provider info should be consumed in a pod
     Given I have a project
-    When I create a new application with:
+    When I create a new application with importmode if supported with:
       | image	       | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
       | labels       | name=ruby-ex                                                                                                  |
     Then the step should succeed
