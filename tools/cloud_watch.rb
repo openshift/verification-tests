@@ -22,7 +22,7 @@ require 'launchers/openstack'
 
 # user libs
 require 'resource_monitor'
-
+require 'instance_auditor'
 
 
 module BushSlicer
@@ -45,6 +45,9 @@ module BushSlicer
       global_option('--no_slack') do |_f|
         no_slack = true
       end
+      global_option('--skip_save') do |_f|
+        skip_save = true
+      end
       default_command :help
 
       command :aws do |c|
@@ -58,6 +61,27 @@ module BushSlicer
         end
       end
 
+      command :aws_audit do |c|
+        c.syntax = "#{File.basename __FILE__} -r <aws_region_name> [--all]"
+        c.description = 'display instance summary for AWS at realtime'
+        c.option("-r", "--region region_name", "report on this region only")
+        c.option('--skip-save', "Skip saving data to DB when specified.")
+        c.action do |args, options|
+          ps = AwsAuditor.new(svc_name: :"AWS-CLOUD-USAGE")
+          options.config = conf
+          say 'Getting summary...'
+          ps.get_summary(target_region: options.region, options: options)
+          # China region use a separate cred, so need to call that specifically
+          global_region = :"AWS-CI-CHINA"
+          ps = AwsAuditor.new(svc_name: global_region)
+          options.config = conf
+          say 'Getting summary...'
+          ps.get_summary(target_region: options.region, options: options,
+            global_region: global_region
+            )
+
+        end
+      end
       command :openstack do |c|
         c.syntax = "#{File.basename __FILE__}"
         c.description = 'display resource summary for Openstack'

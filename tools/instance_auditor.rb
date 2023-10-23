@@ -1,6 +1,9 @@
 require 'text-table'
 require 'thread'
 require 'openshift_qe_slack'
+require 'pry-byebug'
+$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/db")
+require 'instance_model'
 
 module BushSlicer
 
@@ -8,28 +11,41 @@ module BushSlicer
   # Currently display ['name', 'uptime', 'flexy_job_id', 'region'] in a
   # tabulized format
 
-  class InstanceSummary
-    attr_accessor :jenkins, :slack
+  class InstanceAuditor
+    attr_accessor :slack
 
-    def initialize(jenkins)
-      @jenkins = jenkins
+    def initialize(svc_name: nil)
+      @slack_client = nil #BushSlicer::CoreosSlack.new
+      @db = BushSlicer::ClusterInstance.new
     end
 
+    # @input Array of :key/:value tags
+    # the key we are interested in is "Name"
+    # @return String
+    def get_instance_name_from_tags(tags)
+      res = tags.select {|t| t[:key] == 'Name'}
+      if res.count == 0
+        print("No name found, returning nil...")
+        return nil
+      else
+        res.first[:value]
+      end
+    end
     ## print out summary in a text table format
     def print_summary(summary)
       table = Text::Table.new
       has_instance_type = summary.first.keys.include? :type
 
       if has_instance_type
-        table.head = ['name', 'uptime', 'flexy_job_id', 'type', 'cost ($)', 'region', 'inst_prefix']
+        table.head = ['name', 'uptime', 'type', 'cost ($)', 'region', 'owner']
       else
-        table.head = ['name', 'uptime', 'flexy_job_id', 'region', 'inst_prefix']
+        table.head = ['name', 'uptime', 'region', 'owner']
       end
       summary.each do | s |
         if has_instance_type
-          row = [s[:name], s[:uptime], s[:flexy_job_id], s[:type], s[:cost], s[:region], s[:inst_prefix]]
+          row = [s[:name], s[:uptime], s[:type], s[:cost], s[:region], s[:owned]]
         else
-          row = [s[:name], s[:uptime], s[:flexy_job_id], s[:region], s[:inst_prefix]]
+          row = [s[:name], s[:uptime], s[:region], s[:owned]]
         end
         table.rows << row
       end
@@ -98,60 +114,59 @@ module BushSlicer
     end
 
     def print_condensed_usage(usage: nil, options: nil)
-      user_map = @jenkins.build_user_map
       res_list = []
       users = []
       has_cost = false
       usage.each do | k, v |
         if v.has_key? :total_cost
-          user_info = user_map[v[:job_id]]
-          user_info = v[:user] if user_info.nil?
           # force it to k if user_info is nil
-          user_info ||= k
+          user_info ||= v[:user]
           users << user_info
-          res_list << [k, v[:job_id], v[:uptime].round(2), v[:total_cost], user_info]
+          res_list << [k, v[:uptime].round(2), v[:total_cost], user_info]
           has_cost = true
         else
-          res_list << [k, v[:job_id], v[:uptime].round(2), user_map[v[:job_id]]]
+          res_list << [k, v[:uptime].round(2), user_info]
         end
       end
       users.uniq!
       table = Text::Table.new
       if has_cost
-        table.head = ['name', 'job_id', 'uptime', 'total_cost ($)', 'user']
+        table.head = ['name', 'uptime', 'total_cost ($)', 'user']
       else
-        table.head = ['name', 'job_id', 'uptime', 'user']
+        table.head = ['name', 'uptime', 'user']
       end
       res_list.each do |r|
         if has_cost
-          table.rows << [r[0], r[1], r[2], r[3], r[4]]
-        else
           table.rows << [r[0], r[1], r[2], r[3]]
+        else
+          table.rows << [r[0], r[1], r[2]]
         end
       end
       if table.rows.count > 0
         msg = "\nThese '#{options.platform}' clusters have been alive longer than #{options.uptime} hrs.\n"
         print msg
         puts table
-        send_to_slack(summary_text: msg + table.to_s, options: options) unless options.no_slack
+        send_to_slack(summary_text: msg + table.to_s, options: options) unless options.no_slack unless options.no_slack
         # tag the users of the long-lived clusters
         # for Packet platform, we ignore host that ends with  'aux'
-        if self.class == BushSlicer::PacketSummary
+        if self.class == BushSlicer::PacketAuditor
           filtered_list = res_list.select {|r| r[4] unless r[0].end_with? '-aux'}
           users = filtered_list
         # Special case for vSphere where `Workload` user is not real, so just
         # ignore it
-        elsif self.class == BushSlicer::VSphereSummary
+        elsif self.class == BushSlicer::VSphereAuditor
           filtered_list = res_list.map {|r| r[4] if r[0] !='Workloads' }.compact
           users = filtered_list
         end
-        slack_client = BushSlicer::CoreosSlack.new
-        valid_users, unknown_users = translate_to_slack_users(users: users, slack_client: slack_client)
-        tag_users_msg =  valid_users + " please terminate your long-lived clusters if they are no longer in use\n"
-        tag_users_msg += "\nThese clusters have no owners association #{unknown_users}\n" if unknown_users.size > 0
-        #tag_users_msg = "<@UBET0LUR3> please terminate your long-lived clusters if they are no longer in use"
-        options.slack_no_block_format = true
-        send_to_slack(summary_text: tag_users_msg, options: options) unless options.no_slack
+        unless options.no_slack
+          slack_client = BushSlicer::CoreosSlack.new
+          valid_users, unknown_users = translate_to_slack_users(users: users, slack_client: slack_client)
+          tag_users_msg =  valid_users + " please terminate your long-lived clusters if they are no longer in use\n"
+          tag_users_msg += "\nThese clusters have no owners association #{unknown_users}\n" if unknown_users.size > 0
+          #tag_users_msg = "<@UBET0LUR3> please terminate your long-lived clusters if they are no longer in use"
+          options.slack_no_block_format = true
+          send_to_slack(summary_text: tag_users_msg, options: options) unless options.no_slack
+        end
       end
     end
 
@@ -259,7 +274,7 @@ module BushSlicer
           unless sample[:owned].nil?
             sample[:owned] =  sample[:owned].split('@redhat.com').first
           end
-          c_hash[owner] = {'job_id': job_id, 'uptime': sample[:uptime], 'total_cost': cluster_total_cost.round(2), 'user': sample[:owned] }
+          c_hash[owner] = {'uptime': sample[:uptime], 'total_cost': cluster_total_cost.round(2), 'user': sample[:owned] }
         end
       end
       return c_hash
@@ -284,8 +299,6 @@ module BushSlicer
       end
     end
 
-
-
     # call Slack webhook to send text to a particular channel.
     # slack channel URL is defined in private/config/config.yaml
     ## TODO: research doing it via ruby-slack-client instead
@@ -295,11 +308,10 @@ module BushSlicer
     end
   end
 
-  class AwsSummary < InstanceSummary
+  class AwsAuditor < InstanceAuditor
     attr_accessor :amz, :amz_prices
-    def initialize(svc_name: :AWS, jenkins: nil)
+    def initialize(svc_name: :AWS)
       @amz = Amz_EC2.new(service_name: svc_name)
-      @jenkins = jenkins
       @table = Text::Table.new
       # hard-coded pricing lookup table name: => price/hr
       @amz_prices = {
@@ -309,7 +321,7 @@ module BushSlicer
         "m5.4xlarge" => 0.768,
         "m5.8xlarge" => 1.536,
         "m5.large" => 0.096,
-        "m5a.xlarge"	 =>0.172,
+        "m5a.xlarge"   =>0.172,
         "m5a.2xlarge" => 0.344,
         "m5a.4xlarge" => 0.688,
         "m5a.8xlarge" => 1.376,
@@ -320,7 +332,6 @@ module BushSlicer
         "t2.medium" => 0.0464,
         "t2.micro" => 0.0116,
         "t3a.micro" => 0.0094,
-        "t3.medium" => 0.0418,
         "c4.4xlarge" => 0.796,
         "c4.2xlarge" => 0.398,
         "c4.xlarge" => 0.199,
@@ -328,12 +339,14 @@ module BushSlicer
         "c5.2xlarge" => 0.34,
         "c5.4xlarge" => 0.68,
         "c5.9xlarge" => 1.53,
+        "c5n.metal" => 3.888,
         "r4.large" => 0.133,
         "r4.xlarge" => 0.266,
         "r4.2xlarge" => 0.532,
         "r5a.xlarge" => 0.226,
         "t3a.xlarge" => 0.1504,
         "m6i.xlarge" => 0.192,
+        "m6a.xlarge" => 0.1728,
         "m6i.large" => 0.096,
         "c5a.large" => 0.077,
         "m5.12xlarge" => 2.304,
@@ -341,19 +354,16 @@ module BushSlicer
         "m6g.large" => 0.077,
         "m5a.large" => 0.086,
         "m6i.2xlarge" => 0.384,
+        "m6g.4xlarge" => 0.6160,
       }
+      super
     end
 
-    # @return <Hashed Array of Instances> with each hash key being keyed on the `owned` tag.
+    # @return <Hashed Array of Instances> with each hash key being keyed on the `owner` tag.
     def regroup_instances(instances)
       cluster_map = {}
       instances.each do |r|
-        owned =   r.tags.select {|t| t['value'] == "owned" }
-        if owned.count > 0
-          rindex = owned.first['key'].split('kubernetes.io/cluster/')[-1]
-        else
-          rindex = "no_owner"
-        end
+        rindex = r[:owner]
         if cluster_map[rindex]
           cluster_map[rindex] << r
         else
@@ -367,31 +377,25 @@ module BushSlicer
     def summarize_instances(region, instances)
       summary = []
       amz = @amz
-      jenkins = @jenkins
       cm = regroup_instances(instances)
       cm.each do | owned, inst_list |
         inst_list.each do | inst |
           inst_summary = {}
           # inst_summary[:inst_obj] = inst
           inst_summary[:region] = region
-          inst_summary[:name]= amz.instance_name inst
-          inst_summary[:type] = inst.data['instance_type']
-          inst_summary[:uptime]= amz.instance_uptime inst
+          inst_summary[:name]= get_instance_name_from_tags(inst[:tags])
+          inst_summary[:type] = inst[:instance_type]
+          inst_summary[:uptime]= inst[:uptime]
           inst_hourly_price = @amz_prices[inst_summary[:type]]
           cost = 0.0
           if inst_hourly_price.nil?
             inst_hourly_price = 0.0
             puts "##### WARNING, setting hourly price for '#{inst_summary[:type]}' to 0.0 because it's not known"
           end
-
           cost = inst_summary[:uptime] * inst_hourly_price
           inst_summary[:cost] = cost.round(2)
-          inst_summary[:owned] = amz.instance_owned inst
-          if inst_summary[:owned]
-            inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = jenkins.get_jenkins_flexy_job_id(inst_summary[:owned])
-          else
-            inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = nil, nil
-          end
+          inst_summary[:owned] =inst[:owner]
+          ### XXX: why some instances don't have owned properties?  Skipp recording those?
           summary << inst_summary
         end
       end
@@ -403,13 +407,12 @@ module BushSlicer
       region_names =  regions.map {|r| r.region_name }
       aws_instances = {}
       threads = []
+
       regions.each do | region |
         if target_region
           # first check name is valid
-          if global_region != :"AWS-CI-CHINA"
-            raise "Unsupported region '#{target_region}'" unless region_names.include? target_region
-            region.region_name = target_region
-          end
+          raise "Unsupported region '#{target_region}'" unless region_names.include? target_region
+          region.region_name = target_region
         end
         aws = Amz_EC2.new(service_name: global_region, region: region.region_name)
         instances = aws.get_instances_by_status('running')
@@ -423,11 +426,41 @@ module BushSlicer
         # quick exit loop to save some un-nessary queries if a target region is specified
         break if target_region
       end
+      # batch save all the data at once
+      save_time = Time.now()
+      parsed_insts = {}
+      aws_instances.each do |region, instances |
+        # transform instance object to Hash and add 'region' and 'save_time'
+        new_data = []
+        instances.each do |inst|
+          res = inst.data.to_h
+          data = {}
+          data[:instance_id] = res[:instance_id]
+          data[:instance_type] = res[:instance_type]
+          data[:launch_time] = res[:launch_time]
+          data[:vpc_id] = res[:vpc_id]
+          data[:tags] = res[:tags]
+          data[:owner] = @amz.instance_owned(inst)
+          data[:region] = region
+          data[:save_time] = save_time
+          # 1 means it's a spot instance, 0 mean not
+          data[:is_spot] = res.dig('instance_lifecycle') ? 1 : 0
+          data[:uptime] = @amz.instance_uptime(inst)
+          new_data.append(data)
+        end
+        parsed_insts[region] = new_data
+        if options.skip_save
+          puts("Skipping steps to cache instance data\n")
+        else
+          Instance.create(new_data)
+        end
+      end
       ##  XXX commnet out thread implmentation for now as it's flaky when when in jenkins
       #threads.each(&:join)
       grand_summary = []
       # total_cost = 0.0
-      aws_instances.each do |region, inst_list|
+      parsed_insts.each do |region, inst_list|
+      #aws_instances.each do |region, inst_list|
         total_cost = 0.0
         summary = summarize_instances(region, inst_list)
         print_summary(summary) if inst_list.count > 0
@@ -437,17 +470,16 @@ module BushSlicer
         # print "REGION: #{region} TOTAL: #{total_cost}\n"
         grand_summary << {platform: 'aws', region: region, inst_count: inst_list.count, total_cost: total_cost}
       end
-      print_grand_summary(grand_summary)
+      #print_grand_summary(grand_summary)
     end
 
   end
 
-  class GceSummary < InstanceSummary
+  class GceAuditor < InstanceAuditor
     attr_accessor :gce, :gce_prices
 
     def initialize(jenkins: nil)
       @gce = GCE.new
-      @jenkins = jenkins
       @gce_prices = {
         # standard machine types
         "n1-standard-1" => 0.07,
@@ -456,7 +488,7 @@ module BushSlicer
         "n1-standard-8" => 0.56,
         "n1-standard-16" => 1.12,
         # shared-core machine types
-        "f1-micro	" => 0.013,
+        "f1-micro " => 0.013,
         "g1-small" => 0.035,
         # High memory machine types
         "n1-highmem-2" => 0.164,
@@ -492,7 +524,6 @@ module BushSlicer
       summary = []
       gce = @gce
       project = gce.config[:project]
-      jenkins = @jenkins
       cm = regroup_instances(instance_list)
       cm.each do | network, inst_list |
         inst_list.each do | inst |
@@ -568,12 +599,11 @@ module BushSlicer
     end
   end
 
-  class AzureSummary < InstanceSummary
+  class AzureAuditor < InstanceAuditor
     attr_accessor :azure, :azure_prices
 
     def initialize(jenkins: nil)
       @azure = Azure.new
-      @jenkins = jenkins
       @azure_prices = {
         "Standard_DS1_v2" => 0.07,
         "Standard_D2s_v3" => 0.117,
@@ -629,12 +659,11 @@ module BushSlicer
   end
 
 
-  class OpenstackSummary < InstanceSummary
+  class OpenstackAuditor < InstanceAuditor
     attr_accessor :os
 
     def initialize(jenkins: nil)
       @os = OpenStack.new
-      @jenkins = jenkins
     end
 
     # instances is <Array> of server objects
@@ -647,7 +676,7 @@ module BushSlicer
         inst_summary[:name]= name
         inst_summary[:uptime]= os.instance_uptime inst["created"]
         inst_summary[:owned] =  name
-        inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = jenkins.get_jenkins_flexy_job_id(name)
+        inst_summary[:inst_prefix] = name
         summary << inst_summary
       end
       return summary
@@ -667,12 +696,11 @@ module BushSlicer
     end
   end
 
-  class PacketSummary < InstanceSummary
+  class PacketAuditor < InstanceAuditor
     attr_accessor :packet, :packet_prices
 
     def initialize(jenkins: nil)
       @packet = Packet.new
-      @jenkins = jenkins
       # https://metal.equinix.com/product/servers/ for pricing
       @packet_prices = {
         "t1.small.x86" => 0.07,
@@ -730,12 +758,11 @@ module BushSlicer
   end
 
 
-  class VSphereSummary < InstanceSummary
+  class VSphereAuditor < InstanceAuditor
     attr_accessor :vms
 
     def initialize(profile_name="vsphere_vmc7-qe", jenkins: nil)
       @vms = BushSlicer::VSphere.new(service_name: profile_name)
-      @jenkins = jenkins
     end
 
     # instances is <Array> of server objects
@@ -769,11 +796,10 @@ module BushSlicer
     end
   end
 
-  class AliCloudSummary < InstanceSummary
+  class AliCloudAuditor < InstanceAuditor
     attr_accessor :ali, :ali_prices
     def initialize(svc_name: :alicloud-v4, jenkins: nil)
       @ali = Alicloud.new(service_name: svc_name, region: 'us-east-1')
-      @jenkins = jenkins
       @table = Text::Table.new
       # hard-coded pricing lookup table name: => price/hr
       @ali_prices = {
@@ -811,7 +837,6 @@ module BushSlicer
     def summarize_instances(region, instances)
       summary = []
       ali = @ali
-      jenkins = @jenkins
       cm = regroup_instances(instances)
       cm.each do | owned, inst_list |
         inst_list.each do | inst |
