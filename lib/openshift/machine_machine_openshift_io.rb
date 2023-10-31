@@ -143,6 +143,11 @@ module BushSlicer
          dig('spec', 'providerSpec', 'value', 'template')
     end
 
+    def vsphere_networkName(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached ,quiet: quiet).
+        dig('spec', 'providerSpec', 'value', 'network', 'devices', 0, 'networkName')
+    end
+
     def deleting?(user: nil, cached: true, quiet: false)
       ! raw_resource(user: user, cached: cached, quiet: quiet).
           dig('metadata', 'deletionTimestamp').nil?
