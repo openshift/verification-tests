@@ -513,24 +513,26 @@ Feature: Machine features testing
     And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_diskGiB` is stored in the :diskGiB clipboard
     And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_memoryMiB` is stored in the :memoryMiB clipboard
     And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_template` is stored in the :template clipboard
+    And evaluation of `machine_machine_openshift_io(cb.machine).vsphere_networkName` is stored in the :networkName clipboard
     Then admin ensures "<name>" machine_set_machine_openshift_io is deleted after scenario
 
     Given I obtain test data file "cloud/ms-vsphere/ms_default_values.yaml"
     When I run oc create over "ms_default_values.yaml" replacing paths:
-      | n                                                                                         | openshift-machine-api                       |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["datacenter"]          | <%= cb.datacenter %>                        |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["datastore"]           | <%= cb.datastore %>                         |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["folder"]              | <%= cb.folder %>                            |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["resourcePool"]        | <%= cb.resourcePool %>                      |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["server"]              | <%= cb.server %>                            |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["diskGiB"]                          | <diskGiB>                                   |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["memoryMiB"]                        | <%= cb.memoryMiB %>                         |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["template"]                         | <template>                                  |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
-      | ["metadata"]["name"]                                                                      | <name>                                      |
+      | n                                                                                             | openshift-machine-api                       |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]               | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]            | <name>                                      |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]        | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["datacenter"]              | <%= cb.datacenter %>                        |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["datastore"]               | <%= cb.datastore %>                         |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["folder"]                  | <%= cb.folder %>                            |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["resourcePool"]            | <%= cb.resourcePool %>                      |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["server"]                  | <%= cb.server %>                            |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["diskGiB"]                              | <diskGiB>                                   |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["memoryMiB"]                            | <%= cb.memoryMiB %>                         |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["template"]                             | <template>                                  |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["network"]["devices"][0]["networkName"] | <%= cb.networkName %>                       |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"]     | <name>                                      |
+      | ["metadata"]["name"]                                                                          | <name>                                      |
     Then the step should succeed
 
     And I wait up to 120 seconds for the steps to pass:

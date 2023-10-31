@@ -29,7 +29,7 @@ spec:
         value:
            network:
               devices:
-              - networkName: qe-segment 
+              - networkName:
            template:
            diskGiB:
            memoryMiB:
