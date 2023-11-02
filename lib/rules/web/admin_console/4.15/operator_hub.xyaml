@@ -687,7 +687,7 @@ check_managed_namespace_column_installed_for_one_ns:
 check_managed_namespace_column_installed_for_all_ns:
   params:
     col_index: 2
-  action: check_operator_column_all_namespace
+  action: check_operator_column_all_namespace_under_one_project
 ## project selector: all projects
 #check column: Namespace
 check_namespace_column_installed_for_one_ns_under_all_projects:
@@ -713,6 +713,10 @@ check_operator_column_one_namespace:
   elements:
   - selector:
       xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>]//a[contains(text(),'<project_name>') and @href='/k8s/cluster/namespaces/<project_name>']
+check_operator_column_all_namespace_under_one_project:
+  elements:
+  - selector:
+      xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>][contains(.,'The operator is running in openshift-operators but is managing this namespace')]
 check_operator_column_all_namespace:
   elements:
   - selector:

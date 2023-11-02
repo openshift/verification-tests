@@ -773,6 +773,7 @@ click_link_with_text:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
     op: click
+    timeout: 60
 click_link_with_text_only:
   element:
     selector:
