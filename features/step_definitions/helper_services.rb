@@ -505,6 +505,10 @@ Given /^I have a iSCSI setup in the environment$/ do
   if !_project.exists?(user:admin, quiet: true)
     @result = admin.cli_exec(:create_namespace, name: 'iscsi-target')
     raise 'failed to create "iscsi-target" project' unless @result[:success]
+    @result = admin.cli_exec(:annotate, resource: 'namespace', resourcename: 'iscsi-target', keyval: 'openshift.io/node-selector=', overwrite: 'true')
+    if !@result[:success]
+      logger.warn("failed to annotate iscsi-target namespace with openshift.io/node-selector=")
+    end
     step %Q/the appropriate pod security labels are applied to the "iscsi-target" namespace/
   end
 
