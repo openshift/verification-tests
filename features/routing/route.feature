@@ -16,13 +16,13 @@ Feature: Testing route
   @critical
   Scenario: OCP-12122:NetworkEdge Alias will be invalid after removing it
     Given I have a project
-    Given I obtain test data file "routing/header-test/dc.json"
+    Given I obtain test data file "routing/header-test/deployment.yaml"
     When I run the :create client command with:
-      | f  |   dc.json  |
+      | f | deployment.yaml |
     Then the step should succeed
     Given I obtain test data file "routing/header-test/insecure-service.json"
     When I run the :create client command with:
-      | f  |   insecure-service.json |
+      | f | insecure-service.json |
     Then the step should succeed
     When I expose the "header-test-insecure" service
     Then the step should succeed
