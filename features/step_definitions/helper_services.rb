@@ -379,9 +379,9 @@ Given /^I have a header test service in the#{OPT_QUOTED} project$/ do |project_n
     raise "project #{project_name} does not exist"
   end
 
-  @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/routing/header-test/dc.json")
-  raise "could not create header test dc" unless @result[:success]
-  cb.header_test_dc = dc("header-test")
+  @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/routing/header-test/deployment.yaml")
+  raise "could not create header test deployment" unless @result[:success]
+  cb.header_test_deployment = deployment("header-test")
 
   @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/routing/header-test/insecure-service.json")
   raise "could not create header test svc" unless @result[:success]
@@ -397,7 +397,7 @@ Given /^I have a header test service in the#{OPT_QUOTED} project$/ do |project_n
                                service("header-test-insecure"))
 
   @result = BushSlicer::Pod.wait_for_labeled(
-    "deploymentconfig=header-test",
+    "name=header-test",
     count: 1, user: user, project: project, seconds: 300)
   raise "timeout waiting for header test pod to start" unless @result[:success]
   cache_pods(*@result[:matching])
