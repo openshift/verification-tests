@@ -16,7 +16,7 @@ RUN set -x && \
 
 RUN set -x && \
     yum -y update && \
-    INSTALL_PKGS="bsdtar git openssh-clients httpd-tools mesa-libgbm rsync" && \
+    INSTALL_PKGS="diffutils bsdtar git openssh-clients httpd-tools mesa-libgbm rsync" && \
     yum install -y $INSTALL_PKGS && \
     yum -y install https://rpm.nodesource.com/pub_18.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm && \
     yum -y install nodejs --setopt=nodesource-nodejs.module_hotfixes=1 && \
