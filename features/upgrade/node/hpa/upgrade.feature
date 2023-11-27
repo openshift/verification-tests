@@ -3,7 +3,6 @@ Feature: basic verification for upgrade testing
   # @author weinliu@redhat.com
   @upgrade-prepare
   @admin
-  @4.12 @4.11
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @singlenode
@@ -11,9 +10,9 @@ Feature: basic verification for upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @heterogeneous @arm64 @amd64
-  @4.14 @4.12 @4.11
+  @4.15 @4.14 @4.13 @4.12 @4.11
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  Scenario: Upgrade - Make sure multiple resources work well after upgrade - prepare
+  Scenario: OCP-13016:Upgrade - Make sure multiple resources work well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I ensure "node-upgrade" project is deleted
     When I run the :new_project client command with:
@@ -65,7 +64,7 @@ Feature: basic verification for upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  Scenario: Upgrade - Make sure multiple resources work well after upgrade
+  Scenario: OCP-13016: Upgrade - Make sure multiple resources work well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "node-upgrade" project
     And admin ensures "node-upgrade" namespace is deleted after scenario
