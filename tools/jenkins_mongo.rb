@@ -23,7 +23,8 @@ module BushSlicer
       connect_opts = conf.dig('services', :mongodb, :host_connect_opts)
       #connect_opts = conf['services'][:mongodb][:host_connect_opts]
       host = connect_opts[:hostname]
-      client_host = [host]
+      port = connect_opts[:port]
+      client_host = ["#{host}:#{port}"]
       client_options = {
         database: connect_opts[:db_name],
         user: connect_opts[:username],
