@@ -80,8 +80,9 @@ Feature: basic verification for upgrade oc client testing
     Given I switch to the first user
     When I run the :new_project client command with:
       | project_name | workloads-upgrade |
-    When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/hello-openshift@sha256:b6296396b632d15daf9b5e62cf26da20d76157161035fefddbd0e7f7749f4167 |
+    When I run the :create_deployment client command with:
+      | name          | octest                                                                                                        |
+      | image         | quay.io/openshifttest/hello-openshift@sha256:b6296396b632d15daf9b5e62cf26da20d76157161035fefddbd0e7f7749f4167 |
     Then the step should succeed
 
   # @author yinzhou@redhat.com
@@ -102,7 +103,7 @@ Feature: basic verification for upgrade oc client testing
     Given I switch to the first user
     When I use the "workloads-upgrade" project
     Given status becomes :running of 1 pods labeled:
-      | deployment=hello-openshift |
+      | app=octest |
     When I run the :rsh client command with:
       | pod     | <%= pod.name %> |
       | command | ls              |
