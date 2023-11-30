@@ -49,6 +49,7 @@ Given /^the pod(?: named "(.+)")? becomes present$/ do |name|
 
   unless @result[:success]
     logger.error(@result[:response])
+    step %Q{I get project events}
     raise "#{pod.name} pod was never present"
   end
 end
