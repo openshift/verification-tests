@@ -20,9 +20,9 @@ check_user_in_users_page:
   action: check_link_and_text
 delete_user_from_kebab:
   params:
-    kebab_item: Delete User
+    item: Delete User
   action: click_kebab_of_one_resource
-  action: click_kebab_item
+  action: choose_action_item_from_list
   action: submit_changes
 check_rolebinding_of_user:
   params:
@@ -76,9 +76,9 @@ click_add_more_users:
   action: click_button
 remove_user_from_group:
   params:
-    kebab_item: Remove User
+    item: Remove User
   action: click_kebab_of_one_resource
-  action: click_kebab_item
+  action: choose_action_item_from_list
   action: submit_changes
 set_rolebinding_name:
   params:
