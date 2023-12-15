@@ -227,7 +227,7 @@ goto_deploy_image_page:
   url: deploy-image/ns/<project_name>?preselected-ns=<project_name>
   element:
     selector:
-      xpath: //p[contains(.,'Deploy')]
+      xpath: //div[contains(@class,'pf-v5-c-form__helper-text') and contains(., "Deploy")]
     timeout: 30
 
 #catalog page
