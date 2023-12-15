@@ -47,7 +47,7 @@ search_and_deploy_image:
   action: search_image
   elements:
   - selector:
-      xpath: //*[contains(@class,'pf-m-success') and contains(text(), 'Validated')]
+      xpath: //*[contains(@class,'pf-v5-c-helper-text__item-text') and contains(text(), 'Validated')]
     timeout: 30
   action: choose_dc_type
   action: click_create_button
@@ -139,7 +139,7 @@ rollback_with_options:
   action: submit_changes
 select_deployment_strategy:
   params:
-    text: Deployment strategy 
+    text: Deployment strategy
   action: click_checkbox_input_by_text
 select_deployment_trigger:
   params:
