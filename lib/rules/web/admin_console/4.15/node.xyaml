@@ -31,7 +31,7 @@ check_node_list_column_headers:
   action: check_role_column_header
 check_role_column_header:
   params:
-    column_name: Role
+    column_name: Roles
   action: check_column_header
 check_messages_on_terminal_page:
   element:

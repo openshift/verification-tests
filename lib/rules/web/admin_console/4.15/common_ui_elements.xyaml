@@ -551,12 +551,12 @@ check_column_header:
   action: wait_box_loaded
   elements:
   - selector:
-      xpath: //button[contains(@class, 'pf-c-table') and contains(.,'<column_name>')]
+      xpath: //th[contains(@data-label,"<column_name>")]
     timeout: 15
 check_column_header_missing:
   element:
     selector:
-      xpath: //button[contains(@class, 'pf-c-button') and text()='<column_name>']
+      xpath: //th[contains(@data-label,"<column_name>")]
     missing: true
 check_name_column_header:
   params:
