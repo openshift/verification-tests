@@ -130,12 +130,12 @@ check_volume_missing_on_workload_page:
     missing: true
 remove_volume_from_container_base:
   params:
-    kebab_item: Remove volume
+    item: Remove volume
   elements:
   - selector:
       xpath: //h2[contains(., Volumes)]/following-sibling::div//tr[td[@data-label='Name' and contains(., '<volume_name>')] and td[contains(., '<container_name>')]]//button[@data-test-id='kebab-button']
     op: click
-  action: click_kebab_item
+  action: choose_action_item_from_list
   action: click_button
 remove_volume_from_container_but_cancel:
   params:
