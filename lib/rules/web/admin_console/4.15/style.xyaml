@@ -213,33 +213,33 @@ switch_language_to_korean:
 check_pages_in_chinese:
   elements:
   - selector:
-      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'主页')]
+      xpath: //button[contains(@class,'pf-v5-c-nav__link') and contains(.,'主页')]
   - selector:
-      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'网络')]
+      xpath: //button[contains(@class,'pf-v5-c-nav__link') and contains(.,'网络')]
   - selector:
-      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'存储')]
+      xpath: //button[contains(@class,'pf-v5-c-nav__link') and contains(.,'存储')]
   scripts:
   - command: return localStorage['bridge/last-language'] == 'zh'
     expect_result: true
 check_pages_in_japanese:
   elements:
   - selector:
-      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'ホーム')]
+      xpath: //button[contains(@class,'pf-v5-c-nav__link') and contains(.,'ホーム')]
   - selector:
-      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'ネットワーク')]
+      xpath: //button[contains(@class,'pf-v5-c-nav__link') and contains(.,'ネットワーク')]
   - selector:
-      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'ストレージ')]
+      xpath: //button[contains(@class,'pf-v5-c-nav__link') and contains(.,'ストレージ')]
   scripts:
   - command: return localStorage['bridge/last-language'] == 'ja'
     expect_result: true
 check_pages_in_korean:
   elements:
   - selector:
-      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'홈')]
+      xpath: //button[contains(@class,'pf-v5-c-nav__link') and contains(.,'홈')]
   - selector:
-      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'네트워킹')]
+      xpath: //button[contains(@class,'pf-v5-c-nav__link') and contains(.,'네트워킹')]
   - selector:
-      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'스토리지')]
+      xpath: //button[contains(@class,'pf-v5-c-nav__link') and contains(.,'스토리지')]
   scripts:
   - command: return localStorage['bridge/last-language'] == 'ko'
     expect_result: true
