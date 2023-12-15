@@ -1,7 +1,7 @@
 set_filter_strings:
   elements:
   - selector: &filter_text_ele
-      xpath: //input[contains(@class,'text-filter')]
+      xpath: //input[@data-test-id='item-filter']
     op: clear
   - selector:
       <<: *filter_text_ele
