@@ -29,8 +29,14 @@ filter_alert:
     input_value: <alert_name>
     content: <alert_name>
   action: clear_name_filter_if_exists
-  action: set_input_class
+  action: set_span_class
   action: check_page_contains
+set_span_class:
+  element:
+    selector:
+      xpath: //span[contains(@class, '<class_text>')]//input[@data-test-id='item-filter']
+    op: send_keys <input_value>
+    type: span
 open_alert_detail:
   action: Disable_all_filters
   action: filter_alert
