@@ -36,7 +36,7 @@ set_span_class:
     selector:
       xpath: //span[contains(@class, '<class_text>')]//input[@data-test-id='item-filter']
     op: send_keys <input_value>
-    type: span
+    type: input
 open_alert_detail:
   action: Disable_all_filters
   action: filter_alert
