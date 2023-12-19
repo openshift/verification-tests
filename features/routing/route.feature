@@ -521,7 +521,7 @@ Feature: Testing route
       | http://<%= route("reen", service("service-secure")).dns(by: user) %>/ |
       | -k |
     Then the step should succeed
-   And the output should contain:
+    And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
       | ocation: https:// |
