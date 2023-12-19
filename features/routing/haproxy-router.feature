@@ -12,7 +12,6 @@ Feature: Testing haproxy router
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-11903:NetworkEdge haproxy cookies based sticky session for unsecure routes
     #create route and service which has two endpoints
@@ -78,7 +77,6 @@ Feature: Testing haproxy router
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-11130:NetworkEdge haproxy cookies based sticky session for edge termination routes
     #create route and service which has two endpoints
@@ -149,7 +147,6 @@ Feature: Testing haproxy router
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-11619:NetworkEdge Limit the number of TCP connection per IP in specified time period
     Given I have a project
@@ -358,7 +355,6 @@ Feature: Testing haproxy router
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-11679:NetworkEdge Disable haproxy hash based sticky session for unsecure routes
     Given I have a project
