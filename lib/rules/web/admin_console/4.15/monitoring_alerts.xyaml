@@ -29,8 +29,14 @@ filter_alert:
     input_value: <alert_name>
     content: <alert_name>
   action: clear_name_filter_if_exists
-  action: set_input_class
+  action: set_span_class
   action: check_page_contains
+set_span_class:
+  element:
+    selector:
+      xpath: //span[contains(@class, '<class_text>')]//input[@data-test-id='item-filter']
+    op: send_keys <input_value>
+    type: input
 open_alert_detail:
   action: Disable_all_filters
   action: filter_alert
@@ -134,6 +140,7 @@ click_actions_button:
     selector:
       xpath: //button[@class='pf-c-dropdown__toggle']
     op: click
+    timeout: 60
 
 expire_alert_from_detail:
   action: click_first_action_icon
@@ -181,7 +188,13 @@ input_matcher_name_silence:
 
 expire_alert_from_actions:
   action: click_actions_button
+  action: wait_exipre_silence_loaded
   action: click_expire_alert_button
+wait_exipre_silence_loaded:
+  elements:
+  - selector:
+      xpath: //button[text()='Expire silence']
+    timeout: 60
 click_duration_dropdown_button:
   element:
     selector:
@@ -351,7 +364,7 @@ hide_show_alert_graph_button:
 Disable_all_filters:
   element:
     selector:
-      xpath: (//button[text()='Clear all filters'])[2]
+      xpath: //button[text()='Clear all filters']
     op: click
     timeout: 60
 clear_specifc_filter:
