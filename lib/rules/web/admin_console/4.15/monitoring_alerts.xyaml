@@ -193,7 +193,7 @@ wait_exipre_silence_loaded:
   element:
     selector:
       xpath: //button[text()='Expire silence']
-    timeout: 10
+    timeout: 60
 click_duration_dropdown_button:
   element:
     selector:
