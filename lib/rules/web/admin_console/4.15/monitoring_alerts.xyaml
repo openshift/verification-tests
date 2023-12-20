@@ -140,6 +140,7 @@ click_actions_button:
     selector:
       xpath: //button[@class='pf-c-dropdown__toggle']
     op: click
+    timeout: 60
 
 expire_alert_from_detail:
   action: click_first_action_icon
@@ -187,13 +188,7 @@ input_matcher_name_silence:
 
 expire_alert_from_actions:
   action: click_actions_button
-  action: wait_exipre_silence_loaded
   action: click_expire_alert_button
-wait_exipre_silence_loaded:
-  element:
-    selector:
-      xpath: //button[text()='Expire silence']
-    timeout: 60
 click_duration_dropdown_button:
   element:
     selector:
