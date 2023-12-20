@@ -138,7 +138,6 @@ Feature: Testing route
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-12562:NetworkEdge The path specified in route can work well for edge terminated
     Given I have a project
@@ -224,7 +223,6 @@ Feature: Testing route
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-12564:NetworkEdge The path specified in route can work well for reencrypt terminated
     Given I have a project
@@ -275,7 +273,6 @@ Feature: Testing route
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-9651:NetworkEdge Config insecureEdgeTerminationPolicy to Redirect for route
     Given I have a project
@@ -428,7 +425,6 @@ Feature: Testing route
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-11036:NetworkEdge Set insecureEdgeTerminationPolicy to Redirect for passthrough route
     Given I have a project
@@ -487,7 +483,6 @@ Feature: Testing route
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-13839:NetworkEdge Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
@@ -606,7 +601,6 @@ Feature: Testing route
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-13753:NetworkEdge Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
     Given I have a project

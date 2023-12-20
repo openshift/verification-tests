@@ -10,7 +10,6 @@ Feature: Testing websocket features
   @noproxy @connected
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   @critical
   Scenario: OCP-17145:NetworkEdge haproxy router support websocket via unsecure route
     Given I have a project

@@ -11,7 +11,6 @@ Feature: Testing timeout route
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
-  @hypershift-hosted
   @critical
   Scenario: OCP-11635:NetworkEdge Set timeout server for passthough route
     Given I have a project
