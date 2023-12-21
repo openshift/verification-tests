@@ -2,7 +2,6 @@ check_chart_using_victory:
   elements:
   - selector:
       xpath: //div[contains(@class, 'pf-v5-c-chart')]
-    timeout: 30
 check_cluster_utilization_charts_style:
   elements:
   - selector:
@@ -18,6 +17,7 @@ check_node_detail_page_charts_style:
   elements:
   - selector:
       xpath: //*[contains(@class, 'card__title') and contains(text(), 'Utilization')]
+    timeout: 30
   action: check_chart_using_victory
 check_quota_detail_page_charts_style:
   elements:
