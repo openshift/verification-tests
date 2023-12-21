@@ -1,0 +1,175 @@
+update_pod_count:
+  action: edit_pod_count_action
+  action: update_resource_count
+update_resource_count:
+  elements:
+  - selector: &modal_count
+      xpath: //input[@type='number']
+    op: clear
+  - selector:
+      <<: *modal_count
+    op: send_keys <resource_count>
+  action: submit_changes
+update_rollout_strategy:
+  action: edit_update_strategy_action
+  elements:
+  - selector:
+      xpath: //input[@value='<update_strategy>']
+    op: click
+  action: submit_changes
+click_initcontainer_in_detail_page:
+  element:
+    selector:
+      xpath: //h2[contains(.,'Init containers')]/..//span[contains(.,'<container_name>')]
+    op: click
+confirm_cancel_rollout:
+  params:
+    button_text: Yes, cancel
+  action: click_button
+search_image:
+  params:
+    clear_field_id: form-input-searchTerm-field
+    input_field_id: form-input-searchTerm-field
+    input_value: <search_content>
+  action: clear_input_value
+  action: set_input_value
+  elements:
+  - selector:
+      xpath: //span[contains(.,'Deploy Image')]
+    op: click
+search_nonexisted_image_and_check_message:
+  params:
+    search_content: non-existed
+    content: may not have access to the container image
+  action: search_image
+  action: check_page_contains
+search_and_deploy_image:
+  action: search_image
+  elements:
+  - selector:
+      xpath: //*[contains(@class,'pf-v5-c-helper-text__item-text') and contains(text(), 'Validated')]
+    timeout: 30
+  action: choose_dc_type
+  action: click_create_button
+delete_dc_with_dependency_objects:
+  params:
+    item: Delete DeploymentConfig
+    button_text: Delete
+  action: click_one_dropdown_action
+  action: click_button
+check_sections_on_container_details:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class,'co-section-heading') and .='Container details']
+  - selector:
+      xpath: //h2[contains(@class,'co-section-heading') and .='Image details']
+  - selector:
+      xpath: //h2[contains(@class,'co-section-heading') and .='Network']
+  - selector:
+      xpath: //span[contains(.,'Ports')]
+  - selector:
+      xpath: //span[contains(.,'Mounted volumes')]
+  - selector:
+      xpath: //span[contains(.,'Environment variables')]
+check_hpa_metrics_table:
+  elements:
+  - selector:
+      xpath: //div/h2[contains(@data-test-section-heading,'Metrics')]/following-sibling::div[contains(.,'Type')]/../div[contains(.,'Current')]/../div[contains(.,'Target')]
+  action:
+    if_param: target_resource_memory
+    ref: check_target_resource_memory
+  action:
+    if_param: target_resource_cpu
+    ref: check_target_resource_cpu
+  action:
+    if_param: current_cpu_utilization
+    ref: check_current_cpu_utilization
+check_value_in_metrics_table:
+  elements:
+  - selector: &value
+      xpath: //div[contains(@class,'row')]//div[contains(.,'<value>')]
+check_target_resource_memory:
+  params:
+    value: <target_resource_memory>
+  element:
+    selector:
+      <<: *value
+check_target_resource_cpu:
+  params:
+    value: <target_resource_cpu>
+  element:
+    selector:
+      <<: *value
+check_current_cpu_utilization:
+  params:
+    value: <current_cpu_utilization>
+  element:
+    selector:
+      <<: *value
+check_pod_status:
+  elements:
+  - selector: &status
+      xpath: //tr/td[contains(.,'<pod_name>')]/following-sibling::td[contains(.,'<pod_status>')]
+check_pod_completed_status:
+  params:
+    pod_status: Completed
+  element:
+    selector:
+      <<: *status
+check_resource_pod_name_and_link:
+  params:
+    resource_type: Pod
+    resource_name: <pod_name>
+    resource_link: /k8s/ns/<project_name>/pods/<pod_name>
+  action: check_resource_item
+rollback_with_options:
+  action: rollback_action
+  action:
+    if_param:
+      strategy: 'true'
+    ref: select_deployment_strategy
+  action:
+    if_param:
+      trigger: 'true'
+    ref: select_deployment_trigger
+  action:
+    if_param:
+      replica_count_and_selector: 'true'
+    ref: select_replica_count_and_selector
+  action: submit_changes
+select_deployment_strategy:
+  params:
+    text: Deployment strategy
+  action: click_checkbox_input_by_text
+select_deployment_trigger:
+  params:
+    text: Deployment trigger
+  action: click_checkbox_input_by_text
+select_replica_count_and_selector:
+  params:
+    text: Replica count and selector
+  action: click_checkbox_input_by_text
+check_workloads_metrics:
+  action: click_metrics_tab
+  elements:
+  - selector: &memory_usage_chart
+      xpath: //div[contains(text(), 'Memory usage')]
+  - selector: &cpu_usage_chart
+      xpath: //div[contains(text(), 'CPU usage')]
+  - selector: &filessystem_chart
+      xpath: //div[contains(text(), 'Filesystem')]
+  - selector:
+      xpath: //div[contains(text(), 'Network in')]
+  - selector:
+      xpath: //div[contains(text(), 'Network out')]
+  action: check_no_errors_in_charts
+check_build_metrics:
+  action: click_metrics_tab
+  elements:
+  - selector:
+      <<: *memory_usage_chart
+  - selector:
+      <<: *cpu_usage_chart
+  - selector:
+      <<: *filessystem_chart
+  action: check_no_errors_in_charts

@@ -1,0 +1,78 @@
+search_by_resource:
+  action: click_resource_type_dropdown
+  action: send_type_filter
+  action:
+    if_not_param: resource_group
+    ref: search_resource_kind_only
+  action:
+    if_param: resource_group
+    ref: search_resource_kind_and_api_group
+click_resource_type_dropdown:
+  elements:
+  - selector:
+      xpath: //button[contains(., 'Resources')]
+    op: click
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]
+send_type_filter:
+  elements:
+  - selector:
+      xpath: //input[@placeholder='Select Resource']
+    op: send_keys <resource_kind>
+search_resource_kind_only:
+  elements:
+  - selector:
+      xpath: //label//span[text()='<resource_kind>']
+    op: click
+    timeout: 15
+  - selector:
+      xpath: //nav[@data-test='user-dropdown']
+    op: click
+search_resource_kind_and_api_group:
+  elements:
+  - selector:
+      xpath: //span[text()='<resource_kind>']/following-sibling::div[contains(., '<resource_group>')]
+    op: click
+    timeout: 15
+  - selector:
+      xpath: //nav[@data-test='user-dropdown']
+    op: click
+clear_one_search_item:
+  elements:
+  - selector:
+      xpath: //span[contains(., '<search_item>')]/following-sibling::button
+    op: click
+check_resource_tile:
+  elements:
+  - selector:
+      xpath: //span[contains(.,'<resource_kind>') and contains(.,'<resource_group>')]
+choose_filter_type_on_search_page:
+  elements:
+  - selector:
+      xpath: //button[@id='toggle-id']
+    op: click
+  - selector:
+      xpath: //li/button[text()='<filter_type>']
+    op: click
+    timeout: 15
+set_filter_content_on_search_page:
+  params:
+    clear_field_id: search-filter-input
+    input_field_id: search-filter-input
+    input_value: <filter_content>
+  action: clear_input_value
+  action: set_input_value
+press_input_enter_on_search_page:
+  params:
+    input_field_id: search-filter-input
+    input_value: <press_enter>
+  action: set_input_value
+clear_resource_filters:
+  params:
+    filter_type: Resource
+  action: clear_one_type_filters
+clear_one_type_filters:
+  elements:
+  - selector:
+      xpath: (//*[contains(., '<filter_type>')]/following-sibling::ul//button)[last()]
+    op: click

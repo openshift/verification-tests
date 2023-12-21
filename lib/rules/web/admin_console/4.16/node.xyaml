@@ -1,0 +1,154 @@
+browse_to_nodes_page:
+  params:
+    primary_menu: Compute
+    secondary_menu: Nodes
+  action: navigate_to_admin_console
+  action: click_secondary_menu
+  action: wait_box_loaded
+add_taint_to_node:
+  params:
+    tab_name: Details
+  action: goto_one_node_page
+  action: click_tab
+  action: click_key_and_action_link
+  action: click_add_more_button
+  action: add_taint
+  action: submit_changes
+add_tolerations_to_pod:
+  action:
+    if_param: dc_name
+    ref: goto_one_dc_page
+  action:
+    if_param: deploy_name
+    ref: goto_one_deployment_page
+  action: click_key_and_action_link
+  action: click_add_more_button
+  action: add_tolerations
+  action: submit_changes
+check_node_list_column_headers:
+  action: check_name_column_header
+  action: check_status_column_header
+  action: check_role_column_header
+check_role_column_header:
+  params:
+    column_name: Roles
+  action: check_column_header
+check_messages_on_terminal_page:
+  element:
+    selector:
+      xpath: //p[contains(text(), 'To use host binaries, run')]/code[contains(text(), 'chroot /host')]
+    timeout: 30
+remove_tolerations_from_pod:
+  action:
+    if_param: dc_name
+    ref: goto_one_dc_page
+  action:
+    if_param: deploy_name
+    ref: goto_one_deployment_page
+  action: click_key_and_action_link
+  action: delete_node_affinity
+  action: submit_changes
+remove_taint_from_node:
+  params:
+    tab_name: Details
+  action: goto_one_node_page
+  action: click_tab
+  action: click_key_and_action_link
+  action: delete_node_affinity
+  action: submit_changes
+node_affinity_modal_value:
+  element:
+    selector: &value
+      xpath: //div[text()='Value']/following-sibling::input
+node_affinity_modal_key:
+  element:
+    selector: &key
+      xpath: //div[text()='Key']/following-sibling::input
+node_affinity_modal_dropdown:
+  element:
+    selector: &dropdown
+      xpath: //div[contains(text(),'<option>')]/following-sibling::div//button
+delete_node_affinity:
+  element:
+    selector:
+      xpath: //input[@value='<affinity_key>']/parent::div/following-sibling::div/button
+    op: click
+click_node_affinity_modal_dropdown:
+  element:
+    selector:
+      <<: *dropdown
+    op: click
+input_node_affinity_modal_key:
+  element:
+    selector:
+      <<: *key
+    type: input
+    op: send_keys <affinity_key>
+input_node_affinity_modal_value:
+  element:
+    selector:
+      <<: *value
+    type: input
+    op: send_keys <affinity_value>
+set_affinity_operator:
+  params:
+    option: Operator
+    button_text: <operator>
+  action: click_node_affinity_modal_dropdown
+  action: click_button_text
+set_affinity_effect:
+  params:
+    option: Effect
+    button_text: <effect>
+  action: click_node_affinity_modal_dropdown
+  action: click_button_text
+add_taint:
+  action: input_node_affinity_modal_key
+  action: input_node_affinity_modal_value
+  action: set_affinity_effect
+add_tolerations:
+  action: input_node_affinity_modal_key
+  action: set_affinity_operator
+  action: input_node_affinity_modal_value
+  action: set_affinity_effect
+set_minimum_replicas:
+  params:
+    label_text: Minimum replicas
+    input_value: <replicas>
+  action: set_label_input
+set_maximum_replicas:
+  params:
+    label_text: Maximum replicas
+    input_value: <replicas>
+  action: set_label_input
+check_machineautoscaler_list_table_struc:
+  elements:
+  - selector:
+      xpath: //th[@data-label='Name']
+  - selector:
+      xpath: //th[@data-label='Scale target']
+  - selector:
+      xpath: //th[@data-label='Min']
+  - selector:
+      xpath: //th[@data-label='Max']
+check_machineautoscaler_name_and_link:
+  params:
+    resource_type: MachineAutoscaler
+    resource_link: /k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler/<resource_name>
+  action: check_resource_item
+check_machineset_name_and_link:
+  params:
+    resource_type: MachineSet
+    resource_link: /k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet/<resource_name>
+  action: check_resource_item
+check_node_addresses:
+  params:
+    tab_name: Details
+  action: click_tab
+  action: check_addresses
+check_addresses:
+  elements:
+  - selector:
+      xpath: //li[contains(., '<hostname>') and span[contains(., 'Hostname')]]
+  - selector:
+      xpath: //li[contains(., '<internal_ip>') and span[contains(., 'Internal IP')]]
