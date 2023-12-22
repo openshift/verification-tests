@@ -19,5 +19,5 @@ spec:
       containers:
       - name: pi
         image: quay.io/openshifttest/base-alpine@sha256:3126e4eed4a3ebd8bf972b2453fa838200988ee07c01b2251e3ea47e4b1f245c
-        command: ["sh", "-c",  "sleep 8;echo hello-openshift"]
+        command: ["sh", "-c",  "sleep 15;echo hello-openshift"]
       restartPolicy: Never
