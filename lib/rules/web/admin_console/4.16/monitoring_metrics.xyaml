@@ -295,7 +295,7 @@ click_pod_chart_link:
   action: click_link_with_text
   element:
     selector:
-      xpath: //div[contains(text(),'<chart_name>')]/../..//a
+      xpath: //div[contains(text(),'<chart_name>')]/../../../..//a
     op: click
 check_data_diplayed_db:
   element:
