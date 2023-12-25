@@ -1,7 +1,7 @@
 check_chart_using_victory:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'pf-c-chart')]
+      xpath: //div[contains(@class, 'pf-v5-c-chart')]
 check_cluster_utilization_charts_style:
   elements:
   - selector:
