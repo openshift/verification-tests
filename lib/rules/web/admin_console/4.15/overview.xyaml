@@ -16,7 +16,7 @@ wait_side_bar_loaded:
 check_list_heading_shown:
   element:
     selector:
-      xpath: //div[contains(@class,'pf-c-data-list__cell') and contains(.,'<heading>')]
+      xpath: //span[contains(@data-test-id,'<heading>')]
     timeout: 30
 check_list_item:
   elements:
