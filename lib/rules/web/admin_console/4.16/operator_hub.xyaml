@@ -385,7 +385,7 @@ click_continue_button:
 open_first_card_in_overlay:
   elements:
   - selector:
-      xpath: (//a[contains(@class, 'pf-c-card')])[1]
+      xpath: (//a[contains(@class, 'pf-v5-c-card')])[1]
     op: click
   action:
     if_element:
@@ -758,7 +758,7 @@ check_create_operand_button_and_requied_badge_when_ready:
 check_create_operand_button_and_requied_badge_on_csv_details:
   elements:
   - selector:
-      xpath: //h4[contains(@class,'pf-c-alert__title') and contains(.,'Ditto required')]
+      xpath: //h4[contains(@class,'pf-v5-c-alert__title') and contains(.,'Ditto required')]
   action: check_operand_button_link
 check_operand_button_link:
   element:

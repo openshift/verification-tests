@@ -9,7 +9,7 @@ set_filter_strings:
 click_filter_dropdown:
   elements:
   - selector:
-      xpath: //button[contains(@class,'pf-c-select__toggle')]
+      xpath: //button[contains(@aria-label,'Options menu')]
     op: click
 select_filter:
   elements:
