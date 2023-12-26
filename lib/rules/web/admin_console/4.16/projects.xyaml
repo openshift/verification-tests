@@ -122,7 +122,7 @@ switch_to_project:
 toggle_system_projects:
   element:
     selector:
-      xpath: //span[contains(@class,'pf-c-switch__toggle')]
+      xpath: //span[contains(@class,'pf-v5-c-switch__toggle')]
     op: click
 switch_to_all_projects:
   params:
