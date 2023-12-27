@@ -34,12 +34,10 @@ check_used_memory_limit:
     used_ratio: <memory_limit_ratio>
     graph_title: limits.memory
   action: check_used_ratio
-
 check_used_ratio:
   elements:
   - selector:
-      xpath: //div[contains(., '<quota_name>')]/following-sibling::div[@class='co-resource-quota-chart-row']//h5[text()='<graph_title>']/following-sibling::div[@class='pf-c-chart']/*[name()='svg']/*[name()='text']/*[name()='tspan' and text()='<used_ratio>']
-
+      xpath: //div[contains(., '<quota_name>')]/following-sibling::div[@class='co-resource-quota-chart-row']//h5[text()='<graph_title>']/following-sibling::div/*[name()='svg']/*[name()='text']/*[name()='tspan' and text()='<used_ratio>']
 check_chart_color:
   action:
     if_param:
@@ -59,7 +57,7 @@ check_chart_with_green_color:
   action: check_resource_chart_color
 check_chart_with_yellow_color:
   params:
-    rgb_value: f0ab00 
+    rgb_value: f0ab00
   action: check_resource_chart_color
 check_chart_with_red_color:
   params:
@@ -68,7 +66,7 @@ check_chart_with_red_color:
 check_resource_chart_color:
   elements:
   - selector:
-      xpath: //div[contains(., '<quota_name>')]/following-sibling::div[@class='co-resource-quota-chart-row']//h5[text()='<graph_title>']/following-sibling::div[@class='pf-c-chart']/*[name()='svg']/*[name()='g'][2]/*[name()='path' and contains(@style, '<rgb_value>')]
+      xpath: //div[contains(., '<quota_name>')]/following-sibling::div[@class='co-resource-quota-chart-row']//h5[text()='<graph_title>']/following-sibling::div/*[name()='svg']/*[name()='g'][2]/*[name()='path' and contains(@style, '<rgb_value>')]
 check_cpu_request_chart_color:
   params:
     graph_title: cpu
