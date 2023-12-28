@@ -71,7 +71,7 @@ node_affinity_modal_dropdown:
 delete_node_affinity:
   element:
     selector:
-      xpath: //input[@value='<affinity_key>']/parent::div/following-sibling::div/button
+      xpath: //input[@value='<affinity_key>']/ancestor::div//button[@aria-label='Remove']
     op: click
 click_node_affinity_modal_dropdown:
   element:
