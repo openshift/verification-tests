@@ -693,15 +693,15 @@ check_insights_status_when_unavailable:
 check_cluster_inventory_items:
   elements:
   - selector:
-      xpath: //div[contains(@class,'pf-c-card__title') and contains(text(),'Cluster inventory')]
+      xpath: //div[contains(text(),'Cluster inventory')]
   - selector:
-      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Node')]
+      xpath: //a[contains(@data-test,'resource-inventory-item') and contains(text(),'Node')]
   - selector:
-      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Pod')]
+      xpath: //a[contains(@data-test,'resource-inventory-item') and contains(text(),'Pod')]
   - selector:
-      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(normalize-space(text()),'StorageClass')]
+      xpath: //a[contains(@data-test,'resource-inventory-item') and contains(text(),'StorageClasses')]
   - selector:
-      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(normalize-space(text()),'PersistentVolumeClaim')]
+      xpath: //a[contains(@data-test,'resource-inventory-item') and contains(text(),'PersistentVolumeClaims')]
 check_matched_number_of_nodes:
   params:
     resource_type: node
