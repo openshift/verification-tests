@@ -31,7 +31,7 @@ create_cr_infinispancluster:
     api: Infinispan Cluster
   action: create_custom_resource
   action: switch_to_yaml_view
-  action: click_create_button 
+  action: click_create_button
 create_operand:
   params:
     tab_name: <operand_kind>
@@ -376,7 +376,7 @@ click_checkbox_from_capability_level:
       xpath:  //form[@data-test-group-name='capabilityLevel']
     timeout: 30
   - selector:
-      xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
+      xpath: //*[text()='<text>']
     op: click
 click_continue_button:
   params:
