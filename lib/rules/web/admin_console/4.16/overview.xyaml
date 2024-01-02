@@ -164,7 +164,7 @@ click_groupby_dropdown_button:
 check_dropdown_menu_item:
   element:
     selector: &dropdown_item
-      xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and text()='<dropdown_menu_item>']
+      xpath: //button[contains(@class,'dropdown__menu-item') and text()='<dropdown_menu_item>']
 click_dropdown_menu_item:
   element:
     selector:
