@@ -102,7 +102,7 @@ toggle_boolean_switch:
 toggle_checkbox:
   element:
     selector:
-      xpath: (//label[contains(.,'Checkbox')]/following::div[contains(@class,'pf-c-check')]//label[contains(@class,'pf-c-check__label')])[1]
+      xpath: (//label[contains(.,'Checkbox')]/following::div[contains(@class,'check')]//label[contains(@class,'check__label')])[1]
     op: click
 set_image_pull_policy:
   params:

@@ -320,7 +320,7 @@ click_label_dropdown_button:
 toggle_label_input:
   element:
     selector:
-      xpath: (//label[contains(.,'<label_text>')]/following::label[contains(@class,'pf-c-switch')]//span[contains(@class,'pf-c-switch__toggle')])[1]
+      xpath: (//label[contains(.,'<label_text>')]/following::label[contains(@class,'switch')]//span[contains(@class,'switch__toggle')])[1]
     op: click
 set_label_radio_input:
   element:

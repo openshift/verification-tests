@@ -102,7 +102,7 @@ toggle_boolean_switch:
 toggle_checkbox:
   element:
     selector:
-      xpath: (//label[contains(.,'Checkbox')]/following::div[contains(@class,'pf-c-check')]//label[contains(@class,'pf-c-check__label')])[1]
+      xpath: (//label[contains(.,'Checkbox')]/following::div[contains(@class,'check')]//label[contains(@class,'check__label')])[1]
     op: click
 set_image_pull_policy:
   params:
@@ -182,7 +182,7 @@ set_array_field_group:
 set_advanced_configuration:
   elements:
   - selector:
-      xpath: //button[contains(@class,'pf-c-expandable-section__toggle')]
+      xpath: //button[contains(@class,'expandable-section__toggle')]
     op: click
   params:
     label_text: Advanced
