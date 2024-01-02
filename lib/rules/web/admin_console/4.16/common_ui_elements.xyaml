@@ -968,11 +968,11 @@ check_side_overlay_dialog_modal:
 check_alert_title:
   elements:
   - selector:
-      xpath: //h4[contains(@class, 'pf-c-alert__title') and contains(text(), '<title>')]
+      xpath: //h4[contains(@class, 'alert__title') and contains(text(), '<title>')]
 check_alert_description:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'pf-c-alert__description') and contains(.,'<description>')]
+      xpath: //div[contains(@class, 'alert__description') and contains(.,'<description>')]
 check_alert_message:
   action:
     if_param: title

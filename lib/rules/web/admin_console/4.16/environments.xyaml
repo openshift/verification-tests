@@ -101,7 +101,7 @@ remove_env_vars:
 check_link_to_parent_resource:
   element:
     selector:
-      xpath: //div[contains(@class,'pf-c-alert__description')]/span[contains(@class,'co-resource-item')][//span[@title='<parent_resource_type>'] and //a[text()='<parent_resource_name>']]
+      xpath: //div[contains(@class,'alert__description')]/span[contains(@class,'co-resource-item')][//span[@title='<parent_resource_type>'] and //a[text()='<parent_resource_name>']]
 check_info_and_link_to_parent_resource:
   params:
     title: Environment variables set from parent
