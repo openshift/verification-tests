@@ -293,7 +293,7 @@ check_catalog_badge_by_checkbox:
   action: click_checkbox_from_provider_type
   elements:
   - selector:
-      xpath: //*[contains(@class, 'pf-c-badge') and text()='<text>']
+      xpath: //*[contains(@class, 'badge') and text()='<text>']
     timeout: 30
   action: click_checkbox_from_provider_type
 check_marketplace_operator_description_on_overlay:
@@ -351,7 +351,7 @@ click_checkbox_from_provider_type:
     ref: show_all_provider_type
   elements:
   - selector:
-      xpath: //form[@data-test-group-name='catalogSourceDisplayName']//*[contains(@class, 'pf-c-check__label') and contains(text(), '<text>')]
+      xpath: //form[@data-test-group-name='catalogSourceDisplayName']//input[@title='<text>']
     op: click
     timeout: 40
 show_all_provider_type:
@@ -415,7 +415,7 @@ wait_filter_section_loaded:
 choose_one_checkbox:
   element:
     selector:
-      xpath: //input[contains(@class, 'pf-c-check__input') and contains(@title,'<checkbox_text>')]
+      xpath: //input[contains(@title,'<checkbox_text>')]
     op: click
 check_property_label_and_value:
   element:
