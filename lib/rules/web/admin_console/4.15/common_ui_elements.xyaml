@@ -455,7 +455,7 @@ check_imagestreamtagdetails_text_in_breadcrumb:
 check_text_in_breadcrumb:
   element:
     selector:
-      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>][normalize-space(text())='<text>']
+      xpath: //ol[contains(@class, 'breadcrumb__list')]/li[<layer_number>][normalize-space(text())='<text>']
 
 check_row_filter_on_page:
   elements:
