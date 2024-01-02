@@ -16,7 +16,7 @@ wait_log_window_loaded:
       xpath: //div[contains(@class,'log-window')]
     timeout: 30
   - selector:
-      xpath: //div[contains(@class,'pf-c-log-viewer__main')]
+      xpath: //div[contains(@class,'log-viewer__main')]
     timeout: 30
 check_log_content_contains:
   element:
@@ -99,11 +99,11 @@ check_event_is_streaming:
 check_logs_not_wrapped:
   elements:
   - selector:
-      xpath: //div[contains(@class,'pf-c-log-viewer__scroll-container') and contains(@style,'auto')]
+      xpath: //div[contains(@class,'log-viewer__scroll-container') and contains(@style,'auto')]
 check_logs_wrapped:
   elements:
   - selector:
-      xpath: //div[contains(@class,'pf-c-log-viewer__scroll-container') and contains(@style,'hidden')]
+      xpath: //div[contains(@Class,'log-viewer__scroll-container') and contains(@style,'hidden')]
 toggle_log_wraps:
   element:
     selector:
