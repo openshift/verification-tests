@@ -632,8 +632,8 @@ check_installation_failure_message:
 check_view_error_button: {}
 check_customized_operator_purchase_link:
   params:
-    text: Purchase
-    link_url: https://test-remote-workflow/pricing
+    text: PurchaseTest
+    link_url: https://marketplace.redhat.com/en-us/operators/testargo?price
   action: check_link_and_text
 check_phase_status:
   elements:
