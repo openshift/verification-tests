@@ -47,13 +47,13 @@ search_and_deploy_image:
   action: search_image
   elements:
   - selector:
-      xpath: //*[contains(@class,'pf-m-success') and contains(text(), 'Validated')]
+      xpath: //*[contains(text(), 'Validated')]
     timeout: 30
-  action: choose_dc_type
+  action: choose_k8s_type
   action: click_create_button
-delete_dc_with_dependency_objects:
+delete_deployment_with_dependency_objects:
   params:
-    item: Delete DeploymentConfig
+    item: Delete Deployment
     button_text: Delete
   action: click_one_dropdown_action
   action: click_button
