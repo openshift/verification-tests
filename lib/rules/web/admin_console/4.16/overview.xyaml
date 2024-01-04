@@ -122,7 +122,7 @@ click_open_popover:
 check_popover_title:
   elements:
   - selector:
-      xpath: //*[contains(@id, 'popover')]/div[contains(text(),"<popover_item>")]
+      xpath: //*[contains(@id, 'popover')]//div[contains(text(),"<popover_item>")]
 check_run_policy_popover_info:
   params:
     content: RunPolicy describes how the new build created from this build configuration
@@ -218,7 +218,7 @@ send_key_to_workloads:
 check_workload_selected:
   elements:
   - selector:
-      xpath: //li[contains(@class,'pf-c-data-list__item') and contains(@class,'pf-m-selected')]
+      xpath: //li[contains(@class,'data-list__item') and contains(@class,'pf-m-selected')]
 check_workload_name:
   elements:
   - selector:
