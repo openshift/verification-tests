@@ -588,7 +588,7 @@ check_master_info_when_filter_by_node_type:
   action: click_button
   elements:
   - selector:
-      xpath: //span[contains(@class,'pf-c-check__label') and contains(text(),'<node_type_name>')]
+      xpath: //span[contains(@class,'check__label') and contains(text(),'<node_type_name>')]
     op: click
   action: click_button
   action: check_metrics_query_cpu_filter_by_node_type
@@ -611,7 +611,7 @@ choose_node_type:
   action: click_button
   elements:
   - selector:
-      xpath: //span[contains(@class,'pf-c-check__label') and contains(text(),'<node_type>')]
+      xpath: //span[contains(@class,'check__label') and contains(text(),'<node_type>')]
     op: click
   action: click_button
 # status card
