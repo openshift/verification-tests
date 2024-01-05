@@ -540,6 +540,9 @@ check_default_view_is_form_view:
 switch_to_yaml_view:
   params:
     radio_text: yaml
+  element:
+    selector:
+      xpath: //input[@value='yaml']
   scripts:
   - command: return document.querySelector("input[value=yaml]").scrollIntoView(false)
     expect_result: ~
