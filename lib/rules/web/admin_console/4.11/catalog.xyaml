@@ -38,7 +38,7 @@ choose_dc_type:
   action: click_radio_input
 choose_k8s_type:
   params:
-    radio_text: k8s
+    radio_text: kubernetes
   action: click_radio_input
 open_env_edit_for_dc:
   action: choose_dc_type
