@@ -12,17 +12,17 @@ check_brand_in_modal:
       xpath: //div[contains(@role,'dialog')]//img[contains(@src, '<logo_source>') and @alt='<product_name>']
 check_logo_in_masthead:
   params:
-    logo_source: static/assets/openshift-logo.svg
+    logo_source: static/assets/public/imgs/openshift-logo.svg
     product_name: Red Hat OpenShift
   action: check_brand
 check_logo_in_app_launcher:
   params:
-    image_src: static/assets/redhat.svg
+    image_src: static/assets/public/imgs/logos/redhat.svg
   action: click_application_launcher_button
   action: check_image_url
 check_logo_in_about_modal:
   params:
-    logo_source: static/assets/openshift-logo.svg
+    logo_source: static/assets/public/imgs/openshift-logo.svg
     product_name: Red Hat OpenShift
   action: click_about_button
   action: check_brand_in_modal
@@ -33,17 +33,17 @@ click_about_button:
   action: click_button_text
 check_dedicated_logo:
   params:
-    logo_source: static/assets/openshift-dedicated-logo.svg
+    logo_source: static/assets/public/imgs/openshift-dedicated-logo.svg
     product_name: Red Hat OpenShift Dedicated
   action: check_brand
 check_online_logo:
   params:
-    logo_source: static/assets/openshift-online-logo.svg
+    logo_source: static/assets/public/imgs/openshift-online-logo.svg
     product_name: Red Hat OpenShift Online
   action: check_brand
 check_azure_logo:
   params:
-    logo_source: static/assets/openshift-logo.svg
+    logo_source: static/assets/public/imgs/openshift-logo.svg
     product_name: Azure Red Hat OpenShift
   action: check_brand
 check_monitoring_urls:
