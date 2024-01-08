@@ -270,7 +270,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
+  @4.16 @4.15 @4.14
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-41198:Authentication Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
@@ -303,7 +303,7 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-check
   @users=upuser1,upuser2
-  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
+  @4.16 @4.15 @4.14
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
