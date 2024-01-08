@@ -18,8 +18,9 @@ RUN set -x && \
     yum -y update && \
     INSTALL_PKGS="diffutils bsdtar git openssh-clients httpd-tools mesa-libgbm rsync" && \
     yum install -y $INSTALL_PKGS && \
-    yum -y install https://rpm.nodesource.com/pub_18.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm && \
-    yum -y install nodejs --setopt=nodesource-nodejs.module_hotfixes=1 && \
+    yum -y module reset nodejs && \
+    yum -y module enable nodejs:18 && \
+    yum -y module install nodejs:18/common && \
     CFT_VERSION='117.0.5938.88' && \
     npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
     find /chrome -type f -name chrome -exec ln -s {} /usr/local/bin/chrome \; && \
@@ -46,10 +47,10 @@ RUN set -x && \
       pip install --upgrade pip setuptools && \
       pip install 'ansible-core < 2.14' && \
     deactivate && \
-    yum module reset ruby && \
-    yum module -y enable ruby:2.7 && \
-    yum module -y install ruby:2.7 && \
-    yum clean all -y && \
+    yum -y module reset ruby && \
+    yum -y module enable ruby:2.7 && \
+    yum -y module install ruby:2.7 && \
+    yum -y clean all && \
     rm -rf /var/cache/yum /var/tmp/* /tmp/*
 
 ADD . /verification-tests/
