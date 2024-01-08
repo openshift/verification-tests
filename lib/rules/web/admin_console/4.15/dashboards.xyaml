@@ -699,9 +699,9 @@ check_cluster_inventory_items:
   - selector:
       xpath: //a[contains(@data-test,'resource-inventory-item') and contains(text(),'Pod')]
   - selector:
-      xpath: //a[contains(@data-test,'resource-inventory-item') and contains(text(),'StorageClasses')]
+      xpath: //a[contains(@data-test,'resource-inventory-item') and contains(text(),'StorageClass')]
   - selector:
-      xpath: //a[contains(@data-test,'resource-inventory-item') and contains(text(),'PersistentVolumeClaims')]
+      xpath: //a[contains(@data-test,'resource-inventory-item') and contains(text(),'PersistentVolumeClaim')]
 check_matched_number_of_nodes:
   params:
     resource_type: node
