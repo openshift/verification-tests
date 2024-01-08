@@ -15,8 +15,9 @@ RUN set -x && \
     yum -y update --exclude java-1.8.0-openjdk-headless && \
     INSTALL_PKGS="bsdtar mesa-libgbm" && \
     dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
-    dnf -y install https://rpm.nodesource.com/pub_18.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm && \
-    dnf -y install nodejs --setopt=nodesource-nodejs.module_hotfixes=1 && \
+    yum -y module reset nodejs && \
+    yum -y module enable nodejs:18 && \
+    yum -y module install nodejs:18/common && \
     CFT_VERSION='117.0.5938.88' && \
     npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
     find /chrome -type f -name chrome -exec ln -s {} /usr/local/bin/chrome \; && \
@@ -28,7 +29,7 @@ RUN set -x && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
     dnf -y install --setopt=tsflags=nodocs https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     dnf -y install --setopt=tsflags=nodocs https://cbs.centos.org/kojifiles/packages/git-crypt/0.6.0/2.el8/x86_64/git-crypt-0.6.0-2.el8.x86_64.rpm && \
-    yum module reset ruby && \
+    yum -y module reset ruby && \
     yum -y module enable ruby:2.7 && \
     yum -y module install ruby:2.7 && \
     yum -y clean all && \
