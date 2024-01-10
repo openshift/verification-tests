@@ -1026,19 +1026,19 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard as #{cb[cb_pod_name]}."
 end
 
-#To make this step interoperable between IC and non IC versions, resourcetype var will be treated as pod or raft depending on release version 
+#To make this step interoperable between IC and non IC versions, resourcetype var will be treated as pod or raft depending on release version
 #as on IC cluters we need to find pod's corresponding ovnkube-node to access its DB
 Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard(?: for #{QUOTED} using node #{QUOTED})?$/ do |ovndb, cb_leader_name, resourcetype, node_name|
   ensure_admin_tagged
   cb_leader_name ||= "#{ovndb}_leader"
-  if env.version_lt("4.14", user: user) 
+  if env.version_lt("4.14", user: user)
     case ovndb
     when "north"
       ovsappctl_cmd = %w(ovs-appctl -t /var/run/ovn/ovnnb_db.ctl cluster/status OVN_Northbound)
     else
       ovsappctl_cmd = %w(ovs-appctl -t /var/run/ovn/ovnsb_db.ctl cluster/status OVN_Southbound)
     end
-    #for < 4.14, we would ignore pod resourcetype pmtr along with its node_name and proceed with normal <=4.13 flow 
+    #for < 4.14, we would ignore pod resourcetype pmtr along with its node_name and proceed with normal <=4.13 flow
     if (resourcetype == "pod" && node_name != nil) || (resourcetype == nil && node_name == nil)
       # if we don't specify a node pick the oldest pod to check leader status
       ovn_pods = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
@@ -1097,26 +1097,27 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
     logger.info "cb.#{cb_leader_name}.name = #{leader_pod.name}"
     logger.info "cb.#{cb_leader_name}.node_name = #{leader_pod.node_name}"
   elsif node_name == nil
-       logger.info "nil node_name var value means we don't care about resource specific db pod hence choosing a random ovnkube-node"
-       step "I select a random node's host"
-       ovnkube_db_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
-       pod.node_name == node.name
-       }.first
-       cache_resources ovnkube_db_pod
-       cb.north_leader = ovnkube_db_pod
-       cb.south_leader = ovnkube_db_pod
-       else
-       logger.info "choosing resource specific ovnkube-node"
-       ovnkube_db_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), 
-             user: admin, quiet: true) { |pod, hash|
-	    pod.node_name == node_name
-       }.first
-       cache_resources ovnkube_db_pod
-       #north or south leader doesn't make any sense on 4.14+ so regardless we define south or nouth, it will store ovnkube-node for defined test pod
-       cb.north_leader = ovnkube_db_pod
-       cb.south_leader = ovnkube_db_pod
-       end
+    logger.info "nil node_name var value means we don't care about resource specific db pod hence choosing a random ovnkube-node"
+    step "I select a random node's host"
+    ovnkube_db_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
+      pod.node_name == node.name
+    }.first
+    cache_resources ovnkube_db_pod
+    cb[cb_leader_name] = ovnkube_db_pod
+    logger.info "cb.#{cb_leader_name}.name = #{ovnkube_db_pod.name}"
+    logger.info "cb.#{cb_leader_name}.node_name = #{ovnkube_db_pod.node_name}"
+  else
+    logger.info "choosing resource specific ovnkube-node"
+    ovnkube_db_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
+      pod.node_name == node_name
+    }.first
+    cache_resources ovnkube_db_pod
+    #north or south leader doesn't make any sense on 4.14+ so regardless we define south or north, it will store ovnkube-node for defined test pod
+    cb[cb_leader_name] = ovnkube_db_pod
+    logger.info "cb.#{cb_leader_name}.name = #{ovnkube_db_pod.name}"
+    logger.info "cb.#{cb_leader_name}.node_name = #{ovnkube_db_pod.node_name}"
   end
+end
 
 # work-around nested clipboard Transform <% cb.south_leader.name %> issues by combining this step
 Given /^admin deletes the ovnkube-master#{OPT_QUOTED} leader$/ do |ovndb|
