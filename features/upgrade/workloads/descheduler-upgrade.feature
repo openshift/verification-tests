@@ -12,8 +12,8 @@ Feature: Descheduler major upgrade should work fine
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @critical
+  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   Scenario: upgrade - upgrade descheduler from 4.x to 4.y - prepare
     Given I switch to cluster admin pseudo user
     Given I store master major version in the clipboard
@@ -48,7 +48,7 @@ Feature: Descheduler major upgrade should work fine
   @upgrade-check
   @users=upuser1,upuser2
   @destructive
-  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
