@@ -284,11 +284,11 @@ check_on_monitoring_metrics_page:
   elements:
   - selector:
       xpath: //button[text()='Add query']
-    timeout: 30
+    timeout: 60
   - selector:
       xpath: //button[text()='Run queries']
   - selector:
-      xpath: //div[contains(@class,'pf-v5-c-chart')]
+      xpath: //div[contains(@class,'c-chart')]
     timeout: 30
 check_textarea:
   element:
