@@ -964,7 +964,7 @@ check_overlay_edit_modal_title:
 check_side_overlay_dialog_modal:
   elements:
   - selector:
-      xpath: //*[contains(@class, 'pf-c-modal-box') and @role='dialog' and not(contains(., 'modal-content'))]
+      xpath: //*[contains(@class, 'pf-v5-c-modal-box') and @role='dialog' and not(contains(., 'modal-content'))]
 check_alert_title:
   elements:
   - selector:
