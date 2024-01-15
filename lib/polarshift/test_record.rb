@@ -211,12 +211,6 @@ module BushSlicer
 
         if !virtual? && finished?
           attachments = self.test_case.scenarios.map(&:attachments).reduce(&:+).join("\n")
-          # for internal datahub URL, the polarshift-ui method 'formatLinks'
-          # doesn't create the hyperlink correctly, so it here to get
-          # around... kind of hacky.
-          if attachments.include? "/url/generate?key"
-            attachments = "<a href='#{attachments}', target='_blank'>presigned_url</a>"
-          end
           success = update_to!({
             "comment" => %{executed by #{EXECUTOR_NAME}\n#{attachments}},
             "result" => self.test_case.result,
