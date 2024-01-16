@@ -146,6 +146,9 @@ Feature: Logging smoke test case
     Then the step should succeed
     And the expression should be true> @result[:parsed]['count'] > 0
     # normal user
+
+    Given I wait up to 180 seconds for the steps to pass:
+    """
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | app*/_count?format=JSON' -d '{"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj.name %>"}}} |
       | op           | GET                                                                                                     |
@@ -158,6 +161,7 @@ Feature: Logging smoke test case
       | token        | <%= cb.user_token_2 %>    |
     Then the step should succeed
     And the expression should be true> [401, 403].include? @result[:exitstatus]
+    """
 
     # Kibana Access
     Given I switch to the second user
