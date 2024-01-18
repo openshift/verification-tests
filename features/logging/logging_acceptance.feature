@@ -2,6 +2,7 @@ Feature: Logging smoke test case
 
   # @author gkarager@redhat.com
   # @case_id OCP-37508
+  @flaky
   @admin
   @serial
   @console
