@@ -194,6 +194,7 @@ check_operand_des_during_creating_operand:
   action: goto_csv_detail_page
   action: click_tab
   action: click_create_operand_button
+  action: switch_to_form_view
   action: check_complete_description
   action: submit_changes
 create_catalog_source:
