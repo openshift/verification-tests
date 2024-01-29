@@ -129,3 +129,7 @@ check_non_exist_reportquery_conditions_table:
       xpath: //div[contains(@class,'co-conditions__message') and contains(.,'ReportQuery (namespace-memory-request-testtest) does not exist')]
   - selector:
       xpath: //div[contains(.,'error getting reportQuery')]
+check_limited_access:
+  params:
+    content: Restricted Access
+  action: check_page_contains
