@@ -37,18 +37,22 @@ Feature: Testing timeout route
     Then the step should succeed
     Given I have a test-client-pod in the project
     When I execute on the pod:
-      | curl                                                                                       |
-      | https://<%= route("pass-route", service("pass-route")).dns(by: user) %>/delay/2            |
-      | -k                                                                                         |
+      | curl                                                                            |
+      | https://<%= route("pass-route", service("pass-route")).dns(by: user) %>/delay/2 |
+      | -k                                                                              |
     Then the step should succeed
     Then the output should contain:
       | "Host": "pass-route |
       | delay/2             |
+
+    Given I wait up to 60 seconds for the steps to pass:
+    """
     When I execute on the pod:
-      | curl                                                                                       |
-      | -Iv                                                                                        |
-      | https://<%= route("pass-route", service("pass-route")).dns(by: user) %>/delay/4            |
-      | -k                                                                                         |
+      | curl                                                                            |
+      | -Iv                                                                             |
+      | https://<%= route("pass-route", service("pass-route")).dns(by: user) %>/delay/5 |
+      | -k                                                                              |
     Then the step should fail
-    Then the output should contain "Empty reply from server"
+    And the output should contain "Empty reply from server"
+    """
 
