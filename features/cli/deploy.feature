@@ -996,7 +996,9 @@ Feature: deployment related features
   Scenario: OCP-16443:Workloads Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
-    When I process and create "https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-stibuild.json"
+    Given I obtain test data file "templates/application-template-stibuild.json"
+    When I process and create:
+      | f |  application-template-stibuild.json |
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completed
