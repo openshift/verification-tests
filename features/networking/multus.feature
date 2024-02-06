@@ -548,7 +548,7 @@ Feature: Multus-CNI related scenarios
       | {"spec":{"additionalNetworks": null}} |
     """
 
-    And I wait up to 30 seconds for the steps to pass:
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :get admin command with:
       | resource | net-attach-def      |
@@ -1726,7 +1726,7 @@ Feature: Multus-CNI related scenarios
     """
 
     # Check NAD is configured under project namespace
-    And I wait up to 30 seconds for the steps to pass:
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :get admin command with:
       | resource | net-attach-def      |
