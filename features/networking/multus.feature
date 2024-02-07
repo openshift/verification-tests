@@ -1555,7 +1555,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-33579
   @admin
   @singlenode
-  @4.6
+  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
