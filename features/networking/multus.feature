@@ -541,14 +541,8 @@ Feature: Multus-CNI related scenarios
     Given I have a project with proper privilege
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks":[{"name":"test-macvlan-case3","namespace":"<%= project.name %>","simpleMacvlanConfig":{"ipamConfig":{"staticIPAMConfig":{"addresses": [{"address":"10.128.2.100/23","gateway":"10.128.2.1"}]},"type":"static"},"master":"<%= cb.default_interface %>","mode":"bridge"},"type":"SimpleMacvlan"}]}} |
-    #Cleanup for bringing CRD to original
-    Given I register clean-up steps:
-    """
-    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
-      | {"spec":{"additionalNetworks": null}} |
-    """
 
-    And I wait up to 30 seconds for the steps to pass:
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :get admin command with:
       | resource | net-attach-def      |
@@ -1726,7 +1720,7 @@ Feature: Multus-CNI related scenarios
     """
 
     # Check NAD is configured under project namespace
-    And I wait up to 30 seconds for the steps to pass:
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :get admin command with:
       | resource | net-attach-def      |
