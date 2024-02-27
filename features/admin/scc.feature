@@ -12,6 +12,7 @@ Feature: SCC policy related scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-11762:Workloads deployment hook volume inheritance with hostPath volume
     Given I have a project with proper privilege
     # Create hostdir pod again with new SCC
