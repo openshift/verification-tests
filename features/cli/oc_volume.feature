@@ -14,6 +14,7 @@ Feature: oc_volume.feature
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-12194:Node Create a pod that consumes the secret in a volume
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/secret.yaml"

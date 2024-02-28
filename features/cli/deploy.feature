@@ -12,6 +12,7 @@ Feature: deployment related features
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-12543:Workloads Restart a failed deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -53,6 +54,7 @@ Feature: deployment related features
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-10643:Workloads Manually make deployment
     Given I have a project
     Given I obtain test data file "deployment/manual.json"
@@ -101,6 +103,7 @@ Feature: deployment related features
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-11695:Workloads CLI rollback output to file
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -194,6 +197,7 @@ Feature: deployment related features
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     @hypershift-hosted
     @critical
+    @workloads
     Examples:
       | case_id             | change_scaling_settings | change_strategy | changed_val1  | changed_val2       |
       | OCP-12116:Workloads | :false                  | :false          |               |                    | # @case_id OCP-12116
@@ -212,6 +216,7 @@ Feature: deployment related features
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-11877:Workloads CLI rollback with one component
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -268,6 +273,7 @@ Feature: deployment related features
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-12133:Workloads Can't stop a deployment in Failed status
     Given I have a project
     Given I obtain test data file "deployment/test-stop-failed-deployment.json"
@@ -312,6 +318,7 @@ Feature: deployment related features
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-12246:Workloads Stop a "Running" deployment
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -613,6 +620,7 @@ Feature: deployment related features
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-11939:Workloads start deployment when the latest deployment is completed
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -684,6 +692,7 @@ Feature: deployment related features
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-11769:Workloads Start new deployment when deployment running
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -713,6 +722,7 @@ Feature: deployment related features
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-12151:Workloads When the latest deployment failed auto rollback to the active deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -772,6 +782,7 @@ Feature: deployment related features
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-10617:Workloads DeploymentConfig should allow valid value of resource requirements
     Given I have a project
     Given I obtain test data file "quota/limits.yaml"
@@ -818,6 +829,7 @@ Feature: deployment related features
   @rosa @osd_ccs @aro
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-11221:Workloads Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -1020,6 +1032,7 @@ Feature: deployment related features
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-31200:Workloads A/B Deployment for OCP 4.5 or greater
     Given the master version >= "4.5"
     Given I have a project

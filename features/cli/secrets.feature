@@ -11,6 +11,7 @@ Feature: secrets related scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @workloads
   Scenario: OCP-10725:Workloads deployment hook volume inheritance --with secret volume
     Given I have a project
     And I run the :create_secret client command with:
