@@ -21,7 +21,7 @@ RUN set -x && \
     yum -y module reset nodejs && \
     yum -y module enable nodejs:18 && \
     yum -y module install nodejs:18/common && \
-    CFT_VERSION='117.0.5938.88' && \
+    CFT_VERSION='122.0.6261.57' && \
     npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
     find /chrome -type f -name chrome -exec ln -s {} /usr/local/bin/chrome \; && \
     npx @puppeteer/browsers install chromedriver@${CFT_VERSION} && \
