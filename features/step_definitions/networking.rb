@@ -1368,9 +1368,8 @@ end
 Given /^the IPsec is enabled on the cluster$/ do
   ensure_admin_tagged
   _admin = admin
-  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
-  config = network_operator.ovn_kubernetes_config(user: admin)
-  unless config && config["ipsecConfig"]
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig.ipsecConfig}")
+  unless (@result[:response] != nil) && (@result[:response].include?("Full") || @result[:response].include?("{}"))
     logger.warn "env doesn't have IPSec enabled"
     logger.warn "We will skip this scenario"
     skip_this_scenario
