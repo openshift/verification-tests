@@ -130,7 +130,7 @@ check_table_loaded:
 check_chart_loaded:
   elements:
   - selector:
-      xpath: //div[contains(@class,'pf-v5-c-chart')]
+      xpath: //div[contains(@class,'pf-c-chart')]
     timeout: 90
 send_filter_options:
   elements:

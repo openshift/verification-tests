@@ -182,7 +182,7 @@ set_array_field_group:
 set_advanced_configuration:
   elements:
   - selector:
-      xpath: //button[contains(@class,'pf-c-expandable-section__toggle')]
+      xpath: //button[contains(@class,'expandable-section__toggle')]
     op: click
   params:
     label_text: Advanced
