@@ -268,7 +268,10 @@ check_catalogsource_removed_message:
   params:
     content: CatalogSource health unknown
   action: check_page_match
-check_quay_image_security_popup:
+check_image_vulnerabilities_popup:
+  params:
+    text: namespace
+    link_url: k8s/all-namespaces/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln?name=sha256.
   elements:
   - selector:
       xpath: //button[contains(.,'Image Vulnerabilities')]
@@ -561,6 +564,14 @@ switch_to_form_view:
 select_installed_namespace:
   action: click_project_list_dropdown
   action: choose_project_from_dropdown_list
+choose_installation_mode_all_namespaces:
+  params:
+    checked_radio_text: AllNamespaces
+  element:
+    selector:
+      xpath: //input[@value="AllNamespaces"]
+    op: click
+  action: check_checked_radio_input
 check_all_namespace_installation_mode_with_recommended_ns:
   params:
     button_text: <recommended_ns>
