@@ -116,9 +116,10 @@ Given /^(I|admin) waits? for the#{OPT_QUOTED} (\w+) to become ready(?: in the#{O
   _resource = resource(name, type, project_name: project_name)
   timeout = timeout ? timeout.to_i : 60
 
-  puts "User: #{_user}"
-  puts "Resource: #{_resource}"
-  puts "Timeout: #{timeout}"
+
+  logger.info("User: #{_user}")
+  logger.info("Resource: #{_resource}")
+  logger.info("Timeout: #{timeout}")
 
   unless _resource
     raise "Failed to get resource #{name} of type #{type} in project #{project_name}"
