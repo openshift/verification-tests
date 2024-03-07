@@ -201,7 +201,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @admin
   @destructive
   @network-ovnkubernetes
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11
+  @4.14 @4.13 @4.12 @4.11
   @vsphere-ipi @openstack-ipi @nutanix-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
