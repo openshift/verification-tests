@@ -118,7 +118,9 @@ Given /^(I|admin) waits? for the#{OPT_QUOTED} (\w+) to become ready(?: in the#{O
 
 
   logger.info("User: #{_user}")
-  logger.info("Resource: #{_resource}")
+  logger.info("Resource.name: #{_resource.name}")
+  logger.info("Resource.project: #{_resource.project_name}")
+  logger.info("Resource.type: #{_resource.type}")
   logger.info("Timeout: #{timeout}")
 
   unless _resource
