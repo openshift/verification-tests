@@ -116,6 +116,14 @@ Given /^(I|admin) waits? for the#{OPT_QUOTED} (\w+) to become ready(?: in the#{O
   _resource = resource(name, type, project_name: project_name)
   timeout = timeout ? timeout.to_i : 60
 
+  puts "User: #{_user}"
+  puts "Resource: #{_resource}"
+  puts "Timeout: #{timeout}"
+
+  unless _resource
+    raise "Failed to get resource #{name} of type #{type} in project #{project_name}"
+  end
+
   @result = _resource.wait_till_ready(_user, timeout)
   unless @result[:success]
     raise %Q{#{type} "#{_resource.name}" did not become ready within } \
