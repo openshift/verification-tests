@@ -294,7 +294,7 @@ check_catalog_badge_by_checkbox:
   action: click_checkbox_from_provider_type
   elements:
   - selector:
-      xpath: //*[contains(@class, 'badge') and text()='<text>']
+      xpath: //*[contains(@class, 'badge')]//*[contains(text(),'<text>')]
     timeout: 30
   action: click_checkbox_from_provider_type
 check_marketplace_operator_description_on_overlay:
