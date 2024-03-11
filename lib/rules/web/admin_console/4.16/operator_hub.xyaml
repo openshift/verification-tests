@@ -413,6 +413,16 @@ wait_filter_section_loaded:
   element:
     selector:
       xpath: //form[@data-test-group-name='<filter_type_value>']
+  action:
+    if_element:
+      selector: &show_more_group_items
+        xpath: //form[@data-test-group-name='<filter_type_value>']//button[contains(., 'more')]
+    ref: click_show_more
+click_show_more:
+  element:
+    selector:
+      <<: *show_more_group_items
+    op: click
 choose_one_checkbox:
   element:
     selector:
