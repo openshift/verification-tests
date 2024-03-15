@@ -21,7 +21,7 @@ module BushSlicer
        res = get(user: user, quiet: quiet)
        if res[:success]
          res[:success] =
-           res[:parsed]["status"]["state"] == "AtLatestKnown"
+           res[:parsed]["status"] && res[:parsed]["status"]["state"] && res[:parsed]["status"]["state"] == "AtLatestKnown"
         end
         return res
     end
