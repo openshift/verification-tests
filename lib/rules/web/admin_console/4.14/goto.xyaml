@@ -411,7 +411,7 @@ goto_all_machine_sets_page:
 
 #ImageManifestVuln
 goto_ImageManifestVuln_list_page:
-  url: k8s/ns/<project_name>/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln
+  url: k8s/all-namespaces/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln
 goto_one_ImageManifestVuln_page:
   url: k8s/ns/<project_name>/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln/<manifest>
 

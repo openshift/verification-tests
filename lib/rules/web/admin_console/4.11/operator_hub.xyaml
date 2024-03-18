@@ -269,7 +269,10 @@ check_catalogsource_removed_message:
   params:
     content: CatalogSource removed
   action: check_page_match
-check_quay_image_security_popup:
+check_image_vulnerabilities_popup:
+  params:
+    text: namespace
+    link_url: k8s/all-namespaces/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln?name=sha256.
   elements:
   - selector:
       xpath: //button[contains(.,'Image Vulnerabilities')]
