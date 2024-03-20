@@ -1704,3 +1704,15 @@ Given /^the corresponding version ovn masterDB components ds is deleted$/ do
     })
   end
 end 
+
+Given /^the IPsec is disabled on the cluster$/ do
+  ensure_admin_tagged
+  _admin = admin
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  config = network_operator.ovn_kubernetes_config(user: admin)
+  if config && config["ipsecConfig"]
+    logger.warn "env does have IPSec enabled"
+    logger.warn "We will skip this scenario in the IPsec cluster"
+    skip_this_scenario
+  end
+end
