@@ -255,7 +255,7 @@ goto_alertmanagerconfig_page:
   url: monitoring/alertmanagerconfig
   action: wait_box_loaded
 goto_monitoring_db_k8s_resource_pod:
-  url: monitoring/dashboards/grafana-dashboard-k8s-resources-pod
+  url: monitoring/dashboards/dashboard-k8s-resources-pod
 goto_monitoring_db_elasticsearch:
   url: monitoring/dashboards/grafana-dashboard-elasticsearch
 goto_monitoring_db_cluster_logging:
