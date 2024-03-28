@@ -444,7 +444,7 @@ Feature: SDN related networking scenarios
     | nmcli device \| grep ethernet \| grep -c unmanaged |
   And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_unmanaged_infs clipboard
   And I run commands on the host:
-    | nmcli \| grep veth \| wc -l |
+    | nmcli \| grep -P '(?<!ibm)veth' \| wc -l |
   And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_veths clipboard
   Then the expression should be true> cb.no_of_unmanaged_infs >=cb.no_of_veths
 
