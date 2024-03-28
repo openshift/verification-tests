@@ -18,7 +18,7 @@ check_help_info_in_update_channel_modal:
 click_channel_help_icon:
   element:
     selector:
-      xpath: //button[@aria-label='Help']
+      xpath: //dt[contains(., 'Channel')]//button[@aria-label='Help']
     op: click
 check_help_info:
   elements:
