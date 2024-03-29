@@ -79,4 +79,5 @@ Feature: Descheduler major upgrade should work fine
       | resource     | csv                                 |
       | n            | openshift-kube-descheduler-operator |
     Then the step should succeed
-    And the output should match "clusterkubedescheduleroperator.*<%= cb.master_version %>.*Succeeded"
+    Given evaluation of `env.version_ge("4.15", user: user) ? "v5.0" : cb.master_version` is stored in the :descheduler_version clipboard
+    And the output should match "clusterkubedescheduleroperator.*<%= cb.descheduler_version %>.*Succeeded"
