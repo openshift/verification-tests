@@ -68,6 +68,7 @@ Feature: Machine features testing
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
+  @level0
   Scenario: OCP-25436:ClusterInfrastructure Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

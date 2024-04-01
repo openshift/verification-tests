@@ -52,6 +52,7 @@ Feature: ServiceAccount and Policy Managerment
   @osd_ccs @aro @rosa
   @hypershift-hosted
   @critical
+  @level0
   Scenario: OCP-11494:Authentication Could grant admin permission for the service account group to access to its own project
     Given I have a project
     When I run the :new_app client command with:

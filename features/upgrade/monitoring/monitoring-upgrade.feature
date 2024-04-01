@@ -34,6 +34,7 @@ Feature: cluster monitoring related upgrade check
   @s390x @ppc64le @heterogeneous @arm64 @amd64 
   @hypershift-hosted
   @critical
+  @level0
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project

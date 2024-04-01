@@ -12,6 +12,7 @@ Feature: Cluster Autoscaler Tests
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
+  @level0
   Scenario: OCP-28108:ClusterInfrastructure Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
