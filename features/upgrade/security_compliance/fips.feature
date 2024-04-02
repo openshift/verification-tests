@@ -78,6 +78,7 @@ Feature: fips enabled verification for upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @level0
   Scenario: FIPS mode checking command works for a cluster with fip mode on
     Given fips is enabled
     #check whether fips enabled for master node

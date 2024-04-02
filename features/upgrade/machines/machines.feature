@@ -139,6 +139,7 @@ Feature: Machine-api components upgrade tests
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
+  @level0
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

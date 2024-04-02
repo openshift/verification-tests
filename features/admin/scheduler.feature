@@ -10,6 +10,7 @@ Feature: Scheduler related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @level0
   Scenario: OCP-14582:Workloads When no scheduler name is supplied, the pod is automatically scheduled using the default-scheduler
     Given I have a project
     Given I obtain test data file "scheduler/multiple-schedulers/pod-no-scheduler.yaml"
