@@ -414,7 +414,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
