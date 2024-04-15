@@ -858,7 +858,11 @@ Given /^the cluster has "([^"]*)" endpoint publishing strategy$/ do |ep_pub_stra
   ensure_admin_tagged
   _admin = admin
   @result = admin.cli_exec(:get, n: "openshift-ingress-operator", resource: "ingresscontrollers", resource_name: "default", o: "jsonpath={.status.endpointPublishingStrategy.type}")
-  raise "the endpoint strategy is not #{ep_pub_strategy}" unless @result[:response] == ep_pub_strategy
+  unless @result[:response] == ep_pub_strategy
+    logger.warn "the endpoint strategy is not #{ep_pub_strategy}"
+    logger.warn "We will skip this scenario"
+    skip_this_scenario
+  end
 end
 
 Given /^the env is using windows nodes$/ do
