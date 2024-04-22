@@ -219,7 +219,7 @@ check_pages_in_chinese:
   - selector:
       xpath: //button[contains(@class,'pf-v5-c-nav__link') and contains(.,'存储')]
   scripts:
-  - command: return localStorage['bridge/last-language'] == 'zh'
+  - command: return localStorage['bridge/last-language'] == 'zh-CN'
     expect_result: true
 check_pages_in_japanese:
   elements:
