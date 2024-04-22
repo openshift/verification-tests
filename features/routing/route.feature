@@ -139,6 +139,7 @@ Feature: Testing route
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @critical
+  @hypershift-hosted
   Scenario: OCP-12562:NetworkEdge The path specified in route can work well for edge terminated
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -224,6 +225,7 @@ Feature: Testing route
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @critical
+  @hypershift-hosted
   Scenario: OCP-12564:NetworkEdge The path specified in route can work well for reencrypt terminated
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -274,6 +276,7 @@ Feature: Testing route
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @critical
+  @hypershift-hosted
   Scenario: OCP-9651:NetworkEdge Config insecureEdgeTerminationPolicy to Redirect for route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -327,6 +330,7 @@ Feature: Testing route
   @network-ovnkubernetes @network-openshiftsdn
   @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
+  @inactive
   Scenario: OCP-9650:NetworkEdge Config insecureEdgeTerminationPolicy to Allow for route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -426,6 +430,7 @@ Feature: Testing route
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @critical
+  @hypershift-hosted
   Scenario: OCP-11036:NetworkEdge Set insecureEdgeTerminationPolicy to Redirect for passthrough route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -484,6 +489,7 @@ Feature: Testing route
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @critical
+  @hypershift-hosted
   Scenario: OCP-13839:NetworkEdge Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -602,6 +608,7 @@ Feature: Testing route
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @critical
+  @hypershift-hosted
   Scenario: OCP-13753:NetworkEdge Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"

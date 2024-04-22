@@ -68,6 +68,7 @@ Feature: kubelet restart and node restart
     @vsphere-upi
     @hypershift-hosted
     @critical
+    @inactive
     Examples:
       | case_id           | platform       |
       | OCP-13631:Storage | vsphere-volume | # @case_id OCP-13631

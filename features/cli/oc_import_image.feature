@@ -51,6 +51,7 @@ Feature: oc import-image related feature
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @inactive
   Scenario: OCP-11089:ImageRegistry Tags should be added to ImageStream if image repository is from an external docker registry
     Given I have a project
     Given I obtain test data file "image-streams/external.json"

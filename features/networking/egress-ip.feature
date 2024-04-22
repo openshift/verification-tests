@@ -12,6 +12,7 @@ Feature: Egress IP related features
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @inactive
   Scenario: OCP-15465:SDN Only cluster admin can add/remove egressIPs on hostsubnet
     Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host
@@ -37,6 +38,7 @@ Feature: Egress IP related features
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @inactive
   Scenario: OCP-15466:SDN Only cluster admin can add/remove egressIPs on netnamespaces
     Given the env is using "OpenShiftSDN" networkType
     # Try to add the egress ip to the netnamespace with normal user
@@ -62,6 +64,7 @@ Feature: Egress IP related features
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @inactive
   Scenario: OCP-15471:SDN All the pods egress connection will get out through the egress IP if the egress IP is set to netns and egress node can host the IP
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -124,6 +127,7 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-15472:SDN The egressIPs will be added to the node's primary NIC when it gets set on hostsubnet and will be removed after gets unset
     Given the env is using "OpenShiftSDN" networkType
     # add the egress ip to the hostsubnet
@@ -166,6 +170,7 @@ Feature: Egress IP related features
   @proxy @noproxy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-21812:SDN Should remove the egressIP from the array if it was not being used
     Given the env is using "OpenShiftSDN" networkType
     Given I store a random unused IP address from the reserved range to the clipboard
@@ -221,6 +226,7 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-15992:SDN The EgressNetworkPolicy should work well with egressIP
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -270,6 +276,7 @@ Feature: Egress IP related features
   @proxy @noproxy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-15473:SDN The related iptables/openflow rules will be removed once the egressIP gets removed from netnamespace
     Given the env is using "OpenShiftSDN" networkType
     Given the valid egress IP is added to the node
@@ -324,6 +331,7 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-19973:SDN The egressIP should still work fine after the node or network service restarted
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -367,6 +375,7 @@ Feature: Egress IP related features
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @hypershift-hosted
+  @inactive
   Scenario: OCP-15998:SDN Invalid egressIP should not be acceptable
     Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host
@@ -394,6 +403,7 @@ Feature: Egress IP related features
   @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-25694:SDN Random outages with egressIP
     Given the env is using "OpenShiftSDN" networkType
     Given I store the schedulable workers in the :nodes clipboard
@@ -433,6 +443,7 @@ Feature: Egress IP related features
   @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-25640:SDN Should be able to access to the service's externalIP with egressIP
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -494,6 +505,7 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-18316:SDN The egressIPs should work well when re-using the egressIP which is holding by a deleted project
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -532,6 +544,7 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-18315:SDN Add the removed egressIP back to the netnamespace would work well
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -576,6 +589,7 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-19785:SDN The pod should be able to access outside with the node source IP after the egressIP removed
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -628,6 +642,7 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-15989:SDN Pods will not be affected by the egressIP set on other netnamespace
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -662,6 +677,7 @@ Feature: Egress IP related features
   @qeci
   @proxy @noproxy @connected
   @network-openshiftsdn @network-networkpolicy
+  @inactive
   Scenario: OCP-15987:SDN The egressIP will be unavailable if it was set to multiple hostsubnets
     Given the env is using "OpenShiftSDN" networkType
     Given I store the schedulable workers in the :nodes clipboard
@@ -701,6 +717,7 @@ Feature: Egress IP related features
   @network-openshiftsdn @network-networkpolicy @network-multitenant
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-18586:SDN The same egressIP will not be assigned to different netnamespace
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -748,6 +765,7 @@ Feature: Egress IP related features
   @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-40928:SDN Manually EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node it is on
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -800,6 +818,7 @@ Feature: Egress IP related features
   @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-40933:SDN Manually EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -853,6 +872,7 @@ Feature: Egress IP related features
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-40957:SDN Auto EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -907,6 +927,7 @@ Feature: Egress IP related features
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-40956:SDN Auto EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard
@@ -968,6 +989,7 @@ Feature: Egress IP related features
   @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-46244:SDN Bug1926662 NodePort works when configuring an EgressIP address
     Given the env is using "OpenShiftSDN" networkType
     Given I store the schedulable workers in the :workers clipboard
@@ -1015,6 +1037,7 @@ Feature: Egress IP related features
   @network-openshiftsdn
   @noproxy
   @hypershift-hosted
+  @inactive
   Scenario: OCP-46637:SDN Bug2024880 EgressIP should work when configuring networkpolicy
     Given the env is using "OpenShiftSDN" networkType
     Given I save ipecho url to the clipboard

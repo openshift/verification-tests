@@ -187,6 +187,11 @@ Feature: CSI Resizing related feature
     And the output should not contain:
       | No space left on device |
 
+    @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
+    @hypershift-hosted
+    @proxy @noproxy
     Examples:
       | case_id            | sc_name     |
       | OCP-41452::Storage | managed-csi | # @case_id OCP-41452

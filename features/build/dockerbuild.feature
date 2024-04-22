@@ -83,6 +83,12 @@ Feature: dockerbuild.feature
   # @author dyan@redhat.com
   # @case_id OCP-13083
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @proxy @noproxy @disconnected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-13083:BuildAPI Docker build using Dockerfile with 'FROM scratch'
     Given I have a project
     When I run the :new_build client command with:

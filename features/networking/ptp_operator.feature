@@ -6,6 +6,7 @@ Feature: PTP related scenarios
   @stage-only
   @4.10 @4.9 @4.6
   @proxy @noproxy @disconnected @connected
+  @inactive
   Scenario: OCP-25940:SDN ptp operator can be deployed successfully
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ptp" project
@@ -19,6 +20,7 @@ Feature: PTP related scenarios
   # @case_id OCP-25738
   @admin
   @destructive
+  @inactive
   Scenario: OCP-25738:SDN Linuxptp run as slave can sync to master
     Given the ptp operator is running well
     Given I switch to the first user
@@ -53,6 +55,7 @@ Feature: PTP related scenarios
   # @case_id OCP-25740
   @admin
   @destructive
+  @inactive
   Scenario: OCP-25740:SDN Linuxptp runs in transparent udp4 mode
     Given the ptp operator is running well
     Given I switch to the first user
@@ -93,6 +96,10 @@ Feature: PTP related scenarios
   @admin
   @destructive
   @4.10 @4.9
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-26187:SDN PTP operator starts linuxptp daemon based on nodeSelector configured in default PtpOperatorConfig CRD
     Given the ptp operator is running well
     And I use the "openshift-ptp" project

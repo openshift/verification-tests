@@ -3,6 +3,12 @@ Feature: replicaSet related tests
   # @author pruan@redhat.com
   # @case_id OCP-10917
   @smoke
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @critical
+  @hypershift-hosted
   Scenario: OCP-10917:Workloads Support endpoints of RS in OpenShift
     Given I have a project
     Given I obtain test data file "replicaSet/ocp10917/rs_endpoints.yaml"

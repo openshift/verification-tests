@@ -78,6 +78,12 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-21516
   @admin
   @destructive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-21516:ClusterInfrastructure Cao listens and deploys cluster-autoscaler based on ClusterAutoscaler resource
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -95,6 +101,12 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-21517
   @admin
   @destructive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-21517:ClusterInfrastructure CAO listens and annotations machineSets based on MachineAutoscaler resource
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

@@ -522,6 +522,12 @@ Feature: secrets related scenarios
   # @author xiuwang@redhat.com
   # @case_id OCP-12838
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @noproxy @connected
+  @critical
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-12838:BuildAPI Use build source secret based on annotation on Secret --http
     Given I have a project
     When I have an http-git service in the project

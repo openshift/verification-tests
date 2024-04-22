@@ -25,6 +25,11 @@ Feature: buildlogic.feature
   # @author xiazhao@redhat.com
   # @case_id OCP-11170
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-11170:BuildAPI Result image will be tried to push after multi-build
     Given I have a project
     Given I obtain test data file "image/language-image-templates/php-55-rhel7-stibuild.json"
@@ -51,6 +56,12 @@ Feature: buildlogic.feature
   # @author gpei@redhat.com
   # @case_id OCP-11767
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-11767:BuildAPI Create build without output
     Given I have a project
     When I run the :new_build client command with:
@@ -333,6 +344,12 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-13914
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @critical
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-13914:BuildAPI Prune old builds automaticly
     #Should prune completed builds based on the successfulBuildsHistoryLimit setting
     Given I have a project
@@ -361,6 +378,11 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-24154
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-24154:BuildAPI Should prune canceled builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :new_app client command with:
@@ -395,6 +417,12 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-24155
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-24155:BuildAPI Should prune failed builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :new_app client command with:
@@ -421,6 +449,11 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-24156
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-24156:BuildAPI Should prune errored builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :create client command with:
@@ -444,6 +477,11 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-24158
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-24158:BuildAPI Should prune builds after a buildConfig change
     Given I have a project
     When I run the :new_app client command with:
@@ -490,6 +528,12 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-24159
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @critical
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-24159:BuildAPI Buildconfigs should have a default history limit set when created via the group api
     Given I have a project
     When I run the :new_build client command with:

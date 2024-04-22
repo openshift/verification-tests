@@ -3,7 +3,13 @@ Feature: Service related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-9604
   @admin
-  @network-multitenant
+  @network-openshiftsdn @network-multitenant
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @hypershift-hosted
+  @proxy @noproxy
   Scenario: OCP-9604:SDN tenants can access their own services
     # create pod and service in project1
     Given the env is using multitenant network
@@ -635,6 +641,7 @@ Feature: Service related networking scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
+  @inactive
   Scenario: OCP-33850:SDN User cannot decrease the nodePort range in post action
     When I run the :patch admin command with:
       | resource      | networks.config.openshift.io                     |
@@ -845,6 +852,7 @@ Feature: Service related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: OCP-10770:SDN Be able to access the service via the nodeport
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard		

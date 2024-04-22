@@ -2,6 +2,12 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-11421
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @critical
+  @hypershift-hosted
   Scenario: OCP-11421:Workloads Add perma-failed - Deplyment succeed after change pod template by edit deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-1.yaml"
@@ -76,6 +82,13 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-11046
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @critical
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-11046:Workloads Add perma-failed - Deployment failed after pausing and resuming
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-1.yaml"
@@ -169,6 +182,12 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-11681
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @critical
+  @hypershift-hosted
   Scenario: OCP-11681:Workloads Add perma-failed - Failing deployment can be rolled back successful
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-3.yaml"
@@ -268,6 +287,12 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-12110
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @critical
+  @hypershift-hosted
   Scenario: OCP-12110:Workloads Add perma-failed - Rolling back to a failing deployment revision
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-3.yaml"
@@ -375,6 +400,12 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-11865
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @critical
+  @hypershift-hosted
   Scenario: OCP-11865:Workloads Add perma-failed - Make a change outside pod template for failing deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-1.yaml"
@@ -467,6 +498,12 @@ Feature: deployment related steps
 
   # @author chezhang@redhat.com
   # @case_id OCP-12009
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @critical
+  @hypershift-hosted
   Scenario: OCP-12009:Workloads Add perma-failed - Negative value test of progressDeadlineSeconds in failing deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-2.yaml"

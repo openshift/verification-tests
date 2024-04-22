@@ -173,7 +173,7 @@ Feature: collector related tests
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
-  @s390x @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-25768:Logging The container logs metadata check
     Given the master version >= "4.2"
     Given I switch to the first user
@@ -210,7 +210,7 @@ Feature: collector related tests
   @destructive
   @commonlogging
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @logging5.6 @logging5.7 @logging5.8 @logging5.5
+  @logging5.8 @logging5.7 @logging5.6 @logging5.5
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -260,7 +260,7 @@ Feature: collector related tests
   @destructive
   @singlenode
   @4.7 @4.6
-  @logging5.6 @logging5.7 @logging5.8
+  @logging5.8 @logging5.7 @logging5.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-ovnkubernetes @network-openshiftsdn
