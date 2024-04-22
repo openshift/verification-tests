@@ -177,7 +177,7 @@ Feature: Machine misc features testing
   @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi
   @vsphere-upi
   Scenario: OCP-37180:ClusterInfrastructure Report vCenter version to telemetry

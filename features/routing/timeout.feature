@@ -12,6 +12,7 @@ Feature: Testing timeout route
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @critical
+  @hypershift-hosted
   Scenario: OCP-11635:NetworkEdge Set timeout server for passthough route
     Given I have a project
     Given I obtain test data file "routing/routetimeout/httpbin-pod.json"

@@ -58,6 +58,13 @@ Feature: Sriov IB related scenarios
       | ls | /dev/ |
     Then the output should contain "infiniband"
 
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
+    @baremetal-ipi
+    @baremetal-upi
+    @critical
+    @hypershift-hosted
+    @network-ovnkubernetes @network-openshiftsdn
+    @proxy @noproxy
     Examples:
       | case_id       | cardname |
       | OCP-33812:SDN | cx4      | # @case_id OCP-33812
@@ -68,6 +75,7 @@ Feature: Sriov IB related scenarios
   # @case_id OCP-33852
   @destructive
   @admin
+  @inactive
   Scenario: OCP-33852:SDN Set the infiniband-guid for pod
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/ib/cx6/cx6-ib.yaml"

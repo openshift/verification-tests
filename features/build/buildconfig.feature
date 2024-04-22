@@ -25,6 +25,11 @@ Feature: buildconfig.feature
   # @author haowang@redhat.com
   # @case_id OCP-10667
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-10667:BuildAPI Rebuild image when the underlying image changed for Docker build
     Given I have a project
     When I run the :new_build client command with:
@@ -44,6 +49,11 @@ Feature: buildconfig.feature
   # @author dyan@redhat.com
   # @case_id OCP-12020
   @inactive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-12020:BuildAPI Trigger chain builds from a image update
     Given I have a project
     When I run the :new_build client command with:

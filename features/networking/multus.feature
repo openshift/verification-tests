@@ -568,6 +568,13 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-21946
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @vsphere-ipi @baremetal-ipi
+  @vsphere-upi @baremetal-upi
+  @critical
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-21946:SDN The multus admission controller should be able to detect the syntax issue in the net-attach-def
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster

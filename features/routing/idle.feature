@@ -2,6 +2,13 @@ Feature: idle service related scenarios
 
   # @author hongli@redhat.com
   # @case_id OCP-10935
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-10935:NetworkEdge Pod can be changed to un-idle when there is unsecure or edge or passthrough route coming
     Given I have a project
     Given I obtain test data file "routing/web-server-rc.yaml"
@@ -97,6 +104,13 @@ Feature: idle service related scenarios
 
   # @author hongli@redhat.com
   # @case_id OCP-13837
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-13837:NetworkEdge Pod can be changed to un-idle when there is reencrypt route coming
     Given I have a project
     Given I obtain test data file "routing/web-server-rc.yaml"

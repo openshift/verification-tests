@@ -24,6 +24,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-24702
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-24702:SDN netdevice VF for XXV710 can be worked well when sriovnetworknodepolicies is created for rhcos node
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-netdevice.yaml"
@@ -75,6 +81,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-21364
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-21364:SDN Create pod with sriov-cni plugin and macvlan on the same interface
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-netdevice.yaml"
@@ -136,6 +148,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-24713
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-24713:SDN NAD can be also updated when networknamespace is change
     Given the sriov operator is running well
     Given I switch to the first user
@@ -209,6 +227,12 @@ Feature: Sriov related scenarios
     Then the output should contain:
       | 10.56.217 |
 
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
+    @baremetal-ipi
+    @baremetal-upi
+    @hypershift-hosted
+    @network-ovnkubernetes @network-openshiftsdn
+    @proxy @noproxy
     Examples:
       | case_id       | cardname |
       | OCP-24774:SDN | mlx277   | # @case_id OCP-24774
@@ -218,6 +242,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-24780
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-24780:SDN NAD will be deleted too when sriovnetwork is deleted
     Given the sriov operator is running well
     Given I switch to the first user
@@ -239,6 +269,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-25287
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-25287:SDN NAD should be able to restore by sriov operator when it was deleted
     Given the sriov operator is running well
     Given I switch to the first user
@@ -267,6 +303,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-25790
   @admin
   @destructive
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-25790:SDN SR-IOV network config daemon can be set by nodeselector
     Given the sriov operator is running well
     And all existing pods are ready with labels:
@@ -281,6 +323,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-26134
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-26134:SDN sriov can be shown in Metrics and telemetry
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
@@ -367,6 +415,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-33454
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-33454:SDN VF mac can be set with container mac address
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
@@ -456,6 +510,12 @@ Feature: Sriov related scenarios
     And the output should not contain "<keyword>"
     """
 
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
+    @baremetal-ipi
+    @baremetal-upi
+    @hypershift-hosted
+    @network-ovnkubernetes @network-openshiftsdn
+    @proxy @noproxy
     Examples:
       | case_id       | sriov-feature            | keyword          |
       | OCP-25814:SDN | SR-IOV resource injector | injector         | # @case_id OCP-25814
@@ -465,6 +525,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-25835
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-25835:SDN SR-IOV resource injector should not overwrite the request memory and cpu
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
@@ -522,6 +588,12 @@ Feature: Sriov related scenarios
     Then the step should fail
     And the output should contain "<Error message>"
 
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
+    @baremetal-ipi
+    @baremetal-upi
+    @hypershift-hosted
+    @network-ovnkubernetes @network-openshiftsdn
+    @proxy @noproxy
     Examples:
       | file              | Error message                |
       | invalidname.yaml  | invalid characters           |
@@ -534,6 +606,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-28076
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-28076:SDN vf range should be correct if create sriovnetworkpolicy without pfNames
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-netdevice-without-pf.yaml"
@@ -565,6 +643,13 @@ Feature: Sriov related scenarios
   # @case_id OCP-30268
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @critical
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-30268:SDN user can set the loglevel for sriov config daemon
     Given the sriov operator is running well
     Given sriov config daemon is ready
@@ -589,6 +674,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-30277
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-30277:SDN Loglevel value should be explain in CRD
     Given the sriov operator is running well
     When I run the :explain client command with:
@@ -600,6 +691,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-32642
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-32642:SDN MTU can be set according to policy is specified
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
@@ -700,7 +797,7 @@ Feature: Sriov related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
-  @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-25321:SDN dpdk for intel card works well
     Given the sriov operator is running well
@@ -756,6 +853,12 @@ Feature: Sriov related scenarios
   # @case_id OCP-37458
   @destructive
   @admin
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @baremetal-ipi
+  @baremetal-upi
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy
   Scenario: OCP-37458:SDN user can disable drain node by DisableDrain
     Given the sriov operator is running well
     #disable drain node by DisableDrain

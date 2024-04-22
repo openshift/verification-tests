@@ -233,6 +233,7 @@ Feature: Pod related networking scenarios
   @network-openshiftsdn
   @proxy @noproxy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @hypershift-hosted
   Scenario: OCP-23893:SDN A pod in a namespace with an egress IP cannot access the MCS
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -645,6 +646,12 @@ Feature: Pod related networking scenarios
   @long-duration
   @admin
   @destructive
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @disconnected @connected
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-41666:SDN Pod stuck in container creating - failed to run CNI IPAM ADD: failed to allocate for range 0: no IP addresses available in range set
     Given the env is using "OpenShiftSDN" networkType
     Given I switch to cluster admin pseudo user

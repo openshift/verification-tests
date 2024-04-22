@@ -62,6 +62,11 @@ Feature: build 'apps' with CLI
       | ruby-sample-build |
 
     @inactive
+    @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
+    @network-ovnkubernetes @network-openshiftsdn
+    @proxy @noproxy
     Examples:
       | case_id            | number   | build_status |
       | OCP-11224:BuildAPI | ocp11224 | :complete    | # @case_id OCP-11224
@@ -418,6 +423,12 @@ Feature: build 'apps' with CLI
     Given the "<build_name>" build becomes :complete
 
     @inactive
+    @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+    @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+    @s390x @ppc64le @heterogeneous @arm64 @amd64
+    @proxy @noproxy @connected
+    @critical
+    @network-ovnkubernetes @network-openshiftsdn
     Examples:
       | case_id            | bc_name              | build_name             | file_name        |
       | OCP-11580:BuildAPI | ruby-sample-build-ns | ruby-sample-build-ns-1 | Nonesrc-sti.json | # @case_id OCP-11580

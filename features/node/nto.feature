@@ -4,11 +4,13 @@ Feature: Node Tuning Operator related scenarios
   # @case_id OCP-27491
   @admin
   @destructive
-  @nutanix-ipi @ibmcloud-ipi @alicloud-ipi
-  @nutanix-upi @ibmcloud-upi @alicloud-upi
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @4.16 @4.15 @4.14 @4.13
   @hypershift-hosted
-  @s390x @ppc64le
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-27491:PSAP Node tuning operator: tuning is working - add profile
     # Cleaning after test if some step failed
     Given admin ensures "nf-conntrack-max" tuned is deleted from the "openshift-cluster-node-tuning-operator" project after scenario

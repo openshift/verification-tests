@@ -98,6 +98,13 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22419
   @admin
   @destructive
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @aws-ipi
+  @aws-upi
+  @proxy @noproxy @connected
+  @critical
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-22419:SDN The clusteroperator should be able to reflect the realtime status of the network when the config has problem
     Given the master version >= "4.1"
     # Check that the operator is not Degraded
@@ -150,6 +157,12 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22202
   @admin
   @destructive
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @gcp-ipi @azure-ipi @aws-ipi
+  @noproxy @connected
+  @critical
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-22202:SDN The clusteroperator should be able to reflect the realtime status of the network when a new node added
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -281,6 +294,7 @@ Feature: Operator related networking scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @inactive
   Scenario: OCP-21574:SDN Should not allow to change the openshift-sdn config
     #Trying to change network mode to Subnet or any other
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:

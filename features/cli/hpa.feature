@@ -150,6 +150,12 @@ Feature: hpa scale
 
   # @author chezhang@redhat.com
   # @case_id OCP-11576
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @proxy @noproxy @connected
+  @hypershift-hosted
+  @network-ovnkubernetes @network-openshiftsdn
   Scenario: OCP-11576:Node Creates autoscaler for replication controller with invalid value
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"

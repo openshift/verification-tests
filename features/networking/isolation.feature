@@ -3,6 +3,13 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9565
   @admin
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @hypershift-hosted
+  @network-openshiftsdn @network-networkpolicy @network-multitenant
+  @proxy @noproxy
   Scenario: OCP-9565:SDN The pods in default namespace can communicate with all the other pods
     Given I have a project
     And evaluation of `project.name` is stored in the :u1p1 clipboard
@@ -87,9 +94,12 @@ Feature: networking isolation related scenarios
   # @author jechen@redhat.com
   # @case_id OCP-45077
   @admin
-  @network-multitenant
-  @s390x @ppc64le
+  @network-openshiftsdn @network-multitenant
+  @s390x @ppc64le @arm64 @amd64
   @4.16 @4.15 @4.14 @4.13
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @proxy @noproxy @disconnected @connected
   Scenario: Only the pods nested in a same namespace can communicate with each other
     Given the env is using multitenant network
     Given I have a project
@@ -451,7 +461,13 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9646
   @admin
-  @network-multitenant
+  @network-openshiftsdn @network-multitenant
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @hypershift-hosted
+  @proxy @noproxy
   Scenario: OCP-9646:SDN Isolate the network for the project which already make network global
     Given the env is using multitenant network
     Given I have a project

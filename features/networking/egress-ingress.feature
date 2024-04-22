@@ -450,6 +450,7 @@ Feature: Egress-ingress related networking scenarios
   @network-ovnkubernetes
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @critical
   Scenario: OCP-33530:SDN EgressFirewall allows traffic to destination ports
     Given the cluster is not proxy cluster
     Given the env is using "OVNKubernetes" networkType

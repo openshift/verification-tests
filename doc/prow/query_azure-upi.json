@@ -1,3 +1,3 @@
 {
-  "case_query": "products.KEY:ocp AND type:testcase AND caseautomation.KEY:automated AND automation_script:cucushift AND NOT status:inactive AND NOT upstream.KEY:yes AND NOT tags:(stage_only prod_only) AND env_install_method.KEY:(__all__ upi) AND env_iaas_cloud_provider.KEY:(__all__ azure)"
+  "case_query": "products.KEY:ocp AND type:testcase AND caseautomation.KEY:automated AND automation_script:cucushift AND NOT status:inactive AND NOT tags:(stage_only prod_only) AND env_install_method.KEY:(__all__ upi) AND env_iaas_cloud_provider.KEY:(__all__ azure)"
 }

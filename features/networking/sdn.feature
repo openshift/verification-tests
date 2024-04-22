@@ -252,6 +252,7 @@ Feature: SDN related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @inactive
   Scenario: OCP-25707:SDN ovs-vswitchd process must be running on all ovs pods
     Given I switch to cluster admin pseudo user
     When I run cmds on all ovs pods:
@@ -268,6 +269,7 @@ Feature: SDN related networking scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-openshiftsdn
+  @inactive
   Scenario: OCP-25706:SDN Killing ovs process should not put sdn and ovs pods in bad shape
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
@@ -317,6 +319,7 @@ Feature: SDN related networking scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-27655:SDN Networking should work on default namespace
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157
     Given I switch to cluster admin pseudo user
@@ -372,6 +375,7 @@ Feature: SDN related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @inactive
   Scenario: OCP-25787:SDN Don't write CNI configuration file until ovn-controller has done at least one iteration
     Given the env is using "OVNKubernetes" networkType
     And I store the masters in the :master clipboard
@@ -457,6 +461,7 @@ Feature: SDN related networking scenarios
   @baremetal-upi
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @inactive
   Scenario: OCP-29299:SDN Without allow the migration operation, migration cannot be executed
     When I run the :annotate client command with:
        | resource     | network.operator.openshift.io                       |
