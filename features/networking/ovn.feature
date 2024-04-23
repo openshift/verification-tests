@@ -408,45 +408,37 @@ Feature: OVN related networking scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
-  Scenario Outline: New corresponding raft leader should be elected if SB db or NB db on existing master is crashed
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @hypershift-hosted
+  Scenario: New corresponding raft leader should be elected if SB db or NB db on existing master is crashed
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
-    When I store the ovnkube-master "south" leader pod in the clipboard
-    Then the step should succeed
-    When the OVN "south" database is killed with signal "<signal>" on the "<%= cb.south_leader.node_name %>" node
-    Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
+    Given evaluation of `["TERM", "QUIT", "INT", "HUP", "SEGV", "9"]` is stored in the :signals clipboard
+    And I repeat the following steps for each :sig in cb.signals:
     """
+    Given I store the ovnkube-master "south" leader pod in the clipboard
+    When the OVN "south" database is killed with signal "#{cb.sig}" on the "#{cb.south_leader.node_name}" node
+    Then the step should succeed
+    And I wait up to 30 seconds for the steps to pass:
+    \"\"\"
     When I store the ovnkube-master "south" leader pod in the :new_south_leader clipboard
     Then the step should succeed
     And the expression should be true> cb.south_leader.name != cb.new_south_leader.name
-    """
+    \"\"\"
     And admin waits for all pods in the project to become ready up to 120 seconds
 
-    When I store the ovnkube-master "north" leader pod in the clipboard
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    When the OVN "north" database is killed with signal "#{cb.sig}" on the "#{cb.north_leader.node_name}" node
     Then the step should succeed
-    When the OVN "north" database is killed with signal "<signal>" on the "<%= cb.north_leader.node_name %>" node
-    Then the step should succeed
-
     And I wait up to 30 seconds for the steps to pass:
-    """
+    \"\"\"
     When I store the ovnkube-master "north" leader pod in the :new_north_leader clipboard
     Then the step should succeed
     And the expression should be true> cb.north_leader.name != cb.new_north_leader.name
-    """
+    \"\"\"
     And admin waits for all pods in the project to become ready up to 120 seconds
-
-    @s390x @ppc64le @heterogeneous @arm64 @amd64
-    @hypershift-hosted
-    Examples:
-      | signal |
-      | TERM   |
-      | QUIT   |
-      | INT    |
-      | HUP    |
-      | SEGV   |
-      | 9      |
+    """
 
   # @author rbrattai@redhat.com
   # @case_id OCP-26138
