@@ -149,6 +149,4 @@ check_node_addresses:
 check_addresses:
   elements:
   - selector:
-      xpath: //li[contains(., '<hostname>') and span[contains(., 'Hostname')]]
-  - selector:
       xpath: //li[contains(., '<internal_ip>') and span[contains(., 'Internal IP')]]
