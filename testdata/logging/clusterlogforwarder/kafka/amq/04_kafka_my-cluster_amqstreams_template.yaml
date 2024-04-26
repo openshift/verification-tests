@@ -40,7 +40,7 @@ objects:
       replicas: 1
       storage:
         type: ephemeral
-      version: 3.3.1
+      version: 3.6.0
     zookeeper:
       replicas: 1
       storage:
