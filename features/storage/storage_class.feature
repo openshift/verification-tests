@@ -1,6 +1,6 @@
 Feature: storageClass related feature
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   @admin
   @singlenode
   @proxy @noproxy @disconnected @connected
@@ -58,7 +58,6 @@ Feature: storageClass related feature
       | case_id           | storage-class-name |
       | OCP-13488:Storage | managed-premium    | # @case_id OCP-13488
 
-  # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
   @smoke
@@ -122,7 +121,7 @@ Feature: storageClass related feature
       | OCP-10161:Storage | aws-ebs     | sc1  | us-east-1d | false      | 500Gi | # @case_id OCP-10161
       | OCP-10424:Storage | aws-ebs     | st1  | us-east-1d | false      | 500Gi | # @case_id OCP-10424
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   @admin
   @destructive
   @upgrade-sanity
@@ -201,7 +200,7 @@ Feature: storageClass related feature
       | case_id           | provisioner    |
       | OCP-24259:Storage | vsphere-volume | # @case_id OCP-24259
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   @inactive
   @storage
   Scenario Outline: New created PVC without specifying storage class use default class when only one class is marked as default

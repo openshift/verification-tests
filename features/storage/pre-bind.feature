@@ -32,7 +32,6 @@ Feature: Testing for pv and pvc pre-bind feature
     And the "pv2-<%= project.name %>" PV status is :available
 
   # @author chaoyang@redhat.com
-  # @author lxia@redhat.com
   # @case_id OCP-10109
   @admin
   @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -63,7 +62,6 @@ Feature: Testing for pv and pvc pre-bind feature
     And the "pv-<%= project.name %>" PV status is :available
 
   # @author chaoyang@redhat.com
-  # @author lxia@redhat.com
   # @case_id OCP-10111
   @admin
   @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -94,7 +92,6 @@ Feature: Testing for pv and pvc pre-bind feature
     And the "nfsc-prebound" PVC becomes :pending
 
   # @author chaoyang@redhat.com
-  # @author lxia@redhat.com
   # @case_id OCP-10113
   @admin
   @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -124,7 +121,6 @@ Feature: Testing for pv and pvc pre-bind feature
     And the "pv-<%= project.name %>" PV status is :available
 
   # @author chaoyang@redhat.com
-  # @author lxia@redhat.com
   # @case_id OCP-10114
   @admin
   @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -154,7 +150,6 @@ Feature: Testing for pv and pvc pre-bind feature
     And the "pv-<%= project.name %>" PV status is :available
 
   # @author chaoyang@redhat.com
-  # @author lxia@redhat.com
   # @case_id OCP-9941
   @admin
   @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -187,7 +182,6 @@ Feature: Testing for pv and pvc pre-bind feature
     And the "pv2-<%= project.name %>" PV status is :available
 
   # @author chaoyang@redhat.com
-  # @author lxia@redhat.com
   # @case_id OCP-9940
   @admin
   @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -219,7 +213,6 @@ Feature: Testing for pv and pvc pre-bind feature
     And the "mypvc1" PVC becomes :pending
 
   # @author chaoyang@redhat.com
-  # @author lxia@redhat.com
   @admin
   @singlenode
   @proxy @noproxy @disconnected @connected

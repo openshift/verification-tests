@@ -1,7 +1,6 @@
 Feature: Storage of Hostpath plugin testing
 
   # @author chaoyang@redhat.com
-  # @author lxia@redhat.com
   @admin
   @upgrade-sanity
   @singlenode

@@ -1,6 +1,6 @@
 Feature: kubelet restart and node restart
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   @admin
   @destructive
   @upgrade-sanity

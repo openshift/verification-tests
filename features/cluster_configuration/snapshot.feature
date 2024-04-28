@@ -1,6 +1,6 @@
 Feature: Enable volume snapshot on the cluster
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   @admin
   @destructive
   Scenario: Enable volume snapshot

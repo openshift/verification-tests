@@ -1,6 +1,5 @@
 Feature: storage security check
 
-  # @author lxia@redhat.com
   # @author piqin@redhat.com
   @admin
   @smoke
