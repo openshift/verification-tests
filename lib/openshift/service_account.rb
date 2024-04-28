@@ -33,7 +33,7 @@ module BushSlicer
 
     def get_secret_names(user: nil, cached: true, quiet: true)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
-      return rr["secrets"].map {|s| s['name']}
+      return rr["secrets"]&.map {|s| s['name']}
     end
 
     def get_secrets(user: nil, cached: true, quiet: true)
