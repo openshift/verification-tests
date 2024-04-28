@@ -1,7 +1,6 @@
 Feature: Persistent Volume Claim binding policies
 
   # @author jhou@redhat.com
-  # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
   @upgrade-sanity
@@ -78,7 +77,7 @@ Feature: Persistent Volume Claim binding policies
       | claimName: nfsc        |
     """
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   @admin
   @upgrade-sanity
   @singlenode
@@ -118,7 +117,7 @@ Feature: Persistent Volume Claim binding policies
       | OCP-26879:Storage | ReadWriteOnce | # @case_id OCP-26879
 
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   @admin
   @upgrade-sanity
   @singlenode

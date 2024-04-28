@@ -1,6 +1,6 @@
 Feature: local-storage-operator related features
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   # @case_id OCP-24493
   @admin
   @inactive

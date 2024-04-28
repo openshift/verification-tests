@@ -1,10 +1,10 @@
 Feature: Persistent Volume reclaim policy tests
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   @admin
   @singlenode
   @proxy @noproxy @disconnected @connected
-    @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @storage
   Scenario Outline: Persistent volume with RWO access mode and Delete policy

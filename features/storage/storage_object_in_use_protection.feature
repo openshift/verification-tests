@@ -1,6 +1,6 @@
 Feature: Storage object in use protection
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   # @case_id OCP-17253
   @storage
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
@@ -19,7 +19,7 @@ Feature: Storage object in use protection
     And the expression should be true> pvc("mypvc").finalizers&.include? "kubernetes.io/pvc-protection"
     Given I ensure "mypvc" pvc is deleted
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   # @case_id OCP-17254
   @storage
   @s390x @ppc64le @heterogeneous @arm64 @amd64
@@ -64,7 +64,7 @@ Feature: Storage object in use protection
     Given I ensure "mypod" pod is deleted
     And I wait for the resource "pvc" named "mypvc" to disappear within 30 seconds
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   # @case_id OCP-18796
   @admin
   @storage

@@ -1,6 +1,6 @@
 Feature: Dynamic provisioning
 
-  # @author lxia@redhat.com
+  # @author wduan@redhat.com
   @admin
   @smoke
   @upgrade-sanity
