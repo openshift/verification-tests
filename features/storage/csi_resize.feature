@@ -45,14 +45,14 @@ Feature: CSI Resizing related feature
     And the output should not contain:
       | No space left on device |
 
-    @rosa @osd_ccs @aro
+    @rosa @osd_ccs
     @gcp-ipi
     @gcp-upi
     Examples:
       | case_id           | sc_name      |
       | OCP-37479:Storage | standard-csi | # @case_id OCP-37479
 
-    @rosa @osd_ccs @aro
+    @rosa @osd_ccs
     @aws-ipi
     @aws-upi
     Examples:
@@ -100,7 +100,7 @@ Feature: CSI Resizing related feature
     And the output should match:
       | Forbidden.*field can not be less than previous value |
 
-    @rosa @osd_ccs @aro
+    @rosa @osd_ccs
     @aws-ipi
     @aws-upi
     @hypershift-hosted
@@ -187,8 +187,9 @@ Feature: CSI Resizing related feature
     And the output should not contain:
       | No space left on device |
 
-    @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-    @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+    @aro
+    @azure-ipi
+    @azure-upi
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     @hypershift-hosted
     @proxy @noproxy
