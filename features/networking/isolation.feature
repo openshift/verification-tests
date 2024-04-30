@@ -100,7 +100,7 @@ Feature: networking isolation related scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
-  Scenario: Only the pods nested in a same namespace can communicate with each other
+  Scenario: OCP-45077:SDN Only the pods nested in a same namespace can communicate with each other
     Given the env is using multitenant network
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"

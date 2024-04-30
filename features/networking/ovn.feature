@@ -1,6 +1,5 @@
 Feature: OVN related networking scenarios
 
-
   # @author anusaxen@redhat.com
   # @case_id OCP-29954
   @admin
@@ -239,7 +238,7 @@ Feature: OVN related networking scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-28936:SDN Create/delete pods while forcing OVN leader election
-  #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1781297
+    #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1781297
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
 
@@ -410,7 +409,7 @@ Feature: OVN related networking scenarios
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: New corresponding raft leader should be elected if SB db or NB db on existing master is crashed
+  Scenario: OCP-26091:SDN New corresponding raft leader should be elected if SB db or NB db on existing master is crashed
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
 
