@@ -343,15 +343,17 @@ Feature: CSI testing related feature
     Then the step should succeed
     And the output should contain "Hello OpenShift Storage"
 
-    @rosa @osd_ccs @aro
-    @gcp-ipi @aws-ipi
-    @gcp-upi @aws-upi
+    @rosa @osd_ccs
+    @aws-ipi
+    @aws-upi
+    @hypershift-hosted
     Examples:
       | case_id           | sc_name | type | size  |
       | OCP-24546:Storage | gp2-csi | sc1  | 125Gi | # @case_id OCP-24546
       | OCP-24572:Storage | gp2-csi | st1  | 125Gi | # @case_id OCP-24572
 
-    @hypershift-hosted
+    @gcp-ipi
+    @gcp-upi
     Examples:
       | case_id           | sc_name      | type   | size |
       | OCP-37478:Storage | standard-csi | pd-ssd | 1Gi  | # @case_id OCP-37478
@@ -402,14 +404,16 @@ Feature: CSI testing related feature
       | case_id           | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | OCP-37557:Storage | cinder.csi.openstack.org | standard-csi | openstack-cinder-csi-driver-operator | openstack-cinder-csi-driver-controller | openstack-cinder-csi-driver-node | # @case_id OCP-37557
 
-    @rosa @osd_ccs @aro
-    @gcp-ipi @aws-ipi
-    @gcp-upi @aws-upi
+    @rosa @osd_ccs
+    @aws-ipi
+    @aws-upi
+    @hypershift-hosted
     Examples:
       | case_id           | provisioner     | sc_name | deployment_operator         | deployment_controller         | daemonset_node          |
       | OCP-34144:Storage | ebs.csi.aws.com | gp2-csi | aws-ebs-csi-driver-operator | aws-ebs-csi-driver-controller | aws-ebs-csi-driver-node | # @case_id OCP-34144
 
-    @hypershift-hosted
+    @gcp-ipi
+    @gcp-upi
     @critical
     Examples:
       | case_id           | provisioner           | sc_name      | deployment_operator        | deployment_controller        | daemonset_node         |
