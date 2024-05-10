@@ -56,7 +56,7 @@ module BushSlicer
 
     def initialize(svc_name: "AWS-CLOUD-USAGE")
       @amz = Amz_EC2.new(service_name: svc_name)
-      @limits = {:s3 => 300, :vpcs => 100}
+      @limits = {:s3 => 300, :vpcs => 200}
       @table = Text::Table.new
     end
     ## print out summary in a text table format
