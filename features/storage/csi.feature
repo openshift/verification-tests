@@ -407,7 +407,6 @@ Feature: CSI testing related feature
     @rosa @osd_ccs
     @aws-ipi
     @aws-upi
-    @hypershift-hosted
     Examples:
       | case_id           | provisioner     | sc_name | deployment_operator         | deployment_controller         | daemonset_node          |
       | OCP-34144:Storage | ebs.csi.aws.com | gp2-csi | aws-ebs-csi-driver-operator | aws-ebs-csi-driver-controller | aws-ebs-csi-driver-node | # @case_id OCP-34144
