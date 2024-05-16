@@ -451,7 +451,7 @@ check_proxy_infra_value:
 check_fips_infra_value:
   params:
     label: Infrastructure features
-    value: FIPS Mode
+    value: Designed for FIPS
   action: check_property_label_and_value
 check_singlenodecluster_infra_value:
   params:
@@ -488,7 +488,7 @@ click_checkbox_proxy_from_infrastructure_features:
 click_checkbox_fips_from_infrastructure_features:
   params:
     filter_type_value: infraFeatures
-    checkbox_text: FIPS Mode
+    checkbox_text: Designed for FIPS
   action: wait_filter_section_loaded
   action: choose_one_checkbox
 click_checkbox_singlenodecluster_from_infrastructure_features:
