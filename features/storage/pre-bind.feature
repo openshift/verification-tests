@@ -3,7 +3,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10107
   @admin
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
@@ -34,7 +34,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10109
   @admin
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
@@ -64,7 +64,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10111
   @admin
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
@@ -94,7 +94,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10113
   @admin
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
@@ -123,7 +123,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10114
   @admin
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
@@ -152,7 +152,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-9941
   @admin
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
@@ -184,7 +184,7 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-9940
   @admin
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @singlenode
   @proxy @noproxy @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
@@ -217,7 +217,7 @@ Feature: Testing for pv and pvc pre-bind feature
   @singlenode
   @proxy @noproxy @disconnected @connected
     @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @storage
   Scenario Outline: Prebound pv/pvc is availabe/pending due to requested pvc/pv prebound to other pv/pvc
     Given I create a project with non-leading digit name
