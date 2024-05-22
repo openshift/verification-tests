@@ -2,6 +2,10 @@ click_create_route_button:
   params:
     button_text: Create Route
   action: click_button_text
+edit_route:
+  params:
+    item_text: Edit Route
+  action: perform_action_item
 check_custom_dns_help_link:
   params:
     content: Do you need to set up custom DNS

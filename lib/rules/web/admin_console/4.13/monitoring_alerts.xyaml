@@ -132,9 +132,8 @@ click_alert_link_with_text:
 click_actions_button:
   element:
     selector:
-      xpath: //button[@class='pf-c-dropdown__toggle']
+      xpath: //button[contains(@class,'dropdown__toggle')]
     op: click
-
 expire_alert_from_detail:
   action: click_first_action_icon
   action: click_expire_alert_button
