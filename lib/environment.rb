@@ -462,7 +462,7 @@ module BushSlicer
             raise "failed to create service project #{project.name}, see log"
           end
           admin.cli_exec(:annotate, resource: "namespace", resourcename: project_name, keyval: 'openshift.io/node-selector=', overwrite: true)
-          if version_ge("4.12", user: nil) or version_eq("4.2", user: user)
+          if version_ge("4.12", user: nil) or version_eq("4.2", user: nil)
             admin.cli_exec(:label, resource: "namespace", name: project_name, key_val: 'security.openshift.io/scc.podSecurityLabelSync=false', overwrite: true)
             admin.cli_exec(:label, resource: "namespace", name: project_name, key_val: 'pod-security.kubernetes.io/enforce=privileged', overwrite: true)
             admin.cli_exec(:label, resource: "namespace", name: project_name, key_val: 'pod-security.kubernetes.io/audit=privileged', overwrite: true)
