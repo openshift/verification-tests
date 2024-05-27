@@ -74,8 +74,8 @@ Feature: Machine features testing
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
-
-    Given I clone a machineset and name it "machineset-clone-25436"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-25436"
 
     Given I scale the machineset to +2
     Then the step should succeed
@@ -193,8 +193,9 @@ Feature: Machine features testing
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-27609"
-    Then as admin I successfully merge patch resource "machinesets.machine.openshift.io/machineset-clone-27609" with:
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-27609"
+    Then as admin I successfully merge patch resource "machinesets.machine.openshift.io/<%= cb.infraName %>-27609" with:
       | {"spec":{"template": {"spec":{"providerSpec":{"value":{"publicIP": true}}}}}} |
     And I scale the machineset to +2
     Then the machineset should have expected number of running machines
@@ -215,7 +216,8 @@ Feature: Machine features testing
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-24363"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-24363"
     And evaluation of `machine_set_machine_openshift_io.machines.first.node_name` is stored in the :noderef_name clipboard
     And evaluation of `machine_set_machine_openshift_io.machines.first.name` is stored in the :machine_name clipboard
 
@@ -248,6 +250,7 @@ Feature: Machine features testing
 
     #Create a spot machineset
     Given I use the "openshift-machine-api" project
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
     Given I create a spot instance machineset and name it "<machineset_name>" on <iaas_type>
     And evaluation of `machine_set_machine_openshift_io.machines.first.node_name` is stored in the :noderef_name clipboard
     And evaluation of `machine_set_machine_openshift_io.machines.first.name` is stored in the :machine_name clipboard
@@ -322,8 +325,8 @@ Feature: Machine features testing
 
     @aws-ipi
     Examples:
-      | case_id                         | iaas_type | machineset_name        |
-      | OCP-29199:ClusterInfrastructure | aws       | machineset-clone-29199 | # @case_id OCP-29199
+      | case_id                         | iaas_type | machineset_name           |
+      | OCP-29199:ClusterInfrastructure | aws       | <%= cb.infraName %>-29199 | # @case_id OCP-29199
 
     @gcp-ipi
     @s390x @ppc64le @heterogeneous @arm64 @amd64
@@ -331,8 +334,8 @@ Feature: Machine features testing
     @network-ovnkubernetes @network-openshiftsdn
     
     Examples:
-      | case_id                         | iaas_type | machineset_name        |
-      | OCP-32126:ClusterInfrastructure | gcp       | machineset-clone-32126 | # @case_id OCP-32126
+      | case_id                         | iaas_type | machineset_name           |
+      | OCP-32126:ClusterInfrastructure | gcp       | <%= cb.infraName %>-32126 | # @case_id OCP-32126
 
   # @author zhsun@redhat.com
   # @case_id OCP-32620
@@ -350,8 +353,9 @@ Feature: Machine features testing
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-32620"
-    Given as admin I successfully merge patch resource "machinesets.machine.openshift.io/machineset-clone-32620" with:
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-32620"
+    Given as admin I successfully merge patch resource "machinesets.machine.openshift.io/<%= cb.infraName %>-32620" with:
       | {"spec":{"template":{"spec":{"metadata":{"labels":{"node-role.kubernetes.io/infra": ""}}}}}} |
     Then the step should succeed
 

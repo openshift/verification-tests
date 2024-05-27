@@ -27,7 +27,8 @@ Feature: UPI GCP Tests
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-25034"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-25034"
 
     # Create clusterautoscaler
     Given I obtain test data file "cloud/cluster-autoscaler.yml"

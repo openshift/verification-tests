@@ -146,7 +146,8 @@ Feature: Machine-api components upgrade tests
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-22612"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-22612"
 
     Given I scale the machineset to +2
     Then the step should succeed
@@ -168,6 +169,7 @@ Feature: Machine-api components upgrade tests
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     And I pick a random machineset to scale
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
 
     # Create a machineset
     Given I get project machine_set_machine_openshift_io named "<%= machine_set_machine_openshift_io.name %>" as YAML
@@ -196,14 +198,14 @@ Feature: Machine-api components upgrade tests
 
     @aws-ipi
     Examples:
-      | iaas_type | machineset_name        | value                   |
-      | aws       | machineset-clone-41175 | "spotMarketOptions": {} |
+      | iaas_type | machineset_name           | value                   |
+      | aws       | <%= cb.infraName %>-41175 | "spotMarketOptions": {} |
 
     @gcp-ipi
     @flaky
     Examples:
-      | iaas_type | machineset_name        | value                   |
-      | gcp       | machineset-clone-41803 | "preemptible": true     |
+      | iaas_type | machineset_name           | value                   |
+      | gcp       | <%= cb.infraName %>-41803 | "preemptible": true     |
 
   # @author zhsun@redhat.com
   @upgrade-check
@@ -218,6 +220,7 @@ Feature: Machine-api components upgrade tests
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     And admin ensures "<machineset_name>" machine_set_machine_openshift_io is deleted after scenario
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
 
     Given "machine-api-termination-handler" daemonset becomes ready in the "openshift-machine-api" project
     And 1 pod becomes ready with labels:
@@ -236,14 +239,14 @@ Feature: Machine-api components upgrade tests
 
     @aws-ipi
     Examples:
-      | case_id                         | iaas_type | machineset_name        | value                   |
-      | OCP-41175:ClusterInfrastructure | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
+      | case_id                         | iaas_type | machineset_name           | value                   |
+      | OCP-41175:ClusterInfrastructure | aws       | <%= cb.infraName %>-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
 
     @gcp-ipi
     @flaky
     Examples:
-      | case_id                         | iaas_type | machineset_name        | value               |
-      | OCP-41803:ClusterInfrastructure | gcp       | machineset-clone-41803 | "preemptible": true | # @case_id OCP-41803
+      | case_id                         | iaas_type | machineset_name           | value               |
+      | OCP-41803:ClusterInfrastructure | gcp       | <%= cb.infraName %>-41803 | "preemptible": true | # @case_id OCP-41803
 
   @upgrade-prepare
   @destructive
@@ -285,7 +288,8 @@ Feature: Machine-api components upgrade tests
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-30783"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-30783"
 
     # Delete clusterautoscaler after scenario
     Given admin ensures "default" clusterautoscaler is deleted after scenario

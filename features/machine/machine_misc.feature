@@ -200,7 +200,8 @@ Feature: Machine misc features testing
   Scenario: OCP-40665:ClusterInfrastructure Deattach disk before destroying vm from vsphere
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
-    And I clone a machineset and name it "machineset-clone-40665"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-40665"
 
     Given I store the last provisioned machine in the :new_machine clipboard
     And evaluation of `machine_machine_openshift_io(cb.new_machine).node_name` is stored in the :nodeRef clipboard

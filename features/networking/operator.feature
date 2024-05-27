@@ -174,7 +174,8 @@ Feature: Operator related networking scenarios
     """
 
     And admin ensures machine number is restored after scenario
-    Given I clone a machineset and name it "machineset-clone-sdn"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-sdn"
 
     # Check that the status of Progressing is truned to True during the new node provisioning
     Given I wait up to 360 seconds for the steps to pass:

@@ -16,7 +16,8 @@ Feature: MachineHealthCheck Test Scenarios
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-25897"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-25897"
 
     # Create MHC
     Given I obtain test data file "cloud/mhc/mhc1.yaml"
@@ -57,7 +58,8 @@ Feature: MachineHealthCheck Test Scenarios
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-26311"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-26311"
 
     # Create unhealthyCondition before createing a MHC
     Given I create the 'Ready' unhealthyCondition
@@ -90,7 +92,8 @@ Feature: MachineHealthCheck Test Scenarios
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-25734"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-25734"
 
     # Create MHCs
     Given I run the steps 2 times:
@@ -124,7 +127,8 @@ Feature: MachineHealthCheck Test Scenarios
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
-    Given I clone a machineset and name it "machineset-clone-25691"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-25691"
 
     # Create MHC
     Given I obtain test data file "cloud/mhc/mhc1.yaml"
@@ -180,7 +184,8 @@ Feature: MachineHealthCheck Test Scenarios
     Then I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-28718"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-28718"
 
     # Create MHC with configurable node startup timeout
     Given I obtain test data file "cloud/mhc/mhc_configurabletimeout.yaml"
@@ -223,7 +228,8 @@ Feature: MachineHealthCheck Test Scenarios
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-25727"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-25727"
 
     Given I obtain test data file "cloud/mhc/mhc1.yaml"
     When I run oc create over "mhc1.yaml" replacing paths:
@@ -274,7 +280,8 @@ Feature: MachineHealthCheck Test Scenarios
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-28859"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-28859"
 
     # Create MHC
     Given I obtain test data file "cloud/mhc/mhc1.yaml"
