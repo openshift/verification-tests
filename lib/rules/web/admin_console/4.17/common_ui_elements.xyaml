@@ -1,0 +1,1588 @@
+expand_primary_menu:
+  elements:
+  - selector:
+      xpath: //button[text()='<primary_menu>' and @aria-expanded='false']
+    op: click
+expand_monitoring_menu:
+  params:
+    primary_menu: Observe
+  action: expand_primary_menu
+create_resource_by_default_yaml:
+  elements:
+  - selector:
+      xpath: //button[@id="yaml-create"]
+    op: click
+  action:
+    if_element:
+      selector:
+        xpath: //a[text()='Edit YAML']
+    ref: click_edit_yaml_link
+  action: wait_page_body_loaded
+  action: click_create_button
+click_edit_yaml_link:
+  elements:
+  - selector:
+        xpath: //a[text()='Edit YAML']
+    op: click
+  - selector:
+      xpath: //div[contains(@class,'view-lines')]
+    timeout: 20
+check_yaml_line_content:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'ocs-yaml-editor__wrapper')]
+    timeout: 60
+  - selector:
+      xpath: //div[contains(@class,'view-line') and contains(.,'<key>') and contains(.,'<value>')]
+click_create_button:
+  elements:
+  - selector: &create_button
+      xpath: //button[contains(text(),'Create') and @aria-disabled='false']
+    op: click
+    timeout: 20
+check_create_button_missing:
+  elements:
+  - selector:
+      <<: *create_button
+    missing: true
+click_cancel_button:
+  elements:
+  - selector:
+      xpath: //button[contains(text(),'Cancel')]
+    op: click
+click_button:
+  element:
+    selector:
+      xpath: //button[contains(.,'<button_text>')]
+    timeout: 15
+    op: click
+click_button_text:
+  element:
+    selector: &button_with_text
+      xpath: //button[text()='<button_text>']
+    op: click
+check_button_text:
+  element:
+    selector:
+      <<: *button_with_text
+click_button_by_id:
+  element:
+    selector:
+      xpath: //button[contains(@id,'<button_id>')]
+    op: click
+check_button_missing:
+  element:
+    selector:
+      <<: *button_with_text
+    missing: true
+click_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+    op: click
+check_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+check_kebab_items_disabled:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-c-dropdown__menu-item') and not(contains(@class, 'pf-m-disabled'))]
+    missing: true
+check_action_button_missing:
+  elements:
+  - selector:
+      xpath: //span[contains(text(), 'Actions')]
+    missing: true
+check_save_button_missing:
+  params:
+    button_text: Save
+  action: check_button_missing
+check_table_text_data:
+  element:
+    selector:
+      xpath: //td[text()='<text_data>']
+check_table_line_count:
+  action: wait_table_loaded
+  scripts:
+  - command: return document.querySelectorAll("tbody tr").length == '<line_count>'
+    expect_result: true
+select_resource_item:
+  action: click_button_by_id
+  action: click_on_resource_name
+click_on_resource_name:
+  element:
+    selector:
+      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<item>']
+    op: click
+check_button_disabled:
+  element:
+    selector:
+      xpath: //button[contains(., '<button_text>') and @disabled]
+check_create_btn_disabled:
+  params:
+    button_text: Create
+  action: check_button_disabled
+check_button_enabled:
+  element:
+    selector:
+      xpath: //button[contains(., '<button_text>') and not(@disabled)]
+    timeout: 40
+check_button_contains_text:
+  element:
+    selector:
+      xpath: //button[contains(., '<button_text>')]
+check_text_not_a_link:
+  element:
+    selector:
+      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
+
+# tabs related
+click_tab:
+  elements:
+  - selector: &tab
+      xpath: //ul[contains(@class,'nav__menu')]//a[text()='<tab_name>']
+    op: click
+    timeout: 30
+check_tab:
+  element:
+    selector:
+      <<: *tab
+click_environment_tab:
+  params:
+    tab_name: Environment
+  action: click_tab
+click_overview_tab:
+  params:
+    tab_name: Details
+  action: click_tab
+click_terminal_tab:
+  params:
+    tab_name: Terminal
+  action: click_tab
+  action: wait_box_loaded
+click_yaml_tab:
+  params:
+    tab_name: YAML
+  action: click_tab
+click_history_tab:
+  params:
+    tab_name: History
+  action: click_tab
+click_events_tab:
+  params:
+    tab_name: Events
+  action: click_tab
+click_replication_controllers_tab:
+  params:
+    tab_name: ReplicationControllers
+  action: click_tab
+click_replica_sets_tab:
+  params:
+    tab_name: ReplicaSets
+  action: click_tab
+click_instances_tab:
+  params:
+    tab_name: Instances
+  action: click_tab
+click_access_review_tab:
+  params:
+    tab_name: Access review
+  action: click_tab
+click_schema_tab:
+  params:
+    tab_name: Schema
+  action: click_tab
+click_machine_configs_tab:
+  params:
+    tab_name: MachineConfigs
+  action: click_tab
+click_metrics_tab:
+  params:
+    tab_name: Metrics
+  action: click_tab
+check_edit_yaml_enabled:
+  params:
+    button_text: Save
+  action: click_yaml_tab
+  action: check_button_enabled
+click_checkbox_input_by_text:
+  element:
+    selector:
+      xpath: //label[contains(.,'<text>')]/input[@type='checkbox']
+    op: click
+click_radio_input:
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='<radio_text>']
+    op: click
+click_radio_input_by_text:
+  element:
+    selector:
+      xpath: //label[contains(.,'<text>')]/input[@type='radio']
+    op: click
+check_disabled_radio_input:
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='<disabled_radio_text>' and @disabled]
+check_checked_radio_input:
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='<checked_radio_text>' and @checked]
+click_close_icon:
+  element:
+    selector:
+      xpath: //button[contains(@aria-label,'Close')]
+    op: click
+click_resource_creation_button:
+  action: click_yaml_create_button
+click_yaml_create_button:
+  params:
+    button_id: yaml-create
+  action: click_button_by_id
+check_yaml_create_button_missing:
+  elements:
+  - selector:
+      xpath: //button[@id='yaml-create']
+    missing: true
+clear_input_value:
+  elements:
+  - selector:
+      id: <clear_field_id>
+    op: clear
+    type: input
+set_input_value:
+  element:
+    selector:
+      xpath: //input[@id='<input_field_id>']
+    op: send_keys <input_value>
+    type: input
+clear_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: clear
+    type: input
+set_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: send_keys <input_value>
+    type: input
+set_label_input:
+  elements:
+  - selector: &label_input
+      xpath: (//label[contains(text(),'<label_text>')]/following::input[1] | //label[contains(text(),'<label_text>')]//input[1])[1]
+    op: clear
+  - selector:
+      <<: *label_input
+    op: send_keys <input_value>
+set_label_input_simple:
+  elements:
+  - selector: &label_input_value
+      xpath: //label[contains(text(),'<label_text>')]/..//input
+    op: clear
+    type: input
+  - selector:
+      <<: *label_input_value
+    op: send_keys <input_value>
+    type: input
+set_placeholder_input:
+  elements:
+  - selector: &placeholder_input
+      xpath: //input[@placeholder='<name>']
+    op: clear
+    type: input
+  - selector:
+      <<: *placeholder_input
+    op: send_keys <input_value>
+    type: input
+set_label_textarea:
+  elements:
+  - selector: &label_textarea
+      xpath: //label[text()='<label_text>']/..//textarea
+    op: clear
+    type: textarea
+  - selector:
+      <<: *label_textarea
+    op: send_keys <input_value>
+    type: textarea
+click_label_filter_dropdown_button:
+  element:
+    selector:
+      xpath: //label[contains(text(),'<label_text>')]/following::button[1][contains(@class,'select__toggle')]
+    op: click
+click_label_dropdown_button:
+  element:
+    selector:
+      xpath: //label[contains(text(),'<label_text>')]/following::button[1][contains(@class,'dropdown')]
+    op: click
+toggle_label_input:
+  element:
+    selector:
+      xpath: (//label[contains(.,'<label_text>')]/following::label[contains(@class,'switch')]//span[contains(@class,'switch__toggle')])[1]
+    op: click
+set_label_radio_input:
+  element:
+    selector:
+      xpath: //label[contains(.,'<label_text>')]/following::div[contains(@class,'co-radio-group')]//input[@type='radio' and @value='<radio_input_value>']
+    op: click
+check_editor_is_monaco_editor:
+  element:
+    selector:
+      xpath: //div[@class='yaml-editor']//div[contains(@class,'monaco-editor')]
+check_content_in_yaml_editor:
+  element:
+    selector:
+      xpath: //div[contains(@class,'react-monaco-editor-container')]//span[contains(text(),'<yaml_content>')]
+check_sidebar_item:
+  element:
+    selector:
+      xpath: //li[@class='co-resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
+click_on_resource_item:
+  element:
+    selector: &data_test_id
+      xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
+    op: click
+check_resource_item_name:
+  element:
+    selector:
+      <<: *data_test_id
+    timeout: 20
+wait_dropdown_loaded:
+  element:
+    selector:
+      xpath: //ul[contains(@class, 'dropdown__menu')]
+    timeout: 20
+# click and check the first item from resource list such as projects, pods, etc.
+click_first_item_from_resource_list_and_check_breadcrumb:
+  action: wait_box_loaded
+  params:
+    line_index: 1
+  action: click_item_in_resource_list
+  action: check_link_in_breadcrumb
+click_first_project_item_from_resource_list_and_check_breadcrumb:
+  params:
+    layer_number: 1
+    link: cluster/projects
+    text: Projects
+  action: click_first_item_from_resource_list_and_check_breadcrumb
+click_first_replicaset_item_from_resource_list_and_check_breadcrumb:
+  params:
+    layer_number: 1
+    link: /replicasets
+    text: ReplicaSets
+  action: click_first_item_from_resource_list_and_check_breadcrumb
+click_first_node_item_from_resource_list_and_check_breadcrumb:
+  params:
+    layer_number: 1
+    link: /nodes
+    text: Nodes
+  action: click_first_item_from_resource_list_and_check_breadcrumb
+click_first_consolepod_item_from_resource_list_and_check_breadcrumb:
+  params:
+    layer_number: 1
+    link: /k8s/ns/openshift-console/pods
+    text: Pods
+  action: click_first_item_from_resource_list_and_check_breadcrumb
+click_first_imagestream_item_from_resource_list_and_check_breadcrumb:
+  params:
+    layer_number: 1
+    link: imagestreams
+    text: ImageStreams
+  action: click_first_item_from_resource_list_and_check_breadcrumb
+# click and check the first sub item from a resource such as one of imagestreamtag on imagestream detail page
+click_first_item_from_sub_resource_list_and_check_breadcrumb:
+  action: wait_box_loaded
+  action: click_first_sub_item_in_resource_detail_list
+  action: check_link_in_breadcrumb
+check_link_in_breadcrumb:
+  element:
+    selector:
+      xpath: //ol/li[<layer_number>]/a[contains(@data-test-id, 'breadcrumb-link') and contains(@href, '<link>') and contains(translate(normalize-space(text()), ' ',''),'<text>')]
+check_installedoperators_link_in_breadcrumb:
+  params:
+    layer_number: 1
+    link: operators.coreos.com~v1alpha1~ClusterServiceVersion
+    text: InstalledOperators
+  action: check_link_in_breadcrumb
+check_installplans_link_in_breadcrumb:
+  params:
+    layer_number: 1
+    link: operators.coreos.com~v1alpha1~InstallPlan
+    text: InstallPlans
+  action: check_link_in_breadcrumb
+check_installplandetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: InstallPlan details
+  action: check_text_in_breadcrumb
+check_projectdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: Project details
+  action: check_text_in_breadcrumb
+check_replicasetdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: ReplicaSet details
+  action: check_text_in_breadcrumb
+check_nodedetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: Node details
+  action: check_text_in_breadcrumb
+check_machinedetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: Machine details
+  action: check_text_in_breadcrumb
+check_machinesetdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: MachineSet details
+  action: check_text_in_breadcrumb
+check_containerdetails_text_in_breadcrumb:
+  params:
+    layer_number: 3
+    text: Container details
+  action: check_text_in_breadcrumb
+check_imagestreamtagdetails_text_in_breadcrumb:
+  params:
+    layer_number: 3
+    text: ImageStreamTag details
+  action: check_text_in_breadcrumb
+check_text_in_breadcrumb:
+  element:
+    selector:
+      xpath: //ol[contains(@class, 'breadcrumb__list')]/li[<layer_number>][normalize-space(text())='<text>']
+
+check_row_filter_on_page:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'row-filter')]//*[text()='<filter>']
+confirm_deletion:
+  action: send_delete_string
+  action: submit_changes
+check_resource_item:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[contains(@class,'co-resource-item')]//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and contains(@href, '<resource_link>')]
+check_resources_title_on_page:
+  elements:
+  - selector:
+      xpath: //span[text()='<resource_title>']
+click_kebab_item:
+  element:
+    selector:
+      xpath: //button[contains(@data-test-action,'<kebab_item>')]
+    timeout: 60
+    op: click
+click_kebab_of_one_resource:
+  elements:
+  - selector:
+      xpath: //a[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
+    op: click
+click_one_operation_in_kebab:
+  action: click_kebab_of_one_resource
+  action: click_kebab_item
+cancel_build_kebab_operation:
+  params:
+    kebab_item: Cancel build
+  action: click_one_operation_in_kebab
+edit_receiver_kebab_operation:
+  elements:
+  - selector:
+      xpath: //td[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
+    op: click
+  - selector:
+      xpath: //button[@data-test-action='Edit Receiver']
+    op: click
+delete_machinehealthcheck_kabab_operation:
+  params:
+    kebab_item: Delete MachineHealthCheck
+  action: click_one_operation_in_kebab
+delete_catalogsource_kabab_operation:
+  params:
+    kebab_item: Delete CatalogSource
+  action: click_one_operation_in_kebab
+check_display_name_column_in_table:
+  params:
+    field: Display name
+  action: check_column_in_table
+check_scale_target_column_in_table:
+  params:
+    field: Scale target
+  action: check_column_in_table
+check_min_pods_column_in_table:
+  params:
+    field: Min pods
+  action: check_column_in_table
+check_max_pods_column_in_table:
+  params:
+    field: Max pods
+  action: check_column_in_table
+check_highest_severity_column_in_table:
+  params:
+    field: Highest severity
+  action: check_column_in_table
+check_affected_pods_column_in_table:
+  params:
+    field: Affected Pods
+  action: check_column_in_table
+check_fixable_column_in_table:
+  params:
+    field: Fixable
+  action: check_column_in_table
+check_manifest_column_in_table:
+  params:
+    field: Manifest
+  action: check_column_in_table
+check_instance_type_in_table:
+  params:
+    field: Instance type
+  action: check_column_in_table
+check_column_in_table:
+  action: wait_box_loaded
+  elements:
+  - selector:
+      xpath: //th[contains(@data-label,'<field>')]
+check_column_header:
+  action: wait_box_loaded
+  elements:
+  - selector:
+      xpath: //th[@data-label="<column_name>"]
+    timeout: 15
+check_column_header_missing:
+  element:
+    selector:
+      xpath: //th[@data-label="<column_name>"]
+    missing: true
+check_name_column_header:
+  params:
+    column_name: Name
+  action: check_column_header
+check_namespace_column_header:
+  params:
+    column_name: Namespace
+  action: check_column_header
+check_status_column_header:
+  params:
+    column_name: Status
+  action: check_column_header
+check_ready_column_header:
+  params:
+    column_name: Ready
+  action: check_column_header
+check_restarts_column_header:
+  params:
+    column_name: Restarts
+  action: check_column_header
+check_owner_column_header:
+  params:
+    column_name: Owner
+  action: check_column_header
+check_memory_column_header:
+  params:
+    column_name: Memory
+  action: check_column_header
+check_created_column_header:
+  params:
+    column_name: Created
+  action: check_column_header
+check_cpu_column_header:
+  params:
+    column_name: CPU
+  action: check_column_header
+check_resource_name_and_icon:
+  action:
+    if_param: service_name
+    ref: check_service_name_and_icon
+  action:
+    if_param: buildconfig_name
+    ref: check_buildconfig_name_and_icon
+  action:
+    if_param: route_name
+    ref: check_route_name_and_icon
+  action:
+    if_param: job_name
+    ref: check_job_name_and_icon
+  action:
+    if_param: cronjob_name
+    ref: check_cronjob_name_and_icon
+  action:
+    if_param: configmap_name
+    ref: check_configmap_name_and_icon
+  action:
+    if_param: imagestream_name
+    ref: check_imagestream_name_and_icon
+  action:
+    if_param: storageclass_name
+    ref: check_storageclass_name_and_icon
+check_storageclass_name_and_icon:
+  params:
+    icon_text: SC
+    resource_name: <storageclass_name>
+  action: check_resource_name_icon_info
+check_imagestream_name_and_icon:
+  params:
+    icon_text: IS
+    resource_name: <imagestream_name>
+  action: check_resource_name_icon_info
+check_configmap_name_and_icon:
+  params:
+    icon_text: CM
+    resource_name: <configmap_name>
+  action: check_resource_name_icon_info
+check_cronjob_name_and_icon:
+  params:
+    icon_text: CJ
+    resource_name: <cronjob_name>
+  action: check_resource_name_icon_info
+check_job_name_and_icon:
+  params:
+    icon_text: J
+    resource_name: <job_name>
+  action: check_resource_name_icon_info
+check_buildconfig_name_and_icon:
+  params:
+    icon_text: BC
+    resource_name: <buildconfig_name>
+  action: check_resource_name_icon_info
+check_route_name_and_icon:
+  params:
+    icon_text: RT
+    resource_name: <route_name>
+  action: check_resource_name_icon_info
+check_service_name_and_icon:
+  params:
+    icon_text: S
+    resource_name: <service_name>
+  action: check_resource_name_icon_info
+check_templateinstance_name_and_icon:
+  params:
+    icon_text: TI
+    resource_name: <templateinstance_name>
+  action: check_resource_name_icon_info
+check_catalogsource_name_and_icon:
+  params:
+    icon_text: CS
+    resource_name: <catalogsource_name>
+  action: check_resource_name_icon_info
+check_resource_name_icon_info:
+  elements:
+  - selector:
+      xpath: //span[contains(@class, 'co-m-resource-icon') and text()='<icon_text>']/following-sibling::*[text()='<resource_name>']
+check_resource_link:
+  element:
+    selector:
+      css: a[href$='<resource_link>']
+check_page_contains:
+  element:
+    selector:
+      xpath: //div[contains(.,'<content>')]
+    timeout: 30
+check_page_match:
+  element:
+    selector: &page_content
+      xpath: //*[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), translate('<content>','ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))]
+    timeout: 15
+check_page_not_match:
+  element:
+    selector: *page_content
+    missing: true
+check_no_data_found_text:
+  params:
+    content: No Data found
+  action: check_page_contains
+check_no_binary_data_text_missing:
+  params:
+    content: No Binary Data Found
+  action: check_page_not_match
+check_no_deployment_found_text:
+  params:
+    content: No Deployments found
+  action: check_page_contains
+check_no_resource_found_text:
+  params:
+    content: No ConsoleCLIDownloads found
+  action: check_page_contains
+check_no_resources_selected_text:
+  params:
+    content: No resources selected
+  action: check_page_contains
+check_restricted_access_text:
+  params:
+    content: Restricted Access
+  action: check_page_contains
+check_no_endpoints_found_text:
+  params:
+    content: No Endpoints found
+  action: check_page_contains
+check_no_machinehealthcheck_text:
+  params:
+    content: No MachineHealthChecks found
+  action: check_page_contains
+check_no_results_text:
+  params:
+    content: No results
+  action: check_page_contains
+submit_changes:
+  elements:
+  - selector:
+      xpath: //button[@type='submit' and not(@disabled)]
+    op: click
+    timeout: 15
+click_add_more_button:
+  params:
+    button_text: Add
+  action: click_button
+click_add_dropdown_button:
+  element:
+    selector:
+      xpath: //button[contains(.,'Add')]
+    op: click
+click_search_button:
+  element:
+    selector:
+      xpath: //button[contains(@data-test-id,'search')]
+    op: click
+click_annotation_link:
+  elements:
+  - selector:
+      xpath: //a[contains(text(), 'Annotation')]
+    op: click
+    timeout: 20
+click_annotation_edit_link:
+  element:
+    selector:
+      xpath: //button[@data-test='edit-annotations']
+    op: click
+    timeout: 20
+uncheck_checkbox:
+  element:
+    selector:
+      xpath: //input[contains(@type,'checkbox')]
+    op: click
+check_link_and_text:
+  element:
+    selector:
+      xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
+click_link_with_text:
+  element:
+    selector:
+      xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
+    op: click
+    timeout: 60
+click_link_with_text_only:
+  element:
+    selector:
+      xpath: //a[contains(text(),'<text>')]
+    op: click
+click_link_text:
+  element:
+    selector:
+      xpath: //a[text()='<text>']
+    op: click
+click_primary_menu:
+  action:
+    if_element:
+      selector:
+        xpath: //button[text()='<primary_menu>' and @aria-expanded='false']
+    ref: expand_primary_menu
+  element:
+    selector:
+      xpath: //button[text()='<primary_menu>' and @aria-expanded='true']
+click_secondary_menu:
+  action: click_primary_menu
+  elements:
+  - selector: &secondary_menu
+      xpath: //a[text()='<secondary_menu>']
+    op: click
+navigate_to_secondary_menu_deployments:
+  params:
+    primary_menu: Workloads
+    secondary_menu: Deployments
+  action: click_secondary_menu
+check_secondary_menu:
+  element:
+    selector: *secondary_menu
+check_secondary_menu_missing:
+  element:
+    selector: *secondary_menu
+    missing: true
+check_secondary_menu_link:
+  element:
+    selector: *secondary_menu
+  action: check_link_and_text
+check_deploymentconfig_secondary_menu_link:
+  params:
+    secondary_menu: DeploymentConfigs
+    text: DeploymentConfigs
+    link_url: all-namespaces/apps.openshift.io~v1~DeploymentConfig
+  action: check_secondary_menu_link
+check_job_secondary_menu_link:
+  params:
+    secondary_menu: Jobs
+    text: Jobs
+    link_url: all-namespaces/batch~v1~Job
+  action: check_secondary_menu_link
+check_replicaset_secondary_menu_link:
+  params:
+    secondary_menu: ReplicaSets
+    text: ReplicaSets
+    link_url: all-namespaces/apps~v1~ReplicaSet
+  action: check_secondary_menu_link
+check_replicationcontroller_secondary_menu_link:
+  params:
+    secondary_menu: ReplicationControllers
+    text: ReplicationControllers
+    link_url: all-namespaces/core~v1~ReplicationController
+  action: check_secondary_menu_link
+check_secret_secondary_menu_link:
+  params:
+    secondary_menu: Secrets
+    text: Secrets
+    link_url: all-namespaces/core~v1~Secret
+  action: check_secondary_menu_link
+click_dropdown:
+  element:
+    selector: &dropdown_name
+      xpath: //div[contains(@data-test-id, '<dropdown_name>')]//button
+    op: click
+check_dropdown_missing:
+  element:
+    selector:
+      <<: *dropdown_name
+    missing: true
+click_dropdown_field:
+  elements:
+  - selector:
+      xpath: //*[(.='<dropdown_field>')]/..//button[contains(@class, 'toggle')]
+    op: click
+click_item_in_resource_list:
+  elements:
+  - selector:
+      xpath: //tr[<line_index>]//td[1]//span[@class='co-resource-item']/a
+    op: click
+click_first_sub_item_in_resource_detail_list:
+  elements:
+  - selector:
+      xpath: (//div[@class='co-m-table-grid__body']//a)[1]
+    op: click
+click_first_item_in_grid_cell_list:
+  elements:
+  - selector:
+      xpath: (//td[@role='gridcell'][1])[1]
+    op: click
+    timeout: 40
+click_one_item:
+  elements:
+  - selector:
+      xpath: //li//*[@id='<dropdown_item>-link']
+    op: click
+click_one_item_text:
+  elements:
+  - selector:
+      xpath: //li//*[text()='<dropdown_item>']
+    op: click
+choose_dropdown_item:
+  action: click_dropdown_field
+  action: click_one_item
+choose_dropdown_item_text:
+  action: click_dropdown_field
+  action: click_one_item_text
+choose_item_from_dropdown_menu:
+  elements:
+  - selector:
+      xpath: //button[contains(@data-test-id, 'dropdown-button')]
+    op: click
+  - selector:
+      xpath: //ul[contains(@class, 'dropdown__menu')]
+    timeout: 20
+  action: click_dropdown_menu_item
+upload_file_for_one_field:
+  elements:
+  - selector:
+      xpath: //input[@id='<field_name>-input']
+    visible: false
+    type: filefield
+    op: set <file_path>
+wait_form_loaded:
+  element:
+    selector:
+      css: form
+    timeout: 40
+wait_box_loaded:
+  element:
+    selector:
+      css: .loading-box__loaded
+    timeout: 300
+wait_page_body_loaded:
+  element:
+    selector:
+      css: .co-m-page__body
+    timeout: 40
+wait_until_no_loading:
+  element:
+    selector:
+      css: .cos-status-box--loading
+    missing: true
+    timeout: 30
+wait_sidebar_loaded:
+  element:
+    selector:
+      xpath: //div[@data-test='resource-sidebar']
+    timeout: 30
+wait_table_loaded:
+  element:
+    selector:
+      xpath: //table//tr
+    timeout: 50
+skip_dev_perspective_tour:
+  elements:
+  - selector:
+      xpath: //button[@id='tour-step-footer-secondary' and text()='Skip tour']
+    op: click
+  - selector:
+      xpath: //b[contains(text(), 'Welcome to Dev')]
+    missing: true
+check_item_in_list:
+  element:
+    selector:
+      xpath: //ul[contains(.,'<item>')]
+    timeout: 20
+check_overlay_edit_modal:
+  action: check_overlay_edit_modal_title
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'modal-content')]
+check_overlay_edit_modal_title:
+  elements:
+  - selector:
+      xpath: //h1[contains(@data-test-id, 'modal-title')]
+check_side_overlay_dialog_modal:
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'pf-v5-c-modal-box') and @role='dialog' and not(contains(., 'modal-content'))]
+check_alert_title:
+  elements:
+  - selector:
+      xpath: //h4[contains(@class, 'alert__title') and contains(text(), '<title>')]
+check_alert_description:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'alert__description') and contains(.,'<description>')]
+check_alert_message:
+  action:
+    if_param: title
+    ref: check_alert_title
+  action:
+    if_param: description
+    ref: check_alert_description
+
+## -------- check resource key and values pairs ------
+check_resource_details:
+  action:
+    if_param: name
+    ref: check_resource_name
+  action:
+    if_param: display_name
+    ref: check_resource_display_name
+  action:
+    if_param: namespace
+    ref: check_resource_namespace
+  action:
+    if_param: managed_namespace
+    ref: check_resource_managed_namespace
+  action:
+    if_param: labels
+    ref: check_resource_labels
+  action:
+    if_param: status
+    ref: check_resource_status
+  action:
+    if_param: phase
+    ref: check_resource_phase
+  action:
+    if_param: annotations
+    ref: check_resource_annotations
+  action:
+    if_param: provisioner
+    ref: check_resource_provisioner
+  action:
+    if_param: reclaim_policy
+    ref: check_resource_reclaim_policy
+  action:
+    if_param: default_class
+    ref: check_resource_default_class
+  action:
+    if_param: pod_selector
+    ref: check_resource_pod_selector
+  action:
+    if_param: update_strategy
+    ref: check_resource_update_strategy
+  action:
+    if_param: max_unavailable
+    ref: check_resource_max_unavailable
+  action:
+    if_param: max_surge
+    ref: check_resource_max_surge
+  action:
+    if_param: schedule
+    ref: check_resource_schedule
+  action:
+    if_param: concurrency_policy
+    ref: check_resource_concurrency_policy
+  action:
+    if_param: last_schedule_time
+    ref: check_resource_last_schedule_time
+  action:
+    if_param: owner
+    ref: check_resource_owner
+  action:
+    if_param: desired_completions
+    ref: check_resource_desired_completions
+  action:
+    if_param: parallelism
+    ref: check_resource_parallelism
+  action:
+    if_param: type
+    ref: check_resource_type
+  action:
+    if_param: git_repo
+    ref: check_resource_git_repository
+  action:
+    if_param: builder_image
+    ref: check_builder_image
+  action:
+    if_param: output_image
+    ref: check_output_to_image
+  action:
+    if_param: run_policy
+    ref: check_run_policy
+  action:
+    if_param: triggered_by
+    ref: check_triggered_by
+  action:
+    if_param: termination_type
+    ref: check_termination_type
+  action:
+    if_param: insecure_traffic
+    ref: check_insecure_traffic
+  action:
+    if_param: hostname
+    ref: check_route_hostname
+  action:
+    if_param: path
+    ref: check_route_path
+  action:
+    if_param: canonical_hostname
+    ref: check_route_canonical_hostname
+  action:
+    if_param: machine_config_selector
+    ref: check_machine_config_selector
+  action:
+    if_param: node_selector
+    ref: check_node_selector
+  action:
+    if_param: current_configuration
+    ref: check_current_configuration
+  action:
+    if_param: max_unhealthy
+    ref: check_max_unhealthy
+  action:
+    if_param: expected_machines
+    ref: check_expected_machines
+  action:
+    if_param: current_healthy
+    ref: check_current_healthy
+  action:
+    if_param: kind
+    ref: check_resource_kind
+  action:
+    if_param: api_group
+    ref: check_api_group
+  action:
+    if_param: api_version
+    ref: check_api_version
+  action:
+    if_param: namespaced
+    ref: check_namespaced
+  action:
+    if_param: short_names
+    ref: check_short_names
+  action:
+    if_param: created_at
+    ref: check_created_at
+  action:
+    if_param: scale_target
+    ref: check_scale_target
+  action:
+    if_param: min_replicas
+    ref: check_hpa_min_replicas
+  action:
+    if_param: max_replicas
+    ref: check_hpa_max_replicas
+  action:
+    if_param: current_replicas
+    ref: check_current_replicas
+  action:
+    if_param: desired_replicas
+    ref: check_desired_replicas
+  action:
+    if_param: publisher
+    ref: check_publisher
+  action:
+    if_param: endpoint
+    ref: check_endpoint
+  action:
+    if_param: registrypullinterval
+    ref: check_registry_pull_interval
+  action:
+    if_param: size
+    ref: check_size
+  action:
+    if_param: requested_capacity
+    ref: check_requested_capacity
+  action:
+    if_param: source
+    ref: check_source
+  action:
+    if_param: driver
+    ref: check_sc_driver
+  action:
+    if_param: deletion_policy
+    ref: check_deletion_policy
+  action:
+    if_param: snapshot_handle
+    ref: check_snapshot_handle
+  action:
+    if_param: volume_snapshot
+    ref: check_volume_snapshot
+  action:
+    if_param: volume_snapshot_content
+    ref: check_volume_snapshot_content
+  action:
+    if_param: volume_snapshot_class
+    ref: check_volume_snapshot_class
+  action:
+    if_param: volume_snapshot_class_name
+    ref: check_volume_snapshot_class_name
+  action:
+    if_param: instance_type
+    ref: check_instance_type
+  action:
+    if_param: host_boot_mac
+    ref: check_host_boot_mac
+  action:
+    if_param: ref_machine
+    ref: check_ref_machine
+  action:
+    if_param: ref_node
+    ref: check_ref_node
+check_ref_machine:
+  params:
+    key: Machine
+    value: <ref_machine>
+  action: check_resource_details_key_and_value
+check_ref_node:
+  params:
+    key: Node
+    value: <ref_node>
+  action: check_resource_details_key_and_value
+check_host_boot_mac:
+  element:
+    selector:
+      xpath: //dt[(text()='Host Addresses')]/following-sibling::dd[1]//li[contains(., '<host_boot_mac>')]/span[contains(., 'Boot Interface MAC')]
+check_resource_details_key_and_value:
+  element: &key_value
+    selector:
+      xpath: //dt[contains(.,'<key>')]/following-sibling::dd[1][contains(.,'<value>')] | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1][contains(.,'<value>')]
+    timeout: 20
+check_resource_details_key_only:
+  element:
+    selector:
+      xpath: //button[(text()='<key>')]
+check_key_and_resource_link:
+  element:
+    selector:
+      xpath: //button[(text()='<key>')]/parent::dt/following-sibling::dd[1]//a[contains(@href,'<resource_link>')] | //dt[contains(.,'<key>')]/following-sibling::dd[1]//a[contains(@href,'<resource_link>')]
+check_key_and_action_link:
+  element: &key_action
+    selector:
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button | //dt[contains(., '<key>')]/following-sibling::dd[1]//button
+click_pod_selector_on_resource_detail:
+  params:
+    key: Pod selector
+  action: click_value_on_resource_detail
+click_value_on_resource_detail:
+  element:
+    <<: *key_value
+    op: click
+click_key_and_action_link:
+   element:
+     <<: *key_action
+     op: click
+check_resource_name:
+  params:
+    key: Name
+    value: <name>
+  action: check_resource_details_key_and_value
+check_resource_display_name:
+  params:
+    key: Display name
+    value: <display_name>
+  action: check_resource_details_key_and_value
+check_resource_labels:
+  params:
+    key: Labels
+    value: <labels>
+  action: check_resource_details_key_and_value
+check_resource_status:
+  params:
+    key: Status
+    value: <status>
+  action: check_resource_details_key_and_value
+check_resource_phase:
+  params:
+    key: Phase
+    value: <phase>
+  action: check_resource_details_key_and_value
+check_resource_annotations:
+  params:
+    key: Annotations
+    value: <annotations>
+  action: check_resource_details_key_and_value
+check_resource_provisioner:
+  params:
+    key: Provisioner
+    value: <provisioner>
+  action: check_resource_details_key_and_value
+check_resource_reclaim_policy:
+  params:
+    key: Reclaim policy
+    value: <reclaim_policy>
+  action: check_resource_details_key_and_value
+check_resource_default_class:
+  params:
+    key: Default class
+    value: <default_class>
+  action: check_resource_details_key_and_value
+check_resource_pod_selector:
+  params:
+    key: Pod selector
+    value: <pod_selector>
+  action: check_resource_details_key_and_value
+check_resource_update_strategy:
+  params:
+    key: Update strategy
+    value: <update_strategy>
+  action: check_resource_details_key_and_value
+check_resource_max_unavailable:
+  params:
+    key: Max unavailable
+    value: <max_unavailable>
+  action: check_resource_details_key_and_value
+check_resource_max_surge:
+  params:
+    key: Max surge
+    value: <max_surge>
+  action: check_resource_details_key_and_value
+check_resource_schedule:
+  params:
+    key: Schedule
+    value: <schedule>
+  action: check_resource_details_key_and_value
+check_resource_concurrency_policy:
+  params:
+    key: Concurrency policy
+    value: <concurrency_policy>
+  action: check_resource_details_key_and_value
+check_resource_last_schedule_time:
+  params:
+    key: Last schedule time
+    value: <last_schedule_time>
+  action: check_resource_details_key_and_value
+check_resource_owner:
+  params:
+    key: Owner
+    value: <owner>
+  action: check_resource_details_key_and_value
+check_resource_owner_type_and_link:
+  params:
+    resource_type: <resource_kind>
+  elements:
+  - selector:
+      xpath: //dt[contains(.,'Owner')]/following-sibling::dd[1]/span[contains(@class,'co-resource-item')]/span[@title='<resource_type>']
+    timeout: 20
+  - selector:
+      xpath: //dt[contains(.,'Owner')]/following-sibling::dd[1]/span[contains(@class,'co-resource-item')]/a[@href='/k8s/ns/<project_name>/<resource_group>~<resource_version>~<resource_type>/<resource_name>' and text()='<resource_name>']
+    timeout: 20
+check_resource_desired_completions:
+  params:
+    key: Desired completions
+    value: <desired_completions>
+  action: check_resource_details_key_and_value
+check_resource_parallelism:
+  params:
+    key: Parallelism
+    value: <parallelism>
+  action: check_resource_details_key_and_value
+check_resource_type:
+  params:
+    key: Type
+    value: <type>
+  action: check_resource_details_key_and_value
+check_resource_namespace:
+  params:
+    key: Namespace
+    value: <namespace>
+  action: check_resource_details_key_and_value
+check_resource_managed_namespace:
+  params:
+    key: Managed Namespace
+    value: <managed_namespace>
+  action: check_resource_details_key_and_value
+check_resource_git_repository:
+  params:
+    key: Git repository
+    value: <git_repo>
+  action: check_resource_details_key_and_value
+check_builder_image:
+  params:
+    key: Build from
+    value: <builder_image>
+  action: check_resource_details_key_and_value
+check_output_to_image:
+  params:
+    key: Output to
+    value: <output_image>
+  action: check_resource_details_key_and_value
+check_run_policy:
+  params:
+    key: Run policy
+    value: <run_policy>
+  action: check_resource_details_key_and_value
+check_triggered_by:
+  params:
+    key: Triggered by
+    value: <triggered_by>
+  action: check_resource_details_key_and_value
+check_termination_type:
+  params:
+    key: Termination type
+    value: <termination_type>
+  action: check_resource_details_key_and_value
+check_insecure_traffic:
+  params:
+    key: Insecure traffic
+    value: <insecure_traffic>
+  action: check_resource_details_key_and_value
+check_route_hostname:
+  params:
+    key: Host
+    value: <hostname>
+  action: check_resource_details_key_and_value
+check_route_path:
+  params:
+    key: Path
+    value: <path>
+  action: check_resource_details_key_and_value
+check_route_canonical_hostname:
+  params:
+    key: Router canonical hostname
+    value: <canonical_hostname>
+  action: check_resource_details_key_and_value
+check_machine_config_selector:
+  params:
+    key: MachineConfig selector
+    value: <machine_config_selector>
+  action: check_resource_details_key_and_value
+check_node_selector:
+  params:
+    key: Node selector
+    value: <node_selector>
+  action: check_resource_details_key_and_value
+check_current_configuration:
+  params:
+    key: Current configuration
+    value: <current_configuration>
+  action: check_resource_details_key_and_value
+check_max_unhealthy:
+  params:
+    key: Max unhealthy
+    value: <max_unhealthy>
+  action: check_resource_details_key_and_value
+check_expected_machines:
+  params:
+    key: Expected machines
+    value: <expected_machines>
+  action: check_resource_details_key_and_value
+check_current_healthy:
+  params:
+    key: Current healthy
+    value: <current_healthy>
+  action: check_resource_details_key_and_value
+check_min_replicas:
+  params:
+    key: Min replicas
+    value: <replicas_value>
+  action: check_resource_details_key_and_value
+check_max_replicas:
+  params:
+    key: Max replicas
+    value: <replicas_value>
+  action: check_resource_details_key_and_value
+check_resource_kind:
+  params:
+    key: Kind
+    value: <kind>
+  action: check_resource_details_key_and_value
+check_api_group:
+  params:
+    key: API group
+    value: <api_group>
+  action: check_resource_details_key_and_value
+check_api_version:
+  params:
+    key: API version
+    value: <api_version>
+  action: check_resource_details_key_and_value
+check_namespaced:
+  params:
+    key: Namespaced
+    value: <namespaced>
+  action: check_resource_details_key_and_value
+check_short_names:
+  params:
+    key: Short names
+    value: <short_names>
+  action: check_resource_details_key_and_value
+check_created_at:
+  params:
+    key: Created at
+  action: check_resource_details_key_only
+check_scale_target:
+  params:
+    key: Scale target
+    value: <scale_target>
+  action: check_resource_details_key_and_value
+check_current_replicas:
+  params:
+    key: Current replicas
+    value: <current_replicas>
+  action: check_resource_details_key_and_value
+check_desired_replicas:
+  params:
+    key: Desired replicas
+    value: <desired_replicas>
+  action: check_resource_details_key_and_value
+check_hpa_min_replicas:
+  params:
+    key: Min replicas
+    value: <min_replicas>
+  action: check_resource_details_key_and_value
+check_hpa_max_replicas:
+  params:
+    key: Max replicas
+    value: <max_replicas>
+  action: check_resource_details_key_and_value
+check_publisher:
+  params:
+    key: Publisher
+    value: <publisher>
+  action: check_resource_details_key_and_value
+check_endpoint:
+  params:
+    key: Endpoint
+    value: <endpoint>
+  action: check_resource_details_key_and_value
+check_size:
+  params:
+    key: Size
+    value: <size>
+  action: check_resource_details_key_and_value
+check_requested_capacity:
+  params:
+    key: Requested capacity
+    value: <requested_capacity>
+  action: check_resource_details_key_and_value
+check_source:
+  params:
+    key: Source
+    value: <source>
+  action: check_resource_details_key_and_value
+check_sc_driver:
+  params:
+    key: Driver
+    value: <driver>
+  action: check_resource_details_key_and_value
+check_deletion_policy:
+  params:
+    key: Deletion policy
+    value: <deletion_policy>
+  action: check_resource_details_key_and_value
+check_snapshot_handle:
+  params:
+    key: Snapshot handle
+    value: <snapshot_handle>
+  action: check_resource_details_key_and_value
+check_volume_snapshot:
+  params:
+    key: VolumeSnapshot
+    value: <volume_snapshot>
+  action: check_resource_details_key_and_value
+check_volume_snapshot_content:
+  params:
+    key: VolumeSnapshotContent
+    value: <volume_snapshot_content>
+  action: check_resource_details_key_and_value
+check_volume_snapshot_class:
+  params:
+    key: VolumeSnapshotClass
+    value: <volume_snapshot_class>
+  action: check_resource_details_key_and_value
+check_volume_snapshot_class_name:
+  params:
+    key: VolumeSnapshotClass
+    value: <volume_snapshot_class_name>
+  action: check_resource_details_key_and_value
+check_instance_type:
+  params:
+    key: Instance type
+    value: <instance_type>
+  action: check_resource_details_key_and_value
+check_registry_pull_interval:
+  element:
+    selector:
+      xpath: //dt[contains(.,'Registry poll interval')]/following-sibling::dd[1]/button[contains(.,'<registrypullinterval>')]
+check_runtimeclass:
+  params:
+    key: Runtime class
+    value: kata
+  action: check_resource_details_key_and_value
+check_runtimeclass_missing:
+  element:
+    selector:
+      xpath: //dt[contains(.,'Runtime class')]
+    missing: true
+click_workloads_tab:
+  params:
+    tab_name: Workloads
+  action: click_tab
+click_workload_details:
+  params:
+    button_text: Details
+  action: click_button_text
+check_managed_by_badge:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-m-pane__heading-owner') and contains(.,'Managed by')]/span[contains(@class,'co-resource-item')]/a[@href='/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>' and text()='<operand_name>']
+    timeout: 20
+check_owner_reference:
+  params:
+    resource_type: <owner_resource_kind>
+    resource_name: <owner_resource_name>
+    resource_link: /k8s/ns/<owner_resource_namespace>/<owner_resource_group>~<owner_resource_version>~<owner_resource_kind>/<owner_resource_name>
+  action: check_resource_item
