@@ -1,0 +1,57 @@
+open_view_sidebar:
+  params:
+    button_text: View sidebar
+  action: click_button
+  element:
+    selector:
+      xpath: //button[contains(.,'Schema')]
+close_view_sidebar:
+  action: click_close_icon
+  element:
+    selector:
+      xpath: //button[contains(.,'Schema')]
+    missing: true
+view_schema_definition_of_bc_output_name:
+  action: view_spec_schema_details
+  action: view_output_schema_details
+  action: view_to_schema_details
+  element:
+    selector:
+      xpath: //span[contains(.,'Name of the referent')]
+view_spec_schema_details:
+  params:
+    field: spec
+  action: click_view_detail_button
+view_output_schema_details:
+  params:
+    field: output
+  action: click_view_detail_button
+view_to_schema_details:
+  params:
+    field: to
+  action: click_view_detail_button
+view_schema_definition_of_build_postcommit_command_field:
+  action: view_spec_schema_details
+  action: view_postCommit_schema_detail
+  element:
+    selector:
+      xpath: //span[contains(.,'command is the command to run')]
+view_postCommit_schema_detail:
+  params:
+    field: postCommit
+  action: click_view_detail_button
+view_schema_definition_of_for_replicas_field:
+  action: view_spec_schema_details
+  element:
+    selector:
+      xpath: //span[contains(.,'Number of desired pods')]
+click_view_detail_button:
+  element:
+    selector:
+      xpath: //li[contains(@class,'co-resource-sidebar-item')]/h5[contains(.,'<field>')]/following-sibling::button[contains(.,'View details')]
+    op: click
+click_item_in_breadcrumb:
+  element:
+    selector:
+      xpath: //li[contains(@class,'breadcrumb__item')]//button[contains(.,'<breadcrumb_item>')]
+    op: click
