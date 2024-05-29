@@ -294,3 +294,14 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
     raise "failed to clone StorageClass from: #{src_sc}"
   end  
 end
+
+Given(/^default storage class exists$/) do
+  ensure_admin_tagged
+  _sc = BushSlicer::StorageClass.get_matching(user: user) { |sc, sc_hash| sc.default? }.first
+  if _sc
+    logger.info "Default storage class: #{_sc.name} exists"
+  else
+    logger.warn "No default storageclass exist, skip for this scenario"
+    skip_this_scenario
+  end
+end
