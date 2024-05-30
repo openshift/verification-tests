@@ -19,7 +19,8 @@ Feature: Cluster Autoscaler Tests
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-28108"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-28108"
 
     # Create clusterautoscaler
     Given I obtain test data file "cloud/cluster-autoscaler.yml"
@@ -113,7 +114,8 @@ Feature: Cluster Autoscaler Tests
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-21517"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-21517"
     Given I obtain test data file "cloud/machine-autoscaler.yml"
     When I run oc create over "machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest                                      |
@@ -155,9 +157,11 @@ Feature: Cluster Autoscaler Tests
     And I use the "openshift-machine-api" project
     And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-clone-22102"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-22102"
     And evaluation of `machine_set_machine_openshift_io.name` is stored in the :machineset_clone_22102 clipboard
-    Given I clone a machineset and name it "machineset-clone-22102-2"
+    And evaluation of `infrastructure("cluster").infra_name` is stored in the :infraName clipboard
+    Given I clone a machineset and name it "<%= cb.infraName %>-22102-2"
     And evaluation of `machine_set_machine_openshift_io.name` is stored in the :machineset_clone_22102_2 clipboard
 
     Given I obtain test data file "cloud/machine-autoscaler.yml"
