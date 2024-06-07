@@ -43,7 +43,6 @@ gem 'watir'
 gem 'headless'
 gem 'selenium-webdriver', '4.8.0'
 gem 'protobuf'
-gem 'reportportal'
 
 ## Docs
 # beware https://github.com/pry/pry/issues/1465

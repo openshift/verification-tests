@@ -43,11 +43,6 @@ RUN set -x && \
     chmod -R g=u "$HOME" && \
     "$HOME/verification-tests/tools/install_os_deps.sh" && \
     "$HOME/verification-tests/tools/hack_bundle.rb" && \
-    git clone --depth 1 --single-branch https://github.com/openshift-qe/reportportal-agent-ruby.git && \
-    cd reportportal-agent-ruby && \
-    gem build reportportal && \
-    gem install reportportal-*.gem && \
-    cd .. && rm -rf reportportal-agent-ruby && \
     rpm -qa && \
     dnf clean all -y && \
     rm -rf $HOME/verification-tests /var/cache/yum /var/tmp/* /tmp/*
