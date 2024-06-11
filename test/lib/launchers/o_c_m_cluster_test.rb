@@ -55,7 +55,7 @@ class MyTest < Test::Unit::TestCase
     assert_equal('{"name":"myosd4","managed":true,"multi_az":true,"ccs":{"enabled":false}}', json)
   end
 
-  def test_generating_cluster_data_with_multi_az_envvars    
+  def test_generating_cluster_data_with_multi_az_envvars
     ENV['OCM_MULTI_AZ'] = "true"
     options = { :token => "abc" }
     ocm = BushSlicer::OCMCluster.new(options)
@@ -135,7 +135,7 @@ class MyTest < Test::Unit::TestCase
     options = { :token => "abc" }
     ocm = BushSlicer::OCMCluster.new(options)
     ocm_cli = ocm.download_ocm_cli
-    assert(File.exists?(ocm_cli), "File '#{ocm_cli}' was not downloaded")
+    assert(File.exist?(ocm_cli), "File '#{ocm_cli}' was not downloaded")
     output = ocm.exec("version")
     assert_equal("0.1.46", output)
   end

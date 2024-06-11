@@ -84,7 +84,7 @@ module BushSlicer
       # export OPENSHIFT_ENV_OCP4_ADMIN_CREDS_SPEC=file:///~/.kube/config
       if opts[:spec].start_with? 'file:///'
         path = File.expand_path(opts[:spec].split("file://")[1])
-        raise "kubeconfig does not exists" unless File.exists? File.expand_path(path)
+        raise "kubeconfig does not exists" unless File.exist? File.expand_path(path)
         config = File.open(path).read
       else
         url = opts[:spec]

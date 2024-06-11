@@ -70,7 +70,7 @@ Given /^I have a browser with:$/ do |table|
     File.expand_path('../browser_opts.yml', init_params[:rules].first)
   ]
   browser_opts.any? do |file|
-    if File.exists? file
+    if File.exist? file
       init_params.merge! YAML.load_file(file)
     end
   end
