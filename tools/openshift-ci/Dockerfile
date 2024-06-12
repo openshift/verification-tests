@@ -65,3 +65,8 @@ RUN git clone https://github.com/openshift/openshift-ansible.git /usr/share/ansi
 RUN set -x && \
     mkdir /.ansible /.local && \
     chmod -R 777 /.ansible /.local
+
+# Fix permission issues of loading .config/containers/registries.conf.d when runnig oc/skopeo tools
+RUN set -x && \
+    test -d /opt/app-root/src/.config && \
+    chmod -R 777 /opt/app-root/src/.config
