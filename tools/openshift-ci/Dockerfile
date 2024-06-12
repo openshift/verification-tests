@@ -3,6 +3,7 @@ FROM registry.ci.openshift.org/ocp/builder:rhel-8-base-nodejs-openshift-4.12
 LABEL vendor="Red Hat inc."
 LABEL maintainer="OCP QE Team"
 USER root
+WORKDIR /
 
 ADD . /verification-tests/
 ARG YQ_VERSION="v4.30.8"
@@ -42,8 +43,8 @@ RUN set -x && \
     CFT_VERSION='122.0.6261.57' && \
     npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
     npx @puppeteer/browsers install chromedriver@${CFT_VERSION} && \
-    find /opt/app-root/src/chrome -type f -name chrome -exec ln -s {} /usr/local/bin/chrome \; && \
-    find /opt/app-root/src/chromedriver -type f -name chromedriver -exec ln {} /usr/local/bin/chromedriver \; && \
+    find /chrome -type f -name chrome -exec ln -s {} /usr/local/bin/chrome \; && \
+    find /chromedriver -type f -name chromedriver -exec ln {} /usr/local/bin/chromedriver \; && \
     chmod +x /usr/local/bin/chromedriver && \
     GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
