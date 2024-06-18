@@ -796,7 +796,7 @@ Feature: Service related networking scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
-  @network-ovnkubernetes
+  @network-ovnkubernetes @FdpOvnOvs
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-47087:SDN Other node cannot be accessed for nodePort when externalTrafficPolicy is Local
