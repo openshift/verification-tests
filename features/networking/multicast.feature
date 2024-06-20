@@ -9,7 +9,7 @@ Feature: testing multicast scenarios
   @upgrade-sanity
   @proxy @noproxy @connected
   @network-multitenant
-  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @FdpOvnOvs
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -109,7 +109,7 @@ Feature: testing multicast scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
   @network-multitenant
-  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @FdpOvnOvs
   @proxy @noproxy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
@@ -181,7 +181,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @network-multitenant
-  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @FdpOvnOvs
   @proxy @noproxy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
@@ -328,7 +328,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
-  @network-openshiftsdn @network-networkpolicy @network-multitenant
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @network-multitenant @FdpOvnOvs
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-12931:SDN pods in default project should not be able to receive multicast traffic from other namespace
@@ -412,7 +412,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
-  @network-openshiftsdn @network-networkpolicy @network-multitenant
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @network-multitenant @FdpOvnOvs
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-12928:SDN pods should be able to join multiple multicast groups at same time  
@@ -515,7 +515,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
-  @network-openshiftsdn @network-networkpolicy @network-multitenant
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @network-multitenant @FdpOvnOvs
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-12929:SDN pods should not be able to receive multicast traffic from other pods in different namespace
@@ -598,7 +598,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
-  @network-openshiftsdn @network-networkpolicy @network-multitenant
+  @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy @network-multitenant @FdpOvnOvs
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-12966:SDN pods in default project should be able to receive multicast traffic from other default project pods
