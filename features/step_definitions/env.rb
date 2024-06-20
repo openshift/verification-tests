@@ -60,7 +60,8 @@ end
 # Example: Given the master version >= "3.4"
 Given /^the master version ([<>=]=?) #{QUOTED}$/ do |op, ver|
   unless env.version_cmp(ver, user: user).send(op.to_sym, 0)
-    raise "master version not #{op} #{ver}"
+    full_version, major, minor = env.get_version(user: user)
+    raise "master version '#{full_version}' not #{op} '#{ver}'"
   end
 end
 
