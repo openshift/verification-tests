@@ -1177,7 +1177,7 @@ Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
     annotation = 'k8s.ovn.org/multicast-enabled=true'
     space = 'namespace'
   end
-  @result = admin.cli_exec(:annotate, resource: space, resourcename: project_name, keyval: annotation)
+  @result = admin.cli_exec(:annotate, resource: space, resourcename: project_name, keyval: annotation, overwrite: true)
   unless @result[:success]
     raise "Failed to apply the default deny annotation to specified namespace."
   end
