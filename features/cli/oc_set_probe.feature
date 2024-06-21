@@ -235,7 +235,6 @@ Feature: oc_set_probe.feature
       | resource | deploy/mysql               |
       | e        | MARIADB_ROOT_PASSWORD=pass |
     Then the step should succeed
-    Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     When I run the :set_probe client command with:
       | resource        | deployment/mysql |
       | c               | mysql            |
@@ -243,7 +242,6 @@ Feature: oc_set_probe.feature
       | get_url         | http://:8080/opt |
       | timeout_seconds | 30               |
     Then the step should succeed
-    Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     When I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
@@ -259,7 +257,6 @@ Feature: oc_set_probe.feature
       | readiness |                              |
       | get_url   | https://127.0.0.1:1936/stats |
     Then the step should succeed
-    Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     When I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
