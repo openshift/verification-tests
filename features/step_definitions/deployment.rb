@@ -75,6 +75,8 @@ Given /^#{QUOTED} deployment becomes ready in the#{OPT_QUOTED} project$/ do | d_
     ready == desired
   }
   unless success
+    user.cli_exec(:logs, resource_name: "deployment/#{d_name}")
+    step %Q{I get project events}
     logger.error(user.cli_exec(:describe, resource_name: "deployment/#{d_name}"))
     raise "Deployment did not become ready"
   end
