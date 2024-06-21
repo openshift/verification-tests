@@ -96,9 +96,11 @@ Feature: testing multicast scenarios
     And the output should match:
       | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
       | <%= cb.pod2ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
+      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss |
+      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss |
     And the output should not match:
-      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
-      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
+      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/100% |
+      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/100% |
     """
     
   # @author hongli@redhat.com
@@ -170,6 +172,7 @@ Feature: testing multicast scenarios
     Then the step should succeed
     And the output should match:
       | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
+      | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss |
     And the output should not match:
       | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss = 5/0/100% |
     """
@@ -266,9 +269,11 @@ Feature: testing multicast scenarios
     And the output should match:
       | <%= cb.proj1pod1ip %>.*joined \(S,G\) = \(\*, <%= cb.multicast_ip %>\), pinging |
       | <%= cb.proj1pod2ip %>.*joined \(S,G\) = \(\*, <%= cb.multicast_ip %>\), pinging |
+      | <%= cb.proj1pod1ip %>.*multicast, xmt/rcv/%loss |
+      | <%= cb.proj1pod2ip %>.*multicast, xmt/rcv/%loss |
     And the output should not match:
-      | <%= cb.proj1pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0%                |
-      | <%= cb.proj1pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0%                |
+      | <%= cb.proj1pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/100%                |
+      | <%= cb.proj1pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/100%                |
     """
 
     # Check multicast group 239.255.254.24 stream in proj2
@@ -315,9 +320,11 @@ Feature: testing multicast scenarios
     And the output should match:
       | <%= cb.proj2pod1ip %>.*joined \(S,G\) = \(\*, <%= cb.multicast_ip %>\), pinging |
       | <%= cb.proj2pod2ip %>.*joined \(S,G\) = \(\*, <%= cb.multicast_ip %>\), pinging |
+      | <%= cb.proj2pod1ip %>.*multicast, xmt/rcv/%loss |
+      | <%= cb.proj2pod2ip %>.*multicast, xmt/rcv/%loss |
     And the output should not match:
-      | <%= cb.proj2pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0%                |
-      | <%= cb.proj2pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0%                |
+      | <%= cb.proj2pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/100%                |
+      | <%= cb.proj2pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/100%                |
     """
 
   # @author hongli@redhat.com
@@ -497,15 +504,17 @@ Feature: testing multicast scenarios
     Then the step should succeed
     And the output should match:
       | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
+      | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss |
     And the output should not match:
-      | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss = 5/0/0% |
+      | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss = 5/0/100% |
     When I execute on the "<%= cb.pod2 %>" pod:
       | cat | /tmp/p2g2.log |
     Then the step should succeed
     And the output should match:
       | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, <%= cb.multicast_ip %>\), pinging |
+      | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss |
     And the output should not match:
-      | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss = 5/0/0% |
+      | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss = 5/0/100% |
     """
 
   # @author hongli@redhat.com
@@ -658,7 +667,8 @@ Feature: testing multicast scenarios
     Then the step should succeed
     And the output should match:
       | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
+      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss |
     And the output should not match:
-      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
+      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/100% |
     """
     Given I disable multicast for the "default" namespace
