@@ -43,7 +43,6 @@ Feature: Persistent Volume Claim binding policies
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @hypershift-hosted
-    @critical
     Examples:
       | case_id           | accessMode1   | accessMode2   | accessMode3   |
       | OCP-9702:Storage  | ReadOnlyMany  | ReadWriteMany | ReadWriteOnce | # @case_id OCP-9702
@@ -109,7 +108,6 @@ Feature: Persistent Volume Claim binding policies
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @hypershift-hosted
-    @critical
     Examples:
       | case_id           | access_mode   |
       | OCP-26880:Storage | ReadOnlyMany  | # @case_id OCP-26880
@@ -154,7 +152,6 @@ Feature: Persistent Volume Claim binding policies
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @hypershift-hosted
-    @critical
     Examples:
       | case_id           | pv_access_mode | pvc_access_mode1 | pvc_access_mode2 |
       | OCP-26882:Storage | ReadOnlyMany   | ReadWriteMany    | ReadWriteOnce    | # @case_id OCP-26882
