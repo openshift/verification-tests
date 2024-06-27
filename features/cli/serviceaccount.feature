@@ -101,6 +101,7 @@ Feature: ServiceAccount and Policy Managerment
   @hypershift-hosted
   @critical
   Scenario: OCP-11249:Authentication User can get the serviceaccount token via client
+    Given the "ImageRegistry" capability is enabled
     Given I have a project
     When I run the :create_token client command with:
       | serviceaccount | default |
