@@ -70,5 +70,24 @@ module BushSlicer
       end
       percent_done
     end
+
+    def capabilities(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('status', 'capabilities')
+    end
+
+    def enabled_capabilities(user: nil, cached: true, quiet: false)
+      capabilities.dig('enabledCapabilities')
+    end
+
+    def known_capabilities(user: nil, cached: true, quiet: false)
+      capabilities.dig('knownCapabilities')
+    end
+
+    def capability_is_enabled?(capability:, user: nil,cached: true, quiet: false)
+      cluster_enabled_caps = self.enabled_capabilities(user: user, cached: cached, quiet: quiet)
+      cluster_enabled_caps.include? capability
+    end
+
   end
 end
