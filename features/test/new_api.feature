@@ -32,3 +32,15 @@ Feature: test new api methods
   Scenario: check cluster_version capabilities
     And the expression should be true> cluster_version('version').capability_is_enabled?(capability: 'ImageRegistry')
     And the expression should be true> cluster_version('version').capability_is_enabled?(capability: 'MachineAPI')
+
+  @admin
+  Scenario: test cluster_version step
+    Given the "ImageRegistry" capability is enabled
+    Given I have a project
+
+  @admin
+  Scenario: negative test cluster_version step
+    Given the "Flying" capability is enabled
+    And I pry
+    Given I have a project
+
