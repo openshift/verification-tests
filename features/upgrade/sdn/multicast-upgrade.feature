@@ -88,8 +88,8 @@
       | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
       | <%= cb.pod2ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
     And the output should not match:
-      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
-      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
+      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/100% |
+      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/100% |
     """
 
   # @author weliang@redhat.com
@@ -170,6 +170,6 @@
       | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
       | <%= cb.pod2ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
     And the output should not match:
-      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
-      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
+      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/100% |
+      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/100% |
     """

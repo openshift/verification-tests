@@ -130,9 +130,6 @@ Feature: testing multicast scenarios
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
     And evaluation of `pod(1).ip` is stored in the :pod2ip clipboard
     And evaluation of `pod(1).name` is stored in the :pod2 clipboard
-
-    # Enable multicast in proj1
-    Given I enable multicast for the "<%= cb.proj1 %>" namespace
     
     # run omping as background on the pods
     When I run the :exec background client command with:
@@ -173,7 +170,7 @@ Feature: testing multicast scenarios
     And the output should match:
       | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, (232.43.211.234\|ff3e::4321:1234)\), pinging |
       | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss |
-    And the output should not match:
+    And the output should match:
       | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss = 5/0/100% |
     """
 
