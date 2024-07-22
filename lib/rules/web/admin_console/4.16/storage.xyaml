@@ -42,10 +42,17 @@ set_pvc_name:
     type: input
     op: send_keys <pvc_name>
 choose_access_mode:
-  element:
-    selector:
-      xpath: //input[@name='accessMode' and @value='<access_mode>']
+  elements:
+  - selector:
+      xpath: //label[@for="access-mode"]/ancestor::div[@class="form-group"]//button[contains(@class,"menu-toggle")]
     op: click
+  - selector:
+      xpath: //span[contains(.,"<mapped_access_mode>")]/ancestor::button[@role="option" and not(@disabled)]
+    op: click
+choose_access_mode_readwriteonce:
+  params:
+    mapped_access_mode: Single user (RWO)
+  action: choose_access_mode
 set_request_size:
   elements:
   - selector: &pvc_request_size_input
@@ -77,8 +84,9 @@ fill_pvc_form:
     ref: choose_storage_class
   action: set_pvc_name
   action:
-    if_param: access_mode
-    ref: choose_access_mode
+    if_param:
+      access_mode: ReadWriteOnce
+    ref: choose_access_mode_readwriteonce
   action: set_request_size
   action:
     if_param: pvc_size_unit
