@@ -68,9 +68,9 @@ pause_rollouts_action:
   params:
     item: Pause rollouts
   action: click_one_dropdown_action
-start_rollout_action:
+restart_rollout_action:
   params:
-    item: Start rollout
+    item: Restart rollout
   action: click_one_dropdown_action
 resume_rollouts_action:
   params:
