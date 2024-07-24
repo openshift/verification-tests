@@ -7,6 +7,7 @@
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
   @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
@@ -102,10 +103,10 @@
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check the multicast works well after upgrade
     Given I switch to cluster admin pseudo user
-    Given the cluster is not migration from sdn plugin
     When I use the "multicast-upgrade" project
     Given 3 pods become ready with labels:
       | name=mcast-pods |

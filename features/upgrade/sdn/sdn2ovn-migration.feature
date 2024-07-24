@@ -40,7 +40,6 @@ Feature: sdn2ovn migration testing
   @upgrade-prepare
   @vsphere-ipi
   @vsphere-upi
-  @qeci
   @upgrade
   @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
@@ -109,7 +108,6 @@ Feature: sdn2ovn migration testing
   @4.16 @4.15 @4.14 @4.13 @4.12
   @vsphere-ipi
   @vsphere-upi
-  @qeci
   @upgrade
   @network-ovnkubernetes
   @proxy @noproxy @disconnected @connected
