@@ -31,6 +31,8 @@ RUN set -x && \
     curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s#$GECKODRIVER_RE#\1#p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
     dnf -y install --setopt=tsflags=nodocs https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
+    sed --in-place=.orig --regexp-extended 's%#baseurl=https://download.example/pub/epel/%baseurl=https://mirrors.edge.kernel.org/fedora-epel/%g' /etc/yum.repos.d/epel*.repo && \
+    sed --in-place --regexp-extended 's%^metalink=%#metalink=%g' /etc/yum.repos.d/epel*.repo && \
     dnf config-manager --disable epel && \
     dnf -y --enablerepo=epel install git-crypt && \
     dnf -y module list ruby && \
