@@ -257,7 +257,7 @@ module BushSlicer
     def os_volumes_url
       return @os_volumes_url if @os_volumes_url
       for service in os_service_catalog
-        if service['type'] == "volumev2"
+        if service['type'] == "volumev3"
           for item in service['endpoints']
             if item['interface'] == 'public'
               @os_volumes_url = item['url']
