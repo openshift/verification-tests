@@ -1,4 +1,10 @@
 check_baremetalhost_status_popup:
+  action:
+    if_element:
+      selector:
+        xpath: //input[@data-test='status-text' and text()='Externally provisioned']
+    ref: check_external_provisioned_status
+check_external_provisioned_status:
   elements:
   - selector:
       xpath: (//span[@data-test='status-text' and text()='Externally provisioned'])[1]
