@@ -226,7 +226,28 @@ Given /^operator #{QUOTED} becomes #{NO_SPACE_STR}(?: within #{NUMBER} seconds)?
     logger.info("#### Operator #{operator_name} Expected conditions: #{expected}")
     logger.info "#### After #{stats[:seconds]} seconds and #{stats[:iterations]} iterations " <<
       "operator #{operator_name} becomes: #{actual_results}" if success
-    raise "The #{operator_name} operator still didn't become #{expected} after #{timeout} seconds" unless success
+    unless success
+      co_concerned_stuff = {
+        "authentication" => { :namespaces => ["openshift-authentication", "openshift-oauth-apiserver"], :print_nodes => true }
+        # others can be added when related teams need
+        # "kube-apiserver" => { :namespaces => ["openshift-kube-apiserver"], :print_nodes => true }
+      }
+      if co_concerned_stuff[operator_name]
+        if co_concerned_stuff[operator_name][:namespaces]
+          for ns in co_concerned_stuff[operator_name][:namespaces]
+            logger.info("#### Checking pods in namespace #{ns}:")
+            @result = admin.cli_exec(:get, resource: 'pods', namespace: ns , o: 'wide')
+            raise "Unable to get pods in namespace #{ns}." unless @result[:success]
+          end
+        end
+        if co_concerned_stuff[operator_name][:print_nodes]
+          logger.info("#### Checking nodes:")
+          @result = admin.cli_exec(:get, resource: 'nodes')
+          raise "Unable to run nodes." unless @result[:success]
+        end
+      end
+      raise "The #{operator_name} operator still didn't become #{expected} after #{timeout} seconds"
+    end
   ensure
     logger.dedup_flush
   end

@@ -47,13 +47,14 @@ end
 Given /^authentication successfully rolls out after config changes$/ do
   ensure_admin_tagged
   interval_time = 5
-  oauthprocessingtimeout = 200 # set 200 seconds here due to https://bugzilla.redhat.com/show_bug.cgi?id=1958198, after the bug fixed, the seconds should be reduced accordingly
-  oauthsucceedtimeout = 900 
+  oauthprocessingtimeout = 120 # if takes longer for the "Progressing" condition to become "True", consider to file a bug like https://bugzilla.redhat.com/show_bug.cgi?id=1958198
+  oauthsucceedtimeout = 600 
+  terminatingtimeout = 300
   stats = {}
   error = nil
   step %Q/operator "authentication" becomes progressing within #{oauthprocessingtimeout} seconds/
   step %Q|operator "authentication" becomes available/non-progressing/non-degraded within #{oauthsucceedtimeout} seconds|
-  success = wait_for(oauthsucceedtimeout, interval: interval_time, stats: stats){
+  success = wait_for(terminatingtimeout, interval: interval_time, stats: stats){
     begin
       step %Q/I run the :get admin command with:/, table(%{
           | resource | pod                      |
