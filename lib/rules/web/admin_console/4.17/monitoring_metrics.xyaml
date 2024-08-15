@@ -133,12 +133,12 @@ choose_zoom_value:
 click_chart_zoom_dropdown:
   element:
     selector:
-      xpath: //div[contains(@class,'query-browser__controls' )]//button[@id]
+      xpath: //div[contains(@class,'query-browser__wrapper' )]//button[@id]
     op: click
 click_zoom_value_button:
   element:
     selector:
-      xpath: //div[contains(@class,'query-browser__controls' )]//a[text()='<zoom_value>']
+      xpath: //div[contains(@class,'query-browser__wrapper' )]//a[text()='<zoom_value>']
     op: click
 click_reset_zoom_button:
   element:
