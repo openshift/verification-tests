@@ -148,7 +148,7 @@ click_reset_zoom_button:
 check_zoom_value:
   element:
     selector:
-      xpath: //div[contains(@class,'query-browser__controls' )]//input[@value='<zoom_value>']
+      xpath: //div[contains(@class,'query-browser__wrapper' )]//input[@value='<zoom_value>']
 
 check_metric_query_result_not_exit:
   params:
