@@ -544,6 +544,12 @@ Feature: Multus-CNI related scenarios
 
     And I wait up to 60 seconds for the steps to pass:
     """
+    # Cleanup for bringing CRD to original
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"additionalNetworks": null}} |
+    """
     When I run the :get admin command with:
       | resource | net-attach-def      |
       | n        | <%= project.name %> |
