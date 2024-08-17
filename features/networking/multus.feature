@@ -541,7 +541,6 @@ Feature: Multus-CNI related scenarios
     Given I have a project with proper privilege
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks":[{"name":"test-macvlan-case3","namespace":"<%= project.name %>","simpleMacvlanConfig":{"ipamConfig":{"staticIPAMConfig":{"addresses": [{"address":"10.128.2.100/23","gateway":"10.128.2.1"}]},"type":"static"},"master":"<%= cb.default_interface %>","mode":"bridge"},"type":"SimpleMacvlan"}]}} |
-
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :get admin command with:
@@ -550,6 +549,12 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the output should contain:
       | test-macvlan-case3 |
+    """
+    #Cleanup for bringing CRD to original
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"additionalNetworks": null}} |
     """
     #Creating pod under openshift-multus project to absorb above net-attach-def
     Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
