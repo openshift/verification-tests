@@ -801,7 +801,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+20                   |
       | replicationcontrollers\\s+0\\s+30 |
       | resourcequotas\\s+1\\s+1          |
-      | secrets\\s+6\\s+15                |
+      | secrets\\s+3\\s+15                |
       | services\\s+0\\s+10               |
     Given I obtain test data file "quota/ocp11927/pod-request-limit-valid-4.yaml"
     When I run the :create client command with:
@@ -818,7 +818,7 @@ Feature: Quota related scenarios
       | pods\\s+1\\s+20                   |
       | replicationcontrollers\\s+0\\s+30 |
       | resourcequotas\\s+1\\s+1          |
-      | secrets\\s+6\\s+15                |
+      | secrets\\s+3\\s+15                |
       | services\\s+0\\s+10               |
 
   # @author chezhang@redhat.com
