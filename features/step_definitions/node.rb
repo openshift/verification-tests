@@ -683,3 +683,8 @@ Given /^I set all worker nodes status to unschedulable$/ do
    admin.cli_exec(:oadm_cordon_node, opts)
   end
 end
+
+Given /^I store the schedulable workers without taints in the#{OPT_SYM} clipboard$/ do |cb_name|
+  step %Q{I store the schedulable workers in the :#{cb_name} clipboard}
+  cb.nodes = cb.nodes.reject{|w| w.taints.first}
+end 
