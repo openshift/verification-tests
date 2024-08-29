@@ -355,7 +355,7 @@ click_checkbox_from_provider_type:
     ref: show_all_provider_type
   elements:
   - selector:
-      xpath: //form[@data-test-group-name='catalogSourceDisplayName']//input[@title='<text>']
+      xpath: //input[@title="<text>"]
     op: click
     timeout: 40
 show_all_provider_type:
