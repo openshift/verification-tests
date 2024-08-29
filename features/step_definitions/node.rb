@@ -685,6 +685,7 @@ Given /^I set all worker nodes status to unschedulable$/ do
 end
 
 Given /^I store the schedulable workers without taints in the#{OPT_SYM} clipboard$/ do |cb_name|
+  cb_name ||= :nodes
   step %Q{I store the schedulable workers in the :#{cb_name} clipboard}
   cb.nodes = cb.nodes.reject{|w| w.taints.first}
 end 
