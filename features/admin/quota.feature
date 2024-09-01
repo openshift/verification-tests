@@ -553,7 +553,7 @@ Feature: Quota related scenarios
   # @author weinliu@redhat.com
   # @case_id OCP-10706
   @admin
-  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11
+  @4.15 @4.14 @4.13 @4.12 @4.11
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -574,7 +574,7 @@ Feature: Quota related scenarios
       | param | POD_VALUE=2    |
       | param | RC_VALUE=3     |
       | param | RQ_VALUE=3     |
-      | param | SECRET_VALUE=2 |
+      | param | SECRET_VALUE=5 |
       | param | SVC_VALUE=5    |
       | n     | <%= project.name %>            |
     Then the step should succeed
@@ -588,7 +588,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+2                   |
       | replicationcontrollers\\s+0\\s+3 |
       | resourcequotas\\s+1\\s+3         |
-      | secrets\\s+3\\s+2                |
+      | secrets\\s+6\\s+5                |
       | services\\s+0\\s+5               |
     Given I obtain test data file "quota/ocp10706/mysecret.json"
     When I run the :create client command with:
@@ -612,7 +612,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+2                   |
       | replicationcontrollers\\s+0\\s+3 |
       | resourcequotas\\s+1\\s+3         |
-      | secrets\\s+3\\s+15               |
+      | secrets\\s+6\\s+15               |
       | services\\s+0\\s+5               |
     Given I obtain test data file "quota/ocp10706/mysecret.json"
     When I run the :create client command with:
@@ -628,7 +628,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+2                   |
       | replicationcontrollers\\s+0\\s+3 |
       | resourcequotas\\s+1\\s+3         |
-      | secrets\\s+4\\s+15               |
+      | secrets\\s+7\\s+15               |
       | services\\s+0\\s+5               |
 
   # @author chezhang@redhat.com
@@ -774,7 +774,7 @@ Feature: Quota related scenarios
   # @author weinliu@redhat.com
   # @case_id OCP-11927
   @admin
-  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 
+  @4.15 @4.14 @4.13 @4.12 @4.11 
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
@@ -801,7 +801,7 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+20                   |
       | replicationcontrollers\\s+0\\s+30 |
       | resourcequotas\\s+1\\s+1          |
-      | secrets\\s+3\\s+15                |
+      | secrets\\s+6\\s+15                |
       | services\\s+0\\s+10               |
     Given I obtain test data file "quota/ocp11927/pod-request-limit-valid-4.yaml"
     When I run the :create client command with:
@@ -818,7 +818,7 @@ Feature: Quota related scenarios
       | pods\\s+1\\s+20                   |
       | replicationcontrollers\\s+0\\s+30 |
       | resourcequotas\\s+1\\s+1          |
-      | secrets\\s+3\\s+15                |
+      | secrets\\s+6\\s+15                |
       | services\\s+0\\s+10               |
 
   # @author chezhang@redhat.com
