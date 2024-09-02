@@ -631,6 +631,87 @@ Feature: Quota related scenarios
       | secrets\\s+4\\s+15               |
       | services\\s+0\\s+5               |
 
+  # @author sunilc@redhat.com
+  # @case_id OCP-75936
+  @admin
+  @4.17 @4.16
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @upgrade-sanity
+  @singlenode
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @hypershift-hosted
+  @critical
+  Scenario: OCP-75936:Node Could create quota if existing resources exceed to the hard quota but prevent to create further resources
+    Given I have a project
+    Given I obtain test data file "quota/quota_template.yaml"
+    When I run the :new_app admin command with:
+      | file  | quota_template.yaml |
+      | param | CPU_VALUE=0.2  |
+      | param | MEM_VALUE=1Gi  |
+      | param | PV_VALUE=1     |
+      | param | POD_VALUE=2    |
+      | param | RC_VALUE=3     |
+      | param | RQ_VALUE=3     |
+      | param | SECRET_VALUE=2 |
+      | param | SVC_VALUE=5    |
+      | n     | <%= project.name %>            |
+    Then the step should succeed
+    When  I run the :describe client command with:
+      | resource | quota   |
+      | name     | myquota |
+    Then the output should match:
+      | cpu\\s+0\\s+200m                 |
+      | memory\\s+0\\s+1Gi               |
+      | persistentvolumeclaims\\s+0\\s+1 |
+      | pods\\s+0\\s+2                   |
+      | replicationcontrollers\\s+0\\s+3 |
+      | resourcequotas\\s+1\\s+3         |
+      | secrets\\s+3\\s+2                |
+      | services\\s+0\\s+5               |
+    Given I obtain test data file "quota/ocp10706/mysecret.json"
+    When I run the :create client command with:
+      | f | mysecret.json |
+    Then the step should fail
+    And the output should match:
+      | Error from server.*forbidden: (?i)Exceeded quota.* |
+    When I run the :patch admin command with:
+      | resource | quota |
+      | resource_name | myquota |
+      | namespace | <%= project.name %> |
+      | p | {"spec":{"hard":{"secrets":"15"}}} |
+    Then the step should succeed
+    When  I run the :describe client command with:
+      | resource | quota   |
+      | name     | myquota |
+    Then the output should match:
+      | cpu\\s+0\\s+200m                 |
+      | memory\\s+0\\s+1Gi               |
+      | persistentvolumeclaims\\s+0\\s+1 |
+      | pods\\s+0\\s+2                   |
+      | replicationcontrollers\\s+0\\s+3 |
+      | resourcequotas\\s+1\\s+3         |
+      | secrets\\s+3\\s+15               |
+      | services\\s+0\\s+5               |
+    Given I obtain test data file "quota/ocp10706/mysecret.json"
+    When I run the :create client command with:
+      | f | mysecret.json |
+    Then the step should succeed
+    When I run the :describe client command with:
+      | resource | quota   |
+      | name     | myquota |
+    Then the output should match:
+      | cpu\\s+0\\s+200m                 |
+      | memory\\s+0\\s+1Gi               |
+      | persistentvolumeclaims\\s+0\\s+1 |
+      | pods\\s+0\\s+2                   |
+      | replicationcontrollers\\s+0\\s+3 |
+      | resourcequotas\\s+1\\s+3         |
+      | secrets\\s+4\\s+15               |
+      | services\\s+0\\s+5               |
+
   # @author chezhang@redhat.com
   # @case_id OCP-11779
   @admin
@@ -785,6 +866,56 @@ Feature: Quota related scenarios
   @critical
   @hypershift-hosted
   Scenario: OCP-11927:Node The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
+    Given I have a project
+    Given I obtain test data file "quota/myquota.yaml"
+    When I run the :create admin command with:
+      | f | myquota.yaml |
+      | n | <%= project.name %>    |
+    Then the step should succeed
+    When  I run the :describe client command with:
+      | resource | quota   |
+      | name     | myquota |
+    Then the output should match:
+      | cpu\\s+0\\s+30                    |
+      | memory\\s+0\\s+16Gi               |
+      | persistentvolumeclaims\\s+0\\s+20 |
+      | pods\\s+0\\s+20                   |
+      | replicationcontrollers\\s+0\\s+30 |
+      | resourcequotas\\s+1\\s+1          |
+      | secrets\\s+3\\s+15                |
+      | services\\s+0\\s+10               |
+    Given I obtain test data file "quota/ocp11927/pod-request-limit-valid-4.yaml"
+    When I run the :create client command with:
+      | f | pod-request-limit-valid-4.yaml |
+    Then the step should succeed
+    Given the pod named "pod-request-limit-valid-4" status becomes :pending
+    When I run the :describe client command with:
+      | resource | quota   |
+      | name     | myquota |
+    Then the output should match:
+      | cpu\\s+10\\s+30                   |
+      | memory\\s+10Gi\\s+16Gi            |
+      | persistentvolumeclaims\\s+0\\s+20 |
+      | pods\\s+1\\s+20                   |
+      | replicationcontrollers\\s+0\\s+30 |
+      | resourcequotas\\s+1\\s+1          |
+      | secrets\\s+3\\s+15                |
+      | services\\s+0\\s+10               |
+
+  # @author sunilc@redhat.com
+  # @case_id OCP-75937
+  @admin
+  @4.17 @4.16
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @upgrade-sanity
+  @singlenode
+  @proxy @noproxy @connected
+  @network-ovnkubernetes @network-openshiftsdn
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @critical
+  @hypershift-hosted
+  Scenario: OCP-75937:Node The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
