@@ -91,7 +91,7 @@ set_query_input_text_area:
 choose_metrics_query:
   element:
     selector:
-      xpath: //ul[@aria-label='predefined-query-select']//button[@class='pf-c-select__menu-item' and contains(text(),'<metrics_name>')]
+      xpath: //button[@class='pf-c-select__menu-item' and contains(text(),'<metrics_name>')]
     op: click
 check_query_input_text_area:
   element:
