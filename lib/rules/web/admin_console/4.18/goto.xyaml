@@ -1,0 +1,460 @@
+# projects
+goto_projects_list_page:
+  url: k8s/cluster/projects
+  action: wait_box_loaded
+goto_project_status:
+  url: status/ns/<project>
+goto_resource_page_under_default_project:
+  url: k8s/ns/default/<resource_url_name>
+  action: wait_box_loaded
+goto_project_resources_page:
+  url: k8s/cluster/projects/<project_name>/workloads
+  action: wait_box_loaded
+  action:
+    if_element:
+      selector:
+        xpath: //button[contains(translate(@aria-label, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'list view')]
+    ref: click_topology_view_switcher
+goto_project_topology_page:
+  url: topology/ns/<project_name>?view=list
+  action: wait_box_loaded
+goto_project_details_page:
+  url: k8s/cluster/projects/<project_name>/details
+# Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
+goto_one_project_page:
+  url: k8s/cluster/projects/<project_name>
+  action: wait_box_loaded
+goto_one_project_dashboard_page:
+  action: goto_one_project_page
+goto_cluster_dashboards_page:
+  url: /dashboards
+  action: wait_page_body_loaded
+goto_search_page:
+  url: search
+
+#api explore
+goto_api_explore_page:
+  url: api-explorer
+goto_one_api_explore_page:
+  url: api-resource/ns/<project_name>/<api_explore_name>
+goto_cluster_buildconfig_api_explore_page:
+  url: /api-resource/cluster/config.openshift.io~v1~Build
+
+# builds
+goto_buildconfigs_page:
+  url: k8s/ns/<project_name>/buildconfigs
+goto_one_buildconfig_page:
+  url: k8s/ns/<project_name>/buildconfigs/<bc_name>
+goto_builds_page:
+  url: k8s/ns/<project_name>/builds
+goto_one_build_page:
+  url: k8s/ns/<project_name>/builds/<build_name>
+  action: wait_page_body_loaded
+goto_one_build_environment_page:
+  url: k8s/ns/<project_name>/builds/<build_name>/environment
+  action: wait_box_loaded
+goto_one_build_log_page:
+  url: k8s/ns/<project_name>/builds/<build_name>/logs
+  action: wait_log_window_loaded
+
+goto_pipelines_list_page:
+  url: pipelines/ns/<project_name>
+  action: wait_box_loaded
+goto_pipeline_resources_list_page:
+  url: pipelines/ns/<project_name>/pipeline-resources
+  action: wait_box_loaded
+goto_tasks_list_page:
+  url: tasks/ns/<project_name>
+  action: wait_box_loaded
+goto_cluster_tasks_list_page:
+  url: tasks/ns/<project_name>/cluster-tasks
+  action: wait_box_loaded
+
+# command line tools page
+goto_cli_tools_page:
+  url: command-line-tools
+
+# configmaps
+goto_configmaps_page:
+  url: k8s/ns/<project_name>/configmaps
+goto_one_configmap_page:
+  url: k8s/ns/<project_name>/configmaps/<configmap_name>
+
+# cronjobs
+goto_cronjobs_page:
+  url: k8s/ns/<project_name>/cronjobs
+  action: wait_box_loaded
+goto_one_cronjob_page:
+  url: k8s/ns/<project_name>/cronjobs/<cronjob_name>
+  action: wait_box_loaded
+
+# jobs
+goto_jobs_page:
+  url: k8s/ns/<project_name>/jobs
+goto_one_job_page:
+  url: k8s/ns/<project_name>/jobs/<job_name>
+  action: wait_box_loaded
+
+# events
+goto_project_events:
+  url: k8s/ns/<project_name>/events
+
+# environment page
+goto_resource_environment_page:
+  url: k8s/ns/<project_name>/<resource_type>/<resource_name>/environment
+  action: wait_box_loaded
+
+# secrets
+goto_secrets_page:
+  url: k8s/ns/<project_name>/secrets
+  action: wait_box_loaded
+
+goto_secrets_creation_page:
+  url: k8s/ns/<project_name>/secrets/~new/<secret_type>
+goto_one_secret_page:
+  url: k8s/ns/<project_name>/secrets/<secret_name>
+  action: wait_box_loaded
+
+#serviceaccounts
+goto_serviceaccounts_page:
+  url: k8s/ns/<project_name>/serviceaccounts
+
+# storageclass
+goto_storageclass_page:
+  url: k8s/cluster/storageclasses
+goto_one_storageclass_page:
+  url: /k8s/cluster/storageclasses/<storageclass_name>
+goto_persistentvolumeclaims_page:
+  url: k8s/ns/<project_name>/persistentvolumeclaims
+goto_one_pvc_page:
+  url: k8s/ns/<project_name>/persistentvolumeclaims/<pvc_name>
+goto_volumesnapshots_page:
+  url: k8s/ns/<project_name>/snapshot.storage.k8s.io~v1~VolumeSnapshot
+goto_one_volumesnapshot_page:
+  url: k8s/ns/<project_name>/snapshot.storage.k8s.io~v1~VolumeSnapshot/<volumesnapshot_name>
+  action: wait_box_loaded
+goto_volumesnapshotcontents_page:
+  url: k8s/cluster/snapshot.storage.k8s.io~v1~VolumeSnapshotContent
+
+# deployment
+goto_deployment_page:
+  url: k8s/ns/<project_name>/deployments
+  action: wait_box_loaded
+goto_one_deployment_page:
+  url: k8s/ns/<project_name>/deployments/<deploy_name>
+  action: wait_box_loaded
+
+# deploymentconfig
+goto_dc_page:
+  url: k8s/ns/<project_name>/deploymentconfigs
+  action: wait_box_loaded
+goto_one_dc_page:
+  url: k8s/ns/<project_name>/deploymentconfigs/<dc_name>
+  action: wait_box_loaded
+goto_one_rc_page:
+  url: k8s/ns/<project_name>/replicationcontrollers/<rc_name>
+  action: wait_box_loaded
+goto_rc_list_page:
+  url: k8s/ns/<project_name>/replicationcontrollers
+
+# daemonsets
+goto_daemonsets_page:
+  url: k8s/ns/<project_name>/daemonsets
+  action: wait_box_loaded
+goto_one_daemonsets_page:
+  url: k8s/ns/<project_name>/daemonsets/<daemonsets_name>
+  action: wait_box_loaded
+
+# statefulset
+goto_one_statefulset_page:
+  url: /k8s/ns/<project_name>/statefulsets/<statefulset_name>
+  action: wait_box_loaded
+
+#pod
+goto_all_projects_pods_list:
+  url: k8s/all-namespaces/pods
+  action: wait_box_loaded
+goto_one_pod_page:
+  url: k8s/ns/<project_name>/pods/<resource_name>
+goto_one_pod_log_page:
+  url: k8s/ns/<project_name>/pods/<pod_name>/logs
+  action: wait_log_window_loaded
+goto_one_pod_environment_page:
+  url: k8s/ns/<project_name>/pods/<pod_name>/environment
+  action: wait_box_loaded
+goto_project_pods_list_page:
+  url: k8s/ns/<project_name>/pods
+  action: wait_box_loaded
+goto_project_pods_list_page_no_wait:
+  url: k8s/ns/<project_name>/pods
+
+goto_cluster_oauth_configuration_page:
+  url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
+  action: wait_box_loaded
+
+#replica sets
+goto_replica_sets_page:
+  url: k8s/ns/<project_name>/replicasets
+goto_one_rs_page:
+  url: k8s/ns/<project_name>/replicasets/<rs_name>
+  action: wait_box_loaded
+
+#routes
+goto_routes_page:
+  url: k8s/ns/<project_name>/routes
+  action: wait_box_loaded
+goto_one_route_page:
+  url: k8s/ns/<project_name>/routes/<route_name>
+  action: wait_box_loaded
+goto_route_creation_page:
+  url: k8s/ns/<project_name>/routes/~new/form
+
+#imagestream
+goto_all_imagestreams_list:
+  url: k8s/all-namespaces/imagestreams
+goto_imagestreams_page:
+  url: k8s/ns/<project_name>/imagestreams
+goto_one_imagestream_page:
+  url: k8s/ns/<project_name>/imagestreams/<imagestream_name>
+  action: wait_box_loaded
+
+#templateinstance
+goto_one_templateinstance_page:
+  url: k8s/ns/<project_name>/templateinstances/<templateinstance_name>
+
+#deploy image
+goto_deploy_image_page:
+  url: deploy-image/ns/<project_name>?preselected-ns=<project_name>
+  element:
+    selector:
+      xpath: //div[contains(@class,'pf-v5-c-form__helper-text') and contains(., "Deploy")]
+    timeout: 30
+
+#catalog page
+goto_catalog_page:
+  url: catalog/ns/<project_name>
+  action: wait_box_loaded
+goto_create_app_from_imagestream_page:
+  url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
+  action: wait_form_loaded
+goto_create_app_from_template_page:
+  params:
+    template_namespace: openshift
+  url: catalog/instantiate-template?template=<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
+
+# monitoring
+goto_monitoring_metrics_page:
+  url: monitoring/query-browser
+goto_monitoring_alerts_page:
+  url: monitoring/alerts
+goto_monitoring_silences_page:
+  url: monitoring/silences
+goto_monitoring_alertrules_page:
+  url: monitoring/alertrules
+goto_alertmanagerconfig_page:
+  url: monitoring/alertmanagerconfig
+  action: wait_box_loaded
+goto_monitoring_db_k8s_resource_pod:
+  url: monitoring/dashboards/dashboard-k8s-resources-pod
+goto_monitoring_db_elasticsearch:
+  url: monitoring/dashboards/grafana-dashboard-elasticsearch
+goto_monitoring_db_cluster_logging:
+  url: monitoring/dashboards/grafana-dashboard-cluster-logging
+
+# metering
+goto_chargeback_reports_page:
+  url: k8s/ns/<namespace>/metering.openshift.io~v1~Report
+  action: wait_box_loaded
+goto_one_reportquery_page:
+  url: /k8s/ns/<namespace>/metering.openshift.io~v1~ReportQuery/<reportquery_name>
+  action: wait_box_loaded
+goto_one_report_page:
+  url: /k8s/ns/<namespace>/metering.openshift.io~v1~Report/<report_name>
+  action: wait_box_loaded
+
+#node
+goto_node_page:
+  url: k8s/cluster/core~v1~Node
+goto_one_node_page:
+  url: k8s/cluster/nodes/<node_name>
+  action: wait_page_body_loaded
+
+# users
+goto_groups_page:
+  url: /k8s/cluster/user.openshift.io~v1~Group
+goto_one_group_page:
+  url: /k8s/cluster/user.openshift.io~v1~Group/<group_name>
+
+# namespace
+goto_namespace_list_page:
+  url: k8s/cluster/namespaces
+  action: wait_box_loaded
+goto_one_namespace_page:
+  url: k8s/cluster/namespaces/<namespace_name>
+
+# operator hub
+goto_operator_hub_page:
+  url: operatorhub/ns/default
+  action: wait_box_loaded
+goto_installed_operators_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
+  action: wait_box_loaded
+goto_all_installed_operators_page:
+  url: k8s/all-namespaces/operators.coreos.com~v1alpha1~ClusterServiceVersion
+  action: wait_table_loaded
+goto_operator_subscription_page:
+  url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
+  action: wait_box_loaded
+goto_one_project_subscription_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~Subscription/<subscription_name>
+goto_csv_detail_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>
+  action: wait_box_loaded
+goto_csv_subscription_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/subscription
+  action: wait_box_loaded
+goto_operand_list_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/<operand_name>
+  action: wait_box_loaded
+goto_operand_details_page:
+  url: /k8s/ns/<project_name>/clusterserviceversions/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>
+  action: wait_box_loaded
+goto_operand_resources_page:
+  url: /k8s/ns/<project_name>/clusterserviceversions/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>/resources
+  action: wait_box_loaded
+goto_operand_events_page:
+  params:
+    tab_name: Events
+  action: goto_operand_details_page
+  action: click_tab
+goto_operator_all_instance_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/instances
+  action: wait_box_loaded
+
+
+# machines
+goto_machines_page:
+  url: /k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~Machine
+  action: wait_box_loaded
+# machine config
+goto_machineconfigs_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
+goto_machineconfig_pools_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
+  element:
+    selector:
+      xpath: //span[text()='MachineConfigPools']
+    timeout: 30
+goto_machine_sets_page:
+  url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet
+  action: wait_box_loaded
+goto_one_machineset_page:
+  url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet/<machineset_name>
+  action: wait_box_loaded
+goto_machineautoscaler_list_page:
+  url: k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler
+goto_one_machineautoscaler_page:
+  url: k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler/<machineautoscaler_name>
+
+#crd
+goto_crds_page:
+  url: k8s/cluster/customresourcedefinitions
+  action: wait_box_loaded
+goto_crd_instances_page:
+  url: k8s/cluster/customresourcedefinitions/<crd_definition>/instances
+goto_consoleyamlsample_crd_instances_page:
+  url: /k8s/cluster/customresourcedefinitions/consoleyamlsamples.console.openshift.io/instances
+
+# catalog source
+goto_catalog_source_page:
+  url: k8s/cluster/config.openshift.io~v1~OperatorHub/cluster/sources
+  action: wait_table_loaded
+goto_one_catalogsource_page:
+  url: /k8s/ns/openshift-marketplace/operators.coreos.com~v1alpha1~CatalogSource/<cs_name>
+  action: wait_box_loaded
+
+# quota
+goto_quotas_page:
+  url: k8s/ns/<project_name>/resourcequotas
+goto_one_quota_page:
+  url: k8s/ns/<project_name>/resourcequotas/<quota_name>
+  action: wait_box_loaded
+
+# machinehealthcheck
+goto_machinehealthcheck_page:
+  url: k8s/ns/<project_name>/machine.openshift.io~v1beta1~MachineHealthCheck
+
+#user
+goto_users_list_page:
+  url: k8s/cluster/user.openshift.io~v1~User
+  action: wait_table_loaded
+goto_namespace_role_rolebinding_page:
+  url: k8s/ns/<project_name>/roles/<role_name>/bindings
+  action: wait_box_loaded
+goto_cluster_role_rolebinding_page:
+  url: k8s/cluster/clusterroles/<role_name>/bindings
+  action: wait_box_loaded
+goto_rolebinding_list_page:
+  url: k8s/ns/<project_name>/rolebindings
+  action: wait_box_loaded
+goto_allnamespaces_rolebinding_list_page:
+  url: k8s/all-namespaces/rolebindings
+  action: wait_box_loaded
+goto_rolebinding_page_of_user:
+  url: k8s/cluster/user.openshift.io~v1~User/<username>/roles
+  action: wait_box_loaded
+goto_rolebinding_creation_page:
+  url: k8s/cluster/rolebindings/~new
+  action: wait_form_loaded
+
+goto_all_machines_page:
+  url: k8s/all-namespaces/machine.openshift.io~v1beta1~Machine
+goto_all_machine_sets_page:
+  url: k8s/all-namespaces/machine.openshift.io~v1beta1~MachineSet
+
+#ImageManifestVuln
+goto_ImageManifestVuln_list_page:
+  url: k8s/all-namespaces/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln
+goto_one_ImageManifestVuln_page:
+  url: k8s/ns/<project_name>/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln/<manifest>
+
+#hpa
+goto_hpas_page:
+  url: k8s/ns/<project_name>/horizontalpodautoscalers
+goto_one_hpa_page:
+  url: k8s/ns/<project_name>/horizontalpodautoscalers/<hpa_name>
+
+#cluster settings
+goto_cluster_operators:
+  url: settings/cluster/clusteroperators
+  action: wait_box_loaded
+goto_co_relatedobjects_page:
+  url: /k8s/cluster/config.openshift.io~v1~ClusterOperator/<clusteroperator_name>/related-objects
+  action: wait_table_loaded
+  action: wait_box_loaded
+goto_global_configuration_page:
+  url: settings/cluster/globalconfig
+  action: wait_box_loaded
+goto_cluster_settings_details_page:
+  url: settings/cluster
+  action: wait_box_loaded
+
+#barematealhost
+goto_baremetalhosts_page:
+  url: k8s/all-namespaces/metal3.io~v1alpha1~BareMetalHost
+  action: wait_box_loaded
+goto_baremetalhost_details_page:
+  url: k8s/ns/openshift-machine-api/metal3.io~v1alpha1~BareMetalHost/<baremetalhost_name>/details
+goto_baremetalhost_overview_page:
+  url: k8s/ns/openshift-machine-api/metal3.io~v1alpha1~BareMetalHost/<baremetalhost_name>
+
+goto_command_line_tools:
+  url: command-line-tools
+  element:
+    selector:
+      xpath: //div[contains(text(), "Command Line Tools")]
+    timeout: 15
+goto_test_consumer_page:
+  url: /test-consumer
+goto_dynamic_plugin_pseudo_page:
+  url: /test-consumer?pseudolocalization=true&lng=en
