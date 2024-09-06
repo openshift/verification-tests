@@ -69,7 +69,7 @@ perform_cutomer_query:
 click_metrics_query_dropdown:
   element:
     selector:
-      xpath: //div[@class='co-m-pane__body' ]//div[contains(@class, 'odc-metrics-query-input')]//button
+      xpath: //div[@class='pf-c-select' ]//div[contains(@class, 'pf-m-typeahead')]//button
     op: click
 
 click_custom_query_button:
@@ -91,7 +91,7 @@ set_query_input_text_area:
 choose_metrics_query:
   element:
     selector:
-      xpath: //span[contains(text(),'<metrics_name>')]
+      xpath: //button[contains(@class,'pf-c-select__menu-item') and (contains(text(),'<metrics_name>'))]
     op: click
 check_query_input_text_area:
   element:
