@@ -49,7 +49,7 @@ Feature: CSI testing related feature
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @storage
   Scenario Outline: Configure 'Retain' reclaim policy
     Given I have a project
@@ -106,7 +106,7 @@ Feature: CSI testing related feature
   @singlenode
   @proxy @noproxy @disconnected @connected
     @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @storage
   Scenario Outline: CSI dynamic provisioning with default fstype
     Given I have a project
@@ -194,7 +194,7 @@ Feature: CSI testing related feature
   @singlenode
   @proxy @noproxy @disconnected @connected
     @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @storage
   Scenario Outline: CSI dynamic provisioning with fstype
     Given I have a project
@@ -252,7 +252,7 @@ Feature: CSI testing related feature
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
+  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
   @storage
   Scenario Outline: CSI dynamic provisioning with block
     Given I have a project
@@ -307,7 +307,7 @@ Feature: CSI testing related feature
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @storage
   Scenario Outline: CSI dynamic provisioning with different type
     Given I have a project
@@ -366,7 +366,7 @@ Feature: CSI testing related feature
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @storage
   Scenario Outline: Check CSI Driver Operator installation
     When I run the :get admin command with:
