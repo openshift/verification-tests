@@ -801,9 +801,9 @@ Feature: Service related networking scenarios
   @hypershift-hosted
   Scenario: OCP-47087:SDN Other node cannot be accessed for nodePort when externalTrafficPolicy is Local
     Given the env is using "OVNKubernetes" networkType
-    Given I store the workers in the :workers clipboard
-    And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
-    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
+    And the Internal IP of node "<%= cb.masters[1].name %>" is stored in the :master1_ip clipboard
     And evaluation of `rand(30000..32767)` is stored in the :port clipboard
     Given I have a project
     Given I obtain test data file "networking/nodeport_test_pod.yaml"
@@ -819,7 +819,7 @@ Feature: Service related networking scenarios
       | ["spec"]["externalTrafficPolicy"] | Local          |
     Then the step should succeed
 
-    Given I use the "<%= cb.workers[1].name %>" node
+    Given I use the "<%= cb.masters[1].name %>" node
     #It should work because its external traffic from another node and destination node has a backend pod on it (ETP=local respected)
     When I run commands on the host:
       | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> \|\| curl --connect-timeout 5 [<%= cb.hostip %>]:<%= cb.port %> |
@@ -828,12 +828,12 @@ Feature: Service related networking scenarios
       | Hello OpenShift! |
     #It should NOT work because its external traffic from another node and destination node DOES NOT have a backend pod on it (ETP=local respected)
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.worker0_ip %>:<%= cb.port %> \|\| curl --connect-timeout 5 [<%= cb.worker0_ip %>]:<%= cb.port %> |
+      | curl --connect-timeout 5 <%= cb.master0_ip %>:<%= cb.port %> \|\| curl --connect-timeout 5 [<%= cb.master0_ip %>]:<%= cb.port %> |
     And the output should contain:
       | Connection refused |
     #It should work like ETP=cluster because its not external traffic, its within the node (ETP=local shouldn't be respected and its like ETP=cluster behaviour) 
     When I run commands on the host:
-      | curl --connect-timeout 5 <%= cb.worker1_ip %>:<%= cb.port %> \|\| curl --connect-timeout 5 [<%= cb.worker1_ip %>]:<%= cb.port %> |
+      | curl --connect-timeout 5 <%= cb.master1_ip %>:<%= cb.port %> \|\| curl --connect-timeout 5 [<%= cb.master1_ip %>]:<%= cb.port %> |
     And the output should contain:
       | Hello OpenShift! |
     Given I ensure "hello-pod" service is deleted
