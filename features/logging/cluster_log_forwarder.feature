@@ -417,6 +417,7 @@ Feature: cluster log forwarder features
   @network-ovnkubernetes @network-openshiftsdn
   @critical
   @amd64
+  @v-ica.03
   Scenario: OCP-32697:Logging Forward logs to different kafka topics
     Given I switch to the first user
     And I create a project with non-leading digit name
