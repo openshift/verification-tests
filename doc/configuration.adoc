@@ -12,7 +12,7 @@ We have also some configuration in `config/cucumber.yml`. There are some profile
 
 == global configuration
 
-This is the the `global` section inside `config/config.yaml`. Some generic defaults like `git_repo_url` or `browser`.
+This is the `global` section inside `config/config.yaml`. Some generic defaults like `git_repo_url` or `browser`.
 
 Some of these options can be overwritten by environment variables, see `#env_overrides` inside `lib/configuration.rb`
 
@@ -22,7 +22,7 @@ Under `environments` there are default options for different environment types. 
 
 The default environment is determined by the `default_environment` global option. It's usually set by the BUSHSLICER_DEFAULT_ENVIRONMENT env variable.
 
-Let's take one example - OCP4 environment. It has as a default `hosts_type: SSHAccessibleHost`. If we want to override it, we can specify env variable OPENSHIFT_ENV_OCP4_HOSTS_TYPE. Its the same with any other option. All variables that start with `OPENSHIFT_ENV_<env name>_SOMETHING` get an option for the named environment set. The first part `OPENSHIFT_ENV_<env name>_` is removed, then the other part `SOMETHING` is downcased and converted to a Symbol to become a key in the configuration Hash that is passed to the environment class constructor. That is taken care of in the `#load_env` private method of `BushSlicer::EnvironmentManager` class.
+Let's take one example - OCP4 environment. It has as a default `hosts_type: OCDebugAccessibleHost`. If we want to override it, we can specify env variable OPENSHIFT_ENV_OCP4_HOSTS_TYPE. Its the same with any other option. All variables that start with `OPENSHIFT_ENV_<env name>_SOMETHING` get an option for the named environment set. The first part `OPENSHIFT_ENV_<env name>_` is removed, then the other part `SOMETHING` is downcased and converted to a Symbol to become a key in the configuration Hash that is passed to the environment class constructor. That is taken care of in the `#load_env` private method of `BushSlicer::EnvironmentManager` class.
 
 == user configuration
 
