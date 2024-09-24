@@ -13,7 +13,7 @@ Feature: web console related upgrade check
   @network-ovnkubernetes @network-openshiftsdn
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario: check console accessibility - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -58,7 +58,7 @@ Feature: web console related upgrade check
   @admin
   @console
   @users=upuser1,upuser2
-  @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
@@ -87,4 +87,26 @@ Feature: web console related upgrade check
     Then the step should succeed
     When I perform the :check_resource_item_name web action with:
       | resource_name | hello-daemonset |
+    Then the step should succeed
+
+  # @author yapei@redhat.com
+  # @case_id OCP-76051
+  @upgrade-check
+  @admin
+  @console
+  @users=upuser1,upuser2
+  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @vsphere-ipi @vsphere-upi
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @upgrade
+  @network-ovnkubernetes @network-openshiftsdn
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @hypershift-hosted
+  Scenario: UserInterface-check vsphere connection form not empty
+    Given the first user is cluster-admin
+    Given I open admin console in a browser
+    When I run the :goto_cluster_dashboards_page web action
+    Then the step should succeed
+    When I run the :check_vsphere_connection_form_not_empty web action
     Then the step should succeed
