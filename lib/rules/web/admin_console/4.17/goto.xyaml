@@ -201,13 +201,11 @@ goto_one_rs_page:
 
 #routes
 goto_routes_page:
-  url: k8s/ns/<project_name>/routes
-  action: wait_box_loaded
+  url: k8s/ns/<project_name>/route.openshift.io~v1~Route
 goto_one_route_page:
   url: k8s/ns/<project_name>/routes/<route_name>
-  action: wait_box_loaded
 goto_route_creation_page:
-  url: k8s/ns/<project_name>/routes/~new/form
+  url: k8s/ns/<project_name>/route.openshift.io~v1~Route/~new/form
 
 #imagestream
 goto_all_imagestreams_list:

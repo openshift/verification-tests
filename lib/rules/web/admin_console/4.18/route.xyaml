@@ -9,12 +9,11 @@ edit_route:
 check_custom_dns_help_link:
   params:
     content: Do you need to set up custom DNS
-  action: wait_box_loaded
   action: check_page_match
 check_route_traffic_table_shown:
   elements:
   - selector:
-      xpath: //h2[@data-test-section-heading='Traffic']
+      xpath: //h2[text()='Traffic']
   - selector:
       xpath: //table//th[1][text()='Service']
   - selector:
@@ -36,7 +35,19 @@ check_custom_dns_help_info:
   params:
     content: To use a custom route, you must update your DNS provider
   action: check_page_contains
+set_dropdown_item:
+  elements:
+  - selector:
+      xpath: //button[contains(@id, '<dropdown_id>')]
+    op: click
+  - selector:
+      xpath: //span[text()='<dropdown_item>']
+    op: click
 create_route:
+  elements:
+  - selector:
+      xpath: //h2[contains(., 'Create Route')]
+    timeout: 60
   action: set_route_name
   action:
     if_param: route_hostname
@@ -56,32 +67,36 @@ create_route:
   action: click_create_button
 set_route_name:
   params:
+    clear_field_id: name
     input_field_id: name
     input_value: <route_name>
+  action: clear_input_value
   action: set_input_value
 set_hostname:
   params:
-    input_field_id: hostname
+    input_field_id: host
     input_value: <route_hostname>
   action: set_input_value
 set_route_path:
   params:
+    clear_field_id: path
     input_field_id: path
     input_value: <route_path>
+  action: clear_input_value
   action: set_input_value
 set_service_name:
   params:
+    dropdown_id: toggle-host
     dropdown_item: <service_name>
+  action: set_dropdown_item
+set_alternative_service_name:
   elements:
   - selector:
-      xpath: //button[@id='service']
+      xpath: //button[contains(@id, 'toggle-alternate-service')]
     op: click
-  action: click_one_item
-set_alternative_service_name:
-  params:
-    dropdown_field: Alternate Service target
-    dropdown_item: <alternative_service_name>
-  action: choose_dropdown_item
+  - selector:
+      xpath: //span[text()='<alternative_service_name>']
+    op: click
 click_add_alternative_service:
   element:
     selector:
@@ -92,18 +107,21 @@ click_remove_alternative_service:
     button_text: Remove alternate Service
   action: click_button
 set_weight_for_main_service:
-  params:
-    label_text: Weight
-    input_value: <service_weight>
-  action: set_label_input
+  elements:
+  - selector: &weight
+      xpath: //input[contains(@name,'weight')]
+    op: clear 
+  - selector: *weight
+    op: send_keys <service_weight>
 set_weight_for_alternative_service:
-  params:
-    label_text: Alternate Service weight
-    input_value: <alternative_service_weight>
-  action: set_label_input
+  elements:
+  - selector: &weight
+      xpath: //input[contains(@name,'weight')]
+    op: clear          
+  - selector: *weight
+    op: send_keys <alternative_service_weight>
 set_alternative_service:
   action: click_add_alternative_service
-  action: set_weight_for_main_service
   action: set_alternative_service_name
   action: set_weight_for_alternative_service
 set_target_port:
@@ -129,7 +147,7 @@ set_secure_route:
     ref: upload_destination_ca_crt_file
 set_tls_termination:
   params:
-    dropdown_field: TLS termination
+    dropdown_id: toogle-tls-termination
     dropdown_item: <tls_termination_type>
   action: choose_dropdown_item
 set_insecure_traffic:
@@ -167,7 +185,6 @@ upload_destination_ca_crt_file:
     op: set <destination_ca_certificate>
 check_metrics_charts_on_route_overview:
   action: click_metrics_tab
-  action: wait_box_loaded
   elements:
   - selector:
       xpath: //div[contains(text(),'Traffic in')]/following::div[1]//div[@class='pf-v5-c-chart']
