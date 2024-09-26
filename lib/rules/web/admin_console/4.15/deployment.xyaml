@@ -153,15 +153,15 @@ check_workloads_metrics:
   action: click_metrics_tab
   elements:
   - selector: &memory_usage_chart
-      xpath: //div[contains(text(), 'Memory usage')]
+      xpath: //div[contains(text(), "Memory usage")]/ancestor::div[contains(@class,"resource-metrics-dashboard__card")]//div[contains(@class,"c-chart")]
   - selector: &cpu_usage_chart
-      xpath: //div[contains(text(), 'CPU usage')]
+      xpath: //div[contains(text(), "CPU usage")]/ancestor::div[contains(@class,"resource-metrics-dashboard__card")]//div[contains(@class,"c-chart")]
   - selector: &filessystem_chart
-      xpath: //div[contains(text(), 'Filesystem')]
+      xpath: //div[contains(text(), "Filesystem")]/ancestor::div[contains(@class,"resource-metrics-dashboard__card")]//div[contains(@class,"c-chart")]
   - selector:
-      xpath: //div[contains(text(), 'Network in')]
+      xpath: //div[contains(text(), "Network in")]/ancestor::div[contains(@class,"resource-metrics-dashboard__card")]//div[contains(@class,"c-chart")]
   - selector:
-      xpath: //div[contains(text(), 'Network out')]
+      xpath: //div[contains(text(), "Network out")]/ancestor::div[contains(@class,"resource-metrics-dashboard__card")]//div[contains(@class,"c-chart")]
   action: check_no_errors_in_charts
 check_build_metrics:
   action: click_metrics_tab
