@@ -22,6 +22,11 @@ click_events_resume_button:
   params:
     button_text: Resume
   action: click_button
+click_on_vsphere_connection_button:
+  element:
+    selector:
+      xpath: //button[@data-test="vSphere connection"]
+    op: click
 check_event_message_on_dashboard_page:
   element:
     selector:
@@ -52,6 +57,23 @@ check_cluster_id_in_details_card:
     key: Cluster ID
     value: <cluster_id>
   action: check_resource_details_key_and_value
+check_vsphere_connection_form_not_empty:
+  action: click_on_vsphere_connection_button
+  elements:
+  - selector:
+      css: input[id^="textfield"]
+  scripts:
+  - command: |
+      var inputs = document.querySelectorAll('input[id^="textfield-"]')
+      var non_empty = true;
+      inputs.forEach(function(input){
+        if(!input.value){
+          non_empty = false;
+          return non_empty
+        }
+      })
+      return non_empty
+    expect_result: true
 # grafana dashboards
 nagivate_to_monitoring_dashboards_page:
   params:
