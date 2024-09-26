@@ -9,6 +9,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @v-cm.01
   @hypershift-hosted
   Scenario: OCP-38846:SDN Should be able to send node to node ESP traffic on IPsec clusters
     Given the env is using "OVNKubernetes" networkType
@@ -157,6 +158,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @vsphere-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @v-cm.01
   @hypershift-hosted
   Scenario: OCP-37392:SDN pod to pod traffic on different nodes should be ESP encrypted
     Given the env is using "OVNKubernetes" networkType
@@ -213,6 +215,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @singlenode
+  @v-cm.01
   @hypershift-hosted
   Scenario: OCP-40569:SDN Allow enablement/disablement ipsec at runtime
     Given the env is using "OVNKubernetes" networkType
