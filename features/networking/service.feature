@@ -798,7 +798,6 @@ Feature: Service related networking scenarios
   @proxy @noproxy @connected
   @network-ovnkubernetes @FdpOvnOvs
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @hypershift-hosted
   Scenario: OCP-47087:SDN Other node cannot be accessed for nodePort when externalTrafficPolicy is Local
     Given the env is using "OVNKubernetes" networkType
     Given I store the masters in the :masters clipboard
