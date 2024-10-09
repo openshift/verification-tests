@@ -3,9 +3,11 @@ click_create_route_button:
     button_text: Create Route
   action: click_button_text
 edit_route:
-  params:
-    item: Edit Route
-  action: click_one_dropdown_action
+  action: click_resource_action_button
+  elements:
+  - selector:
+      xpath: //button[.='Edit Route' and not(@disabled)]
+    op: click
 check_custom_dns_help_link:
   params:
     content: Do you need to set up custom DNS
@@ -86,7 +88,7 @@ set_route_path:
   action: set_input_value
 set_service_name:
   params:
-    dropdown_id: toggle-host
+    dropdown_id: toggle-service
     dropdown_item: <service_name>
   action: set_dropdown_item
 set_alternative_service_name:
@@ -109,16 +111,16 @@ click_remove_alternative_service:
 set_weight_for_main_service:
   elements:
   - selector: &weight
-      xpath: //input[contains(@name,'weight')]
+      xpath: //input[@id='service-weight']
     op: clear 
   - selector: *weight
     op: send_keys <service_weight>
 set_weight_for_alternative_service:
   elements:
-  - selector: &weight
-      xpath: //input[contains(@name,'weight')]
+  - selector: &alternate-weight
+      xpath: //input[contains(@id,'alternate-service-weight')]
     op: clear          
-  - selector: *weight
+  - selector: *alternate-weight
     op: send_keys <alternative_service_weight>
 set_alternative_service:
   action: click_add_alternative_service
@@ -126,10 +128,13 @@ set_alternative_service:
   action: set_alternative_service_name
   action: set_weight_for_alternative_service
 set_target_port:
-  params:
-    dropdown_field: Target port
-    dropdown_item: <target_port>
-  action: choose_dropdown_item
+  elements:
+  - selector:
+      xpath: //button[contains(@id, 'toggle-target-port')]
+    op: click
+  - selector:
+      xpath: //button[@role='menuitem']
+    op: click
 set_secure_route:
   action: uncheck_checkbox
   action: set_tls_termination
