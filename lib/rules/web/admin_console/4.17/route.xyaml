@@ -153,39 +153,39 @@ set_secure_route:
     ref: upload_destination_ca_crt_file
 set_tls_termination:
   params:
-    dropdown_field: TLS termination
+    dropdown_id: toggle-tls-termination
     dropdown_item: <tls_termination_type>
-  action: choose_dropdown_item
+  action: set_dropdown_item
 set_insecure_traffic:
   params:
-    dropdown_field: Insecure traffic
+    dropdown_id: toggle-tls-insecureEdgeTerminationPolicy
     dropdown_item: <insecure_traffic_type>
-  action: choose_dropdown_item
+  action: set_dropdown_item
 upload_certificate_file:
   elements:
   - selector:
-      xpath: //input[@aria-describedby="certificate-help"]/following-sibling::span[contains(.,"Browse")]/input
+      xpath: //div[contains(@class, 'form__group-label') and label='Certificate']/following-sibling::div//input[@type='file'] 
     visible: false
     type: filefield
     op: set <certificate_path>
 upload_key_file:
   elements:
   - selector:
-      xpath: //input[@aria-describedby="private-key-help"]/following-sibling::span[contains(.,"Browse")]/input
+      xpath: //div[contains(@class, 'form__group-label') and label='Private key']/following-sibling::div//input[@type='file'] 
     visible: false
     type: filefield
     op: set <private_key_path>
 upload_ca_certificate_file:
   elements:
   - selector:
-      xpath: //input[@aria-describedby="ca-certificate-help"]/following-sibling::span[contains(.,"Browse")]/input
+      xpath: //div[contains(@class, 'form__group-label') and label='CA certificate']/following-sibling::div//input[@type='file'] 
     visible: false
     type: filefield
     op: set <ca_certificate_path>
 upload_destination_ca_crt_file:
   elements:
   - selector:
-      xpath: //span[contains(.,"Browse")]//input[@id='destination-ca-certificate']
+      xpath: //div[contains(@class, 'form__group-label') and label='Destination CA certificate']/following-sibling::div//input[@type='file'] 
     visible: false
     type: filefield
     op: set <destination_ca_certificate>
