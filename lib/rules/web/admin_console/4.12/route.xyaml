@@ -131,7 +131,7 @@ set_tls_termination:
   params:
     dropdown_field: TLS termination
     dropdown_item: <tls_termination_type>
-  action: choose_dropdown_item
+  action: choose_dropdown_item_text
 set_insecure_traffic:
   params:
     dropdown_field: Insecure traffic
