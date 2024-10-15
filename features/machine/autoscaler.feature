@@ -13,6 +13,7 @@ Feature: Cluster Autoscaler Tests
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @level0
+  @cas
   Scenario: OCP-28108:ClusterInfrastructure Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -85,6 +86,7 @@ Feature: Cluster Autoscaler Tests
   @hypershift-hosted
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @cas
   Scenario: OCP-21516:ClusterInfrastructure Cao listens and deploys cluster-autoscaler based on ClusterAutoscaler resource
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -108,6 +110,7 @@ Feature: Cluster Autoscaler Tests
   @hypershift-hosted
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
+  @cas
   Scenario: OCP-21517:ClusterInfrastructure CAO listens and annotations machineSets based on MachineAutoscaler resource
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -151,6 +154,7 @@ Feature: Cluster Autoscaler Tests
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @cas
   Scenario: OCP-22102:ClusterInfrastructure Update machineAutoscaler to reference a different MachineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -230,6 +234,7 @@ Feature: Cluster Autoscaler Tests
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @cas
   Scenario: OCP-23745:ClusterInfrastructure Machineautoscaler can be deleted when its referenced machineset does not exist
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

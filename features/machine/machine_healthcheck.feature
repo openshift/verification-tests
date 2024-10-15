@@ -10,6 +10,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @mapi
   Scenario: OCP-25897:ClusterInfrastructure Remediation should be applied when the unhealthyCondition 'Ready' is met
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -52,6 +53,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @mapi
   Scenario: OCP-26311:ClusterInfrastructure Create a machinehealthcheck when there is already an unhealthy machine
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -86,6 +88,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @mapi
   Scenario: OCP-25734:ClusterInfrastructure Create multiple MHCs to monitor same machineset
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -122,6 +125,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @mapi
   Scenario: OCP-25691:ClusterInfrastructure Use "maxUnhealthy" to prevent automated remediation
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -178,6 +182,7 @@ Feature: MachineHealthCheck Test Scenarios
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @mapi
   Scenario: OCP-28718:ClusterInfrastructure Machine Node startup timeout should be configurable
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -222,6 +227,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @mapi
   Scenario: OCP-25727:ClusterInfrastructure Remediation should be applied when machine has nodeRef but node is deleted
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -250,6 +256,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @vsphere-ipi @openstack-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @mapi
   Scenario: OCP-29857:ClusterInfrastructure MaxUnhealthy should not allow malformed values
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -274,6 +281,7 @@ Feature: MachineHealthCheck Test Scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @mapi
   Scenario: OCP-28859:ClusterInfrastructure MHC MaxUnhealthy string value should be checked for '%' symbol
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -317,6 +325,7 @@ Feature: MachineHealthCheck Test Scenarios
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @mapi
   Scenario: OCP-33714:ClusterInfrastructure Leverage OpenAPI validation within MHC
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
@@ -340,6 +349,7 @@ Feature: MachineHealthCheck Test Scenarios
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @mapi
   Scenario: OCP-34095:ClusterInfrastructure timeout field without units(h,m,s) shoud not be allowed to be stored
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
