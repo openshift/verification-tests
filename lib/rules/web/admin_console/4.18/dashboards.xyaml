@@ -89,7 +89,7 @@ check_grafana_dashboard_body_loaded:
 click_dashboard_dropdown:
   element:
     selector:
-      xpath: //label[contains(text(),'Dashboard')]/following::button[1][contains(@class,'pf-c-select__toggle')]
+      xpath: //label[contains(text(),'Dashboard')]/following::button[1][contains(@class,'select__toggle')]
     op: click
 check_dashboard_dropdown_item:
   element:
