@@ -153,13 +153,13 @@ filter_label_and_check_style:
 choose_console_language:
   elements:
   - selector: &username_button
-      xpath: //span[@data-test='username']/ancestor::button[contains(@class,'app-launcher__toggle')]
+      xpath: //button[@data-test="user-dropdown"]
     op: click
   - selector: &user_preferences
-      xpath: //a[contains(@href, 'user-preferences')]
+      xpath: //li[@data-test="application-launcher-item"]//span[contains(@class,'menu__item-text')]
     op: click
   - selector: &language_setting_button
-      xpath: //a[@data-test='tab language']
+      xpath: //a[@data-test="tab language"]
     op: click
   action:
     if_element:
