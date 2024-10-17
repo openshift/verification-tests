@@ -618,7 +618,7 @@ check_master_info_when_filter_by_node_type:
   action: click_button
   elements:
   - selector:
-      xpath: //span[contains(@class,'check__label') and contains(text(),'<node_type_name>')]
+      xpath: //span[contains(@class,'item-text') and contains(text(),'<node_type_name>')]
     op: click
   action: click_button
   action: check_metrics_query_cpu_filter_by_node_type
