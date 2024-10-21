@@ -21,7 +21,7 @@ Then follow steps in [Test scenario execution](#test-scenario-execution)
 
 ### Create local dev environment
 
-1. Install git if not installed already, install ruby 2.7+ if not installed
+1. Install git if not installed already, install ruby 2.7 if not installed
 2. git clone git@github.com:openshift/verification-tests.git
 3. cd verification-tests
 4. tools/install_os_deps.sh # need sudo; you may need to login again to terminal if ruby was installed via rvm during this phase (see below for RVM usage)
@@ -101,11 +101,11 @@ You can install RVM and read more abou it on https://rvm.io/
 Usually once RVM is installed, you would want to create/install a new `rvm` interpreter using:
 
 ```
-`rvm install "ruby-2.7.1" && rvm  --create use 2.7.1@verification-tests` which will install Ruby 2.7.1 and create a new interpreter as well as a Gemset.
-When we install Ruby 2.7.1, it creates a local directory for your user with Ruby 2.7.1 under `~/.rvm/rubies/ruby-2.7.1`.
-Once that is done, the Gemset creation is basically an attempt to have dependencies for various apps under same interpreter `2.7.1`. So in this case,
-we are creating Gemset `verification-tests` for this repo dependencies. If you had multiple repos, you would use similar command as above to create a new Gemset under 2.7.1
-and give it a name that you can recognize. Then for each respective app you may choose to use different gemset as `rvm use 2.7.1@verification-tests` or `rvm use 2.7.1@my-other-repo-or-app`.
+`rvm install "ruby-2.7.6" && rvm  --create use 2.7.6@verification-tests` which will install Ruby 2.7.6 and create a new interpreter as well as a Gemset.
+When we install Ruby 2.7.6, it creates a local directory for your user with Ruby 2.7.6 under `~/.rvm/rubies/ruby-2.7.6`.
+Once that is done, the Gemset creation is basically an attempt to have dependencies for various apps under same interpreter `2.7.6`. So in this case,
+we are creating Gemset `verification-tests` for this repo dependencies. If you had multiple repos, you would use similar command as above to create a new Gemset under 2.7.6
+and give it a name that you can recognize. Then for each respective app you may choose to use different gemset as `rvm use 2.7.6@verification-tests` or `rvm use 2.7.6@my-other-repo-or-app`.
 
 Feel free to read about interpreter and gemset in the Ruby docs or elsewhere on the internet.
 
