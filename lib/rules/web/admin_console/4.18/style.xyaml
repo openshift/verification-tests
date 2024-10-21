@@ -164,14 +164,14 @@ choose_console_language:
   action:
     if_element:
       selector: &language_dropdownlist_disabled
-        xpath: //button[contains(@id,'preferredLanguage') and @disabled]
+        xpath: //input[@id="default-language-checkbox" and @data-checked-state="true"]
     ref: toggle_default_language_checkbox
   elements:
   - selector:
-      xpath: //button[contains(@id, 'console.preferredLanguage')]
+      xpath: //div[@data-test="console.preferredLanguage field"]//button[contains(@class,"toggle")]
     op: click
   - selector:
-      xpath: //button[contains(., '<lng_button>')]
+      xpath: //span[contains(., '<lng_button>')]/ancestor::button[@role="option"]
     op: click
 toggle_default_language_checkbox:
   elements:
