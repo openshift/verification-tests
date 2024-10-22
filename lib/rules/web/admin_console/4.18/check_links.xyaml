@@ -30,7 +30,7 @@ click_about_button:
   params:
     button_text: About
   action: click_help_button
-  action: click_button_text
+  action: click_button
 check_dedicated_logo:
   params:
     logo_source: static/assets/public/imgs/openshift-dedicated-logo.svg
