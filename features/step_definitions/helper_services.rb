@@ -539,6 +539,12 @@ Given /^I have a iSCSI setup in the environment$/ do
   iscsi_ip = cb.iscsi_ip = _service.ip(user: admin)
   @result = _pod.exec("targetcli", "/iscsi/iqn.2016-04.test.com:storage.target00/tpg1/portals", "create", iscsi_ip, as: admin)
   raise "could not create portal to iSCSI service" unless @result[:success] unless @result[:stderr].include?("This NetworkPortal already exists in configFS")
+    
+  # The cb.iscsi_ip will be used for the static pv definition with port for ipv6 address with port needs add '[]' to meet the ipv6 standard
+  if cb.iscsi_ip.include?(':')
+    cb.iscsi_ip = "[#{cb.iscsi_ip}]"
+  end
+  
 end
 
 # Using after step: I have a iSCSI setup in the environment
