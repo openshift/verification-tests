@@ -87,7 +87,7 @@ navigate_to_dev_console:
       xpath: //button[@data-test-id='perspective-switcher-toggle']
     op: click
   - selector:
-      xpath: //li//h2[contains(., 'Developer')]
+      xpath: //li//h2[contains(., 'Developer')]/ancestor::button[@role="option"]
     op: click
   action:
     if_element:
@@ -121,7 +121,7 @@ check_active_perspective_is_developer:
 check_current_perspective_text:
   elements:
   - selector:
-      xpath: //span[contains(@class,'dropdown__toggle-text') and contains(.,'<active_perspective_text>')]
+      xpath: //span[contains(.,'<active_perspective_text>')]
 check_perspective_list_has_acm_option:
   element:
     selector:
