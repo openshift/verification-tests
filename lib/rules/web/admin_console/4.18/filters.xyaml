@@ -9,12 +9,12 @@ set_filter_strings:
 click_filter_dropdown:
   elements:
   - selector:
-      xpath: //button[contains(@aria-label,'Options menu')]
+      xpath: //div[@data-test-id="filter-dropdown-toggle"]//button[contains(@class,"menu-toggle")]
     op: click
 select_filter:
   elements:
   - selector:
-      xpath: //input[contains(@id,'<filter>')]
+      xpath: //label[@id="<filter>"]//input
     op: click
 clear_all_filters:
   params:
