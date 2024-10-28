@@ -114,7 +114,7 @@ check_logs_history_not_present:
   - selector:
       xpath: //button[@disabled]//span[text()='Current log']
   - selector:
-      xpath: //span[@id='logTypeSelect']/following-sibling::div
+      xpath: //span[@id='logTypeSelect']/following-sibling::button
     op: hover
   - selector:
       xpath: //div[contains(text(),'Only the current log is available')]
@@ -123,12 +123,12 @@ check_logs_history_is_present:
   - selector:
       xpath: //button//span[text()='Current log']
   - selector:
-      xpath: //span[@id='logTypeSelect']/following-sibling::div
+      xpath: //span[@id='logTypeSelect']/following-sibling::button
     op: click
   - selector:
-      xpath: //button[contains(@class, 'selected') and contains(text(),'Current log')]
+      xpath: //button[contains(@class, 'selected') and contains(.,'Current log')]
   - selector:
-      xpath: //button[contains(text(),'Previous log')]
+      xpath: //button[contains(.,'Previous log')]
     op: click
 check_logs_option_not_present:
   elements:
