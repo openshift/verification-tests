@@ -60,7 +60,7 @@ Firefox:
  See https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver for more information. The config defaults to firefox, so you're all set!
 
 Chrome:
- Please download the driver from http://chromedriver.storage.googleapis.com/index.html that matches the version of Chrome you are using, place it somewhere on your PATH and set the following environment variable.
+ Please download the driver from https://googlechromelabs.github.io/chrome-for-testing that matches the version of Chrome you are using, place it somewhere on your PATH and set the following environment variable.
 
 * `export BUSHSLICER_CONFIG='{"global": {"browser": "chrome"}}'`
 
