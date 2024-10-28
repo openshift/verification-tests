@@ -352,7 +352,7 @@ check_resource_item_name:
 wait_dropdown_loaded:
   element:
     selector:
-      xpath: //ul[contains(@class, 'dropdown__menu')]
+      xpath: //ul
     timeout: 20
 # click and check the first item from resource list such as projects, pods, etc.
 click_first_item_from_resource_list_and_check_breadcrumb:
@@ -884,7 +884,7 @@ click_one_item:
 click_one_item_text:
   elements:
   - selector:
-      xpath: //li//*[text()='<dropdown_item>']
+      xpath: //*[text()="<dropdown_item>"]/ancestor::button[@role="option"]
     op: click
 choose_dropdown_item:
   action: click_dropdown_field

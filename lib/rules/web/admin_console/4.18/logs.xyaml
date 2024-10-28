@@ -1,15 +1,15 @@
 # logs page
-click_dropdown_button:
-  element:
-    selector:
-      xpath: //button[contains(@data-test-id, 'dropdown-button')]
+click_container_dropdown_button:
+  elements:
+  - selector:
+      xpath: //button[@data-test="container-select"]
     op: click
 switch_to_container:
   params:
     dropdown_item: <container_name>
-  action: click_dropdown_button
+  action: click_container_dropdown_button
   action: wait_dropdown_loaded
-  action: click_one_item
+  action: click_one_item_text
 wait_log_window_loaded:
   elements:
   - selector:
@@ -41,7 +41,7 @@ check_required_context_shown_in_expanded_log_view:
   - selector: &toggle_steaming_paused_button
       xpath: //button[contains(@class,'co-toggle-play')]
   - selector: &container_dropdown_button
-      xpath: //button[contains(@class,'dropdown__toggle')]
+      xpath: //button[@data-test="container-select"]
 check_required_context_shown_in_collapsed_log_view:
   elements:
   - selector:
@@ -51,9 +51,9 @@ check_required_context_shown_in_collapsed_log_view:
   - selector:
       <<: *container_dropdown_button
   - selector:
-      xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), 'Logs')]
+      xpath: //a[contains(text(), 'Logs')]
   - selector:
-      xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), 'Details')]
+      xpath: //a[contains(text(), 'Details')]
 check_some_context_missing_in_collapsed_log_view:
   elements:
   - selector:
