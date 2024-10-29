@@ -56,9 +56,11 @@ add_env_var_value:
 choose_container:
   elements:
   - selector:
-      xpath: //*[(.='Container:')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
+      xpath: //button[@data-test="container-select"]
     op: click
-  action: choose_item_from_list
+  - selector:
+      xpath: //span[contains(.,"<item>")]
+    op: click
 update_env_vars:
   action:
     if_param: env_source_name

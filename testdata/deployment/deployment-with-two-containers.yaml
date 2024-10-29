@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: deploymenttest
+  name: deploymenttest
+spec:
+  selector:
+    matchLabels:
+      run: deploymenttest
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: deploymenttest
+    spec:
+      containers:
+      - image: quay.io/openshifttest/hello-openshift@sha256:4200f438cf2e9446f6bcff9d67ceea1f69ed07a2f83363b7fb52529f7ddd8a83
+        imagePullPolicy: IfNotPresent
+        name: deploymenttest-1
+        ports:
+          -
+            containerPort: 8080
+            protocol: TCP
+        resources:
+          limits:
+            memory: 256Mi
+        terminationMessagePath: /dev/termination-log
+      - image: quay.io/openshifttest/hello-openshift@sha256:b6296396b632d15daf9b5e62cf26da20d76157161035fefddbd0e7f7749f4167
+        imagePullPolicy: IfNotPresent
+        name: deploymenttest-2
+        ports:
+          -
+            containerPort: 8081
+            protocol: TCP
+        resources:
+          limits:
+            memory: 256Mi
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  paused: false
