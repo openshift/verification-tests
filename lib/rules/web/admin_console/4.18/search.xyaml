@@ -9,15 +9,12 @@ search_by_resource:
     ref: search_resource_kind_and_api_group
 click_resource_type_dropdown:
   elements:
-  - selector:
-      xpath: //button[contains(., 'Resources')]
-    op: click
-  - selector:
-      xpath: //span[contains(@class,'co-resource-item')]
+  - selector: &resourcetype
+      xpath: //input[contains(@placeholder,'Resources')]
+    op: clear
 send_type_filter:
   elements:
-  - selector:
-      xpath: //input[@placeholder='Select Resource']
+  - selector: *resourcetype
     op: send_keys <resource_kind>
 search_resource_kind_only:
   elements:
@@ -26,7 +23,7 @@ search_resource_kind_only:
     op: click
     timeout: 15
   - selector:
-      xpath: //nav[@data-test='user-dropdown']
+      xpath: //input[@data-test-id='item-filter']
     op: click
 search_resource_kind_and_api_group:
   elements:
@@ -35,7 +32,7 @@ search_resource_kind_and_api_group:
     op: click
     timeout: 15
   - selector:
-      xpath: //nav[@data-test='user-dropdown']
+      xpath: //input[@data-test-id='item-filter']
     op: click
 clear_one_search_item:
   elements:

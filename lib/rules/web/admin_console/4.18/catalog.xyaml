@@ -43,7 +43,7 @@ choose_resource_type:
       xpath: //button[@id='form-select-input-resources-field']
     op: click
   - selector:
-      xpath: //li[@id='<resource_id>']
+      xpath: //*[@id='<resource_id>']
     op: click
 open_env_edit_for_dc:
   action: choose_dc_type
