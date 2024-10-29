@@ -46,10 +46,10 @@ check_resource_tile:
 choose_filter_type_on_search_page:
   elements:
   - selector:
-      xpath: //button[@id='toggle-id']
+      xpath: //button[@id='search-filter-toggle']
     op: click
   - selector:
-      xpath: //li/button[text()='<filter_type>']
+      xpath: //li/button[.='<filter_type>']
     op: click
     timeout: 15
 set_filter_content_on_search_page:
