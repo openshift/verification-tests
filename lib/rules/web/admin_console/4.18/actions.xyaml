@@ -100,7 +100,7 @@ rollback_action:
 choose_item_from_list:
   elements:
   - selector:
-      xpath: //li//*[@id='<item>-link']
+      xpath: //button//*[contains(text(),'<item>')]
     op: click
 click_resource_action_icon:
   elements:
