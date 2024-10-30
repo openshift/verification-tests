@@ -146,10 +146,10 @@ check_external_log_link:
 # --- links on masthead ---
 browse_to_cli_tools_page:
   action: click_help_button
-  params:
-    text: Command Line Tools
-    link_url: "command-line-tools"
-  action: click_link_with_text
+  elements:
+  - selector:
+      xpath: //span[contains(.,"Command Line Tools")]/ancestor::button[@role="menuitem"]
+    op: click
 check_consolelink:
   action:
     if_param:
