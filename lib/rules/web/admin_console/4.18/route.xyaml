@@ -50,6 +50,9 @@ create_route:
   - selector:
       xpath: //h2[contains(., 'Create Route')]
     timeout: 60
+  - selector:
+      xpath: //input[@id='path']
+    op: clear
   action: set_route_name
   action:
     if_param: route_hostname
