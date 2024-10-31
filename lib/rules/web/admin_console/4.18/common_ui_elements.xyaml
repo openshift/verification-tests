@@ -188,6 +188,8 @@ click_instances_tab:
 click_access_review_tab:
   params:
     tab_name: Access review
+    content: Access review
+  action: check_page_contains
   action: click_tab
 click_schema_tab:
   params:
@@ -713,7 +715,7 @@ check_no_resources_selected_text:
   action: check_page_contains
 check_restricted_access_text:
   params:
-    content: Restricted Access
+    content: Restricted access
   action: check_page_contains
 check_no_endpoints_found_text:
   params:
