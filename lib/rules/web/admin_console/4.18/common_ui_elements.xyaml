@@ -886,7 +886,7 @@ click_one_item:
 click_one_item_text:
   elements:
   - selector:
-      xpath: //*[text()="<dropdown_item>"]/ancestor::button[@role="option"]
+      xpath: //*[text()="<dropdown_item>"]
     op: click
 choose_dropdown_item:
   action: click_dropdown_field
