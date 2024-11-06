@@ -1,8 +1,8 @@
 add_htpasswd_idp_upload_files:
   action: click_add_dropdown_button
   params:
-    dropdown_item: HTPasswd
-  action: click_one_item_text
+    button_id: htpasswd
+  action: click_button_by_id
   action: set_idp_name
   action: upload_file
   action: submit_changes

@@ -2,8 +2,8 @@
 add_basicauth_idp:
   action: click_add_dropdown_button
   params:
-    dropdown_item: Basic Authentication
-  action: click_one_item_text
+    button_id: basicauth
+  action: click_button_by_id
   action: set_idp_name
   action: set_remote_url
   action:
@@ -46,8 +46,8 @@ check_idp_in_table_list:
 add_github_idp:
   action: click_add_dropdown_button
   params:
-    dropdown_item: GitHub
-  action: click_one_item_text
+    button_id: github
+  action: click_button_by_id
   action: set_idp_name
   action: set_client_id
   action: set_client_secret
@@ -95,8 +95,8 @@ check_error_info_for_dupicated_idp_name:
 add_gitlab_idp:
   action: click_add_dropdown_button
   params:
-    dropdown_item: GitLab
-  action: click_one_item_text
+    button_id: gitlab
+  action: click_button_by_id
   action: set_idp_name
   action: set_remote_url
   action: set_client_id
@@ -107,8 +107,8 @@ add_gitlab_idp:
 add_ldap_idp:
   action: click_add_dropdown_button
   params:
-    dropdown_item: LDAP
-  action: click_one_item_text
+    button_id: ldap
+  action: click_button_by_id 
   action: set_idp_name
   action: set_remote_url
   action:
@@ -152,8 +152,8 @@ set_attr_email:
 add_google_idp:
   action: click_add_dropdown_button
   params:
-    dropdown_item: Google
-  action: click_one_item_text
+    button_id: google
+  action: click_button_by_id
   action: set_idp_name
   action: set_client_id
   action: set_client_secret
@@ -169,8 +169,8 @@ set_hosted_domain:
 add_openid_idp:
   action: click_add_dropdown_button
   params:
-    dropdown_item: OpenID Connect
-  action: click_one_item_text
+    button_id: oidconnect
+  action: click_button_by_id
   action: set_idp_name
   action: set_client_id
   action: set_client_secret
@@ -192,8 +192,8 @@ set_issuer_url:
 add_requestheader_idp:
   action: click_add_dropdown_button
   params:
-    dropdown_item: Request Header
-  action: click_one_item_text
+    button_id: requestheader
+  action: click_button_by_id
   action: set_idp_name
   action:
     if_param: login_url
@@ -251,8 +251,8 @@ set_email_headers:
 add_keystone_idp:
   action: click_add_dropdown_button
   params:
-    dropdown_item: Keystone
-  action: click_one_item_text
+    button_id: keystone
+  action: click_button_by_id
   action: set_idp_name
   action: set_domain_name
   action: set_remote_url
