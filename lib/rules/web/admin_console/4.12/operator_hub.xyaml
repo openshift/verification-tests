@@ -530,9 +530,6 @@ filter_by_keyword_on_catalog_page:
       <<: *search_input
     op: send_keys <keyword>
 open_operator_modal:
-  params:
-    keyword: <operator_name>
-  action: filter_by_keyword_on_catalog_page
   action: open_first_card_in_overlay
 check_default_view_is_form_view:
   params:
