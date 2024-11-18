@@ -64,7 +64,7 @@ Feature: basic verification for upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  Scenario: OCP-13016: Upgrade - Make sure multiple resources work well after upgrade
+  Scenario: OCP-13016:Upgrade - Make sure multiple resources work well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "node-upgrade" project
     And admin ensures "node-upgrade" namespace is deleted after scenario
