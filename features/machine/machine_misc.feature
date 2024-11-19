@@ -9,7 +9,7 @@ Feature: Machine misc features testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @mapi
+  @mapi @flaky
   Scenario: OCP-34940:ClusterInfrastructure PVCs can still be provisioned after the password has been changed vSphere
     Given I have an IPI deployment
     Then I switch to cluster admin pseudo user
