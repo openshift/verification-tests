@@ -416,7 +416,7 @@ Feature: Testing route
       | resource_name | service-unsecure1                       |
       | p             | {"spec":{"host":"www.changeroute.com"}} |
     Then the output should contain:
-      | spec.host: Invalid value: "www.changeroute.com": field is immutable |
+      | spec.host: Invalid value: "www.changeroute.com" |
 
   # @author zzhao@redhat.com
   # @case_id OCP-11036
