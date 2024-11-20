@@ -4,9 +4,9 @@ metadata:
   name: test-hpa
 spec:
   scaleTargetRef:
-    apiVersion: apps.openshift.io/v1
-    kind: DeploymentConfig
-    name: ruby-ex
+    apiVersion: apps/v1
+    kind: Deployment
+    name: cakephp-ex
   minReplicas: 1
   maxReplicas: 5
   metrics:
