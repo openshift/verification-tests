@@ -1,10 +1,14 @@
 Feature: Machine-api components upgrade tests
 
+  @critical
   @upgrade-prepare
-  @disconnected @connected
-  @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @admin
+  @network-ovnkubernetes @network-openshiftsdn
+  @proxy @noproxy @disconnected @connected
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Cluster operator should be available after upgrade - prepare
     # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
     # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -20,7 +24,12 @@ Feature: Machine-api components upgrade tests
   # @author huliu@redhat.com
   @upgrade-check
   @admin
+  @critical
   @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
@@ -35,11 +44,6 @@ Feature: Machine-api components upgrade tests
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Progressing')` is stored in the :co_progressing clipboard
     Then the expression should be true> cb.co_progressing["status"]=="False"
 
-    @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-    @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-    @network-ovnkubernetes @network-openshiftsdn
-    @s390x @ppc64le @heterogeneous @arm64 @amd64
-    @critical
   Examples:
     | case_id                         | cluster_operator     |
     | OCP-22712:ClusterInfrastructure | "machine-api"        | # @case_id OCP-22712
@@ -161,8 +165,8 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @admin
   @destructive
-  @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  @ppc64le @heterogeneous @arm64 @amd64
+  @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario Outline: Spot/preemptible instances should not block upgrade - prepare
@@ -213,7 +217,7 @@ Feature: Machine-api components upgrade tests
   @admin
   @destructive
   @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-    @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
   @proxy @noproxy @disconnected @connected
   @network-ovnkubernetes @network-openshiftsdn
   Scenario Outline: Spot/preemptible instances should not block upgrade
