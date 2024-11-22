@@ -401,7 +401,7 @@ click_alert_filter_dropdown:
 click_alert_filter_item:
   element:
     selector:
-      xpath: //input[@id='<filter_item>']
+      xpath: //label[@id='<filter_item>']
     op: click
 click_label_filter_dropdown:
   params:
