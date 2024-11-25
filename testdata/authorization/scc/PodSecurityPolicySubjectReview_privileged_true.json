@@ -1,9 +1,6 @@
 {
     "kind": "PodSecurityPolicySelfSubjectReview",
     "apiVersion": "security.openshift.io/v1",
-    "metadata": {
-        "name": "pspsr"
-    },
     "spec": {
         "template": {
             "spec": {
@@ -17,21 +14,15 @@
                             "protocol": "TCP"
                         }
                     ],
-                    "resources": {
-
-                    },
                     "volumeMounts": [
                         {
                             "name": "tmp",
                             "mountPath": "/tmp"
                         }
                     ],
-                    "terminationMessagePath": "/dev/termination-log",
-                    "terminationMessagePolicy": "FallbackToLogsOnError",
                     "imagePullPolicy": "IfNotPresent",
                     "securityContext": {
                         "capabilities": {
-
                         },
                         "privileged": true
                     }
@@ -41,7 +32,6 @@
                 {
                     "name": "tmp",
                     "emptyDir": {
-
                     }
                 }
             ],
@@ -50,8 +40,5 @@
             "serviceAccount": "default"
             }
         }
-    },
-    "status": {
-
     }
 }
