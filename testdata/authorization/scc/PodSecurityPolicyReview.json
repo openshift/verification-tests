@@ -1,9 +1,6 @@
 {
     "kind": "PodSecurityPolicyReview",
     "apiVersion": "security.openshift.io/v1",
-    "metadata": {
-        "name": "pspsr"
-    },
     "spec": {
         "template": {
             "spec": {
@@ -17,9 +14,6 @@
                             "protocol": "TCP"
                         }
                     ],
-                    "resources": {
-
-                    },
                     "volumeMounts": [
                         {
                             "name": "tmp",
@@ -31,7 +25,6 @@
                     "imagePullPolicy": "IfNotPresent",
                     "securityContext": {
                         "capabilities": {
-
                         },
                         "privileged": false
                     }
@@ -41,7 +34,6 @@
                 {
                     "name": "tmp",
                     "emptyDir": {
-
                     }
                 }
             ],
@@ -52,12 +44,6 @@
         },
         "serviceAccountNames": [
             "default"
-        ],
-        "groups": [
-            "system:authenticated"
         ]
-    },
-    "status": {
-
     }
 }
