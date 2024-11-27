@@ -14,7 +14,7 @@ Feature: web console related upgrade check
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  Scenario: check console accessibility - prepare
+  Scenario: OCP-22597:UserInterface check console accessibility - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
       | project_name | ui-upgrade |
@@ -67,7 +67,7 @@ Feature: web console related upgrade check
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: check console accessibility
+  Scenario: OCP-22597:UserInterface check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser
     When I perform the :goto_deployment_page web action with:
@@ -103,7 +103,7 @@ Feature: web console related upgrade check
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: UserInterface-check vsphere connection form not empty
+  Scenario: OCP-76051:UserInterface check vsphere connection form not empty
     Given the first user is cluster-admin
     Given I open admin console in a browser
     When I run the :goto_cluster_dashboards_page web action
