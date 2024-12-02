@@ -194,7 +194,7 @@ Given /^admin creates a project with a random schedulable node selector$/ do
     | node_selector | #{project_name}=label |
     })
   step %Q/I store the schedulable workers without taints in the :nodes clipboard/
-  step %Q/label "<%= project.name %>=label" is added to the "<%= node.name %>" node/
+  step %Q/label "<%= project.name %>=label" is added to the "<%= cb.nodes[0].name %>" node/
   step %Q/the appropriate pod security labels are applied to the namespace/
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "<%= project.name %>" project/
