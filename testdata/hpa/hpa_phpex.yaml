@@ -8,13 +8,13 @@ spec:
     kind: Deployment
     name: cakephp-ex
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 6
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
-        averageUtilization: 2
+        averageUtilization: 5
         type: Utilization
   - type: Resource
     resource:
