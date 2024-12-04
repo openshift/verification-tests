@@ -77,5 +77,6 @@ Given /^authentication successfully rolls out after config changes$/ do
     end
   }
   raise error unless success
+  raise "#### In 4.18+ (ref: https://issues.redhat.com/browse/OCPBUGS-45051), given the operator reports Progressing=False, the Terminating (Running) old-generation operand pod should already disappear. But the result showed it still took #{stats[:iterations]} iterations (#{stats[:seconds]} seconds) for the disappearing." if env.version_ge("4.18", user: user) && stats[:iterations] > 1
 end
 
