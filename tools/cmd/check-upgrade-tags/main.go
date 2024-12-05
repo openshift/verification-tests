@@ -81,15 +81,16 @@ func parseTags(initMap, addMap, sedMap *map[int]string) {
 								break
 							} else if strings.HasSuffix(postTag, preTag) {
 								tagExist = true
-								fmt.Println("preTag is partial of the postTag, sed the line")
+								fmt.Println("Not paired tags, preTag is partial of the postTag, sed the line")
 								fmt.Printf("\tpostTag: %v\n\tpreTag: %v\n",
 									(*initMap)[postTagLine], (*initMap)[preTagLine])
 								(*sedMap)[preTagLine] = (*initMap)[postTagLine]
 							}
 						}
 						if !tagExist {
-							fmt.Printf("tags '%v' on line %v exist in postTag, but not paired in preTag\n", postTag, postTagLine+1)
-							(*addMap)[postTagLine-postLine+preLine+1] = (*initMap)[postTagLine]
+							extraLines := len(*addMap)
+							fmt.Printf("Not paired tags, on line %v, tags: '%v'\n", postTagLine+1, postTag)
+							(*addMap)[postTagLine-postLine+preLine+extraLines+1] = (*initMap)[postTagLine]
 						}
 					}
 					postLine = preLine
