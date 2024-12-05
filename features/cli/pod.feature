@@ -224,6 +224,7 @@ Feature: pods related scenarios
     When I run the :exec client command with:
       | pod              | doublecontainers |
       | container        | hello-openshift  |
+      | oc_opts_end      |                  |
       | exec_command     | cat              |
       | exec_command_arg | /dev/shm/c2      |
     Then the step should succeed
