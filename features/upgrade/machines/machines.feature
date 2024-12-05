@@ -53,7 +53,7 @@ Feature: Machine-api components upgrade tests
   @4.11 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
-  Scenario:  Cloud-controller-manager cluster operator should be available after upgrade - prepare
+  Scenario: Cloud-controller-manager cluster operator should be available after upgrade - prepare
     Given the expression should be true> "True" == "True"
 
   # @author zhsun@redhat.com
