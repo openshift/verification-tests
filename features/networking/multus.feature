@@ -533,7 +533,7 @@ Feature: Multus-CNI related scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
-  Scenario: OCP-24467:SDN CNO manager mavlan configured manually with static
+  Scenario: OCP-24467:SDN network operator manager mavlan configured manually with static
     Given the multus is enabled on the cluster
     Given I store the ready and schedulable workers in the :nodes clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
