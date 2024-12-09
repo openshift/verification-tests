@@ -295,7 +295,7 @@ Feature: SDN compoment upgrade testing
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-    Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade - prepare
+  Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade - prepare
     # Get the worker nodes for scheduling the pod
     Given I store the ready and schedulable nodes in the :nodes clipboard
     Given I switch to cluster admin pseudo user
