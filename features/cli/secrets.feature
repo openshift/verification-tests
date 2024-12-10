@@ -68,12 +68,14 @@ Feature: secrets related scenarios
     Given the pod named "first-secret-pod" status becomes :running
     When I run the :exec client command with:
       | pod              | first-secret-pod            |
+      | oc_opts_end      |                             |
       | exec_command     | cat                         |
       | exec_command_arg | /etc/secret-volume/username |
     Then the output should contain:
       | first-username |
     When I run the :exec client command with:
       | pod              | first-secret-pod            |
+      | oc_opts_end      |                             |
       | exec_command     | cat                         |
       | exec_command_arg | /etc/secret-volume/password |
     Then the output should contain:
@@ -81,12 +83,14 @@ Feature: secrets related scenarios
     Given the pod named "second-secret-pod" status becomes :running
     When I run the :exec client command with:
       | pod              | second-secret-pod           |
+      | oc_opts_end      |                             |
       | exec_command     | cat                         |
       | exec_command_arg | /etc/secret-volume/username |
     Then the output should contain:
       | second-username |
     When I run the :exec client command with:
       | pod              | second-secret-pod           |
+      | oc_opts_end      |                             |
       | exec_command     | cat                         |
       | exec_command_arg | /etc/secret-volume/password |
     Then the output should contain:
@@ -127,6 +131,7 @@ Feature: secrets related scenarios
     And the pod named "secret-pod-2" status becomes :running
     When I run the :exec client command with:
       | pod              | secret-pod-2                  |
+      | oc_opts_end      |                               |
       | exec_command     | cat                           |
       | exec_command_arg | /etc/secret-volume-2/password |
       | namespace        | <%= cb.project1 %>            |
@@ -135,6 +140,7 @@ Feature: secrets related scenarios
     When I use the "<%= cb.project0 %>" project
     When I run the :exec client command with:
       | pod              | secret-pod-1                  |
+      | oc_opts_end      |                               |
       | exec_command     | cat                           |
       | exec_command_arg | /etc/secret-volume-1/username |
       | namespace        | <%= cb.project0 %>            |
