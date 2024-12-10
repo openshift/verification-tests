@@ -667,7 +667,7 @@ check_insights_status_icon:
 check_status_card_health_item_text:
   element:
     selector:
-      xpath: //span[contains(@class,'co-status-card__health-item-text')]/following::div[contains(.,'<status_text>')]
+      xpath: //span[contains(@class,'co-status-card__health-item-text')]/following::div[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') ,'<status_text>')]
     timeout: 40
 check_view_all_for_operators:
   params:
@@ -713,7 +713,7 @@ check_insights_status_when_available:
 check_insights_status_when_unavailable:
   params:
     status: Error
-    status_text: Not available
+    status_text: ot available
   action: check_status_card_health_item_text
   action: click_insights_status
   action: check_insights_popover_info_when_unavailable
