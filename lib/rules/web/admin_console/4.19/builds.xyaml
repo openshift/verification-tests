@@ -1,0 +1,50 @@
+check_openshift_pipeline_release_link:
+  params:
+    text: OpenShift Pipelines based on Tekton
+    link_url: understanding-openshift-pipelines
+  action: check_link_and_text
+check_tutorial_link_of_openshift_pipeline:
+  params:
+    text: Try the OpenShift Pipelines tutorial
+    link_url: https://github.com/openshift/pipelines-tutorial/
+  action: check_link_and_text
+check_links_in_pipeline_deprecation_note:
+  action: check_openshift_pipeline_release_link
+  action: check_tutorial_link_of_openshift_pipeline
+check_pipelines_sub_menu:
+  params:
+    secondary_menu: Pipelines
+  action: check_secondary_menu
+check_tasks_sub_menu:
+  params:
+    secondary_menu: Tasks
+  action: check_secondary_menu
+check_triggers_sub_menu:
+  params:
+    secondary_menu: Triggers
+  action: check_secondary_menu
+check_pipeline_related_menus:
+  params:
+    primary_menu: Pipelines
+  action: expand_primary_menu
+  action: check_pipelines_sub_menu
+  action: check_tasks_sub_menu
+  action: check_triggers_sub_menu
+check_pipeline_resource_item:
+  params:
+    resource_type: Pipeline
+    resource_name: <pipeline_name>
+    resource_link: /k8s/ns/<project_name>/tekton.dev~v1~Pipeline/<pipeline_name>
+  action: check_resource_item
+check_pipeline_resources_resource_item:
+  params:
+    resource_type: PipelineResource
+    resource_name: <pipelineresource_name>
+    resource_link: /k8s/ns/<project_name>/tekton.dev~v1alpha1~PipelineResource/<pipelineresource_name>
+  action: check_resource_item
+check_task_resource_item:
+  params:
+    resource_type: Task
+    resource_name: <task_name>
+    resource_link: /k8s/ns/<project_name>/tekton.dev~v1~Task/<task_name>
+  action: check_resource_item
