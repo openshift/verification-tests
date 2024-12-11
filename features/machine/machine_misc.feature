@@ -187,8 +187,8 @@ Feature: Machine misc features testing
   Scenario: OCP-37180:ClusterInfrastructure Report vCenter version to telemetry
     Given I switch to cluster admin pseudo user
     When I perform the GET prometheus rest client with:
-      | path  | /api/v1/query?                         |
-      | query | cloudprovider_vsphere_vcenter_versions |
+      | path  | /api/v1/query?       |
+      | query | vsphere_vcenter_info |
     Then the step should succeed
     And the expression should be true> @result[:parsed]["data"]["result"][0]["metric"]["version"] =~ /7.0|8.0/
 
