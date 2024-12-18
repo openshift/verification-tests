@@ -12,6 +12,9 @@ click_resource_type_dropdown:
   - selector: &resourcetype
       xpath: //input[contains(@placeholder,'Resources')]
     op: clear
+  - selector:
+        xpath: //input[@aria-label='Type to filter']
+    op: clear
 send_type_filter:
   elements:
   - selector: *resourcetype
