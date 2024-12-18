@@ -7,7 +7,7 @@ Feature: kubelet restart and node restart
   @singlenode
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @storage
   Scenario Outline: kubelet restart should not affect attached/mounted volumes
     Given I have a project
