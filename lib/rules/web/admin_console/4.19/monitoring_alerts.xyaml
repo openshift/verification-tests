@@ -196,7 +196,7 @@ wait_exipre_silence_loaded:
 click_duration_dropdown_button:
   element:
     selector:
-      xpath: //button[@class='pf-v5-c-dropdown__toggle']
+      xpath: //button[@class='pf-v5-c-menu-toggle pf-m-full-width']
     op: click
 set_silence_duration:
   action: click_duration_dropdown_button
@@ -208,7 +208,7 @@ set_silence_duration_null:
   action: click_duration_dropdown_button
   element:
     selector:
-      xpath: //ul[@class='pf-c-dropdown__menu']//a[text()='-']
+      xpath: //ul[@class='pf-v5-c-menu__list']//span[text()='-']
     op: click
 check_silence_duration_null:
   element:
