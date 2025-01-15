@@ -15,6 +15,17 @@ click_resource_type_dropdown:
   - selector:
         xpath: //input[@aria-label='Type to filter']
     op: clear
+  action:
+    if_element:
+      selector: &close_button
+        xpath: //button[@aria-label='Clear input value']
+      visible: true
+    ref: click_close_button
+click_close_button:
+  element:
+    selector:
+      <<: *close_button
+    op: click
 send_type_filter:
   elements:
   - selector: *resourcetype
