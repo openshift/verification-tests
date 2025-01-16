@@ -45,7 +45,7 @@ Feature: Node components upgrade tests
     When I run commands on the host:
       | cat /etc/kubernetes/kubelet.conf |
     Then the step should succeed
-    And the output should contain:
+    And the output should match:
       | [\"]?imageMinimumGCAge[\"]?: [\"]?5m0s[\"]? |
       | [\"]?imageGCHighThresholdPercent[\"]?: 80   |
       | [\"]?maxPods[\"]?: 240                      |
@@ -76,7 +76,7 @@ Feature: Node components upgrade tests
     When I run commands on the host:
       | cat /etc/kubernetes/kubelet.conf |
     Then the step should succeed
-    And the output should contain:
+    And the output should match:
       | [\"]?imageMinimumGCAge[\"]?: [\"]?5m0s[\"]? |
       | [\"]?imageGCHighThresholdPercent[\"]?: 80   |
       | [\"]?maxPods[\"]?: 240                      |
