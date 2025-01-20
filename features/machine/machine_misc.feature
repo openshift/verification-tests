@@ -186,6 +186,7 @@ Feature: Machine misc features testing
   @mapi
   Scenario: OCP-37180:ClusterInfrastructure Report vCenter version to telemetry
     Given I switch to cluster admin pseudo user
+    Then I check the cluster platform is not None
     When I perform the GET prometheus rest client with:
       | path  | /api/v1/query?       |
       | query | vsphere_vcenter_info |
