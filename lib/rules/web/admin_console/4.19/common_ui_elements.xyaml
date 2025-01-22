@@ -54,7 +54,7 @@ click_button:
   element:
     selector:
       xpath: //button[contains(.,'<button_text>')]
-    timeout: 30
+    timeout: 60
     op: click
 click_button_text:
   element:
