@@ -15,11 +15,38 @@ Given /^fips is (enabled|disabled)$/ do |status|
       | 99-master-fips |
       | 99-worker-fips |
     })
+    @clipboard[:fip_enabled] = true
   else
     step %Q/the output should not contain:/, table(%{
       | 99-master-fips |
       | 99-worker-fips |
     })
+    @clipboard[:fip_enabled] = false
+  end
+end
+# similiar to Given fips is enabled|disabled, but set the clipboard instead of
+# failing immediately.
+And /^I check fips is enabled$/ do
+  ensure_admin_tagged
+  begin
+    step %Q/fips is enabled/
+    logger.warn("FIPS is enabled, setting @clipboard for FIPS to 'true'")
+    @clipboard[:fips_enabled] = true
+
+  rescue
+    logger.warn("FIPS is disabled, setting @clipboard for FIPS to 'false'")
+    @clipboard[:fips_enabled] = false
+  end
+end
+
+Given /^I skip testcase if fips is enabled inside node$/ do
+  ensure_admin_tagged
+  step %Q/I check fips is enabled/
+  if @clipboard[:fips_enabled]
+    logger.warn("FIPS is enabled, skipping testcase")
+    skip_this_scenario
+  else
+    logger.info("FIPS is not enabled, so we continue the test execution...")
   end
 end
 
@@ -688,4 +715,4 @@ Given /^I store the schedulable workers without taints in the#{OPT_SYM} clipboar
   cb_name ||= :nodes
   step %Q{I store the schedulable workers in the :#{cb_name} clipboard}
   cb.nodes = cb.nodes.reject{|w| w.taints.first}
-end 
+end
