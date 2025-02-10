@@ -10,9 +10,23 @@
   },
 
   "spec": {
+      "securityContext": {
+        "runAsNonRoot": true,
+        "seccompProfile": {
+          "type": "RuntimeDefault"
+        }
+      },
       "containers": [{
         "name": "hello-websocket",
         "image": "quay.io/openshifttest/hello-websocket@sha256:d485f1fedd2bc929551e68288812c10957b99db3e833ec150071f00291ea77db",
+	"securityContext": {
+          "allowPrivilegeEscalation": false,
+          "capabilities": {
+            "drop": [
+              "ALL"
+            ]
+          }
+        },
         "ports": [
           {
             "containerPort": 9999
