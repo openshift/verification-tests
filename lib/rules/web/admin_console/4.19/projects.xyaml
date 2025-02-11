@@ -107,18 +107,19 @@ switch_to_project:
     if_element:
       selector:
         xpath: //input[@data-test='showSystemSwitch' and @data-checked-state='false']
-      visible: false
     ref: toggle_system_projects
   action: set_strings_in_project_dropdown_filter_box
-  element:
-    selector:
-      xpath: //span[text()='<project_name>']
-    op: click
+  action: click_project_name
   action:
     if_element:
       selector: &namespace_dropdown_exist
         xpath: //*[@data-test='namespace-dropdown-menu']
     ref: toggle_namespace_dropdown
+click_project_name:
+  element:
+    selector:
+      xpath: //span[text()='<project_name>']
+    op: click
 toggle_system_projects:
   element:
     selector:

@@ -51,7 +51,7 @@ search_resource_kind_and_api_group:
 clear_one_search_item:
   elements:
   - selector:
-      xpath: //span[contains(., '<search_item>')]/ancestor::li//button[@aria-label='close']
+      xpath: //span[contains(., '<search_item>')]/ancestor::li//button[contains(@aria-label, 'Close')]
     op: click
 check_resource_tile:
   elements:
