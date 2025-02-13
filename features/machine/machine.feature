@@ -113,7 +113,6 @@ Feature: Machine features testing
     @proxy @noproxy @disconnected @connected
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     
-    @hypershift-hosted
     Examples:
       | case_id                         | url                                                                          |
       | OCP-25652:ClusterInfrastructure | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
