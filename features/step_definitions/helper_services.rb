@@ -181,7 +181,7 @@ Given /^I have LDAP service in my project$/ do
 
     # Init the test data in ldap server.
     wait_for(60, interval: 5, stats: stats){
-      @result = pod.exec("ldapadd", "-x", "-h", "127.0.0.1", "-p", "389", "-D", "cn=Manager,dc=example,dc=com", "-w", "admin", stdin: File.read(cb.test_file), as: user)
+      @result = pod.exec("ldapadd", "-x", "-h", "localhost", "-p", "389", "-D", "cn=Manager,dc=example,dc=com", "-w", "admin", stdin: File.read(cb.test_file), as: user)
       @result[:success]
     }
     logger.info "after #{stats[:seconds]} seconds and #{stats[:iterations]} " <<
