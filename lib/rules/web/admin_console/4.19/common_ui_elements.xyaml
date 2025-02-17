@@ -944,7 +944,7 @@ wait_table_loaded:
 skip_dev_perspective_tour:
   elements:
   - selector:
-      xpath: //button[@id='tour-step-footer-secondary' and text()='Skip tour']
+      xpath: //button[@id='tour-step-footer-secondary']
     op: click
   - selector:
       xpath: //b[contains(text(), 'Welcome to Dev')]
