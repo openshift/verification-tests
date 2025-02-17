@@ -17,7 +17,7 @@ login_sequence:
         # when idp is specified we use the correct IDP
         # otherwise we always use the first one
         # a hacking way to cover our requirements
-        xpath: //a[contains(@class, 'idp<idp>') or contains(@class, 'login-redhat<idp>') or text()='<idp>'][last()] | //li[contains(@class, 'idp<idp>') or contains(@class, 'login-redhat<idp>') or text()='<idp>'][last()]
+        xpath: //a[contains(@class, 'idp<idp>') or contains(@class, 'login-redhat<idp>') or text()='<idp>' or contains(@title, 'Log in with <idp>')][last()] | //li[contains(@class, 'idp<idp>') or contains(@class, 'login-redhat<idp>') or text()='<idp>'][last()]
       timeout: 1
   action:
     ref: login_console
@@ -77,7 +77,7 @@ login_console:
     expect_result: true
   elements:
     - selector:
-        xpath: //button[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'), 'log in')]
+        xpath: //button[@type='submit']
       op: click
 
 login_token:
@@ -101,7 +101,7 @@ login_token:
 login_page_loaded:
   element:
     selector:
-      css: "#kc-form-login, #password, #inputPassword, .login-redhat, .idp, .navigation-container"
+      css: "#kc-form-login, #password, #inputPassword, .login-redhat, .idp, .navigation-container, .pf-v6-c-login"
     timeout: 60
 
 verify_logged_in:

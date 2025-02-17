@@ -13,7 +13,7 @@ verify_logged_in_admin_console:
   action:
     if_element:
       selector:
-        xpath: //div[@id='guided-tour-modal']//button[text()='Skip tour']
+        xpath: //div[@id='guided-tour-modal']
       timeout: 20
     ref: skip_dev_perspective_tour
 click_console_selector:
