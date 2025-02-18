@@ -37,7 +37,7 @@ check_yaml_line_content:
 click_create_button:
   elements:
   - selector: &create_button
-      xpath: //button[contains(text(),'Create') and @aria-disabled='false']
+      xpath: //button[contains(.,"Create")]
     op: click
     timeout: 20
 check_create_button_missing:
