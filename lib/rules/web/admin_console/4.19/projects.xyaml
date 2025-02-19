@@ -26,7 +26,7 @@ create_project_from_dropdown:
 click_create_project_button:
   params:
     button_text: Create Project
-  action: click_button_text
+  action: click_button
 set_project_name:
   element:
     selector:
@@ -48,7 +48,7 @@ set_project_description:
 send_delete_string:
   elements:
   - selector:
-      xpath: //input[contains(@class,'form-control')]
+      xpath: //input[contains(@placeholder,'Enter name')]
     type: input
     op: send_keys <resource_name>
 create_project_from_get_started_instru:
