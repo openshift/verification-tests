@@ -312,7 +312,7 @@ set_label_textarea:
 click_label_filter_dropdown_button:
   element:
     selector:
-      xpath: //label[contains(text(),'<label_text>')]/following::button[1][contains(@class,'select__toggle')]
+      xpath: //label[contains(text(),'<label_text>')]/following::button[1][@aria-label="Menu toggle"]
     op: click
 click_label_dropdown_button:
   element:
