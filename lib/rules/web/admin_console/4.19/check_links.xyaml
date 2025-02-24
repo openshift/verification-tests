@@ -102,13 +102,6 @@ navigate_to_admin_console:
         xpath: //div[@id='guided-tour-modal']//button[text()='Skip tour']
       timeout: 20
     ref: skip_dev_perspective_tour
-  elements:
-  - selector:
-      xpath: //button[@data-test-id='perspective-switcher-toggle']
-    op: click
-  - selector:
-      xpath: //li//h2[contains(., 'Administrator')]/ancestor::button[@role="option"]
-    op: click
 check_active_perspective:
   action:
     if_param:
