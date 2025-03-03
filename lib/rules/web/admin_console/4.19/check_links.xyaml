@@ -5,15 +5,14 @@ check_doc_get_started_with_cli:
 check_brand:
   elements:
   - selector:
-      xpath: //img[contains(@src, '<logo_source>') and @alt='<product_name>']
+      xpath: //*[contains(@data-src, '<logo_source>')]
 check_brand_in_modal:
   elements:
   - selector:
-      xpath: //div[contains(@role,'dialog')]//img[contains(@src, '<logo_source>') and @alt='<product_name>']
+      xpath: //img[contains(@src, '<logo_source>') and @alt='<product_name>']
 check_logo_in_masthead:
   params:
     logo_source: static/assets/public/imgs/openshift-logo.svg
-    product_name: Red Hat OpenShift
   action: check_brand
 check_logo_in_app_launcher:
   params:
@@ -22,7 +21,7 @@ check_logo_in_app_launcher:
   action: check_image_url
 check_logo_in_about_modal:
   params:
-    logo_source: static/assets/public/imgs/openshift-logo.svg
+    logo_source: static/assets/public/imgs/red-hat-fedora.svg
     product_name: Red Hat OpenShift
   action: click_about_button
   action: check_brand_in_modal
