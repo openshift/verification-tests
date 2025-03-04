@@ -59,11 +59,11 @@ remove_taint_from_node:
 node_affinity_modal_value:
   element:
     selector: &value
-      xpath: //div[text()='Value']/following-sibling::input
+      xpath: //div[text()='Value']/following-sibling::span//input
 node_affinity_modal_key:
   element:
     selector: &key
-      xpath: //div[text()='Key']/following-sibling::input
+      xpath: //div[text()='Key']/following-sibling::span//input
 node_affinity_modal_dropdown:
   element:
     selector: &dropdown
