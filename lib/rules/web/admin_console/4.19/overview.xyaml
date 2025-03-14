@@ -58,12 +58,12 @@ click_topology_view_switcher:
 click_sidebar_overview_tab:
   element:
     selector:
-      xpath: //div[contains(@class,'overview__sidebar')]//button[text()='Details']
+      xpath: //button[contains(@data-test,"horizontal-link-Details")]
     op: click
 click_sidebar_resources_tab:
   element:
     selector:
-      xpath: //div[contains(@class,'overview__sidebar')]//button[text()='Resources']
+      xpath: //button[contains(@data-test,"horizontal-link-Resources")]
     op: click
 check_dc_available_action_menus:
   elements:
