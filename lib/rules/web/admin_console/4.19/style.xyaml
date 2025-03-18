@@ -1,7 +1,7 @@
 check_chart_using_victory:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'pf-v5-c-chart')]
+      xpath: //div[contains(@class, 'pf-v6-c-chart')]
 check_cluster_utilization_charts_style:
   elements:
   - selector:
@@ -21,7 +21,7 @@ check_node_detail_page_charts_style:
 check_quota_detail_page_charts_style:
   elements:
   - selector:
-      xpath: //*[contains(@data-test, 'resource-quota-gauge-chart')]//div[contains(@class, 'pf-v5-c-chart')]
+      xpath: //*[contains(@data-test, 'resource-quota-gauge-chart')]//div[contains(@class, 'pf-v6-c-chart')]
 check_list_view_style:
   elements:
   - selector:
