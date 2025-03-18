@@ -25,7 +25,7 @@ check_quota_detail_page_charts_style:
 check_list_view_style:
   elements:
   - selector:
-      xpath: //table[contains(@class, 'pf-v5-c-table')]
+      xpath: //table[contains(@class, 'pf-v6-c-table')]
 check_catalog_tile_style:
   elements:
   - selector:
