@@ -1,9 +1,9 @@
 open_view_sidebar:
-  params:
-    button_text: View sidebar
-  action: click_button
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //label[@for='showSidebar']
+    op: click
+  - selector:
       xpath: //button[contains(.,'Schema')]
 close_view_sidebar:
   action: click_close_icon

@@ -51,9 +51,9 @@ check_required_context_shown_in_collapsed_log_view:
   - selector:
       <<: *container_dropdown_button
   - selector:
-      xpath: //a[contains(text(), 'Logs')]
+      xpath: //a[contains(., 'Logs')]
   - selector:
-      xpath: //a[contains(text(), 'Details')]
+      xpath: //a[contains(., 'Details')]
 check_some_context_missing_in_collapsed_log_view:
   elements:
   - selector:
