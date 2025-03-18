@@ -42,25 +42,20 @@ check_filter_panel_style:
   elements:
   - selector:
       xpath: //ul[contains(@class, 'vertical-tabs-pf')]/li[contains(@class, 'vertical-tabs-pf-tab')]
-check_warning_alert_style:
-  elements:
-  - selector:
-      xpath: //div[contains(@class, 'pf-v5-c-alert') and contains(@class, 'pf-m-warning')]
-    timeout: 30
 check_error_alert_style:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'pf-v5-c-alert') and contains(@class, 'pf-m-danger')]
+      xpath: //div[contains(@class, 'pf-v6-c-alert') and contains(@class, 'pf-m-danger')]
     timeout: 30
 check_success_alert_style:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'pf-v5-c-alert') and contains(@class, 'pf-m-success')]
+      xpath: //div[contains(@class, 'pf-v6-c-alert') and contains(@class, 'pf-m-success')]
     timeout: 30
 check_info_alert_style:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'pf-v5-c-alert') and contains(@class, 'pf-m-info')]
+      xpath: //div[contains(@class, 'pf-v6-c-alert') and contains(@class, 'pf-m-info')]
     timeout: 30
 check_alert_style_on_deploy_image_page:
   action: goto_deploy_image_page
