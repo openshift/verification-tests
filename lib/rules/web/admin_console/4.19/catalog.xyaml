@@ -190,7 +190,7 @@ select_target_namespace:
 click_catalog_item:
   elements:
   - selector:
-      xpath: //a[contains(@data-test,'<catalog_item>')]
+      xpath: //*[contains(@data-test,'<catalog_item>')]
     op: click
 check_the_support_link:
   params:
