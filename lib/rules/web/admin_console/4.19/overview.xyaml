@@ -213,7 +213,7 @@ group_by_label:
 send_key_to_workloads:
   element:
     selector:
-      xpath: //a[contains(text(),'Workloads')]
+      xpath: //a[contains(.,'Workloads')]
     op: send_keys <key>
 check_workload_selected:
   elements:
@@ -222,7 +222,7 @@ check_workload_selected:
 check_workload_name:
   elements:
   - selector:
-      xpath: //div[@class='resource-overview__summary']//button[text()='Name']
+      xpath: //div[@class='resource-overview__summary']//button[.='Name']
 check_hint_missing_on_filter:
   elements:
   - selector:
@@ -231,7 +231,7 @@ check_hint_missing_on_filter:
 check_workload_sidebar_missing:
   elements:
   - selector:
-      xpath: //div[@class='overview__sidebar overview__sidebar-enter-done']
+      xpath: //div[contains(@class, 'overview__sidebar')]
     missing: true
 check_shortcuts_on_workloads:
   params:

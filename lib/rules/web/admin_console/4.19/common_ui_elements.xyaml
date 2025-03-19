@@ -336,7 +336,7 @@ check_editor_is_monaco_editor:
 check_content_in_yaml_editor:
   element:
     selector:
-      xpath: //div[contains(@class,'react-monaco-editor-container')]//span[contains(text(),'<yaml_content>')]
+      xpath: //div[contains(@class,'view-line')]//span[contains(text(),'<yaml_content>')]
 check_sidebar_item:
   element:
     selector:
@@ -935,7 +935,7 @@ wait_sidebar_loaded:
   element:
     selector:
       xpath: //div[@data-test='resource-sidebar']
-    timeout: 30
+    timeout: 50
 wait_table_loaded:
   element:
     selector:
@@ -1206,7 +1206,7 @@ check_resource_details_key_and_value:
 check_resource_details_key_only:
   element:
     selector:
-      xpath: //button[(text()='<key>')]
+      xpath: //button[.='<key>']
 check_key_and_resource_link:
   element:
     selector:
@@ -1577,7 +1577,7 @@ click_workloads_tab:
 click_workload_details:
   params:
     button_text: Details
-  action: click_button_text
+  action: click_button
 check_managed_by_badge:
   elements:
   - selector:
