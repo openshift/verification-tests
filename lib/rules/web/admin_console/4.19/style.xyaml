@@ -29,7 +29,7 @@ check_list_view_style:
 check_catalog_tile_style:
   elements:
   - selector:
-      xpath: //a[contains(@class, 'catalog-tile-pf') and contains(@class, 'co-catalog-tile')]
+      xpath: //div[contains(@class, 'catalog-tile-pf') and contains(@class, 'co-catalog-tile')]
 check_vertical_tabs_style:
   elements:
   - selector:

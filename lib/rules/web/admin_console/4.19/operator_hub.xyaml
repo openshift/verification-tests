@@ -389,12 +389,12 @@ click_continue_button:
 open_first_card_in_overlay:
   elements:
   - selector:
-      xpath: (//a[contains(@class, 'pf-v5-c-card')])[1]
+      xpath: (//div[contains(@class, 'pf-v6-c-card')])[1]
     op: click
   action:
     if_element:
       selector:
-        xpath: //button[text()='Continue']
+        xpath: //button[.='Continue']
     ref: click_continue_button
 uninstall_operator_on_console:
   params:
