@@ -37,6 +37,34 @@ insert_snippet:
   params:
       button_text: Insert snippet
   action: click_button
+click_create_job:
+  params:
+      button_text: Create Job
+  action: click_button
+click_schema:
+  params:
+      button_text: Schema
+  action: click_button
+click_samples:
+  params:
+      button_text: Samples
+  action: click_button
+click_try_it:
+  params:
+      button_text: Try it
+  action: click_button
+click_snippets:
+  params:
+      button_text: Snippets
+  action: click_button
+click_show_yaml:
+  params:
+      button_text: Show YAML
+  action: click_button
+click_hide_yaml:
+  params:
+      button_text: Hide YAML
+  action: click_button
 check_exposed_flag_model:
   action: goto_test_consumer_page
   elements:
