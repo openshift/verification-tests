@@ -116,7 +116,7 @@ wait_resource_summary_loaded:
 click_open_popover:
   elements:
   - selector:
-      xpath: //button[contains(@class, 'details-item__popover-button') and contains(text(), '<popover_item>') and not(@disabled)]
+      xpath: //button[contains(., '<popover_item>')]
     op: click
     timeout: 20
 check_popover_title:
