@@ -37,16 +37,16 @@ add_env_var_name:
 add_env_var_pair_value:
   elements:
   - selector:
-      xpath: //button//*[contains(text(),'Select a resource')]
+      xpath: (//button//*[contains(.,'Select a resource')])[1]
     op: click
   - selector:
-      xpath: //li//*[text()='<env_source_name>']
+      xpath: //li//*[.='<env_source_name>']
     op: click
   - selector:
-      xpath: //button//*[contains(text(),'Select a key')]
+      xpath: //button//*[contains(.,'Select a key')]
     op: click
   - selector:
-      xpath: //li//*[text()='<env_source_key>']
+      xpath: //li//*[.='<env_source_key>']
     op: click
 add_env_var_value:
   element:
