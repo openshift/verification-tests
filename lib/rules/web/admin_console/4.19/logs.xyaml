@@ -105,9 +105,9 @@ check_logs_wrapped:
   - selector:
       xpath: //div[contains(@Class,'log-viewer__scroll-container') and contains(@style,'hidden')]
 toggle_log_wraps:
-  element:
-    selector:
-      xpath: //input[@id='wrapLogLines']
+  elements:
+  - selector:
+      xpath: //label[@for='wrapLogLines']
     op: click
 check_logs_history_not_present:
   elements:
