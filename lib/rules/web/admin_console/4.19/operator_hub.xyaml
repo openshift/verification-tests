@@ -321,7 +321,7 @@ check_community_operator_description_on_overlay:
 check_operator_description_on_overlay:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'<text> Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'<description>')] ]
+      xpath: //div[div[contains(.,'<text> Operator')] and div[contains(@class, 'hint__body') and contains(.,'<description>')]]
     timeout: 30
 check_basic_install_capability:
   params:
@@ -780,7 +780,7 @@ check_create_operand_button_and_requied_badge_when_ready:
 check_create_operand_button_and_requied_badge_on_csv_details:
   elements:
   - selector:
-      xpath: //h4[contains(@class,'pf-v5-c-alert__title') and contains(.,'Ditto required')]
+      xpath: //h4[contains(@class,'c-alert__title') and contains(.,'Ditto required')]
   action: check_operand_button_link
 check_operand_button_link:
   element:
