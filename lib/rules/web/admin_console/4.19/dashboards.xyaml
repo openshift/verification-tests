@@ -820,7 +820,7 @@ check_memory_request:
 check_utilization_chart_details:
   elements:
   - selector:
-      xpath: //h4[text()='<graph_title>']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-v5-c-chart')]//*[name()='path' and contains(@style, 'rgb(236, 122, 8)')]
+      xpath: //h4[text()='<graph_title>']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'c-chart')]//*[name()='path' and contains(@style, 'rgb(202, 108, 15)')]
 
 click_filesystem_chart:
   element:
