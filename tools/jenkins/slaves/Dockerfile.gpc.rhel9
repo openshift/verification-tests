@@ -1,0 +1,59 @@
+FROM registry.redhat.io/ocp-tools-4/jenkins-agent-base-rhel9:v4.16.0
+
+LABEL vendor="Red Hat inc."
+LABEL maintainer="OCP QE Team"
+ENV USER_PATHS="$HOME /etc/machine-id /etc/passwd"
+
+RUN set -x && \
+    ls -lR /etc/pki/entitlement /etc/rhsm-host && \
+    rm -f /etc/rhsm-host && \
+    dnf repolist enabled && \
+    OLD_REPOS=$(dnf repolist enabled -q | sed 1d | cut -d'/' -f1 | awk '{print $1}') && \
+    ([ -n "$OLD_REPOS" ] && dnf config-manager --disable $OLD_REPOS || :) && \
+    NEW_REPOS="rhel-9-for-x86_64-appstream-rpms rhel-9-for-x86_64-baseos-rpms" && \
+    dnf config-manager --enable $NEW_REPOS && \
+    dnf config-manager --save --setopt=\*.skip_if_unavailable=1 $NEW_REPOS && \
+    dnf repolist enabled && \
+    dnf -y update --allowerasing --nobest --skip-broken --exclude=java-1.8.0-openjdk-headless,subscription-manager && \
+    INSTALL_PKGS="bsdtar dbus-tools mesa-libgbm" && \
+    dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
+    dnf -y module list nodejs && \
+    dnf -y module reset nodejs && \
+    dnf -y module enable nodejs:18 && \
+    dnf -y module install nodejs:18/common && \
+    CFT_VERSION='117.0.5938.88' && \
+    npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
+    find /chrome -type f -name chrome -exec ln -s {} /usr/local/bin/chrome \; && \
+    npx @puppeteer/browsers install chromedriver@${CFT_VERSION} && \
+    find /chromedriver -type f -name chromedriver -exec ln {} /usr/local/bin/chromedriver \; && \
+    GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
+    GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
+    curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s;$GECKODRIVER_RE;\1;p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
+    chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
+    dnf -y install --setopt=tsflags=nodocs https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
+    sed --in-place=.orig --regexp-extended 's%#baseurl=https://download.example/pub/epel/%baseurl=https://mirrors.edge.kernel.org/fedora-epel/%g' /etc/yum.repos.d/epel*.repo && \
+    sed --in-place --regexp-extended 's%^metalink=%#metalink=%g' /etc/yum.repos.d/epel*.repo && \
+    dnf config-manager --disable epel && \
+    dnf -y --enablerepo=epel install git-crypt && \
+    mkdir -p --mode=g+rw $HOME/bin
+
+# make sure context dir is at the repo root
+ADD . $HOME/verification-tests
+
+RUN set -x && \
+    chmod -R g=u "$HOME" && \
+    "$HOME/verification-tests/tools/install_os_deps.sh" && \
+    "$HOME/verification-tests/tools/hack_bundle.rb" && \
+    rpm -qa && \
+    dnf clean all -y && \
+    rm -rf $HOME/verification-tests /var/cache/yum /var/tmp/* /tmp/*
+
+RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
+RUN chown -R 1001:0 $HOME && \
+    chmod -R g=u,g+rw $USER_PATHS && \
+    find /etc/pki -type d \( -path /etc/pki/entitlement \) -prune -o -exec chmod -R g=u,g+rw {} \;
+
+# to fix https://github.com/bitnami/bitnami-docker-jenkins/issues/60
+RUN echo 'id -un 2>/dev/null || echo "default:x:`id -u`:`id -g`:Default Application User:${HOME}:/sbin/nologin" >> /etc/passwd' > /usr/local/bin/configure-agent
+
+USER 1001
