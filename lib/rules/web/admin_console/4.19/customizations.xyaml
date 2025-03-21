@@ -24,11 +24,9 @@ upload_file:
 check_console_notification:
   elements:
   - selector:
-      xpath: //div[@class='co-global-notification' and @data-test='<name>-<location>']//*[contains(text(), '<notification_text>')]
+      xpath: //div[@data-test='<name>-<location>']//*[contains(., '<notification_text>')]
   - selector:
-      css: '.co-global-notification[style*="background-color: <background>"]'
-  - selector:
-      css: '.co-global-notification[style*="color: <color>"]'
+      css: '[style*="background-color: <background>"][style*="color: <color>"]'
   params:
     text: <link_text>
     link_url: <link_url>
