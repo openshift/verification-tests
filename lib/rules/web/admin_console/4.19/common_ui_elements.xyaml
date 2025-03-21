@@ -317,7 +317,7 @@ click_label_filter_dropdown_button:
 click_label_dropdown_button:
   element:
     selector:
-      xpath: //label[contains(text(),'<label_text>')]/following::button[1][contains(@class,'dropdown')]
+      xpath: //label[contains(.,'<label_text>')]/following::button[1][contains(@data-test-id,'dropdown-button')]
     op: click
 toggle_label_input:
   element:
