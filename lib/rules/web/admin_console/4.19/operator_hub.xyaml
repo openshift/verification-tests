@@ -72,11 +72,10 @@ set_password:
     input_value: <password>
   action: set_label_input_simple
 set_k8s_resource:
-  params:
-    label_text: K8s Resource Prefix
-    filter_text: <k8s_resource>
-  action: click_label_dropdown_button
   elements:
+  - selector:
+      xpath: //label[contains(.,'K8s Resource Prefix')]/following::button[1][contains(@id,'k8sResourcePrefix')]
+    op: click
   - selector:
       xpath: //ul//a[@id='<k8s_resource>-Project-link']
     op: click
@@ -182,7 +181,7 @@ set_array_field_group:
 set_advanced_configuration:
   elements:
   - selector:
-      xpath: //button[contains(@class,'expandable-section__toggle')]
+      xpath: //button//*[contains(.,'Advanced configuration')]
     op: click
   params:
     label_text: Advanced
