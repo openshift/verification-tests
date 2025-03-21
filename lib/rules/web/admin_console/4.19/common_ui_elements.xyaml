@@ -900,7 +900,7 @@ choose_item_from_dropdown_menu:
       xpath: //button[contains(@data-test-id, 'dropdown-button')]
     op: click
   - selector:
-      xpath: //ul[contains(@class, 'dropdown__menu')]
+      xpath: //button[contains(@data-test-id, 'dropdown-menu')]
     timeout: 20
   action: click_dropdown_menu_item
 upload_file_for_one_field:
