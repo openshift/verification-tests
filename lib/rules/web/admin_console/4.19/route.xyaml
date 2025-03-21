@@ -115,14 +115,14 @@ set_weight_for_main_service:
   elements:
   - selector: &weight
       xpath: //input[@id='service-weight']
-    op: clear 
+    op: clear
   - selector: *weight
     op: send_keys <service_weight>
 set_weight_for_alternative_service:
   elements:
   - selector: &alternate-weight
       xpath: //input[contains(@id,'alternate-service-weight')]
-    op: clear          
+    op: clear
   - selector: *alternate-weight
     op: send_keys <alternative_service_weight>
 set_alternative_service:
@@ -249,6 +249,7 @@ enable_status_filter:
     op: click
     timeout: 20
 select_all_filters:
+  action: click_filter_dropdown
   action: clear_all_filters
 check_rejected_icon_and_text:
   params:
