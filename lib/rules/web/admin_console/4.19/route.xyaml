@@ -196,13 +196,13 @@ check_metrics_charts_on_route_overview:
   action: click_metrics_tab
   elements:
   - selector:
-      xpath: //div[contains(text(),'Traffic in')]/following::div[1]//div[@class='pf-v5-c-chart']
+      xpath: //div[contains(text(),'Traffic in')]/following::div[1]//div[contains(@class,'-c-chart')]
     timeout: 20
   - selector:
-      xpath: //div[contains(text(),'Traffic out')]/following::div[1]//div[@class='pf-v5-c-chart']
+      xpath: //div[contains(text(),'Traffic out')]/following::div[1]//div[contains(@class,'-c-chart')]
     timeout: 20
   - selector:
-      xpath: //div[contains(text(),'Connection rate')]/following::div[1]//div[@class='pf-v5-c-chart']
+      xpath: //div[contains(text(),'Connection rate')]/following::div[1]//div[contains(@class,'-c-chart')]
     timeout: 20
   - selector:
       xpath: //div[contains(@data-test,'datapoints-msg') and contains(text(),'No datapoints found')]
