@@ -86,35 +86,30 @@ set_strings_in_project_dropdown_filter_box:
   - selector: &dropdown_filter
       xpath: //input[@data-test='dropdown-text-filter']
     op: clear
+    timeout: 10
   - selector:
       <<: *dropdown_filter
     op: send_keys <project_name>
 toggle_namespace_dropdown:
-  params:
-    dropdown_name: namespace-bar
-  action: click_dropdown
+  element:
+    selector:
+      xpath: //div[contains(@data-test-id, 'namespace-bar-dropdown')]//button
+    op: click
+    timeout: 15
 switch_to_project:
   action:
     if_element:
-      selector: &namespace_dropdown_exist
-        xpath: //*[@data-test='namespace-dropdown-menu']
-      missing: true
+      selector:
+        xpath: //div[contains(@data-test-id, 'namespace-bar-dropdown')]//button[@aria-expanded="false"]
     ref: toggle_namespace_dropdown
-  element:
-    selector:
-      <<: *namespace_dropdown_exist
   action:
     if_element:
       selector:
         xpath: //input[@data-test='showSystemSwitch' and @data-checked-state='false']
+      timeout: 15
     ref: toggle_system_projects
   action: set_strings_in_project_dropdown_filter_box
   action: click_project_name
-  action:
-    if_element:
-      selector: &namespace_dropdown_exist
-        xpath: //*[@data-test='namespace-dropdown-menu']
-    ref: toggle_namespace_dropdown
 click_project_name:
   element:
     selector:
@@ -123,7 +118,7 @@ click_project_name:
 toggle_system_projects:
   element:
     selector:
-      xpath: //span[contains(@class,'pf-v5-c-switch__toggle')]
+      xpath: //span[contains(@class,'-c-switch__toggle')]
     op: click
 switch_to_all_projects:
   params:
