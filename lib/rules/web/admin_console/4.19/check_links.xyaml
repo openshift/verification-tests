@@ -3,6 +3,19 @@ check_doc_get_started_with_cli:
   - selector:
       xpath: //*[contains(@href, "/k8s/cluster/projects")]/button[contains(., "View My Projects")]
 check_brand:
+  action:
+    if_param:
+      product_name: my-custom-name
+    ref: check_brand_src
+  action:
+    if_param:
+      product_name: OKD
+    ref: check_brand_datasrc
+check_brand_src:
+  elements:
+  - selector:
+      xpath: //*[contains(@src, '<logo_source>')]
+check_brand_datasrc:
   elements:
   - selector:
       xpath: //*[contains(@data-src, '<logo_source>')]
