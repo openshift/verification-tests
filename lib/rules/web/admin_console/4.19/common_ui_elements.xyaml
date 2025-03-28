@@ -141,7 +141,7 @@ check_text_not_a_link:
 click_tab:
   elements:
   - selector: &tab
-      xpath: //a[contains(@data-test-id,'horizontal-link-<tab_name>')]
+      xpath: //a[@data-test-id='horizontal-link-<tab_name>']
     op: click
     timeout: 30
 check_tab:
