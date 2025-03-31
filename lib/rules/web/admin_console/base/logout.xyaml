@@ -1,7 +1,7 @@
 click_logout:
   elements:
   - selector:
-      xpath: //*[@data-test='user-dropdown-toggle']
+      xpath: //*[contains(@data-test, 'user-dropdown')]
     op: click
   - selector:
       xpath: //button[contains(., 'Log out')]

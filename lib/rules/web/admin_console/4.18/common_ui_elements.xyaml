@@ -947,7 +947,7 @@ skip_dev_perspective_tour:
       xpath: //button[@id='tour-step-footer-secondary' and text()='Skip tour']
     op: click
   - selector:
-      xpath: //b[contains(text(), 'Welcome to Dev')]
+      xpath: //b[contains(text(), 'Welcome to')]
     missing: true
 check_item_in_list:
   element:
