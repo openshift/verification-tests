@@ -7,14 +7,14 @@ More info you can find in [Overview document](doc/overview.adoc).
 ### Create local dev environment in container
 
 ```
-# you can replace oc416 with expected version you want
+# you can replace oc418 with expected version you want
 podman run --env LANG=en_US.UTF-8  --env LANGUAGE=en_US.UTF-8  --env LC_ALL=en_US.UTF-8 \
 	   --user root --shm-size 2g --interactive --tty --rm \
 	   --entrypoint bash \
 	   --volume "$REPLACE_ME/local/path/to/verification-tests:/verification-tests:z" \
 	   --volume "$REPLACE_ME/local/path/to/cucushift:/verification-tests/features/tierN:z" \
 	   --volume "$REPLACE_ME/local/path/to/cucushift-internal:/verification-tests/private:z" \
-       images.paas.redhat.com/aos-qe-ci/jenkins-agent-rhel8:cucushift-oc416
+       images.paas.redhat.com/aos-qe-ci/jenkins-agent-rhel8-cucushift-oc418:latest
 bash-4.4# cd /verification-tests/
 ```
 Then follow steps in [Test scenario execution](#test-scenario-execution)
