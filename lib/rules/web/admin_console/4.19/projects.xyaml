@@ -105,8 +105,8 @@ switch_to_project:
   action:
     if_element:
       selector:
-        xpath: //input[@data-test='showSystemSwitch' and @data-checked-state='false']
-      timeout: 15
+        xpath: //input[@data-test='showSystemSwitch' and @data-checked-state='true']
+      missing: true
     ref: toggle_system_projects
   action: set_strings_in_project_dropdown_filter_box
   action: click_project_name
@@ -118,7 +118,7 @@ click_project_name:
 toggle_system_projects:
   element:
     selector:
-      xpath: //span[contains(@class,'-c-switch__toggle')]
+      xpath: //span[contains(@class,'c-switch__toggle')]
     op: click
 switch_to_all_projects:
   params:
