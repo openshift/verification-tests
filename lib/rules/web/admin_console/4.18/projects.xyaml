@@ -106,7 +106,8 @@ switch_to_project:
   action:
     if_element:
       selector:
-        xpath: //input[@data-test='showSystemSwitch' and @data-checked-state='false']
+        xpath: //input[@data-test='showSystemSwitch' and @data-checked-state='true']
+      missing: true
     ref: toggle_system_projects
   action: set_strings_in_project_dropdown_filter_box
   action: click_project_name
