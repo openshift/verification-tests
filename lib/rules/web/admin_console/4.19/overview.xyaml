@@ -6,7 +6,7 @@ wait_overview_items_loaded:
 wait_pane_body_loaded:
   elements:
   - selector:
-      xpath: //div[@class='co-m-page__body co-m-Project']
+      xpath: //div[contains(@class,'loading-box__loaded')]
     timeout: 10
 wait_side_bar_loaded:
   elements:
