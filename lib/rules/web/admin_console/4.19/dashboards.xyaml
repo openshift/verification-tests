@@ -84,7 +84,7 @@ nagivate_to_monitoring_dashboards_page:
 check_grafana_dashboard_body_loaded:
   element:
     selector:
-      xpath: //div[contains(@class,'co-dashboard-body')]//*[contains(@class,'monitoring-dashboards')]
+      xpath: //*[@data-test-id="dashboard"]
     timeout: 90
 click_dashboard_dropdown:
   element:
