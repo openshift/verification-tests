@@ -74,7 +74,7 @@ check_sections_on_container_details:
 check_hpa_metrics_table:
   elements:
   - selector:
-      xpath: //div/h2[contains(@data-test-section-heading,'Metrics')]/following-sibling::div[contains(.,'Type')]/../div[contains(.,'Current')]/../div[contains(.,'Target')]
+      xpath: //div//h2[contains(@data-test-section-heading,'Metrics')]/following-sibling::*[contains(.,'Type') and contains(., 'Current') and contains(.,'Target')]
   action:
     if_param: target_resource_memory
     ref: check_target_resource_memory
