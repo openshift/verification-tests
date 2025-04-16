@@ -3,6 +3,7 @@ send_metrics_query:
   - selector: &metrics_query_input
       xpath: //div[contains(@contenteditable,'true') and contains(@class,'cm-content')]
     op: send_keys :backspace
+    timeout: 50
   - selector:
       <<: *metrics_query_input
     op: send_keys <metrics_name>
@@ -20,13 +21,13 @@ check_metrics_query_result:
   - selector:
       xpath: //td[text()='1']
 check_alerts_tab:
-  params:
-    tab_name: Alerts
-  action: check_tab
+  elements:
+  - selector:
+      xpath: //a[contains(., 'Alerts')]
 check_silences_tab:
-  params:
-    tab_name: Silences
-  action: check_tab
+  elements:
+  - selector:
+      xpath: //a[contains(., 'Silences')]
 browse_to_receiver_config:
   element:
     selector:
