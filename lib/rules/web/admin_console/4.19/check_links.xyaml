@@ -153,7 +153,7 @@ browse_to_cli_tools_page:
   action: click_help_button
   elements:
   - selector:
-      xpath: //span[contains(.,"Command Line Tools")]/ancestor::button[@role="menuitem"]
+      xpath: //span[contains(.,"Command Line Tools")]/ancestor::*[@role="menuitem"]
     op: click
 check_consolelink:
   action:
