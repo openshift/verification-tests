@@ -20,13 +20,14 @@ Given(/^I have an IPI deployment$/) do
       logger.warn "We will skip this scenario, even though it is IPI deployment"
       skip_this_scenario
     end
-    
-  rhel_nodes = BushSlicer::Node.get_labeled("node.openshift.io/os_id=rhel", user: admin)
-    if rhel_nodes.length > 0
-      logger.warn "There are rhel nodes and rhel nodes may created by machineset, tests running by copying existing machinesets will fail."
-      logger.warn "We will skip this scenario, even though it is IPI deployment"
-      skip_this_scenario
-    end 
+  if env.version_lt("4.19", user: user)  
+    rhel_nodes = BushSlicer::Node.get_labeled("node.openshift.io/os_id=rhel", user: admin)
+      if rhel_nodes.length > 0
+        logger.warn "There are rhel nodes and rhel nodes may created by machineset, tests running by copying existing machinesets will fail."
+        logger.warn "We will skip this scenario, even though it is IPI deployment"
+        skip_this_scenario
+      end
+    end
   end
 end
 
