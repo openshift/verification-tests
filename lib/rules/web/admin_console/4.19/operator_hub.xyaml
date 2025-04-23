@@ -954,9 +954,9 @@ check_plugin_status_on_operator_details_page:
       xpath: //dt[contains(.,'onsole plugins')]
     timeout: 30
   - selector:
-      xpath: //strong[contains(.,'<plugin_1_name>')]/parent::dd//button[.='<plugin_1_status>']
+      xpath: //strong[contains(.,'<plugin_1_name>')]/following-sibling::button[.='<plugin_1_status>']
   - selector:
-      xpath: //strong[contains(.,'<plugin_2_name>')]/parent::dd//button[.='<plugin_2_status>']
+      xpath: //strong[contains(.,'<plugin_2_name>')]/following-sibling::button[.='<plugin_2_status>']
 enable_plugin:
   params:
     source_status: Disabled
@@ -997,7 +997,7 @@ check_no_plugin_message_on_uninstall_modal:
 toggle_plugin_status:
   elements:
   - selector:
-      xpath: //strong[contains(.,'<plugin_name>')]/parent::dd//button[.='<source_status>']
+      xpath: //strong[contains(.,'<plugin_name>')]/following-sibling::button[.='<source_status>']
     op: click
   params:
     radio_text: <target_status>
