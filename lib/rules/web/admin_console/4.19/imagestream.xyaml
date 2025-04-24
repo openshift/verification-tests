@@ -1,7 +1,7 @@
 check_istag_warning_info:
   element:
     selector:
-      xpath: //div[span[contains(., '<istag_name>')]]/following-sibling::span[contains(., '<info>')]
+      xpath: //td[span[contains(., '<istag_name>')]]/following-sibling::td[contains(., '<info>')]
 check_imagestream_help_link:
   element:
     selector: &image_help_button

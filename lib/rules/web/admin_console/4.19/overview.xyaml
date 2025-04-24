@@ -111,18 +111,18 @@ check_error_icon_for_overview_item:
 wait_resource_summary_loaded:
   elements:
   - selector:
-      xpath: //dl[contains(@class,'co-m-pane__details') and @data-test-id='resource-summary']
+      xpath: //dl[contains(@class,'description-list') and @data-test-id='resource-summary']
     timeout: 20
 click_open_popover:
   elements:
   - selector:
-      xpath: //button[contains(., '<popover_item>')]
+      xpath: (//span[contains(., '<popover_item>')])[1]
     op: click
     timeout: 20
 check_popover_title:
   elements:
   - selector:
-      xpath: //*[contains(@id, 'popover')]//div[contains(text(),"<popover_item>")]
+      xpath: //*[contains(@id, 'popover')]//*[contains(text(),"<popover_item>")]
 check_run_policy_popover_info:
   params:
     content: RunPolicy describes how the new build created from this build configuration
