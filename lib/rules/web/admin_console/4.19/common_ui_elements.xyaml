@@ -1206,7 +1206,7 @@ check_resource_details_key_and_value:
 check_resource_details_key_only:
   element:
     selector:
-      xpath: //button[.='<key>']
+      xpath: //span[.='<key>']
 check_key_and_resource_link:
   element:
     selector:

@@ -139,10 +139,10 @@ filter_label_and_check_style:
   action: set_span_class
   elements:
     - selector:
-        xpath: //div[contains(@class, 'co-suggestion-box__suggestions')]//span[contains(text(),'<suggestion_text>')]
+        xpath: //div[contains(@class, 'co-suggestion-box')]//span[contains(text(),'<suggestion_text>')]
       timeout: 15
     - selector:
-        xpath: //button[contains(@class, 'co-suggestion-line') and //span[contains(text(),'<suggestion_text>')]]
+        xpath: //button[contains(@class, 'content') and //span[contains(text(),'<suggestion_text>')]]
       op: click
   action: check_filtered_item_style
 choose_console_language:
