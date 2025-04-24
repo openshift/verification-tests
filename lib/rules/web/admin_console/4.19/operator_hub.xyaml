@@ -792,28 +792,28 @@ click_create_ditto_button:
 check_status_descriptor_grouping:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(@data-test,'Namespace')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//span[contains(@data-test,'Namespace')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(@data-test,'Labels')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//span[contains(@data-test,'Labels')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(@data-test,'Status')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//span[contains(@data-test,'Status')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(@data-test,'Cluster Size')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//span[contains(@data-test,'Cluster Size')]
 check_spec_descriptor_grouping:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(@data-test,'Size')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//span[contains(@data-test,'Size')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(@data-test,'Pod')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//span[contains(@data-test,'Pod')]
 click_field_resource_limits_edit_button:
   elements:
   - selector:
-      xpath: //dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[text()='Resource limits']/following::button[1]
+      xpath: (//dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[.='Resource limits']/following::dd//button)[1]
     op: click
 click_field_resource_requests_edit_button:
   elements:
   - selector:
-      xpath: //dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[text()='Resource requests']/following::button[1]
+      xpath: (//dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[.='Resource requests']/following::dd//button)[1]
     op: click
 set_cpu_cores_value:
   params:
