@@ -401,7 +401,7 @@ click_first_item_from_sub_resource_list_and_check_breadcrumb:
 check_link_in_breadcrumb:
   element:
     selector:
-      xpath: //ol/li[<layer_number>]/a[contains(@data-test-id, 'breadcrumb-link') and contains(@href, '<link>') and contains(translate(normalize-space(text()), ' ',''),'<text>')]
+      xpath: //ol/li[<layer_number>]/a[contains(@href, '<link>') and contains(translate(normalize-space(text()), ' ',''),'<text>')]
 check_installedoperators_link_in_breadcrumb:
   params:
     layer_number: 1
@@ -770,6 +770,7 @@ check_link_and_text:
   element:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
+    timeout: 60
 click_link_with_text:
   element:
     selector:
@@ -1317,10 +1318,10 @@ check_resource_owner_type_and_link:
     resource_type: <resource_kind>
   elements:
   - selector:
-      xpath: //dt[contains(.,'Owner')]/following-sibling::dd[1]/span[contains(@class,'co-resource-item')]/span[@title='<resource_type>']
+      xpath: //dt[contains(.,'Owner')]/following-sibling::dd[1]//span[contains(@class,'co-resource-item')]/span[@title='<resource_type>']
     timeout: 20
   - selector:
-      xpath: //dt[contains(.,'Owner')]/following-sibling::dd[1]/span[contains(@class,'co-resource-item')]/a[@href='/k8s/ns/<project_name>/<resource_group>~<resource_version>~<resource_type>/<resource_name>' and text()='<resource_name>']
+      xpath: //dt[contains(.,'Owner')]/following-sibling::dd[1]//span[contains(@class,'co-resource-item')]/a[@href='/k8s/ns/<project_name>/<resource_group>~<resource_version>~<resource_type>/<resource_name>' and text()='<resource_name>']
     timeout: 20
 check_resource_desired_completions:
   params:
