@@ -94,7 +94,7 @@ click_dashboard_dropdown:
 check_dashboard_dropdown_item:
   element:
     selector: &dashboard_dropdown_item
-      xpath: //div[contains(@class, 'dashboard_dropdown_item')]/span[contains(text(), '<dropdown_menu_item>')]
+      xpath: //li[contains(@class, 'list-item')]//button[contains(., '<dropdown_menu_item>')]
 click_dashboard_dropdown_item:
   element:
     selector:
@@ -326,17 +326,17 @@ close_breakdown_modal:
 check_on_monitoring_metrics_page:
   elements:
   - selector:
-      xpath: //button[text()='Add query']
+      xpath: //button[.='Add query']
     timeout: 60
   - selector:
-      xpath: //button[text()='Run queries']
+      xpath: //button[.='Run queries']
   - selector:
       xpath: //div[contains(@class,'c-chart')]
     timeout: 30
 check_textarea:
   element:
     selector:
-      xpath: //div[contains(@class,'query-browser__query-input')]
+      xpath: //tbody
 check_metrics_query_cpu_by_project:
   scripts:
   - command:
