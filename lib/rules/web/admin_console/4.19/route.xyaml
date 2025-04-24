@@ -272,7 +272,7 @@ check_extendedValidationFailed_in_conditions_table:
 check_conditions_table:
   elements:
   - selector:
-      xpath: //h3[contains(.,'Conditions')]/following-sibling::div[contains(.,'Type')]/../div[contains(.,'Status')]/../div[contains(.,'Reason')]/../div[contains(.,'Message')]
+      xpath: //h3[contains(.,'Conditions')]/following-sibling::table//tr[th[contains(.,'Type')] and th[contains(.,'Status')] and th[contains(.,'Reason')] and th[contains(.,'Message')]]
   action:
     if_param: type
     ref: check_type_in_conditions_table

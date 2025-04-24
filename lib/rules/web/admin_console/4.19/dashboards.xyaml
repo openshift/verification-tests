@@ -794,19 +794,19 @@ click_progressing_icon_link_in_cluster_inventory:
 check_charts_in_project_utilization:
   elements:
   - selector:
-      xpath: //h4[text()='CPU']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-v5-c-chart')]
+      xpath: //h4[text()='CPU']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'-c-chart')]
     timeout: 40
   - selector:
-      xpath: //h4[text()='Memory']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-v5-c-chart')]
+      xpath: //h4[text()='Memory']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'-c-chart')]
     timeout: 40
   - selector: &filesystem_chart
-      xpath: //h4[text()='Filesystem']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-v5-c-chart')]
+      xpath: //h4[text()='Filesystem']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'-c-chart')]
     timeout: 40
   - selector:
-      xpath: //h4[text()='Network transfer']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-v5-c-chart')]
+      xpath: //h4[text()='Network transfer']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'-c-chart')]
     timeout: 40
   - selector:
-      xpath: //h4[text()='Pod count']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-v5-c-chart')]
+      xpath: //h4[text()='Pod count']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'-c-chart')]
     timeout: 40
 
 check_cpu_request:

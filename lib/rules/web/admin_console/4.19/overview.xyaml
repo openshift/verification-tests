@@ -222,7 +222,7 @@ check_workload_selected:
 check_workload_name:
   elements:
   - selector:
-      xpath: //div[@class='resource-overview__summary']//button[.='Name']
+      xpath: //div[@class='resource-overview__summary']//span[.='Name']
 check_hint_missing_on_filter:
   elements:
   - selector:

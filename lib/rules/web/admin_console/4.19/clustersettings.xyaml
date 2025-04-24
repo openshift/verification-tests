@@ -80,8 +80,10 @@ check_columns_for_cs:
 check_catalogsource_operators_info:
   params:
     tab_name: Operators
+    filter_text: Anzo Operator
   action: click_tab
   action: wait_table_loaded
+  action: filter_by_name
   elements:
   - selector:
       xpath: //h1[contains(.,'Anzo Operator')]
