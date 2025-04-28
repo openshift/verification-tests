@@ -450,7 +450,7 @@ goto_command_line_tools:
   url: command-line-tools
   element:
     selector:
-      xpath: //div[contains(text(), "Command Line Tools")]
+      xpath: //h1[contains(text(), "Command Line Tools")]
     timeout: 15
 goto_test_consumer_page:
   url: /test-consumer
