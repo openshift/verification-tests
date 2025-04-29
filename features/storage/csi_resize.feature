@@ -98,7 +98,7 @@ Feature: CSI Resizing related feature
       | p             | {"spec":{"resources":{"requests":{"storage":"1Gi"}}}} |
     Then the step should fail
     And the output should match:
-      | Forbidden.*field can not be less than previous value |
+      | Forbidden.*field can not be less than (previous value\|status\.capacity) |
 
     @rosa @osd_ccs
     @aws-ipi
