@@ -402,6 +402,7 @@ check_link_in_breadcrumb:
   element:
     selector:
       xpath: //ol/li[<layer_number>]/a[contains(@href, '<link>') and contains(translate(normalize-space(text()), ' ',''),'<text>')]
+    timeout: 40
 check_installedoperators_link_in_breadcrumb:
   params:
     layer_number: 1
@@ -457,7 +458,7 @@ check_imagestreamtagdetails_text_in_breadcrumb:
 check_text_in_breadcrumb:
   element:
     selector:
-      xpath: //ol[contains(@class, 'breadcrumb__list')]/li[<layer_number>][normalize-space(text())='<text>']
+      xpath: //ol[contains(@class, 'breadcrumb__list')]/li[<layer_number>][normalize-space(.)='<text>']
 
 check_row_filter_on_page:
   elements:
@@ -871,7 +872,7 @@ click_item_in_resource_list:
 click_first_sub_item_in_resource_detail_list:
   elements:
   - selector:
-      xpath: (//div[@class='co-m-table-grid__body']//a)[1]
+      xpath: (//table//a)[1]
     op: click
 click_first_item_in_grid_cell_list:
   elements:
