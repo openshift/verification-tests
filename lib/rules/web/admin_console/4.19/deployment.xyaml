@@ -35,7 +35,7 @@ search_image:
   action: set_input_value
   elements:
   - selector:
-      xpath: //span[contains(.,'Deploy Image')]
+      xpath: //*[contains(text(),'Deploy Image')]
     op: click
 search_nonexisted_image_and_check_message:
   params:

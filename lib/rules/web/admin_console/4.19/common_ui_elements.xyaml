@@ -10,19 +10,19 @@ expand_monitoring_menu:
 create_resource_by_default_yaml:
   elements:
   - selector:
-      xpath: //button[@id="yaml-create"]
+      id: yaml-create
     op: click
   action:
     if_element:
       selector:
-        xpath: //a[text()='Edit YAML']
+        id: yaml-link
     ref: click_edit_yaml_link
   action: wait_page_body_loaded
   action: click_create_button
 click_edit_yaml_link:
   elements:
   - selector:
-        xpath: //a[text()='Edit YAML']
+      id: yaml-link
     op: click
   - selector:
       xpath: //div[contains(@class,'view-lines')]
