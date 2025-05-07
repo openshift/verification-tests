@@ -133,6 +133,7 @@ Feature: Machine-api components upgrade tests
   @critical
   @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @level0
+  @users=upuser1,upuser2
   Scenario: Scale up and scale down a machineSet after upgrade - prepare
     Given the expression should be true> "True" == "True"
 
@@ -150,6 +151,7 @@ Feature: Machine-api components upgrade tests
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @level0
+  @users=upuser1,upuser2
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
