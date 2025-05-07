@@ -14,7 +14,7 @@ check_brand:
 check_brand_src:
   elements:
   - selector:
-      xpath: //*[contains(@src, '<logo_source>')]
+      xpath: //*[contains(@src, '<logo_source>')] | //*[contains(@alt, '<product_name>')]
 check_brand_datasrc:
   elements:
   - selector:
