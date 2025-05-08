@@ -93,9 +93,17 @@ check_regular_expression_link:
       xpath: //a[@href='https://github.com/google/re2/wiki/Syntax']
 input_silence_comments:
   params:
-    label_text: Comment
+    aria_label_text: Comment
     input_value: <comment_text>
-  action: set_label_textarea
+  elements:
+  - selector: &label_textarea
+      xpath: //span/textarea[@aria-label='<aria_label_text>']
+    op: clear
+    type: textarea
+  - selector:
+      <<: *label_textarea
+    op: send_keys <input_value>
+    type: textarea
 perform_silence:
   action: submit_changes
 check_silence_detail:
