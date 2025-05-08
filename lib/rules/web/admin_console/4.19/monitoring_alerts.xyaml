@@ -37,9 +37,16 @@ set_span_class:
       xpath: //span[contains(@class, '<class_text>')]//input[@data-test-id='item-filter']
     op: send_keys <input_value>
     type: input
+expand_alert_button:
+  element:
+    selector:
+      xpath: //button/span[@class='pf-v6-c-button__icon']
+    op: click
+    timeout: 60
 open_alert_detail:
   action: Disable_all_filters
   action: filter_alert
+  action: expand_alert_button
   action: click_alert_link_with_text
 open_alert_detail_href:
   action: Disable_all_filters
