@@ -132,7 +132,7 @@ silence_alert_from_detail_check_fields:
 click_alert_link_with_text:
   element:
     selector:
-      xpath: //a[text()='<alert_name>' and @data-test-id='alert-resource-link']
+      xpath: //a[text()='<alert_name>' and @data-test-id='alert-resource-link' and contains(@href, '/monitoring/alerts')]
     op: click
     timeout: 60
 click_actions_button:
