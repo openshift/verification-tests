@@ -26,11 +26,12 @@ check_header_and_link:
 check_spec:
   params:
     content: additionalTrustedCA
-    button_text: Build
+    layer_number: 1
+    text: Build
     header_name: spec
   action: click_view_details_for_one_field
   action: check_page_contains
-  action: click_button
+  action: click_text_in_breadcrumb
   action: check_view_details_for_one_field
 check_view_details_for_one_field:
   element:
