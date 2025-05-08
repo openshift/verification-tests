@@ -21,9 +21,14 @@ create_app_from_imagestream:
     ref: set_label
   action: click_create_button
 click_try_sample:
-  params:
-    button_text: Try sample
-  action: click_button
+  scripts:
+  - command:
+      return document.querySelector("input[id='form-input-git-url-field']").scrollIntoView(true)
+    expect_result: ~
+  element:
+    selector:
+      xpath: //*[contains(text(), 'Try sample')]
+    op: click
 set_app_name:
   params:
     input_field_id: form-input-name-field
@@ -53,11 +58,11 @@ open_deployment_env_edit:
     button_text: Deployment
   action: click_button
 set_label:
-  params:
-    button_text: Labels
-  action: click_button
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //button[.='Labels']
+    op: click
+  - selector:
       xpath: //h2[contains(., 'Labels')]/following-sibling::div//input
     op: send_keys <label>
 create_app_from_deploy_image:
