@@ -341,7 +341,7 @@ goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
   element:
     selector:
-      xpath: //span[text()='MachineConfigPools']
+      xpath: //*[text()='MachineConfigPools']
     timeout: 30
 goto_machine_sets_page:
   url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet
