@@ -55,7 +55,7 @@ open_alert_detail_href:
 open_silence_detail:
   action: filter_alert
   action: clear_pending_filter_if_exists
-  action: click_alert_link_with_text
+  action: click_silence_link_with_text
 check_alert_detail:
   params:
     content: alertname=Watchdog
@@ -148,6 +148,12 @@ click_alert_link_with_text:
   element:
     selector:
       xpath: //a[text()='<alert_name>' and @data-test-id='alert-resource-link' and contains(@href, '/monitoring/alerts')]
+    op: click
+    timeout: 60
+click_silence_link_with_text:
+  element:
+    selector:
+      xpath: //a[text()='<alert_name>' and @data-test-id='silence-resource-link' and contains(@href, '/monitoring/silences')]
     op: click
     timeout: 60
 click_actions_button:
