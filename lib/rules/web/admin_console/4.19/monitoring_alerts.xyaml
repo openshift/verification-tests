@@ -240,7 +240,7 @@ status_specific_alert_no_clear:
   action: filter_alert
   element:
     selector:
-      xpath: //tbody[@class='pf-v6-c-table__tbody']//td[text()='<status>'][1]
+      xpath: //tbody[@class='pf-v6-c-table__tbody']//td//span[text()='<status>'][1]
 status_specific_alert:
   action: Disable_all_filters
   action: filter_alert
