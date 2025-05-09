@@ -104,15 +104,15 @@ navigate_to_dev_console:
   action:
     if_element:
       selector:
-        xpath: //div[@id='guided-tour-modal']//button[text()='Skip tour']
+        xpath: //div[@id='guided-tour-modal']//button[.='Skip tour']
       timeout: 30
     ref: skip_dev_perspective_tour
 navigate_to_admin_console:
   action:
     if_element:
       selector:
-        xpath: //div[@id='guided-tour-modal']//button[text()='Skip tour']
-      timeout: 20
+        xpath: //div[@id='guided-tour-modal']//button[.='Skip tour']
+      timeout: 30
     ref: skip_dev_perspective_tour
 check_active_perspective:
   action:
