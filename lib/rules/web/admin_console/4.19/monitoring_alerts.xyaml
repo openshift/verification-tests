@@ -37,9 +37,16 @@ set_span_class:
       xpath: //span[contains(@class, '<class_text>')]//input[@data-test-id='item-filter']
     op: send_keys <input_value>
     type: input
+expand_alert_button:
+  element:
+    selector:
+      xpath: //button/span[@class='pf-v6-c-button__icon']
+    op: click
+    timeout: 60
 open_alert_detail:
   action: Disable_all_filters
   action: filter_alert
+  action: expand_alert_button
   action: click_alert_link_with_text
 open_alert_detail_href:
   action: Disable_all_filters
@@ -48,7 +55,7 @@ open_alert_detail_href:
 open_silence_detail:
   action: filter_alert
   action: clear_pending_filter_if_exists
-  action: click_alert_link_with_text
+  action: click_silence_link_with_text
 check_alert_detail:
   params:
     content: alertname=Watchdog
@@ -86,9 +93,17 @@ check_regular_expression_link:
       xpath: //a[@href='https://github.com/google/re2/wiki/Syntax']
 input_silence_comments:
   params:
-    label_text: Comment
+    aria_label_text: Comment
     input_value: <comment_text>
-  action: set_label_textarea
+  elements:
+  - selector: &label_textarea
+      xpath: //span/textarea[@aria-label='<aria_label_text>']
+    op: clear
+    type: textarea
+  - selector:
+      <<: *label_textarea
+    op: send_keys <input_value>
+    type: textarea
 perform_silence:
   action: submit_changes
 check_silence_detail:
@@ -132,13 +147,19 @@ silence_alert_from_detail_check_fields:
 click_alert_link_with_text:
   element:
     selector:
-      xpath: //a[text()='<alert_name>']
+      xpath: //a[text()='<alert_name>' and @data-test-id='alert-resource-link' and contains(@href, '/monitoring/alerts')]
+    op: click
+    timeout: 60
+click_silence_link_with_text:
+  element:
+    selector:
+      xpath: //a[text()='<alert_name>' and @data-test-id='silence-resource-link' and contains(@href, '/monitoring/silences')]
     op: click
     timeout: 60
 click_actions_button:
   element:
     selector:
-      xpath: //button[@class='pf-v5-c-dropdown__toggle']
+      xpath: //button[@class='pf-v6-c-menu-toggle']
     op: click
 expire_alert_from_detail:
   action: click_first_action_icon
@@ -191,7 +212,7 @@ expire_alert_from_actions:
 wait_exipre_silence_loaded:
   elements:
   - selector:
-      xpath: //button[text()='Expire silence']
+      xpath: //button//span[text()='Expire silence']
     timeout: 60
 click_duration_dropdown_button:
   element:
@@ -225,7 +246,7 @@ status_specific_alert_no_clear:
   action: filter_alert
   element:
     selector:
-      xpath: //div[@aria-label='Alerts']//td[text()='<status>'][1]
+      xpath: //tbody[@class='pf-v6-c-table__tbody']//td//span[text()='<status>'][1]
 status_specific_alert:
   action: Disable_all_filters
   action: filter_alert
@@ -362,7 +383,7 @@ hide_show_alert_graph_button:
 Disable_all_filters:
   element:
     selector:
-      xpath: //button[text()='Clear all filters']
+      xpath: //button/span[text()='Clear all filters']
     op: click
     timeout: 60
 clear_specifc_filter:
