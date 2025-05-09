@@ -337,6 +337,7 @@ goto_machines_page:
 # machine config
 goto_machineconfigs_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
+  action: wait_box_loaded
 goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
   element:
