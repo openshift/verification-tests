@@ -333,6 +333,7 @@ check_editor_is_monaco_editor:
   element:
     selector:
       xpath: //div[@class='yaml-editor']//div[contains(@class,'monaco-editor')]
+    timeout: 30
 check_content_in_yaml_editor:
   element:
     selector:
