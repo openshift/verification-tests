@@ -876,7 +876,7 @@ check_complete_description:
 check_operand_description_contains:
   element:
     selector:
-      xpath: //span[contains(text(),'<operand_kind>')]//ancestor::div//iframe
+      xpath: //*[contains(text(),'<operand_kind>')]//ancestor::div//iframe
     timeout: 20
   scripts:
   - command: |
