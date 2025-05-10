@@ -71,7 +71,7 @@ Given /^I have a browser with:$/ do |table|
   ]
   browser_opts.any? do |file|
     if File.exist? file
-      init_params.merge! YAML.load_file(file)
+      init_params.merge! YAML.safe_load_file(file, aliases: true, permitted_classes: [Symbol, Regexp])
     end
   end
   if conf[:browser]
