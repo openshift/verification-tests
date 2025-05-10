@@ -28,7 +28,7 @@ When /^admin creates a VolumeSnapshotClass replacing paths:$/ do |table|
     raise "No volumesnapshot template for #{iaas_type} platform"
   end
 
-  resource_hash = YAML.load_file file
+  resource_hash = YAML.safe_load_file file, aliases: true, permitted_classes: [Symbol, Regexp]
   # replace paths from table
   table.raw.each do |path, value|
     eval "resource_hash#{path} = value"

@@ -190,7 +190,7 @@ def report_query_result(options)
   table.head = ['case_id', 'summary', 'ruby script', 'auto_by']
 
   query_file = options.query
-  params = YAML.load_file(query_file)
+  params = YAML.safe_load_file(query_file, aliases: true, permitted_classes: [Symbol, Regexp])
   params_hash = BushSlicer::Collections.hash_symkeys(params['filters'])
 
   # translate tag names into ids

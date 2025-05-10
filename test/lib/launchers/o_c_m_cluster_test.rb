@@ -183,7 +183,7 @@ class MyTest < Test::Unit::TestCase
       ocm = BushSlicer::OCMCluster.new(options)
       ocm.create_osd("osd4-001")
       ocpinfo_file = File.join(BushSlicer::Host.localhost.workdir, 'install-dir', 'OCPINFO.yml')
-      ocpinfo = YAML.load_file(ocpinfo_file)
+      ocpinfo = YAML.safe_load_file(ocpinfo_file, aliases: true, permitted_classes: [Symbol, Regexp])
       assert_equal('osd4-001.w95o.s1.foo.com', ocpinfo['ocp_domain'])
       assert_equal('https://console-openshift-console.apps.osd4-001.w95o.s1.foo.com', ocpinfo['ocp_console_url'])
       assert_equal('https://api.osd4-001.w95o.s1.foo.com:6443', ocpinfo['ocp_api_url'])

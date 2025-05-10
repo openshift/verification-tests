@@ -62,7 +62,7 @@ module BushSlicer
           "the template launcher"
         c.action do |args, options|
           say 'terminating..'
-          terminate(YAML.load_file args[0])
+          terminate(YAML.safe_load_file args[0], aliases: true, permitted_classes: [Symbol, Regexp])
         end
       end
 
