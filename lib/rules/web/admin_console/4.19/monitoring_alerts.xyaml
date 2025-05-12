@@ -223,7 +223,7 @@ set_silence_duration:
   action: click_duration_dropdown_button
   element:
     selector:
-      xpath: //label[text()='For...']//..//button
+      xpath: //span[text()='For...']//..//..///..//button
     op: click
 set_silence_duration_null:
   action: click_duration_dropdown_button
