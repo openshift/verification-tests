@@ -234,7 +234,7 @@ set_silence_duration_null:
 check_silence_duration_null:
   element:
     selector:
-      xpath: //label[text()='For...']/..//span[text()='-']
+      xpath: //button[@class='pf-v6-c-menu-toggle pf-m-full-width']//span[text()='-']
 set_invalid_end_time_silence:
   params:
     label_text: Until...
