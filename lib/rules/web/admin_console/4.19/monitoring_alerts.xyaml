@@ -81,12 +81,12 @@ click_silence_alert:
 uncheck_start_from_now:
   element:
     selector:
-      xpath: //h2[text()='Duration']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
+      xpath: //input[@id='start-immediately' and @type='checkbox']
     op: click
 ensure_start_from_now_checked:
   element:
     selector:
-      xpath: //h2[text()='Duration']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox'][@checked]
+      xpath: //input[@id='start-immediately' and @type='checkbox'][@checked]
 check_regular_expression_link:
   element:
     selector:
