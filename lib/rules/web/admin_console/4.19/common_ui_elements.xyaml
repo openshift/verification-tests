@@ -53,7 +53,7 @@ click_cancel_button:
 click_button:
   element:
     selector:
-      xpath: //button[contains(.,'<button_text>')] | //span[contains(.,'<button_text>')]
+      xpath: //button[contains(.,'<button_text>')]
     timeout: 60
     op: click
 click_button_text:
