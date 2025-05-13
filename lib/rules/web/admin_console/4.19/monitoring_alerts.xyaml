@@ -81,12 +81,12 @@ click_silence_alert:
 uncheck_start_from_now:
   element:
     selector:
-      xpath: //h2[text()='Duration']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
+      xpath: //input[@id='start-immediately' and @type='checkbox']
     op: click
 ensure_start_from_now_checked:
   element:
     selector:
-      xpath: //h2[text()='Duration']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox'][@checked]
+      xpath: //input[@id='start-immediately' and @type='checkbox'][@checked]
 check_regular_expression_link:
   element:
     selector:
@@ -217,24 +217,24 @@ wait_exipre_silence_loaded:
 click_duration_dropdown_button:
   element:
     selector:
-      xpath: //button[@class='pf-v5-c-menu-toggle pf-m-full-width']
+      xpath: //button[@class='pf-v6-c-menu-toggle pf-m-full-width']
     op: click
 set_silence_duration:
   action: click_duration_dropdown_button
   element:
     selector:
-      xpath: //label[text()='For...']//..//button
+      xpath: //span[text()='For...']//..//..//..//button
     op: click
 set_silence_duration_null:
   action: click_duration_dropdown_button
   element:
     selector:
-      xpath: //ul[@class='pf-v5-c-menu__list']//span[text()='-']
+      xpath: //ul[@class='pf-v6-c-menu__list']//span[text()='-']
     op: click
 check_silence_duration_null:
   element:
     selector:
-      xpath: //label[text()='For...']/..//span[text()='-']
+      xpath: //button[@class='pf-v6-c-menu-toggle pf-m-full-width']//span[text()='-']
 set_invalid_end_time_silence:
   params:
     label_text: Until...
