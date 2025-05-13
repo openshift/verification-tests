@@ -257,7 +257,7 @@ status_specific_silence:
   action: filter_alert
   element:
     selector:
-      xpath: //div[@aria-label='Silences']//td[text()='<status>'][1]
+      xpath: //div[@aria-label='Silences']//td//div[text()='<status>'][1]
 status_specific_alert_rule_no_clear:
   action: filter_alert
   action: check_specific_alert
