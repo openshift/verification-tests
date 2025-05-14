@@ -93,9 +93,9 @@ fill_pvc_form:
     ref: choose_request_size_unit
 create_persistent_volume_claims:
   params:
-    button_text: Create PersistentVolumeClaim
+    button_id: yaml-create
   action: goto_persistentvolumeclaims_page
-  action: click_button
+  action: click_button_by_id
   action: fill_pvc_form
   action: submit_changes
 expand_pvc_size:
