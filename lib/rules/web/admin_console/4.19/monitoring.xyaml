@@ -23,11 +23,12 @@ check_metrics_query_result:
 check_alerts_tab:
   elements:
   - selector:
-      xpath: //a[contains(., 'Alerts')]
+      xpath: //ul[@role='tablist' and contains(., 'Alerts')]
+    timeout: 30
 check_silences_tab:
   elements:
   - selector:
-      xpath: //a[contains(., 'Silences')]
+      xpath: //ul[@role='tablist' and contains(., 'Silences')]
 browse_to_receiver_config:
   element:
     selector:
