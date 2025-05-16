@@ -205,7 +205,7 @@ module BushSlicer
           test_run_id = args.first
 
           if options.testcase_file
-            new_status = YAML.load_file(File.expand_path(options.testcase_file))
+            new_status = YAML.safe_load_file(File.expand_path(options.testcase_file), aliases: true, permitted_classes: [Symbol, Regexp])
           else
             new_status = options.status
             new_status ||= 'Waiting'
