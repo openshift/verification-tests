@@ -171,14 +171,16 @@ set_sc_provisioner_type:
   action: click_button_by_id
   action: click_one_item
 create_storageclass_from_form:
-  params:
-    button_text: Create StorageClass
   action: goto_storageclass_page
-  action: click_button
+  action: click_create_storageclass
   action: wait_form_loaded
   action: set_storageclass_name
   action: set_provisioner
   action: click_create_button
+click_create_storageclass:
+  params:
+    button_id: yaml-create
+  action: click_button_by_id
 set_iops_value:
   params:
     input_field_id: storage-class-provisioner-iops-per-gi-b
