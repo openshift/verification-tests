@@ -166,7 +166,7 @@ expire_alert_from_detail:
   action: click_expire_alert_button
 click_first_action_icon:
   params:
-    aria_label_text: Actions
+    aria_label_text: kebab dropdown toggle
     index: 1
   action: click_icon_index_button
 click_expire_alert_button:
@@ -252,7 +252,7 @@ status_specific_alert:
   action: filter_alert
   element:
     selector:
-      xpath: //div[@aria-label='Alerts']//td[text()='<status>'][1]
+      xpath: //tbody[@class='pf-v6-c-table__tbody']//td//span[text()='<status>'][1]
 status_specific_silence:
   action: filter_alert
   element:
