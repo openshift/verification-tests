@@ -166,7 +166,7 @@ expire_alert_from_detail:
   action: click_expire_alert_button
 click_first_action_icon:
   params:
-    aria_label_text: Actions
+    aria_label_text: kebab dropdown toggle
     index: 1
   action: click_icon_index_button
 click_expire_alert_button:
