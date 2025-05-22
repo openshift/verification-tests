@@ -154,6 +154,7 @@ Feature: Service related networking scenarios
   @proxy @noproxy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @level0
   Scenario: OCP-24668:SDN externalIP defined in service but no spec.externalIP defined
     Given I have a project
     # Create a service with a externalIP
