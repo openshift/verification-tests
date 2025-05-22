@@ -37,8 +37,8 @@ insert_snippet:
   action: click_button
 click_create_job:
   params:
-      button_text: Create Job
-  action: click_button
+      button_id: yaml-create
+  action: click_button_by_id
 click_schema:
   params:
       button_text: Schema
