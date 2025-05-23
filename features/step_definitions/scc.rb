@@ -13,7 +13,7 @@ Given /^the following scc policy is created: (.+)$/ do |policy|
   raise "no policy template found: #{path}" unless File.exist?(path)
 
   ## figure out policy name for clean-up
-  policy_name = YAML.load_file(path)["metadata"]["name"]
+  policy_name = YAML.safe_load_file(path, aliases: true, permitted_classes: [Symbol, Regexp])["metadata"]["name"]
   raise "no policy name in template" unless policy_name
 
   @result = admin.cli_exec(:create, f: path)
