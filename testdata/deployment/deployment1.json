@@ -9,6 +9,7 @@
         }
     },
     "spec": {
+        "minReadySeconds": 10,
         "strategy": {
             "type": "Recreate",
             "recreateParams": {
