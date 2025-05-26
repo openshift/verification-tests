@@ -88,7 +88,7 @@ Feature: deployment related steps
   @proxy @noproxy @connected
   @critical
   @hypershift-hosted
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   Scenario: OCP-11046:Workloads Add perma-failed - Deployment failed after pausing and resuming
     Given I have a project
     Given I obtain test data file "deployment/deployment-perme-failed-1.yaml"

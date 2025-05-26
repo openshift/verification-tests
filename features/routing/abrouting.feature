@@ -8,7 +8,7 @@ Feature: Testing abrouting
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @hypershift-hosted
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @noproxy
   Scenario: OCP-12076:NetworkEdge Set backends weight for unsecure route
     Given I switch to cluster admin pseudo user
@@ -98,7 +98,7 @@ Feature: Testing abrouting
   @noproxy @connected
   @critical
   @hypershift-hosted
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   Scenario: OCP-11970:NetworkEdge Set backends weight for reencrypt route
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -196,7 +196,7 @@ Feature: Testing abrouting
   @noproxy @connected
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @critical
   Scenario: OCP-13519:NetworkEdge The edge route with multiple service will set load balance policy to RoundRobin by default
     #Create pod/service/route
@@ -293,7 +293,7 @@ Feature: Testing abrouting
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -383,7 +383,7 @@ Feature: Testing abrouting
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical

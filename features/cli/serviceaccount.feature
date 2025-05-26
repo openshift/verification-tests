@@ -8,7 +8,7 @@ Feature: ServiceAccount and Policy Managerment
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
@@ -47,7 +47,7 @@ Feature: ServiceAccount and Policy Managerment
   @upgrade-sanity
   @singlenode
   @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
@@ -94,7 +94,7 @@ Feature: ServiceAccount and Policy Managerment
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
   @singlenode
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa

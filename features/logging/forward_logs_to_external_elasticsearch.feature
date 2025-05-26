@@ -90,7 +90,7 @@ Feature: Cases to test forward logs to external elasticsearch
     @singlenode
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @proxy @noproxy @disconnected @connected
     @heterogeneous @arm64 @amd64
     @logging5.8 @logging5.7 @logging5.6 @logging5. @logging5.5
@@ -206,7 +206,7 @@ Feature: Cases to test forward logs to external elasticsearch
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @proxy @noproxy @disconnected @connected
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @logging5.8 @logging5.7 @logging5.6 @logging5.5
     Examples:
       | case_id           | version | scheme | client_auth | username | password | secret_name |
