@@ -12,7 +12,7 @@ Feature: Elasticsearch related tests
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-22050:Logging Elasticsearch using dynamic volumes
@@ -56,7 +56,7 @@ Feature: Elasticsearch related tests
   @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @amd64
   Scenario: OCP-30776:Logging Elasticsearch6 new data modle indices
     Given I switch to the first user
@@ -91,7 +91,7 @@ Feature: Elasticsearch related tests
   @logging5.8 @logging5.7 @logging5.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @critical
   Scenario: OCP-28140:Logging Elasticsearch retention policy testing

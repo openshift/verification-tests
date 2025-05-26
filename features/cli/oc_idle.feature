@@ -8,7 +8,7 @@ Feature: oc idle
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -61,7 +61,7 @@ Feature: oc idle
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -107,7 +107,7 @@ Feature: oc idle
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -158,7 +158,7 @@ Feature: oc idle
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -197,7 +197,7 @@ Feature: oc idle
   @proxy @noproxy @disconnected @connected
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @critical
   Scenario: OCP-10941:Node Idling service with dc
     Given I have a project
@@ -268,7 +268,7 @@ Feature: oc idle
   @proxy @noproxy @disconnected @connected
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @critical
   Scenario: OCP-11345:Node Idling service with rc
     Given I have a project

@@ -11,7 +11,7 @@ Feature: creating 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -39,7 +39,7 @@ Feature: creating 'apps' with CLI
   @noproxy @connected
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @inactive
   @critical
   Scenario: OCP-12399:BuildAPI Create an application from source code
@@ -205,7 +205,7 @@ Feature: creating 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical

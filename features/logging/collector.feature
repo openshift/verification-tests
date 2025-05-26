@@ -9,7 +9,7 @@ Feature: collector related tests
   @proxy @noproxy @disconnected @connected
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @critical
   Scenario: OCP-25767:Logging All nodes logs are sent to Elasticsearch
     Given the master version == "4.1"
@@ -53,7 +53,7 @@ Feature: collector related tests
   @commonlogging
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   @critical
   Scenario: OCP-24837:Logging All nodes logs had sent logs to Elasticsearch
@@ -117,7 +117,7 @@ Feature: collector related tests
     @proxy @noproxy @disconnected @connected
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     Examples:
       | case_id           | index_name  |
       | OCP-25365:Logging | .operations | # @case_id OCP-25365
@@ -129,7 +129,7 @@ Feature: collector related tests
   @commonlogging
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   Scenario: OCP-18147:Logging The Container logs metadata check
     Given the master version == "4.1"
@@ -172,7 +172,7 @@ Feature: collector related tests
   @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-25768:Logging The container logs metadata check
     Given the master version >= "4.2"
@@ -216,7 +216,7 @@ Feature: collector related tests
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @critical
   Scenario: OCP-30084:Logging All nodes logs are collected
@@ -263,7 +263,7 @@ Feature: collector related tests
   @logging5.8 @logging5.7 @logging5.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   Scenario: OCP-32197:Logging Fluentd should write it's own logs to stdout and exclude them from collection
     Given the correct directory name of clusterlogging file is stored in the :cl_dir clipboard

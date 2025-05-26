@@ -115,7 +115,7 @@ Feature: oc_secrets.feature
   # @case_id OCP-11900
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   @critical
   Scenario: OCP-11900:Authentication Check name requirements for oc secret

@@ -29,7 +29,7 @@ Feature: buildconfig.feature
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   Scenario: OCP-10667:BuildAPI Rebuild image when the underlying image changed for Docker build
     Given I have a project
     When I run the :new_build client command with:
@@ -53,7 +53,7 @@ Feature: buildconfig.feature
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   Scenario: OCP-12020:BuildAPI Trigger chain builds from a image update
     Given I have a project
     When I run the :new_build client command with:
@@ -100,7 +100,7 @@ Feature: buildconfig.feature
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @singlenode
     @noproxy @connected
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     Examples:
@@ -116,7 +116,7 @@ Feature: buildconfig.feature
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical

@@ -15,7 +15,7 @@ Feature: CSI clone testing related feature
   @qeci
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -65,7 +65,7 @@ Feature: CSI clone testing related feature
   @qeci
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @storage
@@ -122,7 +122,7 @@ Feature: CSI clone testing related feature
   @qeci
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @storage
@@ -178,7 +178,7 @@ Feature: CSI clone testing related feature
   @qeci
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -240,7 +240,7 @@ Feature: CSI clone testing related feature
   @qeci
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @storage
@@ -301,7 +301,7 @@ Feature: CSI clone testing related feature
   @qeci
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @inactive
   @storage

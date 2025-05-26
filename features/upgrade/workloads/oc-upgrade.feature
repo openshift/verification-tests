@@ -8,7 +8,7 @@ Feature: basic verification for upgrade oc client testing
   @admin
   @proxy @noproxy @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   Scenario: Check some container related oc commands still work after upgrade - prepare
@@ -29,7 +29,7 @@ Feature: basic verification for upgrade oc client testing
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   Scenario: Check some container related oc commands still work after upgrade
     Given I switch to the first user
     When I use the "workloads-upgrade" project
@@ -71,7 +71,7 @@ Feature: basic verification for upgrade oc client testing
   @admin
   @proxy @noproxy @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -96,7 +96,7 @@ Feature: basic verification for upgrade oc client testing
   @singlenode
   @proxy @noproxy @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: Check some container related oc commands still work for ocp45 after upgrade

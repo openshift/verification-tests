@@ -8,7 +8,7 @@ Feature: Storage object in use protection
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @hypershift-hosted
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   Scenario: OCP-17253:Storage Delete pvc which is not in active use by pod should be deleted immediately
     Given I have a project
@@ -27,7 +27,7 @@ Feature: Storage object in use protection
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @critical
   @hypershift-hosted
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   Scenario: OCP-17254:Storage Delete pvc which is in active use by pod should postpone deletion
     Given I have a project

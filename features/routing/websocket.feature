@@ -8,7 +8,7 @@ Feature: Testing websocket features
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @hypershift-hosted

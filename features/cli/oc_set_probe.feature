@@ -154,7 +154,7 @@ Feature: oc_set_probe.feature
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-31241:Workloads Set a probe to open a TCP socket test
@@ -221,7 +221,7 @@ Feature: oc_set_probe.feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -275,7 +275,7 @@ Feature: oc_set_probe.feature
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical

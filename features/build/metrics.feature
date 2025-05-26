@@ -9,7 +9,7 @@ Feature: Builds and samples related metrics test
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   Scenario: OCP-33220:BuildAPI Alerts on imagestream import retries
@@ -72,7 +72,7 @@ Feature: Builds and samples related metrics test
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   Scenario: OCP-33722:BuildAPI Check build metrics
@@ -161,7 +161,7 @@ Feature: Builds and samples related metrics test
   @singlenode
   @proxy @noproxy @connected
   @4.6
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @inactive
   @openstack-ipi @baremetal-ipi
   @openstack-upi @baremetal-upi
@@ -205,7 +205,7 @@ Feature: Builds and samples related metrics test
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical

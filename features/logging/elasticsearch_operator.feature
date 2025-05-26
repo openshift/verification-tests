@@ -11,7 +11,7 @@ Feature: elasticsearch-operator related tests
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
@@ -84,7 +84,7 @@ Feature: elasticsearch-operator related tests
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @heterogeneous @arm64 @amd64
     @logging5.8 @logging5.7 @logging5.6
     Examples:
@@ -104,7 +104,7 @@ Feature: elasticsearch-operator related tests
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-33883:Logging Additional essential metrics ES dashboard

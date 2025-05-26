@@ -8,7 +8,7 @@ Feature: hpa scale
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -54,7 +54,7 @@ Feature: hpa scale
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -98,7 +98,7 @@ Feature: hpa scale
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -156,7 +156,7 @@ Feature: hpa scale
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @proxy @noproxy @connected
   @hypershift-hosted
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   Scenario: OCP-11576:Node Creates autoscaler for replication controller with invalid value
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"

@@ -11,7 +11,7 @@ Feature: Jenkins feature upgrade test
   @singlenode
   @noproxy @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @amd64
   Scenario: Jenkins feature upgrade test - prepare
     Given I switch to the first user
@@ -35,7 +35,7 @@ Feature: Jenkins feature upgrade test
   @singlenode
   @noproxy @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @amd64
   Scenario: Jenkins feature upgrade test
     Given I switch to the first user

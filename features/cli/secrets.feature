@@ -45,7 +45,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -104,7 +104,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -192,7 +192,7 @@ Feature: secrets related scenarios
     @upgrade-sanity
     @singlenode
     @noproxy @connected
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     @critical
@@ -209,7 +209,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -269,7 +269,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -301,7 +301,7 @@ Feature: secrets related scenarios
   @smoke
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   @critical
   Scenario: OCP-11311:Node Secret volume should update when secret is updated
@@ -345,7 +345,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -387,7 +387,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -443,7 +443,7 @@ Feature: secrets related scenarios
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -533,7 +533,7 @@ Feature: secrets related scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @noproxy @connected
   @critical
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   Scenario: OCP-12838:BuildAPI Use build source secret based on annotation on Secret --http
     Given I have a project
     When I have an http-git service in the project
