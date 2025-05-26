@@ -7,7 +7,7 @@ Feature: basic verification for upgrade testing
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario: OCP-22606:Etcd etcd-operator and cluster works well after upgrade - prepare
@@ -59,7 +59,7 @@ Feature: basic verification for upgrade testing
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @proxy @noproxy @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-22606:Etcd etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user

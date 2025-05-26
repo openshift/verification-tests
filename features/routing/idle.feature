@@ -7,7 +7,7 @@ Feature: idle service related scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @hypershift-hosted
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   Scenario: OCP-10935:NetworkEdge Pod can be changed to un-idle when there is unsecure or edge or passthrough route coming
     Given I have a project
@@ -109,7 +109,7 @@ Feature: idle service related scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @hypershift-hosted
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   Scenario: OCP-13837:NetworkEdge Pod can be changed to un-idle when there is reencrypt route coming
     Given I have a project

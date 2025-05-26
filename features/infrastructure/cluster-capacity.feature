@@ -11,7 +11,7 @@ Feature: cluster-capacity related features
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @critical
   Scenario: OCP-14799:Node Cluster capacity image support: Cluster capacity can work well with a simple pod

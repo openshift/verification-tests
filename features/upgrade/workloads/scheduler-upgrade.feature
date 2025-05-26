@@ -10,7 +10,7 @@ Feature: scheduler with custom policy upgrade check
   @singlenode
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @heterogeneous @arm64 @amd64
   @s390x @ppc64le @heterogeneous @arm64 @amd64
@@ -61,7 +61,7 @@ Feature: scheduler with custom policy upgrade check
   @singlenode
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-34164:Workloads Upgrading cluster when using a custom policy for kube-scheduler should work fine
