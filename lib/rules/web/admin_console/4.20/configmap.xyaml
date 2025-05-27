@@ -1,0 +1,7 @@
+check_binary_data_contains:
+  elements:
+  - selector:
+      xpath: //h2[@data-test-section-heading='Binary data']/following::dt[.='<binary_key>']
+  - selector:
+      text: Save file
+    type: span

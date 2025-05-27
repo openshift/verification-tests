@@ -1,0 +1,131 @@
+set_filter_strings:
+  elements:
+  - selector: &filter_text_ele
+      xpath: //input[@data-test-id='item-filter']
+    op: clear
+  - selector:
+      <<: *filter_text_ele
+    op: send_keys <filter_text>
+click_filter_dropdown:
+  elements:
+  - selector:
+      xpath: //div[@data-test-id="filter-dropdown-toggle"]//button[contains(@class,"menu-toggle")]
+    op: click
+select_filter:
+  elements:
+  - selector:
+      xpath: //label[@id="<filter>"]//input
+    op: click
+clear_all_filters:
+  params:
+    button_text: Clear all filters
+  action: click_button
+set_strings_in_dropdown_filter_box:
+  elements:
+  - selector: &dropdown_filter
+      xpath: //input[@data-test-id='dropdown-text-filter']
+    op: clear
+  - selector:
+      <<: *dropdown_filter
+    op: send_keys <filter_text>
+set_strings_in_filter_box:
+  elements:
+  - selector: &filter_string
+      xpath: //input[@data-test-id='<test_id_value>']
+    op: clear
+  - selector:
+      <<: *filter_string
+    op: send_keys <filter_text>
+set_filter_strings_on_explore_page:
+  elements:
+  - selector: &filter_text_for_explore
+      css: input[class*='text-filter']
+    op: clear
+  - selector:
+      <<: *filter_text_for_explore
+    op: send_keys <filter_text>
+filter_by_name:
+  params:
+    test_id_value: item-filter
+  action: set_strings_in_filter_box
+filter_event_by_name_or_message:
+  params:
+    test_id_value: item-filter
+  action: set_strings_in_filter_box
+search_by_event_catagory:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id="dropdown-button"][contains(.,'All types')]
+    op: click
+  - selector:
+      xpath: //li//*[contains(.,'<catagory>')]
+    op: click
+search_by_catagory_to_show_build_failures:
+  params:
+    catagory: Normal
+  action: search_by_event_catagory
+check_results_contain_correct_strings:
+  element:
+    selector:
+      css: div.co-sysevent__box
+  scripts:
+    - command: |
+        var allrs = document.querySelectorAll('div.co-sysevent__box');
+        var all_contain = true;
+        if (allrs.length == 0) {
+          all_contain = false;
+          return all_contain
+        }
+        allrs.forEach(function(oneRS){
+          all_contain = oneRS.innerHTML.includes('<filter_text>') && all_contain
+        })
+        return all_contain
+      expect_result: true
+check_results_contain_correct_type:
+  element:
+    selector:
+      css: span.co-m-resource-icon
+  scripts:
+    - command: |
+        var resourceicons = document.querySelectorAll('span.co-m-resource-icon.co-m-resource-<type>');
+        var all_contain = true;
+        if (resourceicons.length == 0) {
+          all_contain = false;
+          return all_contain
+        }
+        resourceicons.forEach(function(resourceicon){
+          all_contain = resourceicon.getAttribute('title').length== "<type>".length &&  resourceicon.getAttribute('title').toLowerCase().includes('<type>') && all_contain
+        })
+        return all_contain
+      expect_result: true
+check_results_contain_correct_build_failures_type:
+# build error events are shown in Warning
+  params:
+    catagory: Warning
+  action: check_results_contain_correct_catagory
+check_results_contain_correct_catagory:
+  element:
+    selector:
+      css: div.co-sysevent
+  scripts:
+    - command: |
+        // since 4.4, the events type are Normal and Warning
+        // for Normal, class="co-sysevent slide-entered"
+        // for Waring, class="co-sysevent co-sysevent--warning"
+        var catagories = document.querySelectorAll('div.co-sysevent');
+        var contain = true;
+        if (catagories.length == 0) {
+          contain = false;
+          return contain
+        }
+        catagories.forEach(function(catagory){
+          contain = catagory.className.includes('<catagory>'.toLowerCase()) || contain
+        })
+        return contain
+      expect_result: true
+check_item_in_table:
+  elements:
+  - selector:
+      xpath: //tr[@data-test-rows='resource-row']//*[text()='<item>']
+    timeout: 15
+
