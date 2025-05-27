@@ -1,0 +1,59 @@
+check_unhealthy_conditions_table:
+  elements:
+  - selector:
+      xpath: //h2[contains(.,'Unhealthy conditions')]
+  - selector:
+      xpath: //table//tr[th[contains(text(),'Status')] and th[contains(text(),'Timeout')] and  th[contains(text(),'Type')] ]
+  - selector:
+      xpath: //tbody/tr[td[contains(text(),'<status>')] and td[contains(text(),'<timeout>')] and td[contains(text(),'<type>')]]
+click_machine_tab:
+  params:
+    tab_name: Machines
+  action: click_tab
+check_desired_count_on_machineset_page:
+  params:
+    key: Desired count
+    value: <machine_count>
+  action: check_resource_details_key_and_value
+edit_machine_count:
+  params:
+    item: Edit Machine count
+  action: click_one_dropdown_action
+  action: update_resource_count
+delete_machineset_from_action:
+  params:
+    item: Delete MachineSet
+  action: click_one_dropdown_action
+  action: submit_changes
+check_status_text:
+  element:
+    selector:
+      xpath: //span[@data-test='status-text' and contains(.,'<status_text>')]
+    timeout: 30
+click_health_status_card:
+  params:
+    button_text: Health checks
+  action: click_button
+check_health_condition:
+  element:
+    selector:
+      xpath: //div[contains(@class,'text-secondary') and contains(.,'<health_condition>')]
+    timeout: 30
+check_unhealthy_health_check_status:
+  params:
+    status_text: Not Ready
+    health_condition: Failing
+    description: One or more health check remediation conditions have been met
+  action: check_status_text
+  action: click_health_status_card
+  action: check_health_condition
+  action: check_alert_description
+check_instance_type_on_machinesets_page:
+  action: goto_machine_sets_page
+  action: check_instance_type_in_table
+  elements:
+  - selector:
+      xpath: //td[contains(., '<machineset_name>')]/following-sibling::td[contains(., '<instance_type>')]
+check_instance_type_on_one_machineset_page:
+  action: goto_one_machineset_page
+  action: check_instance_type

@@ -1,0 +1,89 @@
+search_by_resource:
+  action: click_resource_type_dropdown
+  action: send_type_filter
+  action:
+    if_not_param: resource_group
+    ref: search_resource_kind_only
+  action:
+    if_param: resource_group
+    ref: search_resource_kind_and_api_group
+click_resource_type_dropdown:
+  elements:
+  - selector: &resourcetype
+      xpath: //input[contains(@placeholder,'Resources')]
+    op: clear
+  - selector:
+        xpath: //input[@aria-label='Type to filter']
+    op: clear
+  action:
+    if_element:
+      selector: &close_button
+        xpath: //button[@aria-label='Clear input value']
+      visible: true
+    ref: click_close_button
+click_close_button:
+  element:
+    selector:
+      <<: *close_button
+    op: click
+send_type_filter:
+  elements:
+  - selector: *resourcetype
+    op: send_keys <resource_kind>
+search_resource_kind_only:
+  elements:
+  - selector:
+      xpath: //label//span[text()='<resource_kind>']
+    op: click
+    timeout: 15
+  - selector:
+      xpath: //input[@data-test-id='item-filter']
+    op: click
+search_resource_kind_and_api_group:
+  elements:
+  - selector:
+      xpath: //span[text()='<resource_kind>']/following-sibling::div[contains(., '<resource_group>')]
+    op: click
+    timeout: 15
+  - selector:
+      xpath: //input[@data-test-id='item-filter']
+    op: click
+clear_one_search_item:
+  elements:
+  - selector:
+      xpath: //span[contains(., '<search_item>')]/ancestor::li//button[contains(@aria-label, 'Close')]
+    op: click
+check_resource_tile:
+  elements:
+  - selector:
+      xpath: //span[contains(.,'<resource_kind>') and contains(.,'<resource_group>')]
+choose_filter_type_on_search_page:
+  elements:
+  - selector:
+      xpath: //button[@id='search-filter-toggle']
+    op: click
+  - selector:
+      xpath: //li/button[.='<filter_type>']
+    op: click
+    timeout: 15
+set_filter_content_on_search_page:
+  params:
+    clear_field_id: search-filter-input
+    input_field_id: search-filter-input
+    input_value: <filter_content>
+  action: clear_input_value
+  action: set_input_value
+press_input_enter_on_search_page:
+  params:
+    input_field_id: search-filter-input
+    input_value: <press_enter>
+  action: set_input_value
+clear_resource_filters:
+  params:
+    filter_type: Resource
+  action: clear_one_type_filters
+clear_one_type_filters:
+  elements:
+  - selector:
+      xpath: (//*[contains(., '<filter_type>')]/following-sibling::ul//button)[last()]
+    op: click
