@@ -623,6 +623,7 @@ Feature: OVN related networking scenarios
   @vsphere-upi @baremetal-upi
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @level0
   Scenario: OCP-46285:SDN Logical Router Policies and Annotations for a given node should be current
     #Find apiVIP address of the cluster
     Given I run the :get admin command with:
