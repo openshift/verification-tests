@@ -350,14 +350,14 @@ check_alert_rule_details:
   params:
     rule_name: Watchdog
   action: check_rule_name
-  action: check_ruel_expression
+  action: check_rule_expression
   action: check_active_alerts
   action: check_rule_breadcrumb
 check_rule_name:
   element:
     selector:
       xpath: //dd[contains(., '<rule_name>')]
-check_ruel_expression:
+check_rule_expression:
   params:
     text: vector(1)
     link_url: /monitoring/query-browser?query0=vector(1)
@@ -372,12 +372,12 @@ check_rule_breadcrumb:
   action: check_link_and_text
 check_view_metrics:
   params:
-    text: View in Metrics
+    text: Inspect
     link_url: /monitoring/query-browser?query0=vector(1)
   action: check_link_and_text
 click_view_metrics:
   params:
-    text: View in Metrics
+    text: Inspect
     link_url: /monitoring/query-browser?query0=vector(1)
   action: click_link_with_text
 check_alert_description_on_rule_detail:
