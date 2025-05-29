@@ -182,7 +182,7 @@ Feature: Storage upgrade tests
   @storage
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
-  @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario: OCP-31331:Storage Cluster operator storage should be in correct status after upgrade - prepare
     Given I switch to cluster admin pseudo user
     # Check cluster operator storage should be in correct status
@@ -196,7 +196,7 @@ Feature: Storage upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @baremetal-ipi
   @baremetal-upi
   @singlenode
