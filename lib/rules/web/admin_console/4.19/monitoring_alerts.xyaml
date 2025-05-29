@@ -67,7 +67,13 @@ check_alert_breadcrumb:
     link_url: /monitoring/alerts
 open_alertrules_detail:
   action: filter_alert
-  action: click_alert_link_with_text
+  action: click_alertrules_link_with_text
+click_alertrules_link_with_text:
+  element:
+    selector:
+      xpath: //a[contains(@href, '/monitoring/alertrules')]//span[text()='<alert_name>']
+    op: click
+    timeout: 60
 
 perform_action_item:
   params:
@@ -240,7 +246,17 @@ set_invalid_end_time_silence:
     label_text: Until...
     input_value: 2020/03/05 20:11:44
   action: set_silence_duration_null
-  action: set_label_input_simple
+  action: set_until_input_simple
+set_until_input_simple:
+  elements:
+  - selector: &label_input_value
+      xpath: //label//span[contains(text(),'<label_text>')]/ancestor::div[@class='pf-v6-c-form__group']//input
+    op: clear
+    type: input
+  - selector:
+      <<: *label_input_value
+    op: send_keys <input_value>
+    type: input
 
 status_specific_alert_no_clear:
   action: filter_alert
