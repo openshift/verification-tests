@@ -325,7 +325,7 @@ check_info_of_silence_detail_reg:
 check_silence_name:
   element:
     selector:
-      xpath: //dd[contains(text(), '<silence_name>')]
+      xpath: //dd//text()[normalize-space(.)='<silence_name>']
 check_silenced_alert_name:
   element:
     selector:
@@ -356,7 +356,7 @@ check_alert_rule_details:
 check_rule_name:
   element:
     selector:
-      xpath: //dd[contains(text(), '<rule_name>')]
+      xpath: //dd//text()[normalize-space(.)='<rule_name>']
 check_ruel_expression:
   params:
     text: vector(1)
