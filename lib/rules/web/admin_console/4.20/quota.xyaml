@@ -1,0 +1,78 @@
+check_used_quota_ratio:
+  action:
+    if_param: expand_quota_item
+    ref: click_expandable_quota_item
+  action:
+    if_param: cpu_request_ratio
+    ref: check_used_cpu_request
+  action:
+    if_param: cpu_limit_ratio
+    ref: check_used_cpu_limit
+  action:
+    if_param: memory_request_ratio
+    ref: check_used_memory_request
+  action:
+    if_param: memory_limit_ratio
+    ref: check_used_memory_limit
+check_used_cpu_request:
+  params:
+    used_ratio: <cpu_request_ratio>
+    graph_title: cpu
+  action: check_used_ratio
+check_used_cpu_limit:
+  params:
+    used_ratio: <cpu_limit_ratio>
+    graph_title: limits.cpu
+  action: check_used_ratio
+check_used_memory_request:
+  params:
+    used_ratio: <memory_request_ratio>
+    graph_title: requests.memory
+  action: check_used_ratio
+check_used_memory_limit:
+  params:
+    used_ratio: <memory_limit_ratio>
+    graph_title: limits.memory
+  action: check_used_ratio
+check_used_ratio:
+  elements:
+  - selector:
+      xpath: //div[contains(., '<quota_name>')]/following-sibling::div[@class='co-resource-quota-chart-row']//h5[text()='<graph_title>']/following-sibling::div/*[name()='svg']/*[name()='text']/*[name()='tspan' and text()='<used_ratio>']
+check_chart_color:
+  action:
+    if_param:
+      chart_color: green
+    ref: check_chart_with_green_color
+  action:
+    if_param:
+      chart_color: yellow
+    ref: check_chart_with_yellow_color
+  action:
+    if_param:
+      chart_color: red
+    ref: check_chart_with_red_color
+check_chart_with_green_color:
+  params:
+    rgb_value: 63993d
+  action: check_resource_chart_color
+check_chart_with_yellow_color:
+  params:
+    rgb_value: dca614
+  action: check_resource_chart_color
+check_chart_with_red_color:
+  params:
+    rgb_value: b1380b
+  action: check_resource_chart_color
+check_resource_chart_color:
+  elements:
+  - selector:
+      xpath: //div[contains(., '<quota_name>')]/following-sibling::div[@class='co-resource-quota-chart-row']//h5[text()='<graph_title>']/following-sibling::div/*[name()='svg']/*[name()='g'][2]/*[name()='path' and contains(@style, '<rgb_value>')]
+check_cpu_request_chart_color:
+  params:
+    graph_title: cpu
+  action: check_chart_color
+click_expandable_quota_item:
+  element:
+    selector:
+      xpath: //div[contains(@class, 'expandable-section') and contains(., '<quota_name>')]
+    op: click
