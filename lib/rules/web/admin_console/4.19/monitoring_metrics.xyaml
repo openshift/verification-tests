@@ -133,22 +133,22 @@ choose_zoom_value:
 click_chart_zoom_dropdown:
   element:
     selector:
-      xpath: //div[contains(@class,'query-browser__wrapper' )]//button[@id]
+      xpath: //button[@class='pf-v6-c-menu-toggle' and @aria-label='graph timespan']
     op: click
 click_zoom_value_button:
   element:
     selector:
-      xpath: //div[contains(@class,'query-browser__wrapper' )]//a[text()='<zoom_value>']
+      xpath: //li[@class='pf-v6-c-menu__list-item']//span[text()='<zoom_value>']/ancestor::button
     op: click
 click_reset_zoom_button:
   element:
     selector:
-      xpath: //div[contains(@class,'query-browser__controls' )]/button
+      xpath: //span[text()='Reset zoom']/ancestor::button
     op: click
 check_zoom_value:
   element:
     selector:
-      xpath: //div[contains(@class,'query-browser__wrapper' )]//input[@value='<zoom_value>']
+      xpath: //div[contains(@class,'pf-v6-c-input-group' )]//input[@value='<zoom_value>']
 
 check_metric_query_result_not_exit:
   params:
