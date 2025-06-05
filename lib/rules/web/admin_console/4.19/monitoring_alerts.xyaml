@@ -284,7 +284,7 @@ status_specific_alert_rule:
 check_specific_alert:
   element:
     selector:
-      xpath: //a[contains(text(),'<table_text>')]
+      xpath: //a//span[contains(text(),'<table_text>')]
 click_alertrule_expression:
   element:
     selector:
