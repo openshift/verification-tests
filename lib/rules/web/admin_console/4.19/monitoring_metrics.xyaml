@@ -151,7 +151,7 @@ check_zoom_value:
   element:
     selector:
       xpath: //div[contains(@class,'pf-v6-c-input-group' )]//input[@value='<zoom_value>']
-      timeout: 10
+    timeout: 10
 
 check_metric_query_result_not_exit:
   params:
