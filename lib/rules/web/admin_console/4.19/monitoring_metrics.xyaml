@@ -1,15 +1,16 @@
 click_button_example_query:
-  params:
-    button_text: Insert example query
-  action: click_button_text
+  element:
+    selector:
+      xpath: //button//span[text()='Insert example query']
+    op: click
 check_button_example_query:
-  params:
-    button_text: Insert example query
-  action: check_button_text
+  element:
+    selector:
+      xpath: //button//span[text()='Insert example query']
 click_run_queries_button:
-  params:
-    button_text: Run queries
-  action: click_button_text
+  element:
+    selector:
+      xpath: //button[@type='submit']//span[text()='Run queries']
 check_sample_query_area:
   element:
     selector:
@@ -163,7 +164,7 @@ check_metric_query_result:
 check_metric_query_chart:
   element:
     selector:
-      xpath: //div[@class='query-browser__zoom']
+      xpath: //div[@class='pf-v6-c-card pf-m-compact']
     timeout: <time>
 check_metric_query_table_text_not_exist:
   params:
@@ -238,23 +239,28 @@ check_query_input:
       <<: *query_input
 perform_query_cog_action_delete_query:
   params:
-    button_text: Delete query
+    span_text: Delete query
   action: perform_query_cog_action
 perform_query_cog_action_hide_all_query:
   params:
-    button_text: Hide all series
+    span_text: Hide all series
   action: perform_query_cog_action
 perform_query_cog_action_show_all_query:
   params:
-    button_text: Show all series
+    span_text: Show all series
   action: perform_query_cog_action
 perform_query_cog_action:
   action: click_query_cog_icon
-  action: click_button_text
+  action: click_query_cog_span_text
 click_query_cog_icon:
   element:
     selector:
-      xpath: //div[@class='dropdown-kebab-pf']//button
+      xpath: //div[@class='pf-v6-c-data-list__item-action']//button
+    op: click
+click_query_cog_span_text:
+  element:
+    selector:
+      xpath: //div[@class='pf-v6-c-menu__content']//button//span[text()='<span_text>']
     op: click
 check_query_input_text_area_no_value:
   element:
@@ -272,13 +278,17 @@ perform_enable_query:
       xpath: //div[@title='Enable query']
     op: click
 perform_hide_table:
-  params:
-    button_title: Hide table
-  action: click_button_title
+  element:
+    selector:
+      xpath: //button[@class='pf-v6-c-button pf-m-plain' and @aria-expanded='true']
+    op: click
+    timeout: 20
 perform_show_table:
-  params:
-    button_title: Show table
-  action: click_button_title
+  element:
+    selector:
+      xpath: //button[@class='pf-v6-c-button pf-m-plain' and @aria-expanded='false']
+    op: click
+    timeout: 20
 check_all_series_hide:
   params:
     button_title: Hide series
