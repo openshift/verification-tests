@@ -1,0 +1,201 @@
+attach_storage:
+  elements:
+  - selector:
+      xpath: //button[@id="claimName"]
+    op: click
+  - selector:
+      xpath: //span[text()="<pvc_name>"]
+    op: click
+  - selector:
+      id: mount-path
+    type: input
+    op: send_keys <mount_path>
+open_containers_selector:
+  params:
+    button_text: select specific containers
+  action: click_button
+click_use_all_containers:
+  params:
+    button_text: use all containers
+  action: click_button
+select_one_container:
+  elements:
+  - selector:
+      id: <container_name>
+    type: input
+    op: click
+choose_storage_class:
+  elements:
+  - selector:
+      id: storageclass-dropdown
+    type: button
+    op: click
+    timeout: 20
+  - selector:
+      id: <storage_class_name>-link
+    type: a
+    op: click
+set_pvc_name:
+  element:
+    selector:
+      id: pvc-name
+    type: input
+    op: send_keys <pvc_name>
+choose_access_mode:
+  elements:
+  - selector:
+      xpath: //label[@for="access-mode"]/ancestor::div[@class="form-group"]//button[contains(@class,"menu-toggle")]
+    op: click
+  - selector:
+      xpath: //span[contains(.,"<mapped_access_mode>")]/ancestor::button[@role="option" and not(@disabled)]
+    op: click
+choose_access_mode_readwriteonce:
+  params:
+    mapped_access_mode: Single user (RWO)
+  action: choose_access_mode
+set_request_size:
+  elements:
+  - selector: &pvc_request_size_input
+      xpath: //input[@data-test='pvc-size']
+    op: clear
+  - selector:
+      <<: *pvc_request_size_input
+    op: send_keys <pvc_request_size>
+set_expand_size:
+  elements:
+  - selector: &pvc_expand_size_input
+      xpath: //input[@data-test='pvc-expand-size-input']
+    op: clear
+  - selector:
+      <<: *pvc_expand_size_input
+    op: send_keys <pvc_request_size>
+choose_request_size_unit:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='dropdown-button']
+    op: click
+  - selector:
+      id: <pvc_size_unit>-link
+    type: button
+    op: click
+fill_pvc_form:
+  action:
+    if_param: storage_class_name
+    ref: choose_storage_class
+  action: set_pvc_name
+  action:
+    if_param:
+      access_mode: ReadWriteOnce
+    ref: choose_access_mode_readwriteonce
+  action: set_request_size
+  action:
+    if_param: pvc_size_unit
+    ref: choose_request_size_unit
+create_persistent_volume_claims:
+  params:
+    button_id: yaml-create
+  action: goto_persistentvolumeclaims_page
+  action: click_button_by_id
+  action: fill_pvc_form
+  action: submit_changes
+expand_pvc_size:
+  params:
+    button_text: Expand
+  action: set_expand_size
+  action: choose_request_size_unit
+  action: click_button
+attach_storage_to_container:
+  params:
+    item: Add storage
+    content: You must choose at least one container to mount to
+  action: goto_one_dc_page
+  action: click_one_dropdown_action
+  action: attach_storage
+  action:
+    if_param: container_name
+    ref:
+    - open_containers_selector
+    - select_one_container
+  action:
+    if_param: use_all_containers
+    ref:
+    - open_containers_selector
+    - click_use_all_containers
+  action:
+    if_param: use_none_container
+    ref: open_containers_selector
+  action: submit_changes
+  action:
+    if_param: use_none_container
+    ref: check_page_contains
+check_volume_on_workload_page:
+  elements:
+  - selector: &volume_info
+      xpath: //h2[contains(., Volumes)]/following-sibling::div//tr[td[@data-test-volume-name-for='<volume_name>' and contains(., '<volume_name>')] and td[@data-test-mount-path-for='<volume_name>' and contains(., '<mount_path>')] and td[contains(., '<pvc_name>')] and td[contains(., '<container_name>')]]
+check_volume_missing_on_workload_page:
+  element:
+    selector: *volume_info
+    missing: true
+remove_volume_from_container_base:
+  params:
+    item: Remove volume
+  elements:
+  - selector:
+      xpath: //h2[contains(., Volumes)]/following-sibling::div//tr[td[contains(., '<volume_name>')] and td[contains(., '<container_name>')]]//button[@data-test-id='kebab-button']
+    op: click
+  action: choose_action_item_from_list
+  action: click_button
+remove_volume_from_container_but_cancel:
+  params:
+    button_text: Cancel
+  action: remove_volume_from_container_base
+remove_volume_from_container:
+  params:
+    button_text: Remove volume
+  action: remove_volume_from_container_base
+set_storageclass_name:
+  params:
+    input_field_id: storage-class-name
+    input_value: <sc_name>
+  action: set_input_value
+set_provisioner:
+  params:
+    button_id: storage-class-provisioner
+    dropdown_item: <provisioner>
+  action: click_button_by_id
+  action: click_one_item_text
+set_sc_provisioner_type:
+  params:
+    button_id: storage-class-provisioner-type
+    dropdown_item: <provisioner_type>
+  action: click_button_by_id
+  action: click_one_item
+create_storageclass_from_form:
+  action: goto_storageclass_page
+  action: click_create_storageclass
+  action: wait_form_loaded
+  action: set_storageclass_name
+  action: set_provisioner
+  action: click_create_button
+click_create_storageclass:
+  params:
+    button_id: yaml-create
+  action: click_button_by_id
+set_iops_value:
+  params:
+    input_field_id: storage-class-provisioner-iops-per-gi-b
+  action: set_input_value
+check_snapshot_on_pvc_page:
+  params:
+    tab_name: VolumeSnapshots
+  action: goto_one_pvc_page
+  action: click_tab
+  action: check_page_contains
+create_volumesnapshot_from_console:
+  params:
+    dropdown_field: PersistentVolumeClaim
+    dropdown_item: <pvc_name>
+  action: goto_volumesnapshots_page
+  action: click_create_button
+  action: choose_dropdown_item_text
+  action: submit_changes
