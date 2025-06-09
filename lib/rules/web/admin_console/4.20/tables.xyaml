@@ -1,0 +1,347 @@
+check_default_columns_in_baremetalhosts_list_table:
+  action: goto_baremetalhosts_page
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Node']
+  - selector:
+      xpath: //thead//th[.='Role']
+  - selector:
+      xpath: //thead//th[.='Management Address']
+  - selector:
+      xpath: //thead//th[.='Serial Number']
+check_default_columns_in_one_project_pods_list_table:
+  action: goto_project_pods_list_page
+  action: reset_default_columns
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Ready']
+  - selector:
+      xpath: //thead//th[.='Restarts']
+  - selector:
+      xpath: //thead//th[.='Owner']
+  - selector:
+      xpath: //thead//th[.='Memory']
+  - selector:
+      xpath: //thead//th[.='CPU']
+  - selector:
+      xpath: //thead//th[.='Created']
+change_one_project_pods_list_columns:
+  action: click_table_column_management_tooltip
+  action: unselect_owner_column
+  action: unselect_created_column
+  action: unselect_namespace_column
+  action: select_ipaddress_column
+  action: select_node_column
+  action: select_labels_column
+  action: submit_changes
+check_changed_one_project_pods_list_columns:
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Restarts']
+  - selector:
+      xpath: //thead//th[.='Ready']
+  - selector:
+      xpath: //thead//th[.='Memory']
+  - selector:
+      xpath: //thead//th[.='CPU']
+  - selector:
+      xpath: //thead//th[.='Node']
+  - selector:
+      xpath: //thead//th[.='Labels']
+  - selector:
+      xpath: //thead//th[.='IP address']
+  - selector:
+      xpath: //tbody//tr
+  scripts:
+  - command: return document.querySelector('tbody tr').querySelectorAll('td').length == 9 + 1
+    expect_result: true
+check_default_columns_in_projects_list_table:
+  action: goto_projects_list_page
+  action: reset_default_columns
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Display name']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Requester']
+  - selector:
+      xpath: //thead//th[.='Created']
+change_projects_list_columns:
+  action: click_table_column_management_tooltip
+  action: unselect_created_column
+  action: select_description_column
+  action: submit_changes
+check_changed_projects_list_columns:
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Display name']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Requester']
+  - selector:
+      xpath: //thead//th[.='Description']
+  - selector:
+      xpath: //tbody//tr
+  scripts:
+  - command: return document.querySelector('tbody tr').querySelectorAll('td').length == 5 + 1
+    expect_result: true
+check_default_columns_in_namespaces_list_table:
+  action: goto_namespace_list_page
+  action: reset_default_columns
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Display name']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Requester']
+  - selector:
+      xpath: //thead//th[.='Memory']
+  - selector:
+      xpath: //thead//th[.='CPU']
+  - selector:
+      xpath: //thead//th[.='Created']
+change_namespaces_list_columns:
+  action: click_table_column_management_tooltip
+  action: unselect_displayname_column
+  action: unselect_status_column
+  action: select_description_column
+  action: select_labels_column
+  action: submit_changes
+check_changed_namespaces_list_columns:
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Requester']
+  - selector:
+      xpath: //thead//th[.='Memory']
+  - selector:
+      xpath: //thead//th[.='CPU']
+  - selector:
+      xpath: //thead//th[.='Created']
+  - selector:
+      xpath: //thead//th[.='Description']
+  - selector:
+      xpath: //thead//th[.='Labels']
+  - selector:
+      xpath: //tbody//tr
+  scripts:
+  - command: return document.querySelector('tbody tr').querySelectorAll('td').length == 7 + 1
+    expect_result: true
+check_default_columns_in_nodes_list_table:
+  action: goto_node_page
+  action: reset_default_columns
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Roles']
+  - selector:
+      xpath: //thead//th[.='Pods']
+  - selector:
+      xpath: //thead//th[.='Memory']
+  - selector:
+      xpath: //thead//th[.='CPU']
+  - selector:
+      xpath: //thead//th[.='Filesystem']
+  - selector:
+      xpath: //thead//th[.='Created']
+  - selector:
+      xpath: //thead//th[.='Instance type']
+change_nodes_list_columns:
+  action: click_table_column_management_tooltip
+  action: unselect_cpu_column
+  action: unselect_pods_column
+  action: unselect_filesystem_column
+  action: select_machine_column
+  action: select_labels_column
+  action: select_zone_column
+  action: check_no_more_selection_allowed
+  action: submit_changes
+check_changed_nodes_list_columns:
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Roles']
+  - selector:
+      xpath: //thead//th[.='Memory']
+  - selector:
+      xpath: //thead//th[.='Created']
+  - selector:
+      xpath: //thead//th[.='Instance type']
+  - selector:
+      xpath: //thead//th[.='Machine']
+  - selector:
+      xpath: //thead//th[.='Zone']
+  - selector:
+      xpath: //thead//th[.='Labels']
+  - selector:
+      xpath: //tbody//tr
+  scripts:
+  - command: return document.querySelector('tbody tr').querySelectorAll('td').length == 9 + 1
+    expect_result: true
+check_updated_columns_in_all_projects_pods_list_table:
+  action: goto_all_projects_pods_list
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Ready']
+  - selector:
+      xpath: //thead//th[.='Restarts']
+  - selector:
+      xpath: //thead//th[.='Memory']
+  - selector:
+      xpath: //thead//th[.='CPU']
+  - selector:
+      xpath: //thead//th[.='Node']
+  - selector:
+      xpath: //thead//th[.='Labels']
+  - selector:
+      xpath: //thead//th[.='IP address']
+check_default_columns_in_all_projects_pods_list_table:
+  action: reset_default_columns
+  elements:
+  - selector:
+      xpath: //thead//th[.='Name']
+  - selector:
+      xpath: //thead//th[.='Namespace']
+  - selector:
+      xpath: //thead//th[.='Status']
+  - selector:
+      xpath: //thead//th[.='Ready']
+  - selector:
+      xpath: //thead//th[.='Restarts']
+  - selector:
+      xpath: //thead//th[.='Memory']
+  - selector:
+      xpath: //thead//th[.='CPU']
+  - selector:
+      xpath: //thead//th[.='Created']
+change_all_projects_pods_list_columns_but_reset:
+  action: click_table_column_management_tooltip
+  action: unselect_cpu_column
+  action: select_created_column
+  action: click_reset_default_columns_button
+  action: submit_changes
+check_changed_columns_in_all_projects_list_table:
+  action: goto_projects_list_page
+  action: check_changed_projects_list_columns
+reset_default_columns:
+  action: click_table_column_management_tooltip
+  action: click_reset_default_columns_button
+  action: submit_changes
+check_table_column_heading:
+  element:
+    selector:
+      xpath: //thead//th[.='<table_heading>'']
+click_table_column_management_tooltip:
+  elements:
+  - selector:
+      xpath: //button[@aria-label='Column management']
+    op: click
+  - selector:
+      xpath: //p[contains(.,'Selected columns will appear in the table')]
+click_reset_default_columns_button:
+  element:
+    selector:
+      id: reset-action
+    type: button
+    op: click
+click_column_checkbox:
+  elements:
+  - selector:
+      xpath: //input[@name='<column_name>' and @type='checkbox']
+    op: click
+check_no_more_selection_allowed:
+  elements:
+  - selector:
+      xpath: //input[@disabled and not(@name='Name')]
+unselect_displayname_column:
+  params:
+    column_name: Display name
+  action: click_column_checkbox
+unselect_status_column:
+  params:
+    column_name: Status
+  action: click_column_checkbox
+unselect_owner_column:
+  params:
+    column_name: Owner
+  action: click_column_checkbox
+unselect_namespace_column:
+  params:
+    column_name: Namespace
+  action: click_column_checkbox
+unselect_created_column:
+  params:
+    column_name: Created
+  action: click_column_checkbox
+unselect_cpu_column:
+  params:
+    column_name: CPU
+  action: click_column_checkbox
+unselect_pods_column:
+  params:
+    column_name: Pods
+  action: click_column_checkbox
+unselect_filesystem_column:
+  params:
+    column_name: Filesystem
+  action: click_column_checkbox
+select_description_column:
+  params:
+    column_name: Description
+  action: click_column_checkbox
+select_labels_column:
+  params:
+    column_name: Labels
+  action: click_column_checkbox
+select_machine_column:
+  params:
+    column_name: Machine
+  action: click_column_checkbox
+select_zone_column:
+  params:
+    column_name: Zone
+  action: click_column_checkbox
+select_node_column:
+  params:
+    column_name: Node
+  action: click_column_checkbox
+select_ipaddress_column:
+  params:
+    column_name: IP address
+  action: click_column_checkbox
+select_created_column:
+  params:
+    column_name: Created
+  action: click_column_checkbox
