@@ -11,6 +11,7 @@ click_run_queries_button:
   element:
     selector:
       xpath: //button[@type='submit']//span[text()='Run queries']
+    op: click
 check_sample_query_area:
   element:
     selector:
