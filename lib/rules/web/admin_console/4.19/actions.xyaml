@@ -16,8 +16,6 @@ click_resource_action_button_on_sidebar:
 choose_action_item_from_list:
   elements:
   - selector:
-      xpath: //*[@data-test-id="action-items"]
-  - selector:
       xpath: //button[.='<item>' and not(@disabled)]
     op: click
 edit_pod_count_action:

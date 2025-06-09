@@ -49,9 +49,9 @@ check_kebab_menus_for_default_cs:
   action: click_kebab_of_one_resource
   elements:
   - selector:
-      xpath: //button[@data-test-action='Disable']
+      xpath: //li[@data-test-action='Disable']//button
   - selector:
-      xpath: //button[@data-test-action='Edit CatalogSource']
+      xpath: //li[@data-test-action='Edit CatalogSource']//button
   action: click_kebab_of_one_resource
 check_kebab_menus_for_custom_cs:
   params:
@@ -59,13 +59,13 @@ check_kebab_menus_for_custom_cs:
   action: click_kebab_of_one_resource
   elements:
   - selector:
-      xpath: //button[@data-test-action='Edit labels']
+      xpath: //li[@data-test-action='Edit labels']//button
   - selector:
-      xpath: //button[@data-test-action='Edit annotations']
+      xpath: //li[@data-test-action='Edit annotations']//button
   - selector:
-      xpath: //button[@data-test-action='Edit CatalogSource']
+      xpath: //li[@data-test-action='Edit CatalogSource']//button
   - selector:
-      xpath: //button[@data-test-action='Delete CatalogSource']
+      xpath: //li[@data-test-action='Delete CatalogSource']//button
   action: click_kebab_of_one_resource
 check_columns_for_cs:
   elements:
@@ -80,13 +80,13 @@ check_columns_for_cs:
 check_catalogsource_operators_info:
   params:
     tab_name: Operators
-    filter_text: Anzo Operator
+    filter_text: Dynatrace Operator
   action: click_tab
   action: wait_table_loaded
   action: filter_by_name
   elements:
   - selector:
-      xpath: //h1[contains(.,'Anzo Operator')]
+      xpath: //h1[contains(.,'Dynatrace Operator')]
 check_packagemanifests_have_cs_link:
   url: /search/all-namespaces?kind=packages.operators.coreos.com~v1~PackageManifest
   action: wait_table_loaded

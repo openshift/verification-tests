@@ -483,7 +483,7 @@ check_resources_title_on_page:
 click_kebab_item:
   element:
     selector:
-      xpath: //button[contains(@data-test-action,'<kebab_item>')]
+      xpath: //li[contains(@data-test-action,'<kebab_item>')]//button
     timeout: 60
     op: click
 click_kebab_of_one_resource:
@@ -504,7 +504,7 @@ edit_receiver_kebab_operation:
       xpath: //td[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
     op: click
   - selector:
-      xpath: //button[@data-test-action='Edit Receiver']
+      xpath: //li[@data-test-action='Edit Receiver']//button
     op: click
 delete_machinehealthcheck_kabab_operation:
   params:
