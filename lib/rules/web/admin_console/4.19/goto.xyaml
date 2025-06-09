@@ -367,7 +367,7 @@ goto_consoleyamlsample_crd_instances_page:
 # catalog source
 goto_catalog_source_page:
   url: k8s/cluster/config.openshift.io~v1~OperatorHub/cluster/sources
-  action: wait_table_loaded
+  action: wait_box_loaded
 goto_one_catalogsource_page:
   url: /k8s/ns/openshift-marketplace/operators.coreos.com~v1alpha1~CatalogSource/<cs_name>
   action: wait_box_loaded

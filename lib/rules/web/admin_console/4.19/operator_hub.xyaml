@@ -42,7 +42,7 @@ create_operand:
   action: submit_changes
 create_operand_anzo:
   params:
-    tab_name: Anzo Operator
+    tab_name: Altair Graph Studio Operator
     button_text: Create
   action: goto_csv_detail_page
   action: click_tab
