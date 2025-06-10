@@ -51,6 +51,7 @@ open_alert_detail:
 open_alert_detail_href:
   action: Disable_all_filters
   action: filter_alert
+  action: expand_alert_button
   action: click_link_with_text
 open_silence_detail:
   action: filter_alert
