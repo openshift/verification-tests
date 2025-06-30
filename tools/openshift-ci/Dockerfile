@@ -39,6 +39,7 @@ RUN set -x && \
     yum -y module reset ruby && \
     yum -y module enable ruby:2.7 && \
     yum -y module install ruby:2.7 && \
+    npm install -g junit-report-merger && \
     npm install -g n && n lts && \
     CFT_VERSION='122.0.6261.57' && \
     npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
