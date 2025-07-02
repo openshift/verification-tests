@@ -10,6 +10,7 @@ data:
         app: guestbook
         tier: frontend
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
       - name: php-redis
         image: quay.io/openshifttest/gb-frontend:v4
