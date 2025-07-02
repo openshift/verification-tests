@@ -71,30 +71,30 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12286
   @admin
+  @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
+  @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
+  @upgrade-sanity
+  @singlenode
+  @proxy @noproxy @disconnected @connected
+  @network-ovnkubernetes @network-openshiftsdn
+  @s390x @ppc64le @heterogeneous @arm64 @amd64
+  @hypershift-hosted
+  @critical
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   Scenario Outline: Limit range incorrect values
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
     When I run the :create admin command with:
-      | f         | limit.yaml |
-      | namespace | <%= project.name %>                                             |
+      | f         | limit.yaml          |
+      | namespace | <%= project.name %> |
     And the step should fail
     And the output should match:
       | min\[memory\].*<expr2> value <expr3> is greater than <expr4> value <expr5> |
       | min\[cpu\].*<expr7> value <expr8> is greater than <expr9> value <expr10>   |
 
-    @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
-    @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
-    @upgrade-sanity
-    @singlenode
-    @proxy @noproxy @disconnected @connected
-    @network-ovnkubernetes @network-openshiftsdn
-    @s390x @ppc64le @heterogeneous @arm64 @amd64
-    @hypershift-hosted
-    @critical
     Examples:
-      | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 |
-      | ocp12286 | 2Gi | min | 2Gi | max | 1Gi | 400m | min | 400m | max | 200m |
+      | case_id        | path     | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 |
+      | OCP-12286:Node | ocp12286 | 2Gi   | min   | 2Gi   | max   | 1Gi   | 400m  | min   | 400m  | max   | 200m   |
 
   # @author pruan@redhat.com
   # @author azagayno@redhat.com
