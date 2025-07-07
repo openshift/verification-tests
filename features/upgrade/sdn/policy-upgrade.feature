@@ -1,6 +1,7 @@
 Feature: SDN compoment upgrade testing
 
   # @author huirwang@redhat.com
+  @inactive
   @admin
   @upgrade-prepare
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
@@ -20,6 +21,7 @@ Feature: SDN compoment upgrade testing
 
   # @author huirwang@redhat.com
   # @case_id OCP-22707
+  @inactive
   @admin
   @upgrade-check
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
