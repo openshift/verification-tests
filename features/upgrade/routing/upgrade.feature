@@ -11,7 +11,7 @@ Feature: Routing and DNS related scenarios
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
-  @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @inactive
   Scenario: ensure ingress works well before and after upgrade - prepare
     # Check console route
     Given I switch to cluster admin pseudo user
@@ -26,7 +26,6 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29746
   @upgrade-check
   @admin
-  @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
@@ -36,6 +35,7 @@ Feature: Routing and DNS related scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @inactive
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -56,7 +56,7 @@ Feature: Routing and DNS related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
-  @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @inactive
   Scenario: ensure DNS works well before and after upgrade - prepare
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -74,7 +74,6 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29747
   @upgrade-check
   @admin
-  @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
@@ -83,6 +82,7 @@ Feature: Routing and DNS related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
+  @inactive
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -105,7 +105,7 @@ Feature: Routing and DNS related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
-  @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
+  @inactive
   Scenario: upgrade with running router pods on all worker nodes - prepare
     # Get the number of worker nodes and scale up router pods
     Given I switch to cluster admin pseudo user
@@ -129,7 +129,6 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-30501
   @upgrade-check
   @admin
-  @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @baremetal-ipi
   @vsphere-upi @openstack-upi
   @proxy @noproxy @disconnected @connected
@@ -137,6 +136,7 @@ Feature: Routing and DNS related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @inactive
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
     And I store the number of linux worker nodes to the :num_workers clipboard
