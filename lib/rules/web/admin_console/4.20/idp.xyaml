@@ -24,7 +24,7 @@ set_remote_url:
 set_idp_ca_path:
   params:
     file_path: <ca_path>
-    field_name: idp-file
+    field_name: ca-file
   action: upload_file_for_one_field
 set_idp_crt_path:
   params:
