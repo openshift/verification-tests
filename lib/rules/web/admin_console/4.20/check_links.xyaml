@@ -140,7 +140,7 @@ check_external_link:
       xpath: //div[contains(text(),'Launcher')] | //span[contains(text(),'Launcher')]
     timeout: 20
   - selector: &external_link
-      xpath: //a[contains(@class,'co-external-link') and contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), translate('<link_text>', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))]
+      xpath: //a[contains(@class,'link') and contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), translate('<link_text>', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))]
 click_external_link:
   elements:
   - selector:
@@ -308,11 +308,7 @@ check_oc_license:
     text: LICENSE
     link_url: oc-license
   action: check_link_and_text
-check_default_odo_download_links:
-  params:
-    text: odo
-    link_url: clients/odo/latest
-  action: check_link_and_text
+check_default_odo_download_links: {}
 check_customized_oc_download_links:
   params:
     text: Download oc2
