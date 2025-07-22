@@ -12,7 +12,7 @@ Feature: IPsec upgrade scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7
-  Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade - prepare
+  Scenario: OCP-44834:SDN Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade - prepare
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
     Given I store all worker nodes to the :workers clipboard
@@ -85,7 +85,7 @@ Feature: IPsec upgrade scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
-  Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade
+  Scenario: OCP-44834:SDN Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade
     Given the IPsec is enabled on the cluster
     Given evaluation of `50` is stored in the :protocol clipboard
     Given I switch to cluster admin pseudo user

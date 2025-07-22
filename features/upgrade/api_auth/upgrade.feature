@@ -203,7 +203,7 @@ Feature: apiserver and auth related upgrade check
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  Scenario: Check the default SCCs should not be stomped by CVO - prepare
+  Scenario: OCP-29741:Authentication Check the default SCCs should not be stomped by CVO - prepare
     Given as admin I successfully merge patch resource "scc/anyuid" with:
       | {"users": ["system:serviceaccount:test-scc:test-scc"]} |
     Given as admin I successfully merge patch resource "scc/privileged" with:
@@ -240,7 +240,7 @@ Feature: apiserver and auth related upgrade check
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: Check the default SCCs should not be stomped by CVO
+  Scenario: OCP-29741:Authentication Check the default SCCs should not be stomped by CVO
     Given I run the :get admin command with:
       | resource      | namespace                  |
       | resource_name | ocp-29741-pre-upgrade-done |

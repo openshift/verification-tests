@@ -159,7 +159,7 @@ Feature: Routing and DNS related scenarios
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  Scenario: upgrade with route shards - prepare
+  Scenario:  OCP-38812:NetworkEdge upgrade with route shards - prepare
     # Ensure cluster operator ingress is in normal status
     Given I switch to cluster admin pseudo user
     Given the expression should be true> cluster_operator('ingress').condition(type: 'Available')['status'] == "True"
@@ -245,7 +245,7 @@ Feature: Routing and DNS related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: upgrade with route shards
+  Scenario: OCP-38812:NetworkEdge upgrade with route shards
     # Ensure cluster operator ingress is in normal status after upgrade
     Given I switch to cluster admin pseudo user
     Given the expression should be true> cluster_operator('ingress').condition(type: 'Available')['status'] == "True"
@@ -281,7 +281,7 @@ Feature: Routing and DNS related scenarios
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
-  Scenario: Unidling a route work without user intervention - prepare
+  Scenario: OCP-45955:NetworkEdge Unidling a route work without user intervention - prepare
     Given I switch to first user
     And I run the :new_project client command with:
       | project_name | ocp45955 |
@@ -325,7 +325,7 @@ Feature: Routing and DNS related scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
-  Scenario: Unidling a route work without user intervention
+  Scenario: OCP-45955:NetworkEdge Unidling a route work without user intervention
     # Check the servcie service-unsecure to see the idle annotation is still intact
     Given I switch to first user
     Given I use the "ocp45955" project
