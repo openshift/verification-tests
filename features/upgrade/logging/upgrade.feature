@@ -15,7 +15,7 @@ Feature: Logging upgrading related features
   @amd64
   @hypershift-hosted
   @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.8 @4.7 @4.6
-  Scenario: Cluster logging checking during cluster upgrade - prepare
+  Scenario: OCP-22911:Logging Cluster logging checking during cluster upgrade - prepare
     Given logging service is removed successfully
     And I check if the remaining_resources in woker nodes meet the requirements for logging stack
     Given I switch to the first user
@@ -63,7 +63,7 @@ Feature: Logging upgrading related features
   @network-ovnkubernetes @network-openshiftsdn
   @amd64
   @hypershift-hosted
-  Scenario: Cluster logging checking during cluster upgrade
+  Scenario: OCP-22911:Logging Cluster logging checking during cluster upgrade
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Then evaluation of `project.name` is stored in the :proj1 clipboard

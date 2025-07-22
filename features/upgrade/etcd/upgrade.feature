@@ -10,7 +10,7 @@ Feature: basic verification for upgrade testing
   @network-ovnkubernetes @network-openshiftsdn
   @ppc64le @heterogeneous @arm64 @amd64
   @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  Scenario: etcd-operator and cluster works well after upgrade - prepare
+  Scenario: OCP-22606:Etcd etcd-operator and cluster works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I store the masters in the :masters clipboard
     When I use the "openshift-etcd" project
@@ -61,7 +61,7 @@ Feature: basic verification for upgrade testing
   @upgrade
   @network-ovnkubernetes @network-openshiftsdn
   @ppc64le @heterogeneous @arm64 @amd64
-  Scenario: etcd-operator and cluster works well after upgrade
+  Scenario: OCP-22606:Etcd etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     Given I store the masters in the :masters clipboard
     When I use the "openshift-etcd" project

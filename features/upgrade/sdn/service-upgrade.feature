@@ -11,7 +11,7 @@ Feature: service upgrade scenarios
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8
-  Scenario: Check the idle service works well after upgrade - prepare
+  Scenario: OCP-44259:SDN Check the idle service works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
       | project_name | idle-upgrade |
@@ -45,7 +45,7 @@ Feature: service upgrade scenarios
   @network-ovnkubernetes @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: Check the idle service works well after upgrade
+  Scenario: OCP-44259:SDN Check the idle service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "idle-upgrade" project
     And the appropriate pod security labels are applied to the "idle-upgrade" namespace
@@ -77,7 +77,7 @@ Feature: service upgrade scenarios
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
-  Scenario: Check the nodeport service works well after upgrade - prepare
+  Scenario: OCP-44302:SDN Check the nodeport service works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
       | project_name | nodeport-upgrade |
@@ -123,7 +123,7 @@ Feature: service upgrade scenarios
   @network-ovnkubernetes @network-openshiftsdn @network-networkpolicy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: Check the nodeport service works well after upgrade
+  Scenario: OCP-44302:SDN Check the nodeport service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "nodeport-upgrade" project
     Given I use the "hello-pod" service
