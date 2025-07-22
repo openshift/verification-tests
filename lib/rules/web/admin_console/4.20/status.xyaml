@@ -40,7 +40,7 @@ check_get_started_message_when_no_resources:
 check_message_and_doc_for_new_user:
   elements:
   - selector:
-      xpath: //p[contains(., 'To learn more, visit the OpenShift')]/a[contains(@href, 'documentation/en-us/openshift_container_platform')]
+      xpath: //a[contains(@href, 'documentation/en-us/openshift_container_platform') and contains(., 'View documentation')]
   - selector:
       xpath: //a[contains(@href, '/command-line-tools') and contains(., 'command-line tools')]
 check_name_validation_error:
