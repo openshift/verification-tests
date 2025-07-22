@@ -708,13 +708,13 @@ check_insights_popover_info_when_available:
   - selector:
       xpath: //div[contains(@class,'c-chart')]
   - selector:
-      xpath: //a[contains(@class,'co-external-link') and contains(@href,'https://console.redhat.com/openshift/insights/advisor/clusters/<cluster_id>')]
+      xpath: //a[contains(@class,'-link') and contains(@href,'https://console.redhat.com/openshift/insights/advisor/clusters/<cluster_id>')]
 check_insights_popover_info_when_unavailable:
   elements:
   - selector:
       xpath: //div[contains(@class,'popover__body') and contains(.,'unavailable')]
   - selector:
-      xpath: //a[contains(@class,'co-external-link') and contains(@href,'using-insights-to-identify-issues-with-your-cluster')]
+      xpath: //a[contains(@class,'-link') and contains(@href,'using-insights-to-identify-issues-with-your-cluster')]
 check_insights_status_when_available:
   params:
     status: Warning
