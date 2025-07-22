@@ -56,6 +56,10 @@ click_button:
       xpath: //button[contains(.,'<button_text>')]
     timeout: 60
     op: click
+click_delete_button:
+  params:
+    button_text: Delete
+  action: click_button
 click_button_text:
   element:
     selector: &button_with_text
