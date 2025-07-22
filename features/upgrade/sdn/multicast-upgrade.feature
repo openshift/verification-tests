@@ -11,7 +11,7 @@
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
-  Scenario: Check the multicast works well after upgrade - prepare
+  Scenario: OCP-44636:SDN Check the multicast works well after upgrade - prepare
     # create some multicast testing pods
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -105,7 +105,7 @@
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
-  Scenario: Check the multicast works well after upgrade
+  Scenario: OCP-44636:SDN Check the multicast works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "multicast-upgrade" project
     Given 3 pods become ready with labels:

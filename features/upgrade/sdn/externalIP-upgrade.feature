@@ -10,7 +10,7 @@ Feature: SDN externalIP compoment upgrade testing
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
   @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
-  Scenario: Check the externalIP works well after upgrade - prepare
+  Scenario: OCP-44790:SDN Check the externalIP works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
       | project_name | externalip-upgrade |
@@ -64,7 +64,7 @@ Feature: SDN externalIP compoment upgrade testing
   @network-ovnkubernetes @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
-  Scenario: Check the externalIP works well after upgrade
+  Scenario: OCP-44790:SDN Check the externalIP works well after upgrade
     Given I switch to cluster admin pseudo user
     # Get the external ip from  service
     When I use the "externalip-upgrade" project
