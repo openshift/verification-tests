@@ -50,6 +50,11 @@ click_cancel_button:
   - selector:
       xpath: //button[contains(text(),'Cancel')]
     op: click
+click_delete_button:
+  elements:
+  - selector:
+      xpath: //button[@data-test='delete-button']
+    op: click
 click_button:
   element:
     selector:

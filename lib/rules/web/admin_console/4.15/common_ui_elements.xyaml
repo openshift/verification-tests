@@ -61,6 +61,10 @@ click_button_text:
     selector: &button_with_text
       xpath: //button[text()='<button_text>']
     op: click
+click_delete_button:
+  params:
+    button_text: Delete
+  action: click_button
 check_button_text:
   element:
     selector:
