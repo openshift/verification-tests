@@ -216,7 +216,7 @@ check_edit_yaml_enabled:
 click_checkbox_input_by_text:
   element:
     selector:
-      xpath: //label[contains(.,'<text>')]/input[@type='checkbox']
+      xpath: //label[contains(.,'<text>')]/preceding-sibling::input[@type='checkbox']
     op: click
 click_radio_input:
   element:
@@ -346,7 +346,7 @@ check_content_in_yaml_editor:
 check_sidebar_item:
   element:
     selector:
-      xpath: //li[@class='co-resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
+      xpath: //li[@data-test='resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
 click_on_resource_item:
   element:
     selector: &data_test_id
