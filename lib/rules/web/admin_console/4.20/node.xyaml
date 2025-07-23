@@ -59,19 +59,19 @@ remove_taint_from_node:
 node_affinity_modal_value:
   element:
     selector: &value
-      xpath: //div[text()='Value']/following-sibling::span//input
+      xpath: //td[@data-label="Value"]//input
 node_affinity_modal_key:
   element:
     selector: &key
-      xpath: //div[text()='Key']/following-sibling::span//input
+      xpath: //td[@data-label="Key"]//input
 node_affinity_modal_dropdown:
   element:
     selector: &dropdown
-      xpath: //div[contains(text(),'<option>')]/following-sibling::div//button
+      xpath: //td[@data-label="Effect"]//button[@data-test-id="dropdown-button"]
 delete_node_affinity:
   element:
     selector:
-      xpath: //input[@value='<affinity_key>']/ancestor::div//button[@aria-label='Remove']
+      xpath: //input[@value="<affinity_key>"]/ancestor::td[@data-label="Key"]/following-sibling::td//button[@aria-label="Remove"]
     op: click
 click_node_affinity_modal_dropdown:
   element:
@@ -91,11 +91,13 @@ input_node_affinity_modal_value:
     type: input
     op: send_keys <affinity_value>
 set_affinity_operator:
-  params:
-    option: Operator
-    button_text: <operator>
-  action: click_node_affinity_modal_dropdown
-  action: click_button_text
+  elements:
+  - selector:
+      xpath: //td[@data-label="Operator"]//button[@data-test-id="dropdown-button"]
+    op: click
+  - selector:
+      xpath: //button[@data-test-dropdown-menu="<operator>"]
+    op: click
 set_affinity_effect:
   params:
     option: Effect
