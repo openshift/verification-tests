@@ -1,15 +1,15 @@
 open_view_sidebar:
   elements:
   - selector:
-      xpath: //label[contains(@for,'showSidebar')]
+      xpath: //button[@aria-label="Show sidebar"]
     op: click
   - selector:
-      xpath: //button[contains(.,'Schema')]
+      xpath: //button[contains(.,"Schema")]
 close_view_sidebar:
   action: click_close_icon
   element:
     selector:
-      xpath: //button[contains(.,'Schema')]
+      xpath: //button[contains(.,"Schema")]
     missing: true
 view_schema_definition_of_bc_output_name:
   action: view_spec_schema_details
@@ -48,7 +48,7 @@ view_schema_definition_of_for_replicas_field:
 click_view_detail_button:
   element:
     selector:
-      xpath: //li[contains(@class,'co-resource-sidebar-item')]/h5[contains(.,'<field>')]/following-sibling::button[contains(.,'View details')]
+      xpath: //h5[contains(.,'<field>')]/following-sibling::button[contains(.,'View details')]
     op: click
 click_item_in_breadcrumb:
   element:
