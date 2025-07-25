@@ -483,6 +483,7 @@ Feature: Multus-CNI related scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
+  @level0
   Scenario: OCP-24489:SDN Create pod with Multus bridge CNI plugin and vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1322,6 +1323,7 @@ Feature: Multus-CNI related scenarios
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
+  @level0
   Scenario: OCP-28633:SDN Dynamic IP address assignment with Whereabouts
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
