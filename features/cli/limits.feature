@@ -25,7 +25,7 @@ Feature: limit range related scenarios:
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     @hypershift-hosted
     @critical
@@ -58,7 +58,7 @@ Feature: limit range related scenarios:
     @upgrade-sanity
     @singlenode
     @proxy @noproxy @disconnected @connected
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     @hypershift-hosted
     @critical
@@ -76,7 +76,7 @@ Feature: limit range related scenarios:
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -106,7 +106,7 @@ Feature: limit range related scenarios:
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -131,7 +131,7 @@ Feature: limit range related scenarios:
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -156,7 +156,7 @@ Feature: limit range related scenarios:
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -181,7 +181,7 @@ Feature: limit range related scenarios:
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -215,7 +215,7 @@ Feature: limit range related scenarios:
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical

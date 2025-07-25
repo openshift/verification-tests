@@ -65,7 +65,7 @@ Feature: build 'apps' with CLI
     @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi @alicloud-ipi
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @s390x @ppc64le @heterogeneous @arm64 @amd64
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @proxy @noproxy
     Examples:
       | case_id            | number   | build_status |
@@ -81,7 +81,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -152,7 +152,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -198,7 +198,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -233,7 +233,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -261,7 +261,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -332,7 +332,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -369,7 +369,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -428,7 +428,7 @@ Feature: build 'apps' with CLI
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     @proxy @noproxy @connected
     @critical
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     Examples:
       | case_id            | bc_name              | build_name             | file_name        |
       | OCP-11580:BuildAPI | ruby-sample-build-ns | ruby-sample-build-ns-1 | Nonesrc-sti.json | # @case_id OCP-11580
@@ -442,7 +442,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -666,7 +666,7 @@ Feature: build 'apps' with CLI
     @upgrade-sanity
     @singlenode
     @noproxy @connected
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     @critical
@@ -740,7 +740,7 @@ Feature: build 'apps' with CLI
     @upgrade-sanity
     @singlenode
     @noproxy @connected
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     @critical
@@ -786,7 +786,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -820,7 +820,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -846,7 +846,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical
@@ -987,7 +987,7 @@ Feature: build 'apps' with CLI
   @upgrade-sanity
   @singlenode
   @noproxy @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
   @critical

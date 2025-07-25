@@ -8,7 +8,7 @@ Feature: Cluster Autoscaler Tests
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @upgrade-sanity
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
@@ -84,7 +84,7 @@ Feature: Cluster Autoscaler Tests
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @hypershift-hosted
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   @cas
   Scenario: OCP-21516:ClusterInfrastructure Cao listens and deploys cluster-autoscaler based on ClusterAutoscaler resource
@@ -108,7 +108,7 @@ Feature: Cluster Autoscaler Tests
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @hypershift-hosted
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   @cas
   Scenario: OCP-21517:ClusterInfrastructure CAO listens and annotations machineSets based on MachineAutoscaler resource
@@ -152,7 +152,7 @@ Feature: Cluster Autoscaler Tests
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @cas
   Scenario: OCP-22102:ClusterInfrastructure Update machineAutoscaler to reference a different MachineSet
@@ -231,7 +231,7 @@ Feature: Cluster Autoscaler Tests
   @destructive
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
   @vsphere-ipi @openstack-ipi @nutanix-ipi @ibmcloud-ipi @gcp-ipi @azure-ipi @aws-ipi @alicloud-ipi
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @cas

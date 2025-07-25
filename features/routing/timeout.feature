@@ -8,7 +8,7 @@ Feature: Testing timeout route
   @upgrade-sanity
   @singlenode
   @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @rosa @osd_ccs @aro
   @critical

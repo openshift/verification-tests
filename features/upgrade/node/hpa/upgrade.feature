@@ -8,7 +8,7 @@ Feature: basic verification for upgrade testing
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @heterogeneous @arm64 @amd64
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11
@@ -62,7 +62,7 @@ Feature: basic verification for upgrade testing
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   Scenario: OCP-13016:Upgrade - Make sure multiple resources work well after upgrade
     Given I switch to cluster admin pseudo user
