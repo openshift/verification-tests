@@ -7,7 +7,7 @@ Feature: change the policy of user/service account
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @upgrade-sanity
   @singlenode
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
@@ -93,7 +93,7 @@ Feature: change the policy of user/service account
   @upgrade-sanity
   @singlenode
   @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @osd_ccs @aro @rosa
   @hypershift-hosted
@@ -154,7 +154,7 @@ Feature: change the policy of user/service account
   @upgrade-sanity
   @singlenode
   @proxy @noproxy @disconnected @connected
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64 
   @hypershift-hosted
   @critical

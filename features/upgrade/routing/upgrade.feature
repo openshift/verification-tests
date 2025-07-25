@@ -7,7 +7,7 @@ Feature: Routing and DNS related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
@@ -31,7 +31,7 @@ Feature: Routing and DNS related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @critical
@@ -53,7 +53,7 @@ Feature: Routing and DNS related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @inactive
@@ -79,7 +79,7 @@ Feature: Routing and DNS related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @critical
   @inactive
@@ -102,7 +102,7 @@ Feature: Routing and DNS related scenarios
   @vsphere-upi @openstack-upi
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @inactive
@@ -133,7 +133,7 @@ Feature: Routing and DNS related scenarios
   @vsphere-upi @openstack-upi
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   @inactive
@@ -155,7 +155,7 @@ Feature: Routing and DNS related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @hypershift-hosted
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @4.11 @4.10 @4.9 @4.8 @4.7 @4.6
@@ -242,7 +242,7 @@ Feature: Routing and DNS related scenarios
   @singlenode
   @proxy @noproxy @disconnected @connected
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @hypershift-hosted
   Scenario: OCP-38812:NetworkEdge upgrade with route shards
@@ -277,7 +277,7 @@ Feature: Routing and DNS related scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
   @4.11 @4.10 @4.9 @4.8
@@ -322,7 +322,7 @@ Feature: Routing and DNS related scenarios
   @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
   @singlenode
   @upgrade
-  @network-ovnkubernetes @network-openshiftsdn
+  @network-ovnkubernetes @other-cni @network-openshiftsdn
   @proxy @noproxy @disconnected @connected
   @hypershift-hosted
   Scenario: OCP-45955:NetworkEdge Unidling a route work without user intervention

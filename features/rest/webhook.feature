@@ -49,7 +49,7 @@ Feature: Webhook REST Related Tests
     @vsphere-upi @openstack-upi @nutanix-upi @ibmcloud-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi @alicloud-upi
     @singlenode
     @noproxy @connected
-    @network-ovnkubernetes @network-openshiftsdn
+    @network-ovnkubernetes @other-cni @network-openshiftsdn
     @s390x @ppc64le @heterogeneous @arm64 @amd64
     @inactive
     Examples:
