@@ -226,7 +226,7 @@ click_radio_input:
 click_radio_input_by_text:
   element:
     selector:
-      xpath: //label[contains(.,'<text>')]/input[@type='radio']
+      xpath: //label[contains(.,'<text>')]/preceding-sibling::input[@type='radio']
     op: click
 check_disabled_radio_input:
   element:
@@ -332,7 +332,7 @@ toggle_label_input:
 set_label_radio_input:
   element:
     selector:
-      xpath: //label[contains(.,'<label_text>')]/following::div[contains(@class,'co-radio-group')]//input[@type='radio' and @value='<radio_input_value>']
+      xpath: //label[contains(.,'<label_text>')]/preceding-sibling::input[@type='radio' and @value='<radio_input_value>']
     op: click
 check_editor_is_monaco_editor:
   element:

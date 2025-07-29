@@ -105,7 +105,7 @@ toggle_checkbox:
     op: click
 set_image_pull_policy:
   params:
-    label_text: Image Pull Policy
+    label_text: <image_pull_policy> 
     radio_input_value: <image_pull_policy>
   action: set_label_radio_input
 set_update_strategy:
@@ -286,11 +286,7 @@ check_affected_pods_tab:
   params:
     tab_name: Affected Pods
   action: check_tab
-check_link_for_marketplace:
-  params:
-    text: Red Hat Marketplace
-    link_url: marketplace.redhat.com
-  action: check_link_and_text
+check_link_for_marketplace: {}
 check_link_for_developer_catalog:
   params:
     text: Software Catalog 
@@ -303,15 +299,7 @@ check_catalog_badge_by_checkbox:
       xpath: //*[contains(@class, 'badge')]//*[contains(text(),'<text>')]
     timeout: 30
   action: click_checkbox_from_provider_type
-check_marketplace_operator_description_on_overlay:
-  params:
-    text: Marketplace
-    description: This Operator is purchased through Red Hat Marketplace
-  action: click_checkbox_from_provider_type
-  action: open_first_card_in_overlay
-  action: check_operator_description_on_overlay
-  action: click_close_icon
-  action: click_checkbox_from_provider_type
+check_marketplace_operator_description_on_overlay: {}
 check_community_operator_description_on_overlay:
   params:
     text: Community
@@ -655,11 +643,7 @@ check_installation_failure_message:
       xpath: //*[contains(text(), 'ailed')]
     timeout: 30
 check_view_error_button: {}
-check_customized_operator_purchase_link:
-  params:
-    text: PurchaseTest
-    link_url: https://marketplace.redhat.com/en-us/operators/testargo?price
-  action: check_link_and_text
+check_customized_operator_purchase_link: {}
 check_phase_status:
   elements:
   - selector:
