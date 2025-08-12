@@ -149,9 +149,9 @@ When /^admin creates a PV from "([^"]*)" where:$/ do |location, table|
 
   if location.include? '://'
     step %Q/I download a file from "#{location}"/
-    pv_hash = YAML.load @result[:response]
+    pv_hash = YAML.load @result[:response], aliases: true, permitted_classes: [Symbol, Regexp]
   else
-    pv_hash = YAML.load_file location
+    pv_hash = YAML.safe_load_file location, aliases: true, permitted_classes: [Symbol, Regexp]
   end
 
   # use random name to avoid interference
