@@ -18,7 +18,7 @@ check_additional_support:
 check_getting_started:
   elements:
   - selector:
-      xpath: //div[contains(@class,"__title") and contains(.,'Getting Started')]
+      xpath: //div[contains(@class,"__title") and contains(.,'Hello, world')]
   - selector:
       xpath: //button/*[contains(.,'Create a new project')]
 check_dim_resource_list:
