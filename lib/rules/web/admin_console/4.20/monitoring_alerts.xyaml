@@ -23,6 +23,17 @@ check_div_text:
   element:
     selector:
       xpath: //div[contains(text(),'<text>')]
+choose_receiver_type:
+  elements:
+  - selector:
+      xpath: //button[@data-test="receiver-type"]
+    op: click
+  - selector:
+      xpath: //div[@id='receiver-type']
+    timeout: 20
+  - selector:
+      xpath: //button[contains(@class, '-menu__item') and contains(., '<dropdown_menu_item>')]
+    op: click
 filter_alert:
   params:
     class_text: co-text-filter

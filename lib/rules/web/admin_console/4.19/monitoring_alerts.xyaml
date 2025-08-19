@@ -23,6 +23,8 @@ check_div_text:
   element:
     selector:
       xpath: //div[contains(text(),'<text>')]
+choose_receiver_type:
+  action: choose_item_from_dropdown_menu
 filter_alert:
   params:
     class_text: co-text-filter
