@@ -33,7 +33,7 @@ choose_storage_class:
     timeout: 20
   - selector:
       id: <storage_class_name>-link
-    type: a
+    type: button
     op: click
 set_pvc_name:
   element:
@@ -44,7 +44,7 @@ set_pvc_name:
 choose_access_mode:
   elements:
   - selector:
-      xpath: //label[@for="access-mode"]/ancestor::div[@class="form-group"]//button[contains(@class,"menu-toggle")]
+      xpath: //label[@for="access-mode"]/ancestor::div[contains(@class,"form-group")]//button[contains(@class,"menu-toggle")]
     op: click
   - selector:
       xpath: //span[contains(.,"<mapped_access_mode>")]/ancestor::button[@role="option" and not(@disabled)]
@@ -72,7 +72,7 @@ set_expand_size:
 choose_request_size_unit:
   elements:
   - selector:
-      xpath: //button[@data-test-id='dropdown-button']
+      xpath: //button[@id='requestSizeUnit']
     op: click
   - selector:
       id: <pvc_size_unit>-link
