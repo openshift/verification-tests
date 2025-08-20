@@ -23,7 +23,7 @@ clear_all_filters:
 set_strings_in_dropdown_filter_box:
   elements:
   - selector: &dropdown_filter
-      xpath: //input[@data-test-id='dropdown-text-filter']
+      xpath: //input[contains(@placeholder, 'Select')]
     op: clear
   - selector:
       <<: *dropdown_filter
