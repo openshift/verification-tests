@@ -909,10 +909,10 @@ choose_dropdown_item_text:
 choose_item_from_dropdown_menu:
   elements:
   - selector:
-      xpath: //button[contains(@data-test-id, 'dropdown-button')]
+      xpath: //button[contains(@data-test, 'console-select-menu-toggle')]
     op: click
   - selector:
-      xpath: //button[contains(@data-test-id, 'dropdown-menu')]
+      xpath: //ul[contains(@data-test, 'console-select-menu-list')]
     timeout: 20
   action: click_dropdown_menu_item
 upload_file_for_one_field:

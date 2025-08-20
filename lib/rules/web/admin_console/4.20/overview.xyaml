@@ -164,7 +164,7 @@ click_groupby_dropdown_button:
 check_dropdown_menu_item:
   element:
     selector: &dropdown_item
-      xpath: //button[contains(@data-test-id,'dropdown-menu') and contains(text(),'<dropdown_menu_item>')]
+      xpath: //li[contains(@data-test,'console-select-item')]//button[contains(.,'<dropdown_menu_item>')]
 click_dropdown_menu_item:
   element:
     selector:
