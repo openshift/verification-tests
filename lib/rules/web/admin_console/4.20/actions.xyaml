@@ -6,7 +6,7 @@ click_resource_action_button:
   - selector:
       xpath: //button[contains(.,'Actions')]
     op: click
-    timeout: 30
+    timeout: 50
 click_resource_action_button_on_sidebar:
   elements:
   - selector:
