@@ -1571,7 +1571,7 @@ check_instance_type:
 check_registry_pull_interval:
   element:
     selector:
-      xpath: //dt[contains(.,'Registry poll interval')]/following-sibling::dd[1]//button[contains(.,'<registrypullinterval>')]
+      xpath: //dt[contains(.,'Registry poll interval')]/following-sibling::dd[1][contains(.,'<registrypullinterval>')]
 check_runtimeclass:
   params:
     key: Runtime class
