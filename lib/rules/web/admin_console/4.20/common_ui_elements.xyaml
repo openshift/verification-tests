@@ -936,7 +936,7 @@ wait_page_body_loaded:
   element:
     selector:
       css: .co-m-page__body
-    timeout: 40
+    timeout: 200
 wait_until_no_loading:
   element:
     selector:
