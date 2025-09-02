@@ -67,7 +67,7 @@ node_affinity_modal_key:
 node_affinity_modal_dropdown:
   element:
     selector: &dropdown
-      xpath: //td[@data-label="Effect"]//button[@data-test-id="dropdown-button"]
+      xpath: //td[@data-label="Effect"]//button[@data-test="console-select-menu-toggle"]
 delete_node_affinity:
   element:
     selector:
@@ -93,10 +93,10 @@ input_node_affinity_modal_value:
 set_affinity_operator:
   elements:
   - selector:
-      xpath: //td[@data-label="Operator"]//button[@data-test-id="dropdown-button"]
+      xpath: //td[@data-label="Operator"]//button[@data-test="console-select-menu-toggle"]
     op: click
   - selector:
-      xpath: //button[@data-test-dropdown-menu="<operator>"]
+      xpath: //button[@id="<operator>-link"]
     op: click
 set_affinity_effect:
   params:
