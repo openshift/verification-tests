@@ -77,7 +77,7 @@ set_k8s_resource:
       xpath: //label[contains(.,'K8s Resource Prefix')]/following::button[1][contains(@id,'k8sResourcePrefix')]
     op: click
   - selector:
-      xpath: //ul//a[@id='<k8s_resource>-Project-link']
+      xpath: //ul//a[@id='<k8s_resource>-Project-link'] | //ul//button[@id='<k8s_resource>-Project-link']
     op: click
 set_pod_count:
   params:

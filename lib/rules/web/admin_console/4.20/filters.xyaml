@@ -55,7 +55,7 @@ filter_event_by_name_or_message:
 search_by_event_catagory:
   elements:
   - selector:
-      xpath: //button[@data-test-id="dropdown-button"][contains(.,'All types')]
+      xpath: //button[@data-test="console-select-menu-toggle"][contains(.,'All types')]
     op: click
   - selector:
       xpath: //li//*[contains(.,'<catagory>')]
