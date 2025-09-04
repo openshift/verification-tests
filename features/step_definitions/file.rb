@@ -37,6 +37,9 @@ Given /^I get time difference using "(.+)" and "(.+)" in (.+) file$/ do  |s1, s2
   split1 = File.open(filename){ |f| f.read }.split(s1)[0].split("Watching")[0]
   split2 = File.open(filename){ |f| f.read }.split(s2)[0].split(s1)[2].strip
 
+  puts "DEBUG split1: #{split1}"
+  puts "DEBUG split2: #{split2}"
+
   #Calculating time difference in seconds
   time_start = DateTime.parse split1
   time_end = DateTime.parse split2
