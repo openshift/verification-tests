@@ -86,7 +86,7 @@ update_pair_key:
       xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'pairs-list__row')]//div[contains(@class,'value-from--key')][last()]//button
     op: click
   - selector:
-      xpath: //a[contains(.,'<env_source_key>')]
+      xpath: //span[contains(.,'<env_source_key>')]
     op: click
 update_env_var_value: {}
 remove_env_vars:
