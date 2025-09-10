@@ -346,7 +346,7 @@ click_checkbox_from_provider_type:
     ref: show_all_provider_type
   elements:
   - selector:
-      xpath: //input[@title="<text>"]
+      xpath: //input/following-sibling::label[contains(., "<text>")]
     op: click
     timeout: 40
 show_all_provider_type:
@@ -368,7 +368,7 @@ open_first_card_overlay_panel:
 click_checkbox_from_capability_level:
   elements:
   - selector:
-      xpath:  //form[@data-test-group-name='capabilityLevel']
+      xpath:  //form[@data-test-group-name='capabilities']
     timeout: 30
   - selector:
       xpath: //*[text()='<text>']
@@ -420,20 +420,19 @@ click_show_more:
 choose_one_checkbox:
   element:
     selector:
-      xpath: //input[contains(@title,'<checkbox_text>')]
+      xpath: //input/following-sibling::label[contains(.,'<checkbox_text>')]
     op: click
 check_property_label_and_value:
   element:
     selector:
-      xpath: //h5[contains(@class,'property-label') and contains(text(),'<label>')]/../div[contains(@class,'property-value')]/div[contains(text(),'<value>')]
+      xpath: //h5[contains(@class,'property-label') and contains(text(),'<label>')]/following-sibling::div[contains(@class,'property-value')][contains(.,'<value>')]
 check_property_label_missing:
   element:
     selector:
-      xpath: //h5[contains(@class,'property-label') and contains(text(),'<label>')]
-    missing: true
+      xpath: //h5[contains(@class,'property-label') and contains(text(),'<label>')]/following-sibling::div[contains(@class,'property-value')][contains(.,'-')]
 check_validsubscription_property_missing:
   params:
-    label: Valid Subscriptions
+    label: Valid subscriptions
   action: check_property_label_missing
 check_infrastructure_property_missing:
   params:
@@ -461,40 +460,40 @@ check_singlenodecluster_infra_value:
   action: check_property_label_and_value
 check_3scale_subs_value:
   params:
-    label: Valid Subscriptions
+    label: Valid subscriptions
     value: 3Scale Commercial License
   action: check_property_label_and_value
 check_integration_subs_value:
   params:
-    label: Valid Subscriptions
+    label: Valid subscriptions
     value: Red Hat Managed Integration
   action: check_property_label_and_value
 check_other_subs_value:
   params:
-    label: Valid Subscriptions
+    label: Valid subscriptions
     value: OpenShift Container Platform
   action: check_property_label_and_value
 click_checkbox_disconnected_from_infrastructure_features:
   params:
-    filter_type_value: infraFeatures
+    filter_type_value: infrastructureFeatures
     checkbox_text: Disconnected
   action: wait_filter_section_loaded
   action: choose_one_checkbox
 click_checkbox_proxy_from_infrastructure_features:
   params:
-    filter_type_value: infraFeatures
+    filter_type_value: infrastructureFeatures
     checkbox_text: Proxy-aware
   action: wait_filter_section_loaded
   action: choose_one_checkbox
 click_checkbox_fips_from_infrastructure_features:
   params:
-    filter_type_value: infraFeatures
+    filter_type_value: infrastructureFeatures
     checkbox_text: Designed for FIPS
   action: wait_filter_section_loaded
   action: choose_one_checkbox
 click_checkbox_singlenodecluster_from_infrastructure_features:
   params:
-    filter_type_value: infraFeatures
+    filter_type_value: infrastructureFeatures
     checkbox_text: Single Node Clusters
   action: wait_filter_section_loaded
   action: choose_one_checkbox
@@ -525,7 +524,7 @@ check_fips_mode_infras_value_in_operator_modal:
 filter_by_keyword_on_catalog_page:
   elements:
   - selector: &search_input
-      xpath: //div[@data-test='search-operatorhub']//input
+      xpath: //div[@data-test='search-catalog']//input
     op: send_keys :backspace
   - selector:
       <<: *search_input
@@ -900,7 +899,7 @@ check_operator_hidden_on_operatorhub_page:
 check_no_result_on_operatorhub_page:
   elements:
   - selector:
-      xpath: //h2[contains(., 'No Results Match the Filter Criteria')]
+      xpath: //*[contains(., 'No results match the filter criteria')]
 check_extension_help_block:
   elements:
   - selector:
