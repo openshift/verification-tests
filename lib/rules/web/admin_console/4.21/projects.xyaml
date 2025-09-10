@@ -1,0 +1,130 @@
+#---check project related action
+create_project:
+  action: click_create_project_button
+  action: set_project_name
+  action:
+    if_param: display_name
+    ref: set_project_display_name
+  action:
+    if_param: discription_name
+    ref: set_project_description
+  action: submit_changes
+check_project_dropdown_selected_all_projects:
+  element:
+    selector: &all_selected
+      xpath: //div[contains(@data-test-id, 'namespace-bar-dropdown')]//span[contains(., 'All Projects')]
+check_project_dropdown_not_selected_all_projects:
+  element:
+    selector:
+      <<: *all_selected
+    missing: true
+create_project_from_dropdown:
+  params:
+    dropdown_name: namespace-bar
+  action: click_dropdown
+  action: create_project
+click_create_project_button:
+  params:
+    button_text: Create Project
+  action: click_button
+set_project_name:
+  element:
+    selector:
+      xpath: //input[contains(@id,'input-name')]
+    op: send_keys <project_name>
+    type: input
+set_project_display_name:
+  element:
+    selector:
+      xpath: //input[contains(@id,'input-display-name')]
+    op: send_keys <display_name>
+    type: input
+set_project_description:
+  element:
+    selector:
+      xpath: //textarea[contains(@id,'input-description')]
+    op: set <description>
+    type: textarea
+send_delete_string:
+  elements:
+  - selector:
+      xpath: //input[contains(@placeholder,'Enter name')]
+    type: input
+    op: send_keys <resource_name>
+create_project_from_get_started_instru:
+  params:
+    button_text: Create a new project
+  action: click_button
+  action: set_project_name
+  action: submit_changes
+  action: navigate_to_admin_console
+  action: goto_one_project_page
+nagivate_to_project_resources_page:
+  params:
+    tab_name: Workloads
+  action: click_tab
+check_resource_data_in_table:
+  element:
+    selector:
+      xpath: (//a[@class='co-resource-item__resource-name' and text()='<resource_name>']/ancestor::tr[@data-test-rows='resource-row'])[last()]//td[contains(.,'<data>')]
+check_memory_data_for_one_project_in_table:
+  params:
+    resource_name: <project_name>
+    data: MiB
+    filter_text: <project_name>
+  action: filter_by_name
+  action: check_resource_data_in_table
+check_cpu_data_for_one_project_in_table:
+  params:
+    resource_name: <project_name>
+    data: cores
+    filter_text: <project_name>
+  action: filter_by_name
+  action: check_resource_data_in_table
+set_strings_in_project_dropdown_filter_box:
+  elements:
+  - selector: &dropdown_filter
+      xpath: //input[@data-test='dropdown-text-filter']
+    op: clear
+    timeout: 10
+  - selector:
+      <<: *dropdown_filter
+    op: send_keys <project_name>
+toggle_namespace_dropdown:
+  element:
+    selector:
+      xpath: //div[contains(@data-test-id, 'namespace-bar-dropdown')]//button
+    op: click
+    timeout: 15
+switch_to_project:
+  action:
+    if_element:
+      selector:
+        xpath: //div[contains(@data-test-id, 'namespace-bar-dropdown')]//button[@aria-expanded="false"]
+    ref: toggle_namespace_dropdown
+  action:
+    if_element:
+      selector:
+        xpath: //input[@data-test='showSystemSwitch' and @data-checked-state='true']
+      missing: true
+    ref: toggle_system_projects
+  action: set_strings_in_project_dropdown_filter_box
+  action: click_project_name
+click_project_name:
+  element:
+    selector:
+      xpath: //span[text()='<project_name>']
+    op: click
+toggle_system_projects:
+  element:
+    selector:
+      xpath: //span[contains(@class,'c-switch__toggle')]
+    op: click
+switch_to_all_projects:
+  params:
+    project_name: All Projects
+  action: switch_to_project
+check_timestamp:
+  element:
+    selector:
+      xpath: //span[contains(@data-test, 'timestamp')]
