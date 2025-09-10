@@ -294,7 +294,7 @@ goto_one_namespace_page:
 
 # operator hub
 goto_operator_hub_page:
-  url: operatorhub/ns/default
+  url: catalog/ns/default?catalogType=operator
   action: wait_box_loaded
 goto_installed_operators_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
