@@ -1,0 +1,85 @@
+add_htpasswd_idp_upload_files:
+  action: click_add_dropdown_button
+  params:
+    button_id: htpasswd
+  action: click_button_by_id
+  action: set_idp_name
+  action: upload_file
+  action: submit_changes
+set_idp_name:
+  elements:
+  - selector:
+      id: idp-name
+    op: clear
+  - selector:
+      id: idp-name
+    op: send_keys <idp_name>
+upload_file:
+  element:
+    selector:
+      xpath: //input[@type='file']
+    visible: false
+    type: filefield
+    op: set <file_path>
+check_console_notification:
+  elements:
+  - selector:
+      xpath: //div[@data-test='<name>-<location>']//*[contains(., '<notification_text>')]
+  - selector:
+      css: '[style*="background-color: <background>"][style*="color: <color>"]'
+  params:
+    text: <link_text>
+    link_url: <link_url>
+  action: check_link_and_text
+insert_snippet:
+  params:
+      button_text: Insert snippet
+  action: click_button
+click_create_job:
+  params:
+      button_id: yaml-create
+  action: click_button_by_id
+click_schema:
+  params:
+      button_text: Schema
+  action: click_button
+click_samples:
+  params:
+      button_text: Samples
+  action: click_button
+click_try_it:
+  params:
+      button_text: Try it
+  action: click_button
+click_snippets:
+  params:
+      button_text: Snippets
+  action: click_button
+click_show_yaml:
+  params:
+      button_text: Show YAML
+  action: click_button
+click_hide_yaml:
+  params:
+      button_text: Hide YAML
+  action: click_button
+check_exposed_flag_model:
+  action: goto_test_consumer_page
+  elements:
+  - selector: &model_group
+      xpath: //span[contains(.,'Group')]
+  - selector: &model_group_version
+      xpath: //span[contains(.,'Version')]
+  - selector:
+      xpath: //div[contains(.,'workspace.devfile.io')]
+  - selector:
+      xpath: //div[contains(.,'v1alpha1')]
+check_pseudolocalization:
+  action: goto_dynamic_plugin_pseudo_page
+  elements:
+  - selector:
+      <<: *model_group
+    missing: true
+  - selector:
+      <<: *model_group_version
+    missing: true

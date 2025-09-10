@@ -1,0 +1,113 @@
+click_add_value_from_configmap_or_secret:
+  params:
+    button_text: Add from ConfigMap or Secret
+  action: click_button
+check_env_editor_loaded:
+  element:
+    selector:
+      css: .pairs-list__row
+    timeout: 30
+check_env_editor_disabled:
+  elements:
+  - selector:
+      xpath: //input[@data-test='pairs-list-name' and @disabled]
+  action:
+    if_element:
+      selector:
+        xpath: //h3[contains(.,'envFrom')]
+    ref: check_env_from_editor_disabled
+check_env_from_editor_disabled:
+  element:
+    selector:
+      xpath: //input[@placeholder='ConfigMap/Secret' and @disabled]
+add_env_vars:
+  action: add_env_var_name
+  action:
+    if_param: env_source_name
+    ref: add_env_var_pair_value
+  action:
+    if_param: env_var_value
+    ref: add_env_var_value
+add_env_var_name:
+  elements:
+  - selector:
+      xpath: (//input[@data-test="pairs-list-name"])[last()]
+    op: send_keys <env_var_name>
+    timeout: 15
+add_env_var_pair_value:
+  elements:
+  - selector:
+      xpath: (//button//*[contains(.,'Select a resource')])[1]
+    op: click
+  - selector:
+      xpath: //li//*[.='<env_source_name>']
+    op: click
+  - selector:
+      xpath: //button//*[contains(.,'Select a key')]
+    op: click
+  - selector:
+      xpath: //li//*[.='<env_source_key>']
+    op: click
+add_env_var_value:
+  element:
+    selector:
+      xpath: //input[@data-test="pairs-list-value"][last()]
+    op: send_keys <env_var_value>
+choose_container:
+  elements:
+  - selector:
+      xpath: //button[@data-test="container-select"]
+    op: click
+  - selector:
+      xpath: //span[contains(.,"<item>")]
+    op: click
+update_env_vars:
+  action:
+    if_param: env_source_name
+    ref: update_env_var_pair_value
+  action:
+    if_param: env_var_value
+    ref: update_env_var_value
+    op: click
+update_env_var_pair_value:
+  action: update_pair_source
+  action: update_pair_key
+update_pair_source:
+  elements:
+  - selector:
+      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'pairs-list__row')]//div[@class='value-from'][1]//button
+    op: click
+  - selector:
+      xpath: //span[contains(.,'<env_source_name>')]
+    op: click
+update_pair_key:
+  elements:
+  - selector:
+      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'pairs-list__row')]//div[contains(@class,'value-from--key')][last()]//button
+    op: click
+  - selector:
+      xpath: //span[contains(.,'<env_source_key>')]
+    op: click
+update_env_var_value: {}
+remove_env_vars:
+  elements:
+  - selector:
+      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class, 'pairs-list__row')]//button[@data-test='delete-button']
+    op: click
+check_link_to_parent_resource:
+  element:
+    selector:
+      xpath: //div[contains(@class,'alert__description')]/span[contains(@class,'co-resource-item')][//span[@title='<parent_resource_type>'] and //a[text()='<parent_resource_name>']]
+check_info_and_link_to_parent_resource:
+  params:
+    title: Environment variables set from parent
+    description: View environment for resource
+  action: check_alert_title
+  action: check_alert_description
+  action: check_link_to_parent_resource
+check_env_value_pair:
+  elements:
+  - selector:
+      xpath: //input[contains(@value,'<value_from>')]
+  - selector:
+      xpath: //input[contains(@value, '<key>')]

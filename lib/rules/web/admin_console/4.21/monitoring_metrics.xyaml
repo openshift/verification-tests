@@ -1,0 +1,341 @@
+click_button_example_query:
+  element:
+    selector:
+      xpath: //button//span[text()='Insert example query']
+    op: click
+check_button_example_query:
+  element:
+    selector:
+      xpath: //button//span[text()='Insert example query']
+click_run_queries_button:
+  element:
+    selector:
+      xpath: //button[@type='submit']//span[text()='Run queries']
+    op: click
+check_sample_query_area:
+  element:
+    selector:
+      xpath: //span[contains(text(),'sum_over_time')]
+click_primary_menu_developer_mode:
+  element:
+    selector:
+      xpath: //a[text()='<menu_text>']
+    op: click
+goto_monitoring:
+  params:
+    menu_text: Observe
+  action: click_primary_menu_developer_mode
+click_projects_dropdown_developer_mode_admin:
+  element:
+    selector:
+      xpath: (//div[@class='co-namespace-bar']//button)[1]
+    op: click
+  element:
+    selector:
+      xpath: //span[contains(@class,'pf-c-switch__toggle')]
+    op: click
+click_projects_dropdown_developer_mode_user:
+  element:
+    selector:
+      xpath: (//div[@class='co-namespace-bar']//button)[1]
+    op: click
+input_select_project_developer_mode:
+  element:
+    selector:
+      xpath: //div[@class='co-namespace-dropdown']//input[@placeholder='Select project...']
+    op: send_keys <project_name>
+    type: input
+click_project_link_developer_mode:
+  element:
+    selector:
+      xpath: //span[text()='<project_name>']
+    timeout: 20
+    op: click
+# used for admin
+choose_project_developer_mode_admin:
+  action: click_projects_dropdown_developer_mode_admin
+  action: input_select_project_developer_mode
+  action: click_project_link_developer_mode
+# used for common user
+choose_project_developer_mode_user:
+  action: click_projects_dropdown_developer_mode_user
+  action: input_select_project_developer_mode
+  action: click_project_link_developer_mode
+check_tech_preview_badge: {}
+perform_cutomer_query:
+  action: click_metrics_query_dropdown
+  action: click_custom_query_button
+  action: check_query_input_text_area
+  action: set_query_input_text_area
+
+click_metrics_query_dropdown:
+  element:
+    selector:
+      xpath: //div[@class='pf-c-select' ]//div[contains(@class, 'pf-m-typeahead')]//button
+    op: click
+
+click_custom_query_button:
+  element:
+    selector:
+      xpath: //button[text()='Custom query']
+    op: click
+set_query_input_text_area:
+  elements:
+  - selector: &query_input_text_area
+      xpath: //textarea[contains(@class, 'query-browser__query-input')]
+    op: send_keys <metrics>
+    type: textarea
+  - selector:
+      <<: *query_input_text_area
+    op: send_keys <press_enter>
+    type: textarea
+
+choose_metrics_query:
+  element:
+    selector:
+      xpath: //button[contains(@class,'pf-c-select__menu-item') and (contains(text(),'<metrics_name>'))]
+    op: click
+check_query_input_text_area:
+  element:
+    selector:
+      <<: *query_input_text_area
+click_promql_button:
+  element:
+    selector: &promql_button
+      xpath: //button[text()='<text>']
+    op: click
+click_hide_promql_button:
+  params:
+    text: Hide PromQL
+  action: click_promql_button
+click_show_promql_button:
+  params:
+    text: Show PromQL
+  action: click_promql_button
+hide_promql_if_exists:
+  params:
+    text: Hide PromQL
+  action:
+    if_element:
+      selector:
+        <<: *promql_button
+    ref: click_hide_promql_button
+show_promql_if_exists:
+  params:
+    text: Show PromQL
+  action:
+    if_element:
+      selector:
+        <<: *promql_button
+    ref: click_show_promql_button
+
+choose_zoom_value:
+  action: click_chart_zoom_dropdown
+  action: click_zoom_value_button
+click_chart_zoom_dropdown:
+  element:
+    selector:
+      xpath: //button[@class='pf-v6-c-menu-toggle' and @aria-label='graph timespan']
+    op: click
+click_zoom_value_button:
+  element:
+    selector:
+      xpath: //li[@class='pf-v6-c-menu__list-item']//span[text()='<zoom_value>']/ancestor::button
+    op: click
+click_reset_zoom_button:
+  element:
+    selector:
+      xpath: //span[text()='Reset zoom']/ancestor::button
+    op: click
+    timeout: 10
+check_zoom_value:
+  element:
+    selector:
+      xpath: //div[contains(@class,'pf-v6-c-input-group' )]//input[@value='<zoom_value>']
+    timeout: 10
+
+check_metric_query_result_not_exit:
+  params:
+    time: 10
+  action: check_metric_query_chart
+  action: check_metric_query_table_text
+check_metric_query_result:
+  params:
+    time: 120
+  action: check_metric_query_chart
+  action: check_metric_query_table_text
+check_metric_query_chart:
+  element:
+    selector:
+      xpath: //div[@class='pf-v6-c-card pf-m-compact']
+    timeout: <time>
+check_metric_query_table_text_not_exist:
+  params:
+    time: 10
+  action: check_metric_query_table_text
+check_metric_query_table_text:
+  element:
+    selector:
+      xpath: //table[@aria-label='query results table']//td[contains(text(),'<table_text>')]
+    timeout: <time>
+
+perform_metric_query_drop_down_admin:
+  action: click_metrics_query_dropdown_admin
+  action: choose_metrics_query
+  action: submit_changes
+click_metrics_query_dropdown_admin:
+  element:
+    selector:
+      xpath: //button[@id='metrics-dropdown']
+    op: click
+perform_metric_query_textarea:
+  params:
+    metrics: <metrics_name>
+  action: click_clear_query_button
+  action: set_query_input_text_area_only
+  action: submit_changes
+set_query_input_text_area_only:
+  elements:
+  - selector:
+      xpath: //div[@class="cm-line"]
+    op: send_keys <metrics>
+click_clear_query_button:
+  element:
+    selector:
+      xpath: //button[@aria-label='Clear query']
+    op: click
+order_metrics_data:
+  element:
+    selector:
+      xpath: //span[text()='<metric_column>']/ancestor::button
+    op: click
+    timeout: <time>
+check_result_page:
+  params:
+    metric_column: Name
+    time: 20
+  action: order_metrics_data
+  action:
+    if_element:
+      selector:
+        xpath: //th[@aria-sort='descending']
+    ref: order_metrics_data
+  action: check_metric_query_table_text
+
+perform_filter_query:
+  params:
+    text: <metrics>
+  action: click_metrics_query_dropdown_admin
+  action: check_query_input
+  action: set_query_input
+  action: click_link_with_text_only
+  action: submit_changes
+set_query_input:
+  element:
+    selector: &query_input
+      xpath: //div[@class='dropdown-menu__filter']//input
+    op: send_keys <metrics>
+    type: input
+check_query_input:
+  element:
+    selector:
+      <<: *query_input
+perform_query_cog_action_delete_query:
+  params:
+    span_text: Delete query
+  action: perform_query_cog_action
+perform_query_cog_action_hide_all_query:
+  params:
+    span_text: Hide all series
+  action: perform_query_cog_action
+perform_query_cog_action_show_all_query:
+  params:
+    span_text: Show all series
+  action: perform_query_cog_action
+perform_query_cog_action:
+  action: click_query_cog_icon
+  action: click_query_cog_span_text
+click_query_cog_icon:
+  element:
+    selector:
+      xpath: //div[@class='pf-v6-c-data-list__item-action']//button
+    op: click
+click_query_cog_span_text:
+  element:
+    selector:
+      xpath: //div[@class='pf-v6-c-menu__content']//button//span[text()='<span_text>']
+    op: click
+check_query_input_text_area_no_value:
+  element:
+    selector:
+      xpath: //div[@class="cm-line"]
+
+perform_disable_query:
+  element:
+    selector:
+      xpath: //div[@title='Disable query']
+    op: click
+perform_enable_query:
+  element:
+    selector:
+      xpath: //div[@title='Enable query']
+    op: click
+perform_hide_table:
+  element:
+    selector:
+      xpath: //button[@class='pf-v6-c-button pf-m-plain' and @aria-expanded='true']
+    op: click
+    timeout: 20
+perform_show_table:
+  element:
+    selector:
+      xpath: //button[@class='pf-v6-c-button pf-m-plain' and @aria-expanded='false']
+    op: click
+    timeout: 20
+check_all_series_hide:
+  params:
+    button_title: Hide series
+  action: check_button_title
+check_all_series_show:
+  params:
+    button_title: Show series
+  action: check_button_title
+
+click_pod_chart_link:
+  params:
+    text: Metrics
+    link_url: /metrics
+  action: click_link_with_text
+  element:
+    selector:
+      xpath: //div[contains(text(),'<chart_name>')]/../../../..//a
+    op: click
+check_data_diplayed_db:
+  element:
+    selector:
+      xpath: //div[contains(text(),'<data_name>')]/../..//*[contains(text(), '<legend_name>')]
+    timeout: 60
+
+click_utilization_graph_link:
+  element:
+    selector:
+      xpath: //div[@class='co-utilization-card__item-chart']//a[contains(@href, '<metric_kind>')]
+    timeout: 120
+    op: click
+click_uitilization_description:
+  element:
+    selector:
+      xpath: //*[text()='<metric_kind>']/ancestor::div[@class='co-utilization-card__item-description']//button
+    timeout: 120
+    op: click
+click_link_from_uitilization_description:
+  params:
+    metric_kind: <metric_kind>
+    text: <link_text>
+  action: click_uitilization_description
+  action: click_link_with_text_only
+check_pod_detail:
+  params:
+    content: Pod IP
+  action: check_page_contains
+  action: check_pod_detail_page_charts_style
