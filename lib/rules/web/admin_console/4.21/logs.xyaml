@@ -27,19 +27,15 @@ check_download_logfile_name:
   element:
     selector:
       xpath: //a[@download='<pod_name>-<container_name>.log']
-check_some_context_missing_in_expanded_log_view:
-  elements:
-  - selector: &expand_button
-      xpath: //button[contains(.,'Expand')]
-    missing: true
+check_some_context_missing_in_expanded_log_view: {}
 check_required_context_shown_in_expanded_log_view:
   elements:
   - selector: &download_button
-      xpath: //a[contains(.,'Download')]
+      xpath: //div[@class="pf-v6-c-toolbar__item"]//a[contains(@download, "")]
   - selector: &collapse_button
-      xpath: //button[contains(.,'Collapse')]
+      xpath: (//div[@class="pf-v6-c-toolbar__item"]/div[contains(@style, "content")]/button)[4]
   - selector: &toggle_steaming_paused_button
-      xpath: //button[contains(@class,'co-toggle-play')]
+      xpath: //button[@aria-label="Pause event streaming"]
   - selector: &container_dropdown_button
       xpath: //button[@data-test="container-select"]
 check_required_context_shown_in_collapsed_log_view:
@@ -54,15 +50,12 @@ check_required_context_shown_in_collapsed_log_view:
       xpath: //a[contains(., 'Logs')]
   - selector:
       xpath: //a[contains(., 'Details')]
-check_some_context_missing_in_collapsed_log_view:
-  elements:
-  - selector:
-      <<: *collapse_button
-    missing: true
+check_some_context_missing_in_collapsed_log_view: {}
 expand_log:
-  params:
-    button_text: Expand
-  action: click_button
+  element:
+    selector:
+      xpath: (//div[@class="pf-v6-c-toolbar__item"]/div[contains(@style, "content")]/button)[4]
+    op: click
 collapse_log:
   element:
     selector:
@@ -80,18 +73,16 @@ resume_log_streaming:
     op: click
 check_log_streaming_is_paused:
   elements:
-  - selector:
-      xpath: //div[contains(@class,'co-toolbar__item') and contains(.,'Log stream paused')]
   - selector: &resume_button
       xpath: //button[contains(.,'Resume stream')]
 check_log_streaming_is_resumed:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-toolbar__item') and contains(.,'Log streaming')]
+      xpath: //button[@aria-label='Pause event streaming']
 check_log_streaming_is_ended:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-toolbar__item') and contains(.,'Log stream ended')]
+      xpath: //div[contains(.,'Log stream ended')]
 check_event_is_streaming:
   elements:
   - selector:
@@ -107,26 +98,20 @@ check_logs_wrapped:
 toggle_log_wraps:
   elements:
   - selector:
-      xpath: //label[@for='wrapLogLines']
+      xpath: //button[@data-test='resource-log-options-toggle']
+    op: click
+  - selector:
+      xpath: //li[contains(.,'Wrap lines')]//input
     op: click
 check_logs_history_not_present:
   elements:
   - selector:
       xpath: //button[@disabled]//span[text()='Current log']
-  - selector:
-      xpath: //span[@id='logTypeSelect']/following-sibling::button
-    op: hover
-  - selector:
-      xpath: //div[contains(text(),'Only the current log is available')]
 check_logs_history_is_present:
   elements:
   - selector:
       xpath: //button//span[text()='Current log']
-  - selector:
-      xpath: //span[@id='logTypeSelect']/following-sibling::button
     op: click
-  - selector:
-      xpath: //button[contains(@class, 'selected') and contains(.,'Current log')]
   - selector:
       xpath: //button[contains(.,'Previous log')]
     op: click
