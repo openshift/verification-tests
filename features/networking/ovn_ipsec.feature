@@ -215,7 +215,6 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @proxy @noproxy @disconnected @connected
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @singlenode
-  @v-cm.01 @wrs
   @hypershift-hosted
   Scenario: OCP-40569:SDN Allow enablement/disablement ipsec at runtime
     Given the env is using "OVNKubernetes" networkType
