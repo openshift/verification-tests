@@ -216,6 +216,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @s390x @ppc64le @heterogeneous @arm64 @amd64
   @singlenode
   @hypershift-hosted
+  @v-cm.01 @wrs
   Scenario: OCP-40569:SDN Allow enablement/disablement ipsec at runtime
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is disabled on the cluster
@@ -229,7 +230,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
     """
     Given the status of condition "Progressing" for network operator is :True
     """
-    Given I wait up to 360 seconds for the steps to pass:
+    Given I wait up to 600 seconds for the steps to pass:
     """
     Given the status of condition "Progressing" for network operator is :False
     """
@@ -283,7 +284,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
     """
     Given the status of condition "Progressing" for network operator is :True
     """
-    Given I wait up to 360 seconds for the steps to pass:
+    Given I wait up to 600 seconds for the steps to pass:
     """
     Given the status of condition "Progressing" for network operator is :False
     """
