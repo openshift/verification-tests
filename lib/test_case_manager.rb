@@ -5,6 +5,9 @@ require 'find'
 
 require 'common'
 
+# since internal s3 will be de commissioned, we set the ENV['USE_SCP_SERVER'] to true so instead of setting it externally
+ENV['USE_SCP_SERVER'] = '1'
+
 module BushSlicer
   # generic test case manager that delegates to specific test case management
   #   system test suite class
