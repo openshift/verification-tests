@@ -151,15 +151,20 @@ confirm_cancel_action:
   action:
     if_param:
       cancel: 'true'
-    ref: submit_changes
+    ref: click_confirm_in_modal
   action:
     if_param:
       cancel: 'false'
     ref: click_cancel_in_modal
+click_confirm_in_modal:
+  element:
+    selector:
+      xpath: //button[contains(@data-ouia-component-id,'confirm-button')]
+    op: click
 click_cancel_in_modal:
   element:
     selector:
-      xpath: //button[@data-test-id='modal-cancel-action']
+      xpath: //button[contains(@data-ouia-component-id,'cancel-button')]
     op: click
 create_autoscaler_action:
   params:
