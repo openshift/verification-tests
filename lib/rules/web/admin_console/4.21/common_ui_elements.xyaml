@@ -103,6 +103,11 @@ check_save_button_missing:
   params:
     button_text: Save
   action: check_button_missing
+click_save_button:
+  elements:
+  - selector:
+      xpath: //button[.='Save']
+    op: click
 check_table_text_data:
   element:
     selector:

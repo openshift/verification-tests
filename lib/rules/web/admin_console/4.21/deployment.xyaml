@@ -9,7 +9,7 @@ update_resource_count:
   - selector:
       <<: *modal_count
     op: send_keys <resource_count>
-  action: submit_changes
+  action: click_save_button
 update_rollout_strategy:
   action: edit_update_strategy_action
   elements:
