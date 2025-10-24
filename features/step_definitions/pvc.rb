@@ -69,9 +69,9 @@ end
 When /^I create a (manual|dynamic) pvc from #{QUOTED} replacing paths:$/ do |type, file, table|
   if file.include? '://'
     step %Q|I download a file from "#{file}"|
-    resource_hash = YAML.load(@result[:response])
+    resource_hash = YAML.load(@result[:response], aliases: true, permitted_classes: [Symbol, Regexp])
   else
-    resource_hash = YAML.load_file(expand_path(file))
+    resource_hash = YAML.safe_load_file(expand_path(file), aliases: true, permitted_classes: [Symbol, Regexp])
   end
 
   # replace paths from table

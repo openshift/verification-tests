@@ -62,7 +62,7 @@ module BushSlicer
         if File.exist? browser_opts_overrides_file
           logger.debug "recreating web console browser for user #{user.name}" \
                        "using overrides from '#{browser_opts_overrides_file}'"
-          browser_opts_overrides = YAML.load_file browser_opts_overrides_file
+          browser_opts_overrides = YAML.safe_load_file browser_opts_overrides_file, aliases: true, permitted_classes: [Symbol, Regexp]
           browser_opts.merge! browser_opts_overrides
           e.finalize
           e = @executors[user.name] = Web4Cucumber.new(**browser_opts)
