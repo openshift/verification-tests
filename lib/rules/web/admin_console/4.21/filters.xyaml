@@ -47,7 +47,24 @@ set_filter_strings_on_explore_page:
 filter_by_name:
   params:
     test_id_value: item-filter
-  action: set_strings_in_filter_box
+  action:
+    if_element:
+      selector:
+        xpath: //input[@data-test-id='<test_id_value>']
+    ref: set_strings_in_filter_box
+  action:
+    if_element:
+      selector:
+        xpath: //input[@id='name']
+    ref: filter_by_name_id
+filter_by_name_id:
+  elements:
+  - selector: &filter_id
+      xpath: //input[@id='name']
+    op: clear
+  - selector:
+      <<: *filter_id
+    op: send_keys <filter_text>
 filter_event_by_name_or_message:
   params:
     test_id_value: item-filter
