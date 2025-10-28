@@ -74,12 +74,17 @@ click_add_more_users:
   params:
     button_text: Add more
   action: click_button
+click_remove_button:
+  elements:
+  - selector:
+      xpath: //button[.="Remove"]
+    op: click
 remove_user_from_group:
   params:
     item: Remove User
   action: click_kebab_of_one_resource
   action: choose_action_item_from_list
-  action: submit_changes
+  action: click_remove_button
 set_rolebinding_name:
   params:
     input_field_id: role-binding-name
