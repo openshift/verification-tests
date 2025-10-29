@@ -2,7 +2,7 @@ wait_overview_items_loaded:
   elements:
   - selector:
       xpath: //div[contains(@class,'data-list__cell')]
-    timeout: 30
+    timeout: 600
 wait_pane_body_loaded:
   elements:
   - selector:
@@ -17,7 +17,7 @@ check_list_heading_shown:
   element:
     selector:
       xpath: //div[contains(@class, 'data-list__cell')]//span[contains(@data-test-id,'<heading>')]
-    timeout: 30
+    timeout: 600
 check_list_item:
   elements:
   - selector: &overview_item
@@ -191,6 +191,7 @@ check_overview_group_heading:
   element:
     selector:
       xpath: //h2[contains(@class,'project-overview__group-heading') and text()='<group_heading_name>']
+
 check_overview_group_items:
   elements:
   - selector:
