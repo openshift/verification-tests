@@ -1,7 +1,7 @@
 wait_overview_items_loaded:
   elements:
   - selector:
-      css: .odc-topology-list-view
+      xpath: //div[contains(@class,'data-list__cell')]
     timeout: 30
 wait_pane_body_loaded:
   elements:
@@ -16,7 +16,7 @@ wait_side_bar_loaded:
 check_list_heading_shown:
   element:
     selector:
-      xpath: //span[contains(@data-test-id,'<heading>')]
+      xpath: //div[contains(@class, 'data-list__cell')]//span[contains(@data-test-id,'<heading>')]
     timeout: 30
 check_list_item:
   elements:
