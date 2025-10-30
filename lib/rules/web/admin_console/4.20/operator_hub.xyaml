@@ -779,19 +779,19 @@ click_create_ditto_button:
 check_status_descriptor_grouping:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//span[contains(@data-test,'Namespace')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//span[@data-test='Namespace']
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//span[contains(@data-test,'Labels')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//span[@data-test='Labels']
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//span[contains(@data-test,'Status')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//span[@data-test='Status']
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//span[contains(@data-test,'Cluster Size')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//span[@data-test='Cluster Size']
 check_spec_descriptor_grouping:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//span[contains(@data-test,'Size')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//span[@data-test='Size']
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//span[contains(@data-test,'Pod')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//span[@data-test='Pod']
 click_field_resource_limits_edit_button:
   elements:
   - selector:
