@@ -344,7 +344,7 @@ goto_machineconfig_pools_page:
   element:
     selector:
       xpath: //*[text()='MachineConfigPools']
-    timeout: 30
+    timeout: 50
 goto_machine_sets_page:
   url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet
   action: wait_box_loaded
@@ -383,6 +383,7 @@ goto_one_quota_page:
 # machinehealthcheck
 goto_machinehealthcheck_page:
   url: k8s/ns/<project_name>/machine.openshift.io~v1beta1~MachineHealthCheck
+  action: wait_box_loaded
 
 #user
 goto_users_list_page:
