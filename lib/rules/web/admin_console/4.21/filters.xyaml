@@ -143,6 +143,6 @@ check_results_contain_correct_catagory:
 check_item_in_table:
   elements:
   - selector:
-      xpath: //tr[@data-test-rows='resource-row']//*[text()='<item>']
+      xpath: //tr//*[text()='<item>']
     timeout: 15
 

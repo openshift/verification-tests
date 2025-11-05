@@ -12,6 +12,7 @@ create_resource_by_default_yaml:
   - selector:
       id: yaml-create
     op: click
+    timeout: 60
   action:
     if_element:
       selector:
