@@ -79,12 +79,12 @@ check_filter_toolbar_style:
   - selector:
       xpath: //div[contains(@class,'pf-v6-c-toolbar')]//span[contains(.,'Filter')]
 check_filter_dropdown_style:
-  action: click_filter_dropdown
+  action: click_filter_type_dropdown
   elements:
   - selector:
-      xpath: //span[contains(@class, 'co-filter-dropdown-item')]
+      xpath: //span[contains(@class, 'pf-v6-c-menu__item')]
     timeout: 15
-  action: click_filter_dropdown
+  action: click_filter_type_dropdown
 check_input_toolbar_style:
   elements:
     - selector:
@@ -94,9 +94,20 @@ check_search_tool_bar_style:
   action: check_filter_dropdown_style
   action: check_input_toolbar_style
 check_remove_style_and_remove:
+  action:
+    if_element:
+      selector: &label_group
+        xpath: //button[@aria-label='Close label group']
+    ref: remove_label_group
+  action:
+    if_element:
+      selector: 
+        xpath: //button[contains(., 'Clear')]
+    ref: clear_all_filters
+remove_label_group:
   elements:
     - selector:
-        xpath: //button[@aria-label='Close label group']
+        <<: *label_group
       op: click
 check_filtered_style:
   elements:
@@ -108,31 +119,46 @@ check_filtered_item_style:
   elements:
     - selector:
         xpath: //*[@class='pf-v6-c-label__text' and contains(text(),'<filter>')]
+select_filter_status:
+  elements:
+    - selector:
+        xpath: //label//span[contains(., '<filter>')]
+      op: click
 filter_running_and_check_style:
   params:
     filter: Running
-  action: click_filter_dropdown
-  action: select_filter
+  action: click_filter_options_dropdown
+  action: select_filter_status
   action: check_filtered_item_style
-  action: click_filter_dropdown
+  action: click_filter_options_dropdown
 filter_pending_and_check_style:
   params:
     filter: Pending
-  action: click_filter_dropdown
-  action: select_filter
+  action: click_filter_options_dropdown
+  action: select_filter_status
   action: check_filtered_item_style
-  action: click_filter_dropdown
+  action: click_filter_options_dropdown
 filter_name_and_check_style:
   params:
-    dropdown_menu_item: Name
+    dropdown_item: Name
+    filter_text: <input_value>
     class_text: co-text-filter
     filter: <input_value>
   action: choose_item_from_dropdown_menu
-  action: set_span_class
+  action:
+    if_element:
+      selector:
+        xpath: //input[@id='name']
+    ref: filter_by_name_id
+  action:
+    if_element:
+      selector:
+        xpath: //span[contains(@class, 'co-text-filter')]
+    ref: set_span_class
   action: check_filtered_item_style
 filter_label_and_check_style:
   params:
-    dropdown_menu_item: Label
+    dropdown_item: Label
     class_text: co-text-filter
     filter: <input_value>
   action: choose_item_from_dropdown_menu

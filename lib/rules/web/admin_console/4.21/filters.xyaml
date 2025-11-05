@@ -11,6 +11,16 @@ click_filter_dropdown:
   - selector:
       xpath: //div[@data-test-id="filter-dropdown-toggle"]//button[contains(@class,"menu-toggle")]
     op: click
+click_filter_type_dropdown:
+  elements:
+  - selector:
+      xpath: (//div[contains(@class, "filter-group")]//button[contains(@class,"menu-toggle")])[1]
+    op: click
+click_filter_options_dropdown:
+  elements:
+  - selector:
+      xpath: (//div[contains(@class, "filter-group")]//button[contains(@class,"menu-toggle")])[2]
+    op: click
 select_filter:
   elements:
   - selector:
@@ -18,7 +28,7 @@ select_filter:
     op: click
 clear_all_filters:
   params:
-    button_text: Clear all filters
+    button_text: Clear
   action: click_button
 set_strings_in_dropdown_filter_box:
   elements:
