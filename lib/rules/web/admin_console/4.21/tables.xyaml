@@ -269,7 +269,7 @@ click_table_column_management_tooltip:
       xpath: //button[@aria-label='Column management']
     op: click
   - selector:
-      xpath: //p[contains(.,'Selected columns will appear in the table')]
+      xpath: //div[contains(.,'namespace column is only shown when in "All projects"')]
 click_reset_default_columns_button:
   element:
     selector:
