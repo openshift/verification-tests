@@ -34,10 +34,9 @@ check_rolebinding_of_user:
     ref: check_link_and_text
 filter_user_from_user_list:
   params:
-    test_id_value: item-filter
     filter_text: <resource_name>
   action: goto_users_list_page
-  action: set_strings_in_filter_box
+  action: filter_by_name_id
 impersonate_one_user:
   params:
     kebab_item: Impersonate User <resource_name>
@@ -139,7 +138,7 @@ create_cluster_rolebinding:
 filter_by_role_name:
   params:
     filter_text: <role_name>
-  action: set_filter_strings
+  action: filter_by_name_id 
 filter_by_subject_name:
   params:
     filter_text: <subject_name>
