@@ -896,6 +896,12 @@ click_first_item_in_grid_cell_list:
       xpath: (//td[@role='gridcell'][1])[1]
     op: click
     timeout: 40
+click_first_item_in_dataview_list:
+  elements:
+  - selector:
+      xpath: (//td[contains(@data-test, 'data-view-cell')][1])[1]
+    op: click
+    timeout: 40
 click_one_item:
   elements:
   - selector:
