@@ -913,14 +913,13 @@ choose_dropdown_item_text:
   action: click_dropdown_field
   action: click_one_item_text
 choose_item_from_dropdown_menu:
+  action: click_filter_type_dropdown
+  action: click_one_list_item
+click_one_list_item:
   elements:
   - selector:
-      xpath: //button[contains(@data-test, 'console-select-menu-toggle')]
+      xpath: //li//*[text()="<dropdown_item>"]
     op: click
-  - selector:
-      xpath: //ul[contains(@data-test, 'console-select-menu-list')]
-    timeout: 20
-  action: click_dropdown_menu_item
 upload_file_for_one_field:
   elements:
   - selector:
