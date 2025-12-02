@@ -1332,7 +1332,7 @@ Feature: Multus-CNI related scenarios
     Given I have a project with proper privilege
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
     When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
-      | ["metadata"]["namespace"] | [%= project.name.to_s %]                                                                                                                                                      |
+      | ["metadata"]["namespace"] | <%= project.name.to_s %>                                                                                                                                                      |
       | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/30"} }' |
     Then the step should succeed
 
