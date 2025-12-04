@@ -73,9 +73,17 @@ When /^I run oc create( as admin)? (?:over|with) #{QUOTED} replacing paths:$/ do
 
   # replace paths from table
   table.raw.each do |path, value|
-    eval "resource_hash#{path} = YAML.load value"
-    # e.g. resource["spec"]["nfs"]["server"] = 10.10.10.10
-    #      resource["spec"]["containers"][0]["name"] = "xyz"
+    # Try YAML first, fall back to JSON, then raw string
+    parsed_value = begin
+      YAML.safe_load(value, permitted_classes: [Symbol, Date, Time])
+    rescue Psych::SyntaxError, Psych::DisallowedClass
+      begin
+        JSON.parse(value)
+      rescue JSON::ParserError
+        value
+      end
+    end
+    eval "resource_hash#{path} = parsed_value"
   end
   resource = resource_hash.to_json
   logger.info resource
