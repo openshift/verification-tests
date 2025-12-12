@@ -14,9 +14,9 @@ check_users_secondary_menu_missing:
   action: check_secondary_menu_missing
 check_user_in_users_page:
   params:
-    role_name : <text>
+    filter_text: <text>
   action: goto_users_list_page
-  action: filter_by_role_name
+  action: filter_by_name_id
   action: check_link_and_text
 delete_user_from_kebab:
   params:
@@ -44,11 +44,11 @@ impersonate_one_user:
 check_impersonate_notifications:
   elements:
   - selector:
-      xpath: //strong[contains(.,"Impersonating User")]
+      xpath: //div[contains(text(), 'impersonating User')]
   - selector:
       xpath: //strong[contains(.,'<username>')]
   - selector: &stop_impersonation
-      xpath: //button[contains(.,'Stop impersonation')]
+      xpath: //button[contains(., 'Stop impersonating')]
 click_stop_impersonation:
   elements:
   - selector: *stop_impersonation
