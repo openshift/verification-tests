@@ -41,9 +41,9 @@ module BushSlicer
         # assume a file path (TODO: be more intelligent)
         case spec
         when %r{https?://}
-          spec = YAML.load(Http.get(url: spec, raise_on_error: true)[:response])
+          spec = YAML.load(Http.get(url: spec, raise_on_error: true)[:response], aliases: true, permitted_classes: [Symbol, Regexp])
         else
-          spec = YAML.load_file(spec)
+          spec = YAML.safe_load_file(spec, aliases: true, permitted_classes: [Symbol, Regexp])
         end
       end
       name = spec["metadata"]["name"]

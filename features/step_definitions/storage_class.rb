@@ -8,9 +8,9 @@ When /^admin creates a StorageClass( in the node's zone)? from #{QUOTED} where:$
 
   if location.include? '://'
     step %Q/I download a file from "#{location}"/
-    sc_hash = YAML.load @result[:response]
+    sc_hash = YAML.load @result[:response], aliases: true, permitted_classes: [Symbol, Regexp]
   else
-    sc_hash = YAML.load_file location
+    sc_hash = YAML.safe_load_file location, aliases: true, permitted_classes: [Symbol, Regexp]
   end
 
   # use random name to avoid interference
@@ -235,11 +235,11 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
   ensure_admin_tagged
   project_name = project.name
 
-  platform = infrastructure('cluster').platform.downcase 
+  platform = infrastructure('cluster').platform.downcase
   case platform
   when 'aws'
     provisioner = 'aws-ebs'
-  when 'gcp' 
+  when 'gcp'
     provisioner = 'gce-pd'
   when 'azure'
     provisioner = 'azure-disk'
@@ -252,9 +252,9 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
     skip_this_scenario
   end
 
-  # load file 
+  # load file
   file = "#{BushSlicer::HOME}/testdata/storage/misc/in-tree-storageClass-template.yaml"
-  sc_hash = YAML.load_file file
+  sc_hash = YAML.safe_load_file file, aliases: true, permitted_classes: [Symbol, Regexp]
 
   # replace paths from table
   sc_hash["parameters"] ||= {}
@@ -263,22 +263,22 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
   end
 
   # After CSI Migration the default volumeType change to 'gp3', but most aws local zones nodes don't support gp3 type volume
-  if platform == "aws"  
+  if platform == "aws"
     sc_hash["parameters"]["type"] = "gp2"
   end
 
   # if no volumeBindingMode exists in tc, we need to pass vSphere=Immediate, others=WaitForFirstConsumer
   if !sc_hash.dig("volumeBindingMode")
-    if platform == "vsphere"  
-      sc_hash["volumeBindingMode"] = "Immediate" 
-    else 
+    if platform == "vsphere"
+      sc_hash["volumeBindingMode"] = "Immediate"
+    else
       sc_hash["volumeBindingMode"] = "WaitForFirstConsumer"
     end
   end
 
-  # replace the provisioner value according to platform wise 
+  # replace the provisioner value according to platform wise
   sc_hash["provisioner"] = "kubernetes.io/#{provisioner}"
-  
+
   logger.info("Creating StorageClass:\n#{sc_hash.to_yaml}")
   @result = BushSlicer::StorageClass.create(by: admin, spec: sc_hash)
 
@@ -292,7 +292,7 @@ When /^admin creates new in-tree storageclass with:$/ do |table|
   else
     logger.error(@result[:response])
     raise "failed to clone StorageClass from: #{src_sc}"
-  end  
+  end
 end
 
 Given(/^default storage class exists$/) do

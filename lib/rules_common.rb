@@ -7,7 +7,7 @@ module BushSlicer
         return sources.flatten.reduce({}) { |rules, source|
           if source.kind_of? Hash
           elsif File.file? source
-            source = YAML.load_file source
+            source = YAML.safe_load_file source, aliases: true, permitted_classes: [Symbol, Regexp]
           elsif File.directory? source
             files = []
             if source.end_with? "/"

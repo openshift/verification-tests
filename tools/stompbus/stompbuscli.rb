@@ -55,7 +55,7 @@ module BushSlicer
           setup_global_opts(options)
 
           if options.file
-            msg = YAML.load_file options.file
+            msg = YAML.safe_load_file options.file, aliases: true, permitted_classes: [Symbol, Regexp]
             msg[:body] = msg[:body].to_json unless String === msg[:body]
           elsif options.message
             msg = { body: options.message }
@@ -66,9 +66,9 @@ module BushSlicer
           end
 
           if options.header
-            msg[:header] = YAML.load options.header
+            msg[:header] = YAML.safe_load options.header, aliases: true, permitted_classes: [Symbol, Regexp]
           elsif ENV["STOMP_HEADER"] && !ENV["STOMP_HEADER"].strip.empty?
-            msg[:header] = YAML.load ENV["STOMP_HEADER"]
+            msg[:header] = YAML.safe_load ENV["STOMP_HEADER"], aliases: true, permitted_classes: [Symbol, Regexp]
           else
             msg[:header] = {}
           end

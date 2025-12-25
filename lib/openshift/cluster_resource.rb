@@ -33,7 +33,7 @@ module BushSlicer
     def self.create(by:, spec:, **opts)
       if spec.kind_of? String
         # assume a file path (TODO: be more intelligent)
-        spec = YAML.load_file(spec)
+        spec = YAML.safe_load_file(spec, aliases: true, permitted_classes: [Symbol, Regexp])
       end
       name = spec["metadata"]["name"] || raise("no name specified for resource")
       init_opts = {name: name, env: by.env}
