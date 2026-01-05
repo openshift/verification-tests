@@ -3,7 +3,7 @@ Feature: SGW<->LGW migration related scenarios
   
   # @author anusaxen@redhat.com
   # @case_id OCP-47561
-  @4.21 @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
+  @4.22 @4.21 @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
   @admin
   @destructive
   @network-ovnkubernetes
@@ -130,7 +130,7 @@ Feature: SGW<->LGW migration related scenarios
  
   # @author anusaxen@redhat.com
   # @case_id OCP-47641
-  @4.21 @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
+  @4.22 @4.21 @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10 @4.9
   @admin
   @destructive
   @network-ovnkubernetes
@@ -200,7 +200,7 @@ Feature: SGW<->LGW migration related scenarios
 
   # @author weliang@redhat.com
   # @case_id OCP-48066
-  @4.21 @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10
+  @4.22 @4.21 @4.20 @4.19 @4.18 @4.17 @4.16 @4.15 @4.14 @4.13 @4.12 @4.11 @4.10
   @admin
   @destructive
   @network-ovnkubernetes
