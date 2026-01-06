@@ -27,6 +27,11 @@ click_create_project_button:
   params:
     button_text: Create Project
   action: click_button
+choose_name_filter:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,"item-text") and .="Name"]
+    op: click
 set_project_name:
   element:
     selector:
@@ -66,12 +71,14 @@ nagivate_to_project_resources_page:
 check_resource_data_in_table:
   element:
     selector:
-      xpath: (//a[@class='co-resource-item__resource-name' and text()='<resource_name>']/ancestor::tr[@data-test-rows='resource-row'])[last()]//td[contains(.,'<data>')]
+      xpath: //a[@data-test="<resource_name>"]/ancestor::tr[contains(@data-ouia-component-id,"DataViewTable")]//td[contains(.,"<data>")]
 check_memory_data_for_one_project_in_table:
   params:
     resource_name: <project_name>
     data: MiB
     filter_text: <project_name>
+  action: click_filter_type_dropdown
+  action: choose_name_filter
   action: filter_by_name
   action: check_resource_data_in_table
 check_cpu_data_for_one_project_in_table:
@@ -79,6 +86,8 @@ check_cpu_data_for_one_project_in_table:
     resource_name: <project_name>
     data: cores
     filter_text: <project_name>
+  action: click_filter_type_dropdown
+  action: choose_name_filter
   action: filter_by_name
   action: check_resource_data_in_table
 set_strings_in_project_dropdown_filter_box:
