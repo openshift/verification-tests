@@ -519,6 +519,7 @@ delete_catalogsource_kabab_operation:
   params:
     kebab_item: Delete CatalogSource
   action: click_one_operation_in_kebab
+  action: confirm_deletion
 check_display_name_column_in_table:
   params:
     field: Display name
