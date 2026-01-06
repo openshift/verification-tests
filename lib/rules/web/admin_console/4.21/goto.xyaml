@@ -121,6 +121,7 @@ goto_serviceaccounts_page:
 # storageclass
 goto_storageclass_page:
   url: k8s/cluster/storageclasses
+  action: wait_box_loaded
 goto_one_storageclass_page:
   url: /k8s/cluster/storageclasses/<storageclass_name>
 goto_persistentvolumeclaims_page:
