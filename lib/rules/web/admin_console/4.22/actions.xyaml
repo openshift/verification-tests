@@ -1,0 +1,181 @@
+click_one_dropdown_action:
+  action: click_resource_action_button
+  action: choose_action_item_from_list
+click_resource_action_button:
+  elements:
+  - selector:
+      xpath: //button[contains(.,'Actions')]
+    op: click
+    timeout: 50
+click_resource_action_button_on_sidebar:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'overview__sidebar-pane')]//button[contains(.,'Actions')]
+    op: click
+    timeout: 30
+choose_action_item_from_list:
+  elements:
+  - selector:
+      xpath: //button[.='<item>' and not(@disabled)]
+    op: click
+edit_pod_count_action:
+  params:
+    item: Edit Pod count
+  action: click_one_dropdown_action
+start_build_action:
+  params:
+    item: Start build
+  action: click_one_dropdown_action
+delete_buildconfig_action:
+  params:
+    item: Delete BuildConfig
+  action: click_one_dropdown_action
+cancel_build_action:
+  params:
+    item: Cancel build
+  action: click_one_dropdown_action
+rebuild_action:
+  params:
+    item: Rebuild
+  action: click_one_dropdown_action
+delete_project_action:
+  params:
+    item: Delete Project
+  action: click_one_dropdown_action
+delete_serviceaccount_action:
+  params:
+    item: Delete ServiceAccount
+  action: click_one_dropdown_action
+edit_parallelism_action:
+  params:
+    item: Edit parallelism
+  action: click_one_dropdown_action
+delete_cronjob_action:
+  params:
+    item: Delete CronJob
+  action: click_one_dropdown_action
+edit_update_strategy_action:
+  params:
+    item: Edit update strategy
+  action: click_one_dropdown_action
+delete_deployment_action:
+  params:
+    item: Delete Deployment
+  action: click_one_dropdown_action
+pause_rollouts_action:
+  params:
+    item: Pause rollouts
+  action: click_one_dropdown_action
+restart_rollout_action:
+  params:
+    item: Restart rollout
+  action: click_one_dropdown_action
+resume_rollouts_action:
+  params:
+    item: Resume rollouts
+  action: click_one_dropdown_action
+cancel_rollout_action:
+  params:
+    item: Cancel rollout
+  action: click_one_dropdown_action
+  action: confirm_cancel_rollout
+delete_configmap_action:
+  params:
+    item: Delete ConfigMap
+  action: click_one_dropdown_action
+expand_pvc_action:
+  params:
+    item: Expand PVC
+  action: click_one_dropdown_action
+edit_secret_action:
+  params:
+    item: Edit Secret
+  action: click_one_dropdown_action
+rollback_action:
+  params:
+    item: Rollback
+  action: click_one_dropdown_action
+choose_item_from_list:
+  elements:
+  - selector:
+      xpath: //li//*[@id='<item>-link']
+    op: click
+click_resource_action_icon:
+  elements:
+  - selector:
+      xpath: //h1[contains(.,'<resource_name>')]/ancestor::tr[@data-test-rows='resource-row']//button[@data-test-id='kebab-button']
+    op: click
+# a combined action can be directly used for Edit Labels
+add_label_for_resource:
+  params:
+    item: Edit labels
+  action: click_one_dropdown_action
+  action: add_label
+  action: submit_changes
+add_label:
+  elements:
+  - selector:
+      id: tags-input
+    type: input
+    op: send_keys <new_label>
+  - selector:
+      id: tags-input
+    type: input
+    op: send_keys <press_enter>
+
+# a combined action can be directly used for Edit Annotations
+add_annotation_for_resource:
+  params:
+    item: Edit annotations
+  action: click_one_dropdown_action
+  action: add_annotation
+  action: submit_changes
+add_annotation:
+  action: click_add_more_button
+  elements:
+  - selector:
+      xpath: //input[contains(@placeholder,'Key')]
+    op: send_keys <annotation_key>
+  - selector:
+      xpath: //input[contains(@placeholder,'Value')]
+    op: send_keys <annotation_value>
+
+# Delete <Resource Type>
+delete_resource_panel:
+  action:
+    if_param:
+      cascade: 'false'
+    ref: uncheck_checkbox
+  action: submit_changes
+confirm_cancel_action:
+  action:
+    if_param:
+      cancel: 'true'
+    ref: click_confirm_in_modal
+  action:
+    if_param:
+      cancel: 'false'
+    ref: click_cancel_in_modal
+click_confirm_in_modal:
+  element:
+    selector:
+      xpath: //button[contains(@data-ouia-component-id,'confirm-button')]
+    op: click
+click_cancel_in_modal:
+  element:
+    selector:
+      xpath: //button[contains(@data-ouia-component-id,'cancel-button')]
+    op: click
+create_autoscaler_action:
+  params:
+    item: Create MachineAutoscaler
+  action: click_one_dropdown_action
+click_add_users_action:
+  params:
+    item: Add Users
+  action: click_one_dropdown_action
+click_remove_group_action:
+  params:
+    item: Delete Group
+  action: click_one_dropdown_action
+  action: submit_changes

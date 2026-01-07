@@ -1,0 +1,266 @@
+check_chart_using_victory:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pf-v6-c-chart')]
+check_cluster_utilization_charts_style:
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'card__title') and contains(text(), 'Cluster utilization')]
+  action: check_chart_using_victory
+check_pod_detail_page_charts_style:
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'co-m-pane__body')]//*[contains(text(), 'Pod details')]
+  action: click_metrics_tab
+  action: check_chart_using_victory
+check_node_detail_page_charts_style:
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'card__title') and contains(text(), 'Utilization')]
+  action: check_chart_using_victory
+check_quota_detail_page_charts_style:
+  elements:
+  - selector:
+      xpath: //*[contains(@data-test, 'resource-quota-gauge-chart')]//div[contains(@class, 'pf-v6-c-chart')]
+check_list_view_style:
+  elements:
+  - selector:
+      xpath: //table[contains(@class, 'pf-v6-c-table')]
+check_catalog_tile_style:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'catalog-tile-pf') and contains(@class, 'co-catalog-tile')]
+check_vertical_tabs_style:
+  elements:
+  - selector:
+      xpath: //ul[contains(@class, 'vertical-tabs-pf')]/li[contains(@class, 'vertical-tabs-pf-tab')]
+check_filter_side_panel_style:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'properties-side-panel-pf')]/div[contains(@class, 'properties-side-panel-pf-property')]
+check_filter_panel_style:
+  elements:
+  - selector:
+      xpath: //ul[contains(@class, 'vertical-tabs-pf')]/li[contains(@class, 'vertical-tabs-pf-tab')]
+check_error_alert_style:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pf-v6-c-alert') and contains(@class, 'pf-m-danger')]
+    timeout: 30
+check_success_alert_style:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pf-v6-c-alert') and contains(@class, 'pf-m-success')]
+    timeout: 30
+check_info_alert_style:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pf-v6-c-alert') and contains(@class, 'pf-m-info')]
+    timeout: 30
+check_alert_style_on_deploy_image_page:
+  action: goto_deploy_image_page
+  action: search_and_deploy_image
+  action: check_error_alert_style
+check_alert_style_on_dc_env_page:
+  action: goto_one_dc_page
+  action: click_environment_tab
+  action: add_env_vars
+  action: submit_changes
+  action: check_success_alert_style
+check_alert_style_for_dc_pause_rollouts:
+  params:
+    item: Pause rollouts
+  action: goto_one_dc_page
+  action: click_one_dropdown_action
+  action: check_info_alert_style
+
+check_filter_toolbar_style:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'pf-v6-c-toolbar') and contains(@data-ouia-component-id,'DataViewToolbar')]
+check_filter_dropdown_style:
+  action: click_filter_type_dropdown
+  elements:
+  - selector:
+      xpath: //span[contains(@class, 'pf-v6-c-menu__item')]
+    timeout: 15
+  action: click_filter_type_dropdown
+check_input_toolbar_style:
+  elements:
+    - selector:
+        xpath: //div[contains(@class,'pf-v6-c-toolbar')]//*[contains(@class,'pf-v6-c-form-control')]
+check_search_tool_bar_style:
+  action: check_filter_toolbar_style
+  action: check_filter_dropdown_style
+  action: check_input_toolbar_style
+check_remove_style_and_remove:
+  action:
+    if_element:
+      selector: &label_group
+        xpath: //button[@aria-label='Close label group']
+    ref: remove_label_group
+  action:
+    if_element:
+      selector: 
+        xpath: //button[contains(., 'Clear')]
+    ref: clear_all_filters
+remove_label_group:
+  elements:
+    - selector:
+        <<: *label_group
+      op: click
+check_filtered_style:
+  elements:
+    - selector:
+        xpath: //*[contains(@class, 'pf-v6-c-label-group')]//*[@class='pf-v6-c-label-group__label']
+    - selector:
+        xpath: //*[contains(@class, 'pf-v6-c-label-group')]//*[@class='pf-v6-c-label-group__list']
+check_filtered_item_style:
+  elements:
+    - selector:
+        xpath: //*[@class='pf-v6-c-label__text' and contains(text(),'<filter>')]
+select_filter_status:
+  elements:
+    - selector:
+        xpath: //label//span[contains(., '<filter>')]
+      op: click
+filter_running_and_check_style:
+  params:
+    filter: Running
+  action: click_filter_options_dropdown
+  action: select_filter_status
+  action: check_filtered_item_style
+  action: click_filter_options_dropdown
+filter_pending_and_check_style:
+  params:
+    filter: Pending
+  action: click_filter_options_dropdown
+  action: select_filter_status
+  action: check_filtered_item_style
+  action: click_filter_options_dropdown
+filter_name_and_check_style:
+  params:
+    dropdown_item: Name
+    filter_text: <input_value>
+    class_text: co-text-filter
+    filter: <input_value>
+  action: choose_item_from_dropdown_menu
+  action:
+    if_element:
+      selector:
+        xpath: //input[@id='name']
+    ref: filter_by_name_id
+  action:
+    if_element:
+      selector:
+        xpath: //span[contains(@class, 'co-text-filter')]
+    ref: set_span_class
+  action: check_filtered_item_style
+filter_label_and_check_style:
+  params:
+    dropdown_item: Label
+    class_text: co-text-filter
+    filter: <input_value>
+  action: choose_item_from_dropdown_menu
+  action: set_span_class
+  elements:
+    - selector:
+        xpath: //div[contains(@class, 'co-suggestion-box')]//span[contains(text(),'<suggestion_text>')]
+      timeout: 15
+    - selector:
+        xpath: //button[contains(@class, 'content') and //span[contains(text(),'<suggestion_text>')]]
+      op: click
+  action: check_filtered_item_style
+choose_console_language:
+  elements:
+  - selector: &username_button
+      xpath: //button[@data-test="user-dropdown-toggle"]
+    op: click
+  - selector: &user_preferences
+      xpath: //li[@data-test="application-launcher-item"]//span[contains(@class,'menu__item-text')]
+    op: click
+  - selector: &language_setting_button
+      xpath: //a[@data-test="tab language"]
+    op: click
+  action:
+    if_element:
+      selector: &language_dropdownlist_disabled
+        xpath: //input[@id="default-language-checkbox" and @data-checked-state="true"]
+    ref: toggle_default_language_checkbox
+  elements:
+  - selector:
+      xpath: //div[@data-test="console.preferredLanguage field"]//button[contains(@class,"toggle")]
+    op: click
+  - selector:
+      xpath: //span[contains(., '<lng_button>')]/ancestor::button[@role="option"]
+    op: click
+toggle_default_language_checkbox:
+  elements:
+  - selector:
+      xpath: //input[@id='default-language-checkbox' and @type='checkbox']
+    op: click
+check_default_language:
+  elements:
+  - selector:
+      <<: *username_button
+    op: click
+  - selector:
+      <<: *user_preferences
+    op: click
+  - selector:
+      <<: *language_setting_button
+    op: click
+  action:
+    if_element:
+      selector:
+        <<: *language_dropdownlist_disabled
+    ref: toggle_default_language_checkbox
+switch_language_to_english:
+  params:
+    lng_button: English
+  action: choose_console_language
+switch_language_to_chinese:
+  params:
+    lng_button: 中文
+  action: choose_console_language
+switch_language_to_japanese:
+  params:
+    lng_button: 日本語
+  action: choose_console_language
+switch_language_to_korean:
+  params:
+    lng_button: 한국어
+  action: choose_console_language
+check_pages_in_chinese:
+  elements:
+  - selector:
+      xpath: //button[contains(@class,'-c-nav__link') and contains(.,'主页')]
+  - selector:
+      xpath: //button[contains(@class,'-c-nav__link') and contains(.,'网络')]
+  - selector:
+      xpath: //button[contains(@class,'-c-nav__link') and contains(.,'存储')]
+  scripts:
+  - command: return localStorage['bridge/last-language'] == 'zh-CN'
+    expect_result: true
+check_pages_in_japanese:
+  elements:
+  - selector:
+      xpath: //button[contains(@class,'-c-nav__link') and contains(.,'ホーム')]
+  - selector:
+      xpath: //button[contains(@class,'-c-nav__link') and contains(.,'ネットワーク')]
+  - selector:
+      xpath: //button[contains(@class,'-c-nav__link') and contains(.,'ストレージ')]
+  scripts:
+  - command: return localStorage['bridge/last-language'] == 'ja'
+    expect_result: true
+check_pages_in_korean:
+  elements:
+  - selector:
+      xpath: //button[contains(@class,'-c-nav__link') and contains(.,'홈')]
+  - selector:
+      xpath: //button[contains(@class,'-c-nav__link') and contains(.,'네트워킹')]
+  - selector:
+      xpath: //button[contains(@class,'-c-nav__link') and contains(.,'스토리지')]
+  scripts:
+  - command: return localStorage['bridge/last-language'] == 'ko'
+    expect_result: true
