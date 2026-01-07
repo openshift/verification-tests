@@ -1,0 +1,462 @@
+click_icon_index_button:
+  element:
+    selector:
+      xpath: (//button[@aria-label='<aria_label_text>'])[<index>]
+    op: click
+set_placeholder_input_value:
+  element:
+    selector:
+      xpath: (//input[@placeholder='<placeholder_text>'])[<index>]
+    op: send_keys <input_value>
+    type: input
+check_message_when_multiple_receivers_not_configured:
+  params:
+    title: Incomplete alert receivers
+    description: Configure the receivers
+  action: check_alert_message
+check_message_when_single_receiver_not_configured:
+  params:
+    title: Incomplete alert receiver
+    description: Configure the receiver
+  action: check_alert_message
+check_div_text:
+  element:
+    selector:
+      xpath: //div[contains(text(),'<text>')]
+choose_receiver_type:
+  elements:
+  - selector:
+      xpath: //button[@data-test="receiver-type"]
+    op: click
+  - selector:
+      xpath: //div[@id='receiver-type']
+    timeout: 20
+  - selector:
+      xpath: //button[contains(@class, '-menu__item') and contains(., '<dropdown_menu_item>')]
+    op: click
+filter_alert:
+  params:
+    class_text: co-text-filter
+    input_value: <alert_name>
+    content: <alert_name>
+  action: clear_name_filter_if_exists
+  action: set_span_class
+  action: check_page_contains
+set_span_class:
+  element:
+    selector:
+      xpath: //span[contains(@class, '<class_text>')]//input[@data-test-id='item-filter']
+    op: send_keys <input_value>
+    type: input
+expand_alert_button:
+  element:
+    selector:
+      xpath: //button/span[@class='pf-v6-c-button__icon']
+    op: click
+    timeout: 60
+open_alert_detail:
+  action: Disable_all_filters
+  action: filter_alert
+  action: expand_alert_button
+  action: click_alert_link_with_text
+open_alert_detail_href:
+  action: Disable_all_filters
+  action: filter_alert
+  action: expand_alert_button
+  action: click_link_with_text
+open_silence_detail:
+  action: filter_alert
+  action: clear_pending_filter_if_exists
+  action: click_silence_link_with_text
+check_alert_detail:
+  params:
+    content: alertname=Watchdog
+  action: check_page_contains
+  action: check_alert_breadcrumb
+check_alert_breadcrumb:
+  params:
+    text: Alerts
+    link_url: /monitoring/alerts
+open_alertrules_detail:
+  action: filter_alert
+  action: click_alertrules_link_with_text
+click_alertrules_link_with_text:
+  element:
+    selector:
+      xpath: //a[contains(@href, '/monitoring/alertrules')]//span[text()='<alert_name>']
+    op: click
+    timeout: 60
+
+perform_action_item:
+  params:
+    button_text: <item_text>
+  action: click_actions_button
+  action: click_button_text
+click_silence_alert:
+  params:
+    button_text: Silence alert
+  action: click_button_text
+uncheck_start_from_now:
+  element:
+    selector:
+      xpath: //input[@id='start-immediately' and @type='checkbox']
+    op: click
+ensure_start_from_now_checked:
+  element:
+    selector:
+      xpath: //input[@id='start-immediately' and @type='checkbox'][@checked]
+check_regular_expression_link:
+  element:
+    selector:
+      xpath: //a[@href='https://github.com/google/re2/wiki/Syntax']
+input_silence_comments:
+  params:
+    aria_label_text: Comment
+    input_value: <comment_text>
+  elements:
+  - selector: &label_textarea
+      xpath: //span/textarea[@aria-label='<aria_label_text>']
+    op: clear
+    type: textarea
+  - selector:
+      <<: *label_textarea
+    op: send_keys <input_value>
+    type: textarea
+perform_silence:
+  action: submit_changes
+check_silence_detail:
+  element:
+    selector:
+      xpath: //h2[text()='Silence details']
+
+silence_alert_from_detail_if:     
+  action:
+    if_element:
+      selector:
+        tag_name: button
+        text: Silence alert
+    ref: silence_alert_from_detail
+silence_alert_from_detail:
+  params:
+    comment_text: silence comments is a must from ocp 4.5
+  action: click_silence_alert
+  action: input_silence_comments
+  action: perform_silence
+  action: check_silence_detail
+
+silence_alert_from_detail_check_fields_if:     
+  action:
+    if_element:
+      selector:
+        tag_name: button
+        text: Silence alert
+    ref: silence_alert_from_detail_check_fields
+silence_alert_from_detail_check_fields:
+  params:
+    comment_text: silence comments is a must from ocp 4.5
+    duration: 6h
+  action: click_silence_alert
+  action: set_silence_duration
+  action: uncheck_start_from_now
+  action: check_regular_expression_link
+  action: input_silence_comments
+  action: perform_silence
+  action: check_silence_detail
+click_alert_link_with_text:
+  element:
+    selector:
+      xpath: //a[text()='<alert_name>' and @data-test-id='alert-resource-link' and contains(@href, '/monitoring/alerts')]
+    op: click
+    timeout: 60
+click_silence_link_with_text:
+  element:
+    selector:
+      xpath: //a[text()='<alert_name>' and @data-test-id='silence-resource-link' and contains(@href, '/monitoring/silences')]
+    op: click
+    timeout: 60
+click_actions_button:
+  element:
+    selector:
+      xpath: //button[@class='pf-v6-c-menu-toggle']
+    op: click
+expire_alert_from_detail:
+  action: click_first_action_icon
+  action: click_expire_alert_button
+click_first_action_icon:
+  params:
+    aria_label_text: kebab dropdown toggle
+    index: 1
+  action: click_icon_index_button
+click_expire_alert_button:
+  params:
+    button_text: Expire silence
+  action: click_button_text
+disable_silence_tab:
+  action:
+    if_element:
+      selector:
+        xpath: //a[text()='Silenced'][contains(@class,'_box--active')]
+      timeout: 60
+    ref: click_silenced_tab
+click_silenced_tab:
+  element:
+    selector:
+      xpath: //a[text()='Silenced']
+    op: click
+
+edit_silence_alert:
+  params:
+    item_text: Edit silence
+  action: perform_action_item
+check_silence_fields:
+  action: ensure_start_from_now_checked
+  action: check_silence_duration_null
+remove_matcher_silence_alert:
+  params:
+    aria_label_text: Remove
+    index: 2
+  action: click_icon_index_button
+input_matcher_name_silence:
+  params:
+    placeholder_text: name
+    index: 1
+    input_value: alertname
+  action: set_placeholder_input_value
+
+expire_alert_from_actions:
+  action: click_actions_button
+  action: wait_exipre_silence_loaded
+  action: click_expire_alert_button
+wait_exipre_silence_loaded:
+  elements:
+  - selector:
+      xpath: //button//span[text()='Expire silence']
+    timeout: 60
+click_duration_dropdown_button:
+  element:
+    selector:
+      xpath: //button[@class='pf-v6-c-menu-toggle pf-m-full-width']
+    op: click
+set_silence_duration:
+  action: click_duration_dropdown_button
+  element:
+    selector:
+      xpath: //span[text()='For...']//..//..//..//button
+    op: click
+set_silence_duration_null:
+  action: click_duration_dropdown_button
+  element:
+    selector:
+      xpath: //ul[@class='pf-v6-c-menu__list']//span[text()='-']
+    op: click
+check_silence_duration_null:
+  element:
+    selector:
+      xpath: //button[@class='pf-v6-c-menu-toggle pf-m-full-width']//span[text()='-']
+set_invalid_end_time_silence:
+  params:
+    label_text: Until...
+    input_value: 2020/03/05 20:11:44
+  action: set_silence_duration_null
+  action: set_until_input_simple
+set_until_input_simple:
+  elements:
+  - selector: &label_input_value
+      xpath: //label//span[contains(text(),'<label_text>')]/ancestor::div[@class='pf-v6-c-form__group']//input
+    op: clear
+    type: input
+  - selector:
+      <<: *label_input_value
+    op: send_keys <input_value>
+    type: input
+
+status_specific_alert_no_clear:
+  action: filter_alert
+  element:
+    selector:
+      xpath: //tbody[@class='pf-v6-c-table__tbody']//td//span[text()='<status>'][1]
+status_specific_alert:
+  action: Disable_all_filters
+  action: filter_alert
+  element:
+    selector:
+      xpath: //tbody[@class='pf-v6-c-table__tbody']//td//span[text()='<status>'][1]
+status_specific_silence:
+  action: filter_alert
+  element:
+    selector:
+      xpath: //div[@aria-label='Silences']//td//div[text()='<status>'][1]
+status_specific_alert_rule_no_clear:
+  action: filter_alert
+  action: check_specific_alert
+status_specific_alert_rule:
+  action: Disable_all_filters
+  action: filter_alert
+  action: check_specific_alert
+check_specific_alert:
+  element:
+    selector:
+      xpath: //a//span[contains(text(),'<table_text>')]
+click_alertrule_expression:
+  element:
+    selector:
+      xpath: //a[contains(@href, '<expression>')]
+    op: click
+
+set_alert_label:
+  action: set_label_name_alert_name
+  action: set_label_value_watchdog_reg
+set_label_name_alert_name:
+  params:
+    name: Name
+    input_value: alertname
+  action: set_placeholder_input
+set_label_value_watchdog_reg:
+  params:
+    name: Value
+    input_value: <label_value>
+  action: set_placeholder_input
+silence_alert_from_create_button:
+  params:
+    comment_text: silence comments is a must from ocp 4.5
+  action: input_silence_comments
+  action: perform_silence
+  action: check_silence_detail
+check_use_regular:
+  element:
+    selector:
+      xpath: //div[@class='pf-v6-c-check']/input[@type='checkbox'][following-sibling::label[text()='RegEx']]
+    op: click
+check_info_of_silence_detail_reg:
+  params:
+    silence_name: Watchdo.*
+    alert_name: Watchdog
+  action: check_silence_name
+  action: check_silenced_alert_name
+  action: check_silence_breadcrumb
+check_silence_name:
+  element:
+    selector:
+      xpath: //dd[contains(., '<silence_name>')]
+check_silenced_alert_name:
+  element:
+    selector:
+      xpath: //a[contains(text(), '<alert_name>')]
+check_silence_breadcrumb:
+  params:
+    text: Silences
+    link_url: /monitoring/silences
+  action: check_link_and_text
+expire_alert_from_cog_menu:
+  action: filter_alert
+  action: click_first_action_icon
+  action: click_expire_alert_button
+
+open_alert_rule_from_detail:
+  params:
+    text: Watchdog
+    link_url: /monitoring/alertrules
+  action: check_link_and_text
+  action: click_link_with_text
+check_alert_rule_details:
+  params:
+    rule_name: Watchdog
+  action: check_rule_name
+  action: check_rule_expression
+  action: check_active_alerts
+  action: check_rule_breadcrumb
+check_rule_name:
+  element:
+    selector:
+      xpath: //dd[contains(., '<rule_name>')]
+check_rule_expression:
+  params:
+    text: vector(1)
+    link_url: /monitoring/query-browser?query0=vector(1)
+  action: check_link_and_text
+check_active_alerts:
+  action: check_view_metrics
+  action: check_alert_description_on_rule_detail
+check_rule_breadcrumb:
+  params:
+    text: Alerting rules
+    link_url: /monitoring/alertrules
+  action: check_link_and_text
+check_view_metrics:
+  params:
+    text: Inspect
+    link_url: /monitoring/query-browser?query0=vector(1)
+  action: check_link_and_text
+click_view_metrics:
+  params:
+    text: Inspect
+    link_url: /monitoring/query-browser?query0=vector(1)
+  action: click_link_with_text
+check_alert_description_on_rule_detail:
+  params:
+    text: This is an alert meant to ensure that the entire alerting pipeline is functional
+    link_url: /monitoring/alerts
+  action: check_link_and_text
+
+hide_alert_graph:
+  action: hide_show_alert_graph_button
+show_alert_graph:
+  action: hide_show_alert_graph_button
+hide_show_alert_graph_button:
+  element:
+    selector:
+      xpath: //button[contains(.,'graph')]
+    op: click
+
+Disable_all_filters:
+  element:
+    selector:
+      xpath: //button/span[text()='Clear all filters']
+    op: click
+    timeout: 60
+clear_specifc_filter:
+  element:
+    selector: &specific_filter
+      xpath: //span[text()='<filter_category>']/..//button
+    op: click
+clear_name_filter_if_exists:
+  params:
+    filter_category: Name
+  action:
+    if_element:
+      selector:
+        <<: *specific_filter
+    ref: clear_specifc_filter
+clear_pending_filter_if_exists:
+  params:
+    filter_category: Pending
+  action:
+    if_element:
+      selector:
+        <<: *specific_filter
+    ref: clear_specifc_filter
+list_alerts_by_filters_clear:
+  action: Disable_all_filters
+  action: list_alerts_by_filters
+list_alerts_by_filters:
+  action: click_alert_filter_dropdown
+  action: click_alert_filter_item
+  action: click_alert_filter_dropdown
+click_alert_filter_dropdown:
+  element:
+    selector:
+      xpath: //div[@data-test-id="filter-dropdown-toggle"]//button
+    op: click
+click_alert_filter_item:
+  element:
+    selector:
+      xpath: //label[@id='<filter_item>']
+    op: click
+click_label_filter_dropdown:
+  params:
+    button_text: Label
+  element:
+    selector:
+      xpath: //div[@id='filter-toolbar']//button[@data-test-id='dropdown-button']
+    op: click
+  action: click_button_text

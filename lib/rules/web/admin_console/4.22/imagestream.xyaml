@@ -1,0 +1,38 @@
+check_istag_warning_info:
+  element:
+    selector:
+      xpath: //td[span[contains(., '<istag_name>')]]/following-sibling::td[contains(., '<info>')]
+check_imagestream_help_link:
+  element:
+    selector: &image_help_button
+      xpath: //button[contains(.,'Do you need to work with this ImageStream')]
+    timeout: 30
+open_imagestream_help_modal:
+  element:
+    selector:
+      <<: *image_help_button
+    op: click
+check_image_registry_command:
+  action: check_registry_login
+  action: check_docker_push
+  action: check_docker_pull
+check_registry_login:
+  params:
+    command: oc registry login
+  action: check_command
+check_docker_push:
+  params:
+    command: docker push
+  action: check_command
+check_docker_pull:
+  params:
+    command: docker pull
+  action: check_command
+check_command:
+  element:
+    selector:
+      xpath: //pre[contains(., '<command>') and contains(@data-test, 'copy-to-clipboard')]
+check_page_contains_warning_alert:
+  params:
+    content: warning alert
+  action: check_page_contains

@@ -1,0 +1,50 @@
+check_info_in_schema:
+  action: wait_page_body_loaded
+  action: check_apiversion
+  action: check_kind
+  action: check_metadata
+  action: check_spec
+check_apiversion:
+  params:
+    header_name: apiVersion
+    link_url: api-conventions.md#resources
+  action: check_header_and_link
+check_kind:
+  params:
+    header_name: kind
+    link_url: api-conventions.md#types-kinds
+  action: check_header_and_link
+check_metadata:
+  params:
+    header_name: metadata
+    link_url: api-conventions.md#metadata
+  action: check_header_and_link
+check_header_and_link:
+  elements:
+  - selector:
+      xpath: //h5[contains(., '<header_name>')]/following-sibling::p//a[contains(@href, '<link_url>')]
+check_spec:
+  params:
+    content: additionalTrustedCA
+    layer_number: 1
+    text: Build
+    header_name: spec
+  action: click_view_details_for_one_field
+  action: check_page_contains
+  action: click_text_in_breadcrumb
+  action: check_view_details_for_one_field
+check_view_details_for_one_field:
+  element:
+    selector: &view_details
+      xpath: //h5[contains(., '<header_name>')]/following-sibling::button[contains(., 'View details')]
+click_view_details_for_one_field:
+  element:
+    selector:
+      <<: *view_details
+    op: click
+check_access_review_table:
+  elements:
+  - selector:
+      xpath: //th[contains(., 'Subject')]/following-sibling::th[contains(., 'Type')]
+  - selector:
+      xpath: //td[contains(., 'system:admin')]/following-sibling::td[contains(., 'User')]
