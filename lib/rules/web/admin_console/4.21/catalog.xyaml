@@ -4,7 +4,7 @@ create_app_from_template:
   action: click_create_button
 delete_template_instance_action:
   params:
-    item: Delete Template Instance
+    item: Delete TemplateInstance
   action: click_one_dropdown_action
   action: submit_changes
 create_app_from_imagestream:
