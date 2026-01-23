@@ -142,5 +142,5 @@ check_non_exist_reportquery_conditions_table:
       xpath: //div[contains(.,'error getting reportQuery')]
 check_limited_access:
   params:
-    content: No Pods found
+    content: Restricted access
   action: check_page_contains
