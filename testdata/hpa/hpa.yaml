@@ -1,9 +1,10 @@
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: php-apache
 spec:
   scaleTargetRef:
+    apiVersion: apps.openshift.io/v1
     kind: DeploymentConfig
     name: php-apache
   minReplicas: 1
