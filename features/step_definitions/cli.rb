@@ -66,9 +66,9 @@ end
 When /^I run oc create( as admin)? (?:over|with) #{QUOTED} replacing paths:$/ do |admin, file, table|
   if file.include? '://'
     step %Q|I download a file from "#{file}"|
-    resource_hash = YAML.load(@result[:response])
+    resource_hash = YAML.load(@result[:response], aliases: true, permitted_classes: [Symbol, Regexp])
   else
-    resource_hash = YAML.load_file(expand_path(file))
+    resource_hash = YAML.safe_load_file(expand_path(file), aliases: true, permitted_classes: [Symbol, Regexp])
   end
 
   # replace paths from table
@@ -99,9 +99,9 @@ end
 When /^I run oc replace( as admin)? (?:over|with) #{QUOTED} replacing paths:$/ do |admin, file, table|
   if file.include? '://'
     step %Q|I download a file from "#{file}"|
-    resource_hash = YAML.load(@result[:response])
+    resource_hash = YAML.load(@result[:response], aliases: true, permitted_classes: [Symbol, Regexp])
   else
-    resource_hash = YAML.load_file(expand_path(file))
+    resource_hash = YAML.safe_load_file(expand_path(file), aliases: true, permitted_classes: [Symbol, Regexp])
   end
 
   # replace paths from table
@@ -271,4 +271,3 @@ Given /^(?:(as admin) )?I successfully#{OPT_WORD} patch resource "(.*)\/(.*)" wi
     end
   end
 end
-
