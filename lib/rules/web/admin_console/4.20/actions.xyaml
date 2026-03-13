@@ -173,9 +173,19 @@ create_autoscaler_action:
 click_add_users_action:
   params:
     item: Add Users
-  action: click_one_dropdown_action
+  elements:
+  - selector:
+      xpath: //div[contains(@data-test-id,'details-actions')]//button[contains(@aria-label,'Actions')]
+    op: click
+    timeout: 50
+  action: choose_action_item_from_list
 click_remove_group_action:
   params:
     item: Delete Group
-  action: click_one_dropdown_action
+  elements:
+  - selector:
+      xpath: //div[contains(@data-test-id,'details-actions')]//button[contains(@aria-label,'Actions')]
+    op: click
+    timeout: 50
+  action: choose_action_item_from_list
   action: submit_changes
