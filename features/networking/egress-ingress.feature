@@ -779,7 +779,7 @@ Feature: Egress-ingress related networking scenarios
     And I wait up to 60 seconds for the steps to pass:
     """
     When I execute on the pod:
-      | curl | --connect-timeout | 5 | --head | www.amihealthy.com |
+      | curl | --connect-timeout | 5 | --head | www.redhat.com |
     Then the step should succeed
     """
 

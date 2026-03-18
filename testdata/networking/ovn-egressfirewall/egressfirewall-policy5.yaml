@@ -66,7 +66,7 @@ spec:
       dnsName: www.google.com
   - type: Allow
     to:
-      dnsName: www.amihealthy.com
+      dnsName: www.redhat.com
   - type: Deny
     to:
       cidrSelector: 0.0.0.0/0
