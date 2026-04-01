@@ -228,16 +228,15 @@ Feature: oc_set_probe.feature
   Scenario: OCP-31245:Workloads Set a probe over HTTPS/HTTP test
     Given I have a project
     When I run the :create_deployment client command with:
-      | name          | mysql                                                                                               |
-      | image         | quay.io/openshifttest/mysql@sha256:0c76fd1a2eb31b0a196c7c557e4e56a11a6a8b26d745289e75fc983602035ba5 |
+      | name          | hello-openshift                                                                                               |
+      | image         | quay.io/openshifttest/hello-openshift@sha256:56c354e7885051b6bb4263f9faa58b2c292d44790599b7dde0e49e7c466cf339 |
     Then the step should succeed
     When I run the :set_env client command with:
-      | resource | deploy/mysql               |
+      | resource | deploy/hello-openshift     |
       | e        | MARIADB_ROOT_PASSWORD=pass |
     Then the step should succeed
     When I run the :set_probe client command with:
-      | resource        | deployment/mysql |
-      | c               | mysql            |
+      | resource        | deployment/hello-openshift |
       | readiness       |                  |
       | get_url         | http://:8080/opt |
       | timeout_seconds | 30               |
@@ -245,26 +244,26 @@ Feature: oc_set_probe.feature
     When I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-      | resource | pod       |
-      | l        | app=mysql |
+      | resource | pod                 |
+      | l        | app=hello-openshift |
     Then the output should contain:
       | Readiness                 |
       | http-get http://:8080/opt |
       | timeout=30s               |
     """
     When I run the :set_probe client command with:
-      | resource  | deployment/mysql             |
+      | resource  | deployment/hello-openshift   |
       | readiness |                              |
-      | get_url   | https://127.0.0.1:1936/stats |
+      | get_url   | https://:1936/stats          |
     Then the step should succeed
     When I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-      | resource | pod              |
-      | l        | app=mysql |
+      | resource | pod                 |
+      | l        | app=hello-openshift |
     Then the output should contain:
-      | Readiness                             |
-      | http-get https://127.0.0.1:1936/stats |
+      | Readiness                    |
+      | http-get https://:1936/stats |
     """
 
   # @author wewang@redhat.com
