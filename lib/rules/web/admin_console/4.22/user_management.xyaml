@@ -16,8 +16,16 @@ check_user_in_users_page:
   params:
     filter_text: <text>
   action: goto_users_list_page
-  action: filter_by_name_id
+  action: filter_by_user_name
   action: check_link_and_text
+filter_by_user_name:
+  elements:
+  - selector: &user_name_input
+      xpath: //input[@data-test-id="item-filter"]
+    op: clear
+  - selector:
+      <<: *user_name_input
+    op: send_keys <text>
 delete_user_from_kebab:
   params:
     item: Delete User
