@@ -28,10 +28,10 @@ add_tolerations_to_pod:
 check_node_list_column_headers:
   action: check_name_column_header
   action: check_status_column_header
-  action: check_role_column_header
-check_role_column_header:
+  action: check_machineset_column_header
+check_machineset_column_header:
   params:
-    column_name: Roles
+    column_name: Machine set
   action: check_column_header
 check_messages_on_terminal_page:
   element:
