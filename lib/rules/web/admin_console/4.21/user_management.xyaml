@@ -16,7 +16,7 @@ check_user_in_users_page:
   params:
     filter_text: <text>
   action: goto_users_list_page
-  action: filter_by_name_id
+  action: set_filter_strings
   action: check_link_and_text
 delete_user_from_kebab:
   params:
