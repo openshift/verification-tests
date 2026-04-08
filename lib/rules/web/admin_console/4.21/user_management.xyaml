@@ -16,7 +16,7 @@ check_user_in_users_page:
   params:
     filter_text: <text>
   action: goto_users_list_page
-  action: filter_by_name_id
+  action: set_filter_strings
   action: check_link_and_text
 delete_user_from_kebab:
   params:
@@ -36,7 +36,7 @@ filter_user_from_user_list:
   params:
     filter_text: <resource_name>
   action: goto_users_list_page
-  action: filter_by_name_id
+  action: set_filter_strings
 impersonate_one_user:
   params:
     kebab_item: Impersonate User <resource_name>
@@ -138,7 +138,7 @@ create_cluster_rolebinding:
 filter_by_role_name:
   params:
     filter_text: <role_name>
-  action: filter_by_name_id 
+  action: set_filter_strings 
 filter_by_subject_name:
   params:
     filter_text: <subject_name>
