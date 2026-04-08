@@ -70,5 +70,4 @@ RUN set -x && \
 
 # Fix permission issues of loading .config/containers/registries.conf.d when runnig oc/skopeo tools
 RUN set -x && \
-    test -d /opt/app-root/src/.config && \
-    chmod -R 777 /opt/app-root/src/.config
+    ( chmod -R 777 /opt/app-root/src/.config || true )
