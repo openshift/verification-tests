@@ -1008,7 +1008,7 @@ Feature: deployment related features
   Scenario: OCP-16443:Workloads Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
-    Given I obtain test data file "templates/application-template-stibuild.json"
+    Given I obtain test data file "build/application-template-stibuild.json"
     When I process and create:
       | f |  application-template-stibuild.json |
     Then the step should succeed
