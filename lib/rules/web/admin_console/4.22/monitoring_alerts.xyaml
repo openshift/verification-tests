@@ -36,22 +36,22 @@ choose_receiver_type:
     op: click
 filter_alert:
   params:
-    class_text: co-text-filter
     input_value: <alert_name>
     content: <alert_name>
   action: clear_name_filter_if_exists
+  action: select_alert_name_filter_category
   action: set_span_class
   action: check_page_contains
 set_span_class:
   element:
     selector:
-      xpath: //span[contains(@class, '<class_text>')]//input[@data-test-id='item-filter']
+      xpath: //input[@placeholder='Filter by Name' or @placeholder='Filter by Label' or @placeholder='Filter by State' or @placeholder='Filter by Severity' or @placeholder='Filter by Source']
     op: send_keys <input_value>
     type: input
 expand_alert_button:
   element:
     selector:
-      xpath: //button/span[@class='pf-v6-c-button__icon']
+      xpath: //td[@data-test='alerting-rule-arrow']//button | //td[contains(@class, 'pf-v6-c-table__toggle')]//button
     op: click
     timeout: 60
 open_alert_detail:
@@ -129,7 +129,7 @@ check_silence_detail:
     selector:
       xpath: //h2[text()='Silence details']
 
-silence_alert_from_detail_if:     
+silence_alert_from_detail_if:
   action:
     if_element:
       selector:
@@ -144,7 +144,7 @@ silence_alert_from_detail:
   action: perform_silence
   action: check_silence_detail
 
-silence_alert_from_detail_check_fields_if:     
+silence_alert_from_detail_check_fields_if:
   action:
     if_element:
       selector:
@@ -184,7 +184,7 @@ expire_alert_from_detail:
   action: click_expire_alert_button
 click_first_action_icon:
   params:
-    aria_label_text: kebab dropdown toggle
+    aria_label_text: Kebab toggle
     index: 1
   action: click_icon_index_button
 click_expire_alert_button:
@@ -230,7 +230,7 @@ expire_alert_from_actions:
 wait_exipre_silence_loaded:
   elements:
   - selector:
-      xpath: //button//span[text()='Expire silence']
+      xpath: //button[contains(., 'Expire silence')] | //span[text()='Expire silence']
     timeout: 60
 click_duration_dropdown_button:
   element:
@@ -278,14 +278,30 @@ status_specific_alert_no_clear:
 status_specific_alert:
   action: Disable_all_filters
   action: filter_alert
+  action: ensure_both_status_filters_active
   element:
     selector:
       xpath: //tbody[@class='pf-v6-c-table__tbody']//td//span[text()='<status>'][1]
+ensure_both_status_filters_active:
+  action: select_alert_state_filter_category
+  action: click_alert_filter_dropdown
+  action: wait_for_alert_filter_menu
+  action: click_firing_filter
+  action: click_silenced_filter
+  action: click_alert_filter_dropdown
+click_firing_filter:
+  params:
+    filter_item: firing
+  action: click_alert_filter_item
+click_silenced_filter:
+  params:
+    filter_item: silenced
+  action: click_alert_filter_item
 status_specific_silence:
   action: filter_alert
   element:
     selector:
-      xpath: //div[@aria-label='Silences']//td//div[text()='<status>'][1]
+      xpath: //table[contains(@aria-label, 'Silences')]//td//div[normalize-space(.)='<status>'][1]
 status_specific_alert_rule_no_clear:
   action: filter_alert
   action: check_specific_alert
@@ -296,7 +312,7 @@ status_specific_alert_rule:
 check_specific_alert:
   element:
     selector:
-      xpath: //a//span[contains(text(),'<table_text>')]
+      xpath: //a[contains(text(),'<table_text>')] | //a//span[contains(text(),'<table_text>')]
 click_alertrule_expression:
   element:
     selector:
@@ -417,16 +433,19 @@ Disable_all_filters:
 clear_specifc_filter:
   element:
     selector: &specific_filter
-      xpath: //span[text()='<filter_category>']/..//button
+      xpath: //span[@class='pf-v6-c-label-group__label' and text()='<filter_category>']/following-sibling::ul//button | //span[text()='<filter_category>']/..//button
     op: click
 clear_name_filter_if_exists:
-  params:
-    filter_category: Name
   action:
     if_element:
       selector:
-        <<: *specific_filter
-    ref: clear_specifc_filter
+        xpath: //span[@class='pf-v6-c-label-group__label' and (text()='Alert Name' or text()='Name')]/following-sibling::ul//button | //span[(text()='Alert Name' or text()='Name')]/..//button
+    ref: click_name_filter_chip
+click_name_filter_chip:
+  element:
+    selector:
+      xpath: //span[@class='pf-v6-c-label-group__label' and (text()='Alert Name' or text()='Name')]/following-sibling::ul//button | //span[(text()='Alert Name' or text()='Name')]/..//button
+    op: click
 clear_pending_filter_if_exists:
   params:
     filter_category: Pending
@@ -439,18 +458,133 @@ list_alerts_by_filters_clear:
   action: Disable_all_filters
   action: list_alerts_by_filters
 list_alerts_by_filters:
+  action:
+    if_param:
+      filter_item: none
+    ref: list_alerts_by_severity_filters_internal
+  action:
+    if_param:
+      filter_item: critical
+    ref: list_alerts_by_severity_filters_internal
+  action:
+    if_param:
+      filter_item: warning
+    ref: list_alerts_by_severity_filters_internal
+  action:
+    if_param:
+      filter_item: info
+    ref: list_alerts_by_severity_filters_internal
+  action:
+    if_param:
+      filter_item: user
+    ref: list_alerts_by_source_filters_internal
+  action:
+    if_param:
+      filter_item: platform
+    ref: list_alerts_by_source_filters_internal
+  action:
+    if_param:
+      filter_item: firing
+    ref: list_alerts_by_state_filters_internal
+  action:
+    if_param:
+      filter_item: silenced
+    ref: list_alerts_by_state_filters_internal
+  action:
+    if_param:
+      filter_item: pending
+    ref: list_alerts_by_state_filters_internal
+  action:
+    if_param:
+      filter_item: active
+    ref: list_alerts_by_state_filters_internal
+  action:
+    if_param:
+      filter_item: expired
+    ref: list_alerts_by_state_filters_internal
+list_alerts_by_state_filters_internal:
+  action: select_alert_state_filter_category
   action: click_alert_filter_dropdown
+  action: wait_for_alert_filter_menu
   action: click_alert_filter_item
   action: click_alert_filter_dropdown
+list_alerts_by_severity_filters_internal:
+  action: select_alert_severity_filter_category
+  action: click_severity_filter_dropdown
+  action: wait_for_alert_filter_menu
+  action: click_alert_filter_item
+  action: click_severity_filter_dropdown
+list_alerts_by_source_filters_internal:
+  action: select_alert_source_filter_category
+  action: click_source_filter_dropdown
+  action: wait_for_alert_filter_menu
+  action: click_alert_filter_item
+  action: click_source_filter_dropdown
+select_filter_category:
+  elements:
+  - selector:
+      xpath: (//div[@class='pf-v6-c-toolbar__group pf-m-filter-group']//button[@class='pf-v6-c-menu-toggle'])[1]
+    op: click
+    timeout: 10
+  - selector:
+      xpath: //ul[@role='menu']//button[.='<category_name>']
+    op: click
+    timeout: 10
+select_alert_name_filter_category:
+  elements:
+  - selector:
+      xpath: (//div[@class='pf-v6-c-toolbar__group pf-m-filter-group']//button[@class='pf-v6-c-menu-toggle'])[1]
+    op: click
+    timeout: 10
+  - selector:
+      xpath: //ul[@role='menu']//button[.='Alert Name' or .='Name']
+    op: click
+    timeout: 10
+select_alert_state_filter_category:
+  elements:
+  - selector:
+      xpath: (//div[@class='pf-v6-c-toolbar__group pf-m-filter-group']//button[@class='pf-v6-c-menu-toggle'])[1]
+    op: click
+    timeout: 10
+  - selector:
+      xpath: //ul[@role='menu']//button[.='Alert State' or .='Silence State']
+    op: click
+    timeout: 10
+select_alert_severity_filter_category:
+  params:
+    category_name: Severity
+  action: select_filter_category
+select_alert_source_filter_category:
+  params:
+    category_name: Source
+  action: select_filter_category
 click_alert_filter_dropdown:
   element:
     selector:
-      xpath: //div[@data-test-id="filter-dropdown-toggle"]//button
+      xpath: //button[contains(., 'Filter by State')]
     op: click
+    timeout: 10
+click_severity_filter_dropdown:
+  element:
+    selector:
+      xpath: //button[contains(., 'Filter by Severity')]
+    op: click
+    timeout: 10
+click_source_filter_dropdown:
+  element:
+    selector:
+      xpath: //button[contains(., 'Filter by Source')]
+    op: click
+    timeout: 10
+wait_for_alert_filter_menu:
+  element:
+    selector:
+      xpath: //div[@data-ouia-component-id='AlertStateFilter-menu' or @data-ouia-component-id='AlertSeverityFilter-menu' or @data-ouia-component-id='AlertSourceFilter-menu' or @data-ouia-component-id='SilenceStateFilter-menu' or @data-ouia-component-id='RuleStateFilter-menu' or @data-ouia-component-id='RuleSeverityFilter-menu' or @data-ouia-component-id='RuleSourceFilter-menu']//ul[@role='menu']
+    timeout: 20
 click_alert_filter_item:
   element:
     selector:
-      xpath: //label[@id='<filter_item>']
+      xpath: //li[contains(@data-ouia-component-id, 'filter-item-<filter_item>')] | //input[@id='<filter_item>'] | //label[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='<filter_item>']/preceding-sibling::input[@type='checkbox']
     op: click
 click_label_filter_dropdown:
   params:
