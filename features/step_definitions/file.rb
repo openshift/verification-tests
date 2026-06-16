@@ -36,24 +36,11 @@ Given /^I get time difference using "(.+)" and "(.+)" in (.+) file$/ do  |s1, s2
   ##This isn't a generic step-definition yet & specific to logs of machineset-controller##
   log_content = File.read(filename)
 
-  # DEBUG: Show what we're searching for
-  puts "DEBUG: Searching for markers: s1='#{s1}' s2='#{s2}'"
-  puts "DEBUG: Log file size: #{log_content.length} bytes"
-
-  # Old parsing logic (for debugging)
-  split1_old = log_content.split(s1)[0].split("Watching")[0]
-  split2_old = log_content.split(s2)[0].split(s1)[2].strip rescue "PARSE_ERROR"
-
-  puts "DEBUG: split1_old length=#{split1_old.length}, content='#{split1_old[0..200]}...'"
-  puts "DEBUG: split2_old length=#{split2_old.length rescue 0}, content='#{split2_old.to_s[0..200]}...'"
-
-  # New regex-based parsing to extract timestamps
-  # Match timestamp pattern before each marker
-  match1 = log_content.match(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?)\s.*#{Regexp.escape(s1)}/)
-  match2 = log_content.match(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?)\s.*#{Regexp.escape(s2)}/)
-
-  puts "DEBUG: regex match1 found: #{match1 ? match1[1] : 'NOT_FOUND'}"
-  puts "DEBUG: regex match2 found: #{match2 ? match2[1] : 'NOT_FOUND'}"
+  # Extract timestamp from line containing the marker
+  # Log format: YYYY/MM/DD HH:MM:SS Message
+  # Example: 2026/06/16 08:36:17 Registering Components.
+  match1 = log_content.match(/(\d{4}\/\d{2}\/\d{2}\s+\d{2}:\d{2}:\d{2})\s+#{Regexp.escape(s1)}/)
+  match2 = log_content.match(/(\d{4}\/\d{2}\/\d{2}\s+\d{2}:\d{2}:\d{2})\s+#{Regexp.escape(s2)}/)
 
   raise "Could not find timestamp for '#{s1}' in log" unless match1
   raise "Could not find timestamp for '#{s2}' in log" unless match2
@@ -61,14 +48,10 @@ Given /^I get time difference using "(.+)" and "(.+)" in (.+) file$/ do  |s1, s2
   split1 = match1[1]
   split2 = match2[1]
 
-  puts "DEBUG: Using timestamps - start='#{split1}' end='#{split2}'"
-
   #Calculating time difference in seconds
   time_start = DateTime.parse split1
   time_end = DateTime.parse split2
   time_difference = ((time_end - time_start)* 24 * 60 * 60).to_i
-
-  puts "DEBUG: Time difference = #{time_difference} seconds (threshold: 30s)"
 
   if time_difference > 30
     raise ("Upgrade can cause issues for new machinesets (#{time_difference}s > 30s)")
