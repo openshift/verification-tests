@@ -1,5 +1,4 @@
 require 'google/apis/compute_v1'
-require 'google/apis/cloudresourcemanager_v1'
 require 'googleauth'
 # require 'signet/oauth_2/client'
 
@@ -77,19 +76,6 @@ module BushSlicer
       end
       @compute.authorization.fetch_access_token! unless @compute.authorization.access_token
       return @compute
-    end
-
-    def crm
-      return @crm if @crm
-
-      @crm = Google::Apis::CloudresourcemanagerV1::CloudResourceManagerService.new
-      @crm.authorization = compute.authorization
-      return @crm
-    end
-
-    def get_iam_policy(project: nil)
-      project ||= @config[:project]
-      crm.get_project_iam_policy(project)
     end
 
     # image_name is RE2 syntax see:

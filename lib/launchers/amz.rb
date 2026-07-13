@@ -1,9 +1,5 @@
 #!/usr/bin/env ruby
-require 'aws-sdk-ec2'
-require 'aws-sdk-iam'
-require 'aws-sdk-route53'
-require 'aws-sdk-s3'
-require 'aws-sdk-sts'
+require 'aws-sdk'
 
 lib_path = File.expand_path(File.dirname(File.dirname(__FILE__)))
 unless $LOAD_PATH.any? {|p| File.expand_path(p) == lib_path}
@@ -560,9 +556,7 @@ module BushSlicer
 
     # @return [Array <Region>]
     def get_regions
-      client_ec2.describe_regions(
-        filters: [{ name: 'opt-in-status', values: ['opt-in-not-required', 'opted-in'] }]
-      ).to_a[0][0]
+      client_ec2.describe_regions.to_a[0][0]
     end
 
     def default_zone

@@ -25,7 +25,7 @@ module BushSlicer
     end
 
     def load_file(config_file)
-      config = YAML.unsafe_load_file(config_file)
+      config = YAML.load_file(config_file)
     end
 
     ## return full raw configuration
@@ -37,7 +37,7 @@ module BushSlicer
 
       # merge config from environment if present
       if ENV["BUSHSLICER_CONFIG"] && !ENV["BUSHSLICER_CONFIG"].strip.empty?
-        raw_configs << YAML.unsafe_load(ENV["BUSHSLICER_CONFIG"])
+        raw_configs << YAML.load(ENV["BUSHSLICER_CONFIG"])
       end
 
       # merge all config files

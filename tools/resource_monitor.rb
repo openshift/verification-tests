@@ -1,4 +1,3 @@
-require 'set'
 require 'text-table'
 require 'thread'
 require 'openshift_qe_slack'
@@ -76,21 +75,15 @@ module BushSlicer
       region_names =  regions.map {|r| r.region_name }
       vpcs_hash  = {}
       raw_vpcs = []
-      mutex = Mutex.new
       threads = []
+      ##  XXX commnet out thread implmentation for now as it's flaky when when in jenkins
       regions.each do | region |
-        threads << Thread.new(region.region_name) do |region_name|
-          begin
-            aws = Amz_EC2.new(service_name: global_region, region: region_name)
-            vpcs_in_region = aws.get_vpcs()
-            mutex.synchronize do
-              raw_vpcs << vpcs_in_region
-              if vpcs_in_region.count > 0
-                vpcs_hash[region.region_name] = vpcs_in_region
-              end
-            end
-          rescue => e
-            puts "WARNING: failed to get VPCs for region #{region_name}: #{e.message}"
+        threads << Thread.new(Amz_EC2.new(region: region.region_name)) do |aws|
+          aws = Amz_EC2.new(service_name: global_region, region: region.region_name)
+          vpcs_in_region = aws.get_vpcs()
+          raw_vpcs << vpcs_in_region
+          if vpcs_in_region.count > 0
+            vpcs_hash[region.region_name] = vpcs_in_region
           end
         end
       end
@@ -162,190 +155,18 @@ module BushSlicer
 
   end
 
-  class GceResources < ResourceMonitor
+  class GceRources < ResourceMonitor
     attr_accessor :gce
 
     def initialize(jenkins: nil)
       @gce = GCE.new
-      @resource_limits = {
-        :instances => 1000,
-        :cpus => 5000,
-        :disks => 2000,
-        :networks => 100
-      }
     end
 
-    # @return Array of networks (VPCs)
-    def get_networks
+    # @return <Array of Hash of summary>
+    def summarize_resource()
+      summary = []
       gce = @gce
       project = gce.config[:project]
-      compute = gce.compute
-      networks = compute.list_networks(project)
-      return networks.items || []
-    end
-
-    # @return Array of [name, creation_timestamp, subnet_count]
-    def extract_networks_data(networks)
-      data = []
-      networks.each do |network|
-        subnet_count = network.subnetworks ? network.subnetworks.count : 0
-        row_data = [
-          network.name,
-          network.creation_timestamp || 'N/A',
-          subnet_count
-        ]
-        data << row_data
-      end
-      return data
-    end
-
-    ## print out summary in a text table format
-    def print_summary(data_rows, headers)
-      table = Text::Table.new
-
-      table.head = headers
-      data_rows.each do |data|
-        table.rows << data
-      end
-      puts table
-    end
-
-    # @return Hash of instances keyed by zone
-    def get_instances_by_zone
-      gce = @gce
-      project = gce.config[:project]
-      regions = gce.regions
-      instances_hash = {}
-      raw_instances = []
-      mutex = Mutex.new
-      threads = []
-
-      regions.each do |region, zones|
-        zones.each do |zone|
-          threads << Thread.new(zone) do |zone_name|
-            begin
-              instances_in_zone = gce.get_instances_by_status(zone: zone_name, status: 'RUNNING')
-              mutex.synchronize do
-                raw_instances << instances_in_zone
-                if instances_in_zone && instances_in_zone.count > 0
-                  instances_hash[zone_name] = instances_in_zone
-                end
-              end
-            rescue => e
-              puts "WARNING: failed to get instances for zone #{zone_name}: #{e.message}"
-            end
-          end
-        end
-      end
-      threads.each(&:join)
-      return instances_hash, raw_instances
-    end
-
-    # @return Array of [name, status, creation_date, machine_type]
-    def extract_instances_data(raw_instances)
-      instances = raw_instances.flatten.compact
-      data = []
-      instances.each do |inst|
-        row_data = [
-          inst.name,
-          inst.status,
-          inst.creation_timestamp,
-          inst.machine_type.split('/')[-1]
-        ]
-        data << row_data
-      end
-      return data
-    end
-
-    # @return summary of GCE resources
-    def summarize_resources(resources: [])
-      instances_hash, raw_instances = self.get_instances_by_zone
-      instances_total = 0
-      summary_data = []
-      limits_msgs = []
-
-      instances_hash.each do |zone, instances|
-        instances_total += instances.count
-        row_data = [zone, instances.count]
-        summary_data << row_data
-        limits_msg = over_limit?(resource_type: "instances in zone #{zone}",
-                                 resource_value: instances.count,
-                                 resource_limit: @resource_limits[:instances],
-                                 percentage: 80)
-        limits_msgs << limits_msg unless limits_msg.nil?
-      end
-
-      zone_header = ['zone', 'total_instances']
-      print_summary(summary_data, zone_header)
-
-      instances_data = extract_instances_data(raw_instances)
-      instances_header = ['name', 'status', 'creation_date', 'machine_type']
-      print_summary(instances_data, instances_header)
-
-      instances_limits_msg = over_limit?(resource_type: "total instances",
-                                        resource_value: instances_total,
-                                        resource_limit: @resource_limits[:instances],
-                                        percentage: 90)
-      limits_msgs << instances_limits_msg unless instances_limits_msg.nil?
-
-      # Get and display networks (VPCs)
-      networks = self.get_networks
-      networks_data = extract_networks_data(networks)
-      networks_header = ['name', 'creation_date', 'subnet_count']
-      print_summary(networks_data, networks_header)
-
-      networks_limits_msg = over_limit?(resource_type: "total networks (VPCs)",
-                                         resource_value: networks.count,
-                                         resource_limit: @resource_limits[:networks],
-                                         percentage: 90)
-      limits_msgs << networks_limits_msg unless networks_limits_msg.nil?
-
-      # IAM policy member breakdown
-      begin
-        iam_summary = get_iam_policy_summary
-
-        iam_role_data = iam_summary[:by_role].map { |role, members| [role, members.count] }
-        print_summary(iam_role_data, ['role', 'member_count'])
-
-        iam_type_data = iam_summary[:by_type].map { |type, count| [type, count] }
-        print_summary(iam_type_data, ['member_type', 'count'])
-      rescue => e
-        puts "WARNING: failed to get IAM policy: #{e.message}"
-        iam_summary = nil
-      end
-
-      print("#" * 70 + "\n")
-      msg_header = "# GCE usage summary\n"
-      print("#{msg_header}")
-      print("#" * 70 + "\n")
-      print("Total instances: #{instances_total}/#{@resource_limits[:instances]}\n")
-      print("Total networks (VPCs): #{networks.count}/#{@resource_limits[:networks]}\n")
-      if iam_summary
-        print("Total unique IAM members: #{iam_summary[:total_unique]}\n")
-      end
-
-      limits_msgs.unshift(msg_header) if limits_msgs.count > 0
-      notify_limits(limits_msgs)
-    end
-
-    def get_iam_policy_summary
-      policy = @gce.get_iam_policy
-      by_role = {}
-      all_members = Set.new
-
-      policy.bindings.each do |binding|
-        role_short = binding.role.split('/').last
-        by_role[role_short] = binding.members
-        binding.members.each { |m| all_members.add(m) }
-      end
-
-      by_type = Hash.new(0)
-      all_members.each do |member|
-        type = member.split(':').first
-        by_type[type] += 1
-      end
-
-      { by_role: by_role, by_type: by_type, total_unique: all_members.count }
     end
 
   end
@@ -357,7 +178,7 @@ module BushSlicer
       @azure = Azure.new
     end
 
-    def summarize_resources(cm)
+    def summarize_resource(cm)
       print "Summaring resource ..."
     end
 

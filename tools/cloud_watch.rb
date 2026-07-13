@@ -1,23 +1,27 @@
 #!/usr/bin/env ruby
+$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/../lib")
+$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/../tools")
 
 ''"
 Helper utility to interact with AWS services on the command-line
 "''
 
-# Fast path for --version/--help before loading heavy deps
-if ARGV == ['--version']
-  puts "CloudWatch 0.0.1"
-  exit
-end
-
-$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/../lib")
-$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/../tools")
-
 require 'commander'
+
+require 'launchers/amz'
+
 require 'collections'
 require 'common'
+require 'cucuhttp'
+require 'jenkins_api_client'
 require 'text-table'
-require 'launchers/cloud_helper'
+# GCE specific
+require 'google/apis/compute_v1'
+require 'googleauth'
+require 'launchers/openstack'
+
+# user libs
+require 'resource_monitor'
 
 
 
@@ -47,10 +51,6 @@ module BushSlicer
         c.syntax = "#{File.basename __FILE__} -r <aws_region_name> [--all]"
         c.description = 'display resource summary for AWS'
         c.action do |args, options|
-          require 'launchers/amz'
-          require 'cucuhttp'
-          require 'jenkins_api_client'
-          require 'resource_monitor'
           ps = AwsResources.new
           options.config = conf
           say 'Getting summary...'
@@ -62,24 +62,7 @@ module BushSlicer
         c.syntax = "#{File.basename __FILE__}"
         c.description = 'display resource summary for Openstack'
         c.action do |args, options|
-          require 'launchers/openstack'
-          require 'cucuhttp'
-          require 'resource_monitor'
           ps = OpenstackResources.new
-          options.config = conf
-          say 'Getting summary...'
-          ps.summarize_resources
-        end
-      end
-
-      command :gce do |c|
-        c.syntax = "#{File.basename __FILE__}"
-        c.description = 'display resource summary for GCE'
-        c.action do |args, options|
-          require 'launchers/gce'
-          require 'cucuhttp'
-          require 'resource_monitor'
-          ps = GceResources.new
           options.config = conf
           say 'Getting summary...'
           ps.summarize_resources
