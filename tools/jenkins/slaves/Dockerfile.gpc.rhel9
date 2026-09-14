@@ -7,22 +7,23 @@ ENV USER_PATHS="$HOME /etc/machine-id /etc/passwd"
 RUN set -eux && \
     ls -lR /etc/pki/entitlement /etc/rhsm-host && \
     rm -f /etc/rhsm-host && \
-    dnf repolist --enabled && \
-    OLD_REPOS=$(dnf repolist --enabled | sed 1d | awk '{print $1}') && \
-    ([ -n "$OLD_REPOS" ] && dnf config-manager disable $OLD_REPOS || :) && \
-    NEW_REPOS="rhel-9-for-x86_64-appstream-rpms rhel-9-for-x86_64-baseos-rpms" && \
-    dnf config-manager enable $NEW_REPOS && \
-    dnf config-manager setopt \
-        rhel-9-for-x86_64-appstream-rpms.skip_if_unavailable=1 \
-        rhel-9-for-x86_64-baseos-rpms.skip_if_unavailable=1 && \
-    dnf repolist --enabled && \
-    dnf -y update --allowerasing --nobest --skip-broken --exclude=java-1.8.0-openjdk-headless,subscription-manager && \
+    dnf_rhel() { \
+        dnf \
+            --disablerepo='*' \
+            --enablerepo=rhel-9-for-x86_64-appstream-rpms \
+            --enablerepo=rhel-9-for-x86_64-baseos-rpms \
+            --setopt=rhel-9-for-x86_64-appstream-rpms.skip_if_unavailable=1 \
+            --setopt=rhel-9-for-x86_64-baseos-rpms.skip_if_unavailable=1 \
+            "$@"; \
+    } && \
+    dnf_rhel repolist --enabled && \
+    dnf_rhel -y update --allowerasing --nobest --skip-broken --exclude=java-1.8.0-openjdk-headless,subscription-manager && \
     INSTALL_PKGS="bsdtar dbus-tools mesa-libgbm" && \
-    dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
-    dnf -y module list nodejs && \
-    dnf -y module reset nodejs && \
-    dnf -y module enable nodejs:18 && \
-    dnf -y module install nodejs:18/common && \
+    dnf_rhel -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
+    dnf_rhel -y module list nodejs && \
+    dnf_rhel -y module reset nodejs && \
+    dnf_rhel -y module enable nodejs:18 && \
+    dnf_rhel -y module install nodejs:18/common && \
     CFT_VERSION='117.0.5938.88' && \
     npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
     find /chrome -type f -name chrome -exec ln -s {} /usr/local/bin/chrome \; && \
@@ -32,11 +33,15 @@ RUN set -eux && \
     GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
     curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s;$GECKODRIVER_RE;\1;p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
-    dnf -y install --setopt=tsflags=nodocs https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
+    dnf_rhel -y install --setopt=tsflags=nodocs https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
     sed --in-place=.orig --regexp-extended 's%#baseurl=https://download.example/pub/epel/%baseurl=https://mirrors.edge.kernel.org/fedora-epel/%g' /etc/yum.repos.d/epel*.repo && \
     sed --in-place --regexp-extended 's%^metalink=%#metalink=%g' /etc/yum.repos.d/epel*.repo && \
-    dnf config-manager disable epel && \
-    dnf -y --enablerepo=epel install git-crypt && \
+    dnf \
+        --disablerepo='*' \
+        --enablerepo=rhel-9-for-x86_64-appstream-rpms \
+        --enablerepo=rhel-9-for-x86_64-baseos-rpms \
+        --enablerepo=epel \
+        -y install git-crypt && \
     mkdir -p --mode=g+rw $HOME/bin
 
 # make sure context dir is at the repo root
