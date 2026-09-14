@@ -7,13 +7,13 @@ ENV USER_PATHS="$HOME /etc/machine-id /etc/passwd"
 RUN set -x && \
     ls -lR /etc/pki/entitlement /etc/rhsm-host && \
     rm -f /etc/rhsm-host && \
-    dnf repolist enabled && \
-    OLD_REPOS=$(dnf repolist enabled -q | sed 1d | cut -d'/' -f1 | awk '{print $1}') && \
+    dnf repolist --enabled && \
+    OLD_REPOS=$(dnf repolist --enabled -q | sed 1d | cut -d'/' -f1 | awk '{print $1}') && \
     ([ -n "$OLD_REPOS" ] && dnf config-manager --disable $OLD_REPOS || :) && \
     NEW_REPOS="rhel-9-for-x86_64-appstream-rpms rhel-9-for-x86_64-baseos-rpms" && \
     dnf config-manager --enable $NEW_REPOS && \
     dnf config-manager --save --setopt=\*.skip_if_unavailable=1 $NEW_REPOS && \
-    dnf repolist enabled && \
+    dnf repolist --enabled && \
     dnf -y update --allowerasing --nobest --skip-broken --exclude=java-1.8.0-openjdk-headless,subscription-manager && \
     INSTALL_PKGS="bsdtar dbus-tools mesa-libgbm" && \
     dnf -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
