@@ -4,17 +4,15 @@ LABEL vendor="Red Hat inc."
 LABEL maintainer="OCP QE Team"
 ENV USER_PATHS="$HOME /etc/machine-id /etc/passwd"
 
-RUN set -eux && \
+RUN set -x && \
     ls -lR /etc/pki/entitlement /etc/rhsm-host && \
     rm -f /etc/rhsm-host && \
     dnf repolist --enabled && \
-    OLD_REPOS=$(dnf repolist --enabled | sed 1d | awk '{print $1}') && \
-    ([ -n "$OLD_REPOS" ] && dnf config-manager disable $OLD_REPOS || :) && \
+    OLD_REPOS=$(dnf repolist --enabled -q | sed 1d | cut -d'/' -f1 | awk '{print $1}') && \
+    ([ -n "$OLD_REPOS" ] && dnf config-manager --disable $OLD_REPOS || :) && \
     NEW_REPOS="rhel-9-for-x86_64-appstream-rpms rhel-9-for-x86_64-baseos-rpms" && \
-    dnf config-manager enable $NEW_REPOS && \
-    dnf config-manager setopt \
-        rhel-9-for-x86_64-appstream-rpms.skip_if_unavailable=1 \
-        rhel-9-for-x86_64-baseos-rpms.skip_if_unavailable=1 && \
+    dnf config-manager --enable $NEW_REPOS && \
+    dnf config-manager --save --setopt=\*.skip_if_unavailable=1 $NEW_REPOS && \
     dnf repolist --enabled && \
     dnf -y update --allowerasing --nobest --skip-broken --exclude=java-1.8.0-openjdk-headless,subscription-manager && \
     INSTALL_PKGS="bsdtar dbus-tools mesa-libgbm" && \
@@ -35,7 +33,7 @@ RUN set -eux && \
     dnf -y install --setopt=tsflags=nodocs https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
     sed --in-place=.orig --regexp-extended 's%#baseurl=https://download.example/pub/epel/%baseurl=https://mirrors.edge.kernel.org/fedora-epel/%g' /etc/yum.repos.d/epel*.repo && \
     sed --in-place --regexp-extended 's%^metalink=%#metalink=%g' /etc/yum.repos.d/epel*.repo && \
-    dnf config-manager disable epel && \
+    dnf config-manager --disable epel && \
     dnf -y --enablerepo=epel install git-crypt && \
     mkdir -p --mode=g+rw $HOME/bin
 
