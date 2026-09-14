@@ -32,8 +32,8 @@ elif [ "$(os_type)" == "rhel9" ] || [ "$(os_type)" == "centos9" ]; then
     cmd=(
         dnf
         --disablerepo='*'
-        --enablerepo=rhel-9-for-x86_64-appstream-rpms
-        --enablerepo=rhel-9-for-x86_64-baseos-rpms
+        --enablerepo=ubi-9-appstream
+        --enablerepo=ubi-9-baseos
         install
         -y
     )

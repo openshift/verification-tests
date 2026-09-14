@@ -10,20 +10,19 @@ RUN set -eux && \
     dnf_rhel() { \
         dnf \
             --disablerepo='*' \
-            --enablerepo=rhel-9-for-x86_64-appstream-rpms \
-            --enablerepo=rhel-9-for-x86_64-baseos-rpms \
-            --setopt=rhel-9-for-x86_64-appstream-rpms.skip_if_unavailable=1 \
-            --setopt=rhel-9-for-x86_64-baseos-rpms.skip_if_unavailable=1 \
+            --enablerepo=ubi-9-appstream \
+            --enablerepo=ubi-9-baseos \
+            --setopt=ubi-9-appstream.skip_if_unavailable=1 \
+            --setopt=ubi-9-baseos.skip_if_unavailable=1 \
             "$@"; \
     } && \
     dnf_rhel repolist --enabled && \
     dnf_rhel -y update --allowerasing --nobest --skip-broken --exclude=java-1.8.0-openjdk-headless,subscription-manager && \
     INSTALL_PKGS="bsdtar dbus-tools mesa-libgbm" && \
     dnf_rhel -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
-    dnf_rhel -y module list nodejs && \
     dnf_rhel -y module reset nodejs && \
     dnf_rhel -y module enable nodejs:18 && \
-    dnf_rhel -y module install nodejs:18/common && \
+    dnf_rhel -y install nodejs npm && \
     CFT_VERSION='117.0.5938.88' && \
     npx @puppeteer/browsers install chrome@${CFT_VERSION} && \
     find /chrome -type f -name chrome -exec ln -s {} /usr/local/bin/chrome \; && \
@@ -38,8 +37,8 @@ RUN set -eux && \
     sed --in-place --regexp-extended 's%^metalink=%#metalink=%g' /etc/yum.repos.d/epel*.repo && \
     dnf \
         --disablerepo='*' \
-        --enablerepo=rhel-9-for-x86_64-appstream-rpms \
-        --enablerepo=rhel-9-for-x86_64-baseos-rpms \
+        --enablerepo=ubi-9-appstream \
+        --enablerepo=ubi-9-baseos \
         --enablerepo=epel \
         -y install git-crypt && \
     mkdir -p --mode=g+rw $HOME/bin
