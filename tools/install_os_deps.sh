@@ -6,41 +6,48 @@ export TOOLS_HOME=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 echo "Installing packages on $(os_type)"
 if [ "$(os_type)" == "fedora_dnf" ]; then
-    cmd="dnf install -y --setopt=skip_missing_names_on_install=False"
+    cmd=(dnf install -y --setopt=skip_missing_names_on_install=False)
     file="deps.dnf.fedora"
 elif [ "$(os_type)" == "fedora" ]; then
-    cmd="yum install -y --setopt=skip_missing_names_on_install=False"
+    cmd=(yum install -y --setopt=skip_missing_names_on_install=False)
     file="deps.yum.fedora"
     additional_deps=install_rvm_if_ruby_is_outdated
 elif [ "$(os_type)" == "ubuntu" -o "$(os_type)" == "debian" ] || [ "$(os_type)" == "mint" ]; then
-    cmd="apt-get install -q --ignore-missing --fix-missing -y"
+    cmd=(apt-get install -q --ignore-missing --fix-missing -y)
     file="deps.deb"
     additional_deps=install_rvm_if_ruby_is_outdated
 elif [ "$(os_type)" == "rhel6" ]; then
-    cmd="yum install -y"
+    cmd=(yum install -y)
     file="deps.yum.RHEL"
     additional_deps=install_rvm_if_ruby_is_outdated
 elif [ "$(os_type)" == "rhel7" ] || [ "$(os_type)" == "centos7" ]; then
-    cmd="yum install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs"
+    cmd=(yum install -y --setopt=skip_missing_names_on_install=False --setopt=tsflags=nodocs)
     file="deps.yum.RHEL7"
     additional_deps=install_rvm_if_ruby_is_outdated
 elif [ "$(os_type)" == "rhel8" ] || [ "$(os_type)" == "centos8" ]; then
-    cmd="dnf install -y --setopt=skip_missing_names_on_install=False --allowerasing --skip-broken"
+    cmd=(dnf install -y --setopt=skip_missing_names_on_install=False --allowerasing --skip-broken)
     file="deps.yum.RHEL8"
     additional_deps=install_rvm_if_ruby_is_outdated
 elif [ "$(os_type)" == "rhel9" ] || [ "$(os_type)" == "centos9" ]; then
-    cmd="dnf install -y"
+    cmd=(
+        dnf
+        --disablerepo='*'
+        --enablerepo=rhel-9-for-x86_64-appstream-rpms
+        --enablerepo=rhel-9-for-x86_64-baseos-rpms
+        install
+        -y
+    )
     file="deps.yum.RHEL9"
     additional_deps=install_rvm_if_ruby_is_outdated
 elif [ "$(os_type)" == "Mac OS X" ]; then
-    cmd="brew install"
+    cmd=(brew install)
     file="deps.macos"
     additional_deps=install_rvm_if_ruby_is_outdated
 else
     exit 3
 fi
 
-cat "${TOOLS_HOME}/os_deps/$file" | grep -v '^\s*#' | xargs $(need_sudo) $cmd
+cat "${TOOLS_HOME}/os_deps/$file" | grep -v '^\s*#' | xargs $(need_sudo) "${cmd[@]}"
     $additional_deps
 
 if [ "$?" -ne 0 ]; then
