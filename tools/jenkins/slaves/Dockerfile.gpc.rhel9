@@ -17,9 +17,9 @@ RUN set -eux && \
             "$@"; \
     } && \
     dnf_rhel repolist --enabled && \
-    dnf_rhel -y update --allowerasing --nobest --skip-broken --exclude=java-1.8.0-openjdk-headless,subscription-manager && \
+    dnf_rhel -y update --nobest && \
     INSTALL_PKGS="bsdtar dbus-tools mesa-libgbm" && \
-    dnf_rhel -y install --allowerasing --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
+    dnf_rhel -y install --setopt=tsflags=nodocs $INSTALL_PKGS && \
     dnf_rhel -y module reset nodejs && \
     dnf_rhel -y module enable nodejs:18 && \
     dnf_rhel -y install nodejs npm && \
