@@ -1,0 +1,21 @@
+[rhel-9-for-x86_64-baseos-rpms]
+name=Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)
+baseurl=https://cdn.redhat.com/content/dist/rhel9/9/$basearch/baseos/os
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+sslverify=1
+sslcacert=/etc/rhsm/ca/redhat-uep.pem
+sslclientcert=/etc/pki/entitlement/entitlement.pem
+sslclientkey=/etc/pki/entitlement/entitlement-key.pem
+
+[rhel-9-for-x86_64-appstream-rpms]
+name=Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)
+baseurl=https://cdn.redhat.com/content/dist/rhel9/9/$basearch/appstream/os
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+sslverify=1
+sslcacert=/etc/rhsm/ca/redhat-uep.pem
+sslclientcert=/etc/pki/entitlement/entitlement.pem
+sslclientkey=/etc/pki/entitlement/entitlement-key.pem

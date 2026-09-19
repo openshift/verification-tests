@@ -4,6 +4,10 @@ LABEL vendor="Red Hat inc."
 LABEL maintainer="OCP QE Team"
 ENV USER_PATHS="$HOME /etc/machine-id /etc/passwd"
 
+# The base image contains only UBI repository definitions. This file enables
+# the entitlement-backed RHEL repositories needed by verification-tests deps.
+COPY tools/jenkins/slaves/rhel9.repo /etc/yum.repos.d/rhel9.repo
+
 RUN set -eux && \
     ls -lR /etc/pki/entitlement /etc/rhsm-host && \
     rm -f /etc/rhsm-host && \
@@ -56,6 +60,7 @@ RUN set -x && \
     "$HOME/verification-tests/tools/hack_bundle.rb" && \
     rpm -qa && \
     dnf clean all -y && \
+    rm -f /etc/yum.repos.d/rhel9.repo && \
     rm -rf $HOME/verification-tests /var/cache/yum /var/tmp/* /tmp/*
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
