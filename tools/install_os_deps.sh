@@ -32,8 +32,8 @@ elif [ "$(os_type)" == "rhel9" ] || [ "$(os_type)" == "centos9" ]; then
     cmd=(
         dnf
         --disablerepo='*'
-        --enablerepo=ubi-9-appstream
-        --enablerepo=ubi-9-baseos
+        --enablerepo=rhel-9-for-x86_64-appstream-rpms
+        --enablerepo=rhel-9-for-x86_64-baseos-rpms
         install
         -y
     )
@@ -47,12 +47,12 @@ else
     exit 3
 fi
 
-cat "${TOOLS_HOME}/os_deps/$file" | grep -v '^\s*#' | xargs $(need_sudo) "${cmd[@]}"
-    $additional_deps
-
-if [ "$?" -ne 0 ]; then
-  echo 5
+if ! cat "${TOOLS_HOME}/os_deps/$file" | grep -v '^\s*#' | xargs $(need_sudo) "${cmd[@]}"; then
+  echo "Failed to install OS dependencies from $file" >&2
+  exit 5
 fi
+
+$additional_deps
 
 # have to do these manually prior to bundler or else hell will break loose
 # We need to use 'gem install bundler' beacause for RHEL, using 'yum install rubygem-bundler'
